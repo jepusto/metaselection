@@ -1,5 +1,5 @@
 Package: metaselection
-Title: Meta-analytic selection models with cluster robust standard errors
+Title: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors
 Version: 0.0.1
 Authors@R: c(
     person(given = "James", family = "Pustejovsky",
