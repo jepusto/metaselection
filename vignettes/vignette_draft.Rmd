@@ -1,0 +1,141 @@
+---
+title: "Vignette draft"
+output: html_document
+date: "2024-07-25"
+bibliography: references.bib
+link-citations: yes
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{Using the metaselection package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Selective reporting occurs when statistically significant affirmative results are more likely to be reported and therefore more likely to be available for meta-analysis. Selective reporting is a major concern for research synthesis because it distorts the evidence base available for meta-analysis. Failure to account for selective reporting can inflate effect size estimates from meta-analysis and bias estimates of heterogeneity, making it difficult to draw accurate conclusions from a synthesis.
+
+There are many tools available to investigate and correct for selective outcome reporting. Widely used methods include: graphical diagnostics like funnel plots; tests and adjustments for funnel plot asymmetry like trim-and-fill, Egger's regression, PET/PEESE, selection models, and p-value diagnostics. However, very few methods available for investigating selective reporting can accommodate dependent effect sizes. Such limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a very common feature of meta-analytic data.
+
+Dependent effect sizes occur when primary studies report multiple measures of the outcomes or repeated measures of the outcome. Failing to account for dependency can result in misleading conclusions too narrow confidence intervals and hypothesis tests that have inflated type one error rates. Many methods exist to handle effect size dependency when running basic meta-analytic models, including the widely recommended approach which is to use cluster robust variance estimation (Hedges, Tipton, Johnson, 2010; Tipton, 2015). However such methods have not been extended to meta-analysis models that also account for bias due to selective reporting.
+
+X (2025) developed and examined methods for investigating and accounting for selective reporting in meta-analysis that account for dependent effect sizes. Particularly, X (2025) combined step and beta selection models with robust variance estimation and with cluster and fractional weighted bootstrap. The results showed that selection models combined with RVE resulted in lower bias ...
+
+## Modified Selection Models
+
+Selection models are a general set of methods that correct for selective reporting by modeling the process by which the effect size estimates are reported [@rothstein_selection_2006]. Selection models have two components: a model describing the evidence generation process and model describing the selection process. X (2025) particularly examined selection processes that are a function of one-sided p-values, with weights corresponding to the likelihood that effects with their respective p-values are reported. X (2025) examine two types of selection models: step-function [@vevea_general_1995] and beta-density [@citkowicz_parsimonious_2017]. Step function model specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea_general_1995]. The beta-density model, also a weight function model, uses the shape parameters from the beta distribution to identify complex patterns of selection [@citkowicz_parsimonious_2017]. X (2025) modified the step and beta-density models to accommodate effect size dependencies.
+
+### Bootstrapped Confidence Intervals
+
+To improve confidence interval width, X (2025) also examined bootstrapping the selection models to obtain the confidence intervals. Bootstrapping involves re-sampling many times from the original data to create an empirical distribution that can be use in place of the sampling distribution to estimate measures of uncertainty [@boos2003introduction]. X (2025) examined two bootstrapping methods: cluster bootstrapping and fractional weighted bootstrapping. Cluster bootstrapping involves resampling whole clusters with replacement. Fractional weighted bootstrapping involves random sampling from the exponential distribution that we used as weights assigned to each cluster. 
+
+
+
+# Example from `metaselection` 
+
+In this section, we will walk through examples on how to implement functions from the `metaselection` package. We use `metadat::dat.lehmann` data as our working example [@lehmann2018meta; @metadat]. The data is from a meta-analysis by Lehmann, Elliot, & Calin-Jageman (2018) which examined the effects of color red on attractiveness judgments. The dataset includes 81 effect sizes from 41 studies. 
+
+
+```{r, warning = FALSE, message = FALSE}
+library(metadat)
+library(tidyverse)
+library(janitor)
+library(metafor)
+library(clubSandwich)
+library(kableExtra)
+#library(OURPACKAGE)
+devtools::load_all()
+
+
+lehmann_dat <- 
+  dat.lehmann2018 %>%
+  clean_names() %>%
+  mutate(study = str_split_fixed(short_title, pattern = "-", n = 2)[, 1]) %>%
+  arrange(study) %>%
+  mutate(sei = sqrt(vi)) %>%
+  select(study, presentation = stimuli_presentation, yi, vi, sei, everything()) %>%
+  mutate(esid = 1:nrow(.))
+
+
+glimpse(lehmann_dat %>% select(study, esid, yi:sei))
+```
+
+
+## Prelminary Analysis 
+
+First, we run analysis pretending there is no selection bias but accounting for the dependent data structure. Below is the code to run correlated and hierarchical effects model. 
+
+```{r}
+V_mat <- vcalc(vi = vi, 
+               cluster = study,
+               obs = esid, 
+               data = lehmann_dat,
+               rho = .8)
+
+mod <- rma.mv(yi = yi,
+              V = V_mat,
+              data = lehmann_dat,
+              random = ~ 1 | study/esid,
+              sparse = TRUE)
+
+che_res <- conf_int(mod, cluster = lehmann_dat$study, vcov = "CR2", p_values = TRUE, tidy = TRUE)
+
+kbl(che_res) %>%
+  kable_paper()
+```
+
+
+The overall estimate of the average effect is `r round(che_res$beta, 3)`.
+
+## Step Function with RVE
+
+In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package. We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`. We indicate that we want to estimate `"step"` selection model and input steps as `0.025`. The function, by default, uses maximum likelihood estimation. Another option is to use a hybrid estimator. More details on these estimators can be found in X (2024).
+
+```{r}
+step_results <- selection_model(data = lehmann_dat, 
+                                yi = yi,
+                                sei = sei,
+                                selection_type = "step",
+                                steps = .025)
+#step_results
+
+step_results$est
+```
+
+### Bootstrap Confidence Intervals
+
+The code below is similar to above except now we specify that we want to run cluster bootstrapping to estimate the standard error and confidence intervals. We specify `bootstrap = "multinomial"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals. We specify that number of bootstraps by setting R to `19`. We are setting the value to 19 here just for an example to speed up the computation. In practice, we recommend a much higher number of bootstrap replications (i.e., 1999). Please see @davidson2000bootstrap for further information on how to select the number of bootstraps. 
+
+```{r}
+step_results_boot <- selection_model(data = lehmann_dat, 
+                                     yi = yi,
+                                     sei = sei,
+                                     steps = .025,
+                                     bootstrap = "multinomial",
+                                     boot_CI = "percentile",
+                                     R = 19)
+
+step_results_boot$est
+```
+
+
+## Beta Function with RVE
+
+In the code below, we specify `selection_type = "beta"` to run beta-density model and specify `steps = c(.025, .975)`. Similar to the step function model, maximum likelihood and hybrid estimators are available with the default being maximum likelihood. Further, though not presented below, we can request bootstrap confidence intervals similarly to how we did for step function model. 
+
+```{r}
+beta_results <- selection_model(data = lehmann_dat, 
+                                yi = yi,
+                                sei = sei,
+                                cluster = study,
+                                selection_type = "beta",
+                                steps = c(.025, .975))
+
+
+beta_results$est
+```
+
+# References
+
