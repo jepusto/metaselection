@@ -560,18 +560,28 @@ bootstrap_selmodel <- function(
 #' 
 #' @examples
 #' 
+#' dat <- r_meta(
+#'   mean_smd = 0, 
+#'   tau = .1, omega = .01,
+#'   m = 50, 
+#'   cor_mu = .4, cor_sd = 0.001, 
+#'   censor_fun = step_fun(cut_vals = .025, weights = 0.4), 
+#'   n_ES_sim = n_ES_param(40, 3)
+#' )
 #' 
-#' selection_model(data = dat,
-#'                 yi = d,
-#'                 sei = sd_d,
-#'                 pi = p_onesided,
-#'                 cluster = studyid,
-#'                 steps = 0.025,
-#'                 estimator = "ML",
-#'                 bootstrap = "multinomial",
-#'                 boot_CI = "percentile",
-#'                 R = 49)
+#' res <- selection_model(
+#'   data = dat,
+#'   yi = d,
+#'   sei = sd_d,
+#'   cluster = studyid,
+#'   steps = 0.025,
+#'   estimator = "ML",
+#'   bootstrap = "multinomial",
+#'   boot_CI = "percentile",
+#'   R = 49
+#' )
 #' 
+#' res$est
 
 
 selection_model <- function(
@@ -637,7 +647,7 @@ selection_model <- function(
   m <- match(c("data","yi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
-  mf[[1L]] <- quote(build_model_frame)
+  mf[[1L]] <- quote(metaselection:::build_model_frame)
   mf <- eval(mf, parent.frame())
   
   # Evaluate yi, sei, pi, ai from model frame
