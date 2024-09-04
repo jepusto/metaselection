@@ -1,5 +1,5 @@
 ---
-title: "Vignette draft"
+title: "Selection Models for Selective Reporting in Meta-Analysis with Dependent Effects"
 output: html_document
 date: "2024-07-25"
 bibliography: references.bib
@@ -39,14 +39,13 @@ In this section, we will walk through examples on how to implement functions fro
 
 
 ```{r, warning = FALSE, message = FALSE}
+library(metaselection)
 library(metadat)
 library(tidyverse)
 library(janitor)
 library(metafor)
 library(clubSandwich)
 library(kableExtra)
-#library(OURPACKAGE)
-devtools::load_all()
 
 
 lehmann_dat <- 
