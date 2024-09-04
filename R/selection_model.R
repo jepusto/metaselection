@@ -1,6 +1,6 @@
 #' 
 #' @importFrom Formula as.Formula
-#' @export
+
 
 build_model_frame <- function(
     data,
