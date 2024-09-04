@@ -3,6 +3,8 @@ output: github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# metaselection
+
 Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results. 
 Selective reporting is a major concern for research synthesis because it distorts the evidence base available for meta-analysis. 
 Failure to account for selective reporting can inflate effect size estimates from meta-analysis and bias estimates of heterogeneity, making it difficult to draw accurate conclusions from a synthesis.
@@ -31,7 +33,7 @@ remotes::install_github("jepusto/metaselection")
 The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
 In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with robust variance estimates.
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 library(metadat)
 library(metaselection)
 

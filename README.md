@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# metaselection
+
 Selective reporting occurs when statistically significant, affirmative
 results are more likely to be reported (and therefore more likely to be
 available for meta-analysis) compared to null, non-affirmative results.
@@ -53,11 +55,6 @@ step function model with robust variance estimates.
 
 ``` r
 library(metadat)
-```
-
-    ## Warning: package 'metadat' was built under R version 4.4.1
-
-``` r
 library(metaselection)
 
 lehmann_dat <- dat.lehmann2018
