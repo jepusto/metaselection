@@ -1,7 +1,7 @@
 ---
 title: "Selection Models for Selective Reporting in Meta-Analysis with Dependent Effects"
 output: html_document
-date: "2024-07-25"
+date: "2024-09-10"
 bibliography: references.bib
 link-citations: yes
 csl: apa.csl
@@ -39,13 +39,15 @@ In this section, we will walk through examples on how to implement functions fro
 
 
 ```{r, warning = FALSE, message = FALSE}
-library(metaselection)
 library(metadat)
 library(tidyverse)
 library(janitor)
 library(metafor)
 library(clubSandwich)
 library(kableExtra)
+library(ggplot2)
+#library(OURPACKAGE)
+devtools::load_all()
 
 
 lehmann_dat <- 
@@ -81,12 +83,12 @@ mod <- rma.mv(yi = yi,
 
 che_res <- conf_int(mod, cluster = lehmann_dat$study, vcov = "CR2", p_values = TRUE, tidy = TRUE)
 
-kbl(che_res) %>%
+kbl(che_res, digits = 3) %>%
   kable_paper()
 ```
 
 
-The overall estimate of the average effect is `r round(che_res$beta, 3)`.
+The overall estimate of the average effect is `r round(che_res$beta, 3)`, which is significantly different from zero (p = `r round(che_res$p, 3)`). Next, we examine how this estimate differs from the estimates calculated using the `metaselection` package.
 
 ## Step Function with RVE
 
@@ -100,8 +102,33 @@ step_results <- selection_model(data = lehmann_dat,
                                 steps = .025)
 #step_results
 
-step_results$est
+
+
+kbl(step_results$est, digits = 3) %>%
+  kable_paper()
 ```
+
+The overall estimate of the average effect is now `r round(step_results$est$Est[step_results$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(che_res$beta, 3)`). This estimate is no longer significant, as depicted by the confidence intervals [`r round(step_results$est$CI_lo[step_results$est$param=="beta"], 3)`, `r round(step_results$est$CI_hi[step_results$est$param=="beta"], 3)`].
+
+We can plot the selection weights to see how the likelihood of selection differs at the pre-specified p-value cutpoint of `0.025`. The selection weight is in the log metric; thus, we must first exponentiate the estimate (exp(`r round(step_results$est$Est[step_results$est$param=="zeta1"], 3)`) = `r round(exp(step_results$est$Est[step_results$est$param=="zeta1"]), 3)`).
+
+```{r}
+pvalue <- seq(0,1,.01)
+zeta1 <- exp(step_results$est$Est[step_results$est$param=="zeta1"])
+stepdat <- data.frame(pvalue = rep(pvalue, 5), weights = zeta1)
+stepdat$weights <- ifelse(stepdat$pvalue < .025, 1, stepdat$weights)
+
+ggplot(stepdat, aes(x = pvalue, y = weights)) +
+  geom_line() + 
+  scale_x_continuous(limits = c(0,1), expand = expansion(0,0), breaks = c(0, .025, .25, .5, .75, .975, 1)) + 
+  scale_y_continuous(limits = c(0,1), expand = expansion(0,0)) + 
+  geom_hline(yintercept = 0) +  
+  geom_vline(xintercept = c(.025, .5, .975), linetype = "dashed") +  
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  labs(x = "p-value", y = "Relative Likelihood of Being Published")
+```
+
+The plot shows that studies with p-values > 0.025 are about half as likely (`r round(exp(step_results$est$Est[step_results$est$param=="zeta1"]), 3)`) to be published than studies with smaller p-values.
 
 ### Bootstrap Confidence Intervals
 
@@ -116,13 +143,15 @@ step_results_boot <- selection_model(data = lehmann_dat,
                                      boot_CI = "percentile",
                                      R = 19)
 
-step_results_boot$est
+kbl(step_results_boot$est, digits = 3) %>%
+  kable_paper()
 ```
 
+The overall estimate of the average effect does not change when bootstrapping is applied (`r round(step_results_boot$est$Est[step_results_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(step_results_boot$est$percentile_lower[step_results_boot$est$param=="beta"], 3)`, `r round(step_results_boot$est$percentile_upper[step_results_boot$est$param=="beta"], 3)`], which can change the significance of the effect. [NOTE: I say "can" because the CI changes each time I run it.]
 
 ## Beta Function with RVE
 
-In the code below, we specify `selection_type = "beta"` to run beta-density model and specify `steps = c(.025, .975)`. Similar to the step function model, maximum likelihood and hybrid estimators are available with the default being maximum likelihood. Further, though not presented below, we can request bootstrap confidence intervals similarly to how we did for step function model. 
+In the code below, we specify `selection_type = "beta"` to run beta-density model and specify `steps = c(.025, .975)`. The default estimator for the beta function model is maximum likelihood; the hybrid estimator is not yet available. In additional, although not presented below, we can request bootstrap confidence intervals similarly to how we did for step function model. 
 
 ```{r}
 beta_results <- selection_model(data = lehmann_dat, 
@@ -133,8 +162,38 @@ beta_results <- selection_model(data = lehmann_dat,
                                 steps = c(.025, .975))
 
 
-beta_results$est
+kbl(beta_results$est, digits = 3) %>%
+  kable_paper()
 ```
+
+The overall estimate of the average effect is `r round(beta_results$est$Est[beta_results$est$param=="beta"], 3)`, which is smaller than both the estimate that does not account for selection bias (`r round(che_res$beta, 3)`) and the estimate from the step function model with RVE (`r round(step_results$est$Est[step_results$est$param=="beta"], 3)`). This estimate is not significant, as depicted by the confidence intervals [`r round(beta_results$est$CI_lo[beta_results$est$param=="beta"], 3)`, `r round(beta_results$est$CI_hi[beta_results$est$param=="beta"], 3)`].
+
+To see how the likelihood of selection differs across studies with different p-values, we use the beta density function. We use a truncated version of the beta density as the beta function with RVE truncates the pre-specified cutpoints to psychologically salient thresholds for one-sided p-values, specifically `.025` and `.975`. Again, we must first exponentiate the selection weights as they are in the log metric (exp(`r round(beta_results$est$Est[beta_results$est$param=="zeta1"], 3)`) = `r round(exp(beta_results$est$Est[beta_results$est$param=="zeta1"]), 3)`, exp(`r round(beta_results$est$Est[beta_results$est$param=="zeta2"], 3)`) = `r round(exp(beta_results$est$Est[beta_results$est$param=="zeta2"]), 3)`).
+
+```{r}
+trunc_beta <- function(pval, a, b) {
+  pval_trunc <- pmin(pmax(pval, .025), .975)
+  wt <- pval_trunc^(a - 1) * (1 - pval_trunc)^(b - 1)
+  scale <- .025^(a - 1) * (1 - .025)^(b - 1)
+  wt / scale
+}
+
+pvalue <- seq(0,1,.01)
+zeta1 <- exp(beta_results$est$Est[beta_results$est$param=="zeta1"])
+zeta2 <- exp(beta_results$est$Est[beta_results$est$param=="zeta2"])
+betadat <- data.frame(pvalue = rep(pvalue, 5), weights = c(trunc_beta(pvalue, zeta1, zeta2)))
+
+ggplot(betadat, aes(x = pvalue, y = weights)) +
+  geom_line() + 
+  scale_x_continuous(limits = c(0,1), expand = expansion(0,0), breaks = c(0, .025, .25, .5, .75, .975, 1)) + 
+  scale_y_continuous(limits = c(0,1), expand = expansion(0,0)) + 
+  geom_hline(yintercept = 0) +  
+  geom_vline(xintercept = c(.025, .5, .975), linetype = "dashed") +  
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  labs(x = "p-value", y = "Relative Likelihood of Being Published")
+```
+
+The plot shows that studies with smaller p-values are more likely to be published than studies with larger p-values. For example, studies with p-values = 0.050 are about half as likely to be published than studies with p-value = 0.025.
 
 # References
 
