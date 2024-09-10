@@ -17,9 +17,9 @@ Such limitation poses a problem for meta-analyses in education, psychology and o
 Dependent effect sizes occur when primary studies report multiple measures of the outcomes or repeated measures of the outcome. 
 Failing to account for dependency can result in misleading conclusions too narrow confidence intervals and hypothesis tests that have inflated type one error rates.
 
-X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analysis that account for dependent effect sizes. Particularly, X (2024) combined step and beta selection models with robust variance estimation and with cluster and fractional weighted bootstrap. The results showed...
+X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analysis that account for dependent effect sizes. The results showed that selection models combined with robust variance estimation led to lower bias in the estimate of the overall effect size. Combining the selection models with cluster bootstrapping led to close to nominal coverage rates. 
 
-Our metaselection package provides a set of functions that implements the methods discussed in X (2024).
+Our metaselection package provides a set of functions that implements these methods. The main function, `selection_model()`, fits step and beta selection models with robust variance estimation and has options to run cluster bootstrapping.
 
 ## Installation
 
@@ -31,25 +31,34 @@ remotes::install_github("jepusto/metaselection")
 ## Example
 
 The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
-In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with robust variance estimates.
+In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping.
 
 ```{r, warning = FALSE, message = FALSE}
 library(metadat)
 library(metaselection)
+library(kableExtra)
 
 lehmann_dat <- dat.lehmann2018
 lehmann_dat$sei <- sqrt(lehmann_dat$vi)
 
-step_results <- selection_model(
+set.seed(20240910)
+
+step_results_boot <- selection_model(
   data = lehmann_dat, 
   yi = yi,
   sei = sei,
   selection_type = "step",
-  steps = .025
+  steps = .025,
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 19
 )
 
-step_results$est
+kbl(step_results_boot$est, digits = 3) |>
+  kable_paper()
 ```
+
+The overall estimate of the average effect is `r round(step_results_boot$est$Est[step_results_boot$est$param=="beta"], 3)`, 95% CI [`r round(step_results_boot$est$percentile_lower[step_results_boot$est$param=="beta"], 3)`, `r round(step_results_boot$est$percentile_upper[step_results_boot$est$param=="beta"], 3)`].
 
 ## Related Work
 
