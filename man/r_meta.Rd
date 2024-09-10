@@ -32,7 +32,7 @@ r_meta(
 
 \item{cor_sd}{number indicating standard deviation of correlation between outcomes}
 
-\item{censor_fun}{a function used to censor effects. This package provides functions \code{step_fun()} and \code{beta_wts_fun()}... ???}
+\item{censor_fun}{a function used to censor effects. This package provides functions \code{step_fun()} and \code{beta_fun()}... ???}
 
 \item{n_ES_sim}{a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study}
 

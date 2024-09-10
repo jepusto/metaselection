@@ -647,7 +647,7 @@ check_beta_score_hessian_bias <- function(
   
   if (!is.null(seed)) set.seed(seed)
   
-  censor_fun <- beta_wts_fun(delta_1 = lambdas[1], delta_2 = lambdas[2],
+  censor_fun <- beta_fun(delta_1 = lambdas[1], delta_2 = lambdas[2],
                              trunc_1 = steps[1], trunc_2 = steps[2])
   
   # create sample size sampler
@@ -792,7 +792,7 @@ check_beta_score_hessian_bias <- function(
 
 eval_beta_range <- function(delta, steps, eps = 1e-3, plot = FALSE) {
   p <- seq(0,1,eps)
-  b <- beta_wts_fun(delta_1 = delta[1], delta_2 = delta[2], 
+  b <- beta_fun(delta_1 = delta[1], delta_2 = delta[2], 
                     trunc_1 = steps[1], trunc_2 = steps[2])
   wts <- b(p)
   if (plot) plot(p, wts)

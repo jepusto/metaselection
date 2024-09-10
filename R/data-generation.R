@@ -91,11 +91,13 @@ r_study <- function(delta_j, #
 # censoring functions ---------------------------------------------
 #' @export
 
-step_fun <- function(cut_vals = .025, weights = 1) {
+step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
   
   if (length(cut_vals) != length(weights)) stop("cut_vals and weights must be the same length, doofus!")
   
-  wt_vec <- c(1, weights) / max(c(1, weights))
+  wt_vec <- c(1, weights)
+  
+  if (renormalize) wt_vec <- wt_vec / max(wt_vec)
   
   cut_vals_full <- c(0, cut_vals, 1)
   
@@ -109,7 +111,7 @@ step_fun <- function(cut_vals = .025, weights = 1) {
 
 #' @export
 
-beta_wts_fun <- function(delta_1 = 1, delta_2 = 1,
+beta_fun <- function(delta_1 = 1, delta_2 = 1,
                          trunc_1 = 0.025, trunc_2 = 0.975) {
 
   if (delta_1 + delta_2 > 2) {
@@ -154,7 +156,7 @@ beta_wts_fun <- function(delta_1 = 1, delta_2 = 1,
 #' @param m number of studies in the simulated meta-analysis
 #' @param cor_mu number indicating the average correlation between outcomes
 #' @param cor_sd number indicating standard deviation of correlation between outcomes
-#' @param censor_fun a function used to censor effects. This package provides functions `step_fun()` and `beta_wts_fun()`... ???
+#' @param censor_fun a function used to censor effects. This package provides functions `step_fun()` and `beta_fun()`... ???
 #' @param n_ES_sim a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study
 #' @param m_multiplier number indicating a multiplier for buffer for the number of studies 
 #' @param id_start integer indicating the starting value for id

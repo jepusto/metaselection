@@ -459,7 +459,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
     m = 50, 
     cor_mu = 0, 
     cor_sd = 0.01, 
-    censor_fun = beta_wts_fun(delta_1 = 0.6, delta_2 = 1.7, trunc_1 = .025, trunc_2 = .975), 
+    censor_fun = beta_fun(delta_1 = 0.6, delta_2 = 1.7, trunc_1 = .025, trunc_2 = .975), 
     n_ES_sim = n_ES_param(40, 1) 
   )
   

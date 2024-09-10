@@ -769,6 +769,7 @@ selection_model <- function(
   
   res$cl <- cl
   res$mf <- mf
+  res$steps <- steps
   
   return(res)
 }
