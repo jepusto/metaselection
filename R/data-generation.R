@@ -6,6 +6,14 @@
 # n_ES_empirical() is a functional (a function that returns a function). 
 # You give it a dataset with primary study sample sizes and numbers of effect sizes per study. 
 # It returns a function that generates random samples from the dataset—random study characteristics.
+
+#' @title Simulate empirical distribution of sample size and number of effect sizes 
+#' 
+#' @description A functional that takes in a dataset with primary study sample sizes and number of effect sizes per study and return a function to generate random samples from the dataset.
+#' 
+#' @param dat a dataframe or tibble containing primary study sample sizse and number of effect sizes per study
+#' 
+#' @returns A function that generates random samples from the input dataset.
 #' 
 #' @export
 
@@ -15,8 +23,18 @@ n_ES_empirical <- function(dat) {
   
 }
 
+#' @title Simulate empirical distribution of sample size and number of effect sizes 
+#' 
+#' @description A functional that takes in average sample size per primary study, average number of effect sizes per study, and the minimum sample size per study and returns a function to generate dataset with random samples of primary study sample size and and the number of effect sizes per study based on the Poisson distribution. 
+#' 
+#' @param mean_N number indicating the average sample size per primary study
+#' @param mean_ES number indicating the average number of effect sizes per primary study
+#' @param min_N number indicating the minimum sample size per study
+#' 
+#' @returns A function that generates a dataframe with randomly generated sample size per primary study and number of effect sizes per study
 #' 
 #' @export
+
 
 n_ES_param <- function(mean_N, mean_ES, min_N = 20L) {
   function(m) {
@@ -89,6 +107,17 @@ r_study <- function(delta_j, #
 }
 
 # censoring functions ---------------------------------------------
+
+#' @title Censor meta-analytic dataset based on a step-function model
+#' 
+#' @description A functional that takes in cut values and weights representing selection probabilities for different intervals of p-values and returns a function that can be used to censor meta-analytic datasets according to the step-function model. 
+#' 
+#' @param cut_vals numeric vector of one or more values specifying the thresholds of p-values where the likelihood of effects being selected changes 
+#' @param weights numeric vector of one or more values specifying the likelihood of selection for different intervals of p-values; the intervals are determined by the `cut_vals`
+#' @param renormalize logical with \code{TRUE} indicating 
+#' 
+#' @returns A function that can be used to censor a meta-analytic dataset based on the step-function model. 
+#' 
 #' @export
 
 step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
@@ -109,10 +138,22 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
   }
 }
 
+
+#' @title Censor meta-analytic dataset based on the beta-density model model
+#' 
+#' @description A functional that takes in beta-density model parameters and returns a function that can be used to censor meta-analytic datasets according to the beta-density model. 
+#' 
+#' @param delta_1 a number 
+#' @param delta_2 a number
+#' @param trunc_1 a number
+#' @param trunc_2 a number
+#' 
+#' @returns A function that can be used to censor a meta-analytic dataset based on the beta-density model. 
+#' 
 #' @export
 
 beta_fun <- function(delta_1 = 1, delta_2 = 1,
-                         trunc_1 = 0.025, trunc_2 = 0.975) {
+                     trunc_1 = 0.025, trunc_2 = 0.975) {
 
   if (delta_1 + delta_2 > 2) {
     max_p <- (delta_1 - 1) / (delta_1 + delta_2 - 2)
@@ -143,7 +184,6 @@ beta_fun <- function(delta_1 = 1, delta_2 = 1,
 # Sample k studies from r_study function
 # establish multi-variate normal distribution of n_ES per study
 # var/covariance structure created using mean correlation (cor_mu) and sd (cor_sd)
-# What was n_ES_gen (number generated?)
 
 
 #' @title Generate meta-analytic data 
@@ -156,10 +196,10 @@ beta_fun <- function(delta_1 = 1, delta_2 = 1,
 #' @param m number of studies in the simulated meta-analysis
 #' @param cor_mu number indicating the average correlation between outcomes
 #' @param cor_sd number indicating standard deviation of correlation between outcomes
-#' @param censor_fun a function used to censor effects. This package provides functions `step_fun()` and `beta_fun()`... ???
+#' @param censor_fun a function used to censor effects; this package provides functionals `step_fun()` and `beta_fun()` to censor effects based on step-function or beta-function models respectively.
 #' @param n_ES_sim a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study
 #' @param m_multiplier number indicating a multiplier for buffer for the number of studies 
-#' @param id_start integer indicating the starting value for id
+#' @param id_start integer indicating the starting value for study id
 #' @param paste_ids logical with \code{TRUE} (the default) indicating that the study id and effect size id should be pasted together
 #' @param include_sel_prob logical with \code{TRUE} indicating 
 #' 

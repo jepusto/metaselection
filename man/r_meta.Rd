@@ -32,13 +32,13 @@ r_meta(
 
 \item{cor_sd}{number indicating standard deviation of correlation between outcomes}
 
-\item{censor_fun}{a function used to censor effects. This package provides functions \code{step_fun()} and \code{beta_fun()}... ???}
+\item{censor_fun}{a function used to censor effects; this package provides functionals \code{step_fun()} and \code{beta_fun()} to censor effects based on step-function or beta-function models respectively.}
 
 \item{n_ES_sim}{a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study}
 
 \item{m_multiplier}{number indicating a multiplier for buffer for the number of studies}
 
-\item{id_start}{integer indicating the starting value for id}
+\item{id_start}{integer indicating the starting value for study id}
 
 \item{paste_ids}{logical with \code{TRUE} (the default) indicating that the study id and effect size id should be pasted together}
 
