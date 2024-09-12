@@ -277,7 +277,6 @@ test_that("selection_model() works with the subset argument.", {
     censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.7, 0.4)), 
     n_ES_sim = n_ES_param(40, 3)
   )
-  dat$X1 <- rnorm(nrow(dat))
   dat$Z1 <- sample(LETTERS[1:2], size = nrow(dat), replace = TRUE)
   
   
@@ -365,8 +364,7 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       make_sandwich = TRUE,
-      estimator = "hybrid",
-      optimizer = c("nleqslv","rootSolve")
+      estimator = "hybrid"
     )
   m1_hybrid_A2 <-
     selection_model(
@@ -376,8 +374,7 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       make_sandwich = TRUE,
-      estimator = "hybrid",
-      optimizer = c("nleqslv","rootSolve")
+      estimator = "hybrid"
     )
 
   expect_identical(m1_hybrid_A1$est, m1_hybrid_A2$est)
@@ -392,8 +389,7 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       make_sandwich = TRUE,
-      estimator = "hybrid",
-      optimizer = c("nleqslv","rootSolve")
+      estimator = "hybrid"
     )
   m1_hybrid_B2 <-
     selection_model(
@@ -403,13 +399,42 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       make_sandwich = TRUE,
-      estimator = "hybrid",
-      optimizer = c("nleqslv","rootSolve")
+      estimator = "hybrid"
     )
   
   expect_identical(m1_hybrid_B1$est, m1_hybrid_B2$est)
   expect_identical(m1_hybrid_B1$vcov, m1_hybrid_B2$vcov)
   expect_identical(m1_hybrid_B1$info, m1_hybrid_B2$info)
+  
+  
+  set.seed(20240912)
+  dat <- r_meta(
+    mean_smd = 0.3, tau = 0.15, omega = 0,
+    m = 300, cor_mu = 0.6, cor_sd = 0.001, 
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.7, 0.4)), 
+    n_ES_sim = n_ES_param(40, 1)
+  )
+  dat$Z1 <- sample(LETTERS[1:2], size = nrow(dat), replace = TRUE)
+  
+  m1_hybrid_full_A1 <-
+    selection_model(
+      data = subset(dat, Z1 == "A"),
+      yi = d,
+      sei = sda,
+      steps = c(.025, .500),
+      make_sandwich = TRUE,
+      estimator = "hybrid-full"
+    )
+  
+  m1_hybrid_full_B1 <-
+    selection_model(
+      data = subset(dat, Z1 == "B"),
+      yi = d,
+      sei = sda,
+      steps = c(.025, .500),
+      make_sandwich = TRUE,
+      estimator = "hybrid-full"
+    )
   
   m1_hybrid_mod <-
     selection_model(
@@ -421,21 +446,19 @@ test_that("selection_model() works with the subset argument.", {
       var_mods = ~ 0 + Z1,
       sel_mods = ~ 0 + Z1,
       make_sandwich = TRUE,
-      estimator = "hybrid-full",
-      optimizer = "nleqslv",
-      optimizer_control = list()
+      estimator = "hybrid-full"
     )
   
   expect_equal(
     subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1A", select = c(-param,-estimator)),
-    subset(m1_hybrid_A1$est, select = c(-param,-estimator)),
+    subset(m1_hybrid_full_A1$est, select = c(-param,-estimator)),
     ignore_attr = TRUE,
     tolerance = 1e-6
   )
   
   expect_equal(
     subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1B", select = c(-param,-estimator)),
-    subset(m1_hybrid_B1$est, select = c(-param,-estimator)),
+    subset(m1_hybrid_full_B1$est, select = c(-param,-estimator)),
     ignore_attr = TRUE,
     tolerance = 1e-6
   )
