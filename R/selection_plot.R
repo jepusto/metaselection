@@ -1,15 +1,43 @@
 #-------------------------------------------------------------------------------
 # Calculate selection weights for specified p-values
 
+#' @title Calculate model-implied weights for specified p-values.
+#'
+#' @description Calculates the selection weights implied by an estimated model
+#'   for a user-specified p-value or set of p-values.
+#'
+#' @param mod Fitted model of class \code{"selmodel"}.
+#' @param pvals Numeric vector of p-values for which to calculate selection
+#'   weights.
+#' @param ... further arguments passed to some methods.
+#'
+#' @returns If \code{mod} does not include bootstrapped confidence intervals or
+#'   if the argument \code{bootstraps = FALSE}, then \code{selection_wts} will
+#'   return a \code{data.frame} containing the user-specified p-values and the
+#'   selection weights implied by the estimated model parameters.
+#'
+#'   If \code{mod} does include bootstrapped confidence intervals (i.e., when
+#'   \code{inherits(mod, "boot.selmodel")} is \code{TRUE}) and the argument
+#'   \code{bootstraps = TRUE}, then \code{selection_wts} will return a list with
+#'   two elements. The first element is a \code{data.frame} containing the
+#'   user-specified p-values and the selection weights implied by the estimated
+#'   model parameters. The second element is a \code{data.frame} containing the
+#'   user-specified p-values and the selection weights implied by each bootstrap
+#'   replicate of the model parameter estimates. The \code{data.frame} includes
+#'   an additional variable, \code{rep}, identifying the bootstrap replicate.
+#'
 #' @export
 
-selection_wts <- function(mod, pts, ...) UseMethod("selection_wts")
+selection_wts <- function(mod, pvals, ...) UseMethod("selection_wts")
+
 
 #' @export
 
-selection_wts.default <- function(mod, pts, params, steps) {
+selection_wts.default <- function(mod, pvals, params, steps, ...) {
   
   mod <- match.arg(mod, c("step","beta"))
+  
+  if (min(pvals) < 0 | max(pvals) > 1) stop("pvals must be in the interval [0,1].")
   
   if (mod == "step") {
     
@@ -32,12 +60,19 @@ selection_wts.default <- function(mod, pts, params, steps) {
     )
   }
   
-  sel_fun(pts)
+  sel_fun(pvals)
 }
 
+#' @rdname selection_wts
+#' @param bootstraps If \code{mod} includes bootstrap replications, then setting
+#'   \code{bootstraps = TRUE} will return selection weights for each bootstrap
+#'   replication, in addition to the selection weights implied by the model
+#'   parameter estimates. Ignored if \code{mod} does not include bootstrap
+#'   replications.
+#'
 #' @export
 
-selection_wts.step.selmodel <- function(mod, pts, bootstraps = TRUE) {
+selection_wts.step.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_wts() is not available for models that include moderators of the selection parameters.")
   
@@ -46,8 +81,8 @@ selection_wts.step.selmodel <- function(mod, pts, bootstraps = TRUE) {
   sel_fun <- step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)
   
   wts <- data.frame(
-    p = pts, 
-    wt = sel_fun(pts)
+    p = pvals, 
+    wt = sel_fun(pvals)
   )
   
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
@@ -55,14 +90,14 @@ selection_wts.step.selmodel <- function(mod, pts, bootstraps = TRUE) {
   R <- eval(mod$cl$R, envir = parent.frame())
   sel_param_boots <- mod$bootstrap_reps[grepl("zeta", mod$bootstrap_reps$param),]
   sel_param_boots$rep <- rep(1:R, each = nrow(sel_param_boots) / R)
-  sel_param_boots <- reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
+  sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
   sel_param_boots$rep <- NULL
   
-  boot_wts <- apply(sel_param_boots, 1, \(zeta) step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(pts), simplify = FALSE)
+  boot_wts <- apply(sel_param_boots, 1, \(zeta) step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(pvals), simplify = FALSE)
   
   boot_wts <- data.frame(
-    rep = rep(1:R, each = length(pts)),
-    p = rep(pts, times = R),
+    rep = rep(1:R, each = length(pvals)),
+    p = rep(pvals, times = R),
     wt = unlist(boot_wts)
   )
   
@@ -70,9 +105,10 @@ selection_wts.step.selmodel <- function(mod, pts, bootstraps = TRUE) {
   
 }
 
+#' @rdname selection_wts
 #' @export
 
-selection_wts.beta.selmodel <- function(mod, pts, bootstraps = TRUE) {
+selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
   
   zeta <- mod$est$Est[grepl("zeta", mod$est$param)]
   
@@ -83,8 +119,8 @@ selection_wts.beta.selmodel <- function(mod, pts, bootstraps = TRUE) {
   )
   
   wts <- data.frame(
-    p = pts, 
-    wt = sel_fun(pts)
+    p = pvals, 
+    wt = sel_fun(pvals)
   )
   
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
@@ -92,7 +128,7 @@ selection_wts.beta.selmodel <- function(mod, pts, bootstraps = TRUE) {
   R <- eval(mod$cl$R, envir = parent.frame())
   sel_param_boots <- mod$bootstrap_reps[grepl("zeta", mod$bootstrap_reps$param),]
   sel_param_boots$rep <- rep(1:R, each = nrow(sel_param_boots) / R)
-  sel_param_boots <- reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
+  sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
   sel_param_boots$rep <- NULL
   
   boot_wts <- apply(
@@ -101,13 +137,13 @@ selection_wts.beta.selmodel <- function(mod, pts, bootstraps = TRUE) {
       delta_1 = exp(zeta[1]), delta_2 = exp(zeta[2]), 
       trunc_1 = mod$steps[1], trunc_2 = mod$steps[2],
       renormalize = FALSE
-    )(pts), 
+    )(pvals), 
     simplify = FALSE
   )
   
   boot_wts <- data.frame(
-    rep = rep(1:R, each = length(pts)),
-    p = rep(pts, times = R),
+    rep = rep(1:R, each = length(pvals)),
+    p = rep(pvals, times = R),
     wt = unlist(boot_wts)
   )
   
@@ -120,24 +156,49 @@ selection_wts.beta.selmodel <- function(mod, pts, bootstraps = TRUE) {
 #-------------------------------------------------------------------------------
 # Plotting methods
 
+#' @title Plot the selection weights implied by an estimated selection model.
+#'
+#' @description For a fitted model of class \code{"selmodel"}, create a plot of
+#'   the selection weights implied by the model parameter estimates. If the
+#'   model includes bootstrapped confidence intervals, then the plot will also
+#'   display the selection weights implied by each bootstrap replicate of the
+#'   parameter estimates.
+#'
+#' @param mod Fitted model of class \code{"selmodel"}.
+#' @param pts Number of points for which to calculate selection weights, with a
+#'   default of 200 points, evenly spaced between 0 and 1.
+#' @param ... further arguments passed to some methods.
+#'
+#' @returns A \code{ggplot2} object.
+#'
 #' @export
 
-selection_plot <- function(mod, pts, ...) UseMethod("selection_plot")
+selection_plot <- function(mod, pts = 200L, ...) UseMethod("selection_plot")
+
 
 #' @export
 
-selection_plot.default <- function(mod, pts, ...) {
+selection_plot.default <- function(mod, pts = 200L, ...) {
   mod_class <- paste(class(mod), collapse = ", ")
   msg <- paste0("There is no `selection_plot` method available for objects of class ", mod_class, ".")
   stop(msg)
 }
 
+#' @rdname selection_plot
+#' @param fill character string specifying the fill-color to use when \code{mod}
+#'   does not include bootstrap replications, with a default of \code{"blue"}.
+#'   Passed to \code{ggplot2::geom_area()}.
+#' @param alpha numeric value specifying the opacity of the filled area plot,
+#'   with a default of 0.5. Passed to \code{ggplot2::geom_area()}. Only used
+#'   when \code{mod} does not include bootstrap replications.
 #' @export
+#'
+#' @importFrom rlang .data
 
 selection_plot.selmodel <- function(
   mod, 
   pts = 200L, 
-  color = "blue",
+  fill = "blue",
   alpha = 0.5,
   ...
 ) {
@@ -146,14 +207,14 @@ selection_plot.selmodel <- function(
   
   pts <- seq(0, 1, length.out = pts)
 
-  dat <- selection_wts(mod, pts = pts, bootstrap = FALSE)
+  dat <- selection_wts(mod, pvals = pts, bootstrap = FALSE)
   
   ggplot2::ggplot(dat) + 
-    ggplot2::aes(x = p, y = wt) + 
+    ggplot2::aes(x = .data$p, y = .data$wt) + 
     ggplot2::expand_limits(y = 0) + 
     ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,0))) + 
-    ggplot2::geom_area(fill = color, alpha = alpha) + 
+    ggplot2::geom_area(fill = fill, alpha = alpha) + 
     ggplot2::labs(
       x = "p-value (one-sided)",
       y = "Selection weight"
@@ -161,6 +222,23 @@ selection_plot.selmodel <- function(
   
 }
 
+#' @rdname selection_plot
+#' @param color character string specifying the line color to use for drawing
+#'   the estimated selection weights, with a default of \code{"black"}. Passed
+#'   to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
+#'   bootstrap replications.
+#' @param linewidth numeric value specifying the line width to use for drawing
+#'   the estimated selection weights, with a default of 1.2. Passed
+#'   to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
+#'   bootstrap replications.
+#' @param draw_boots logical value indicating whether to draw the selection weights for each bootstrap replication, with a default of \code{TRUE}.
+#' @param boot_color character string specifying the line color to use for drawing the selection weights of each bootstrap replication, with a default of
+#'   \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
+#'   bootstrap replications.
+#' @param boot_alpha numeric value specifying the opacity of the lines for drawing the selection weights of each bootstrap replication, with a default of
+#'   \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
+#'   bootstrap replications.
+#'
 #' @export
 
 selection_plot.boot.selmodel <- function(
@@ -178,7 +256,7 @@ selection_plot.boot.selmodel <- function(
   
   pts <- seq(0, 1, length.out = pts)
   
-  dat <- selection_wts(mod, pts = pts, bootstraps = TRUE)
+  dat <- selection_wts(mod, pvals = pts, bootstraps = TRUE)
   R <- eval(mod$cl$R, envir = parent.frame())
   
   p <- ggplot2::ggplot(dat$wts) + 
@@ -192,9 +270,9 @@ selection_plot.boot.selmodel <- function(
     ggplot2::theme_minimal()
   
   if (draw_boots) {
-    p <- p + ggplot2::geom_line(data = dat$boot_wts, ggplot2::aes(x = p, y = wt, group = rep), color = boot_color, alpha = 100 * boot_alpha / R)
+    p <- p + ggplot2::geom_line(data = dat$boot_wts, ggplot2::aes(x = .data$p, y = .data$wt, group = .data$rep), color = boot_color, alpha = 100 * boot_alpha / R)
   }
   
-  p + ggplot2::geom_line(aes(x = p, y = wt), color = color, linewidth = linewidth)
+  p + ggplot2::geom_line(ggplot2::aes(x = .data$p, y = .data$wt), color = color, linewidth = linewidth)
     
 }
