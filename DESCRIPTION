@@ -23,9 +23,9 @@ Imports:
     mvtnorm,
     optimx,
     nleqslv,
-    rootSolve,
     purrr,
     pbapply,
+    ggplot2,
     simhelpers (> 0.2.1)
 Suggests: 
     testthat (>= 3.0.0),

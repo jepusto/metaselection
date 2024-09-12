@@ -93,7 +93,7 @@ fit_selection_model <- function(
   selection_type = "step",
   estimator = "ML",
   theta = NULL,
-  optimizer = if (estimator == "ML") "BFGS" else "nleqslv",
+  optimizer = "BFGS",
   optimizer_control = list(),
   use_jac = TRUE
 ) {
@@ -180,72 +180,44 @@ fit_selection_model <- function(
     
   } else if (estimator == "hybrid-full") {
     
-    optimizer <- match.arg(optimizer, choices = c("nleqslv","rootSolve"), several.ok = TRUE)
-    
     info <- list()
 
     jac <- if (use_jac) step_hybrid_jacobian else NULL
     
-    if ("nleqslv" %in% optimizer) {
-      
-      nleqslv_args <- list(
-        x = theta, 
-        fn = step_hybrid_score,
-        jac = jac,
-        yi = yi, sei = sei, pi = pi, ai = ai,
-        steps = steps,
-        X = X, U = U, Z0 = Z0, Z = Z,
-        jacobian = TRUE
-      )
-      if ("method" %in% names(optimizer_control)) {
-        nleqslv_args$method <- optimizer_control$method
-        optimizer_control$method <- NULL
-      }
-      if ("global" %in% names(optimizer_control)) {
-        nleqslv_args$global <- optimizer_control$global
-        optimizer_control$global <- NULL
-      }
-      if ("xscalm" %in% names(optimizer_control)) {
-        nleqslv_args$xscalm <- optimizer_control$xscalm
-        optimizer_control$xscalm <- NULL
-      }
-      nleqslv_args$control <- optimizer_control
-      
-      nleqslv_res <- do.call(nleqslv::nleqslv, args = nleqslv_args)
-      
-      nleqslv_norm <- sum(nleqslv_res$fvec^2)
-      info$nleqslv <- nleqslv_res[-1]  
-      info$nleqslv$f_norm <- nleqslv_norm
-      
+    nleqslv_args <- list(
+      x = theta, 
+      fn = step_hybrid_score,
+      jac = jac,
+      yi = yi, sei = sei, pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z,
+      jacobian = TRUE
+    )
+    
+    if ("method" %in% names(optimizer_control)) {
+      nleqslv_args$method <- optimizer_control$method
+      optimizer_control$method <- NULL
+    }
+    if ("global" %in% names(optimizer_control)) {
+      nleqslv_args$global <- optimizer_control$global
+      optimizer_control$global <- NULL
+    }
+    if ("xscalm" %in% names(optimizer_control)) {
+      nleqslv_args$xscalm <- optimizer_control$xscalm
+      optimizer_control$xscalm <- NULL
     }
     
-    if ("rootSolve" %in% optimizer) {
-      rootsolve <- list(
-        f = step_hybrid_score,
-        start = theta, 
-        jacfun = jac,
-        yi = yi, sei = sei, pi = pi, ai = ai,
-        steps = steps,
-        X = X, U = U, Z0 = Z0, Z = Z
-      )
-      rootsolve_args <- c(rootsolve, optimizer_control)
-      
-      rootsolve_res <- do.call(rootSolve::multiroot, args = rootsolve_args)
-      
-      rootsolve_norm <- sum(rootsolve_res$f.root^2)
-      info$rootsolve <- rootsolve_res[-1]
-      info$rootsolve$f_norm <- rootsolve_norm
-      
-    }
-
-    if (identical(optimizer, "nleqslv") || (all(c("nleqslv","rootSolve") %in% optimizer) && nleqslv_norm < rootsolve_norm)) {
-      max_method <- if ("method" %in% names(nleqslv_args)) nleqslv_args$method else "default"
-      max_method <- paste("nleqslv", max_method)
-      theta <- nleqslv_res$x
-    } else  {
-      max_method <- "rootSolve"
-      theta <- rootsolve_res$root
-    }
+    nleqslv_args$control <- optimizer_control
+    
+    nleqslv_res <- do.call(nleqslv::nleqslv, args = nleqslv_args)
+    
+    nleqslv_norm <- sum(nleqslv_res$fvec^2)
+    info$nleqslv <- nleqslv_res[-1]  
+    info$nleqslv$f_norm <- nleqslv_norm
+    
+    max_method <- if ("method" %in% names(nleqslv_args)) nleqslv_args$method else "default"
+    max_method <- paste("nleqslv", max_method)
+    theta <- nleqslv_res$x
     
     names(theta) <- params$H_names
     
@@ -259,8 +231,6 @@ fit_selection_model <- function(
     
   }  else if (estimator == "hybrid") {
     
-    optimizer <- match.arg(optimizer, choices = c("nleqslv","rootSolve"), several.ok = TRUE)
-    
     info <- list()
     
     x_index <- if (is.null(X)) 1L else 1:ncol(X)
@@ -268,66 +238,38 @@ fit_selection_model <- function(
      
     jac <- if (use_jac) step_hybrid_profile_jacobian else NULL
     
-    if ("nleqslv" %in% optimizer) {
-      
-      nleqslv_args <- list(
-        x = theta, 
-        fn = step_hybrid_profile_score,
-        jac = jac,
-        yi = yi, sei = sei, pi = pi, ai = ai,
-        steps = steps,
-        X = X, U = U, Z0 = Z0, Z = Z,
-        jacobian = TRUE
-      )
-      if ("method" %in% names(optimizer_control)) {
-        nleqslv_args$method <- optimizer_control$method
-        optimizer_control$method <- NULL
-      }
-      if ("global" %in% names(optimizer_control)) {
-        nleqslv_args$global <- optimizer_control$global
-        optimizer_control$global <- NULL
-      }
-      if ("xscalm" %in% names(optimizer_control)) {
-        nleqslv_args$xscalm <- optimizer_control$xscalm
-        optimizer_control$xscalm <- NULL
-      }
-      nleqslv_args$control <- optimizer_control
-      
-      nleqslv_res <- do.call(nleqslv::nleqslv, args = nleqslv_args)
-      
-      nleqslv_norm <- sum(nleqslv_res$fvec^2)
-      info$nleqslv <- nleqslv_res[-1]  
-      info$nleqslv$f_norm <- nleqslv_norm
-      
+    nleqslv_args <- list(
+      x = theta, 
+      fn = step_hybrid_profile_score,
+      jac = jac,
+      yi = yi, sei = sei, pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z,
+      jacobian = TRUE
+    )
+    if ("method" %in% names(optimizer_control)) {
+      nleqslv_args$method <- optimizer_control$method
+      optimizer_control$method <- NULL
     }
+    if ("global" %in% names(optimizer_control)) {
+      nleqslv_args$global <- optimizer_control$global
+      optimizer_control$global <- NULL
+    }
+    if ("xscalm" %in% names(optimizer_control)) {
+      nleqslv_args$xscalm <- optimizer_control$xscalm
+      optimizer_control$xscalm <- NULL
+    }
+    nleqslv_args$control <- optimizer_control
     
-    if ("rootSolve" %in% optimizer) {
-      rootsolve <- list(
-        f = step_hybrid_profile_score,
-        start = theta, 
-        jacfun = jac,
-        yi = yi, sei = sei, pi = pi, ai = ai,
-        steps = steps,
-        X = X, U = U, Z0 = Z0, Z = Z
-      )
-      rootsolve_args <- c(rootsolve, optimizer_control)
-      
-      rootsolve_res <- do.call(rootSolve::multiroot, args = rootsolve_args)
-      
-      rootsolve_norm <- sum(rootsolve_res$f.root^2)
-      info$rootsolve <- rootsolve_res[-1]
-      info$rootsolve$f_norm <- rootsolve_norm
-      
-    }
+    nleqslv_res <- do.call(nleqslv::nleqslv, args = nleqslv_args)
     
-    if (identical(optimizer, "nleqslv") || (all(c("nleqslv","rootSolve") %in% optimizer) && nleqslv_norm < rootsolve_norm)) {
-      max_method <- if ("method" %in% names(nleqslv_args)) nleqslv_args$method else "default"
-      max_method <- paste("nleqslv", max_method)
-      theta <- nleqslv_res$x
-    } else  {
-      max_method <- "rootSolve"
-      theta <- rootsolve_res$root
-    }
+    nleqslv_norm <- sum(nleqslv_res$fvec^2)
+    info$nleqslv <- nleqslv_res[-1]  
+    info$nleqslv$f_norm <- nleqslv_norm
+    
+    max_method <- if ("method" %in% names(nleqslv_args)) nleqslv_args$method else "default"
+    max_method <- paste("nleqslv", max_method)
+    theta <- nleqslv_res$x
     
     theta <- c(rep(NA_real_, max(x_index)), theta)
     
@@ -454,7 +396,7 @@ bootstrap_selmodel <- function(
     selection_type = "step",
     estimator = "ML",
     theta = NULL,
-    optimizer = if (estimator == "ML") "BFGS" else "nleqslv",
+    optimizer = "BFGS",
     optimizer_control = list(),
     use_jac = TRUE,
     wtype = c("multinomial", "exponential")
@@ -524,51 +466,75 @@ bootstrap_selmodel <- function(
 }
 
 #' @title Estimate step or beta selection model
-#' 
+#'
 #' @description Estimate step or beta selection model
-#' 
-#' 
-#' @param data a data frame or tibble containing the meta-analytic data
-#' @param yi vector of effect sizes
-#' @param sei vector of sampling standard error
-#' @param pi vector of one-sided p-values
-#' @param ai vector of analytic weight
-#' @param cluster vector indicating cluster membership 
-#' @param selection_type character string specifying the type selection model to estimate, with possible options \code{"step"} or \code{"beta"}.
-#' @param steps numeric vector of one or more values specifying the thresholds of p-values where the likelihood of effects being selected changes 
-#' @param mean_mods optional model formula indicating moderators related to the average effect size magnitude
-#' @param var_mods optional model formula indicating moderators related to effect size heterogeneity
-#' @param sel_mods optional model formula indicating moderators related to the probability of selection 
-#' @param sel_zero_mods optional model formula indicating moderators related to the probability of selection 
-#' @param subset optional logical expression indicating the subset of the data to keep in the analysis
-#' @param make_sandwich logical with \code{TRUE} (the default) indicating to calculate standard errors using sandwich estimators
-#' @param conf_level desired coverage level for confidence intervals, with the default value set to \code{.95}
-#' @param estimator vector indicating whether to use the maximum likelihood or the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"}, and \code{"hybrid-full"}. If running the beta selection model, only the maximum likelihood estimator, \code{"ML"}, is available. For step function models, both maximum likelihood and hybrid estimators are available.  
-#' @param theta optional numeric vector of containing starting values of the parameters to be estimated 
-#' @param optimizer character string indicating the optimizer to use
-#' @param optimizer_control an optional list of control parameters to be used for optimization
-#' @param use_jac logical with \code{TRUE} (the default) indicating that the Jacobian ...???
-#' @param bootstrap character string specifying the type of bootstrap to run, with possible options \code{"none"} (the default), \code{"exponential"}, \code{"multinomial"}.
-#' @param boot_CI character string specifying the type of bootstrap confidence interval to calculate, with possible options \code{"percentile"} (the default), \code{"student"}, \code{"large-sample"}, or \code{"none"}. 
-#' @param R number of bootstrap replications, with the default set to \code{1999}
+#'
+#'
+#' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
+#'   data
+#' @param yi vector of effect sizes estimates.
+#' @param sei vector of sampling standard errors.
+#' @param pi optional vector of one-sided p-values. If not specified, p-values will be
+#'   computed from \code{yi} and \code{sei}.
+#' @param ai optional vector of analytic weights.
+#' @param cluster vector indicating which observations belong to the same
+#'   cluster.
+#' @param selection_type character string specifying the type selection model to
+#'   estimate, with possible options \code{"step"} or \code{"beta"}.
+#' @param steps If \code{selection_type = "step"}, a numeric vector of one or
+#'   more values specifying the thresholds (or steps) where the selection
+#'   probability changes. If \code{selection_type = "beta"}, then a numeric
+#'   vector of two values specifying the thresholds beyond which the selection
+#'   function is truncated.
+#' @param mean_mods optional model formula for moderators related to average
+#'   effect size magnitude.
+#' @param var_mods optional model formula for moderators related to effect size
+#'   heterogeneity.
+#' @param sel_mods optional model formula for moderators related to the
+#'   probability of selection. Only relevant for \code{selection_type = "step"}.
+#' @param sel_zero_mods optional model formula for moderators related to
+#'   the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.
+#' @param subset optional logical expression indicating a subset of observations
+#'   to use for estimation.
+#' @param make_sandwich logical with \code{TRUE} (the default) indicating to
+#'   calculate standard errors using sandwich estimators.
+#' @param conf_level desired coverage level for confidence intervals, with the
+#'   default value set to \code{.95}
+#' @param estimator vector indicating whether to use the maximum likelihood or
+#'   the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
+#'   and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
+#'   maximum likelihood estimator, \code{"ML"}, is available. For step function
+#'   models, both maximum likelihood and hybrid estimators are available.
+#' @param theta optional numeric vector of starting values to use in optimization routines.
+#' @param optimizer character string indicating the optimizer to use. Ignored if \code{estimator = "hybrid"} or \code{"hybrid-full"}.
+#' @param optimizer_control an optional list of control parameters to be used
+#'   for optimization
+#' @param use_jac logical with \code{TRUE} (the default) indicating to use the Jacobian of the estimating equations for optimization.
+#' @param bootstrap character string specifying the type of bootstrap to run,
+#'   with possible options \code{"none"} (the default), \code{"exponential"} for the fractionally re-weighted cluster bootstrap,
+#'   or \code{"multinomial"} for a conventional clustered bootstrap.
+#' @param boot_CI character string specifying the type of bootstrap confidence
+#'   interval to calculate, with possible options \code{"percentile"} (the
+#'   default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.
+#' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
-#' 
+#'
 #' @returns A numeric vector.
-#' 
+#'
 #' @export
-#' 
-#' 
+#'
+#'
 #' @examples
-#' 
+#'
 #' dat <- r_meta(
-#'   mean_smd = 0, 
+#'   mean_smd = 0,
 #'   tau = .1, omega = .01,
-#'   m = 50, 
-#'   cor_mu = .4, cor_sd = 0.001, 
-#'   censor_fun = step_fun(cut_vals = .025, weights = 0.4), 
+#'   m = 50,
+#'   cor_mu = .4, cor_sd = 0.001,
+#'   censor_fun = step_fun(cut_vals = .025, weights = 0.4),
 #'   n_ES_sim = n_ES_param(40, 3)
 #' )
-#' 
+#'
 #' res <- selection_model(
 #'   data = dat,
 #'   yi = d,
@@ -580,7 +546,7 @@ bootstrap_selmodel <- function(
 #'   boot_CI = "percentile",
 #'   R = 49
 #' )
-#' 
+#'
 #' res$est
 
 
