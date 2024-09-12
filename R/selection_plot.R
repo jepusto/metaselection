@@ -137,12 +137,10 @@ selection_plot.default <- function(mod, pts, ...) {
 selection_plot.selmodel <- function(
   mod, 
   pts = 200L, 
-  col = "blue",
+  color = "blue",
   alpha = 0.5,
   ...
 ) {
-  
-  require(ggplot2)
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
@@ -150,13 +148,13 @@ selection_plot.selmodel <- function(
 
   dat <- selection_wts(mod, pts = pts, bootstrap = FALSE)
   
-  ggplot(dat) + 
-    aes(x = p, y = wt) + 
-    expand_limits(y = 0) + 
-    scale_x_continuous(limits = c(0, 1), expand = expansion(0, 0.01)) + 
-    scale_y_continuous(expand = expansion(0, c(0,0))) + 
-    geom_area(fill = col, alpha = alpha) + 
-    labs(
+  ggplot2::ggplot(dat) + 
+    ggplot2::aes(x = p, y = wt) + 
+    ggplot2::expand_limits(y = 0) + 
+    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,0))) + 
+    ggplot2::geom_area(fill = color, alpha = alpha) + 
+    ggplot2::labs(
       x = "p-value (one-sided)",
       y = "Selection weight"
     )
@@ -168,15 +166,13 @@ selection_plot.selmodel <- function(
 selection_plot.boot.selmodel <- function(
     mod, 
     pts = 200L, 
-    col = "black",
+    color = "black",
     linewidth = 1.2, 
     draw_boots = TRUE,
-    boot_col = "blue",
+    boot_color = "blue",
     boot_alpha = 0.1,
     ...
 ) {
-  
-  require(ggplot2)
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
@@ -185,20 +181,20 @@ selection_plot.boot.selmodel <- function(
   dat <- selection_wts(mod, pts = pts, bootstraps = TRUE)
   R <- eval(mod$cl$R, envir = parent.frame())
   
-  p <- ggplot(dat$wts) + 
-    expand_limits(y = 0) + 
-    scale_x_continuous(limits = c(0, 1), expand = expansion(0, 0.01)) + 
-    scale_y_continuous(expand = expansion(0, c(0,NA))) + 
-    labs(
+  p <- ggplot2::ggplot(dat$wts) + 
+    ggplot2::expand_limits(y = 0) + 
+    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,NA))) + 
+    ggplot2::labs(
       x = "p-value (one-sided)",
       y = "Selection weight"
     ) + 
-    theme_minimal()
+    ggplot2::theme_minimal()
   
   if (draw_boots) {
-    p <- p + geom_line(data = dat$boot_wts, aes(x = p, y = wt, group = rep), color = boot_col, alpha = 100 * boot_alpha / R)
+    p <- p + ggplot2::geom_line(data = dat$boot_wts, ggplot2::aes(x = p, y = wt, group = rep), color = boot_color, alpha = 100 * boot_alpha / R)
   }
   
-  p + geom_line(aes(x = p, y = wt), color = col, linewidth = linewidth)
+  p + ggplot2::geom_line(aes(x = p, y = wt), color = color, linewidth = linewidth)
     
 }
