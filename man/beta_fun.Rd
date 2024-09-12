@@ -4,7 +4,13 @@
 \alias{beta_fun}
 \title{Censor meta-analytic dataset based on the beta-density model model}
 \usage{
-beta_fun(delta_1 = 1, delta_2 = 1, trunc_1 = 0.025, trunc_2 = 0.975)
+beta_fun(
+  delta_1 = 1,
+  delta_2 = 1,
+  trunc_1 = 0.025,
+  trunc_2 = 0.975,
+  renormalize = TRUE
+)
 }
 \arguments{
 \item{delta_1}{a number}

@@ -153,14 +153,19 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
 #' @export
 
 beta_fun <- function(delta_1 = 1, delta_2 = 1,
-                     trunc_1 = 0.025, trunc_2 = 0.975) {
+                     trunc_1 = 0.025, trunc_2 = 0.975, 
+                     renormalize = TRUE) {
 
-  if (delta_1 + delta_2 > 2) {
-    max_p <- (delta_1 - 1) / (delta_1 + delta_2 - 2)
-    if (is.nan(max_p)) max_p <- 0.5
-    max_p <- max(min(max_p, trunc_2), trunc_1)
+  if (renormalize) {
+    if (delta_1 + delta_2 > 2) {
+      max_p <- (delta_1 - 1) / (delta_1 + delta_2 - 2)
+      if (is.nan(max_p)) max_p <- 0.5
+      max_p <- max(min(max_p, trunc_2), trunc_1)
+    } else {
+      max_p <- if (delta_1 > delta_2) trunc_2 else trunc_1
+    }
   } else {
-    max_p <- if (delta_1 > delta_2) trunc_2 else trunc_1
+    max_p <- trunc_1
   }
   
   max_val <- max_p^(delta_1 - 1) * (1 - max_p)^(delta_2 - 1)
