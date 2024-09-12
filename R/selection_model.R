@@ -535,19 +535,32 @@ bootstrap_selmodel <- function(
 #'   n_ES_sim = n_ES_param(40, 3)
 #' )
 #'
-#' res <- selection_model(
+#' res_ML <- selection_model(
 #'   data = dat,
 #'   yi = d,
 #'   sei = sd_d,
 #'   cluster = studyid,
 #'   steps = 0.025,
 #'   estimator = "ML",
+#'   bootstrap = "none"
+#' )
+#' 
+#' res_ML$est
+#' 
+#'  
+#' res_hybrid <- selection_model(
+#'   data = dat,
+#'   yi = d,
+#'   sei = sd_d,
+#'   cluster = studyid,
+#'   steps = 0.025,
+#'   estimator = "hybrid",
 #'   bootstrap = "multinomial",
 #'   boot_CI = "percentile",
-#'   R = 49
+#'   R = 199
 #' )
 #'
-#' res$est
+#' res_hybrid$est
 
 
 selection_model <- function(
