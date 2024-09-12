@@ -1,5 +1,9 @@
 ---
 title: "Selection Models for Selective Reporting in Meta-Analysis with Dependent Effects"
+authors:
+  - Megha Joshi
+  - James E. Pustejovsky
+  - Martyna Citkowicz
 output: html_document
 date: "2024-09-10"
 bibliography: references.bib
@@ -57,10 +61,9 @@ The dataset includes 81 effect sizes from 41 studies.
 
 
 ```{r, warning = FALSE, message = FALSE}
+library(metadat)        # for example dataset
+library(metafor)        # for conventional meta-analysis 
 library(metaselection)
-library(metadat)
-library(metafor)
-library(clubSandwich)
 library(kableExtra)
 library(tidyverse)
 

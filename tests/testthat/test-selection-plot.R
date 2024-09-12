@@ -22,7 +22,7 @@ test_that("selection_plot() works for 3PSM.", {
     bootstrap = "none"
   )
   
-  wt_noboot <- selection_wts(ML_noboot, pts = seq(0,1,length.out = 200))
+  wt_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(ML_noboot)
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
@@ -50,7 +50,7 @@ test_that("selection_plot() works for 3PSM.", {
   expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
-  wt_boot <- selection_wts(ML_boot, pts = seq(0,1,length.out = 200))
+  wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
   p_boot <- selection_plot(ML_boot)
   
   p_boot
@@ -71,7 +71,7 @@ test_that("selection_plot() works for 3PSM.", {
     bootstrap = "none"
   )
   
-  wt_noboot <- selection_wts(hybrid_noboot, pts = seq(0,1,length.out = 200))
+  wt_noboot <- selection_wts(hybrid_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(hybrid_noboot)
   
   p_noboot
@@ -101,7 +101,7 @@ test_that("selection_plot() works for 3PSM.", {
   expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
-  wt_boot <- selection_wts(hybrid_boot, pts = seq(0,1,length.out = 200))
+  wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
   p_boot <- selection_plot(hybrid_boot)
   
   p_boot
@@ -137,7 +137,7 @@ test_that("selection_plot() works for 4PSM.", {
     bootstrap = "none"
   )
   
-  wt_noboot <- selection_wts(ML_noboot, pts = seq(0,1,length.out = 200))
+  wt_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(ML_noboot)
   
   p_noboot
@@ -167,7 +167,7 @@ test_that("selection_plot() works for 4PSM.", {
   expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
-  wt_boot <- selection_wts(ML_boot, pts = seq(0,1,length.out = 200))
+  wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
   p_boot <- selection_plot(ML_boot)
   
   p_boot
@@ -188,7 +188,7 @@ test_that("selection_plot() works for 4PSM.", {
     bootstrap = "none"
   )
   
-  wt_noboot <- selection_wts(hybrid_noboot, pts = seq(0,1,length.out = 200))
+  wt_noboot <- selection_wts(hybrid_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(hybrid_noboot)
   
   p_noboot
@@ -217,7 +217,7 @@ test_that("selection_plot() works for 4PSM.", {
   expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
-  wt_boot <- selection_wts(hybrid_boot, pts = seq(0,1,length.out = 200))
+  wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
   p_boot <- selection_plot(hybrid_boot)
   
   p_boot
@@ -257,7 +257,7 @@ test_that("selection_plot() works for beta model", {
     bootstrap = "none"
   )
   
-  wt_noboot <- selection_wts(ML_noboot, pts = seq(0,1,length.out = 200))
+  wt_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(ML_noboot)
   
   p_noboot
@@ -289,7 +289,7 @@ test_that("selection_plot() works for beta model", {
   expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
-  wt_boot <- selection_wts(ML_boot, pts = seq(0,1,length.out = 200))
+  wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
   p_boot <- selection_plot(ML_boot)
   
   p_boot
