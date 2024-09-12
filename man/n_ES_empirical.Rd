@@ -7,11 +7,11 @@
 n_ES_empirical(dat)
 }
 \arguments{
-\item{dat}{a dataframe or tibble containing primary study sample sizse and number of effect sizes per study}
+\item{dat}{a \code{data.frame} or \code{tibble} containing primary study sample sizes and number of effect sizes per study}
 }
 \value{
 A function that generates random samples from the input dataset.
 }
 \description{
-A functional that takes in a dataset with primary study sample sizes and number of effect sizes per study and return a function to generate random samples from the dataset.
+A functional that takes in a dataset with primary study sample sizes and number of effect sizes per study and return a function that generates random samples from the dataset.
 }

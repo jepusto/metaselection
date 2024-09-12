@@ -13,17 +13,25 @@ beta_fun(
 )
 }
 \arguments{
-\item{delta_1}{a number}
+\item{delta_1}{numeric value for the first parameter of the beta function}
 
-\item{delta_2}{a number}
+\item{delta_2}{numeric value for the second parameter of the beta function}
 
-\item{trunc_1}{a number}
+\item{trunc_1}{numeric value between 0 and 1, below which p-values will be
+truncated.}
 
-\item{trunc_2}{a number}
+\item{trunc_2}{numeric value between 0 and 1, above which p-values will be
+truncated.}
+
+\item{renormalize}{logical indicating whether to normalize the beta function
+to have a maximum value of 1, with a default value of \code{TRUE}.}
 }
 \value{
-A function that can be used to censor a meta-analytic dataset based on the beta-density model.
+A function that can be used to censor a meta-analytic dataset based
+on the beta-density model.
 }
 \description{
-A functional that takes in beta-density model parameters and returns a function that can be used to censor meta-analytic datasets according to the beta-density model.
+A functional that takes model parameters and returns a function
+that can be used to censor meta-analytic datasets according to the
+beta-density model.
 }
