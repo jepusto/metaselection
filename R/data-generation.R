@@ -23,7 +23,8 @@
 #' 
 #' @examples
 #' study_features <- n_ES_empirical(wwc_es)
-#' study_features()
+#' study_features(3)
+#' study_features(7)
 #' 
 
 n_ES_empirical <- function(dat) {
