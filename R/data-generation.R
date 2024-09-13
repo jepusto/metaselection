@@ -2,20 +2,28 @@
 # Data Generating Model  #
 # -----------------------#
 
-# simulate empirical distribution of sample size and number of effect size
+# simulate empirical distribution of sample size and number of effect sizes
 # n_ES_empirical() is a functional (a function that returns a function). 
 # You give it a dataset with primary study sample sizes and numbers of effect sizes per study. 
 # It returns a function that generates random samples from the dataset—random study characteristics.
 
-#' @title Simulate empirical distribution of sample size and number of effect sizes 
+#' @title Simulate empirical distribution of sample size and number of effect 
+#'   sizes 
 #' 
-#' @description A functional that takes in a dataset with primary study sample sizes and number of effect sizes per study and return a function that generates random samples from the dataset.
+#' @description A functional that takes in a dataset with empirical distribution of 
+#'    primary study sample sizes and number of effect sizes per primary study and 
+#'    returns a function that generates random samples from the dataset
 #' 
-#' @param dat a \code{data.frame} or \code{tibble} containing primary study sample sizes and number of effect sizes per study
+#' @param dat a \code{data.frame} or \code{tibble} containing primary study sample 
+#'    sizes and number of effect sizes per primary study
 #' 
 #' @returns A function that generates random samples from the input dataset.
 #' 
 #' @export
+#' 
+#' @examples
+#' study_features <- n_ES_empirical(wwc_es)
+#' study_features()
 #' 
 
 n_ES_empirical <- function(dat) {
@@ -123,15 +131,22 @@ r_study <- function(delta_j, #
 
 #' @title Censor meta-analytic dataset based on a step-function model
 #' 
-#' @description A functional that takes in cut values and weights representing selection probabilities for different intervals of p-values and returns a function that can be used to censor meta-analytic datasets according to the step-function model. 
+#' @description A functional that takes in cut values and weights representing 
+#'    selection probabilities for different intervals of p-values and returns a 
+#'    function that can be used to censor meta-analytic datasets according to 
+#'    the step-function model. 
 #' 
-#' @param cut_vals numeric vector of one or more values specifying the specifying the thresholds (or steps) where the selection
-#'   probability changes.
-#' @param weights numeric vector of one or more values specifying the selection probabilities for different intervals of p-values; the intervals are determined by the `cut_vals`.
+#' @param cut_vals numeric vector of one or more values specifying the 
+#'    specifying the thresholds (or steps) where the selection probability 
+#'    changes.
+#' @param weights numeric vector of one or more values specifying the 
+#'    selection probabilities for different intervals of p-values; the intervals 
+#'    are determined by the `cut_vals`.
 #' @param renormalize logical indicating whether to normalize the step function
 #'   to have a maximum value of 1, with a default value of \code{TRUE}.
 #' 
-#' @returns A function that can be used to censor a meta-analytic dataset based on the step-function model. 
+#' @returns A function that can be used to censor a meta-analytic dataset 
+#'    based on the step-function model. 
 #' 
 #' @export
 
