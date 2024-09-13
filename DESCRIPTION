@@ -34,7 +34,6 @@ Suggests:
     metadat,
     DescTools,
     knitr,
-    kableExtra,
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
