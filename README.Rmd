@@ -3,6 +3,7 @@ output: github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+
 # metaselection
 
 Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results. 
