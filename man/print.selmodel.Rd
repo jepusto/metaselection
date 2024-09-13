@@ -4,10 +4,10 @@
 \alias{print.selmodel}
 \title{Print results from \code{selmodel()}}
 \usage{
-\method{print}{selmodel}(mod, expoentiate = TRUE)
+\method{print}{selmodel}(x, exponentiate = TRUE)
 }
 \arguments{
-\item{x}{Object from selmodel class.}
+\item{x}{Fitted model of class \code{"selmodel"}.}
 
 \item{exponentiate}{logical with \code{TRUE} indicating that the gamma and zeta estimates should be exponentiated}
 }
