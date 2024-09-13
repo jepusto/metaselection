@@ -102,6 +102,7 @@ Below is the code to run correlated-and-heirarchical effects model.
 
 ```{r CHE}
 library(metafor)
+library(clubSandwich)
 
 V_mat <- vcalc(
   vi = vi, 

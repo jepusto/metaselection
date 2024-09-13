@@ -32,6 +32,7 @@ Suggests:
     testthat (>= 3.0.0),
     metafor,
     metadat,
+    clubSandwich,
     DescTools,
     knitr,
     rmarkdown
