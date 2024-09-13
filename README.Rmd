@@ -48,6 +48,7 @@ step_results_boot <- selection_model(
   data = lehmann_dat, 
   yi = yi,
   sei = sei,
+  cluster = Short_Title,
   selection_type = "step",
   steps = .025,
   bootstrap = "multinomial",
