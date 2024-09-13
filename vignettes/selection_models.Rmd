@@ -140,6 +140,7 @@ step_mod <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
+  cluster = study,
   selection_type = "step",
   steps = .025
 )
@@ -167,6 +168,8 @@ step_mod_boot <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
+  cluster = study,
+  selection_type = "step",
   steps = .025,
   bootstrap = "multinomial",
   boot_CI = "percentile",
