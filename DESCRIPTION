@@ -36,7 +36,8 @@ Suggests:
     clubSandwich,
     DescTools,
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
 Depends: 
