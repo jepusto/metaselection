@@ -12,7 +12,7 @@ selection_model(
   ai,
   cluster,
   selection_type = c("step", "beta"),
-  steps = if (selection_type == "step") 0.025 else c(0.025, 0.975),
+  steps = NULL,
   mean_mods = NULL,
   var_mods = NULL,
   sel_mods = NULL,
@@ -52,9 +52,9 @@ estimate, with possible options \code{"step"} or \code{"beta"}.}
 
 \item{steps}{If \code{selection_type = "step"}, a numeric vector of one or
 more values specifying the thresholds (or steps) where the selection
-probability changes. If \code{selection_type = "beta"}, then a numeric
+probability changes, with a default of \code{steps = .025}. If \code{selection_type = "beta"}, then a numeric
 vector of two values specifying the thresholds beyond which the selection
-function is truncated.}
+function is truncated, with a default of \code{steps = c(.025, .975)}.}
 
 \item{mean_mods}{optional model formula for moderators related to average
 effect size magnitude.}

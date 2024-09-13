@@ -483,9 +483,9 @@ bootstrap_selmodel <- function(
 #'   estimate, with possible options \code{"step"} or \code{"beta"}.
 #' @param steps If \code{selection_type = "step"}, a numeric vector of one or
 #'   more values specifying the thresholds (or steps) where the selection
-#'   probability changes. If \code{selection_type = "beta"}, then a numeric
+#'   probability changes, with a default of \code{steps = .025}. If \code{selection_type = "beta"}, then a numeric
 #'   vector of two values specifying the thresholds beyond which the selection
-#'   function is truncated.
+#'   function is truncated, with a default of \code{steps = c(.025, .975)}.
 #' @param mean_mods optional model formula for moderators related to average
 #'   effect size magnitude.
 #' @param var_mods optional model formula for moderators related to effect size
@@ -571,7 +571,7 @@ selection_model <- function(
     ai,
     cluster,
     selection_type = c("step","beta"),
-    steps = if (selection_type == "step") .025 else c(.025, .975),
+    steps = NULL,
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
@@ -611,7 +611,10 @@ selection_model <- function(
     }
   }
   
-  if (missing(steps)) stop("Must supply steps argument.")
+  if (missing(steps)) {
+    steps <- if (selection_type == "step") .025 else c(.025, .975)
+  }
+  
   if (!inherits(steps, "numeric") || min(steps) <= 0 || max(steps) >= 1) stop("steps must be a numeric vector with all entries in the interval (0,1).")
   if (selection_type == "beta") {
     if (length(steps) != 2L) stop("steps must be a numeric vector of length 2 when selection_type = 'beta'.")

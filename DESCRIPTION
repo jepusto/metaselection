@@ -33,8 +33,8 @@ Suggests:
     metafor,
     metadat,
     DescTools,
-    dplyr,
     knitr,
+    kableExtra,
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
