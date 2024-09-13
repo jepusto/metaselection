@@ -38,3 +38,6 @@ Suggests:
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
+Depends: 
+    R (>= 2.10)
+LazyData: true
