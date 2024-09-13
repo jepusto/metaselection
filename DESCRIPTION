@@ -27,7 +27,8 @@ Imports:
     pbapply,
     rlang,
     ggplot2,
-    simhelpers (> 0.2.1)
+    simhelpers (> 0.2.1),
+    Rdpack
 Suggests: 
     testthat (>= 3.0.0),
     metafor,
