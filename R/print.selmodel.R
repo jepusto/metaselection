@@ -5,13 +5,13 @@
 #' 
 #' @param x Fitted model of class \code{"selmodel"}.
 #' @param exponentiate logical with `TRUE` indicating that the gamma and zeta estimates should be exponentiated
-#'
+#' @param ... Not used.
 #'
 #' @export
 
 
 
-print.selmodel <- function(x, exponentiate = TRUE) {
+print.selmodel <- function(x, exponentiate = TRUE, ...) {
   
   model <- if ("step.selmodel" %in% class(x)) "Step Function Model with Robust Variance Estimation"
   
