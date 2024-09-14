@@ -2,12 +2,30 @@
 # Data Generating Model  #
 # -----------------------#
 
-# simulate empirical distribution of sample size and number of effect size
+# simulate empirical distribution of sample size and number of effect sizes
 # n_ES_empirical() is a functional (a function that returns a function). 
 # You give it a dataset with primary study sample sizes and numbers of effect sizes per study. 
 # It returns a function that generates random samples from the dataset—random study characteristics.
+
+#' @title Simulate empirical distribution of sample size and number of effect 
+#'   sizes 
+#' 
+#' @description A functional that takes in a dataset with empirical distribution of 
+#'    primary study sample sizes and number of effect sizes per primary study and 
+#'    returns a function that generates random samples from the dataset
+#' 
+#' @param dat a \code{data.frame} or \code{tibble} containing primary study sample 
+#'    sizes and number of effect sizes per primary study
+#' 
+#' @returns A function that generates random samples from the input dataset.
 #' 
 #' @export
+#' 
+#' @examples
+#' study_features <- n_ES_empirical(wwc_es)
+#' study_features(m=3)
+#' study_features(m=7)
+#' 
 
 n_ES_empirical <- function(dat) {
   d <- dat
@@ -15,8 +33,30 @@ n_ES_empirical <- function(dat) {
   
 }
 
-#' 
+#' @title Simulate empirical distribution of sample size and number of effect
+#'   sizes
+#'
+#' @description A functional that takes in average sample size per primary
+#'   study, average number of effect sizes per study, and the minimum sample
+#'   size per study and returns a function to generate random samples of primary
+#'   study sample sizes and numbers of effect sizes per study. 
+#'
+#' @param mean_N numeric value specifying the average sample size per primary study
+#' @param mean_ES numeric value specifying the average number of effect sizes per
+#'   primary study
+#' @param min_N numeric value specifying the minimum sample size per study
+#'
+#' @returns A function that generates a \code{data.frame} with randomly generated sample
+#'   size per primary study and number of effect sizes per study.
+#'
 #' @export
+#' 
+#' @examples
+#' study_features <- n_ES_param(mean_N = 40, mean_ES = 3, min_N = 10)
+#' study_features(m = 3)
+#' study_features(m = 5)
+#' 
+
 
 n_ES_param <- function(mean_N, mean_ES, min_N = 20L) {
   function(m) {
@@ -89,13 +129,35 @@ r_study <- function(delta_j, #
 }
 
 # censoring functions ---------------------------------------------
+
+#' @title Censor meta-analytic dataset based on a step-function model
+#' 
+#' @description A functional that takes in cut values and weights representing 
+#'    selection probabilities for different intervals of p-values and returns a 
+#'    function that can be used to censor meta-analytic datasets according to 
+#'    the step-function model. 
+#' 
+#' @param cut_vals numeric vector of one or more values specifying the 
+#'    specifying the thresholds (or steps) where the selection probability 
+#'    changes.
+#' @param weights numeric vector of one or more values specifying the 
+#'    selection probabilities for different intervals of p-values; the intervals 
+#'    are determined by the `cut_vals`.
+#' @param renormalize logical indicating whether to normalize the step function
+#'   to have a maximum value of 1, with a default value of \code{TRUE}.
+#' 
+#' @returns A function that can be used to censor a meta-analytic dataset 
+#'    based on the step-function model. 
+#' 
 #' @export
 
-step_fun <- function(cut_vals = .025, weights = 1) {
+step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
   
   if (length(cut_vals) != length(weights)) stop("cut_vals and weights must be the same length, doofus!")
   
-  wt_vec <- c(1, weights) / max(c(1, weights))
+  wt_vec <- c(1, weights)
+  
+  if (renormalize) wt_vec <- wt_vec / max(wt_vec)
   
   cut_vals_full <- c(0, cut_vals, 1)
   
@@ -107,17 +169,41 @@ step_fun <- function(cut_vals = .025, weights = 1) {
   }
 }
 
+
+#' @title Censor meta-analytic dataset based on the beta-density model model
+#'
+#' @description A functional that takes model parameters and returns a function
+#'   that can be used to censor meta-analytic datasets according to the
+#'   beta-density model.
+#'
+#' @param delta_1 numeric value for the first parameter of the beta function
+#' @param delta_2 numeric value for the second parameter of the beta function
+#' @param trunc_1 numeric value between 0 and 1, below which p-values will be
+#'   truncated.
+#' @param trunc_2 numeric value between 0 and 1, above which p-values will be
+#'   truncated.
+#' @param renormalize logical indicating whether to normalize the beta function
+#'   to have a maximum value of 1, with a default value of \code{TRUE}.
+#'
+#' @returns A function that can be used to censor a meta-analytic dataset based
+#'   on the beta-density model.
+#'
 #' @export
 
-beta_wts_fun <- function(delta_1 = 1, delta_2 = 1,
-                         trunc_1 = 0.025, trunc_2 = 0.975) {
+beta_fun <- function(delta_1 = 1, delta_2 = 1,
+                     trunc_1 = 0.025, trunc_2 = 0.975, 
+                     renormalize = TRUE) {
 
-  if (delta_1 + delta_2 > 2) {
-    max_p <- (delta_1 - 1) / (delta_1 + delta_2 - 2)
-    if (is.nan(max_p)) max_p <- 0.5
-    max_p <- max(min(max_p, trunc_2), trunc_1)
+  if (renormalize) {
+    if (delta_1 + delta_2 > 2) {
+      max_p <- (delta_1 - 1) / (delta_1 + delta_2 - 2)
+      if (is.nan(max_p)) max_p <- 0.5
+      max_p <- max(min(max_p, trunc_2), trunc_1)
+    } else {
+      max_p <- if (delta_1 > delta_2) trunc_2 else trunc_1
+    }
   } else {
-    max_p <- if (delta_1 > delta_2) trunc_2 else trunc_1
+    max_p <- trunc_1
   }
   
   max_val <- max_p^(delta_1 - 1) * (1 - max_p)^(delta_2 - 1)
@@ -141,27 +227,26 @@ beta_wts_fun <- function(delta_1 = 1, delta_2 = 1,
 # Sample k studies from r_study function
 # establish multi-variate normal distribution of n_ES per study
 # var/covariance structure created using mean correlation (cor_mu) and sd (cor_sd)
-# What was n_ES_gen (number generated?)
 
 
 #' @title Generate meta-analytic data 
 #' 
 #' @description Generate meta-analytic correlated or correlated and hierarchical effects data with options to simulate selective outcome reporting
 #' 
-#' @param mean_smd number indicating the true mean effect size 
-#' @param tau number characterizing between-study heterogeneity in effects
-#' @param omega number characterizing within-study heterogeneity in effects
-#' @param m number of studies in the simulated meta-analysis
-#' @param cor_mu number indicating the average correlation between outcomes
-#' @param cor_sd number indicating standard deviation of correlation between outcomes
-#' @param censor_fun a function used to censor effects. This package provides functions `step_fun()` and `beta_wts_fun()`... ???
+#' @param mean_smd numeric value indicating the true mean effect size 
+#' @param tau numeric value characterizing between-study heterogeneity in effects
+#' @param omega numeric value characterizing within-study heterogeneity in effects
+#' @param m numeric value of studies in the simulated meta-analysis
+#' @param cor_mu numeric value indicating the average correlation between outcomes
+#' @param cor_sd numeric value indicating standard deviation of correlation between outcomes
+#' @param censor_fun a function used to censor effects; this package provides functionals `step_fun()` and `beta_fun()` to censor effects based on step-function or beta-function models respectively.
 #' @param n_ES_sim a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study
-#' @param m_multiplier number indicating a multiplier for buffer for the number of studies 
-#' @param id_start integer indicating the starting value for id
+#' @param m_multiplier numeric value indicating a multiplier for buffer for the number of studies 
+#' @param id_start integer indicating the starting value for study id
 #' @param paste_ids logical with \code{TRUE} (the default) indicating that the study id and effect size id should be pasted together
 #' @param include_sel_prob logical with \code{TRUE} indicating 
 #' 
-#' @returns A data frame containing the simulated meta-analytic dataset.
+#' @returns A \code{data.frame} containing the simulated meta-analytic dataset.
 #' 
 #' 
 #' @examples

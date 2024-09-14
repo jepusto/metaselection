@@ -4,7 +4,7 @@
 \name{metaselection-package}
 \alias{metaselection}
 \alias{metaselection-package}
-\title{metaselection: Meta-analytic selection models with cluster robust standard errors}
+\title{metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors}
 \description{
 What the package does (one paragraph).
 }

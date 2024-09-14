@@ -445,7 +445,7 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
     m = 50, 
     cor_mu = 0, 
     cor_sd = 0.01, 
-    censor_fun = beta_wts_fun(delta_1 = 1.3, delta_2 = 0.7, trunc_1 = .025, trunc_2 = .975), 
+    censor_fun = beta_fun(delta_1 = 1.3, delta_2 = 0.7, trunc_1 = .025, trunc_2 = .975), 
     n_ES_sim = n_ES_param(40, 1) 
   )
   

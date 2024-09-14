@@ -20,32 +20,32 @@ r_meta(
 )
 }
 \arguments{
-\item{mean_smd}{number indicating the true mean effect size}
+\item{mean_smd}{numeric value indicating the true mean effect size}
 
-\item{tau}{number characterizing between-study heterogeneity in effects}
+\item{tau}{numeric value characterizing between-study heterogeneity in effects}
 
-\item{omega}{number characterizing within-study heterogeneity in effects}
+\item{omega}{numeric value characterizing within-study heterogeneity in effects}
 
-\item{m}{number of studies in the simulated meta-analysis}
+\item{m}{numeric value of studies in the simulated meta-analysis}
 
-\item{cor_mu}{number indicating the average correlation between outcomes}
+\item{cor_mu}{numeric value indicating the average correlation between outcomes}
 
-\item{cor_sd}{number indicating standard deviation of correlation between outcomes}
+\item{cor_sd}{numeric value indicating standard deviation of correlation between outcomes}
 
-\item{censor_fun}{a function used to censor effects. This package provides functions \code{step_fun()} and \code{beta_wts_fun()}... ???}
+\item{censor_fun}{a function used to censor effects; this package provides functionals \code{step_fun()} and \code{beta_fun()} to censor effects based on step-function or beta-function models respectively.}
 
 \item{n_ES_sim}{a function used to simulate the distribution of primary study sample sizes and the number of effect sizes per study}
 
-\item{m_multiplier}{number indicating a multiplier for buffer for the number of studies}
+\item{m_multiplier}{numeric value indicating a multiplier for buffer for the number of studies}
 
-\item{id_start}{integer indicating the starting value for id}
+\item{id_start}{integer indicating the starting value for study id}
 
 \item{paste_ids}{logical with \code{TRUE} (the default) indicating that the study id and effect size id should be pasted together}
 
 \item{include_sel_prob}{logical with \code{TRUE} indicating}
 }
 \value{
-A data frame containing the simulated meta-analytic dataset.
+A \code{data.frame} containing the simulated meta-analytic dataset.
 }
 \description{
 Generate meta-analytic correlated or correlated and hierarchical effects data with options to simulate selective outcome reporting

@@ -11,7 +11,7 @@ Authors@R: c(
            role = "aut",
            comment = c(ORCID = "0000-0001-7936-076X")))
 Description: What the package does (one paragraph).
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -23,17 +23,23 @@ Imports:
     mvtnorm,
     optimx,
     nleqslv,
-    rootSolve,
     purrr,
     pbapply,
-    simhelpers (> 0.2.1)
+    rlang,
+    ggplot2,
+    simhelpers (> 0.2.1),
+    Rdpack
 Suggests: 
     testthat (>= 3.0.0),
     metafor,
     metadat,
+    clubSandwich,
     DescTools,
-    dplyr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
+Depends: 
+    R (>= 2.10)
+LazyData: true

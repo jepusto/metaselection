@@ -12,7 +12,7 @@ selection_model(
   ai,
   cluster,
   selection_type = c("step", "beta"),
-  steps = if (selection_type == "step") 0.025 else c(0.025, 0.975),
+  steps = NULL,
   mean_mods = NULL,
   var_mods = NULL,
   sel_mods = NULL,
@@ -32,51 +32,75 @@ selection_model(
 )
 }
 \arguments{
-\item{data}{a data frame or tibble containing the meta-analytic data}
+\item{data}{\code{data.frame} or \code{tibble} containing the meta-analytic
+data}
 
-\item{yi}{vector of effect sizes}
+\item{yi}{vector of effect sizes estimates.}
 
-\item{sei}{vector of sampling standard error}
+\item{sei}{vector of sampling standard errors.}
 
-\item{pi}{vector of one-sided p-values}
+\item{pi}{optional vector of one-sided p-values. If not specified, p-values will be
+computed from \code{yi} and \code{sei}.}
 
-\item{ai}{vector of analytic weight}
+\item{ai}{optional vector of analytic weights.}
 
-\item{cluster}{vector indicating cluster membership}
+\item{cluster}{vector indicating which observations belong to the same
+cluster.}
 
-\item{selection_type}{character string specifying the type selection model to estimate, with possible options \code{"step"} or \code{"beta"}.}
+\item{selection_type}{character string specifying the type selection model to
+estimate, with possible options \code{"step"} or \code{"beta"}.}
 
-\item{steps}{numeric vector of one or more values specifying the thresholds of p-values where the likelihood of effects being selected changes}
+\item{steps}{If \code{selection_type = "step"}, a numeric vector of one or
+more values specifying the thresholds (or steps) where the selection
+probability changes, with a default of \code{steps = .025}. If \code{selection_type = "beta"}, then a numeric
+vector of two values specifying the thresholds beyond which the selection
+function is truncated, with a default of \code{steps = c(.025, .975)}.}
 
-\item{mean_mods}{optional model formula indicating moderators related to the average effect size magnitude}
+\item{mean_mods}{optional model formula for moderators related to average
+effect size magnitude.}
 
-\item{var_mods}{optional model formula indicating moderators related to effect size heterogeneity}
+\item{var_mods}{optional model formula for moderators related to effect size
+heterogeneity.}
 
-\item{sel_mods}{optional model formula indicating moderators related to the probability of selection}
+\item{sel_mods}{optional model formula for moderators related to the
+probability of selection. Only relevant for \code{selection_type = "step"}.}
 
-\item{sel_zero_mods}{optional model formula indicating moderators related to the probability of selection}
+\item{sel_zero_mods}{optional model formula for moderators related to
+the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.}
 
-\item{subset}{optional logical expression indicating the subset of the data to keep in the analysis}
+\item{subset}{optional logical expression indicating a subset of observations
+to use for estimation.}
 
-\item{make_sandwich}{logical with \code{TRUE} (the default) indicating to calculate standard errors using sandwich estimators}
+\item{make_sandwich}{logical with \code{TRUE} (the default) indicating to
+calculate standard errors using sandwich estimators.}
 
-\item{conf_level}{desired coverage level for confidence intervals, with the default value set to \code{.95}}
+\item{conf_level}{desired coverage level for confidence intervals, with the
+default value set to \code{.95}}
 
-\item{estimator}{vector indicating whether to use the maximum likelihood or the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"}, and \code{"hybrid-full"}. If running the beta selection model, only the maximum likelihood estimator, \code{"ML"}, is available. For step function models, both maximum likelihood and hybrid estimators are available.}
+\item{estimator}{vector indicating whether to use the maximum likelihood or
+the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
+and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
+maximum likelihood estimator, \code{"ML"}, is available. For step function
+models, both maximum likelihood and hybrid estimators are available.}
 
-\item{theta}{optional numeric vector of containing starting values of the parameters to be estimated}
+\item{theta}{optional numeric vector of starting values to use in optimization routines.}
 
-\item{optimizer}{character string indicating the optimizer to use}
+\item{optimizer}{character string indicating the optimizer to use. Ignored if \code{estimator = "hybrid"} or \code{"hybrid-full"}.}
 
-\item{optimizer_control}{an optional list of control parameters to be used for optimization}
+\item{optimizer_control}{an optional list of control parameters to be used
+for optimization}
 
-\item{use_jac}{logical with \code{TRUE} (the default) indicating that the Jacobian ...???}
+\item{use_jac}{logical with \code{TRUE} (the default) indicating to use the Jacobian of the estimating equations for optimization.}
 
-\item{bootstrap}{character string specifying the type of bootstrap to run, with possible options \code{"none"} (the default), \code{"exponential"}, \code{"multinomial"}.}
+\item{bootstrap}{character string specifying the type of bootstrap to run,
+with possible options \code{"none"} (the default), \code{"exponential"} for the fractionally re-weighted cluster bootstrap,
+or \code{"multinomial"} for a conventional clustered bootstrap.}
 
-\item{boot_CI}{character string specifying the type of bootstrap confidence interval to calculate, with possible options \code{"percentile"} (the default), \code{"student"}, \code{"large-sample"}, or \code{"none"}.}
+\item{boot_CI}{character string specifying the type of bootstrap confidence
+interval to calculate, with possible options \code{"percentile"} (the
+default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.}
 
-\item{R}{number of bootstrap replications, with the default set to \code{1999}}
+\item{R}{number of bootstrap replications, with a default of \code{1999}.}
 
 \item{...}{further arguments passed to \code{simhelpers::bootstrap_CIs}.}
 }
@@ -88,16 +112,39 @@ Estimate step or beta selection model
 }
 \examples{
 
+dat <- r_meta(
+  mean_smd = 0,
+  tau = .1, omega = .01,
+  m = 50,
+  cor_mu = .4, cor_sd = 0.001,
+  censor_fun = step_fun(cut_vals = .025, weights = 0.4),
+  n_ES_sim = n_ES_param(40, 3)
+)
 
-selection_model(data = dat,
-                yi = d,
-                sei = sd_d,
-                pi = p_onesided,
-                cluster = studyid,
-                steps = 0.025,
-                estimator = "ML",
-                bootstrap = "multinomial",
-                boot_CI = "percentile",
-                R = 49)
+res_ML <- selection_model(
+  data = dat,
+  yi = d,
+  sei = sd_d,
+  cluster = studyid,
+  steps = 0.025,
+  estimator = "ML",
+  bootstrap = "none"
+)
 
+res_ML$est
+
+ 
+res_hybrid <- selection_model(
+  data = dat,
+  yi = d,
+  sei = sd_d,
+  cluster = studyid,
+  steps = 0.025,
+  estimator = "hybrid",
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 199
+)
+
+res_hybrid$est
 }
