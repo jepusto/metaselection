@@ -452,7 +452,6 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   
 })
 
-
 test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
 
   suppressWarnings(
@@ -521,4 +520,50 @@ test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
   
   
 })
+
+test_that("bootstrapping works with parallel processing.", {
   
+  skip_on_cran()
+  skip_if_not_installed("future")
+  skip_if_not_installed("future.apply")
+  
+  library(future)
+  
+  plan(sequential)
+  set.seed(20240916)
+  
+  step_sequential <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "ML",
+      bootstrap = "multinomial", 
+      boot_CI = c("large-sample","percentile"),
+      R = 40
+    )
+  
+  
+  plan(multisession, workers = 2L)
+  set.seed(20240916)
+  
+  step_parallel <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "ML",
+      bootstrap = "multinomial", 
+      boot_CI = c("large-sample","percentile"),
+      R = 40
+    )
+  
+  expect_identical(class(step_sequential), class(step_parallel))
+  
+})  

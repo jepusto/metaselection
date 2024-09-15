@@ -699,7 +699,18 @@ selection_model <- function(
     
     boot_sandwich <- any("student" %in% boot_CI)
     
-    booties_df <- pbapply::pbreplicate(n = max(R), {
+    # Set options depending on availability of future and future.apply
+    future_available <- requireNamespace("future", quietly = TRUE) && requireNamespace("future.apply", quietly = TRUE)
+    
+    if (future_available) {
+      future_cl <- "future"
+      future.seed <- TRUE
+    } else {
+      future_cl <- NULL
+      future.seed <- NULL
+    }
+    
+    booties_df <- pbapply::pblapply(1:max(R), \(x) {
       bootstrap_selmodel(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
@@ -713,7 +724,7 @@ selection_model <- function(
         use_jac = use_jac,
         wtype = bootstrap
       )
-    }, simplify = FALSE)
+    }, cl = future_cl, future.seed = future.seed)
     
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$est$bootstrap <- bootstrap
