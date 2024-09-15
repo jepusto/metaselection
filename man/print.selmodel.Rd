@@ -4,12 +4,14 @@
 \alias{print.selmodel}
 \title{Print results from \code{selmodel()}}
 \usage{
-\method{print}{selmodel}(x, exponentiate = TRUE, ...)
+\method{print}{selmodel}(x, transf_gamma = FALSE, transf_zeta = FALSE, ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{"selmodel"}.}
 
-\item{exponentiate}{logical with \code{TRUE} indicating that the gamma and zeta estimates should be exponentiated}
+\item{transf_gamma}{logical with \code{TRUE} indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
+
+\item{transf_zeta}{logical with \code{TRUE} indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
 
 \item{...}{Not used.}
 }
