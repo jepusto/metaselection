@@ -14,8 +14,6 @@
 
 print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
   
-  model <- if ("step.selmodel" %in% class(x)) "Step Function Model with Robust Variance Estimation"
-  
   estimates <- x$est
   
   if (transf_gamma | transf_zeta) {
@@ -38,13 +36,7 @@ print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
     estimates$param <- sub("^zeta","lambda_", estimates$param)
   }
   
-  call <- x$cl
-  steps <- x$steps
-  
-  #cat(model, "\n")
-  # cat("\nCall:", call ,"\n\n")
+
   print(estimates)
-  #cat("---\n")
-  #cat("Signif. codes: < .01 *** < .05 ** < .10 *\n")
-  #cat("---\n")
+
 }
