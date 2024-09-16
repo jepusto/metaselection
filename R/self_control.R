@@ -5,12 +5,12 @@
 #'
 #' @format A tibble with 158 rows and 27 variables:
 #' \describe{
-#'   \item{studyid}{identifier for study}
-#'   \item{esid}{identifier for effect sizes}
+#'   \item{studyid}{identifier for the study}
+#'   \item{esid}{identifier for the effect size}
 #'   \item{name}{name of the study}
 #'   \item{g}{effect size in form of Hedges' g}
-#'   \item{var_g}{variance of the effect size}
-#'   \item{se_g}{standard error of the effect size}
+#'   \item{var_g}{corresponding variance of the effect size}
+#'   \item{se_g}{corresponding standard error of the effect size}
 #'   \item{outcome}{name of the outcome measure}
 #'   \item{comparison}{conditions compared}
 #'   \item{type_of_treatment}{type of treatment/training}
@@ -25,7 +25,7 @@
 #'   \item{subjectivity_of_outcome_measurement}{indicator for the subjectivity of the outcome measure}
 #'   \item{lab_based_versus_real_world_behavior}{indicator for whether the behavior measured was assessed in lab or in the real-world}
 #'   \item{stamina_versus_strength}{indicator for whether the outcome was assessed with (Stamina) or without a preceding effortful task (Strength)}
-#'   \item{pre_test_measure}{indicator for thether there was a pre and post measure of outcome or only post measure}
+#'   \item{pre_test_measure}{indicator for whether there was a pre and post measure of outcome or only post measure}
 #'   \item{sample_population}{population examined in the study}
 #'   \item{sample_age}{average age of the sample}
 #'   \item{attrition}{percentage of attrition}
