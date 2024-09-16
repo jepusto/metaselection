@@ -3,7 +3,7 @@
 #' A dataset containing sample size and number of effect sizes seen in primary
 #' studies evaluated by the What Works Clearinghouse.
 #'
-#' @format A tibble with 158 rows and 27 variables:
+#' @format A tibble with 158 rows and 26 variables:
 #' \describe{
 #'   \item{studyid}{identifier for the study}
 #'   \item{esid}{identifier for the effect size}
