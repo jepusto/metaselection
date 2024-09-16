@@ -41,7 +41,7 @@
 #'   bootstrap = "none"
 #' )
 #' 
-#' selection_wts(mod, pvals = c(0, 0.0251, .51))
+#' selection_wts(mod, pvals = c(0, 0.3, .8))
 #' 
 
 selection_wts <- function(mod, pvals, ...) UseMethod("selection_wts")
