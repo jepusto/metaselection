@@ -1,26 +1,31 @@
 ---
 output: github_document
+bibliography: vignettes/references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 
 # metaselection
 
-Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results. 
-Selective reporting is a major concern for research synthesis because it distorts the evidence base available for meta-analysis. 
+Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results.
+Selective reporting is a major concern for research synthesis because it distorts the evidence base available for meta-analysis.
 Failure to account for selective reporting can inflate effect size estimates from meta-analysis and bias estimates of heterogeneity, making it difficult to draw accurate conclusions from a synthesis.
 
-There are many tools available already to investigate and correct for selective outcome reporting. 
-Widely used methods include: graphical diagnostics like funnel plots; tests and adjustments for funnel plot asymmetry like trim-and-fill, Egger's regression, PET/PEESE, selection models, and p-value diagnostics. 
-However, very few methods available for investigating selective reporting can accommodate dependent effect sizes. 
+There are many tools available already to investigate and correct for selective outcome reporting.
+Widely used methods include: graphical diagnostics like funnel plots; tests and adjustments for funnel plot asymmetry like trim-and-fill, Egger's regression, PET/PEESE, selection models, and p-value diagnostics.
+However, very few methods available for investigating selective reporting can accommodate dependent effect sizes.
 Such limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a very common feature of meta-analytic data.
 
-Dependent effect sizes occur when primary studies report multiple measures of the outcomes or repeated measures of the outcome. 
+Dependent effect sizes occur when primary studies report multiple measures of the outcomes or repeated measures of the outcome.
 Failing to account for dependency can result in misleading conclusions too narrow confidence intervals and hypothesis tests that have inflated type one error rates.
 
-X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analysis that account for dependent effect sizes. The results showed that selection models combined with robust variance estimation led to lower bias in the estimate of the overall effect size. Combining the selection models with cluster bootstrapping led to close to nominal coverage rates. 
+X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analysis that account for dependent effect sizes.
+The results showed that selection models combined with robust variance estimation led to lower bias in the estimate of the overall effect size.
+Combining the selection models with cluster bootstrapping led to close to nominal coverage rates.
 
-Our metaselection package provides a set of functions that implements these methods. The main function, `selection_model()`, fits step and beta selection models with robust variance estimation and has options to run cluster bootstrapping.
+Our metaselection package provides a set of functions that implements these methods.
+The main function, `selection_model()`, fits step and beta selection models with robust variance estimation and has options to run cluster bootstrapping.
 
 ## Installation
 
@@ -32,8 +37,9 @@ remotes::install_github("jepusto/metaselection")
 
 ## Example
 
-The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
-In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping. For futher details, please see the vignette. 
+The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments [@metadat].
+In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping.
+For further details, please see the vignette.
 
 ```{r, warning = FALSE, message = FALSE}
 library(metaselection)
@@ -59,14 +65,19 @@ mod_3PSM_boot <- selection_model(
 print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-
 ## Related Work
 
 We want to recognize other packages that provide functions to selection modeling.
 
-The `metafor` package now includes the `selmodel()` function which allows users to fit selection models. However, the function and the set of selection models that it can fit can only be applied to meta-analytic data assuming that the effects are independent.
+Few packages are available to estimate selection models assuming that effects are independent.
+The `metafor` package now includes the `selmodel()` function which allows users to fit different types of selection models [@metafor].
+The `weightr` package includes functions to estimate weight-function models described in @vevea1995 [@weightr].
+However, the functions available in these packages can only be applied to meta-analytic data assuming that the effects are independent.
+
+The `PublicationBias` package provides sensitivity analyses for publication bias that incorporates robust variance estimation [@PublicationBias].
+The analyses allow for dependent effect sizes in meta-analytic data.
+However, the approach that is implemented in the package is based on pre-specified degree of selective reporting and only works for the simplest form of the step-function model.
 
 ## Acknowledgements
-
 
 ## References

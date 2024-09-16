@@ -1,6 +1,4 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # metaselection
 
 Selective reporting occurs when statistically significant, affirmative
@@ -52,10 +50,10 @@ remotes::install_github("jepusto/metaselection")
 
 The following example uses `metadat::dat.lehmann` data from a
 meta-analysis by Lehmann meta-analysis which examined the effects of
-color red on attractiveness judgments. In the code below, we input the
-`lehmann_dat` to the `selection_model()` function for our package to run
-step function model with cluster bootstrapping. For futher details,
-please see the vignette.
+color red on attractiveness judgments (White et al. 2022). In the code
+below, we input the `lehmann_dat` to the `selection_model()` function
+for our package to run step function model with cluster bootstrapping.
+For further details, please see the vignette.
 
 ``` r
 library(metaselection)
@@ -95,11 +93,67 @@ print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 We want to recognize other packages that provide functions to selection
 modeling.
 
-The `metafor` package now includes the `selmodel()` function which
-allows users to fit selection models. However, the function and the set
-of selection models that it can fit can only be applied to meta-analytic
-data assuming that the effects are independent.
+Few packages are available to estimate selection models assuming that
+effects are independent. The `metafor` package now includes the
+`selmodel()` function which allows users to fit different types of
+selection models (Viechtbauer 2010). The `weightr` package includes
+functions to estimate weight-function models described in Vevea and
+Hedges (1995; Coburn and Vevea 2019). However, the functions available
+in these packages can only be applied to meta-analytic data assuming
+that the effects are independent.
+
+The `PublicationBias` package provides sensitivity analyses for
+publication bias that incorporates robust variance estimation
+(Braginsky, Mathur, and VanderWeele 2023). The analyses allow for
+dependent effect sizes in meta-analytic data. However, the approach that
+is implemented in the package is based on pre-specified degree of
+selective reporting and only works for the simplest form of the
+step-function model.
 
 ## Acknowledgements
 
 ## References
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-PublicationBias" class="csl-entry">
+
+Braginsky, Mika, Maya Mathur, and Tyler J. VanderWeele. 2023.
+*PublicationBias: Sensitivity Analysis for Publication Bias in
+Meta-Analyses*. <https://CRAN.R-project.org/package=PublicationBias>.
+
+</div>
+
+<div id="ref-weightr" class="csl-entry">
+
+Coburn, Kathleen M., and Jack L. Vevea. 2019. *Weightr: Estimating
+Weight-Function Models for Publication Bias*.
+<https://CRAN.R-project.org/package=weightr>.
+
+</div>
+
+<div id="ref-vevea1995" class="csl-entry">
+
+Vevea, Jack L., and Larry V. Hedges. 1995. “A General Linear Model for
+Estimating Effect Size in the Presence of Publication Bias.”
+*Psychometrika* 60 (3): 419435. <https://doi.org/10.1007/BF02294384>.
+
+</div>
+
+<div id="ref-metafor" class="csl-entry">
+
+Viechtbauer, Wolfgang. 2010. “Conducting Meta-Analyses in R with the
+<span class="nocase">metafor</span> Package.” *Journal of Statistical
+Software* 36 (3): 1–48. <https://doi.org/10.18637/jss.v036.i03>.
+
+</div>
+
+<div id="ref-metadat" class="csl-entry">
+
+White, Thomas, Daniel Noble, Alistair Senior, W. Kyle Hamilton, and
+Wolfgang Viechtbauer. 2022. *Metadat: Meta-Analysis Datasets*.
+<https://CRAN.R-project.org/package=metadat>.
+
+</div>
+
+</div>
