@@ -33,6 +33,7 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
     
   }
   
+  call <- x$cl
   
 
   # betas model results -----------------------------------------------------
@@ -85,6 +86,9 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   # output ------------------------------------------------------------------
 
   cat(model, "\n", "\n")
+  cat("Call:", "\n")
+  print(call)
+  cat("\n")
   cat(paste("Steps: ", steps), "\n")
   cat(paste("Estimator: ", estimator), "\n")
   if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R), "\n")
