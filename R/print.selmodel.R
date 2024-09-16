@@ -12,7 +12,7 @@
 
 
 
-print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
+print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
   
   estimates <- x$est
   
@@ -36,7 +36,9 @@ print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
     estimates$param <- sub("^zeta","lambda_", estimates$param)
   }
   
-
+  estimates <- subset(estimates, select = -estimator)
+  estimates <- format(estimates, digits = digits)
+  
   print(estimates)
 
 }
