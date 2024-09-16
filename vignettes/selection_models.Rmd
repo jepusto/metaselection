@@ -228,6 +228,7 @@ We can visualize the estimated selection function with `selection_plot()`:
 ```{r}
 selection_plot(mod_4PSM)
 ```
+
 As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided p-value greater than .50) are even less likely to be observed than effects that are positive but not statistically significant.
 However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated. 
 
@@ -262,6 +263,8 @@ The plot shows that effect sizes with smaller p-values are more likely to be pub
 Rather than relying on robust variance estimation to construct standard errors and confidence intervals, we can use cluster-wise bootstrap resampling. The code below re-fits the three-parameter step function model to obtain cluster-bootstrap confidence intervals. We specify `bootstrap = "multinomial"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals. We specify that number of bootstraps by setting R to `99`. We set the value to 99 here solely to limit the amount of computation. In practice, we recommend using a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates [@davidson2000bootstrap]. We highly recommend running the selection models with cluster bootstrapping, particularly the regular multinomial bootstrap with percentile confidence intervals, as this has been shown to improve confidence interval coverage rates relative to using other forms of bootstrap confidence intervals. 
 
 ```{r 3PSM-bootstrap}
+set.seed(20240916)
+
 mod_3PSM_boot <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,

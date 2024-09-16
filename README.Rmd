@@ -25,6 +25,7 @@ Our metaselection package provides a set of functions that implements these meth
 ## Installation
 
 You can install the development version of the package from GitHub with:
+
 ```{r, eval = FALSE}
 remotes::install_github("jepusto/metaselection")
 ```
@@ -32,23 +33,22 @@ remotes::install_github("jepusto/metaselection")
 ## Example
 
 The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
-In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping.
+In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping. For futher details, please see the vignette. 
 
 ```{r, warning = FALSE, message = FALSE}
-library(metadat)
 library(metaselection)
-library(kableExtra)
 
-lehmann_dat <- dat.lehmann2018
-lehmann_dat$sei <- sqrt(lehmann_dat$vi)
+data("dat.lehmann2018", package = "metadat")
+dat.lehmann2018$study <- dat.lehmann2018$Full_Citation
+dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
 
 set.seed(20240910)
 
-step_results_boot <- selection_model(
-  data = lehmann_dat, 
+mod_3PSM_boot <- selection_model(
+  data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
-  cluster = Short_Title,
+  cluster = study,
   selection_type = "step",
   steps = .025,
   bootstrap = "multinomial",
@@ -56,11 +56,9 @@ step_results_boot <- selection_model(
   R = 19
 )
 
-kbl(step_results_boot$est, digits = 3) |>
-  kable_paper()
+print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-The overall estimate of the average effect is `r round(step_results_boot$est$Est[step_results_boot$est$param=="beta"], 3)`, 95% CI [`r round(step_results_boot$est$percentile_lower[step_results_boot$est$param=="beta"], 3)`, `r round(step_results_boot$est$percentile_upper[step_results_boot$est$param=="beta"], 3)`].
 
 ## Related Work
 

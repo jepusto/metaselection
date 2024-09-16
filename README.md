@@ -30,12 +30,15 @@ error rates.
 
 X (2024) developed and examined methods for investigating and accounting
 for selective reporting in meta-analysis that account for dependent
-effect sizes. Particularly, X (2024) combined step and beta selection
-models with robust variance estimation and with cluster and fractional
-weighted bootstrap. The results showed…
+effect sizes. The results showed that selection models combined with
+robust variance estimation led to lower bias in the estimate of the
+overall effect size. Combining the selection models with cluster
+bootstrapping led to close to nominal coverage rates.
 
 Our metaselection package provides a set of functions that implements
-the methods discussed in X (2024).
+these methods. The main function, `selection_model()`, fits step and
+beta selection models with robust variance estimation and has options to
+run cluster bootstrapping.
 
 ## Installation
 
@@ -51,30 +54,41 @@ The following example uses `metadat::dat.lehmann` data from a
 meta-analysis by Lehmann meta-analysis which examined the effects of
 color red on attractiveness judgments. In the code below, we input the
 `lehmann_dat` to the `selection_model()` function for our package to run
-step function model with robust variance estimates.
+step function model with cluster bootstrapping. For futher details,
+please see the vignette.
 
 ``` r
-library(metadat)
 library(metaselection)
 
-lehmann_dat <- dat.lehmann2018
-lehmann_dat$sei <- sqrt(lehmann_dat$vi)
+data("dat.lehmann2018", package = "metadat")
+dat.lehmann2018$study <- dat.lehmann2018$Full_Citation
+dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
 
-step_results <- selection_model(
-  data = lehmann_dat, 
+set.seed(20240910)
+
+mod_3PSM_boot <- selection_model(
+  data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
+  cluster = study,
   selection_type = "step",
-  steps = .025
+  steps = .025,
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 19
 )
 
-step_results$est
+print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-    ##   estimator param        Est        SE      CI_lo      CI_hi
-    ## 1        ML  beta  0.1327994 0.1377834 -0.1372511  0.4028498
-    ## 2        ML gamma -2.5117243 1.0215649 -4.5139548 -0.5094939
-    ## 3        ML zeta1 -0.6006530 1.0535870 -2.6656457  1.4643396
+    ##   estimator    param        Est         SE   bootstrap bootstraps
+    ## 1        ML     beta 0.13279939 0.13728035 multinomial         19
+    ## 2        ML     tau2 0.08112823 0.08448746 multinomial         19
+    ## 3        ML lambda_1 0.54845336 0.61595727 multinomial         19
+    ##   percentile_lower percentile_upper
+    ## 1     -0.032735627        0.3765500
+    ## 2      0.001500518        0.1984563
+    ## 3      0.088833781        3.0549676
 
 ## Related Work
 
