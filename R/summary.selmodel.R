@@ -24,6 +24,8 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   estimator <- estimates$estimator[1]
   estimator <- ifelse(estimator == "ML", "Maximum likelihood", "Hybrid Estimating Equations")
   
+  steps <- paste(x$steps, collapse = ", ")
+                 
   if(grepl("^boot", class(x)[1])){
     
     boot_type <- estimates$bootstrap[1]
@@ -32,6 +34,9 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   }
   
   
+
+  # betas model results -----------------------------------------------------
+
   vars_display <- intersect(
     names(estimates),
     c("param", "Est", "SE", "CI_lo","CI_hi","percentile_lower","percentile_upper","basic_lower","basic_upper","student_lower","student_upper")
@@ -40,13 +45,13 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   beta_params <- grepl("^beta", estimates$param)
   beta_estimates <- estimates[beta_params, vars_display]
   beta_estimates <- format(beta_estimates, digits = digits)
-  
+
+  # heterogeneity -----------------------------------------------------------
 
   transf_variables <- intersect(
     names(estimates),
       c("Est","CI_lo","CI_hi","percentile_lower","percentile_upper","basic_lower","basic_upper","student_lower","student_upper")
     )
- 
 
   gamma_params <- grepl("^gamma", estimates$param)
   estimates[gamma_params, transf_variables] <- exp(estimates[gamma_params,transf_variables])
@@ -56,15 +61,31 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   tau_2 <- round(gamma_estimates$Est, 3)
   SE_tau <- round(gamma_estimates$SE, 3)
   
-  
+
+  # zetas  ------------------------------------------------------------------
+
   zeta_params <- grepl("^zeta", estimates$param)
-  estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
-  estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
-  estimates$param <- sub("^zeta","lambda_", estimates$param)
-  zeta_estimates <- estimates[zeta_params, vars_display]
+  
+  if(transf_zeta){
+    
+    estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
+    estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
+    estimates$param <- sub("^zeta","lambda_", estimates$param)
+    zeta_estimates <- estimates[zeta_params, vars_display]
+
+  } else{
+    
+    zeta_estimates <- estimates[zeta_params, vars_display]
+      
+  }
+  
   zeta_estimates <- format(zeta_estimates, digits = digits)
   
+
+  # output ------------------------------------------------------------------
+
   cat(model, "\n", "\n")
+  cat(paste("Steps: ", steps), "\n")
   cat(paste("Estimator: ", estimator), "\n")
   if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R), "\n")
   cat(paste("Number of clusters = ", "Number of effects = "), "\n", "\n")
