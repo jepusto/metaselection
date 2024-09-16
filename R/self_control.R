@@ -1,7 +1,7 @@
-#' What Works Clearinghouse sample size and effect size distribution data
+#' Self-Control Training Meta-Analysis
 #'
-#' A dataset containing sample size and number of effect sizes seen in primary
-#' studies evaluated by the What Works Clearinghouse.
+#' Meta-analytic dataset containing results of primary studies examining the 
+#' effect of self-control training. See the OSF project at https://osf.io/v7gxf/
 #'
 #' @format A tibble with 158 rows and 26 variables:
 #' \describe{
@@ -33,7 +33,7 @@
 #'   \item{self_control_potential}{indicator for whether the outcome measure required utilization of full self-control potential}
 #' }
 #'
-#'
+#' @source
 #'
 #' @importFrom Rdpack reprompt
 #'
