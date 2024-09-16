@@ -168,7 +168,7 @@ The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta),
 The estimated total heterogeneity (including both between- and within-study heterogeneity) is `r round(sum(CHE_mod$sigma2), 3)`, corresponding to a total standard deviation of `r round(sqrt(sum(CHE_mod$sigma2)), 3)`.
 Next, we examine how this average effect size estimate differs from the estimates based on a step-function or beta-function selection model, fitted using the `metaselection` package.
 
-## Step Function with RVE
+## Three-Parameter Step Function with RVE
 
 The primary function for fitting p-value selection models is `selection_model()`. 
 In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function. 
@@ -178,7 +178,7 @@ We indicate that we want to estimate `"step"` selection model and specify a sing
 ```{r 3PSM}
 library(metaselection)
 
-step_mod <- selection_model(
+mod_3PSM <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
@@ -187,32 +187,56 @@ step_mod <- selection_model(
   steps = .025
 )
 
-step_mod
+mod_3PSM
 ```
 
-The estimate of the overall average effect is now `r round(step_mod$est$Est[step_mod$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(step_mod$est$CI_lo[step_mod$est$param=="beta"], 3)`, `r round(step_mod$est$CI_hi[step_mod$est$param=="beta"], 3)`].
+The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`].
 
 The estimates of the total heterogeneity parameter and the selection parameter are on the log-scale. We can obtain an estimate of the total variance by setting the argument `transf_gamma` to `TRUE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the probability scale by setting `transf_zeta = TRUE`:
 ```{r}
-print(step_mod, transf_gamma = TRUE, transf_zeta = TRUE)
+print(mod_3PSM, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
-The estimated total heterogeneity of `r round( exp(step_mod$est$Est[step_mod$est$param=="gamma"]), 3)` is slightly smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
-The selection parameter is now called `lambda_1`. The estimate of `r round(exp(step_mod$est$Est[step_mod$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided p-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
+The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is slightly smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
+The selection parameter is now called `lambda_1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided p-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
 
 The `metaselection` package provides a function `selection_plot()` to visualize the estimated selection weights:
 
 ```{r 3PSM-plot}
-selection_plot(step_mod)
+selection_plot(mod_3PSM)
 ```
 
-The plot illustrates how the likelihood of selection differs as a function of the one-sided p-value of an effect size estimate. In this example, the plot shows that studies with p-values > 0.025 are about half as likely ($\lambda_1 = `r round(exp(step_mod$est$Est[step_mod$est$param=="zeta1"]), 3)`$) to be published than studies with smaller p-values.
+The plot illustrates how the likelihood of selection differs as a function of the one-sided p-value of an effect size estimate. In this example, the plot shows that studies with p-values > 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`$) to be published than studies with smaller p-values.
+
+## Four-Parameter Step Model with RVE
+
+Rather than using a single threshold at $\alpha_1 = .025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates. The following code fits such a model, setting `steps = c(.025, .500)`:
+```{r}
+mod_4PSM <- selection_model(
+  data = dat.lehmann2018, 
+  yi = yi,
+  sei = sei,
+  cluster = study,
+  selection_type = "step",
+  steps = c(.025, .500)
+)
+
+print(mod_4PSM, transf_gamma = TRUE, transf_zeta = TRUE)
+```
+The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, even smaller than the estimated effect from the three-parameter step model and only one third the magnitude of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`).
+
+We can visualize the estimated selection function with `selection_plot()`:
+```{r}
+selection_plot(mod_4PSM)
+```
+As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided p-value greater than .50) are even less likely to be observed than effects that are positive but not statistically significant.
+However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated. 
 
 ## Beta Function with RVE
 
-In the code below, we specify `selection_type = "beta"` to run beta-density model and specify `steps = c(.025, .975)`. The default estimator for the beta function model is maximum likelihood; the hybrid estimator is not yet available. In additional, although not presented below, we can request bootstrap confidence intervals similarly to how we did for step function model. 
+The `selection_model()` function also allows fitting models based on beta density selection functions by specifying `selection_type = "beta"`. The default estimator for the beta function model is maximum likelihood; the hybrid estimator is not yet available.  
 
 ```{r beta}
-beta_mod <- selection_model(
+mod_beta <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
@@ -220,25 +244,25 @@ beta_mod <- selection_model(
   selection_type = "beta"
 )
 
-beta_mod
+print(mod_beta, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-The overall estimate of the average effect is `r round(beta_mod$est$Est[beta_mod$est$param=="beta"], 3)`, which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimate from the step function model with RVE (`r round(step_mod$est$Est[step_mod$est$param=="beta"], 3)`). This estimate is not significant, as depicted by the confidence intervals [`r round(beta_mod$est$CI_lo[beta_mod$est$param=="beta"], 3)`, `r round(beta_mod$est$CI_hi[beta_mod$est$param=="beta"], 3)`].
+The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models. The average effect estimate based on the beta function is not statistically distinct from zero, as indicated by the 95% confidence intervals [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`].
 
-To see how the likelihood of selection differs across studies with different p-values, we use the beta density function. We use a truncated version of the beta density as the beta function with RVE truncates the pre-specified cutpoints to psychologically salient thresholds for one-sided p-values, specifically `.025` and `.975`. Again, we must first exponentiate the selection weights as they are in the log metric (exp(`r round(beta_mod$est$Est[beta_mod$est$param=="zeta1"], 3)`) = `r round(exp(beta_mod$est$Est[beta_mod$est$param=="zeta1"]), 3)`, exp(`r round(beta_mod$est$Est[beta_mod$est$param=="zeta2"], 3)`) = `r round(exp(beta_mod$est$Est[beta_mod$est$param=="zeta2"]), 3)`).
+To see how the probability of selection differs across studies with different p-values, we can again visualize the selection function:
 
 ```{r beta-plot}
-selection_plot(beta_mod)
+selection_plot(mod_beta)
 ```
 
-The plot shows that studies with smaller p-values are more likely to be published than studies with larger p-values. For example, studies with p-values = 0.050 are about half as likely to be published than studies with p-value = .025.
+The plot shows that effect sizes with smaller p-values are more likely to be published than effects with larger p-values. For example, an effect size estimate of zero (with one-sided p-value of $p = .500$) is about half as likely to be published as an effect with a statistically significant, positive effect.
 
 ## Bootstrap Confidence Intervals
 
-The code below is similar to above except now we specify that we want to run cluster bootstrapping to estimate the standard error and confidence intervals. We specify `bootstrap = "multinomial"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals. We specify that number of bootstraps by setting R to `99`. We are setting the value to 99 here solely to limit the amount of computation. In practice, we recommend using a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates [@davidson2000bootstrap]. We highly recommend running the selection models with cluster bootstrapping, particularly the regular multinomial bootstrap with percentile confidence intervals, as this has been shown to improve confidence interval coverage rates relative to using other forms of bootstrap confidence intervals. 
+Rather than relying on robust variance estimation to construct standard errors and confidence intervals, we can use cluster-wise bootstrap resampling. The code below re-fits the three-parameter step function model to obtain cluster-bootstrap confidence intervals. We specify `bootstrap = "multinomial"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals. We specify that number of bootstraps by setting R to `99`. We set the value to 99 here solely to limit the amount of computation. In practice, we recommend using a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates [@davidson2000bootstrap]. We highly recommend running the selection models with cluster bootstrapping, particularly the regular multinomial bootstrap with percentile confidence intervals, as this has been shown to improve confidence interval coverage rates relative to using other forms of bootstrap confidence intervals. 
 
 ```{r 3PSM-bootstrap}
-step_mod_boot <- selection_model(
+mod_3PSM_boot <- selection_model(
   data = dat.lehmann2018, 
   yi = yi,
   sei = sei,
@@ -250,10 +274,10 @@ step_mod_boot <- selection_model(
   R = 99
 )
 
-print(step_mod_boot, transf_gamma = TRUE, transf_zeta = TRUE)
+print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-The overall estimate of the average effect does not change when bootstrapping is applied (`r round(step_mod_boot$est$Est[step_mod_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(step_mod_boot$est$percentile_lower[step_mod_boot$est$param=="beta"], 3)`, `r round(step_mod_boot$est$percentile_upper[step_mod_boot$est$param=="beta"], 3)`] (due to the use of a smaller-than-desirable number of bootstrap replications).
+The overall estimate of the average effect does not change when bootstrapping is applied (`r round(mod_3PSM_boot$est$Est[mod_3PSM_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(mod_3PSM_boot$est$percentile_lower[mod_3PSM_boot$est$param=="beta"], 3)`, `r round(mod_3PSM_boot$est$percentile_upper[mod_3PSM_boot$est$param=="beta"], 3)`] (due to the use of a smaller-than-desirable number of bootstrap replications).
 
 The bootstrapping routine is implemented to work with the `future` and `future.apply` packages for parallel processing. If these packages are available, the bootstrap calculations will use a specified future processing plan. For example, the following code specifies to use a `multisession` plan with 4 worker nodes, then fits the same model as above:
 ```{r parallel-boot}
