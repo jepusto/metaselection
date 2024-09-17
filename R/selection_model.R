@@ -525,8 +525,6 @@ bootstrap_selmodel <- function(
 #'
 #'
 #' @examples
-#'
-#'
 #' res_ML <- selection_model(
 #'   data = self_control,
 #'   yi = g,

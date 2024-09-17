@@ -111,8 +111,6 @@ A numeric vector.
 Estimate step or beta selection model
 }
 \examples{
-
-
 res_ML <- selection_model(
   data = self_control,
   yi = g,

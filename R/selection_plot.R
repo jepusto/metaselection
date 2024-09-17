@@ -29,8 +29,6 @@
 #' @export
 #' 
 #' @examples
-#'
-#'
 #' mod <- selection_model(
 #'   data = self_control,
 #'   yi = g,
@@ -43,6 +41,22 @@
 #' 
 #' selection_wts(mod, pvals = c(0, 0.3, .8))
 #' 
+#' mod_boot <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "multinomial",
+#'   boot_CI = "percentile",
+#'   R = 9
+#' )
+#'
+#' selection_wts(mod_boot, pvals = c(0, 0.3, .8))
+#' 
+#' 
+
 
 selection_wts <- function(mod, pvals, ...) UseMethod("selection_wts")
 
@@ -190,8 +204,6 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #' @export
 #' 
 #' @examples
-#'
-#'
 #' mod <- selection_model(
 #'   data = self_control,
 #'   yi = g,
@@ -204,6 +216,20 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #' 
 #' selection_plot(mod)
 #' 
+#' 
+#' mod_boot <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "multinomial",
+#'   boot_CI = "percentile",
+#'   R = 9
+#' )
+#' 
+#'  selection_plot(mod_boot)
 #' 
 
 selection_plot <- function(mod, pts = 200L, ...) UseMethod("selection_plot")

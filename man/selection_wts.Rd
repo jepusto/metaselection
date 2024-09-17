@@ -47,8 +47,6 @@ Calculates the selection weights implied by an estimated model
 for a user-specified p-value or set of p-values.
 }
 \examples{
-
-
 mod <- selection_model(
   data = self_control,
   yi = g,
@@ -60,5 +58,20 @@ mod <- selection_model(
 )
 
 selection_wts(mod, pvals = c(0, 0.3, .8))
+
+mod_boot <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 9
+)
+
+selection_wts(mod_boot, pvals = c(0, 0.3, .8))
+
 
 }

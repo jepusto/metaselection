@@ -5,10 +5,10 @@
 \alias{wwc_es}
 \title{What Works Clearinghouse sample size and effect size distribution data}
 \format{
-A tibble with 625 rows and 2 variables:
+A tibble with 615 rows and 2 variables:
 \describe{
-\item{n}{the number of studies included in the meta-analysis.}
-\item{n_ES}{correlation between outcomes.}
+\item{n}{the sample size of the primary study}
+\item{n_ES}{number of effect sizes in the primary study}
 }
 }
 \usage{
