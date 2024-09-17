@@ -10,7 +10,11 @@ Authors@R: c(
            email = "megha.j456@gmail.com", 
            role = "aut",
            comment = c(ORCID = "0000-0001-7936-076X")))
-Description: What the package does (one paragraph).
+Description: Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, 
+    providing standard errors and confidence intervals based on either cluster-robust variance estimators
+    (i.e., sandwich estimators) or cluster-level bootstrapping. Supported models include generalizations of the 
+    step-function selection model as proposed by Vevea and Hedges (1995) <DOI:10.1007/BF02294384>  and the 
+    beta-function selection model as proposed by Citkowicz and Vevea (2017) <DOI:10.1037/met0000119>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -27,8 +31,7 @@ Imports:
     pbapply,
     rlang,
     ggplot2,
-    simhelpers (> 0.2.1),
-    Rdpack
+    simhelpers (> 0.2.1)
 Suggests: 
     testthat (>= 3.0.0),
     metafor,
