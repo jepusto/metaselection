@@ -9,7 +9,7 @@
 #'   \item{n_ES}{correlation between outcomes.}
 #' }
 #'
-#'
-#' @importFrom Rdpack reprompt
+#' @references What Works Clearinghouse. (2021). Data from individual studies.
+#' \href{https://ies.ed.gov/ncee/wwc/studyfindings}{https://ies.ed.gov/ncee/wwc/studyfindings}
 #'
 "wwc_es"

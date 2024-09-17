@@ -18,4 +18,8 @@ wwc_es
 A dataset containing sample size and number of effect sizes seen in primary
 studies evaluated by the What Works Clearinghouse.
 }
+\references{
+What Works Clearinghouse. (2021). Data from individual studies.
+\href{https://ies.ed.gov/ncee/wwc/studyfindings}{https://ies.ed.gov/ncee/wwc/studyfindings}
+}
 \keyword{datasets}

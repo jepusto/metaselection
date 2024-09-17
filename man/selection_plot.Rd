@@ -67,3 +67,20 @@ model includes bootstrapped confidence intervals, then the plot will also
 display the selection weights implied by each bootstrap replicate of the
 parameter estimates.
 }
+\examples{
+
+
+mod <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "none"
+)
+
+selection_plot(mod)
+
+
+}

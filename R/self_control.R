@@ -1,7 +1,7 @@
 #' Self-Control Training Meta-Analysis
 #'
 #' Meta-analytic dataset containing results of primary studies examining the 
-#' effect of self-control training. See the OSF project at https://osf.io/v7gxf/
+#' effect of self-control training. 
 #'
 #' @format A tibble with 158 rows and 26 variables:
 #' \describe{
@@ -14,9 +14,9 @@
 #'   \item{outcome}{name of the outcome measure}
 #'   \item{comparison}{conditions compared}
 #'   \item{type_of_treatment}{type of treatment/training}
-#'   \item{type_of_treatment}{length of treatment coded in days}
+#'   \item{length_of_treatment}{length of treatment coded in days}
 #'   \item{publication_status}{indicator for whether the study was published}
-#'   \item{publication_status_new}{indicator for whether the study was published}
+#'   \item{publication_status_new}{indicator for whether the study was published (newer version)}
 #'   \item{publication_year}{year that the study was published}
 #'   \item{research_group}{indicator for whether researchers of the study belonged to the strength model group}
 #'   \item{control_group_quality}{quality of the control group with active indicating that the control group worked on some task}
@@ -30,11 +30,13 @@
 #'   \item{sample_age}{average age of the sample}
 #'   \item{attrition}{percentage of attrition}
 #'   \item{partipant_compensation}{type of compensation received by the participants}
-#'   \item{self_control_potential}{indicator for whether the outcome measure required utilization of full self-control potential}
+#'   \item{self_control_potential}{indicator for whether the outcome measure required utilization of maximum self-control potential}
 #' }
 #'
-#' @source
+#' @source \href{https://osf.io/v7gxf/}{OSF page for the project}
 #'
-#' @importFrom Rdpack reprompt
+#' @references Friese, M., Frankenbach, J., Job, V., & Loschelder, D. D. 
+#'   (2017). Does self-control training improve self-control? A meta-analysis. 
+#'   \emph{Perspectives on Psychological Science, 12}(6), 1077-1099.
 #'
 "self_control"
