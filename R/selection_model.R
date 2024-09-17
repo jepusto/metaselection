@@ -629,7 +629,7 @@ selection_model <- function(
   m <- match(c("data","yi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
-  mf[[1L]] <- quote(metaselection:::build_model_frame)
+  mf[[1L]] <- str2lang("metaselection:::build_model_frame")
   mf <- eval(mf, parent.frame())
   
   # Evaluate yi, sei, pi, ai from model frame
