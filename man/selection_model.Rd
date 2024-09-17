@@ -111,20 +111,10 @@ A numeric vector.
 Estimate step or beta selection model
 }
 \examples{
-
-dat <- r_meta(
-  mean_smd = 0,
-  tau = .1, omega = .01,
-  m = 50,
-  cor_mu = .4, cor_sd = 0.001,
-  censor_fun = step_fun(cut_vals = .025, weights = 0.4),
-  n_ES_sim = n_ES_param(40, 3)
-)
-
 res_ML <- selection_model(
-  data = dat,
-  yi = d,
-  sei = sd_d,
+  data = self_control,
+  yi = g,
+  sei = se_g,
   cluster = studyid,
   steps = 0.025,
   estimator = "ML",
@@ -135,15 +125,15 @@ res_ML$est
 
  
 res_hybrid <- selection_model(
-  data = dat,
-  yi = d,
-  sei = sd_d,
+  data = self_control,
+  yi = g,
+  sei = se_g,
   cluster = studyid,
   steps = 0.025,
   estimator = "hybrid",
   bootstrap = "multinomial",
   boot_CI = "percentile",
-  R = 199
+  R = 19
 )
 
 res_hybrid$est

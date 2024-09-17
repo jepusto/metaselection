@@ -27,6 +27,36 @@
 #'   an additional variable, \code{rep}, identifying the bootstrap replicate.
 #'
 #' @export
+#' 
+#' @examples
+#' mod <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "none"
+#' )
+#' 
+#' selection_wts(mod, pvals = seq(0, 1, 0.2))
+#' 
+#' mod_boot <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "multinomial",
+#'   boot_CI = "percentile",
+#'   R = 9
+#' )
+#'
+#' selection_wts(mod_boot, pvals = seq(0, 1, 0.2))
+#' 
+#' 
+
 
 selection_wts <- function(mod, pvals, ...) UseMethod("selection_wts")
 
@@ -172,6 +202,37 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #' @returns A \code{ggplot2} object.
 #'
 #' @export
+#' 
+#' @examples
+#' mod <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "none"
+#' )
+#' 
+#' selection_plot(mod, fill = "purple")
+#' 
+#' 
+#' mod_boot <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = c(0.025, .5),
+#'   estimator = "ML",
+#'   bootstrap = "multinomial",
+#'   boot_CI = "percentile",
+#'   R = 9
+#' )
+#' 
+#'  selection_plot(mod_boot)
+#'  selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
+#'  selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
+#' 
 
 selection_plot <- function(mod, pts = 200L, ...) UseMethod("selection_plot")
 

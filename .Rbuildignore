@@ -2,7 +2,8 @@
 ^\.git
 ^\.github$
 ^\.Rhistory$
+^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^README\.Rmd$
+^README
 ^codecov\.yml$
