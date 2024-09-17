@@ -67,3 +67,34 @@ model includes bootstrapped confidence intervals, then the plot will also
 display the selection weights implied by each bootstrap replicate of the
 parameter estimates.
 }
+\examples{
+mod <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "none"
+)
+
+selection_plot(mod, fill = "purple")
+
+
+mod_boot <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 9
+)
+
+ selection_plot(mod_boot)
+ selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
+ selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
+
+}

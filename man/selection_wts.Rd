@@ -46,3 +46,32 @@ an additional variable, \code{rep}, identifying the bootstrap replicate.
 Calculates the selection weights implied by an estimated model
 for a user-specified p-value or set of p-values.
 }
+\examples{
+mod <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "none"
+)
+
+selection_wts(mod, pvals = seq(0, 1, 0.2))
+
+mod_boot <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = c(0.025, .5),
+  estimator = "ML",
+  bootstrap = "multinomial",
+  boot_CI = "percentile",
+  R = 9
+)
+
+selection_wts(mod_boot, pvals = seq(0, 1, 0.2))
+
+
+}
