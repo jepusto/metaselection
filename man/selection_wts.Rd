@@ -57,7 +57,7 @@ mod <- selection_model(
   bootstrap = "none"
 )
 
-selection_wts(mod, pvals = c(0, 0.3, .8))
+selection_wts(mod, pvals = seq(0, 1, 0.2))
 
 mod_boot <- selection_model(
   data = self_control,
@@ -71,7 +71,7 @@ mod_boot <- selection_model(
   R = 9
 )
 
-selection_wts(mod_boot, pvals = c(0, 0.3, .8))
+selection_wts(mod_boot, pvals = seq(0, 1, 0.2))
 
 
 }

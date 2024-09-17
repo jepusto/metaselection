@@ -78,7 +78,7 @@ mod <- selection_model(
   bootstrap = "none"
 )
 
-selection_plot(mod)
+selection_plot(mod, fill = "purple")
 
 
 mod_boot <- selection_model(
@@ -94,5 +94,7 @@ mod_boot <- selection_model(
 )
 
  selection_plot(mod_boot)
+ selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
+ selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
 
 }

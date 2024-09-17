@@ -1,3 +1,4 @@
+# Data from https://osf.io/v7gxf/
 
 dat <- read.csv2("data-raw/full_tidy.csv", stringsAsFactors = FALSE) 
 mods <- names(dat)[14:31]

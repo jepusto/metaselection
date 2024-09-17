@@ -39,7 +39,7 @@
 #'   bootstrap = "none"
 #' )
 #' 
-#' selection_wts(mod, pvals = c(0, 0.3, .8))
+#' selection_wts(mod, pvals = seq(0, 1, 0.2))
 #' 
 #' mod_boot <- selection_model(
 #'   data = self_control,
@@ -53,7 +53,7 @@
 #'   R = 9
 #' )
 #'
-#' selection_wts(mod_boot, pvals = c(0, 0.3, .8))
+#' selection_wts(mod_boot, pvals = seq(0, 1, 0.2))
 #' 
 #' 
 
@@ -214,7 +214,7 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #'   bootstrap = "none"
 #' )
 #' 
-#' selection_plot(mod)
+#' selection_plot(mod, fill = "purple")
 #' 
 #' 
 #' mod_boot <- selection_model(
@@ -230,6 +230,8 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #' )
 #' 
 #'  selection_plot(mod_boot)
+#'  selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
+#'  selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
 #' 
 
 selection_plot <- function(mod, pts = 200L, ...) UseMethod("selection_plot")

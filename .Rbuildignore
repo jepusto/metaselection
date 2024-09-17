@@ -1,6 +1,7 @@
 ^LICENSE\.md$
 ^\.git
 ^\.github$
+^data-raw$
 ^\.Rhistory$
 ^.*\.Rproj$
 ^\.Rproj\.user$
