@@ -57,8 +57,8 @@ mod_3PSM_boot <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = .025,
+  CI_type = "percentile",
   bootstrap = "multinomial",
-  boot_CI = "percentile",
   R = 19
 )
 

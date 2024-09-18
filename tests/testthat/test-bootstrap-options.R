@@ -35,7 +35,7 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       steps = 0.025,
       estimator = "ML",
       bootstrap = "none",
-      boot_CI = "percentile"
+      CI_type = "percentile"
     )
   
   expect_identical(step_RVE_A$est, step_RVE$est)
@@ -51,7 +51,7 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       steps = 0.025,
       estimator = "ML",
       bootstrap = "none",
-      boot_CI = "percentile",
+      CI_type = "percentile",
       R = 999
     )
   
@@ -84,7 +84,7 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp",
-      boot_CI = "percentile",
+      CI_type = "percentile",
       R = 0
     )
   
@@ -107,7 +107,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = "large-sample",
+      CI_type = "large-sample",
       R = 19
     )
   
@@ -146,7 +146,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = "student",
+      CI_type = "student",
       R = 19
     )
   
@@ -167,7 +167,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = "basic",
+      CI_type = "basic",
       R = 19
     )
   
@@ -188,7 +188,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic"),
       R = 19
     )
   
@@ -219,7 +219,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic"),
       R = 19,
       format = "long"
     )
@@ -260,7 +260,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = "none",
+      CI_type = "none",
       R = 29
     )
   
@@ -287,7 +287,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = "large-sample",
+      CI_type = "large-sample",
       R = 24L
     )
   
@@ -326,7 +326,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = "student",
+      CI_type = "student",
       R = 24
     )
   
@@ -347,7 +347,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = "basic",
+      CI_type = "basic",
       R = 24
     )
   
@@ -368,7 +368,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic"),
       R = 24
     )
   
@@ -399,7 +399,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic"),
       R = 24,
       format = "long"
     )
@@ -440,7 +440,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       steps = 0.025,
       estimator = "ML",
       bootstrap = "exp", 
-      boot_CI = "none",
+      CI_type = "none",
       R = 37
     )
   
@@ -452,7 +452,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   
 })
 
-test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
+test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
 
   suppressWarnings(
     step_multinomial <- 
@@ -465,7 +465,7 @@ test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "ML",
         bootstrap = "multinomial", 
-        boot_CI = c("student","percentile","basic"),
+        CI_type = c("student","percentile","basic"),
         R = 39,
         format = "long"
       )
@@ -486,7 +486,7 @@ test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "ML",
         bootstrap = "multinomial", 
-        boot_CI = c("student","percentile","basic"),
+        CI_type = c("student","percentile","basic"),
         R = c(39,59,79,99),
         seed = 20240819,
         format = "long"
@@ -508,7 +508,7 @@ test_that("boot_CI options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "ML",
         bootstrap = "exp", 
-        boot_CI = c("student","percentile"),
+        CI_type = c("student","percentile"),
         R = 49,
         format = "long"
       )
@@ -541,7 +541,7 @@ test_that("bootstrapping works with parallel processing.", {
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = c("large-sample","percentile"),
+      CI_type = c("large-sample","percentile"),
       R = 40
     )
   
@@ -559,7 +559,7 @@ test_that("bootstrapping works with parallel processing.", {
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
-      boot_CI = c("large-sample","percentile"),
+      CI_type = c("large-sample","percentile"),
       R = 40
     )
   

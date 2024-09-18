@@ -67,7 +67,7 @@ mod_boot <- selection_model(
   steps = c(0.025, .5),
   estimator = "ML",
   bootstrap = "multinomial",
-  boot_CI = "percentile",
+  CI_type = "percentile",
   R = 9
 )
 

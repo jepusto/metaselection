@@ -276,8 +276,8 @@ system.time(
     cluster = study,
     selection_type = "step",
     steps = .025,
+    CI_type = "percentile",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
     R = 99
   )
 )
@@ -301,8 +301,8 @@ system.time(
     cluster = study,
     selection_type = "step",
     steps = .025,
+    CI_type = "percentile",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
     R = 99
   )  
 )

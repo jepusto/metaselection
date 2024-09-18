@@ -49,7 +49,7 @@
 #'   steps = c(0.025, .5),
 #'   estimator = "ML",
 #'   bootstrap = "multinomial",
-#'   boot_CI = "percentile",
+#'   CI_type = "percentile",
 #'   R = 9
 #' )
 #'
@@ -225,7 +225,7 @@ selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #'   steps = c(0.025, .5),
 #'   estimator = "ML",
 #'   bootstrap = "multinomial",
-#'   boot_CI = "percentile",
+#'   CI_type = "percentile",
 #'   R = 9
 #' )
 #' 

@@ -492,15 +492,18 @@ bootstrap_selmodel <- function(
 #'   the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
-#' @param calc_vcov logical with \code{TRUE} (the default) indicating to
-#'   calculate a variance-covariance matrix for the parameter estimates.
-#' @param conf_level desired coverage level for confidence intervals, with the
-#'   default value set to \code{.95}
 #' @param estimator vector indicating whether to use the maximum likelihood or
 #'   the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
 #'   and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
 #'   maximum likelihood estimator, \code{"ML"}, is available. For step function
 #'   models, both maximum likelihood and hybrid estimators are available.
+#' @param calc_vcov logical with \code{TRUE} (the default) indicating to
+#'   calculate a variance-covariance matrix for the parameter estimates.
+#' @param CI_type character string specifying the type of bootstrap confidence
+#'   interval to calculate, with possible options \code{"percentile"} (the
+#'   default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.
+#' @param conf_level desired coverage level for confidence intervals, with the
+#'   default value set to \code{.95}
 #' @param theta optional numeric vector of starting values to use in optimization routines.
 #' @param optimizer character string indicating the optimizer to use. Ignored if \code{estimator = "hybrid"} or \code{"hybrid-full"}.
 #' @param optimizer_control an optional list of control parameters to be used
@@ -509,9 +512,6 @@ bootstrap_selmodel <- function(
 #' @param bootstrap character string specifying the type of bootstrap to run,
 #'   with possible options \code{"none"} (the default), \code{"exponential"} for the fractionally re-weighted cluster bootstrap,
 #'   or \code{"multinomial"} for a conventional clustered bootstrap.
-#' @param boot_CI character string specifying the type of bootstrap confidence
-#'   interval to calculate, with possible options \code{"percentile"} (the
-#'   default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
@@ -544,7 +544,7 @@ bootstrap_selmodel <- function(
 #'   steps = 0.025,
 #'   estimator = "hybrid",
 #'   bootstrap = "multinomial",
-#'   boot_CI = "percentile",
+#'   CI_type = "percentile",
 #'   R = 19
 #' )
 #'
@@ -565,15 +565,15 @@ selection_model <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL,
     subset = NULL,
-    calc_vcov = TRUE,
-    conf_level = .95,
     estimator = c("ML","hybrid","hybrid-full"),
+    calc_vcov = TRUE,
+    CI_type = "percentile",
+    conf_level = .95,
     theta = NULL,
     optimizer = NULL,
     optimizer_control = list(),
     use_jac = TRUE,
     bootstrap = "none",
-    boot_CI = "percentile",
     R = 1999,
     ...
 ) {
@@ -584,11 +584,11 @@ selection_model <- function(
   
   if (identical(R, 0)) {
     bootstrap <- "none"
-    boot_CI <- "large-sample"
+    CI_type <- "large-sample"
   } else if (bootstrap == "none") {
-    boot_CI <- "large-sample"
+    CI_type <- "large-sample"
   } else {
-    boot_CI <- match.arg(boot_CI, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
+    CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
   }
   
   if (is.null(optimizer)) {
@@ -671,7 +671,7 @@ selection_model <- function(
     SE = sqrt(diag(res$vcov))
   )
   
-  if ("large-sample" %in% boot_CI) {
+  if ("large-sample" %in% CI_type) {
     qz <- qnorm(1 - (1 - conf_level) / 2)
     res$est$CI_lo <- res$est$Est - qz * res$est$SE
     res$est$CI_hi <- res$est$Est + qz * res$est$SE
@@ -685,7 +685,7 @@ selection_model <- function(
   
   if (bootstrap != "none") {
     
-    boot_sandwich <- any("student" %in% boot_CI)
+    boot_sandwich <- any("student" %in% CI_type)
     
     reps <- max(R)
     p <- progressr::progressor(reps)
@@ -709,7 +709,7 @@ selection_model <- function(
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$est$bootstrap <- bootstrap
     
-    if (any(c("percentile","basic","student") %in% boot_CI)) {
+    if (any(c("percentile","basic","student") %in% CI_type)) {
       
       est <- split(res$est$Est, res$est$param)
       se <- split(res$est$SE, res$est$param)
@@ -719,7 +719,7 @@ selection_model <- function(
         \(e, s, b) simhelpers::bootstrap_CIs(
           boot_est = b$Est, boot_se = b$SE, 
           est = e, se = s, 
-          CI_type = boot_CI, level = conf_level, B_vals = R, ...
+          CI_type = CI_type, level = conf_level, B_vals = R, ...
         ),
         e = est,
         s = se,

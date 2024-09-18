@@ -37,7 +37,7 @@ test_that("selection_plot() works for 3PSM.", {
     steps = 0.025,
     estimator = "ML",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 29
   )
   
@@ -87,7 +87,7 @@ test_that("selection_plot() works for 3PSM.", {
     steps = 0.025,
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 199
   )
   
@@ -153,7 +153,7 @@ test_that("selection_plot() works for 4PSM.", {
     steps = c(0.025,0.500),
     estimator = "ML",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 29
   )
   
@@ -204,7 +204,7 @@ test_that("selection_plot() works for 4PSM.", {
     steps = c(0.025,0.500),
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 199
   )
   
@@ -275,7 +275,7 @@ test_that("selection_plot() works for beta model", {
       selection_type = "beta",
       estimator = "ML",
       bootstrap = "multinomial",
-      boot_CI = "percentile",
+      CI_type = "percentile",
       R = 19
     )
   )

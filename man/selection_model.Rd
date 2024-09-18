@@ -18,15 +18,15 @@ selection_model(
   sel_mods = NULL,
   sel_zero_mods = NULL,
   subset = NULL,
-  make_sandwich = TRUE,
+  estimator = "ML",
+  vcov_type = "robust",
+  CI_type = "percentile",
   conf_level = 0.95,
-  estimator = c("ML", "hybrid", "hybrid-full"),
   theta = NULL,
   optimizer = NULL,
   optimizer_control = list(),
   use_jac = TRUE,
   bootstrap = "none",
-  boot_CI = "percentile",
   R = 1999,
   ...
 )
@@ -39,8 +39,8 @@ data}
 
 \item{sei}{vector of sampling standard errors.}
 
-\item{pi}{optional vector of one-sided p-values. If not specified, p-values will be
-computed from \code{yi} and \code{sei}.}
+\item{pi}{optional vector of one-sided p-values. If not specified, p-values
+will be computed from \code{yi} and \code{sei}.}
 
 \item{ai}{optional vector of analytic weights.}
 
@@ -52,9 +52,10 @@ estimate, with possible options \code{"step"} or \code{"beta"}.}
 
 \item{steps}{If \code{selection_type = "step"}, a numeric vector of one or
 more values specifying the thresholds (or steps) where the selection
-probability changes, with a default of \code{steps = .025}. If \code{selection_type = "beta"}, then a numeric
-vector of two values specifying the thresholds beyond which the selection
-function is truncated, with a default of \code{steps = c(.025, .975)}.}
+probability changes, with a default of \code{steps = .025}. If
+\code{selection_type = "beta"}, then a numeric vector of two values
+specifying the thresholds beyond which the selection function is truncated,
+with a default of \code{steps = c(.025, .975)}.}
 
 \item{mean_mods}{optional model formula for moderators related to average
 effect size magnitude.}
@@ -65,17 +66,12 @@ heterogeneity.}
 \item{sel_mods}{optional model formula for moderators related to the
 probability of selection. Only relevant for \code{selection_type = "step"}.}
 
-\item{sel_zero_mods}{optional model formula for moderators related to
-the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.}
+\item{sel_zero_mods}{optional model formula for moderators related to the
+probability of selection for p-values below the lowest threshold value of
+\code{steps}. Only relevant for \code{selection_type = "step"}.}
 
 \item{subset}{optional logical expression indicating a subset of observations
 to use for estimation.}
-
-\item{make_sandwich}{logical with \code{TRUE} (the default) indicating to
-calculate standard errors using sandwich estimators.}
-
-\item{conf_level}{desired coverage level for confidence intervals, with the
-default value set to \code{.95}}
 
 \item{estimator}{vector indicating whether to use the maximum likelihood or
 the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
@@ -83,22 +79,36 @@ and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
 maximum likelihood estimator, \code{"ML"}, is available. For step function
 models, both maximum likelihood and hybrid estimators are available.}
 
-\item{theta}{optional numeric vector of starting values to use in optimization routines.}
+\item{vcov_type}{character string specifying the type of variance-covariance
+matrix to calculate, with possible options \code{"robust"} for robust or
+cluster-robust standard errors, \code{"model-based"} for model-based
+standard errors, or \code{"none"}.}
 
-\item{optimizer}{character string indicating the optimizer to use. Ignored if \code{estimator = "hybrid"} or \code{"hybrid-full"}.}
+\item{CI_type}{character string specifying the type of confidence interval to
+calculate, with possible options \code{"percentile"} (the default) for
+percentile bootstrap, \code{"basic"} for basic bootstrap, \code{"student"}
+for studentized bootstrap, \code{"large-sample"} for large-sample normal,
+or \code{"none"}.}
+
+\item{conf_level}{desired coverage level for confidence intervals, with the
+default value set to \code{.95}}
+
+\item{theta}{optional numeric vector of starting values to use in
+optimization routines.}
+
+\item{optimizer}{character string indicating the optimizer to use. Ignored if
+\code{estimator = "hybrid"} or \code{"hybrid-full"}.}
 
 \item{optimizer_control}{an optional list of control parameters to be used
 for optimization}
 
-\item{use_jac}{logical with \code{TRUE} (the default) indicating to use the Jacobian of the estimating equations for optimization.}
+\item{use_jac}{logical with \code{TRUE} (the default) indicating to use the
+Jacobian of the estimating equations for optimization.}
 
 \item{bootstrap}{character string specifying the type of bootstrap to run,
-with possible options \code{"none"} (the default), \code{"exponential"} for the fractionally re-weighted cluster bootstrap,
-or \code{"multinomial"} for a conventional clustered bootstrap.}
-
-\item{boot_CI}{character string specifying the type of bootstrap confidence
-interval to calculate, with possible options \code{"percentile"} (the
-default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.}
+with possible options \code{"none"} (the default), \code{"exponential"} for
+the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
+a conventional clustered bootstrap.}
 
 \item{R}{number of bootstrap replications, with a default of \code{1999}.}
 
@@ -123,7 +133,9 @@ res_ML <- selection_model(
 
 res_ML$est
 
- 
+# configure progress bar
+progressr::handlers("cli")
+
 res_hybrid <- selection_model(
   data = self_control,
   yi = g,
@@ -132,7 +144,7 @@ res_hybrid <- selection_model(
   steps = 0.025,
   estimator = "hybrid",
   bootstrap = "multinomial",
-  boot_CI = "percentile",
+  CI_type = "percentile",
   R = 19
 )
 
