@@ -89,7 +89,7 @@ fit_selection_model <- function(
   Z0 = NULL, 
   Z = NULL, 
   subset = NULL,
-  make_sandwich = TRUE,
+  calc_vcov = TRUE,
   selection_type = "step",
   estimator = "ML",
   theta = NULL,
@@ -164,7 +164,7 @@ fit_selection_model <- function(
       }
     )
     
-    if (make_sandwich == "raw") {
+    if (calc_vcov == "raw") {
       return(mle_est)
     } 
     
@@ -174,7 +174,7 @@ fit_selection_model <- function(
     info <- mle_est[max_method, -theta_names]
     names(theta) <- params$H_names
     
-    if (isFALSE(make_sandwich)) {
+    if (isFALSE(calc_vcov)) {
       return(theta)
     }
     
@@ -221,11 +221,11 @@ fit_selection_model <- function(
     
     names(theta) <- params$H_names
     
-    if (make_sandwich == "raw") {
+    if (calc_vcov == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
     
-    if (isFALSE(make_sandwich)) {
+    if (isFALSE(calc_vcov)) {
       return(theta)
     }
     
@@ -286,11 +286,11 @@ fit_selection_model <- function(
 
     names(theta) <- params$H_names
     
-    if (make_sandwich == "raw") {
+    if (calc_vcov == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
 
-    if (isFALSE(make_sandwich)) {
+    if (isFALSE(calc_vcov)) {
       return(theta)
     }
   }
@@ -392,7 +392,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
-    make_sandwich = TRUE,
+    calc_vcov = TRUE,
     selection_type = "step",
     estimator = "ML",
     theta = NULL,
@@ -440,7 +440,7 @@ bootstrap_selmodel <- function(
     cluster = cluster, 
     subset = cl_subset,
     X = X, U = U, Z0 = Z0, Z = Z,
-    make_sandwich = make_sandwich, 
+    calc_vcov = calc_vcov, 
     selection_type = selection_type,
     estimator = estimator, 
     theta = theta,
@@ -448,18 +448,14 @@ bootstrap_selmodel <- function(
     optimizer_control = optimizer_control,
     use_jac = use_jac
   )
+
+  est <- data.frame(
+    param = names(res),
+    Est = as.numeric(res)
+  )
   
-  if (make_sandwich) {
-    est <- data.frame(
-      param = names(res$est),
-      Est = as.numeric(res$est),
-      SE = sqrt(diag(res$vcov))
-    )
-  } else {
-    est <- data.frame(
-      param = names(res),
-      Est = as.numeric(res)
-    )
+  if (calc_vcov) {
+    est$SE = sqrt(diag(res$vcov))
   }
   
   return(est)
@@ -496,8 +492,8 @@ bootstrap_selmodel <- function(
 #'   the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
-#' @param make_sandwich logical with \code{TRUE} (the default) indicating to
-#'   calculate standard errors using sandwich estimators.
+#' @param calc_vcov logical with \code{TRUE} (the default) indicating to
+#'   calculate a variance-covariance matrix for the parameter estimates.
 #' @param conf_level desired coverage level for confidence intervals, with the
 #'   default value set to \code{.95}
 #' @param estimator vector indicating whether to use the maximum likelihood or
@@ -569,7 +565,7 @@ selection_model <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL,
     subset = NULL,
-    make_sandwich = TRUE,
+    calc_vcov = TRUE,
     conf_level = .95,
     estimator = c("ML","hybrid","hybrid-full"),
     theta = NULL,
@@ -653,7 +649,7 @@ selection_model <- function(
     yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
     steps = steps,
-    make_sandwich = make_sandwich, 
+    calc_vcov = calc_vcov, 
     selection_type = selection_type,
     estimator = estimator, 
     theta = theta,
@@ -662,7 +658,7 @@ selection_model <- function(
     use_jac = use_jac
   ) 
   
-  if ((make_sandwich == "raw") && (bootstrap=="none")) {
+  if ((calc_vcov == "raw") && (bootstrap=="none")) {
     return(res)
   }
   
@@ -699,7 +695,7 @@ selection_model <- function(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
         steps = steps,
-        make_sandwich = boot_sandwich, 
+        calc_vcov = boot_sandwich, 
         selection_type = selection_type,
         estimator = estimator, 
         theta = theta,

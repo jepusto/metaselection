@@ -166,7 +166,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   methods <- c("BFGS","CG","Nelder-Mead","nlminb","Rvmmin","bobyqa")
   
   m1_est <- selection_model(data = dat, yi = d, sei = sda, steps = c(.025, .500), 
-                            make_sandwich = "raw", 
+                            calc_vcov = "raw", 
                             optimizer_control = list(all.methods = TRUE))
   expect_s3_class(m1_est, "data.frame")
   expect_true(all(methods %in% rownames(m1_est)))
@@ -186,7 +186,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   m2_est <- selection_model(data = dat, yi = d, sei = sda, 
                             mean_mods = ~ X1, sel_mods = ~ Z1, 
                             steps = c(.025, .500), 
-                            make_sandwich = "raw", 
+                            calc_vcov = "raw", 
                             optimizer_control = list(all.methods = TRUE))
   expect_s3_class(m2_est, "data.frame")
   expect_true(all(methods %in% rownames(m2_est)))
@@ -225,7 +225,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   
   
   m1_est <- selection_model(data = dat, yi = d, sei = sda, steps = c(.025, .500), 
-                            make_sandwich = "raw", 
+                            calc_vcov = "raw", 
                             estimator = "hybrid")
   expect_identical(names(m1_est), c("est","max_method","info"))
   expect_identical(names(m1_est$info$nleqslv), c("fvec","termcd","message","scalex","nfcnt","njcnt","iter","jac","f_norm"))
@@ -244,7 +244,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   m2_est <- selection_model(data = dat, yi = d, sei = sda, 
                             mean_mods = ~ X1, sel_mods = ~ Z1, 
                             steps = c(.025, .500), 
-                            make_sandwich = "raw", 
+                            calc_vcov = "raw", 
                             estimator = "hybrid")
   expect_identical(names(m2_est), c("est","max_method","info"))
   expect_identical(names(m2_est$info$nleqslv), c("fvec","termcd","message","scalex","nfcnt","njcnt","iter","jac","f_norm"))
@@ -286,7 +286,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "ML",
       optimizer = "Rvmmin"
     )
@@ -297,7 +297,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "ML",
       optimizer = "Rvmmin"
     )
@@ -310,7 +310,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "ML",
       optimizer = "Rvmmin"
     )
@@ -321,7 +321,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "ML",
       optimizer = "Rvmmin"
     )
@@ -337,7 +337,7 @@ test_that("selection_model() works with the subset argument.", {
       mean_mods = ~ 0 + Z1,
       var_mods = ~ 0 + Z1,
       sel_mods = ~ 0 + Z1,
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "ML",
       optimizer = "Rvmmin"
     )
@@ -363,7 +363,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid"
     )
   m1_hybrid_A2 <-
@@ -373,7 +373,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid"
     )
 
@@ -388,7 +388,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid"
     )
   m1_hybrid_B2 <-
@@ -398,7 +398,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid"
     )
   
@@ -422,7 +422,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid-full"
     )
   
@@ -432,7 +432,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid-full"
     )
   
@@ -445,7 +445,7 @@ test_that("selection_model() works with the subset argument.", {
       mean_mods = ~ 0 + Z1,
       var_mods = ~ 0 + Z1,
       sel_mods = ~ 0 + Z1,
-      make_sandwich = TRUE,
+      calc_vcov = TRUE,
       estimator = "hybrid-full"
     )
   
