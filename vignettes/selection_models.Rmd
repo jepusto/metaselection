@@ -265,16 +265,21 @@ Rather than relying on robust variance estimation to construct standard errors a
 ```{r 3PSM-bootstrap}
 set.seed(20240916)
 
-mod_3PSM_boot <- selection_model(
-  data = dat.lehmann2018, 
-  yi = yi,
-  sei = sei,
-  cluster = study,
-  selection_type = "step",
-  steps = .025,
-  bootstrap = "multinomial",
-  boot_CI = "percentile",
-  R = 99
+# configure progress bar
+progressr::handlers('cli')
+
+system.time(
+  mod_3PSM_boot <- selection_model(
+    data = dat.lehmann2018, 
+    yi = yi,
+    sei = sei,
+    cluster = study,
+    selection_type = "step",
+    steps = .025,
+    bootstrap = "multinomial",
+    boot_CI = "percentile",
+    R = 99
+  )
 )
 
 print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
@@ -282,7 +287,7 @@ print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 
 The overall estimate of the average effect does not change when bootstrapping is applied (`r round(mod_3PSM_boot$est$Est[mod_3PSM_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(mod_3PSM_boot$est$percentile_lower[mod_3PSM_boot$est$param=="beta"], 3)`, `r round(mod_3PSM_boot$est$percentile_upper[mod_3PSM_boot$est$param=="beta"], 3)`] (due to the use of a smaller-than-desirable number of bootstrap replications).
 
-The bootstrapping routine is implemented to work with the `future` and `future.apply` packages for parallel processing. If these packages are available, the bootstrap calculations will use a specified future processing plan. For example, the following code specifies to use a `multisession` plan with 4 worker nodes, then fits the same model as above:
+The bootstrapping routine is implemented to work with the `future` and `future.apply` packages for parallel processing. For example, the following code specifies to use a `multisession` future processing plan with 4 worker nodes, then fits the same model as above:
 ```{r parallel-boot}
 library(future)
 library(future.apply)

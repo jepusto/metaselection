@@ -525,8 +525,7 @@ test_that("bootstrapping works with parallel processing.", {
   
   skip_on_cran()
   skip_if_not_installed("future")
-  skip_if_not_installed("future.apply")
-  
+
   library(future)
   
   plan(sequential)
@@ -565,5 +564,7 @@ test_that("bootstrapping works with parallel processing.", {
     )
   
   expect_identical(class(step_sequential), class(step_parallel))
+  expect_identical(step_sequential$est, step_parallel$est)
+  expect_identical(step_sequential$bootstrap_reps, step_parallel$bootstrap_reps)
   
 })  

@@ -28,7 +28,8 @@ Imports:
     optimx,
     nleqslv,
     purrr,
-    pbapply,
+    future.apply,
+    progressr,
     rlang,
     ggplot2,
     simhelpers (> 0.2.1)
@@ -39,8 +40,6 @@ Suggests:
     clubSandwich,
     DescTools,
     knitr,
-    future,
-    future.apply,
     rmarkdown,
     dplyr
 Config/testthat/edition: 3

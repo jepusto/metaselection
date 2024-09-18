@@ -537,7 +537,9 @@ bootstrap_selmodel <- function(
 #' 
 #' res_ML$est
 #' 
-#'  
+#' # configure progress bar
+#' progressr::handlers("cli")
+#'   
 #' res_hybrid <- selection_model(
 #'   data = self_control,
 #'   yi = g,
@@ -689,18 +691,10 @@ selection_model <- function(
     
     boot_sandwich <- any("student" %in% boot_CI)
     
-    # Set options depending on availability of future and future.apply
-    future_available <- requireNamespace("future", quietly = TRUE) && requireNamespace("future.apply", quietly = TRUE)
-    
-    if (future_available) {
-      future_cl <- "future"
-      future.seed <- TRUE
-    } else {
-      future_cl <- NULL
-      future.seed <- NULL
-    }
-    
-    booties_df <- pbapply::pblapply(1:max(R), \(x) {
+    reps <- max(R)
+    p <- progressr::progressor(reps)
+    booties_df <- future.apply::future_replicate(reps, {
+      p()
       bootstrap_selmodel(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
@@ -714,7 +708,7 @@ selection_model <- function(
         use_jac = use_jac,
         wtype = bootstrap
       )
-    }, cl = future_cl, future.seed = future.seed)
+    }, simplify = FALSE, future.seed = TRUE)
     
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$est$bootstrap <- bootstrap
@@ -725,7 +719,7 @@ selection_model <- function(
       se <- split(res$est$SE, res$est$param)
       boots <- by(res$bootstrap_reps, res$bootstrap_reps$param, identity)
       
-      boot_CIs <- mapply(
+      boot_CIs <- future.apply::future_mapply(
         \(e, s, b) simhelpers::bootstrap_CIs(
           boot_est = b$Est, boot_se = b$SE, 
           est = e, se = s, 
@@ -734,7 +728,8 @@ selection_model <- function(
         e = est,
         s = se,
         b = boots,
-        SIMPLIFY = FALSE
+        SIMPLIFY = FALSE,
+        future.seed = TRUE
       )
       
       boot_lengths <- sapply(boot_CIs, nrow)
