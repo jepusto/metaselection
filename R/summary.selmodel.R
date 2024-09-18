@@ -14,26 +14,38 @@
 
 summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
   
+  # title -------------------------------------------------------------------
+  
   # need to edit the language for the title 
   model <- if ("step.selmodel" %in% class(x)) "Step Function Model" else if("beta.selmodel" %in% class(x)) "Beta Density Model"
   boot_model <- if(grepl("^boot", class(x)[1])) "With Cluster Bootstrapping" else NULL
   if(!is.null(boot_model)) model <- paste(model, boot_model)
+
+
+
+  # info  -------------------------------------------------------------------
+
+  
+  n_clusters <- x$n_clusters
+  n_effects <- x$n_effects
+  steps <- paste(x$steps, collapse = ", ")
+  call <- x$cl
   
   estimates <- x$est
-  
   estimator <- estimates$estimator[1]
   estimator <- ifelse(estimator == "ML", "Maximum likelihood", "Hybrid Estimating Equations")
   
-  steps <- paste(x$steps, collapse = ", ")
+
+  # bootstrap information  --------------------------------------------------
                  
   if(grepl("^boot", class(x)[1])){
     
     boot_type <- estimates$bootstrap[1]
     R <- estimates$bootstraps[2]
     
+    # can request multiple CI so not sure how to add the ci info 
+    
   }
-  
-  call <- x$cl
   
 
   # betas model results -----------------------------------------------------
@@ -49,6 +61,8 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
 
   # heterogeneity -----------------------------------------------------------
 
+  # do we need to have a transf_gamma argument or just display tau2 and the se 
+  
   transf_variables <- intersect(
     names(estimates),
       c("Est","CI_lo","CI_hi","percentile_lower","percentile_upper","basic_lower","basic_upper","student_lower","student_upper")
@@ -89,7 +103,8 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   cat("Call:", "\n")
   print(call)
   cat("\n")
-  cat(paste("Number of clusters = ", "Number of effects = "), "\n", "\n")
+  if(!is.null(n_clusters)) cat(paste0("Number of clusters = ", n_clusters, ";", " Number of effects = ", n_effects), "\n", "\n")
+  if(is.null(n_clusters)) cat(paste0("Number of effects = ", n_effects), "\n", "\n") 
   cat(paste("Steps: ", steps), "\n")
   cat(paste("Estimator: ", estimator), "\n")
   if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R), "\n")

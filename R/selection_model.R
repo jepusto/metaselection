@@ -630,6 +630,9 @@ selection_model <- function(
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
   
+  n_clusters <- if(!is.null(cluster)) length(unique(cluster))
+  n_effects <- length(yi)
+  
   # Create matrices X, U, Z0, Z_1,... from data formulas
   
   X <- if (is.null(mean_mods)) NULL else do.call(model.matrix, list(object = mean_mods, data = mf))
@@ -753,6 +756,8 @@ selection_model <- function(
   res$cl <- cl
   res$mf <- mf
   res$steps <- steps
+  if(!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
+  res$n_effects <- n_effects
   
   return(res)
 }
