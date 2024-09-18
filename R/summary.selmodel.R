@@ -33,7 +33,7 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   
   estimates <- x$est
   estimator <- estimates$estimator[1]
-  estimator <- ifelse(estimator == "ML", "Maximum likelihood", "Hybrid Estimating Equations")
+  estimator <- ifelse(estimator == "ML", "Maximum likelihood", "Hybrid estimating equations")
   
 
   # bootstrap information  --------------------------------------------------
