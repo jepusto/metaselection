@@ -28,6 +28,7 @@ Imports:
     optimx,
     nleqslv,
     purrr,
+    future,
     future.apply,
     progressr,
     rlang,

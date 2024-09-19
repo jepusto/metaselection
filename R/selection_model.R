@@ -89,7 +89,7 @@ fit_selection_model <- function(
   Z0 = NULL, 
   Z = NULL, 
   subset = NULL,
-  calc_vcov = TRUE,
+  vcov_type = "robust",
   selection_type = "step",
   estimator = "ML",
   theta = NULL,
@@ -164,7 +164,7 @@ fit_selection_model <- function(
       }
     )
     
-    if (calc_vcov == "raw") {
+    if (vcov_type == "raw") {
       return(mle_est)
     } 
     
@@ -174,7 +174,7 @@ fit_selection_model <- function(
     info <- mle_est[max_method, -theta_names]
     names(theta) <- params$H_names
     
-    if (isFALSE(calc_vcov)) {
+    if (vcov_type == "none") {
       return(theta)
     }
     
@@ -221,11 +221,11 @@ fit_selection_model <- function(
     
     names(theta) <- params$H_names
     
-    if (calc_vcov == "raw") {
+    if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
     
-    if (isFALSE(calc_vcov)) {
+    if (vcov_type == "none") {
       return(theta)
     }
     
@@ -286,11 +286,11 @@ fit_selection_model <- function(
 
     names(theta) <- params$H_names
     
-    if (calc_vcov == "raw") {
+    if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
 
-    if (isFALSE(calc_vcov)) {
+    if (vcov_type == "none") {
       return(theta)
     }
   }
@@ -358,23 +358,29 @@ fit_selection_model <- function(
   
   hess_inv <- MASS::ginv(hess)
   
-  # Compute sandwich variance estimator using score and Hessian (Eq. 52-54)
-  
-  if (is.null(cluster)) {
-    meat <- crossprod(scores)
-  } else {
-    score_j <- rowsum(scores, group = cluster)
-    meat <- crossprod(score_j)
-  }
+  if (vcov_type == "robust") {
+    
+    # Compute sandwich variance estimator using score and Hessian (Eq. 52-54)
+    if (is.null(cluster)) {
+      meat <- crossprod(scores)
+    } else {
+      score_j <- rowsum(scores, group = cluster)
+      meat <- crossprod(score_j)
+    }
+    
+    vcov_mat <- hess_inv %*% meat %*% t(hess_inv)
 
-  sandwich <- hess_inv %*% meat %*% t(hess_inv)
+  } else {
+    
+  }
   
-  rownames(hess) <- names(theta)
-  colnames(hess) <- names(theta)
+  
+  rownames(vcov_mat) <- names(theta)
+  colnames(vcov_mat) <- names(theta)
   
   list(
     est = theta, 
-    vcov = sandwich, 
+    vcov = vcov_mat, 
     method = max_method,
     info = info
   )
@@ -392,7 +398,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
-    calc_vcov = TRUE,
+    vcov_type = "robust",
     selection_type = "step",
     estimator = "ML",
     theta = NULL,
@@ -440,7 +446,7 @@ bootstrap_selmodel <- function(
     cluster = cluster, 
     subset = cl_subset,
     X = X, U = U, Z0 = Z0, Z = Z,
-    calc_vcov = calc_vcov, 
+    vcov_type = vcov_type, 
     selection_type = selection_type,
     estimator = estimator, 
     theta = theta,
@@ -454,7 +460,7 @@ bootstrap_selmodel <- function(
     Est = as.numeric(res)
   )
   
-  if (calc_vcov) {
+  if (vcov_type != "none") {
     est$SE = sqrt(diag(res$vcov))
   }
   
@@ -470,8 +476,8 @@ bootstrap_selmodel <- function(
 #'   data
 #' @param yi vector of effect sizes estimates.
 #' @param sei vector of sampling standard errors.
-#' @param pi optional vector of one-sided p-values. If not specified, p-values will be
-#'   computed from \code{yi} and \code{sei}.
+#' @param pi optional vector of one-sided p-values. If not specified, p-values
+#'   will be computed from \code{yi} and \code{sei}.
 #' @param ai optional vector of analytic weights.
 #' @param cluster vector indicating which observations belong to the same
 #'   cluster.
@@ -479,17 +485,19 @@ bootstrap_selmodel <- function(
 #'   estimate, with possible options \code{"step"} or \code{"beta"}.
 #' @param steps If \code{selection_type = "step"}, a numeric vector of one or
 #'   more values specifying the thresholds (or steps) where the selection
-#'   probability changes, with a default of \code{steps = .025}. If \code{selection_type = "beta"}, then a numeric
-#'   vector of two values specifying the thresholds beyond which the selection
-#'   function is truncated, with a default of \code{steps = c(.025, .975)}.
+#'   probability changes, with a default of \code{steps = .025}. If
+#'   \code{selection_type = "beta"}, then a numeric vector of two values
+#'   specifying the thresholds beyond which the selection function is truncated,
+#'   with a default of \code{steps = c(.025, .975)}.
 #' @param mean_mods optional model formula for moderators related to average
 #'   effect size magnitude.
 #' @param var_mods optional model formula for moderators related to effect size
 #'   heterogeneity.
 #' @param sel_mods optional model formula for moderators related to the
 #'   probability of selection. Only relevant for \code{selection_type = "step"}.
-#' @param sel_zero_mods optional model formula for moderators related to
-#'   the probability of selection for p-values below the lowest threshold value of \code{steps}. Only relevant for \code{selection_type = "step"}.
+#' @param sel_zero_mods optional model formula for moderators related to the
+#'   probability of selection for p-values below the lowest threshold value of
+#'   \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the maximum likelihood or
@@ -497,21 +505,29 @@ bootstrap_selmodel <- function(
 #'   and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
 #'   maximum likelihood estimator, \code{"ML"}, is available. For step function
 #'   models, both maximum likelihood and hybrid estimators are available.
-#' @param calc_vcov logical with \code{TRUE} (the default) indicating to
-#'   calculate a variance-covariance matrix for the parameter estimates.
-#' @param CI_type character string specifying the type of bootstrap confidence
-#'   interval to calculate, with possible options \code{"percentile"} (the
-#'   default), \code{"basic"}, \code{"student"}, \code{"large-sample"}, or \code{"none"}.
+#' @param vcov_type character string specifying the type of variance-covariance
+#'   matrix to calculate, with possible options \code{"robust"} for robust or
+#'   cluster-robust standard errors, \code{"model-based"} for model-based
+#'   standard errors, or \code{"none"}.
+#' @param CI_type character string specifying the type of confidence interval to
+#'   calculate, with possible options \code{"large-sample"} for large-sample
+#'   normal (the default), \code{"percentile"} for percentile bootstrap,
+#'   \code{"basic"} for basic bootstrap, \code{"student"} for studentized
+#'   bootstrap, or \code{"none"}.
 #' @param conf_level desired coverage level for confidence intervals, with the
 #'   default value set to \code{.95}
-#' @param theta optional numeric vector of starting values to use in optimization routines.
-#' @param optimizer character string indicating the optimizer to use. Ignored if \code{estimator = "hybrid"} or \code{"hybrid-full"}.
+#' @param theta optional numeric vector of starting values to use in
+#'   optimization routines.
+#' @param optimizer character string indicating the optimizer to use. Ignored if
+#'   \code{estimator = "hybrid"} or \code{"hybrid-full"}.
 #' @param optimizer_control an optional list of control parameters to be used
 #'   for optimization
-#' @param use_jac logical with \code{TRUE} (the default) indicating to use the Jacobian of the estimating equations for optimization.
+#' @param use_jac logical with \code{TRUE} (the default) indicating to use the
+#'   Jacobian of the estimating equations for optimization.
 #' @param bootstrap character string specifying the type of bootstrap to run,
-#'   with possible options \code{"none"} (the default), \code{"exponential"} for the fractionally re-weighted cluster bootstrap,
-#'   or \code{"multinomial"} for a conventional clustered bootstrap.
+#'   with possible options \code{"none"} (the default), \code{"exponential"} for
+#'   the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
+#'   a conventional clustered bootstrap.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
@@ -530,12 +546,12 @@ bootstrap_selmodel <- function(
 #'   estimator = "ML",
 #'   bootstrap = "none"
 #' )
-#' 
+#'
 #' res_ML$est
-#' 
+#'
 #' # configure progress bar
 #' progressr::handlers("cli")
-#'   
+#'
 #' res_hybrid <- selection_model(
 #'   data = self_control,
 #'   yi = g,
@@ -565,9 +581,9 @@ selection_model <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL,
     subset = NULL,
-    estimator = c("ML","hybrid","hybrid-full"),
-    calc_vcov = TRUE,
-    CI_type = "percentile",
+    estimator = "ML",
+    vcov_type = "robust",
+    CI_type = "large-sample",
     conf_level = .95,
     theta = NULL,
     optimizer = NULL,
@@ -579,18 +595,19 @@ selection_model <- function(
 ) {
   
   selection_type <- match.arg(selection_type)
-  estimator <- match.arg(estimator)
+  estimator <- match.arg(estimator, c("ML","hybrid","hybrid-full"))
   bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
-  
-  if (identical(R, 0)) {
-    bootstrap <- "none"
-    CI_type <- "large-sample"
-  } else if (bootstrap == "none") {
-    CI_type <- "large-sample"
-  } else {
-    CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
+  vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
+  CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
+
+  if (vcov_type == "model-based") {
+    if (!missing(cluster)) stop("vcov_type = 'model-based' does not allow the use of a clustering variable.")
   }
-  
+  if (any(c("percentile","basic","student") %in% CI_type)) {
+    if (identical(R, 0)) stop("Bootstrap confidence intervals require setting R > 0.")
+    if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'multinomial' or 'exponential'.")
+  }
+
   if (is.null(optimizer)) {
     if (selection_type == "step") {
       optimizer <- if (estimator == "ML") "Rvmmin" else "nleqslv"
@@ -649,7 +666,7 @@ selection_model <- function(
     yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
     steps = steps,
-    calc_vcov = calc_vcov, 
+    vcov_type = vcov_type, 
     selection_type = selection_type,
     estimator = estimator, 
     theta = theta,
@@ -658,7 +675,7 @@ selection_model <- function(
     use_jac = use_jac
   ) 
   
-  if ((calc_vcov == "raw") && (bootstrap=="none")) {
+  if ((vcov_type == "raw") && (bootstrap=="none")) {
     return(res)
   }
   
@@ -685,7 +702,11 @@ selection_model <- function(
   
   if (bootstrap != "none") {
     
-    boot_sandwich <- any("student" %in% CI_type)
+    if ("student" %in% CI_type) {
+      boot_sandwich <- "robust"
+    } else {
+      boot_sandwich <- "none"
+    }
     
     reps <- max(R)
     p <- progressr::progressor(reps)
@@ -695,7 +716,7 @@ selection_model <- function(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
         steps = steps,
-        calc_vcov = boot_sandwich, 
+        vcov_type = boot_sandwich, 
         selection_type = selection_type,
         estimator = estimator, 
         theta = theta,

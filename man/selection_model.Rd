@@ -20,7 +20,7 @@ selection_model(
   subset = NULL,
   estimator = "ML",
   vcov_type = "robust",
-  CI_type = "percentile",
+  CI_type = "large-sample",
   conf_level = 0.95,
   theta = NULL,
   optimizer = NULL,
@@ -85,10 +85,10 @@ cluster-robust standard errors, \code{"model-based"} for model-based
 standard errors, or \code{"none"}.}
 
 \item{CI_type}{character string specifying the type of confidence interval to
-calculate, with possible options \code{"percentile"} (the default) for
-percentile bootstrap, \code{"basic"} for basic bootstrap, \code{"student"}
-for studentized bootstrap, \code{"large-sample"} for large-sample normal,
-or \code{"none"}.}
+calculate, with possible options \code{"large-sample"} for large-sample
+normal (the default), \code{"percentile"} for percentile bootstrap,
+\code{"basic"} for basic bootstrap, \code{"student"} for studentized
+bootstrap, or \code{"none"}.}
 
 \item{conf_level}{desired coverage level for confidence intervals, with the
 default value set to \code{.95}}
