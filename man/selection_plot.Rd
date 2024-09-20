@@ -8,13 +8,21 @@
 \usage{
 selection_plot(mod, pts = 200L, ...)
 
-\method{selection_plot}{selmodel}(mod, pts = 200L, fill = "blue", alpha = 0.5, ...)
+\method{selection_plot}{selmodel}(
+  mod,
+  pts = 200L,
+  fill = "blue",
+  alpha = 0.5,
+  step_linetype = "dashed",
+  ...
+)
 
 \method{selection_plot}{boot.selmodel}(
   mod,
   pts = 200L,
   color = "black",
   linewidth = 1.2,
+  step_linetype = "dashed",
   draw_boots = TRUE,
   boot_color = "blue",
   boot_alpha = 0.1,
@@ -37,25 +45,31 @@ Passed to \code{ggplot2::geom_area()}.}
 with a default of 0.5. Passed to \code{ggplot2::geom_area()}. Only used
 when \code{mod} does not include bootstrap replications.}
 
+\item{step_linetype}{character string specifying the type of line to draw to
+indicate p-value thresholds assumed in \code{mod}.}
+
 \item{color}{character string specifying the line color to use for drawing
 the estimated selection weights, with a default of \code{"black"}. Passed
 to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
 bootstrap replications.}
 
 \item{linewidth}{numeric value specifying the line width to use for drawing
-the estimated selection weights, with a default of 1.2. Passed
-to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-bootstrap replications.}
+the estimated selection weights, with a default of 1.2. Passed to
+\code{ggplot2::geom_line()}. Only used when \code{mod} includes bootstrap
+replications.}
 
-\item{draw_boots}{logical value indicating whether to draw the selection weights for each bootstrap replication, with a default of \code{TRUE}.}
+\item{draw_boots}{logical value indicating whether to draw the selection
+weights for each bootstrap replication, with a default of \code{TRUE}.}
 
-\item{boot_color}{character string specifying the line color to use for drawing the selection weights of each bootstrap replication, with a default of
-\code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-bootstrap replications.}
+\item{boot_color}{character string specifying the line color to use for
+drawing the selection weights of each bootstrap replication, with a default
+of \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when
+\code{mod} includes bootstrap replications.}
 
-\item{boot_alpha}{numeric value specifying the opacity of the lines for drawing the selection weights of each bootstrap replication, with a default of
-\code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-bootstrap replications.}
+\item{boot_alpha}{numeric value specifying the opacity of the lines for
+drawing the selection weights of each bootstrap replication, with a default
+of \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when
+\code{mod} includes bootstrap replications.}
 }
 \value{
 A \code{ggplot2} object.

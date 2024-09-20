@@ -26,19 +26,21 @@ test_that("selection_plot() works for 3PSM.", {
   p_noboot <- selection_plot(ML_noboot)
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
-  expect_s3_class(p_noboot$layers[[2]]$geom, "GeomArea")
+  expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
-  ML_boot <- selection_model(
-    data = dat,
-    yi = d,
-    sei = sd_d,
-    cluster = studyid,
-    steps = 0.025,
-    estimator = "ML",
-    bootstrap = "multinomial",
-    CI_type = "percentile",
-    R = 29
+  suppressWarnings(
+    ML_boot <- selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "ML",
+      bootstrap = "multinomial",
+      CI_type = "percentile",
+      R = 29
+    )
   )
   
   expect_equal(ML_noboot$est$Est, ML_boot$est$Est)
@@ -47,7 +49,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
@@ -55,10 +57,10 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_boot
   expect_s3_class(p_boot, "ggplot")
-  expect_s3_class(p_boot$layers[[2]]$geom, "GeomLine")
   expect_s3_class(p_boot$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
-  expect_identical(wt_boot$boot_wts, p_boot$layers[[2]]$data)
+  expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
 
   hybrid_noboot <- selection_model(
@@ -76,7 +78,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
-  expect_s3_class(p_noboot$layers[[2]]$geom, "GeomArea")
+  expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
   hybrid_boot <- selection_model(
@@ -98,7 +100,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
@@ -106,10 +108,10 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_boot
   expect_s3_class(p_boot, "ggplot")
-  expect_s3_class(p_boot$layers[[2]]$geom, "GeomLine")
   expect_s3_class(p_boot$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
-  expect_identical(wt_boot$boot_wts, p_boot$layers[[2]]$data)
+  expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
 })
 
@@ -142,7 +144,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
-  expect_s3_class(p_noboot$layers[[2]]$geom, "GeomArea")
+  expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
   ML_boot <- selection_model(
@@ -164,7 +166,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
@@ -172,10 +174,10 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_boot
   expect_s3_class(p_boot, "ggplot")
-  expect_s3_class(p_boot$layers[[2]]$geom, "GeomLine")
   expect_s3_class(p_boot$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
-  expect_identical(wt_boot$boot_wts, p_boot$layers[[2]]$data)
+  expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
   
   hybrid_noboot <- selection_model(
@@ -193,7 +195,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
-  expect_s3_class(p_noboot$layers[[2]]$geom, "GeomArea")
+  expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
   hybrid_boot <- selection_model(
@@ -214,7 +216,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
@@ -222,10 +224,10 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_boot
   expect_s3_class(p_boot, "ggplot")
-  expect_s3_class(p_boot$layers[[2]]$geom, "GeomLine")
   expect_s3_class(p_boot$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
-  expect_identical(wt_boot$boot_wts, p_boot$layers[[2]]$data)
+  expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
 })
 
@@ -262,7 +264,7 @@ test_that("selection_plot() works for beta model", {
   
   p_noboot
   expect_s3_class(p_noboot, "ggplot")
-  expect_s3_class(p_noboot$layers[[2]]$geom, "GeomArea")
+  expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
   suppressWarnings(
@@ -286,7 +288,7 @@ test_that("selection_plot() works for beta model", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[2]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
@@ -294,10 +296,10 @@ test_that("selection_plot() works for beta model", {
   
   p_boot
   expect_s3_class(p_boot, "ggplot")
-  expect_s3_class(p_boot$layers[[2]]$geom, "GeomLine")
   expect_s3_class(p_boot$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
-  expect_identical(wt_boot$boot_wts, p_boot$layers[[2]]$data)
+  expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
 })
 

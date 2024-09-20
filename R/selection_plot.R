@@ -252,6 +252,8 @@ selection_plot.default <- function(mod, pts = 200L, ...) {
 #' @param alpha numeric value specifying the opacity of the filled area plot,
 #'   with a default of 0.5. Passed to \code{ggplot2::geom_area()}. Only used
 #'   when \code{mod} does not include bootstrap replications.
+#' @param step_linetype character string specifying the type of line to draw to
+#'   indicate p-value thresholds assumed in \code{mod}.
 #' @export
 #'
 #' @importFrom rlang .data
@@ -261,13 +263,14 @@ selection_plot.selmodel <- function(
   pts = 200L, 
   fill = "blue",
   alpha = 0.5,
+  step_linetype = "dashed",
   ...
 ) {
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
   pts <- seq(0, 1, length.out = pts)
-
+  steps <- mod$steps
   dat <- selection_wts(mod, pvals = pts, bootstrap = FALSE)
   
   ggplot2::ggplot(dat) + 
@@ -275,6 +278,7 @@ selection_plot.selmodel <- function(
     ggplot2::expand_limits(y = 0) + 
     ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,0))) + 
+    ggplot2::geom_vline(xintercept = steps, linetype = step_linetype) + 
     ggplot2::geom_area(fill = fill, alpha = alpha) + 
     ggplot2::labs(
       x = "p-value (one-sided)",
@@ -289,16 +293,21 @@ selection_plot.selmodel <- function(
 #'   to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
 #'   bootstrap replications.
 #' @param linewidth numeric value specifying the line width to use for drawing
-#'   the estimated selection weights, with a default of 1.2. Passed
-#'   to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-#'   bootstrap replications.
-#' @param draw_boots logical value indicating whether to draw the selection weights for each bootstrap replication, with a default of \code{TRUE}.
-#' @param boot_color character string specifying the line color to use for drawing the selection weights of each bootstrap replication, with a default of
-#'   \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-#'   bootstrap replications.
-#' @param boot_alpha numeric value specifying the opacity of the lines for drawing the selection weights of each bootstrap replication, with a default of
-#'   \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when \code{mod} includes
-#'   bootstrap replications.
+#'   the estimated selection weights, with a default of 1.2. Passed to
+#'   \code{ggplot2::geom_line()}. Only used when \code{mod} includes bootstrap
+#'   replications.
+#' @param step_linetype character string specifying the type of line to draw to
+#'   indicate p-value thresholds assumed in \code{mod}.
+#' @param draw_boots logical value indicating whether to draw the selection
+#'   weights for each bootstrap replication, with a default of \code{TRUE}.
+#' @param boot_color character string specifying the line color to use for
+#'   drawing the selection weights of each bootstrap replication, with a default
+#'   of \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when
+#'   \code{mod} includes bootstrap replications.
+#' @param boot_alpha numeric value specifying the opacity of the lines for
+#'   drawing the selection weights of each bootstrap replication, with a default
+#'   of \code{"blue"}. Passed to \code{ggplot2::geom_line()}. Only used when
+#'   \code{mod} includes bootstrap replications.
 #'
 #' @export
 
@@ -307,6 +316,7 @@ selection_plot.boot.selmodel <- function(
     pts = 200L, 
     color = "black",
     linewidth = 1.2, 
+    step_linetype = "dashed",
     draw_boots = TRUE,
     boot_color = "blue",
     boot_alpha = 0.1,
@@ -316,6 +326,7 @@ selection_plot.boot.selmodel <- function(
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
   pts <- seq(0, 1, length.out = pts)
+  steps <- mod$steps
   
   dat <- selection_wts(mod, pvals = pts, bootstraps = TRUE)
   R <- eval(mod$cl$R, envir = parent.frame())
@@ -328,6 +339,7 @@ selection_plot.boot.selmodel <- function(
       x = "p-value (one-sided)",
       y = "Selection weight"
     ) + 
+    ggplot2::geom_vline(xintercept = steps, linetype = step_linetype) + 
     ggplot2::theme_minimal()
   
   if (draw_boots) {
