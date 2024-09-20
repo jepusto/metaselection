@@ -28,7 +28,6 @@ Imports:
     optimx,
     nleqslv,
     purrr,
-    future,
     future.apply,
     progressr,
     rlang,
@@ -36,6 +35,7 @@ Imports:
     simhelpers (> 0.2.1)
 Suggests: 
     testthat (>= 3.0.0),
+    future,
     metafor,
     metadat,
     clubSandwich,
