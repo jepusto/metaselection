@@ -21,11 +21,7 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   boot_model <- if(grepl("^boot", class(x)[1])) "With Cluster Bootstrapping" else NULL
   if(!is.null(boot_model)) model <- paste(model, boot_model)
 
-
-
   # info  -------------------------------------------------------------------
-
-  
   n_clusters <- x$n_clusters
   n_effects <- x$n_effects
   steps <- paste(x$steps, collapse = ", ")
@@ -69,12 +65,21 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
     )
 
   gamma_params <- grepl("^gamma", estimates$param)
-  estimates[gamma_params, transf_variables] <- exp(estimates[gamma_params,transf_variables])
-  estimates$SE[gamma_params] <- estimates$Est[gamma_params] * estimates$SE[gamma_params]
-  estimates$param <- sub("^gamma","tau2", estimates$param)
-  gamma_estimates <- estimates[gamma_params, vars_display]
-  tau_2 <- round(gamma_estimates$Est, 3)
-  SE_tau <- round(gamma_estimates$SE, 3)
+  
+  if(transf_gamma){
+    
+    estimates[gamma_params, transf_variables] <- exp(estimates[gamma_params,transf_variables])
+    estimates$SE[gamma_params] <- estimates$Est[gamma_params] * estimates$SE[gamma_params]
+    estimates$param <- sub("^gamma","tau2", estimates$param)
+    gamma_estimates <- estimates[gamma_params, vars_display]
+  
+  } else {
+    
+    gamma_estimates <- estimates[gamma_params, vars_display]
+    
+  }
+  
+  gamma_estimates <- format(gamma_estimates, digits = digits)
   
 
   # zetas  ------------------------------------------------------------------
@@ -109,9 +114,11 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   cat(paste("Estimator: ", estimator), "\n")
   if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R), "\n")
   cat("\n")
-  cat(paste0("tau^2 (estimated amount of total heterogeneity): ", tau_2, " (SE = ", SE_tau, ")"), "\n", "\n")
   cat("Model results:", "\n")
   print(beta_estimates, row.names = FALSE)
+  cat("\n", "\n")
+  cat("Heterogeneity estimates:", "\n")
+  print(gamma_estimates, row.names = FALSE)
   cat("\n", "\n")
   cat("Selection model results:", "\n")
   print(zeta_estimates, row.names = FALSE)
