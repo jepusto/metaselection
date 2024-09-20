@@ -554,7 +554,7 @@ bootstrap_selmodel <- function(
 #' res_ML$est
 #'
 #' # configure progress bar
-#' progressr::handlers("cli")
+#' progressr::handlers(global = TRUE)
 #'
 #' res_hybrid <- selection_model(
 #'   data = self_control,

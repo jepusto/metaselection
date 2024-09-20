@@ -265,9 +265,6 @@ Rather than relying on robust variance estimation to construct standard errors a
 ```{r 3PSM-bootstrap}
 set.seed(20240916)
 
-# configure progress bar
-progressr::handlers('cli', global = TRUE)
-
 system.time(
   mod_3PSM_boot <- selection_model(
     data = dat.lehmann2018, 
