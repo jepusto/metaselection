@@ -266,7 +266,7 @@ Rather than relying on robust variance estimation to construct standard errors a
 set.seed(20240916)
 
 # configure progress bar
-progressr::handlers('cli')
+progressr::handlers('cli', global = TRUE)
 
 system.time(
   mod_3PSM_boot <- selection_model(

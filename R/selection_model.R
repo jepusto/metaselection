@@ -455,13 +455,17 @@ bootstrap_selmodel <- function(
     use_jac = use_jac
   )
 
-  est <- data.frame(
-    param = names(res),
-    Est = as.numeric(res)
-  )
-  
   if (vcov_type != "none") {
-    est$SE = sqrt(diag(res$vcov))
+    est <- data.frame(
+      param = names(res$est),
+      Est = as.numeric(res$est),
+      SE = as.numeric(sqrt(diag(res$vcov)))
+    )
+  } else {
+    est <- data.frame(
+      param = names(res),
+      Est = as.numeric(res)
+    )
   }
   
   return(est)
@@ -596,15 +600,18 @@ selection_model <- function(
   
   selection_type <- match.arg(selection_type)
   estimator <- match.arg(estimator, c("ML","hybrid","hybrid-full"))
-  bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
   vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
+  bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
   CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
 
   if (vcov_type == "model-based") {
     if (!missing(cluster)) stop("vcov_type = 'model-based' does not allow the use of a clustering variable.")
   }
+  if (bootstrap %in% c("exponential","multinomial")) {
+    if (identical(as.integer(R), 0L)) stop("Bootstrap methods require setting R > 0.") 
+  }
   if (any(c("percentile","basic","student") %in% CI_type)) {
-    if (identical(R, 0)) stop("Bootstrap confidence intervals require setting R > 0.")
+    if (identical(as.integer(R), 0L)) stop("Bootstrap confidence intervals require setting R > 0.")
     if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'multinomial' or 'exponential'.")
   }
 

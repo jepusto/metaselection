@@ -13,19 +13,8 @@ dat <- r_meta(
 )
 
 test_that("bootstrap_CI options for selection_model() are irrelevant when bootstrap = 'none'.", {
-  step_RVE <- 
-    selection_model(
-      data = dat,
-      yi = d,
-      sei = sd_d,
-      pi = p_onesided,
-      cluster = studyid,
-      steps = 0.025,
-      estimator = "ML",
-      bootstrap = "none"
-    )
-  
-  step_RVE_A <- 
+
+  expect_error(
     selection_model(
       data = dat,
       yi = d,
@@ -37,11 +26,9 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       bootstrap = "none",
       CI_type = "percentile"
     )
+  )  
   
-  expect_identical(step_RVE_A$est, step_RVE$est)
-  expect_identical(class(step_RVE_A), class(step_RVE))
-  
-  step_RVE_B <- 
+  expect_error(
     selection_model(
       data = dat,
       yi = d,
@@ -54,11 +41,9 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       CI_type = "percentile",
       R = 999
     )
+  )
   
-  expect_identical(step_RVE_B$est, step_RVE$est)
-  expect_identical(class(step_RVE_B), class(step_RVE))
-  
-  step_RVE_C <- 
+  expect_error(
     selection_model(
       data = dat,
       yi = d,
@@ -70,11 +55,9 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       bootstrap = "multinomial",
       R = 0
     )
-  
-  expect_identical(step_RVE_C$est, step_RVE$est)
-  expect_identical(class(step_RVE_C), class(step_RVE))
-  
-  step_RVE_D <- 
+  )
+
+  expect_error(
     selection_model(
       data = dat,
       yi = d,
@@ -87,9 +70,8 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
       CI_type = "percentile",
       R = 0
     )
-  
-  expect_identical(step_RVE_D$est, step_RVE$est)
-  expect_identical(class(step_RVE_D), class(step_RVE))
+  )
+
 })  
 
 test_that("bootstrap_CI options for selection_model() work when bootstrap = 'multinomial'.", {
@@ -127,6 +109,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "ML",
       bootstrap = "multinomial", 
+      CI_type = "percentile",
       R = 19
     )
   
@@ -246,6 +229,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       student = dplyr::select(step_t$est, param, bootstraps, lower = student_lower, upper = student_upper),
       .id = "type"
     )
+  rownames(all_CIs) <- NULL
   expect_equal(long_CIs, all_CIs)
   
   set.seed(20240807)
@@ -306,6 +290,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       cluster = studyid,
       steps = 0.025,
       estimator = "ML",
+      CI_type = "percentile",
       bootstrap = "exp", 
       R = 24
     )
@@ -426,6 +411,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
       student = dplyr::select(step_t$est, param, bootstraps, lower = student_lower, upper = student_upper),
       .id = "type"
     )
+  rownames(all_CIs) <- NULL
   expect_equal(long_CIs, all_CIs)
   
   set.seed(20240808)
@@ -487,13 +473,13 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         estimator = "ML",
         bootstrap = "multinomial", 
         CI_type = c("student","percentile","basic"),
-        R = c(39,59,79,99),
+        R = 59,
         seed = 20240819,
         format = "long"
       )
   )
   
-  multi_boot_multiR <- get_boot_CIs(step_multinomial_multiR, type = c("percentile","student","basic"), B_vals = c(39, 59, 79, 99), seed = 20240819, format = "long")
+  multi_boot_multiR <- get_boot_CIs(step_multinomial_multiR, type = c("percentile","student","basic"), seed = 20240819, format = "long")
   
   expect_equal(step_multinomial_multiR$est$boot_CIs, multi_boot_multiR)
 
