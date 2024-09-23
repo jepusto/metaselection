@@ -39,8 +39,10 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
     boot_type <- estimates$bootstrap[1]
     R <- estimates$bootstraps[2]
     
-    # can request multiple CI so not sure how to add the ci info 
-    
+    boot_ci_type_names <- names(estimates)[endsWith(names(estimates), 'lower')]
+    boot_ci_type <- sapply(strsplit(boot_ci_type_names, "_"), `[`, 1)
+    boot_ci_type <- paste(boot_ci_type, collapse = ", ")
+
   }
   
 
@@ -112,7 +114,7 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   if(is.null(n_clusters)) cat(paste0("Number of effects = ", n_effects), "\n", "\n") 
   cat(paste("Steps: ", steps), "\n")
   cat(paste("Estimator: ", estimator), "\n")
-  if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R), "\n")
+  if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R, "; CI type: ", boot_ci_type), "\n")
   cat("\n")
   cat("Model results:", "\n")
   print(beta_estimates, row.names = FALSE)
