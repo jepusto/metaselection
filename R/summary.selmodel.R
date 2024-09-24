@@ -47,11 +47,13 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   
 
   # betas model results -----------------------------------------------------
-
-  vars_display <- intersect(
-    names(estimates),
-    c("param", "Est", "SE", "CI_lo","CI_hi","percentile_lower","percentile_upper","basic_lower","basic_upper","student_lower","student_upper")
+  all_vars <- data.frame(
+    var   = c("param", "Est",      "SE",         "CI_lo", "CI_hi" , "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper"),
+    head  = c("     ", "        ", "          ", "Large", "Sample", "Percentile"      , "Bootstrap"       , "Basic"      , "Bootstrap"  , "Studentized"  , "Bootstrap"),
+    lab   = c("Coef.", "Estimate", "Std. Error", "Lower", "Upper" , "Lower"           , "Upper"           , "Lower"      , "Upper"      , "Lower"        , "Upper"),
   )
+  
+  vars_display <- intersect(names(estimates), all_vars$var)
 
   beta_params <- grepl("^beta", estimates$param)
   beta_estimates <- estimates[beta_params, vars_display]
@@ -61,14 +63,11 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
 
   # do we need to have a transf_gamma argument or just display tau2 and the se 
   
-  transf_variables <- intersect(
-    names(estimates),
-      c("Est","CI_lo","CI_hi","percentile_lower","percentile_upper","basic_lower","basic_upper","student_lower","student_upper")
-    )
+  transf_variables <- intersect(names(estimates), setdiff(all_vars$var, "SE"))
 
   gamma_params <- grepl("^gamma", estimates$param)
   
-  if(transf_gamma){
+  if (transf_gamma) {
     
     estimates[gamma_params, transf_variables] <- exp(estimates[gamma_params,transf_variables])
     estimates$SE[gamma_params] <- estimates$Est[gamma_params] * estimates$SE[gamma_params]
@@ -88,14 +87,14 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
 
   zeta_params <- grepl("^zeta", estimates$param)
   
-  if(transf_zeta){
+  if (transf_zeta) {
     
     estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
     estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
     estimates$param <- sub("^zeta","lambda_", estimates$param)
     zeta_estimates <- estimates[zeta_params, vars_display]
 
-  } else{
+  } else {
     
     zeta_estimates <- estimates[zeta_params, vars_display]
       
@@ -116,14 +115,13 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   cat(paste("Estimator: ", estimator), "\n")
   if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R, "; CI type: ", boot_ci_type), "\n")
   cat("\n")
-  cat("Model results:", "\n")
+  cat("Mean effect estimates:", "\n")
   print(beta_estimates, row.names = FALSE)
   cat("\n", "\n")
   cat("Heterogeneity estimates:", "\n")
   print(gamma_estimates, row.names = FALSE)
   cat("\n", "\n")
-  cat("Selection model results:", "\n")
+  cat("Selection process estimates:", "\n")
   print(zeta_estimates, row.names = FALSE)
-  
   
 }
