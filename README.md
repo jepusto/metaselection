@@ -1,10 +1,11 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jepusto/metaselection/workflows/R-CMD-check/badge.svg)](https://github.com/jepusto/metaselection/actions)
+[![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
 [![Codecov
-Status](https://codecov.io/gh/jepusto/metaselection/branch/main/graph/badge.svg)](https://codecov.io/gh/jepusto/metaselection?branch=main)
-[![](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
+Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
+[![CRAN
+Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
 <!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 <!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 <!-- badges: end -->
