@@ -1,4 +1,14 @@
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/jepusto/metaselection/workflows/R-CMD-check/badge.svg)](https://github.com/jepusto/metaselection/actions)
+[![Codecov
+Status](https://codecov.io/gh/jepusto/metaselection/branch/main/graph/badge.svg)](https://codecov.io/gh/jepusto/metaselection?branch=main)
+[![](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
+<!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+<!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+<!-- badges: end -->
+
 # metaselection
 
 Selective reporting occurs when statistically significant, affirmative
@@ -71,22 +81,22 @@ mod_3PSM_boot <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = .025,
+  CI_type = "percentile",
   bootstrap = "multinomial",
-  boot_CI = "percentile",
   R = 19
 )
 
 print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-    ##   estimator    param        Est         SE   bootstrap bootstraps
-    ## 1        ML     beta 0.13279939 0.13728035 multinomial         19
-    ## 2        ML     tau2 0.08112823 0.08448746 multinomial         19
-    ## 3        ML lambda_1 0.54845336 0.61595727 multinomial         19
-    ##   percentile_lower percentile_upper
-    ## 1     -0.032735627        0.3765500
-    ## 2      0.001500518        0.1984563
-    ## 3      0.088833781        3.0549676
+    ##       estimator    param        Est         SE   bootstrap bootstraps
+    ## beta         ML     beta 0.13279939 0.13728035 multinomial         19
+    ## gamma        ML     tau2 0.08112823 0.08448746 multinomial         19
+    ## zeta1        ML lambda_1 0.54845336 0.61595727 multinomial         19
+    ##       percentile_lower percentile_upper
+    ## beta      -0.032735627        0.3765500
+    ## gamma      0.001500518        0.1984563
+    ## zeta1      0.088833781        3.0549676
 
 ## Related Work
 
@@ -114,7 +124,8 @@ step-function model.
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-PublicationBias" class="csl-entry">
 
