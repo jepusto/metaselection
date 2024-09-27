@@ -6,7 +6,8 @@
 #' @param x Fitted model of class \code{"selmodel"}.
 #' @param transf_gamma logical with `TRUE` indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
 #' @param transf_zeta logical with `TRUE` indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
-#' @param ... Not used.
+#' @param digits Minimum number of significant digits to be used, with a default of 3.
+#' @param ... further arguments passed to \code{print.data.frame()}.
 #'
 #' @export
 
@@ -36,9 +37,9 @@ print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits 
     estimates$param <- sub("^zeta","lambda_", estimates$param)
   }
   
-  estimates <- subset(estimates, select = -estimator)
-  estimates <- format(estimates, digits = digits)
+  col_names <- setdiff(names(estimates), c("estimator","bootstrap","bootstraps"))
+  print(estimates[,col_names], digits = digits, ...)
   
-  print(estimates)
+  return(estimates)
 
 }
