@@ -4,7 +4,7 @@
 \alias{summary.selmodel}
 \title{Summarize results from \code{selmodel()}}
 \usage{
-\method{summary}{selmodel}(x, digits = 3, transf_gamma = FALSE, transf_zeta = FALSE, ...)
+\method{summary}{selmodel}(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{"selmodel"}.}
@@ -13,7 +13,9 @@
 
 \item{transf_zeta}{logical with \code{TRUE} indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
 
-\item{...}{Not used.}
+\item{digits}{Minimum number of significant digits to be used, with a default of 3.}
+
+\item{...}{further arguments passed to \code{print.data.frame()}.}
 }
 \description{
 Summarize relevant results from \code{selmodel()}

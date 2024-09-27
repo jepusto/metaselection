@@ -3,16 +3,13 @@
 #' @description Summarize relevant results from `selmodel()`
 #' 
 #' 
-#' @param x Fitted model of class \code{"selmodel"}.
-#' @param transf_gamma logical with `TRUE` indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
-#' @param transf_zeta logical with `TRUE` indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
-#' @param ... Not used.
+#' @inheritParams print.selmodel
 #'
 #' @export
 
 
 
-summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
+summary.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
   
   # title -------------------------------------------------------------------
   
@@ -50,14 +47,13 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   all_vars <- data.frame(
     var   = c("param", "Est",      "SE",         "CI_lo", "CI_hi" , "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper"),
     head  = c("     ", "        ", "          ", "Large", "Sample", "Percentile"      , "Bootstrap"       , "Basic"      , "Bootstrap"  , "Studentized"  , "Bootstrap"),
-    lab   = c("Coef.", "Estimate", "Std. Error", "Lower", "Upper" , "Lower"           , "Upper"           , "Lower"      , "Upper"      , "Lower"        , "Upper"),
+    lab   = c("Coef.", "Estimate", "Std. Error", "Lower", "Upper" , "Lower"           , "Upper"           , "Lower"      , "Upper"      , "Lower"        , "Upper")
   )
   
   vars_display <- intersect(names(estimates), all_vars$var)
 
   beta_params <- grepl("^beta", estimates$param)
   beta_estimates <- estimates[beta_params, vars_display]
-  beta_estimates <- format(beta_estimates, digits = digits)
 
   # heterogeneity -----------------------------------------------------------
 
@@ -80,8 +76,6 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
     
   }
   
-  gamma_estimates <- format(gamma_estimates, digits = digits)
-  
 
   # zetas  ------------------------------------------------------------------
 
@@ -100,8 +94,6 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
       
   }
   
-  zeta_estimates <- format(zeta_estimates, digits = digits)
-  
 
   # output ------------------------------------------------------------------
 
@@ -109,19 +101,27 @@ summary.selmodel <- function(x, digits = 3, transf_gamma = FALSE, transf_zeta = 
   cat("Call:", "\n")
   print(call)
   cat("\n")
-  if(!is.null(n_clusters)) cat(paste0("Number of clusters = ", n_clusters, ";", " Number of effects = ", n_effects), "\n", "\n")
-  if(is.null(n_clusters)) cat(paste0("Number of effects = ", n_effects), "\n", "\n") 
-  cat(paste("Steps: ", steps), "\n")
-  cat(paste("Estimator: ", estimator), "\n")
-  if(grepl("^boot", class(x)[1]))  cat(paste0("Bootstrap type: ", boot_type, "; Number of replications: ", R, "; CI type: ", boot_ci_type), "\n")
+  if (!is.null(n_clusters)) {
+    cat("Number of clusters = ", n_clusters, "; ", "Number of effects = ", n_effects, "\n", "\n", sep = "")
+  } else {
+    cat("Number of effects = ", n_effects, "\n", "\n", sep = "") 
+  }
+  
+  cat("Steps:", steps, "\n")
+  cat("Estimator:", estimator, "\n")
+  if(grepl("^boot", class(x)[1])) {
+    cat("Bootstrap type:", boot_type,"\n")
+    cat("Number of replications:", R, "\n")
+    cat("CI type:", boot_ci_type, "\n")
+  }  
   cat("\n")
-  cat("Mean effect estimates:", "\n")
-  print(beta_estimates, row.names = FALSE)
+  cat("Mean effect estimates:\n")
+  print(beta_estimates, row.names = FALSE, digits = digits, ...)
   cat("\n", "\n")
-  cat("Heterogeneity estimates:", "\n")
-  print(gamma_estimates, row.names = FALSE)
+  cat("Heterogeneity estimates:\n")
+  print(gamma_estimates, row.names = FALSE, digits = digits, ...)
   cat("\n", "\n")
-  cat("Selection process estimates:", "\n")
-  print(zeta_estimates, row.names = FALSE)
+  cat("Selection process estimates:\n")
+  print(zeta_estimates, row.names = FALSE, digits = digits, ...)
   
 }

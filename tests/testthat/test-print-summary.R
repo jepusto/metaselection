@@ -18,7 +18,25 @@ print_and_parse <- function(mod,...) {
   d[,-1]
 }
 
-test_that("print() works for selmodel objects with no predictors.", {
+pull_argument <- function(s, str) {
+  x <- s[grepl(str, s)]
+  substr(x, nchar(str) + 2L, nchar(x))
+}
+
+summary_and_parse <- function(mod, ...) {
+  s <- capture_output_lines(summary(mod, ...))
+  mod <- s[1]
+  steps <- pull_argument(s, "Steps:")
+  estimator <- pull_argument(s,"Estimator:",) 
+  boot_type <- pull_argument(s, "Bootstrap type:")
+  R <- pull_argument(s, "Number of replications:")
+  CI_type <- pull_argument(s, "CI type:")
+  
+  headers <- which(grepl("estimates:", p))
+  
+}
+
+test_that("print() and summary() work for selmodel objects with no predictors.", {
   
   mod <- selection_model(
     data = dat,
@@ -37,6 +55,9 @@ test_that("print() works for selmodel objects with no predictors.", {
   expect_identical(print_and_parse(mod, transf_gamma = TRUE)[-1,1], c("beta","tau2","zeta1"))
   expect_identical(print_and_parse(mod, transf_zeta = TRUE)[-1,1], c("beta","gamma","lambda_1"))
   expect_identical(print_and_parse(mod, transf_gamma = TRUE, transf_zeta = TRUE)[-1,1], c("beta","tau2","lambda_1"))
+  
+  expect_output(summary(mod))
+  
   
   mod <- selection_model(
     data = dat,

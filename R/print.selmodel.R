@@ -38,7 +38,7 @@ print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits 
   }
   
   col_names <- setdiff(names(estimates), c("estimator","bootstrap","bootstraps"))
-  print(estimates[,col_names], digits = digits, ...)
+  print(estimates[,col_names], digits = digits, ..., row.names = FALSE)
   
   return(estimates)
 
