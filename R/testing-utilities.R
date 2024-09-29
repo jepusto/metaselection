@@ -984,3 +984,50 @@ get_boot_CIs <- function(bmod, type, ..., format = "long") {
 
 }
 
+#-------------------------------------------------------------------------------
+# Functions for checking print() and summary()
+
+print_and_parse <- function(mod,...) {
+  p <- testthat::capture_output_lines(print(mod,...), width = 1000)
+  d <- do.call(rbind, strsplit(p, " +"))
+  d[,-1]
+}
+
+pull_argument <- function(s, str) {
+  x <- s[grepl(str, s)]
+  trimws(substr(x, nchar(str) + 2L, nchar(x)))
+}
+
+check_selmodel_summary <- function(mod, ...) {
+  s <- testthat::capture_output_lines(summary(mod, ...), width = 1000)
+  p <- testthat::capture_output_lines(print(mod, ...), width = 1000)
+  mod_str <- trimws(s[1])
+  steps <- pull_argument(s, "Steps:") |> strsplit(",") |> unlist() |> as.numeric()
+  estimator <- pull_argument(s,"Estimator:") 
+  boot_type <- pull_argument(s, "Bootstrap type:")
+  R <- pull_argument(s, "Number of bootstrap replications:") |> as.integer()
+  
+  headers <- which(grepl("estimates:", s))
+  mean_effects <- s[(headers[1] + 3L):(headers[2] - 2)]
+  var_effects <- s[(headers[2] + 3L):(headers[3] - 2)]
+  sel_effects <- s[(headers[3] + 3L):length(s)]
+  sum_effects <- strsplit(c(mean_effects, var_effects, sel_effects), " +")
+  sum_effects <- sapply(sum_effects, \(x) x[2])
+  p_effects <- sapply(strsplit(p[-1], " +"), \(x) x[2])
+
+  mod_type <- if (mod$selection_type == "step") "Step Function Model" else "Beta Density Model"
+  if (inherits(mod, "boot.selmodel")) {
+    mod_type <- paste(mod_type, "with Cluster Bootstrapping")
+    
+    testthat::expect_identical(boot_type, unique(mod$bootstrap_type))
+    testthat::expect_identical(R, unique(mod$est$bootstraps))
+  } 
+  
+  testthat::expect_identical(mod_str, mod_type)
+  testthat::expect_identical(steps, mod$steps)
+  
+  estimator_type <- if (mod$estimator == "ML") "maximum likelihood" else "hybrid estimating equations"
+  testthat::expect_identical(estimator, estimator_type)
+ 
+  testthat::expect_identical(sum_effects, p_effects) 
+}

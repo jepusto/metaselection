@@ -3,54 +3,45 @@
 #' @description Summarize relevant results from `selmodel()`
 #' 
 #' 
+#' @param object Fitted model of class \code{"selmodel"}.
 #' @inheritParams print.selmodel
 #'
 #' @export
 
 
 
-summary.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
+summary.selmodel <- function(object, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
   
   # title -------------------------------------------------------------------
   
   # need to edit the language for the title 
-  model <- if ("step.selmodel" %in% class(x)) "Step Function Model" else if("beta.selmodel" %in% class(x)) "Beta Density Model"
-  boot_model <- if(grepl("^boot", class(x)[1])) "With Cluster Bootstrapping" else NULL
-  if(!is.null(boot_model)) model <- paste(model, boot_model)
-
-  # info  -------------------------------------------------------------------
-  n_clusters <- x$n_clusters
-  n_effects <- x$n_effects
-  steps <- paste(x$steps, collapse = ", ")
-  call <- x$cl
+  model <- if ("step.selmodel" %in% class(object)) "Step Function Model" else if("beta.selmodel" %in% class(object)) "Beta Density Model"
   
-  estimates <- x$est
+  # info  -------------------------------------------------------------------
+  n_clusters <- object$n_clusters
+  n_effects <- object$n_effects
+  steps <- paste(object$steps, collapse = ", ")
+  call <- object$cl
+  
+  estimates <- object$est
   estimator <- estimates$estimator[1]
-  estimator <- ifelse(estimator == "ML", "Maximum likelihood", "Hybrid estimating equations")
+  estimator <- ifelse(estimator == "ML", "maximum likelihood", "hybrid estimating equations")
   
 
   # bootstrap information  --------------------------------------------------
                  
-  if(grepl("^boot", class(x)[1])){
+  if (inherits(object, "boot.selmodel")) {
+    model <- paste(model, "with Cluster Bootstrapping")
     
-    boot_type <- estimates$bootstrap[1]
-    R <- estimates$bootstraps[2]
-    
-    boot_ci_type_names <- names(estimates)[endsWith(names(estimates), 'lower')]
-    boot_ci_type <- sapply(strsplit(boot_ci_type_names, "_"), `[`, 1)
-    boot_ci_type <- paste(boot_ci_type, collapse = ", ")
-
+    boot_type <- object$bootstrap_type[1]
+    R <- unique(estimates$bootstraps)
   }
   
 
-  # betas model results -----------------------------------------------------
-  all_vars <- data.frame(
-    var   = c("param", "Est",      "SE",         "CI_lo", "CI_hi" , "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper"),
-    head  = c("     ", "        ", "          ", "Large", "Sample", "Percentile"      , "Bootstrap"       , "Basic"      , "Bootstrap"  , "Studentized"  , "Bootstrap"),
-    lab   = c("Coef.", "Estimate", "Std. Error", "Lower", "Upper" , "Lower"           , "Upper"           , "Lower"      , "Upper"      , "Lower"        , "Upper")
-  )
+  all_vars <- c("param", "Est", "SE", "CI_lo", "CI_hi", "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper")
+  vars_display <- intersect(names(estimates), all_vars)
   
-  vars_display <- intersect(names(estimates), all_vars$var)
+  # mean model results -----------------------------------------------------
 
   beta_params <- grepl("^beta", estimates$param)
   beta_estimates <- estimates[beta_params, vars_display]
@@ -59,7 +50,7 @@ summary.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digit
 
   # do we need to have a transf_gamma argument or just display tau2 and the se 
   
-  transf_variables <- intersect(names(estimates), setdiff(all_vars$var, "SE"))
+  transf_variables <- intersect(names(estimates), setdiff(all_vars, "SE"))
 
   gamma_params <- grepl("^gamma", estimates$param)
   
@@ -109,19 +100,39 @@ summary.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digit
   
   cat("Steps:", steps, "\n")
   cat("Estimator:", estimator, "\n")
-  if(grepl("^boot", class(x)[1])) {
+  if (inherits(object, "boot.selmodel")) {
     cat("Bootstrap type:", boot_type,"\n")
-    cat("Number of replications:", R, "\n")
-    cat("CI type:", boot_ci_type, "\n")
+    cat("Number of bootstrap replications:", R, "\n")
   }  
-  cat("\n")
-  cat("Mean effect estimates:\n")
-  print(beta_estimates, row.names = FALSE, digits = digits, ...)
-  cat("\n", "\n")
-  cat("Heterogeneity estimates:\n")
-  print(gamma_estimates, row.names = FALSE, digits = digits, ...)
-  cat("\n", "\n")
-  cat("Selection process estimates:\n")
-  print(zeta_estimates, row.names = FALSE, digits = digits, ...)
   
+  cat("\n", "Mean effect estimates:", sep = "")
+  print_with_header(beta_estimates, digits = digits, ...)
+  
+  cat("\n", "Heterogeneity estimates:", sep = "")
+  print_with_header(gamma_estimates, digits = digits, ...)
+  
+  cat("\n", "Selection process estimates:", sep = "")
+  print_with_header(zeta_estimates, digits = digits, ...)
+}
+
+print_with_header <- function(x, digits, ...) {
+ 
+  all_vars <- data.frame(
+    param = c(" ", "Coef."),
+    Est   = c(" ", "Estimate"),
+    SE    = c(" ", "Std. Error"),
+    CI_lo = c("Large", "Lower"),
+    CI_hi = c("Sample", "Upper"),
+    percentile_lower = c("Percentile","Lower"),
+    percentile_upper = c("Bootstrap", "Upper"),
+    basic_lower = c("Basic","Lower"),
+    basic_upper = c("Bootstrap", "Upper"),
+    student_lower = c("Studentized","Lower"),
+    student_upper = c("Bootstrap", "Upper")
+  )
+  vars_display <- intersect(names(x), names(all_vars))
+  
+  x_format <- format(x[,vars_display], digits = digits, ...)
+  x_print <- rbind(all_vars[,vars_display], x_format)
+  print(unname(x_print), row.names = FALSE)
 }

@@ -4,10 +4,10 @@
 \alias{summary.selmodel}
 \title{Summarize results from \code{selmodel()}}
 \usage{
-\method{summary}{selmodel}(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...)
+\method{summary}{selmodel}(object, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...)
 }
 \arguments{
-\item{x}{Fitted model of class \code{"selmodel"}.}
+\item{object}{Fitted model of class \code{"selmodel"}.}
 
 \item{transf_gamma}{logical with \code{TRUE} indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
 
