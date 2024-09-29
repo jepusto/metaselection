@@ -6,15 +6,14 @@
 #' @param x Fitted model of class \code{"selmodel"}.
 #' @param transf_gamma logical with `TRUE` indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
 #' @param transf_zeta logical with `TRUE` indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
-#' @param ... Not used.
+#' @param digits Minimum number of significant digits to be used, with a default of 3.
+#' @param ... further arguments passed to \code{print.data.frame()}.
 #'
 #' @export
 
 
 
-print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
-  
-  model <- if ("step.selmodel" %in% class(x)) "Step Function Model with Robust Variance Estimation"
+print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
   
   estimates <- x$est
   
@@ -38,13 +37,7 @@ print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, ...) {
     estimates$param <- sub("^zeta","lambda_", estimates$param)
   }
   
-  call <- x$cl
-  steps <- x$steps
+  col_names <- setdiff(names(estimates), c("estimator","bootstrap","bootstraps"))
+  print(estimates[,col_names], digits = digits, ..., row.names = FALSE)
   
-  #cat(model, "\n")
-  # cat("\nCall:", call ,"\n\n")
-  print(estimates)
-  #cat("---\n")
-  #cat("Signif. codes: < .01 *** < .05 ** < .10 *\n")
-  #cat("---\n")
 }

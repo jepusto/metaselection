@@ -94,7 +94,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_large, "selmodel")
-  expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap"))
+  expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi"))
   expect_false(is.null(step_large$bootstrap_reps))
 
   set.seed(20240807)
@@ -114,7 +114,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_perc, "boot.selmodel")
-  expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstrap","bootstraps","percentile_lower","percentile_upper"))
+  expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstraps","percentile_lower","percentile_upper"))
   expect_identical(table(step_perc$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   
   set.seed(20240807)
@@ -134,7 +134,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_t, "boot.selmodel")
-  expect_identical(names(step_t$est), c("estimator","param","Est","SE","bootstrap","bootstraps","student_lower","student_upper"))
+  expect_identical(names(step_t$est), c("estimator","param","Est","SE","bootstraps","student_lower","student_upper"))
   expect_identical(table(step_t$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_t$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
@@ -155,7 +155,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_basic, "boot.selmodel")
-  expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstrap","bootstraps","basic_lower","basic_upper"))
+  expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstraps","basic_lower","basic_upper"))
   expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
@@ -176,7 +176,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_all, "boot.selmodel")
-  expect_identical(names(step_all$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
+  expect_identical(names(step_all$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
   expect_identical(table(step_all$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_all$bootstrap_reps, step_t$bootstrap_reps)
   
@@ -208,13 +208,13 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_long, "boot.selmodel")
-  expect_identical(names(step_long$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap","boot_CIs"))
+  expect_identical(names(step_long$est), c("estimator","param","Est","SE","CI_lo","CI_hi","boot_CIs"))
   expect_identical(table(step_long$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_all$bootstrap_reps, step_long$bootstrap_reps)
   
   expect_equal(
-    step_all$est[,c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap")],
-    step_long$est[,c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap")]
+    step_all$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")],
+    step_long$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")]
   )
   
   long_CIs <- 
@@ -249,8 +249,8 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     )
   
   expect_s3_class(step_none, "boot.selmodel")
-  expect_identical(step_large$est[,c("estimator","param","Est","SE","bootstrap")], step_none$est)
-  expect_identical(names(step_none$est), c("estimator","param","Est","SE","bootstrap"))
+  expect_identical(step_large$est[,c("estimator","param","Est","SE")], step_none$est)
+  expect_identical(names(step_none$est), c("estimator","param","Est","SE"))
   expect_identical(table(step_none$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 29L)))
   expect_identical(step_none$bootstrap_reps[1:(3*19),], step_t$bootstrap_reps[,c("param","Est")])
   
@@ -276,7 +276,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_large, "selmodel")
-  expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap"))
+  expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi"))
   expect_false(is.null(step_large$bootstrap_reps))
   
   set.seed(20240808)
@@ -296,7 +296,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_perc, "boot.selmodel")
-  expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstrap","bootstraps","percentile_lower","percentile_upper"))
+  expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstraps","percentile_lower","percentile_upper"))
   expect_identical(table(step_perc$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   
   set.seed(20240808)
@@ -316,7 +316,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_t, "boot.selmodel")
-  expect_identical(names(step_t$est), c("estimator","param","Est","SE","bootstrap","bootstraps","student_lower","student_upper"))
+  expect_identical(names(step_t$est), c("estimator","param","Est","SE","bootstraps","student_lower","student_upper"))
   expect_identical(table(step_t$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_t$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
@@ -337,7 +337,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_basic, "boot.selmodel")
-  expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstrap","bootstraps","basic_lower","basic_upper"))
+  expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstraps","basic_lower","basic_upper"))
   expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
@@ -358,7 +358,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_all, "boot.selmodel")
-  expect_identical(names(step_all$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
+  expect_identical(names(step_all$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
   expect_identical(table(step_all$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_all$bootstrap_reps, step_t$bootstrap_reps)
   
@@ -390,13 +390,13 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_long, "boot.selmodel")
-  expect_identical(names(step_long$est), c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap","boot_CIs"))
+  expect_identical(names(step_long$est), c("estimator","param","Est","SE","CI_lo","CI_hi","boot_CIs"))
   expect_identical(table(step_long$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_all$bootstrap_reps, step_long$bootstrap_reps)
   
   expect_equal(
-    step_all$est[,c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap")],
-    step_long$est[,c("estimator","param","Est","SE","CI_lo","CI_hi","bootstrap")]
+    step_all$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")],
+    step_long$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")]
   )
   
   long_CIs <- 
@@ -431,8 +431,8 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_none, "boot.selmodel")
-  expect_identical(step_large$est[,c("estimator","param","Est","SE","bootstrap")], step_none$est)
-  expect_identical(names(step_none$est), c("estimator","param","Est","SE","bootstrap"))
+  expect_identical(step_large$est[,c("estimator","param","Est","SE")], step_none$est)
+  expect_identical(names(step_none$est), c("estimator","param","Est","SE"))
   expect_identical(table(step_none$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 37L)))
   expect_identical(step_none$bootstrap_reps[1:(3*24),], step_t$bootstrap_reps[,c("param","Est")])
   
