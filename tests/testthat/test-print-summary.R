@@ -65,7 +65,7 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     steps = c(0.025,0.500),
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 9
   )
   
@@ -95,7 +95,7 @@ test_that("print() works for selmodel objects with mean predictors.", {
     mean_mods = ~ 0 + X, 
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = c("percentile","student"),
+    CI_type = c("percentile","student"),
     R = 9
   )
   
@@ -144,7 +144,7 @@ test_that("print() works for selmodel objects with variance predictors.", {
     var_mods = ~ 0 + X, 
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = c("large-sample","basic"),
+    CI_type = c("large-sample","basic"),
     R = 9
   )
   
@@ -169,7 +169,7 @@ test_that("print() works for selmodel objects with variance predictors.", {
     var_mods = ~ 0 + X, 
     estimator = "hybrid",
     bootstrap = "multinomial",
-    boot_CI = "student",
+    CI_type = "student",
     R = 9
   )
   
@@ -197,7 +197,7 @@ test_that("print() works for selmodel objects with selection predictors.", {
     sel_mods = ~ 0 + X, 
     estimator = "hybrid",
     bootstrap = "exponential",
-    boot_CI = "percentile",
+    CI_type = "percentile",
     R = 9
   )
   
@@ -222,7 +222,7 @@ test_that("print() works for selmodel objects with selection predictors.", {
     sel_mods = ~ 0 + X, 
     estimator = "hybrid",
     bootstrap = "exponential",
-    boot_CI = "student",
+    CI_type = "student",
     R = 9
   )
   
