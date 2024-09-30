@@ -152,7 +152,8 @@ get_selmodel_params <- function(sel_mod, theta = TRUE) {
 
 check_against_metafor_selmodel <- function(
     mod, type = "stepfun", steps = .025, 
-    tol_LRT = 1e-8, tol_score = 5e-5, tol_param = 1e-4,
+    tol_LRT = 1e-8, tol_score = 5e-5, 
+    tol_param = 1e-4, tol_SE = 1e-4,
     ...,
     verbose = FALSE
 ) {
@@ -198,6 +199,12 @@ check_against_metafor_selmodel <- function(
         log(sel_mod$delta[-1])
       )
       
+      metafor_SE <- c(
+        sel_mod$se, 
+        sel_mod$se.tau2 / sel_mod$tau2, 
+        sel_mod$se.delta[-1] / sel_mod$delta[-1]
+      )
+      
       my_est <- selection_model(
         data = dat,
         yi = yi,
@@ -240,6 +247,12 @@ check_against_metafor_selmodel <- function(
         log(sel_mod$delta)
       )
       
+      metafor_SE <- c(
+        sel_mod$se, 
+        sel_mod$se.tau2 / sel_mod$tau2, 
+        sel_mod$se.delta / sel_mod$delta
+      )
+      
       my_est <- selection_model(
         data = dat,
         yi = yi,
@@ -263,18 +276,23 @@ check_against_metafor_selmodel <- function(
   testthat::expect_lt(max(abs(score_full)), tol_score)
   
   if (mod$method != "FE") {
+
+    
     # parameter estimates
     est_compare <- data.frame(
       param = my_est$est$param,
       metafor = metafor_est,
       package = my_est$est$Est,
       diff = metafor_est - my_est$est$Est,
-      package_SE = my_est$est$SE
+      metafor_SE = metafor_SE,
+      package_SE = my_est$est$SE,
+      SE_diff = metafor_SE - my_est$est$SE
     )
     
     if (verbose) print(est_compare)
     
-    testthat::expect_equal(my_est$est$Est, metafor_est, tolerance = tol_param)
+    if (!is.infinite(tol_param)) testthat::expect_equal(est_compare$package, est_compare$metafor, tolerance = tol_param)
+    if (!is.infinite(tol_SE)) testthat::expect_equal(est_compare$package_SE, est_compare$metafor_SE, tolerance = tol_SE)
     
   }
 }

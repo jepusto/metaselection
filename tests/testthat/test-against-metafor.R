@@ -110,11 +110,11 @@ test_that("beta_loglik() and beta_score() agree with metafor::selmodel().", {
   
   # Random effects selection model, no predictors
   RE1 <- rma.uni(yi = yi, sei = sei, data = dat, method = "ML")
-  check_against_metafor_selmodel(RE1, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2)
+  check_against_metafor_selmodel(RE1, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2, tol_SE = 5e-1)
   
   # Random effects selection model with meta-regression
   RE2 <- rma.uni(yi = yi, sei = sei, mods = ~ Color_Match + Gender, 
                  data = dat, method = "ML")
-  check_against_metafor_selmodel(RE2, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2)
+  check_against_metafor_selmodel(RE2, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2, tol_SE = Inf)
   
 })
