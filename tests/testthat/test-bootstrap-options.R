@@ -457,7 +457,7 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
       )
   )
   
-  multi_boot <- get_boot_CIs(step_multinomial, type = c("percentile","student","basic"), format = "long")
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("percentile","student","basic"), R = 39, format = "long")
   
   expect_equal(step_multinomial$est$boot_CIs, multi_boot)
   
@@ -479,7 +479,7 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
       )
   )
   
-  multi_boot_multiR <- get_boot_CIs(step_multinomial_multiR, type = c("percentile","student","basic"), seed = 20240819, format = "long")
+  multi_boot_multiR <- get_boot_CIs(step_multinomial_multiR, CI_type = c("percentile","student","basic"), R = 59, seed = 20240819, format = "long")
   
   expect_equal(step_multinomial_multiR$est$boot_CIs, multi_boot_multiR)
 
@@ -500,7 +500,7 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
       )
   )
   
-  exp_boot <- get_boot_CIs(step_exponential, type = c("percentile","student"), format = "long")
+  exp_boot <- get_boot_CIs(step_exponential, CI_type = c("percentile","student"), R = 49, format = "long")
 
   expect_equal(step_exponential$est$boot_CIs, exp_boot)
   
@@ -552,5 +552,114 @@ test_that("bootstrapping works with parallel processing.", {
   expect_identical(class(step_sequential), class(step_parallel))
   expect_identical(step_sequential$est, step_parallel$est)
   expect_identical(step_sequential$bootstrap_reps, step_parallel$bootstrap_reps)
+  
+})  
+
+
+test_that("bootstrap CIs appear in the right order in models with predictors.", {
+  
+  dat <- r_meta_categories(
+    mean_smd = c(0, 0.2, 0.4),
+    tau = c(0.1, 0.05, 0.03),
+    omega = 0,
+    m = 40,
+    cor_mu = 0.3,
+    cor_sd = 0.01,
+    censor_fun = step_fun(cut_vals = .1, weights = 0.6),
+    n_ES_sim = n_ES_param(mean_N = 80, mean_ES = 1L)
+  )
+  
+  levels(dat$X) <- c("D","B","A")
+  
+  dat$sig <- dat$p_onesided < .1
+  with(dat, table(X, sig))
+  
+  step_multinomial <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.1,
+      mean_mods = ~ X,
+      estimator = "hybrid",
+      bootstrap = "multinomial", 
+      CI_type = c("student","percentile","basic"),
+      R = 59
+    )
+  
+  # Check that Est falls within CI bounds
+  expect_true(all(with(step_multinomial$est, basic_lower < Est & Est < basic_upper)))  
+  expect_true(all(with(step_multinomial$est, student_lower < Est & Est < student_upper)))
+  expect_true(all(with(step_multinomial$est, percentile_lower < Est & Est < percentile_upper)))
+
+  # Check against get_boot_CIs  
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("percentile","student","basic"), R = 59)
+  multi_boot <- do.call(rbind, multi_boot)
+  multi_boot <- multi_boot[step_multinomial$est$param,]
+  expect_equal(
+    subset(step_multinomial$est, select = bootstraps:percentile_upper), 
+    multi_boot
+  )
+  
+  step_multinomial <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.1,
+      mean_mods = ~ X,
+      var_mods = ~ 0 + X, 
+      estimator = "hybrid",
+      bootstrap = "multinomial", 
+      CI_type = c("percentile","basic"),
+      R = 39
+    )
+  
+  # Check that Est falls within CI bounds
+  expect_true(all(with(step_multinomial$est, basic_lower < Est & Est < basic_upper)))  
+  expect_true(all(with(step_multinomial$est, percentile_lower < Est & Est < percentile_upper)))
+  
+  # Check against get_boot_CIs  
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("percentile","basic"), R = 39)
+  multi_boot <- do.call(rbind, multi_boot)
+  multi_boot <- multi_boot[step_multinomial$est$param,]
+  expect_equal(
+    subset(step_multinomial$est, select = bootstraps:percentile_upper), 
+    multi_boot
+  )
+  
+  set.seed(20240930)
+  step_multinomial <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.1,
+      mean_mods = ~ X,
+      sel_mods = ~ 0 + X, 
+      estimator = "hybrid",
+      bootstrap = "multinomial", 
+      CI_type = "percentile",
+      R = 27 
+    )
+  
+  # Check that Est falls within CI bounds
+  expect_true(all(with(step_multinomial$est, percentile_lower < Est & Est < percentile_upper)))
+  
+  # Check against get_boot_CIs  
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = "percentile", R = 27)
+  multi_boot <- do.call(rbind, multi_boot)
+  multi_boot <- multi_boot[step_multinomial$est$param,]
+  
+  expect_equal(
+    subset(step_multinomial$est, select = bootstraps:percentile_upper), 
+    multi_boot
+  )
   
 })  

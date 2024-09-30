@@ -107,7 +107,7 @@ fit_selection_model <- function(
     if (!is.null(X)) X <- X[subset,,drop=FALSE]
     if (!is.null(U)) U <- U[subset,,drop=FALSE]
     if (!is.null(Z0)) Z0 <- Z0[subset,,drop=FALSE]
-    if (!is.null(Z)) Z <- Z[subset,,drop=FALSE]
+    if (!is.null(Z)) Z <- lapply(Z, \(z) z[subset,,drop=FALSE])
   }
   
   if (is.null(theta)) {
@@ -710,6 +710,8 @@ selection_model <- function(
     class(res) <- c("beta.selmodel","selmodel")
   }
   
+  # bootstrap calculations
+  
   if (bootstrap != "none") {
     
     if ("student" %in% CI_type) {
@@ -717,7 +719,7 @@ selection_model <- function(
     } else {
       boot_sandwich <- "none"
     }
-    
+
     reps <- max(R)
     p <- progressr::progressor(reps)
     booties_df <- future.apply::future_replicate(reps, {
@@ -742,23 +744,8 @@ selection_model <- function(
     
     if (any(c("percentile","basic","student") %in% CI_type)) {
       
-      est <- split(res$est$Est, res$est$param)
-      se <- split(res$est$SE, res$est$param)
-      boots <- by(res$bootstrap_reps, res$bootstrap_reps$param, identity)
-      
-      boot_CIs <- future.apply::future_mapply(
-        \(e, s, b) simhelpers::bootstrap_CIs(
-          boot_est = b$Est, boot_se = b$SE, 
-          est = e, se = s, 
-          CI_type = CI_type, level = conf_level, B_vals = R, ...
-        ),
-        e = est,
-        s = se,
-        b = boots,
-        SIMPLIFY = FALSE,
-        future.seed = TRUE
-      )
-      
+      boot_CIs <- get_boot_CIs(bmod = res, CI_type = CI_type, conf_level = conf_level, R = R, ...)
+
       boot_lengths <- sapply(boot_CIs, nrow)
       if (all(boot_lengths == 1L)) {
         boot_CIs <- do.call(rbind, c(boot_CIs, make.row.names = FALSE))
@@ -772,6 +759,8 @@ selection_model <- function(
     
   }
   
+  # Finish building selmodel object
+  
   res$cl <- cl
   res$mf <- mf
   res$selection_type <- selection_type
@@ -784,3 +773,31 @@ selection_model <- function(
   
   return(res)
 }
+
+
+get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
+  
+  param_f <- factor(bmod$est$param, levels = bmod$est$param)
+  est <- split(bmod$est$Est, param_f)
+  se <- split(bmod$est$SE, param_f)
+  boots <- by(
+    bmod$bootstrap_reps, 
+    factor(bmod$bootstrap_reps$param, levels = levels(param_f)), 
+    identity
+  )
+
+  future.apply::future_mapply(
+    \(e, s, b) simhelpers::bootstrap_CIs(
+      boot_est = b$Est, boot_se = b$SE, 
+      est = e, se = s, 
+      CI_type = CI_type, level = conf_level, B_vals = R, ...
+    ),
+    e = est,
+    s = se,
+    b = boots,
+    SIMPLIFY = FALSE,
+    future.seed = TRUE
+  )
+  
+}
+

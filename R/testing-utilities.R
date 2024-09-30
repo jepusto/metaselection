@@ -965,25 +965,6 @@ check_profiling_equivalence <- function(
 }
 
 
-get_boot_CIs <- function(bmod, type, ..., format = "long") {
-  est <- split(bmod$est$Est, bmod$est$param)
-  se <- split(bmod$est$SE, bmod$est$param)
-  boots <- by(bmod$bootstrap_reps, bmod$bootstrap_reps$param, identity)
-  
-  mapply(
-    \(e, s, b) simhelpers::bootstrap_CIs(
-      boot_est = b$Est, boot_se = b$SE, 
-      est = e, se = s, 
-      CI_type = type, ..., 
-      format = format),
-    e = est,
-    s = se,
-    b = boots,
-    SIMPLIFY = FALSE
-  )
-
-}
-
 #-------------------------------------------------------------------------------
 # Functions for checking print() and summary()
 
