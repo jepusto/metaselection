@@ -206,6 +206,7 @@ check_against_metafor_selmodel <- function(
         mean_mods = mods,
         selection_type = "step",
         estimator = "ML",
+        vcov_type = "model-based",
         theta = metafor_est
       )
       
@@ -247,6 +248,7 @@ check_against_metafor_selmodel <- function(
         mean_mods = mods,
         selection_type = "beta",
         estimator = "ML",
+        vcov_type = "model-based",
         theta = metafor_est
       )
       
@@ -266,8 +268,8 @@ check_against_metafor_selmodel <- function(
       param = my_est$est$param,
       metafor = metafor_est,
       package = my_est$est$Est,
-      SE = my_est$est$SE,
-      diff = metafor_est - my_est$est$Est
+      diff = metafor_est - my_est$est$Est,
+      package_SE = my_est$est$SE
     )
     
     if (verbose) print(est_compare)
@@ -985,6 +987,7 @@ check_selmodel_summary <- function(mod, ...) {
   mod_str <- trimws(s[1])
   steps <- pull_argument(s, "Steps:") |> strsplit(",") |> unlist() |> as.numeric()
   estimator <- pull_argument(s,"Estimator:") 
+  vcov_type <- pull_argument(s,"Variance estimator:") 
   boot_type <- pull_argument(s, "Bootstrap type:")
   R <- pull_argument(s, "Number of bootstrap replications:") |> as.integer()
   
@@ -1009,6 +1012,7 @@ check_selmodel_summary <- function(mod, ...) {
   
   estimator_type <- if (mod$estimator == "ML") "maximum likelihood" else "hybrid estimating equations"
   testthat::expect_identical(estimator, estimator_type)
+  testthat::expect_identical(vcov_type, mod$vcov_type)
  
   testthat::expect_identical(sum_effects, p_effects) 
 }

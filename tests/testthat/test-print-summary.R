@@ -40,6 +40,20 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     data = dat,
     yi = d,
     sei = sd_d,
+    steps = 0.025,
+    estimator = "ML",
+    vcov_type = "model-based",
+    bootstrap = "none"
+  )
+  
+  expect_output(print(mod))
+  expect_output(summary(mod))
+  check_selmodel_summary(mod)
+  
+  mod <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
     cluster = studyid,
     selection_type = "beta",
     estimator = "ML",

@@ -371,7 +371,7 @@ fit_selection_model <- function(
     vcov_mat <- hess_inv %*% meat %*% t(hess_inv)
 
   } else {
-    
+    vcov_mat = -hess_inv
   }
   
   
@@ -605,6 +605,7 @@ selection_model <- function(
   CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
 
   if (vcov_type == "model-based") {
+    if (estimator != "ML") stop("vcov_type = 'model-based' is only allowed for estimator = 'ML'.")
     if (!missing(cluster)) stop("vcov_type = 'model-based' does not allow the use of a clustering variable.")
   }
   if (bootstrap %in% c("exponential","multinomial")) {
@@ -766,6 +767,7 @@ selection_model <- function(
   res$selection_type <- selection_type
   res$steps <- steps
   res$estimator <- estimator
+  res$vcov_type <- vcov_type
   res$conf_level <- conf_level
   
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL

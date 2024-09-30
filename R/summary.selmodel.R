@@ -26,6 +26,7 @@ summary.selmodel <- function(object, transf_gamma = FALSE, transf_zeta = FALSE, 
   estimates <- object$est
   estimator <- estimates$estimator[1]
   estimator <- ifelse(estimator == "ML", "maximum likelihood", "hybrid estimating equations")
+  vcov_type <- object$vcov_type
   
 
   # bootstrap information  --------------------------------------------------
@@ -100,6 +101,7 @@ summary.selmodel <- function(object, transf_gamma = FALSE, transf_zeta = FALSE, 
   
   cat("Steps:", steps, "\n")
   cat("Estimator:", estimator, "\n")
+  cat("Variance estimator:", vcov_type, "\n")
   if (inherits(object, "boot.selmodel")) {
     cat("Bootstrap type:", boot_type,"\n")
     cat("Number of bootstrap replications:", R, "\n")
