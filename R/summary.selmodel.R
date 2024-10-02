@@ -7,6 +7,19 @@
 #' @inheritParams print.selmodel
 #'
 #' @export
+#' 
+#' @examples
+#' res_ML <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   steps = 0.025,
+#'   estimator = "ML",
+#'   bootstrap = "none"
+#' )
+#' 
+#' summary(res_ML, transf_gamma = TRUE, transf_zeta = TRUE)
 
 
 
@@ -51,7 +64,7 @@ summary.selmodel <- function(object, transf_gamma = FALSE, transf_zeta = FALSE, 
 
   # do we need to have a transf_gamma argument or just display tau2 and the se 
   
-  transf_variables <- intersect(names(estimates), setdiff(all_vars, "SE"))
+  transf_variables <- intersect(names(estimates), setdiff(all_vars, c("param","SE")))
 
   gamma_params <- grepl("^gamma", estimates$param)
   

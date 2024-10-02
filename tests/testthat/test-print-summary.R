@@ -93,12 +93,15 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
+  check_selmodel_summary(mod, transf_gamma = TRUE)
+  check_selmodel_summary(mod, transf_zeta = TRUE)
+  check_selmodel_summary(mod, transf_gamma = TRUE, transf_zeta = TRUE)
   
 
 })
 
 
-test_that("print() works for selmodel objects with mean predictors.", {
+test_that("print() and summary() work for selmodel objects with mean predictors.", {
   
   mod <- selection_model(
     data = dat,
@@ -144,6 +147,9 @@ test_that("print() works for selmodel objects with mean predictors.", {
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
+  check_selmodel_summary(mod, transf_gamma = TRUE)
+  check_selmodel_summary(mod, transf_zeta = TRUE)
+  check_selmodel_summary(mod, transf_gamma = TRUE, transf_zeta = TRUE)
   
 })
 
@@ -197,6 +203,9 @@ test_that("print() works for selmodel objects with variance predictors.", {
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
+  check_selmodel_summary(mod, transf_gamma = TRUE)
+  check_selmodel_summary(mod, transf_zeta = TRUE)
+  check_selmodel_summary(mod, transf_gamma = TRUE, transf_zeta = TRUE)
   
 })
 
@@ -250,5 +259,8 @@ test_that("print() works for selmodel objects with selection predictors.", {
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
+  check_selmodel_summary(mod, transf_gamma = TRUE)
+  check_selmodel_summary(mod, transf_zeta = TRUE)
+  check_selmodel_summary(mod, transf_gamma = TRUE, transf_zeta = TRUE)
   
 })
