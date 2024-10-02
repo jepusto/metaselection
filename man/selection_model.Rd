@@ -131,7 +131,8 @@ res_ML <- selection_model(
   bootstrap = "none"
 )
 
-res_ML$est
+res_ML
+summary(res_ML)
 
 # configure progress bar
 progressr::handlers(global = TRUE)
@@ -148,5 +149,7 @@ res_hybrid <- selection_model(
   R = 19
 )
 
-res_hybrid$est
+res_hybrid
+summary(res_hybrid)
+
 }

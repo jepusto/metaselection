@@ -20,3 +20,16 @@
 \description{
 Summarize relevant results from \code{selmodel()}
 }
+\examples{
+res_ML <- selection_model(
+  data = self_control,
+  yi = g,
+  sei = se_g,
+  cluster = studyid,
+  steps = 0.025,
+  estimator = "ML",
+  bootstrap = "none"
+)
+
+summary(res_ML, transf_gamma = TRUE, transf_zeta = TRUE)
+}
