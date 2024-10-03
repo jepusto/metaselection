@@ -44,9 +44,11 @@ overall effect size. Combining the selection models with cluster
 bootstrapping led to close to nominal coverage rates.
 
 Our metaselection package provides a set of functions that implements
-these methods. The main function, `selection_model()`, fits step and
-beta selection models with robust variance estimation and has options to
-run cluster bootstrapping.
+these methods. The main function, `selection_model()`, fits step
+function and beta density selection models. To handle dependence in the
+effect size estimates, the function provides options to use
+cluster-robust (sandwich) variance estimation or cluster bootstrapping
+to assess uncertainty in the model parameter estimates.
 
 ## Installation
 
@@ -58,12 +60,13 @@ remotes::install_github("jepusto/metaselection")
 
 ## Example
 
-The following example uses `metadat::dat.lehmann` data from a
-meta-analysis by Lehmann meta-analysis which examined the effects of
-color red on attractiveness judgments (White et al. 2022). In the code
-below, we input the `lehmann_dat` to the `selection_model()` function
-for our package to run step function model with cluster bootstrapping.
-For further details, please see the vignette.
+The following example uses data from a meta-analysis by Lehmann
+meta-analysis which examined the effects of color red on attractiveness
+judgments. The dataset is included in the `metadat` package (White et
+al. 2022) as `dat.lehmann`. In the code below, we fit a step function
+selection model to the Lehmann dataset using the `selection_model()`
+function, with confidence intervals computed using cluster
+bootstrapping. For further details, please see the vignette.
 
 ``` r
 library(metaselection)
@@ -89,36 +92,33 @@ mod_3PSM_boot <- selection_model(
 print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-    ##       estimator    param        Est         SE   bootstrap bootstraps
-    ## beta         ML     beta 0.13279939 0.13728035 multinomial         19
-    ## gamma        ML     tau2 0.08112823 0.08448746 multinomial         19
-    ## zeta1        ML lambda_1 0.54845336 0.61595727 multinomial         19
-    ##       percentile_lower percentile_upper
-    ## beta      -0.032735627        0.3765500
-    ## gamma      0.001500518        0.1984563
-    ## zeta1      0.088833781        3.0549676
+    ##     param    Est     SE percentile_lower percentile_upper
+    ##      beta 0.1328 0.1373          -0.0327            0.377
+    ##      tau2 0.0811 0.0845           0.0015            0.198
+    ##  lambda_1 0.5485 0.6160           0.0888            3.055
 
 ## Related Work
 
 We want to recognize other packages that provide functions to selection
 modeling.
 
-Few packages are available to estimate selection models assuming that
-effects are independent. The `metafor` package now includes the
-`selmodel()` function which allows users to fit different types of
-selection models (Viechtbauer 2010). The `weightr` package includes
-functions to estimate weight-function models described in Vevea and
-Hedges (1995; Coburn and Vevea 2019). However, the functions available
-in these packages can only be applied to meta-analytic data assuming
-that the effects are independent.
-
-The `PublicationBias` package provides sensitivity analyses for
-publication bias that incorporates robust variance estimation
-(Braginsky, Mathur, and VanderWeele 2023). The analyses allow for
-dependent effect sizes in meta-analytic data. However, the approach that
-is implemented in the package is based on pre-specified degree of
-selective reporting and only works for the simplest form of the
-step-function model.
+Several existing packages provide tools for estimating selection models
+assuming that effects are independent. The `metafor` package
+(Viechtbauer 2010) includes the `selmodel()` function, which allows
+users to fit many different types of selection models. The `weightr`
+package (Coburn and Vevea 2019) includes functions to estimate a class
+of p-value selection models described in Vevea and Hedges (1995).
+However, the functions available in these packages can only be applied
+to meta-analytic data assuming that the effects are independent. In
+addition, the `PublicationBias` package (Braginsky, Mathur, and
+VanderWeele 2023) implements sensitivity analyses for selective
+reporting bias that incorporate robust variance estimation methods for
+handling dependent effect sizes. However, the sensitivity analyses
+implemented in the package are based on a pre-specified degree of
+selective reporting, rather than allowing the degree of selection to be
+estimated from the data. The sensitivity analyses are also based on a
+specific and simple form of the step-function model, and do not allow
+consideration of more complex forms of selection functions.
 
 ## Acknowledgements
 

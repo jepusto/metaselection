@@ -33,7 +33,7 @@ The results showed that selection models combined with robust variance estimatio
 Combining the selection models with cluster bootstrapping led to close to nominal coverage rates.
 
 Our metaselection package provides a set of functions that implements these methods.
-The main function, `selection_model()`, fits step and beta selection models with robust variance estimation and has options to run cluster bootstrapping.
+The main function, `selection_model()`, fits step function and beta density selection models. To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates.
 
 ## Installation
 
@@ -45,8 +45,9 @@ remotes::install_github("jepusto/metaselection")
 
 ## Example
 
-The following example uses `metadat::dat.lehmann` data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments [@metadat].
-In the code below, we input the `lehmann_dat` to the `selection_model()` function for our package to run step function model with cluster bootstrapping.
+The following example uses data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
+The dataset is included in the `metadat` package [@metadat] as `dat.lehmann`.
+In the code below, we fit a step function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using cluster bootstrapping.
 For further details, please see the vignette.
 
 ```{r, warning = FALSE, message = FALSE}
@@ -77,14 +78,12 @@ print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 
 We want to recognize other packages that provide functions to selection modeling.
 
-Few packages are available to estimate selection models assuming that effects are independent.
-The `metafor` package now includes the `selmodel()` function which allows users to fit different types of selection models [@metafor].
-The `weightr` package includes functions to estimate weight-function models described in @vevea1995 [@weightr].
+Several existing packages provide tools for estimating selection models assuming that effects are independent.
+The `metafor` package [@metafor] includes the `selmodel()` function, which allows users to fit many different types of selection models.
+The `weightr` package [@weightr] includes functions to estimate a class of p-value selection models described in @vevea1995.
 However, the functions available in these packages can only be applied to meta-analytic data assuming that the effects are independent.
-
-The `PublicationBias` package provides sensitivity analyses for publication bias that incorporates robust variance estimation [@PublicationBias].
-The analyses allow for dependent effect sizes in meta-analytic data.
-However, the approach that is implemented in the package is based on pre-specified degree of selective reporting and only works for the simplest form of the step-function model.
+In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate robust variance estimation methods for handling dependent effect sizes.
+However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of the step-function model, and do not allow consideration of more complex forms of selection functions.
 
 ## Acknowledgements
 
