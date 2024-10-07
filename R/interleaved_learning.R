@@ -3,7 +3,7 @@
 #' Meta-analytic dataset containing results of primary studies examining the 
 #' effect of interleaved learning. 
 #'
-#' @format A data frame with 158 rows and 21 variables:
+#' @format A data frame with 238 rows and 21 variables:
 #' \describe{
 #'   \item{study}{name of the study}
 #'   \item{esid}{identifier for the effect size}
@@ -23,7 +23,7 @@
 #'   \item{grey_lit}{indicator for grey literature with 1 indicating theses and dissertations and 0 indicating articles and conference papers}
 #'   \item{design}{indicator for research design with 1 indicating within-participants design and 0 indicating between-participants design}
 #'   \item{students}{indicator type of sample with 1 indicating samples with only students and 0 indicating all other types of samples}
-#'   \item{retention_interval}{indicator for retention interval length with 1 indicating longer (>= 20 min) intervals and 0 indicating short (< 20 min) intervals}
+#'   \item{retention_interval}{indicator for retention interval length with 1 indicating long (>= 20 min) intervals and 0 indicating short (< 20 min) intervals}
 #'   \item{intentionality}{indicator for intentional learning designs with 1 indicating incidental learning designs and 0 indicating intentional learning designs}
 #'   \item{transfer_retention}{indicator for type of tests with 1 indicating transfer tests and 0 indicating retention tests}
 #'   \item{simultaneity}{indicator for type of presentation with 1 indicating simultaneous presentation and 0 indicating successive presentation}

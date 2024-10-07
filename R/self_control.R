@@ -3,7 +3,7 @@
 #' Meta-analytic dataset containing results of primary studies examining the 
 #' effect of self-control training. 
 #'
-#' @format A tibble with 158 rows and 26 variables:
+#' @format A data frame with 158 rows and 26 variables:
 #' \describe{
 #'   \item{studyid}{identifier for the study}
 #'   \item{esid}{identifier for the effect size}

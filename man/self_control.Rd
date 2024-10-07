@@ -5,7 +5,7 @@
 \alias{self_control}
 \title{Self-Control Training Meta-Analysis}
 \format{
-A tibble with 158 rows and 26 variables:
+A data frame with 158 rows and 26 variables:
 \describe{
 \item{studyid}{identifier for the study}
 \item{esid}{identifier for the effect size}
