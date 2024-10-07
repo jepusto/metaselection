@@ -2,9 +2,7 @@ url: ~
 template:
   bootstrap: 5
   light-switch: true
-  bootswatch: litera
-  bslib:
-    info-text-emphasis-dark: "#FFFFFF"
+
 
 authors:
   James Pustejovsky:
