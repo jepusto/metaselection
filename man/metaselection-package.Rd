@@ -8,6 +8,13 @@
 \description{
 Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, providing standard errors and confidence intervals based on either cluster-robust variance estimators (i.e., sandwich estimators) or cluster-level bootstrapping. Supported models include generalizations of the step-function selection model as proposed by Vevea and Hedges (1995) \doi{10.1007/BF02294384} and the beta-function selection model as proposed by Citkowicz and Vevea (2017) \doi{10.1037/met0000119}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jepusto/metaselection}
+}
+
+}
 \author{
 \strong{Maintainer}: James Pustejovsky \email{jepusto@gmail.com} (\href{https://orcid.org/0000-0003-0591-9465}{ORCID})
 
