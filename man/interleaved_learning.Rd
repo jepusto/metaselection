@@ -39,6 +39,9 @@ nonspaced indicating designs with immediate succession of items (less than 2 sec
 -1 indicating designs with distractors between presentation of items are coded as distract and items not included in the analysis of spacing between items}
 }
 }
+\source{
+\href{https://osf.io/7u253/}{OSF page for the project}
+}
 \usage{
 interleaved_learning
 }
@@ -50,5 +53,6 @@ effect of interleaved learning.
 Brunmair, M., & Richter, T. (2019). Similarity matters:
 A meta-analysis of interleaved learning and its moderators.
 \emph{Psychological Bulletin, 145}(11), 1029.
+\doi{doi:10.1037/bul0000209}
 }
 \keyword{datasets}

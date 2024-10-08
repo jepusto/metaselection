@@ -38,5 +38,6 @@
 #' @references Friese, M., Frankenbach, J., Job, V., & Loschelder, D. D. 
 #'   (2017). Does self-control training improve self-control? A meta-analysis. 
 #'   \emph{Perspectives on Psychological Science, 12}(6), 1077-1099.
+#'   \doi{doi:10.1177/1745691617697076}
 #'
 "self_control"

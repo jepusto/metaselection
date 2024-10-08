@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/selection_models.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/beta_fun.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/metaselection-package.html</loc></url>
+<url><loc>/reference/n_ES_empirical.html</loc></url>
+<url><loc>/reference/n_ES_param.html</loc></url>
+<url><loc>/reference/print.selmodel.html</loc></url>
+<url><loc>/reference/r_meta.html</loc></url>
+<url><loc>/reference/selection_model.html</loc></url>
+<url><loc>/reference/selection_plot.html</loc></url>
+<url><loc>/reference/selection_wts.html</loc></url>
+<url><loc>/reference/self_control.html</loc></url>
+<url><loc>/reference/step_fun.html</loc></url>
+<url><loc>/reference/summary.selmodel.html</loc></url>
+<url><loc>/reference/wwc_es.html</loc></url>
+</urlset>
+
