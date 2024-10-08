@@ -65,7 +65,7 @@
 
       <h1>P-Value Selection Models for Meta-Analysis with Dependent Effects</h1>
             
-            <h4 data-toc-skip class="date">2024-10-07</h4>
+            <h4 data-toc-skip class="date">2024-10-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jepusto/metaselection/blob/HEAD/vignettes/selection_models.Rmd" class="external-link"><code>vignettes/selection_models.Rmd</code></a></small>
       <div class="d-none name"><code>selection_models.Rmd</code></div>
@@ -572,7 +572,7 @@ forms of bootstrap confidence intervals.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  12.194   0.031  12.259</span></span></code></pre>
+<span><span class="co">##  12.063   0.035  12.129</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod_3PSM_boot</span>, transf_gamma <span class="op">=</span> <span class="cn">TRUE</span>, transf_zeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     param    Est     SE percentile_lower percentile_upper</span></span>
@@ -607,7 +607,7 @@ then fits the same model as above:</p>
 <span>  <span class="op">)</span>  </span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.380   0.007   2.639</span></span></code></pre>
+<span><span class="co">##   0.364   0.007   2.696</span></span></code></pre>
 <p>Setting a <code>sequential</code> plan will stop the use of parallel
 processing:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">

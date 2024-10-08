@@ -33,5 +33,6 @@ reference:
   desc: "Two example datasets from real meta-analyses and one dataset containing distribution of sample sizes and effect sizes"
   contents:
   - self_control
+  - interleaved_learning
   - wwc_es
     
