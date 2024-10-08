@@ -40,6 +40,6 @@
 #'
 #' @references Brunmair, M., & Richter, T. (2019). Similarity matters:
 #'   A meta-analysis of interleaved learning and its moderators.  
-#'   \emph{Psychological bulletin, 145}(11), 1029.
+#'   \emph{Psychological Bulletin, 145}(11), 1029.
 #'
 "interleaved_learning"

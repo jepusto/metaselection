@@ -25,11 +25,11 @@
 #'   \item{subjectivity_of_outcome_measurement}{indicator for the subjectivity of the outcome measure}
 #'   \item{lab_based_versus_real_world_behavior}{indicator for whether the behavior measured was assessed in lab or in the real-world}
 #'   \item{stamina_versus_strength}{indicator for whether the outcome was assessed with (Stamina) or without a preceding effortful task (Strength)}
-#'   \item{pre_test_measure}{indicator for whether there was a pre and post measure of outcome or only post measure}
+#'   \item{pre_test_measurement}{indicator for whether there was a pre and post measure of outcome or only post measure}
 #'   \item{sample_population}{population examined in the study}
 #'   \item{sample_age}{average age of the sample}
 #'   \item{attrition}{percentage of attrition}
-#'   \item{partipant_compensation}{type of compensation received by the participants}
+#'   \item{participant_compensation}{type of compensation received by the participants}
 #'   \item{self_control_potential}{indicator for whether the outcome measure required utilization of maximum self-control potential}
 #' }
 #'
