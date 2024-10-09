@@ -5,34 +5,34 @@ template:
 
 
 authors:
-  James Pustejovsky:
+  James E. Pustejovsky:
     href: "https://www.jepusto.com/"
   Megha Joshi:
     href: "https://meghapsimatrix.com/"
     
     
 reference:
-- title: "Selection Model"
+- title: "Model-Fitting"
   desc: >
-    Functions to fit and evaluate selection models with RVE and cluster bootstrapping
+    Functions to fit and evaluate selection models with robust variance estimation or cluster bootstrapping
   contents: 
   - selection_model
   - selection_plot
   - selection_wts
   - print.selmodel
   - summary.selmodel
-- title: "Data Generation"
-  desc: "Functions to generate meta-analytic data with options options to simulate selective outcome reporting"
+- title: "Example Datasets"
+  desc: "Example datasets from published meta-analyses and one dataset containing a distribution of primary study characteristics"
+  contents:
+  - self_control
+  - interleaved_learning
+  - wwc_es
+- title: "Data Simulation"
+  desc: "Functions to simulate meta-analytic data, including data subject to selective outcome reporting"
   contents:
   - r_meta
   - step_fun
   - beta_fun
   - n_ES_empirical
   - n_ES_param
-- title: "Example Datasets"
-  desc: "Two example datasets from real meta-analyses and one dataset containing distribution of sample sizes and effect sizes"
-  contents:
-  - self_control
-  - interleaved_learning
-  - wwc_es
     
