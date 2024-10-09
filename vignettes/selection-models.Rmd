@@ -1,20 +1,19 @@
 ---
 title: "P-Value Selection Models for Meta-Analysis with Dependent Effects"
-authors:
+author:
   - James E. Pustejovsky
   - Megha Joshi
   - Martyna Citkowicz
 output: 
-  html_document:
+  rmarkdown::html_vignette:
     number_sections: true
     toc: true
-    toc_float: true
 date: "`r Sys.Date()`"
 bibliography: references.bib
 link-citations: yes
 csl: apa.csl
 vignette: >
-  %\VignetteIndexEntry{Using the metaselection package}
+  %\VignetteIndexEntry{P-Value Selection Models for Meta-Analysis with Dependent Effects}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,30 +22,33 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-A meta-analysis aims to provide a comprehensive synthesis of available evidence on a topic of interest. 
-One major challenge to this aim is selective reporting of evidence from primary studies. Selective reporting occurs when the statistical significance level of a finding affects whether it is reported and therefore whether the finding is available for inclusion in a meta-analysis. 
-If statistically significant, affirmative results are more likely to be reported compared to null, non-affirmative results, the evidence base available for meta-analysis will be distorted, leading to inflation of effect size estimates from meta-analysis and bias in estimates of heterogeneity. 
+A systematic review and meta-analysis project typically aims to provide a comprehensive synthesis of available evidence on a topic of interest. 
+One major challenge to this aim is selective reporting of evidence from primary studies. 
+Selective reporting occurs when the statistical significance level of a finding influences whether it is reported and therefore whether the finding is available for inclusion in a systematic review. 
+Selective reporting arises due to biases in the publication process, on the part of journals, editors, and reviewers, as well as strategic decisions on part of the authors [@Rothstein2005publication; @sutton2009publication].
+If statistically significant, affirmative results are more likely to be reported compared to null, non-affirmative results, the evidence base available for meta-analysis will be distorted, leading to inflation of effect size estimates from meta-analysis [@carter2019correcting; @mcshane2016adjusting] and bias in estimates of heterogeneity [@augusteijn2019effect]. 
 
-Because selective reporting makes it difficult to draw accurate conclusions from a synthesis, many tools have been developed that try to detect selective reporting problems and to correct for the biases it creates in meta-analytic summaries. 
-Widely used methods include: graphical diagnostics like funnel plots; tests and adjustments for funnel plot asymmetry such as trim-and-fill, Egger's regression, and PET/PEESE; selection models; and p-value diagnostics such as p-curve and p-uniform. 
-However, very few methods available for investigating selective reporting can accommodate dependent effect sizes. 
+Because selective reporting can make it difficult to draw accurate inferences from a meta-analysis, many tools have been developed that try to detect selective reporting problems and to correct for the biases it creates in meta-analytic summaries. 
+Widely used methods include: graphical diagnostics like funnel plots [@sterne2001funnel; @Sterne2011recommendations]; tests and adjustments for funnel plot asymmetry such as trim-and-fill [@duval2000nonparametric], Egger's regression [@egger1997bias], and PET/PEESE [@stanley2008meta; @stanley2014meta]; p-value diagnostics such as p-curve and p-uniform [@simonsohn2014pcurve; @VanAssen2015meta; @vanaert2016conducting]; and selection models [@hedges1992modeling; @vevea1995general; @Hedges1996estimating]. 
+However, very few methods are available for investigating selective reporting that can also accommodate dependent effect sizes.
 This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a very common feature of meta-analytic data.
 
-Dependent effect sizes occur when primary studies report multiple measures of the outcomes or repeated measures of the outcome. 
+Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collected repeated measures an outcome across multiple time-points, or involve comparisons between multiple intervention conditions. 
 Generally, failing to account for dependency can result in misleading conclusions,  overly narrow confidence intervals, and hypothesis tests that have inflated type one error rates.
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience]. These methods can be combined with a few of the available techniques for investigating selective reporting, but this is currently limited to selective reporting detection and correction techniques based on regression adjustment [@fernandezcastilla2019detecting; @rodgers2020evaluating] or to sensitivity analyses based on simple forms of selection models, which provide bounds on average effects given an _a priori_ level of selective reporting [@mathur2020sensitivity]. 
 
-In this package, we provide methods for investigating and accounting for selective reporting based on p-value selection models. 
-The methods account for dependent effect sizes by using cluster-robust variance estimation (i.e., sandwich estimation) or clustered bootstrapping techniques. 
+The `metaseleciton` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes. In particular, the package provides methods for investigating and accounting for selective reporting based on p-value selection models, where prior developments were limited to data with independent effect sizes.
+The package implements two distinct methods to account for dependent effect sizes, using either cluster-robust variance estimation (i.e., sandwich estimation) or clustered bootstrapping techniques. 
 Simulation results show that selection models combined with robust variance estimation led to low bias in the estimate of the overall effect size. 
 Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates. 
 
 # P-Value Selection Models
 
-P-value selection models are a general set of methods that correct for selective reporting by modeling the process by which the effect size estimates are reported [@rothstein_selection_2006]. 
+P-value selection models are a general set of methods that correct for selective reporting by modeling the process by which the effect size estimates are reported [@Rothstein2005publication]. 
 Selection models have two components: a model describing the evidence generation process and model describing the selection process.
-The `metaselection` package implements a very flexible class of selection models, in which the evidence-generating process follows a random effects location-scale model [@viechtbauer_locationscale_2022] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea_general_1995] or a beta-density function [@citkowicz_parsimonious_2017]. 
-Step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea_general_1995]. 
-The beta-density model uses a different selection function, based on a beta distribution, to capture complex patterns of selection [@citkowicz_parsimonious_2017]. 
+The `metaselection` package implements a very flexible class of selection models, in which the evidence-generating process follows a random effects location-scale model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
+Step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea1995general]. 
+The beta-density model uses a different selection function, based on a beta distribution, to capture complex patterns of selection [@Citkowicz2017parsimonious]. 
 
 Consider a meta-analytic dataset with a total of $J$ studies, where study $j$ includes $k_j$ effect size estimates. 
 Let $Y_{ij}$ denote an effect size estimate produced by a study, prior to selective reporting. 
@@ -80,7 +82,7 @@ $$
 $$
 In the above, the first term in the numerator is defined by the selective reporting process and the second term is defined by the evidence-generating process. 
 
-@hedges_modeling_1992 and @vevea_general_1995 proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, we have steps $\alpha_1,...,\alpha_H$ and 
+@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, we have steps $\alpha_1,...,\alpha_H$ and 
 $$
 \text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
 1 & \text{if} & p_{ij} < \alpha_1 \\ 
