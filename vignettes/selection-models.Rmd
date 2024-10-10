@@ -19,6 +19,8 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
+library(ggplot2)
+library(metaselection)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
@@ -44,27 +46,27 @@ Combining the selection models with cluster-bootstrapping leads to confidence in
 
 # Selection Models
 
-Selection models are a general set of methods that correct for selective reporting by modeling the process by which the effect size estimates are reported [@Rothstein2005publication]. 
-Selection models have two components: a model describing the evidence generation process and model describing the selection process.
-The `metaselection` package implements a very flexible class of selection models, in which the evidence-generating process follows a random effects location-scale model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
+Selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication]. 
+Such models have two components: a set of assumptions describing the evidence-generation process and a set of assumptions describing the selection process.
+The `metaselection` package implements a flexible class of selection models, in which the evidence-generating process follows a random effects location-scale meta-regression model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
 Step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea1995general]. 
-The beta-density model uses a different selection function, based on a beta distribution, to capture complex patterns of selection [@Citkowicz2017parsimonious]. 
+The beta-density model uses a different selection function, based on a beta distribution, to capture distinctive, more smoothly varying patterns of selection [@Citkowicz2017parsimonious]. 
 
-Consider a meta-analytic dataset with a total of $J$ studies, where study $j$ includes $k_j$ effect size estimates. 
-Let $Y_{ij}$ denote an effect size estimate produced by a study, prior to selective reporting. 
+Consider a meta-analytic dataset with a total of $J$ samples, where study $j$ includes $k_j$ effect size estimates. 
+Let $Y_{ij}$ denote an effect size estimate produced by a samples, prior to selective reporting. 
 The effect size estimate has standard error $\sigma_{ij}$, which is treated as a fixed quantity.
-Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors that encode characteristics of the effect size and/or the study and may be related to average effect size magnitude. 
+Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors that encode characteristics of the effect sizes or the samples and may be related to average effect size magnitude. 
 Let $\mathbf{u}_{ij}$ be a $1 \times u$ row vector of predictors that may be related to effect size heterogeneity. 
 Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ the standard normal density. 
 Finally, let $p_{ij}$ be the one-sided p-value corresponding to the effect size estimate, which is a function of the effect size estimate and its standard error: $p_{ij} = 1 - \Phi\left(Y_{ij} / \sigma_{ij}\right) = \Phi\left(-Y_{ij} / \sigma_{ij}\right)$.
 
 ## The evidence-generating process
 
-The model for the evidence-generating process is a random effects location-scale model, in which
+The model for the evidence-generating process is a random effects location-scale meta-regression model, in which
 $$
 Y_{ij} = \mathbf{x}_{ij} \boldsymbol\beta + v_{ij} + e_{ij},
 $$
-where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_i$ is a normally distributed sampling error with mean zero and known variance $\sigma^{*2}_{ij}$. 
+where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_{ij}$ is a normally distributed sampling error with mean zero and known variance $\sigma^{2}_{ij}$. 
 The variance of the random effects is modeled as
 $$
 \log\left(\tau_{ij}^{2}\right) = \mathbf{u}_{ij} \boldsymbol\gamma,
@@ -72,36 +74,131 @@ $$
 where $\boldsymbol\gamma$ is a $u \times 1$ vector of coefficients that relate the predictors to the degree of marginal variation in the random effects.
 If the model does not include predictors of heterogeneity, then $\mathbf{u}_{ij} = 1$ and the model reduces to a conventional random effects meta-regression in which $\gamma = \log(\tau^2)$.
 
-## The selective reporting process
+Note that this random-effects location scale model treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. Thus, it is a model for the _marginal_ distribution of effect size estimates, which does not attempt to capture the dependence structure among effect size estimates drawn from the same sample. As a result, the regression coefficients $\boldsymbol\beta$ describe the overall average effects (given the predictors) and variance parameters $\boldsymbol\gamma$ describe the marginal or _total_ heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-sample and between-sample components. 
 
-The selective reporting process is defined by a selection function, which specifies how the probability that a given effect size estimate is reported varies depending on its $p$-value. 
+## Selective reporting processes
+
+At a general level, the selective reporting process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value. 
 Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observed. 
-Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. The distribution of observed effect sizes then corresponds to 
+Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. 
+The package includes two different forms of selection functions: step functions and beta-density functions.
+
+### Step functions
+
+@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, suppose that there are $H$ steps, $\alpha_1,...,\alpha_H$, and that 
+$$
+\text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
+1 & \text{if} & p_{ij} < \alpha_1 \\ 
+\lambda_1 & \text{if} & \alpha_1 \leq p_{ij} < \alpha_2 \\ \lambda_2 & \text{if} & \alpha_2 \leq p_{ij} < \alpha_3 \\
+\vdots \\
+\lambda_H & \text{if} & \alpha_H \leq p_{ij}.
+\end{cases}
+$$
+The selection parameters $\lambda_1,...,\lambda_H$ control the probabilities of selection given a p-value, with parameter $\lambda_h$ defined as the relative probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, compared to the probability than an effect size estimate is observed, given that its p-value is in the range $[0, \alpha_1)$. 
+The model is estimated in terms of log-transformed relative probabilities so that the parameter space is unrestricted, with $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,...,H$. 
+With this parameterization, $\zeta_1 = \cdots = \zeta_H = 0$ describes a process where effect sizes are reported with uniform probability regardless of their statistical significance levels.
+
+
+In practice, meta-analysts will often use only a small number of steps in the selection model. 
+One common choice is the three-parameter selection model, which has a single step at $\alpha_1 = .025$, as depicted in the first figure below. With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < .05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
+Another possibility is to use two steps at $\alpha_1 = .025$ and $\alpha_2 = .500$, which allows for different probabilities of selection for effects that are positive but not statistically significant and effects that are negative (i.e., in the opposite the intended direction). 
+We call the latter model a four-parameter selection model; it is depicted in the second figure below.
+
+```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = c("One-step selection model with $\\lambda_1 = 0.4$", "Two-step selection model with $\\lambda_1 = 0.4, \\lambda_2 = 0.2$")}
+lambda1 <- 0.4
+lambda2 <- 0.2
+pvals <- seq(0,1,.005)
+PSM3 <- step_fun(cut_vals = .025, weights = lambda1)
+PSM4 <- step_fun(cut_vals = c(.025, .500), weights = c(lambda1, lambda2))
+
+dat <- data.frame(p = pvals, PSM3 = PSM3(pvals), PSM4 = PSM4(pvals))
+
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = 0.025, linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = PSM3), fill = "green", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, .500), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = PSM4), fill = "purple", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+```
+
+
+### Beta-density functions
+
+@Citkowicz2017parsimonious proposed a selection model based on an alternative form of selection function, where the probability of selection follows a beta density. Compared to a step function, the beta density selection function can capture a very different set of shapes, with selection probabilities that vary smoothly over the range of possible one-sided $p$-values. In the original formulation, the selection function is given by
+$$
+\text{Pr}(O_{ij} = 1 | p_{ij}) = p_{ij}^{(\lambda_1 - 1)} \left(1 - p_{ij}\right)^{(\lambda_2 - 1)},
+$$
+for $\lambda_1, \lambda_2 > 0$. 
+
+```{r, echo = FALSE}
+pvals <- c(.005, .500, .900)
+sel_probs_un <- beta_fun(delta_1 = .4, delta_2 = 5, trunc_1 = 1e-6, trunc_2 = 1 - 1e-6)(pvals)
+rel_sel_un <- sel_probs_un[-1] / sel_probs_un[1]
+sel_probs_trunc <- beta_fun(delta_1 = .4, delta_2 = 5, trunc_1 = .025, trunc_2 = .975)(pvals)
+rel_sel_trunc <- sel_probs_trunc[-1] / sel_probs_trunc[1]
+```
+
+In a commentary on @Citkowicz2017parsimonious, @hedges2017plausibility highlighted an important limitation of using the beta-density as a selection function. For some parameter values, the beta density implies selection probabilities that differ by many orders of magnitude. Following the example discussed in @hedges2017plausibility, the beta density with selection parameters $\lambda_1 = 0.4, \lambda_2 = 5$ implies that the probability of reporting an effect with $p_{ij} = .5$ (corresponding to $T_{ij} = 0$) is only `r round(rel_sel_un[1], 3)` times the probability of reporting a significant effect with $p_{ij} = .005$, and the probability of reporting a non-significant, negative effect with $p_{ij} = .9$ is `r formatC(rel_sel_un[2], digits = 6, format = "f")` times the probability of reporting a significant effect with $p_{ij} = .005$. These extreme differences in selection probability can imply implausible selection processes, in which hundreds of non-significant effect size estimates would need to go unreported to observe a sample of a few dozen findings. Furthermore, they lead to estimates of average effects that can be highly sensitive to the inclusion or exclusion of some effect size estimates because the influence of each estimate is driven by the inverse of its selection probability [@hedges2017plausibility]. 
+
+To mitigate these issues, the `metaselection` package implements a modification of the original selection function in which the selection probabilities are truncated at user-specified steps, $\alpha_1$ and $\alpha_2$. The truncated density is given by
+$$
+\text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
+\alpha_1^{(\lambda_1 - 1)} \left(1 - \alpha_1\right)^{(\lambda_2 - 1)} & \text{if} & p_{ij} < \alpha_1 \\ 
+p_{ij}^{(\lambda_1 - 1)} \left(1 - p_{ij}\right)^{(\lambda_2 - 1)} & \text{if} & \alpha_1 \leq p_{ij} < \alpha_2 \\ 
+\alpha_2^{(\lambda_1 - 1)} \left(1 - \alpha_2\right)^{(\lambda_2 - 1)} & \text{if} & \alpha_2 \leq p_{ij}.
+\end{cases}
+$$
+Equivalently, the truncated beta function can be written as
+$$
+\text{Pr}(O_{ij} = 1 | p_{ij}) = \tilde{p}_{ij}^{(\lambda_1 - 1)} \left(1 - \tilde{p}\right)^{(\lambda_2 - 1)},
+$$
+where $\tilde{p}_{ij} = \min\{\max\{\alpha_1, p_{ij}\}, \alpha_2\}$. 
+Using this modification, one might set truncation points at $\alpha_1 = .025$ and $\alpha_2 = .975$ (these are the default values in `metaselection`) so that all statistically significant positive effect size estimates have the same selection probability and, likewise, all statistically significant, negative effect size estimates have the same selection probability, with the selection probabilities of non-significant effect sizes varying according to a beta density. The first figure below depicts this truncated beta density using the default truncation points and with $\lambda_1 = 0.4, \lambda_2 = 5$, which represents very strong selection. The second figure depicts a truncated beta density with more moderate values of $\lambda_1 = 0.7, \lambda_2 = 1$ and where the second truncation point is set at $\alpha_2 = 0.5$, so that all negative effect size estimates have equal selection probability.
+
+```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = c("Beta-density selection model with $\\lambda_1 = 0.4, \\lambda_2 = 5.0$, using truncation points $\\alpha_1 = .025, \\alpha_2 = .975$", "Beta-density selection model with $\\lambda_1 = 0.7, \\lambda_2 = 1$,  using truncation points $\\alpha_1 = .025, \\alpha_2 = .500$")}
+
+pvals <- seq(0,1,.005)
+beta_strong <- beta_fun(delta_1 = .4, delta_2 = 5, trunc_1 = .025, trunc_2 = .975)
+beta_mild <- beta_fun(delta_1 = 0.7, delta_2 = 1, trunc_1 = .025, trunc_2 = .500)
+
+dat <- data.frame(p = pvals, strong = beta_strong(pvals), mild = beta_mild(pvals))
+
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, .975), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = strong), fill = "red", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, .500), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = mild), fill = "yellow", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+```
+## Estimation
+
+The distribution of observed effect sizes then corresponds to 
 $$
 \text{Pr}(Y_{ij} = y \ | \ O_{ij} = 1) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}) \times \text{Pr}(Y_{ij} = y \ | \ \sigma_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij})}.
 $$
 In the above, the first term in the numerator is defined by the selective reporting process and the second term is defined by the evidence-generating process. 
-
-@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, we have steps $\alpha_1,...,\alpha_H$ and 
-$$
-\text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
-1 & \text{if} & p_{ij} < \alpha_1 \\ 
-\exp(\zeta_1) & \text{if} & \alpha_1 \leq p_{ij} < \alpha_2 \\ \exp(\zeta_2) & \text{if} & \alpha_2 \leq p_{ij} < \alpha_3 \\
-\vdots \\
-\exp(\zeta_H) & \text{if} & \alpha_H \leq p_{ij}.
-\end{cases}
-$$
-The selection parameters $\zeta_1,...,\zeta_H$ control the probabilities of selection given a p-value, with parameter $\zeta_h$ defined as the log of the probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, relative to the probability than effect size estimate is observe, given that its p-value is in the range $[0, \alpha_1)$. 
-We use log-transformed probabilities so that the parameter space is unrestricted, $-\infty < \zeta_h < +\infty$ for $h=1,...,H$; $\zeta_1 = \cdots = \zeta_H = 0$ therefore describes a process where effect sizes are reported with uniform probability, regardless of their statistical significance level.
-
-In practice, meta-analysts will often use only a small number of steps in the selection model. 
-One common choice is the three-parameter selection model, which has a single step at $\alpha = .025$. With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < .05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
-Another possibility is to use two steps at $\alpha_1 = .025$ and $\alpha_2 = .500$, which allows for different probabilities of selection for effects that are positive but not statistically significant and effects that are negative (i.e., in the opposite the intended direction). 
-We call the latter model a four-parameter selection model.
-
-<!-- Martyna, can you add a paragraph on the beta function model? -->
-
-## Estimation
 
 ## Cluster-robust variance estimation
 
