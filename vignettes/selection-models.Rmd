@@ -74,15 +74,12 @@ If the model does not include predictors of heterogeneity, then $\mathbf{u}_{ij}
 
 ## Selective reporting processes
 
-The selective reporting process is defined by a selection function, which specifies how the probability that a given effect size estimate is reported varies depending on its $p$-value. 
+At a general level, the selective reporting process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value. 
 Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observed. 
-Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. The distribution of observed effect sizes then corresponds to 
-$$
-\text{Pr}(Y_{ij} = y \ | \ O_{ij} = 1) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}) \times \text{Pr}(Y_{ij} = y \ | \ \sigma_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij})}.
-$$
-In the above, the first term in the numerator is defined by the selective reporting process and the second term is defined by the evidence-generating process. 
+Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. 
+The package includes two different forms of selection functions: step functions and beta-density functions.
 
-@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, we have steps $\alpha_1,...,\alpha_H$ and 
+@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, suppose that there are $H$ steps, $\alpha_1,...,\alpha_H$, and that 
 $$
 \text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
 1 & \text{if} & p_{ij} < \alpha_1 \\ 
@@ -91,17 +88,24 @@ $$
 \exp(\zeta_H) & \text{if} & \alpha_H \leq p_{ij}.
 \end{cases}
 $$
-The selection parameters $\zeta_1,...,\zeta_H$ control the probabilities of selection given a p-value, with parameter $\zeta_h$ defined as the log of the probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, relative to the probability than effect size estimate is observe, given that its p-value is in the range $[0, \alpha_1)$. 
-We use log-transformed probabilities so that the parameter space is unrestricted, $-\infty < \zeta_h < +\infty$ for $h=1,...,H$; $\zeta_1 = \cdots = \zeta_H = 0$ therefore describes a process where effect sizes are reported with uniform probability, regardless of their statistical significance level.
+The selection parameters $\zeta_1,...,\zeta_H$ control the probabilities of selection given a p-value, with parameter $\zeta_h$ defined as the log of the probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, relative to the probability than an effect size estimate is observed, given that its p-value is in the range $[0, \alpha_1)$. 
+The model is specified in terms of log-transformed relative probabilities so that the parameter space is unrestricted, $-\infty < \zeta_h < +\infty$ for $h=1,...,H$. 
+Consequently, $\zeta_1 = \cdots = \zeta_H = 0$ describes a process where effect sizes are reported with uniform probability, regardless of their statistical significance level.
 
 In practice, meta-analysts will often use only a small number of steps in the selection model. 
-One common choice is the three-parameter selection model, which has a single step at $\alpha = .025$. With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < .05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
+One common choice is the three-parameter selection model, which has a single step at $\alpha_1 = .025$. With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < .05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
 Another possibility is to use two steps at $\alpha_1 = .025$ and $\alpha_2 = .500$, which allows for different probabilities of selection for effects that are positive but not statistically significant and effects that are negative (i.e., in the opposite the intended direction). 
 We call the latter model a four-parameter selection model.
 
 <!-- Martyna, can you add a paragraph on the beta function model? -->
 
 ## Estimation
+
+The distribution of observed effect sizes then corresponds to 
+$$
+\text{Pr}(Y_{ij} = y \ | \ O_{ij} = 1) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}) \times \text{Pr}(Y_{ij} = y \ | \ \sigma_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij})}.
+$$
+In the above, the first term in the numerator is defined by the selective reporting process and the second term is defined by the evidence-generating process. 
 
 ## Cluster-robust variance estimation
 
