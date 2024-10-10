@@ -44,11 +44,11 @@ Combining the selection models with cluster-bootstrapping leads to confidence in
 
 # P-Value Selection Models
 
-P-value selection models are a general set of methods that correct for selective reporting by modeling the process by which the effect size estimates are reported [@Rothstein2005publication]. 
-Selection models have two components: a model describing the evidence generation process and model describing the selection process.
-The `metaselection` package implements a very flexible class of selection models, in which the evidence-generating process follows a random effects location-scale model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
+P-value selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication]. 
+Such models have two components: a set of assumptions describing the evidence-generation process and a set of assumptions describing the selection process.
+The `metaselection` package implements a flexible class of selection models, in which the evidence-generating process follows a random effects location-scale meta-regression model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
 Step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea1995general]. 
-The beta-density model uses a different selection function, based on a beta distribution, to capture complex patterns of selection [@Citkowicz2017parsimonious]. 
+The beta-density model uses a different selection function, based on a beta distribution, to capture distinctive, more smoothly varying patterns of selection [@Citkowicz2017parsimonious]. 
 
 Consider a meta-analytic dataset with a total of $J$ studies, where study $j$ includes $k_j$ effect size estimates. 
 Let $Y_{ij}$ denote an effect size estimate produced by a study, prior to selective reporting. 
@@ -60,11 +60,11 @@ Finally, let $p_{ij}$ be the one-sided p-value corresponding to the effect size 
 
 ## The evidence-generating process
 
-The model for the evidence-generating process is a random effects location-scale model, in which
+The model for the evidence-generating process is a random effects location-scale meta-regression model, in which
 $$
 Y_{ij} = \mathbf{x}_{ij} \boldsymbol\beta + v_{ij} + e_{ij},
 $$
-where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_i$ is a normally distributed sampling error with mean zero and known variance $\sigma^{*2}_{ij}$. 
+where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_{ij}$ is a normally distributed sampling error with mean zero and known variance $\sigma^{2}_{ij}$. 
 The variance of the random effects is modeled as
 $$
 \log\left(\tau_{ij}^{2}\right) = \mathbf{u}_{ij} \boldsymbol\gamma,
@@ -72,7 +72,7 @@ $$
 where $\boldsymbol\gamma$ is a $u \times 1$ vector of coefficients that relate the predictors to the degree of marginal variation in the random effects.
 If the model does not include predictors of heterogeneity, then $\mathbf{u}_{ij} = 1$ and the model reduces to a conventional random effects meta-regression in which $\gamma = \log(\tau^2)$.
 
-## The selective reporting process
+## Selective reporting processes
 
 The selective reporting process is defined by a selection function, which specifies how the probability that a given effect size estimate is reported varies depending on its $p$-value. 
 Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observed. 
