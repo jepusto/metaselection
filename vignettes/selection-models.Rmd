@@ -1,5 +1,5 @@
 ---
-title: "P-Value Selection Models for Meta-Analysis with Dependent Effects"
+title: "Selection Models for Meta-Analysis with Dependent Effects"
 author:
   - James E. Pustejovsky
   - Megha Joshi
@@ -192,13 +192,44 @@ ggplot(dat, aes(x = pvals)) +
   theme_minimal() + 
   labs(x = "p-value (one-sided)", y = "Selection probability")
 ```
+
+In the package, the beta-density function is parameterized in terms of $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,2$. 
+With this parameterization, $\zeta_1 = \zeta_2 = 0$ describes a process where effect sizes are reported with uniform probability regardless of their statistical significance levels.
+
 ## Estimation
 
-The distribution of observed effect sizes then corresponds to 
+The combination of assumptions about the evidence-generating process and assumptions about the selection process implies a distribution for the observed effect sizes. 
+The evidence-generating process describes the distribution $\text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ and the selection process specifies $\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$.
+The distribution of observed effect size estimates then corresponds to 
 $$
-\text{Pr}(Y_{ij} = y \ | \ O_{ij} = 1) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}) \times \text{Pr}(Y_{ij} = y \ | \ \sigma_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij})}.
+\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y_{ij},\sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) \times \text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})}.
 $$
-In the above, the first term in the numerator is defined by the selective reporting process and the second term is defined by the evidence-generating process. 
+The distribution of observed effect sizes depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$. 
+
+The `metaselection` package implements two different estimation strategies: composite maximum likelihood and hybrid estimating equations. In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent. Denoting the log likelihood of observation $i$ from sample $j$ as $\mathcal{l}_C(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) = \log \text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, the composite log-likelihood is
+$$
+\mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} \mathcal{l}_C(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}).
+$$
+The composite maximum likelihood estimator is then taken to be the parameter values that maximize $\mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right)$. 
+
+An alternative estimation strategy, hybrid estimating equations, defines the parameter estimator as the solution to a set of mean-zero estimating equations. We consider a strategy where the selection parameters are estimated using the same score equations as the composite maximum likelihood estimator, but where the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the data-generating process, with weights equal to the inverse probability of selection. This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori. Here, we apply the strategy to jointly estimate the meta-regression, scale regression, and selection parameters. 
+
+Let $\mathcal{l}_E(\boldsymbol\beta, \boldsymbol\gamma, | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ be the log-likelihood of observation $i$ from sample $j$ based on the evidence-generating process. Let $w_{ij}(\boldsymbol\zeta) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y_{ij},\sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ be the selection probability for observation $i$ from sample $j$, which depends on the selection parameters but not on the other model parameters. The inverse-selection-weighted log likelihood is then 
+$$
+\mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{1}{w_{ij}(\boldsymbol\zeta)}\mathcal{l}_E(\boldsymbol\beta, \boldsymbol\gamma | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}).
+$$
+Given $\boldsymbol\zeta$, $\mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right)$ is maximized when its first derivatives with respect to $\boldsymbol\beta$ and $\boldsymbol\gamma$ are zero, so that
+$$
+\begin{aligned}
+\frac{\partial}{\partial \boldsymbol\beta} \mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) &= \mathbf{0} \\
+\frac{\partial}{\partial \boldsymbol\gamma} \mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) &= \mathbf{0}.
+\end{aligned}
+$$
+To identify the selection parameters, we use the derivative of the composite log likelihood, based on the assumptions of both the evidence-generating process and the selection process: 
+$$
+\frac{\partial}{\partial \boldsymbol\zeta} \mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \mathbf{0}.
+$$
+
 
 ## Cluster-robust variance estimation
 
