@@ -1,0 +1,16 @@
+Let $\mathcal{l}_E(\boldsymbol\beta, \boldsymbol\gamma, | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ be the log-likelihood of observation $i$ from sample $j$ based on the evidence-generating process. Let $w_{ij}(\boldsymbol\zeta) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y_{ij},\sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ be the selection probability for observation $i$ from sample $j$, which depends on the selection parameters but not on the other model parameters. The inverse-selection-weighted log likelihood is then 
+$$
+\mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{1}{w_{ij}(\boldsymbol\zeta)}\mathcal{l}_E(\boldsymbol\beta, \boldsymbol\gamma | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}).
+$$
+Given $\boldsymbol\zeta$, $\mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right)$ is maximized when its first derivatives with respect to $\boldsymbol\beta$ and $\boldsymbol\gamma$ are zero, so that
+$$
+\begin{aligned}
+\frac{\partial}{\partial \boldsymbol\beta} \mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) &= \mathbf{0} \\
+\frac{\partial}{\partial \boldsymbol\gamma} \mathcal{l}_E\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) &= \mathbf{0}.
+\end{aligned}
+$$
+To identify the selection parameters, we use the derivative of the composite log likelihood, based on the assumptions of both the evidence-generating process and the selection process: 
+$$
+\frac{\partial}{\partial \boldsymbol\zeta} \mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \mathbf{0}.
+$$
+
