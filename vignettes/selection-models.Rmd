@@ -236,13 +236,36 @@ Consequently, it should be emphasized that CRVE methods are the package's defaul
 
 For composite maximum likelihood estimators, CRVE matrices can be computed using the score (first derivative) and Hessian (second derivative) of the likelihood. Denoting the full parameter vector by $\boldsymbol\theta = (\boldsymbol\beta', \boldsymbol\gamma', \boldsymbol\zeta')'$ and the corresponding maximum likelihood estimator as $\boldsymbol{\hat\theta}$, the score contribution of sample $j$ is 
 $$
-\mathbf{S}_j = \sum_{i=1}^{k_j} \frac{\partial}{\partial \boldsymbol\theta} \mathcal{l}_C \left(\boldsymbol\theta | \ y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij} \right)
+\mathbf{S}_j(\boldsymbol\theta) = \sum_{i=1}^{k_j} \frac{\partial\ \mathcal{l}_C \left(\boldsymbol\theta | \ y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij} \right)}{\partial \boldsymbol\theta}
 $$
+and the Hessian contribution of sample $j$ is 
+$$
+\mathbf{H}_j(\boldsymbol\theta) = \frac{\partial\ \mathbf{S}_j(\boldsymbol\theta)}{\partial \boldsymbol\theta'}.
+$$
+The CRVE matrix is computed as
+$$
+\mathbf{V}^{CR} = \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1} \left(\sum_{j=1}^J \mathbf{S}_j(\boldsymbol{\hat\theta}) \mathbf{S}_j'(\boldsymbol{\hat\theta}) \right) \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1},
+$$
+where the score and Hessian contributions are evaluated at the composite maximum likelihood estimates. 
+With a sufficiently large number of independent samples, confidence intervals for model parameters can be constructed using Wald test statistics. For example, a large-sample, $1 - \alpha$ confidence interval for $\beta_q$ is given by
+$$
+\hat\beta_q \pm \Phi^{-1}(1 - \alpha / 2) \times \sqrt{V^{CR}_{\beta q}},
+$$
+where $V^{CR}_{\beta q}$ is the diagonal entry of $\mathbf{V}^{CR}$ corresponding to $\hat\beta_q$.
+Very similar methods are implemented to obtain standard errors with the hybrid estimating equations approach.
 
 ## Bootstrapped Confidence Intervals
 
-To improve confidence interval coverage, X (2025) also examined bootstrapping the selection models to obtain the confidence intervals. 
+An alternative to CRVE is to use bootstrap re-sampling methods to quantify uncertainty in parameter estimates. 
 Bootstrapping involves re-sampling many times from the original data to create an empirical distribution that can be use in place of the sampling distribution to estimate measures of uncertainty [@boos2003introduction]. 
+With dependent data structures, entire clusters of observations are re-sampled so that each bootstrapped dataset includes dependent observations, emulating the structure of the original dataset. 
+In the implementation in the `metaselection` package, this approach is called a multinomial bootstrap. 
+The package also implements a different variation of bootstrapping, known as the fractional random weight bootstrap [@xu2020applications] or Bayesian bootstrap [@rubin1981bayesian; @newton1994approximate].
+This variation involves assigning a random weight to each cluster of dependent observations, where the weights are simulated from an exponential distribution with mean 1.
+
+Several different methods confidence 
+To improve confidence interval coverage, X (2025) also examined bootstrapping the selection models to obtain the confidence intervals. 
+
 X (2025) examined variations of bootstrapping approaches combined with different confidence interval calculations. 
 The results showed that regular cluster bootstrapping with percentile confidence intervals performed the best. 
 The modified selection models combined with this bootstrapping led to close to nominal coverage rates.  
