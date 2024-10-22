@@ -41,7 +41,7 @@ Meta-analysts now have access to an array of methods for summarizing and modelin
 <!-- Another sentence on limitations of regression adjustment methods? -->
 
 The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes. In particular, the package provides methods for investigating and accounting for selective reporting based on selection models, where prior developments were limited to data with independent effect sizes.
-The package implements two distinct methods to account for dependent effect sizes, using either cluster-robust variance estimation (i.e., sandwich estimation) or clustered bootstrapping techniques. 
+The package implements two distinct methods to account for dependent effect sizes, using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping techniques. 
 Simulation results show that applying selection models to dependent effect size estimates leads to low bias in the estimate of the overall effect size. 
 Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates. 
 
@@ -50,7 +50,7 @@ Combining the selection models with cluster-bootstrapping leads to confidence in
 Selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication]. 
 Such models have two components: a set of assumptions describing the evidence-generation process and a set of assumptions describing the selection process.
 The `metaselection` package implements a flexible class of selection models, in which the evidence-generating process follows a random effects location-scale meta-regression model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided p-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
-Step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea1995general]. 
+The step function model involves specifying steps which categorize the p-values into intervals that have different probabilities of selection [@vevea1995general]. 
 The beta-density model uses a different selection function, based on a beta distribution, to capture distinctive, more smoothly varying patterns of selection [@Citkowicz2017parsimonious]. 
 
 Consider a meta-analytic dataset with a total of $J$ samples, where study $j$ includes $k_j$ effect size estimates. 
@@ -95,7 +95,7 @@ $$
 \lambda_H & \text{if} & \alpha_H \leq p_{ij}.
 \end{cases}
 $$
-The selection parameters $\lambda_1,...,\lambda_H$ control the probabilities of selection given a p-value, with parameter $\lambda_h$ defined as the relative probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, compared to the probability than an effect size estimate is observed, given that its p-value is in the range $[0, \alpha_1)$. 
+The selection parameters $\lambda_1,...,\lambda_H$ control the probabilities of selection given a p-value, with parameter $\lambda_h$ defined as the relative probability that an effect size estimate is observed, given that its p-value is in the range $[\alpha_h, \alpha_{h+1})$, compared to the probability that an effect size estimate is observed, given that its p-value is in the range $[0, \alpha_1)$. 
 The model is estimated in terms of log-transformed relative probabilities so that the parameter space is unrestricted, with $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,...,H$. 
 With this parameterization, $\zeta_1 = \cdots = \zeta_H = 0$ describes a process where effect sizes are reported with uniform probability regardless of their statistical significance levels.
 
@@ -226,7 +226,7 @@ However, this approach is predicated on the assumption that the effect size esti
 
 [^model-based]: The `metaselection` package also provides standard errors based on the inverse of the observed Fisher information matrix, which are valid when effect size estimates are mutually independent. These can be obtained by setting `vcov_type = 'model-based' in  the call to `selection_model()`.
 
-For meta-regression models that do not account for selective reporting problems, @Hedges2010robust proposed to use cluster-robust variance estimation (CRVE) methods (also known as sandwich estimators) that accommodate dependent effect sizes, even if the exact dependence structure is not correctly specified. The form of CRVE originally described in @Hedges2010robust is based on large-sample approximations and requires a relatively large number of independent samples (each of which might have multiple effect size estimates) to function well. 
+For meta-regression models that do not account for selective reporting problems, @Hedges2010robust proposed to use CRVE methods (also known as sandwich estimators) that accommodate dependent effect sizes, even if the exact dependence structure is not correctly specified. The form of CRVE originally described in @Hedges2010robust is based on large-sample approximations and requires a relatively large number of independent samples (each of which might have multiple effect size estimates) to function well. 
 Subsequent work developed small-sample refinements to CRVE, including adjustments to hypothesis tests and confidence intervals based on CRVE, which are accurately calibrated even for datasets that include a small number of independent clusters [@tipton2015small; @tiptonpusto2015small].
 
 CRVE methods can also be applied to selection models in order to quantify uncertainty in parameter estimates obtained by composite maximum likehood or hybrid estimating equations.
@@ -270,7 +270,8 @@ The `metaselection` package implements three different techniques, following the
 * The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate, so that the interval has end-points corresponding to $2 \times \hat\beta_f - q\left(1 - \frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$ and $2 \times \hat\beta_f - q\left(\frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$. 
 * The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. It has endpoints $\hat\beta_f - SE_f \times q\left(1  - \frac{\alpha}{2}; t^{(b)}\right)$ and $\hat\beta_f - SE_f \times q\left(\frac{\alpha}{2}; t^{(b)}\right)$, where $t^{(b)} = \frac{\hat\beta_f^{(b)} - \hat\beta_f}{SE_f^{(b)}}$ is the t statistic from a bootstrap replicate, taking the original point estimator as the null. 
 
-Of these three methods, our simulation results indicate that the percentile method provides confidence intervals with coverage rates that are close to nominal levels. It is therefore the recommended method.
+
+Our simulation results indicate that bootstrap confidence intervals, particularly using the multinomial bootstrap approach with percentile confidence intervals, leads to coverage rates that are close to nominal levels whereas the coverage rates provided by the CRVE method are below nominal. We highly recommend using the multinomial bootstrap with the percentile confidence intervals. 
 
 Bootstrap confidence intervals require re-estimating the selection model and re-calculating parameter estimates on each re-sampled dataset, which is a computationally demanding process.
 Furthermore, obtaining accurate confidence intervals requires using a relatively large number of bootstrap replications [@davidson2000bootstrap]; using an insufficient number will produce confidence intervals that are too narrow and have below-nominal coverage. 
@@ -299,8 +300,8 @@ dat.lehmann2018$esid <- 1:nrow(dat.lehmann2018)
 
 ## Prelminary Analysis 
 
-As a point of comparison, we first run an analysis that ignores the possibility of selective reporting bias but accounts for the dependence structure of the effect sizes using a correlated-and-heirarchical effects working model and cluster-robust variance estimation [@pustejovsky2022preventionscience]. 
-The following code first creates a sampling variance-covariance matrix assuming that effect size estimates from the same study have sampling errors that are correlated at 0.8. It then fits a correlated-and-heirarchical effects working model and applies robust variance estimation, clustering by study.
+As a point of comparison, we first run an analysis that ignores the possibility of selective reporting bias but accounts for the dependence structure of the effect sizes using a correlated-and-hierarchical effects (CHE) working model and CRVE [@pustejovsky2022preventionscience]. 
+The following code first creates a sampling variance-covariance matrix assuming that effect size estimates from the same study have sampling errors that are correlated at 0.8. It then fits a CHE working model and applies robust variance estimation, clustering by study.
 
 ```{r CHE}
 library(metafor)
@@ -339,7 +340,7 @@ Next, we examine how this average effect size estimate differs from the estimate
 The primary function for fitting p-value selection models is `selection_model()`. 
 In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function. 
 We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`. 
-We indicate that we want to estimate a `"step"` selection model and specify a single step at .025 by setting  `step = 0.025`. By default, the function fits the model using composite maximum likelihood estimation and calculates standard errors and confidence intervals using cluster-robust variance estimation.
+We indicate that we want to estimate a `"step"` selection model and specify a single step at .025 by setting  `step = 0.025`. By default, the function fits the model using composite maximum likelihood estimation and calculates standard errors and confidence intervals using CRVE.
 
 ```{r 3PSM}
 library(metaselection)
