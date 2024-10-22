@@ -366,7 +366,13 @@ The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est
 The selection parameter is now called `lambda_1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided p-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
 The selection parameter estimate is quite imprecise, with a 95% confidence interval of `r round(exp(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="zeta1"]), 3)`, which includes the value $\lambda_1 = 1$ corresponding to no selective reporting.
 
-The `metaselection` package provides a function `selection_plot()` to visualize the estimated selection weights:
+For more detailed information about the results, the `metaselection` package also provides a `summary()` function which also includes the `transf_gamma` and `transf_zeta` arguments:
+```{r}
+summary(mod_3PSM, transf_gamma = TRUE, transf_zeta = TRUE)
+```
+
+
+Furthermore, the `metaselection` package provides a function `selection_plot()` to visualize the estimated selection weights:
 
 ```{r 3PSM-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
 selection_plot(mod_3PSM)
