@@ -18,7 +18,7 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/selection_models.html">P-Value Selection Models for Meta-Analysis with Dependent Effects</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/selection-models.html">Selection Models for Meta-Analysis with Dependent Effects</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -41,9 +41,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="selection-model">Selection Model<a class="anchor" aria-label="anchor" href="#selection-model"></a></h2>
+      <h2 id="model-fitting">Model-Fitting<a class="anchor" aria-label="anchor" href="#model-fitting"></a></h2>
 
-      <div class="section-desc"><p>Functions to fit and evaluate selection models with RVE and cluster bootstrapping</p></div>
+      <div class="section-desc"><p>Functions to fit and evaluate selection models with robust variance estimation or cluster bootstrapping</p></div>
 
 
     </div><div class="section level2">
@@ -82,9 +82,38 @@
         </dt>
         <dd>Summarize results from <code>selmodel()</code></dd>
       </dl></div><div class="section level2">
-      <h2 id="data-generation">Data Generation<a class="anchor" aria-label="anchor" href="#data-generation"></a></h2>
+      <h2 id="example-datasets">Example Datasets<a class="anchor" aria-label="anchor" href="#example-datasets"></a></h2>
 
-      <div class="section-desc"><p>Functions to generate meta-analytic data with options options to simulate selective outcome reporting</p></div>
+      <div class="section-desc"><p>Example datasets from published meta-analyses and one dataset containing a distribution of primary study characteristics</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="self_control.html">self_control</a></code>
+
+        </dt>
+        <dd>Self-Control Training Meta-Analysis</dd>
+      </dl><dl><dt>
+
+          <code><a href="interleaved_learning.html">interleaved_learning</a></code>
+
+        </dt>
+        <dd>Interleaved Learning Meta-Analysis</dd>
+      </dl><dl><dt>
+
+          <code><a href="wwc_es.html">wwc_es</a></code>
+
+        </dt>
+        <dd>What Works Clearinghouse sample size and effect size distribution data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-simulation">Data Simulation<a class="anchor" aria-label="anchor" href="#data-simulation"></a></h2>
+
+      <div class="section-desc"><p>Functions to simulate meta-analytic data, including data subject to selective outcome reporting</p></div>
 
 
     </div><div class="section level2">
@@ -122,42 +151,13 @@
 
         </dt>
         <dd>Simulate empirical distribution of sample size and number of effect sizes</dd>
-      </dl></div><div class="section level2">
-      <h2 id="example-datasets">Example Datasets<a class="anchor" aria-label="anchor" href="#example-datasets"></a></h2>
-
-      <div class="section-desc"><p>Two example datasets from real meta-analyses and one dataset containing distribution of sample sizes and effect sizes</p></div>
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="self_control.html">self_control</a></code>
-
-        </dt>
-        <dd>Self-Control Training Meta-Analysis</dd>
-      </dl><dl><dt>
-
-          <code><a href="interleaved_learning.html">interleaved_learning</a></code>
-
-        </dt>
-        <dd>Interleaved Learning Meta-Analysis</dd>
-      </dl><dl><dt>
-
-          <code><a href="wwc_es.html">wwc_es</a></code>
-
-        </dt>
-        <dd>What Works Clearinghouse sample size and effect size distribution data</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://www.jepusto.com/" class="external-link">James Pustejovsky</a>, <a href="https://meghapsimatrix.com/" class="external-link">Megha Joshi</a>.</p>
+  <p>Developed by James Pustejovsky, <a href="https://meghapsimatrix.com/" class="external-link">Megha Joshi</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
