@@ -45,6 +45,13 @@ The package implements two distinct methods to account for dependent effect size
 Simulation results show that applying selection models to dependent effect size estimates leads to low bias in the estimate of the overall effect size. 
 Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates. 
 
+Several existing packages provide implementations of selection models assuming that effect size estimates are independent.
+The `metafor` package [@metafor] includes the `selmodel()` function, which allows users to fit many different types of selection models.
+The `weightr` package [@weightr] includes functions to estimate a class of p-value selection models described in @vevea1995.
+However, the functions available in these packages can only be applied to meta-analytic data assuming that the effect sizes are independent.
+In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
+However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
+
 # Selection Models
 
 Selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication]. 
