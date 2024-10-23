@@ -4,9 +4,9 @@
 \name{metaselection-package}
 \alias{metaselection}
 \alias{metaselection-package}
-\title{metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors}
+\title{metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates}
 \description{
-Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, providing standard errors and confidence intervals based on either cluster-robust variance estimators (i.e., sandwich estimators) or cluster-level bootstrapping. Supported models include generalizations of the step-function selection model as proposed by Vevea and Hedges (1995) \doi{10.1007/BF02294384} and the beta-function selection model as proposed by Citkowicz and Vevea (2017) \doi{10.1037/met0000119}.
+Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, providing standard errors and confidence intervals based on either cluster-robust variance estimators (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates. Supported models include generalizations of the step-function selection model as proposed by Vevea and Hedges (1995) \doi{10.1007/BF02294384} and the beta-function selection model as proposed by Citkowicz and Vevea (2017) \doi{10.1037/met0000119}.
 }
 \seealso{
 Useful links:

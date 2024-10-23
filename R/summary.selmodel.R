@@ -19,11 +19,12 @@
 #'   bootstrap = "none"
 #' )
 #' 
-#' summary(res_ML, transf_gamma = TRUE, transf_zeta = TRUE)
+#' summary(res_ML)
+#' summary(res_ML, transf_gamma = FALSE, transf_zeta = FALSE)
 
 
 
-summary.selmodel <- function(object, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
+summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...) {
   
   # title -------------------------------------------------------------------
   

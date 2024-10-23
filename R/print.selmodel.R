@@ -4,8 +4,8 @@
 #' 
 #' 
 #' @param x Fitted model of class \code{"selmodel"}.
-#' @param transf_gamma logical with `TRUE` indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
-#' @param transf_zeta logical with `TRUE` indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
+#' @param transf_gamma logical with `TRUE` (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
+#' @param transf_zeta logical with `TRUE` (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
 #' @param digits Minimum number of significant digits to be used, with a default of 3.
 #' @param ... further arguments passed to \code{print.data.frame()}.
 #'
@@ -22,12 +22,13 @@
 #'   bootstrap = "none"
 #' )
 #' 
-#' print(res_ML, transf_gamma = TRUE, transf_zeta = TRUE)
-#' 
+#' print(res_ML)
+#' print(res_ML, transf_gamma = FALSE, transf_zeta = FALSE)
+#'  
 
 
 
-print.selmodel <- function(x, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...) {
+print.selmodel <- function(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...) {
   
   estimates <- x$est
   
