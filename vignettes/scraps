@@ -14,3 +14,24 @@ $$
 \frac{\partial}{\partial \boldsymbol\zeta} \mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \mathbf{0}.
 $$
 
+For composite maximum likelihood estimators, CRVE matrices can be computed using the score (first derivative) and Hessian (second derivative) of the likelihood. Denoting the full parameter vector by $\boldsymbol\theta = (\boldsymbol\beta', \boldsymbol\gamma', \boldsymbol\zeta')'$ and the corresponding maximum likelihood estimator as $\boldsymbol{\hat\theta}$, the score contribution of sample $j$ is 
+$$
+\mathbf{S}_j(\boldsymbol\theta) = \sum_{i=1}^{k_j} \frac{\partial\ \mathcal{l}_C \left(\boldsymbol\theta | \ y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij} \right)}{\partial \boldsymbol\theta}
+$$
+and the Hessian contribution of sample $j$ is 
+$$
+\mathbf{H}_j(\boldsymbol\theta) = \frac{\partial\ \mathbf{S}_j(\boldsymbol\theta)}{\partial \boldsymbol\theta'}.
+$$
+The CRVE matrix is computed as
+$$
+\mathbf{V}^{CR} = \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1} \left(\sum_{j=1}^J \mathbf{S}_j(\boldsymbol{\hat\theta}) \mathbf{S}_j'(\boldsymbol{\hat\theta}) \right) \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1},
+$$
+where the score and Hessian contributions are evaluated at the composite maximum likelihood estimates. 
+
+
+
+For a meta-regression coefficient $\beta_f$, let $\hat\beta_f$ denote the point estimator, $SE_f$ denote its robust standard error, $\hat\beta_f^{(b)}$ denote a bootstrap replicate of the estimator, and $q(\alpha; \hat\beta_f^{(b)})$ denote the $\alpha$ quantile of $\hat\beta_f^{(1)},...,\hat\beta_f^{(B)}$. The methods used to construct a $1 - \alpha$ confidence interval are as follows:
+
+* The percentile  confidence interval (`CI_method = "percentile"`) simply takes quantiles of the bootstrap distribution, $q\left(\frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$ and $q\left(1 - \frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$. 
+* The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate, so that the interval has end-points corresponding to $2 \times \hat\beta_f - q\left(1 - \frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$ and $2 \times \hat\beta_f - q\left(\frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$. 
+* The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. It has endpoints $\hat\beta_f - SE_f \times q\left(1  - \frac{\alpha}{2}; t^{(b)}\right)$ and $\hat\beta_f - SE_f \times q\left(\frac{\alpha}{2}; t^{(b)}\right)$, where $t^{(b)} = \frac{\hat\beta_f^{(b)} - \hat\beta_f}{SE_f^{(b)}}$ is the t statistic from a bootstrap replicate, taking the original point estimator as the null. 

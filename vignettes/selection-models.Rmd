@@ -188,19 +188,10 @@ With this parameterization, $\zeta_1 = \zeta_2 = 0$ describes a process where ef
 
 The combination of assumptions about the evidence-generating process and assumptions about the selection process implies a marginal distribution for the observed effect sizes. 
 The evidence-generating process describes the distribution $\text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ and the selection process specifies $\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$.
-The distribution of observed effect size estimates then corresponds to 
-$$
-\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) = \frac{\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y_{ij},\sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) \times \text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})}{\text{Pr}(O_{ij} = 1 \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})}.
-$$
-The distribution of observed effect sizes depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$. 
+The distribution of observed effect size estimates then corresponds to $\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, which depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$. 
 
-The `metaselection` package implements two different estimation strategies: composite maximum likelihood and hybrid estimating equations. In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent. Denoting the log likelihood of observation $i$ from sample $j$ as $\mathcal{l}_C(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}) = \log \text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, the composite log-likelihood is
-$$
-\mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} \mathcal{l}_C(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta | y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij}).
-$$
-The composite maximum likelihood estimator is then taken to be the parameter values that maximize $\mathcal{l}_C\left(\boldsymbol\beta, \boldsymbol\gamma, \boldsymbol\zeta\right)$. 
-
-An alternative estimation strategy, hybrid estimating equations, defines the parameter estimator as the solution to a set of mean-zero estimating equations. In this approach, the selection parameters are estimated using their score equations, just as in the composite maximum likelihood estimator. Unlike the composite maximum likelihood strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the data-generating process, with weights equal to the inverse probability of selection. This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori. In constrast, the `metaselection` package implementation applies the strategy to jointly estimate the meta-regression, scale regression, and selection parameters. 
+The `metaselection` package implements two different estimation strategies: composite maximum likelihood and hybrid estimating equations. In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent. 
+An alternative estimation strategy, hybrid estimating equations, defines the parameter estimator as the solution to a set of mean-zero estimating equations. The selection parameters are estimated using their score equations, just as in the composite maximum likelihood estimator. Unlike the composite maximum likelihood strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the data-generating process, with weights equal to the inverse probability of selection. This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori. The implementation in the `metaselection` package uses the strategy to jointly estimate the meta-regression, scale regression, and selection parameters. 
 
 ## Cluster-robust variance estimation
 
@@ -217,26 +208,7 @@ CRVE methods can also be applied to selection models in order to quantify uncert
 The `metaselection` package provides standard errors and confidence intervals based on CRVE methods by default. 
 The implementation is similar to the original, large-sample CRVE methods described by @Hedges2010robust; the subsequently developed small-sample refinements are not currently available for selection models. 
 It is important to bear in mind that CRVE methods are the default not because they are the best available method, but rather because they are computationally convenient and quicker to compute compared to bootstrap-based methods.
-
-For composite maximum likelihood estimators, CRVE matrices can be computed using the score (first derivative) and Hessian (second derivative) of the likelihood. Denoting the full parameter vector by $\boldsymbol\theta = (\boldsymbol\beta', \boldsymbol\gamma', \boldsymbol\zeta')'$ and the corresponding maximum likelihood estimator as $\boldsymbol{\hat\theta}$, the score contribution of sample $j$ is 
-$$
-\mathbf{S}_j(\boldsymbol\theta) = \sum_{i=1}^{k_j} \frac{\partial\ \mathcal{l}_C \left(\boldsymbol\theta | \ y_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij} \right)}{\partial \boldsymbol\theta}
-$$
-and the Hessian contribution of sample $j$ is 
-$$
-\mathbf{H}_j(\boldsymbol\theta) = \frac{\partial\ \mathbf{S}_j(\boldsymbol\theta)}{\partial \boldsymbol\theta'}.
-$$
-The CRVE matrix is computed as
-$$
-\mathbf{V}^{CR} = \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1} \left(\sum_{j=1}^J \mathbf{S}_j(\boldsymbol{\hat\theta}) \mathbf{S}_j'(\boldsymbol{\hat\theta}) \right) \left(\sum_{j=1}^J \mathbf{H}_j(\boldsymbol{\hat\theta})\right)^{-1},
-$$
-where the score and Hessian contributions are evaluated at the composite maximum likelihood estimates. 
-With a sufficiently large number of independent samples, confidence intervals for model parameters can be constructed using Wald test statistics. For example, a large-sample, $1 - \alpha$ confidence interval for $\beta_f$ is given by
-$$
-\hat\beta_f \pm \Phi^{-1}(1 - \alpha / 2) \times \sqrt{V^{CR}_{\beta f}},
-$$
-where $V^{CR}_{\beta f}$ is the diagonal entry of $\mathbf{V}^{CR}$ corresponding to $\hat\beta_f$.
-Very similar methods are implemented to obtain standard errors with the hybrid estimating equations approach.
+With a sufficiently large number of independent samples, confidence intervals for model parameters can be constructed using large-sample normal approximations. 
 
 ## Bootstrapped confidence intervals
 
@@ -248,12 +220,11 @@ The package also implements a different variation of bootstrapping, known as the
 This variation involves assigning a random weight to each cluster of dependent observations, where the weights are simulated from an exponential distribution with mean 1. 
 
 Several different methods can be used to construct confidence intervals from a bootstrap distribution [@davison1997bootstrap], which use various approximations and therefore vary in the accuracy of their coverage levels.
-The `metaselection` package implements three different techniques, following the same methods and terminology as in the `boot` package [@boot]. For a meta-regression coefficient $\beta_f$, let $\hat\beta_f$ denote the point estimator, $SE_f$ denote its robust standard error, $\hat\beta_f^{(b)}$ denote a bootstrap replicate of the estimator, and $q(\alpha; \hat\beta_f^{(b)})$ denote the $\alpha$ quantile of $\hat\beta_f^{(1)},...,\hat\beta_f^{(B)}$. The methods used to construct a $1 - \alpha$ confidence interval are as follows:
+The `metaselection` package implements three different techniques, following the same methods and terminology as in the `boot` package [@boot]:
 
-* The percentile  confidence interval (`CI_method = "percentile"`) simply takes quantiles of the bootstrap distribution, $q\left(\frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$ and $q\left(1 - \frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$. 
-* The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate, so that the interval has end-points corresponding to $2 \times \hat\beta_f - q\left(1 - \frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$ and $2 \times \hat\beta_f - q\left(\frac{\alpha}{2}; \hat\beta_f^{(b)}\right)$. 
-* The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. It has endpoints $\hat\beta_f - SE_f \times q\left(1  - \frac{\alpha}{2}; t^{(b)}\right)$ and $\hat\beta_f - SE_f \times q\left(\frac{\alpha}{2}; t^{(b)}\right)$, where $t^{(b)} = \frac{\hat\beta_f^{(b)} - \hat\beta_f}{SE_f^{(b)}}$ is the t statistic from a bootstrap replicate, taking the original point estimator as the null. 
-
+* The percentile  confidence interval (`CI_method = "percentile"`) is based on quantiles of the bootstrap distribution. 
+* The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate. 
+* The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. 
 
 Our simulation results indicate that bootstrap confidence intervals, particularly using the multinomial bootstrap approach with percentile confidence intervals, leads to coverage rates that are close to nominal levels whereas the coverage rates provided by the CRVE method are below nominal. We highly recommend using the multinomial bootstrap with the percentile confidence intervals. 
 
