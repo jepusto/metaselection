@@ -473,7 +473,9 @@ bootstrap_selmodel <- function(
 
 #' @title Estimate step or beta selection model
 #'
-#' @description Estimate step or beta selection model
+#' @description Estimate step or beta selection model, with standard errors and
+#'   confidence intervals based on either cluster-robust variance estimators
+#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates.
 #'
 #'
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic

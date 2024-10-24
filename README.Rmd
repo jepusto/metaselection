@@ -78,12 +78,12 @@ print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 
 We want to recognize other packages that provide functions to selection modeling.
 
-Several existing packages provide tools for estimating selection models assuming that effects are independent.
+Several existing packages provide implementations of selection models assuming that effect size estimates are independent.
 The `metafor` package [@metafor] includes the `selmodel()` function, which allows users to fit many different types of selection models.
 The `weightr` package [@weightr] includes functions to estimate a class of p-value selection models described in @vevea1995.
-However, the functions available in these packages can only be applied to meta-analytic data assuming that the effects are independent.
-In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate robust variance estimation methods for handling dependent effect sizes.
-However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of the step-function model, and do not allow consideration of more complex forms of selection functions.
+However, the functions available in these packages can only be applied to meta-analytic data assuming that the effect sizes are independent.
+In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
+However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
 
 ## Acknowledgements
 

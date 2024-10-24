@@ -4,14 +4,14 @@
 \alias{summary.selmodel}
 \title{Summarize results from \code{selmodel()}}
 \usage{
-\method{summary}{selmodel}(object, transf_gamma = FALSE, transf_zeta = FALSE, digits = 3, ...)
+\method{summary}{selmodel}(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 }
 \arguments{
 \item{object}{Fitted model of class \code{"selmodel"}.}
 
-\item{transf_gamma}{logical with \code{TRUE} indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
+\item{transf_gamma}{logical with \code{TRUE} (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
 
-\item{transf_zeta}{logical with \code{TRUE} indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
+\item{transf_zeta}{logical with \code{TRUE} (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
 
 \item{digits}{Minimum number of significant digits to be used, with a default of 3.}
 
@@ -31,5 +31,6 @@ res_ML <- selection_model(
   bootstrap = "none"
 )
 
-summary(res_ML, transf_gamma = TRUE, transf_zeta = TRUE)
+summary(res_ML)
+summary(res_ML, transf_gamma = FALSE, transf_zeta = FALSE)
 }

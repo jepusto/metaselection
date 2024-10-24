@@ -1,5 +1,5 @@
 Package: metaselection
-Title: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors
+Title: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates
 Version: 0.1.0
 Authors@R: c(
     person(given = "James", family = "Pustejovsky",
@@ -12,7 +12,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-7936-076X")))
 Description: Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, 
     providing standard errors and confidence intervals based on either cluster-robust variance estimators
-    (i.e., sandwich estimators) or cluster-level bootstrapping. Supported models include generalizations of the 
+    (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates. Supported models include generalizations of the 
     step-function selection model as proposed by Vevea and Hedges (1995) <DOI:10.1007/BF02294384>  and the 
     beta-function selection model as proposed by Citkowicz and Vevea (2017) <DOI:10.1037/met0000119>.
 License: GPL (>= 3)
