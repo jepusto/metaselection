@@ -59,7 +59,7 @@ find_starting_values <- function(
   
   # Compute squared residuals
   if (is.null(U)) {
-    gamma_start <- log(mean(ri_sq))
+    gamma_start <- log(min(1e-4, mean(ri_sq) - mean(sei^2)))
   } else {
     gamma_fit <- stats::glm.fit(x = U, y = ri_sq, family = stats::quasipoisson())
     gamma_start <- unname(gamma_fit$coefficients)
