@@ -29,7 +29,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   # title -------------------------------------------------------------------
   
   # need to edit the language for the title 
-  model <- if ("step.selmodel" %in% class(object)) "Step Function Model" else if("beta.selmodel" %in% class(object)) "Beta Density Model"
+  model <- if (inherits(object, "step.selmodel")) "Step Function Model" else if (inherits(object, "beta.selmodel")) "Beta Density Model"
   
   # info  -------------------------------------------------------------------
   n_clusters <- object$n_clusters
@@ -41,6 +41,8 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   estimator <- estimates$estimator[1]
   estimator <- ifelse(estimator == "ML", "maximum likelihood", "hybrid estimating equations")
   vcov_type <- object$vcov_type
+  clog_lik <- object$ll
+  wt_partial_log_lik <- object$wpll
   
 
   # bootstrap information  --------------------------------------------------
@@ -121,6 +123,11 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     cat("Number of bootstrap replications:", R, "\n")
   }  
   
+  cat("\n", "Log composite likelihood of selection model: ", clog_lik, "\n", sep = "")
+  if (inherits(object, "step.selmodel")) {
+    cat("Inverse selection weighted partial log likelihood:", wt_partial_log_lik, "\n")
+  }
+
   cat("\n", "Mean effect estimates:", sep = "")
   print_with_header(beta_estimates, digits = digits, ...)
   

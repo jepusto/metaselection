@@ -152,7 +152,7 @@ get_selmodel_params <- function(sel_mod, theta = TRUE) {
 
 check_against_metafor_selmodel <- function(
     mod, type = "stepfun", steps = .025, 
-    tol_LRT = 1e-8, tol_score = 5e-5, 
+    tol_LRT = 1e-8, tol_ll = 1e-4, tol_score = 5e-5, 
     tol_param = 1e-4, tol_SE = 1e-4,
     ...,
     verbose = FALSE
@@ -277,6 +277,8 @@ check_against_metafor_selmodel <- function(
   
   if (mod$method != "FE") {
 
+    # Log-likelihood
+    testthat::expect_equal(my_est$ll, sel_mod$ll, tolerance = tol_ll)
     
     # parameter estimates
     est_compare <- data.frame(

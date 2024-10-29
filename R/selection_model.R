@@ -295,7 +295,38 @@ fit_selection_model <- function(
     }
   }
 
+  # Compute composite log likelihood
   
+  norm_const <-  log(2 * base::pi) * length(yi) / 2
+  
+  if (selection_type == "step") {
+    
+    log_lik <- step_loglik(
+      theta = theta,  
+      yi = yi, sei = sei, pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z
+    ) - norm_const
+    
+    wt_partial_log_lik <- step_weighted_logpartlik(
+      theta = theta,  
+      yi = yi, sei = sei, pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z
+    )
+    
+  } else if (selection_type == "beta") {
+    
+    log_lik <- beta_loglik(
+      theta, 
+      yi = yi, sei = sei, pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U
+    ) - norm_const
+    
+    wt_partial_log_lik <- NULL
+  }
+
   # Compute score contributions using MLEs
   
   if (estimator == "ML") {
@@ -382,7 +413,9 @@ fit_selection_model <- function(
     est = theta, 
     vcov = vcov_mat, 
     method = max_method,
-    info = info
+    info = info,
+    ll = log_lik,
+    wpll = wt_partial_log_lik
   )
   
 }
@@ -764,6 +797,12 @@ selection_model <- function(
     
   }
   
+  # Count number of parameters in each component
+  params_mu <- if (is.null(mean_mods)) 1L else ncol(X)
+  params_gamma <- if (is.null(var_mods)) 1L else ncol(U)
+  params_zeta <- if (is.null(sel_mods)) length(steps) else sum(sapply(Z, ncol))
+  params_zeta_zero <- if (is.null(sel_zero_mods)) 0L else ncol(Z0)
+    
   # Finish building selmodel object
   
   res$cl <- cl
@@ -773,6 +812,7 @@ selection_model <- function(
   res$estimator <- estimator
   res$vcov_type <- vcov_type
   res$conf_level <- conf_level
+  res$param_dim <- c(mean = params_mu, var = params_zeta, sel = params_zeta, sel_zero = params_zeta_zero)
   
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
   res$n_effects <- n_effects
