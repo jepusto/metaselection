@@ -9,6 +9,10 @@
 #' @param mod Fitted model of class \code{"selmodel"}.
 #' @param pvals Numeric vector of p-values for which to calculate selection
 #'   weights.
+#' @param ref_pval Numeric value of a p-value at which to standardize the
+#'   weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
+#'   selection weight of 1 and selection weights for all other p-values will be
+#'   calculated relative to \code{ref_pval}.
 #' @param ... further arguments passed to some methods.
 #'
 #' @returns If \code{mod} does not include bootstrapped confidence intervals or
@@ -27,7 +31,7 @@
 #'   an additional variable, \code{rep}, identifying the bootstrap replicate.
 #'
 #' @export
-#' 
+#'
 #' @examples
 #' mod <- selection_model(
 #'   data = self_control,
@@ -38,9 +42,9 @@
 #'   estimator = "ML",
 #'   bootstrap = "none"
 #' )
-#' 
+#'
 #' selection_wts(mod, pvals = seq(0, 1, 0.2))
-#' 
+#'
 #' mod_boot <- selection_model(
 #'   data = self_control,
 #'   yi = g,
@@ -54,20 +58,22 @@
 #' )
 #'
 #' selection_wts(mod_boot, pvals = seq(0, 1, 0.2))
-#' 
+#'
 #' 
 
 
-selection_wts <- function(mod, pvals, ...) UseMethod("selection_wts")
+selection_wts <- function(mod, pvals, ref_pval, ...) UseMethod("selection_wts")
 
 
 #' @export
 
-selection_wts.default <- function(mod, pvals, params, steps, ...) {
+selection_wts.default <- function(mod, pvals, ref_pval, params, steps, ...) {
   
   mod <- match.arg(mod, c("step","beta"))
   
-  if (min(pvals) < 0 | max(pvals) > 1) stop("pvals must be in the interval [0,1].")
+  if (min(pvals) < 0 | max(pvals) > 1) stop("`pvals` must be in the interval [0,1].")
+  if (length(ref_pval) > 1) stop("`ref_pval` must be a single value.")
+  if (ref_pval < 0 | ref_pval > 1) stop("`ref_pval` must be between 0 and 1.")
   
   if (mod == "step") {
     
@@ -90,7 +96,12 @@ selection_wts.default <- function(mod, pvals, params, steps, ...) {
     )
   }
   
-  sel_fun(pvals)
+  if (missing(ref_pval)) {
+    sel_fun(pvals)
+  } else {
+    sel_fun(pvals) / sel_fun(ref_pval)
+  }
+  
 }
 
 #' @rdname selection_wts
@@ -102,9 +113,10 @@ selection_wts.default <- function(mod, pvals, params, steps, ...) {
 #'
 #' @export
 
-selection_wts.step.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ...) {
+selection_wts.step.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, bootstraps = TRUE, ...) {
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_wts() is not available for models that include moderators of the selection parameters.")
+  if (length(ref_pval) > 1) stop("`ref_pval` must be a single value.")
   
   if (is.null(pvals)) {
     if (is.null(mod$cl_pi)) {
@@ -125,6 +137,12 @@ selection_wts.step.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ..
     wt = sel_fun(pvals)
   )
   
+  if (!is.null(ref_pval)) {
+    if (ref_pval < 0 | ref_pval > 1) stop("`ref_pval` must be between 0 and 1.")
+    ref_wt <- sel_fun(ref_pval)
+    wts$wt <- wts$wt / ref_wt
+  }
+  
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
 
   R <- eval(mod$cl$R, envir = parent.frame())
@@ -133,7 +151,19 @@ selection_wts.step.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ..
   sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
   sel_param_boots$rep <- NULL
   
-  boot_wts <- apply(sel_param_boots, 1, \(zeta) step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(pvals), simplify = FALSE)
+  if (is.null(ref_pval)) {
+    boot_wts <- apply(
+      sel_param_boots, 1, \(zeta) 
+      step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(pvals), 
+      simplify = FALSE
+    )
+  } else {
+    boot_wts <- apply(
+      sel_param_boots, 1, \(zeta) 
+      step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(pvals) / step_fun(cut_vals = mod$steps, weights = exp(zeta), renormalize = FALSE)(ref_pval), 
+      simplify = FALSE
+    )
+  }
   
   boot_wts <- data.frame(
     rep = rep(1:R, each = length(pvals)),
@@ -148,8 +178,10 @@ selection_wts.step.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ..
 #' @rdname selection_wts
 #' @export
 
-selection_wts.beta.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ...) {
- 
+selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, bootstraps = TRUE, ...) {
+  
+  if (length(ref_pval) > 1) stop("`ref_pval` must be a single value.")
+  
   if (is.null(pvals)) {
     if (is.null(mod$cl_pi)) {
       yi <- eval(mod$cl$yi, envir = mod$mf)
@@ -173,6 +205,12 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ..
     wt = sel_fun(pvals)
   )
   
+  if (!is.null(ref_pval)) {
+    if (ref_pval < 0 | ref_pval > 1) stop("`ref_pval` must be between 0 and 1.")
+    ref_wt <- sel_fun(ref_pval)
+    wts$wt <- wts$wt / ref_wt
+  }
+  
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
   
   R <- eval(mod$cl$R, envir = parent.frame())
@@ -181,15 +219,35 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ..
   sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
   sel_param_boots$rep <- NULL
   
-  boot_wts <- apply(
-    sel_param_boots, 1, 
-    \(zeta) beta_fun(
-      delta_1 = exp(zeta[1]), delta_2 = exp(zeta[2]), 
-      trunc_1 = mod$steps[1], trunc_2 = mod$steps[2],
-      renormalize = FALSE
-    )(pvals), 
-    simplify = FALSE
-  )
+
+  
+  if (is.null(ref_pval)) {
+    boot_wts <- apply(
+      sel_param_boots, 1, 
+      \(zeta) beta_fun(
+        delta_1 = exp(zeta[1]), delta_2 = exp(zeta[2]), 
+        trunc_1 = mod$steps[1], trunc_2 = mod$steps[2],
+        renormalize = FALSE
+      )(pvals), 
+      simplify = FALSE
+    )
+  } else {
+    boot_wts <- apply(
+      sel_param_boots, 1, 
+      \(zeta) 
+      beta_fun(
+        delta_1 = exp(zeta[1]), delta_2 = exp(zeta[2]), 
+        trunc_1 = mod$steps[1], trunc_2 = mod$steps[2],
+        renormalize = FALSE
+      )(pvals) / 
+      beta_fun(
+        delta_1 = exp(zeta[1]), delta_2 = exp(zeta[2]), 
+        trunc_1 = mod$steps[1], trunc_2 = mod$steps[2],
+        renormalize = FALSE
+      )(ref_pval), 
+      simplify = FALSE
+    )
+  }
   
   boot_wts <- data.frame(
     rep = rep(1:R, each = length(pvals)),
