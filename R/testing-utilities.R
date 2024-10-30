@@ -58,7 +58,9 @@ check_all_derivatives <- function(
   cl$N <- NULL
   cl$crit <- NULL
   cl[[1]] <- quote(selection_model)
-  selmod_fit <- eval(cl, parent.frame())
+  suppressWarnings(
+    selmod_fit <- eval(cl, parent.frame())
+  )
   
   m <- match(c("data","yi", "sei"), names(cl), 0L)
   mf <- cl[c(1L, m)]
