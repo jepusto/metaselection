@@ -327,7 +327,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     m = 50, 
     cor_mu = 0, 
     cor_sd = 0.01, 
-    censor_fun = beta_fun(delta_1 = 1.3, delta_2 = 0.7, trunc_1 = .025, trunc_2 = .975), 
+    censor_fun = beta_fun(delta_1 = 1.3, delta_2 = 0.7, trunc_1 = .025, trunc_2 = .5), 
     n_ES_sim = n_ES_param(40, 1) 
   )
   
@@ -336,7 +336,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     yi = d, sei = sd_d, 
     selection_type = "beta",
     steps = c(.025, .500),
-    estimator = "ML",
+    estimator = "ML"
   )
   beta_derivs$selmod_fit$est
   beta_derivs$score_diff_over_range
@@ -351,7 +351,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     selection_type = "beta",
     steps = c(.025, .975),
     estimator = "ML",
-    crit = c(2, 1, 2, 2)
+    crit = c(2, 1, 1, 0.5)
   )
   
   beta_derivs$selmod_fit$est

@@ -76,8 +76,9 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
 
 test_that("bootstrap_CI options for selection_model() work when bootstrap = 'multinomial'.", {
   
+  aseed <- 20241030
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_large <- 
     selection_model(
@@ -97,7 +98,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi"))
   expect_false(is.null(step_large$bootstrap_reps))
 
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_perc <- 
     selection_model(
@@ -117,7 +118,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstraps","percentile_lower","percentile_upper"))
   expect_identical(table(step_perc$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_t <- 
     selection_model(
@@ -138,7 +139,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   expect_identical(table(step_t$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_t$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_basic <- 
     selection_model(
@@ -159,7 +160,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_all <- 
     selection_model(
@@ -190,7 +191,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
     step_all$est
   )
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_long <- 
     selection_model(
@@ -232,7 +233,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   rownames(all_CIs) <- NULL
   expect_equal(long_CIs, all_CIs)
   
-  set.seed(20240807)
+  set.seed(aseed)
   
   step_none <- 
     selection_model(
@@ -258,8 +259,8 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
 
 test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp'.", {
   
-  
-  set.seed(20240808)
+  aseed <- 20241029
+  set.seed(aseed)
   
   step_large <- 
     selection_model(
@@ -279,7 +280,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   expect_identical(names(step_large$est), c("estimator","param","Est","SE","CI_lo","CI_hi"))
   expect_false(is.null(step_large$bootstrap_reps))
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_perc <- 
     selection_model(
@@ -299,7 +300,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstraps","percentile_lower","percentile_upper"))
   expect_identical(table(step_perc$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_t <- 
     selection_model(
@@ -320,7 +321,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   expect_identical(table(step_t$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_t$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_basic <- 
     selection_model(
@@ -341,7 +342,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_all <- 
     selection_model(
@@ -372,7 +373,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     step_all$est
   )
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_long <- 
     selection_model(
@@ -414,7 +415,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   rownames(all_CIs) <- NULL
   expect_equal(long_CIs, all_CIs)
   
-  set.seed(20240808)
+  set.seed(aseed)
   
   step_none <- 
     selection_model(
@@ -453,6 +454,7 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         bootstrap = "multinomial", 
         CI_type = c("student","percentile","basic"),
         R = 39,
+        seed = 20241031,
         format = "long"
       )
   )
@@ -496,6 +498,7 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         bootstrap = "exp", 
         CI_type = c("student","percentile"),
         R = 49,
+        seed = 20241101,
         format = "long"
       )
   )
@@ -513,9 +516,10 @@ test_that("bootstrapping works with parallel processing.", {
   skip_if_not_installed("future")
 
   library(future)
+  aseed <- 20241028
   
   plan(sequential)
-  set.seed(20240916)
+  set.seed(aseed)
   
   step_sequential <- 
     selection_model(
@@ -533,7 +537,7 @@ test_that("bootstrapping works with parallel processing.", {
   
   
   plan(multisession, workers = 2L)
-  set.seed(20240916)
+  set.seed(aseed)
   
   step_parallel <- 
     selection_model(
@@ -558,11 +562,12 @@ test_that("bootstrapping works with parallel processing.", {
 
 test_that("bootstrap CIs appear in the right order in models with predictors.", {
   
+  set.seed(20241025)
   dat <- r_meta_categories(
     mean_smd = c(0, 0.2, 0.4),
-    tau = c(0.1, 0.05, 0.03),
+    tau = c(0.1, 0.05, 0.13),
     omega = 0,
-    m = 40,
+    m = 50,
     cor_mu = 0.3,
     cor_sd = 0.01,
     censor_fun = step_fun(cut_vals = .1, weights = 0.6),
@@ -632,7 +637,6 @@ test_that("bootstrap CIs appear in the right order in models with predictors.", 
     multi_boot
   )
   
-  set.seed(20240930)
   step_multinomial <- 
     selection_model(
       data = dat,
@@ -646,14 +650,15 @@ test_that("bootstrap CIs appear in the right order in models with predictors.", 
       estimator = "hybrid",
       bootstrap = "multinomial", 
       CI_type = "percentile",
-      R = 27 
+      seed = 20241031,
+      R = 49 
     )
   
   # Check that Est falls within CI bounds
   expect_true(all(with(step_multinomial$est, percentile_lower < Est & Est < percentile_upper)))
   
   # Check against get_boot_CIs  
-  multi_boot <- get_boot_CIs(step_multinomial, CI_type = "percentile", R = 27)
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = "percentile", R = 49)
   multi_boot <- do.call(rbind, multi_boot)
   multi_boot <- multi_boot[step_multinomial$est$param,]
   
