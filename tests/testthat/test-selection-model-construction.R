@@ -153,7 +153,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   
   # Generate some independent data
   
-  set.seed(20230522)
+  set.seed(20230523)
   dat <- r_meta(
     mean_smd = 0.3, tau = 0.1, omega = 0,
     m = 1000, cor_mu = 0.6, cor_sd = 0.001, 

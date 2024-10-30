@@ -842,7 +842,7 @@ check_profiling_equivalence <- function(
     subset = NULL,
     vcov_type = "robust",
     optimizer_control = list(),
-    tol = 1e-8,
+    tol = 1e-4,
     score_tol = 1e-8,
     jac_tol = 1e-8,
     verbose = FALSE

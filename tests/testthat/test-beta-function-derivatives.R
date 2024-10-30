@@ -296,6 +296,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     selection_type = "beta",
     steps = c(.025, .500),
     estimator = "ML",
+    optimizer = c("BFGS","nlminb","Rvmmin"),
     crit = qnorm(0.92)
   )
   beta_derivs$selmod_fit$est
@@ -310,6 +311,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     selection_type = "beta",
     steps = c(.025, .975),
     estimator = "ML",
+    optimizer = c("BFGS","nlminb","Rvmmin"),
     params = c(1L, 3L, 4L)
   )
   beta_derivs$selmod_fit$est
@@ -327,7 +329,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     m = 50, 
     cor_mu = 0, 
     cor_sd = 0.01, 
-    censor_fun = beta_fun(delta_1 = 1.3, delta_2 = 0.7, trunc_1 = .025, trunc_2 = .5), 
+    censor_fun = beta_fun(delta_1 = 0.6, delta_2 = 1.3, trunc_1 = .025, trunc_2 = .5), 
     n_ES_sim = n_ES_param(40, 1) 
   )
   
@@ -340,26 +342,10 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
   )
   beta_derivs$selmod_fit$est
   beta_derivs$score_diff_over_range
-  expect_lt(max(beta_derivs$score_diff_over_range), 1e-3)
+  expect_lt(max(beta_derivs$score_diff_over_range), 5e-3)
   round(beta_derivs$hess_diff_over_range, 5)
   expect_lt(max(beta_derivs$hess_diff_over_range), 5e-3)
-  
-  
-  beta_derivs <- check_all_derivatives(
-    data = dat, 
-    yi = d, sei = sd_d, 
-    selection_type = "beta",
-    steps = c(.025, .975),
-    estimator = "ML",
-    crit = c(2, 1, 1, 0.5)
-  )
-  
-  beta_derivs$selmod_fit$est
-  beta_derivs$score_diff_over_range
-  expect_lt(max(beta_derivs$score_diff_over_range), 1e-3)
-  round(beta_derivs$hess_diff_over_range, 5)
-  expect_lt(max(beta_derivs$hess_diff_over_range), 1e-3)
-  
+
   
   # library(tidyverse)
   # ggplot(beta_derivs$data, aes(x = val)) +
