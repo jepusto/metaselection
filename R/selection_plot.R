@@ -102,9 +102,19 @@ selection_wts.default <- function(mod, pvals, params, steps, ...) {
 #'
 #' @export
 
-selection_wts.step.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
+selection_wts.step.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ...) {
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_wts() is not available for models that include moderators of the selection parameters.")
+  
+  if (is.null(pvals)) {
+    if (is.null(mod$cl_pi)) {
+      yi <- eval(mod$cl$yi, envir = mod$mf)
+      sei <- eval(mod$cl$sei, envir = mod$mf)
+      pvals <- pnorm(yi / sei, lower.tail = FALSE)
+    } else {
+      pvals <- eval(mod$cl$pi, envir = mod$mf)
+    }
+  }
   
   zeta <- mod$est$Est[grepl("zeta", mod$est$param)]
   
@@ -138,7 +148,17 @@ selection_wts.step.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
 #' @rdname selection_wts
 #' @export
 
-selection_wts.beta.selmodel <- function(mod, pvals, bootstraps = TRUE, ...) {
+selection_wts.beta.selmodel <- function(mod, pvals = NULL, bootstraps = TRUE, ...) {
+ 
+  if (is.null(pvals)) {
+    if (is.null(mod$cl_pi)) {
+      yi <- eval(mod$cl$yi, envir = mod$mf)
+      sei <- eval(mod$cl$sei, envir = mod$mf)
+      pvals <- pnorm(yi / sei, lower.tail = FALSE)
+    } else {
+      pvals <- eval(mod$cl$pi, envir = mod$mf)
+    }
+  }
   
   zeta <- mod$est$Est[grepl("zeta", mod$est$param)]
   

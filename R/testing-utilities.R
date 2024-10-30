@@ -1044,3 +1044,58 @@ check_selmodel_summary <- function(mod, ...) {
  
   testthat::expect_identical(sum_effects, p_effects) 
 }
+
+#-------------------------------------------------------------------------------
+# Functions for checking selection_wts()
+
+check_selection_weights <- function(dat, steps, estimator = "ML", bootstrap = "none", R = 9) {
+
+  step_fit <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    steps = steps,
+    estimator = estimator,
+    bootstrap = bootstrap,
+    R = R
+  )
+  
+  
+  if (bootstrap == "none") {
+    
+    zeta_est <- subset(step_fit$est, grepl("zeta", param))
+    lambda_est <- exp(zeta_est$Est)
+    
+    dat_wts <- selection_wts(step_fit)
+    
+    unique_wts <- tapply(dat_wts$wt, cut(dat_wts$p, c(0,steps, 1), include.lowest = TRUE), unique, simplify = FALSE)[-1]
+    expect_equal(as.integer(lengths(unique_wts)), rep(1L, length(steps)))
+    expect_equal(as.numeric(unlist(unique_wts)), lambda_est)
+    
+    other_wts <- selection_wts(step_fit, pvals = seq(0, 1, 0.02))
+    unique_other_wts <- tapply(other_wts$wt, cut(other_wts$p, c(0,steps, 1), include.lowest = TRUE), unique, simplify = FALSE)[-1]
+    expect_equal(unique_wts, unique_other_wts)
+    
+  } else {
+    
+    zeta_est <- subset(step_fit$bootstrap_reps, grepl("zeta", param))
+    lambda_est <- exp(zeta_est$Est)
+    R <- nrow(zeta_est) / step_fit$param_dim["sel"]
+    
+    dat_wts <- selection_wts(step_fit)$boot_wts
+    
+    unique_wts <- tapply(dat_wts$wt, list(dat_wts$rep, cut(dat_wts$p, c(0,steps, 1), include.lowest = TRUE)), unique, simplify = FALSE)[,-1,drop=FALSE]
+    dimnames(unique_wts) <- NULL
+    expect_equal(lengths(unique_wts), matrix(1L, R, length(steps)))
+    expect_equal(unlist(t(unique_wts)), lambda_est)
+    
+    other_wts <- selection_wts(step_fit, pvals = seq(0, 1, 0.02))$boot_wts
+    unique_other_wts <- tapply(other_wts$wt, list(other_wts$rep, cut(other_wts$p, c(0,steps, 1), include.lowest = TRUE)), unique, simplify = FALSE)[,-1,drop=FALSE]
+    dimnames(unique_other_wts) <- NULL
+    expect_equal(unique_wts, unique_other_wts)
+    
+  }
+  
+}
+
