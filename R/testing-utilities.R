@@ -278,7 +278,13 @@ check_against_metafor_selmodel <- function(
   if (mod$method != "FE") {
 
     # Log-likelihood
-    testthat::expect_equal(my_est$ll, sel_mod$ll, tolerance = tol_ll)
+    ll_selmod <- stats::logLik(sel_mod)
+    attr(ll_selmod, "nall") <- NULL
+    testthat::expect_equal(
+      stats::logLik(my_est), 
+      ll_selmod, 
+      tolerance = tol_ll
+    )
     
     # parameter estimates
     est_compare <- data.frame(

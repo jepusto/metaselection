@@ -812,7 +812,7 @@ selection_model <- function(
   res$estimator <- estimator
   res$vcov_type <- vcov_type
   res$conf_level <- conf_level
-  res$param_dim <- c(mean = params_mu, var = params_zeta, sel = params_zeta, sel_zero = params_zeta_zero)
+  res$param_dim <- c(mean = params_mu, var = params_gamma, sel = params_zeta, sel_zero = params_zeta_zero)
   
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
   res$n_effects <- n_effects
