@@ -59,10 +59,61 @@ predict.step.selmodel <- function(
       names(object$predictions$lambda_full) <- paste0("lambda", 0:ncol(object$predictions$lambda_full))
       res <- cbind(res, object$predictions$lambda_full)
     }
-    if (obs_prob) {
-      res$obs_prob <- object$predictions$Ai
-    }
+    if (obs_prob) res$obs_prob <- object$predictions$Ai
 
+    return(res)
+    
+  } else {
+    
+  }
+  
+  res
+}
+
+#' @title Predict method for fitted `beta.selmodel`
+#'
+#' @description Calculate predicted values for the mean (location) and
+#'   heterogeneity (scale) from a fitted model of
+#'   class \code{"beta.selmodel"}.
+#'
+#' @param object Fitted model of class inheriting from \code{"beta.selmodel"}.
+#' @inheritParams predict.step.selmodel
+#' @export
+#'
+#' @examples
+#' res <- selection_model(
+#'   data = self_control,
+#'   yi = g,
+#'   sei = se_g,
+#'   cluster = studyid,
+#'   selection_type = "beta",
+#'   mean_mods = ~ 0 + sample_population,
+#' )
+#'
+#' predict(res)
+#'
+#' newdat <- data.frame(sample_population = c("Students","Students"))
+#' predict(res, newdata = newdat)
+
+
+
+predict.beta.selmodel <- function(
+    object, 
+    newdata = NULL, 
+    location = TRUE,
+    scale = TRUE,
+    obs_prob = TRUE,
+    ...
+) {
+  
+  if (is.null(newdata)) {
+    
+    res <- data.frame()
+    
+    if (location) res$mu <- object$predictions$mu
+    if (scale) res$tau2 <- object$predictions$tau2
+    if (obs_prob) res$obs_prob <- object$predictions$Ai
+    
     return(res)
     
   } else {
