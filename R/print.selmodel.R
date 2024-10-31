@@ -1,6 +1,6 @@
-#' @title Print results from `selmodel()`
+#' @title Print results from a `selmodel` object
 #'
-#' @description Print relevant results from `selmodel()`
+#' @description Print relevant results from a fitted `selmodel` object.
 #' 
 #' 
 #' @param x Fitted model of class \code{"selmodel"}.

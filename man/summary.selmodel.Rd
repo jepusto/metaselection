@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.selmodel.R
 \name{summary.selmodel}
 \alias{summary.selmodel}
-\title{Summarize results from \code{selmodel()}}
+\title{Summarize results from a \code{selmodel} object}
 \usage{
 \method{summary}{selmodel}(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 }
@@ -18,7 +18,7 @@
 \item{...}{further arguments passed to \code{print.data.frame()}.}
 }
 \description{
-Summarize relevant results from \code{selmodel()}
+Summarize relevant results from a \code{selmodel} object.
 }
 \examples{
 res_ML <- selection_model(

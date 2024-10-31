@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.selmodel.R
 \name{print.selmodel}
 \alias{print.selmodel}
-\title{Print results from \code{selmodel()}}
+\title{Print results from a \code{selmodel} object}
 \usage{
 \method{print}{selmodel}(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 }
@@ -18,7 +18,7 @@
 \item{...}{further arguments passed to \code{print.data.frame()}.}
 }
 \description{
-Print relevant results from \code{selmodel()}
+Print relevant results from a fitted \code{selmodel} object.
 }
 \examples{
 res_ML <- selection_model(

@@ -691,7 +691,6 @@ selection_model <- function(
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
   
   n_clusters <- if (!is.null(cluster)) length(unique(cluster))
-  n_effects <- length(yi)
   
   # Create matrices X, U, Z0, Z_1,... from data formulas
   
@@ -797,12 +796,14 @@ selection_model <- function(
     
   }
   
-  # Count number of parameters in each component
-  params_mu <- if (is.null(mean_mods)) 1L else ncol(X)
-  params_gamma <- if (is.null(var_mods)) 1L else ncol(U)
-  params_zeta <- if (is.null(sel_mods)) length(steps) else sum(sapply(Z, ncol))
-  params_zeta_zero <- if (is.null(sel_zero_mods)) 0L else ncol(Z0)
-    
+  # Evaluate predictions
+  predictions <- parse_step_params(
+    theta = res$est$Est,
+    yi = yi, sei = sei, pi = pi, ai = ai, 
+    steps = steps, 
+    X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
+  )
+  
   # Finish building selmodel object
   
   res$cl <- cl
@@ -812,10 +813,16 @@ selection_model <- function(
   res$estimator <- estimator
   res$vcov_type <- vcov_type
   res$conf_level <- conf_level
-  res$param_dim <- c(mean = params_mu, var = params_gamma, sel = params_zeta, sel_zero = params_zeta_zero)
+  res$param_dim <- c(
+    mean = predictions$x_dim, 
+    var = predictions$u_dim, 
+    sel = sum(predictions$z_dim), 
+    sel_zero = predictions$z0_dim
+  )
+  res$predictions <- predictions[c("mu","tausq","eta","lambda_full","weight_vec","cats","B_mat","Ai")]
   
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
-  res$n_effects <- n_effects
+  res$n_effects <- predictions$k
   
   return(res)
 }

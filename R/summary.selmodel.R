@@ -1,7 +1,6 @@
-#' @title Summarize results from `selmodel()`
+#' @title Summarize results from a `selmodel` object
 #'
-#' @description Summarize relevant results from `selmodel()`
-#' 
+#' @description Summarize relevant results from a `selmodel` object.
 #' 
 #' @param object Fitted model of class \code{"selmodel"}.
 #' @inheritParams print.selmodel
