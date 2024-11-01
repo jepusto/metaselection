@@ -1106,12 +1106,15 @@ check_predictions <- function(
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
-    estimator = "hybrid"
+    estimator = "hybrid",
+    check_subset = TRUE
 ) {
   
   cl <- match.call()
   cl[[1L]] <- str2lang("metaselection:::selection_model")
-  mod <- eval(cl, parent.frame())
+  suppressWarnings(
+    mod <- eval(cl, parent.frame())
+  )
   
   all_preds <- predict(mod)
 
@@ -1123,7 +1126,7 @@ check_predictions <- function(
   if (is.null(mean_mods)) {
     expect_equal(beta, unique(all_preds$mu))
   } else {
-    X <- model.matrix(mean_mods, data = dat)
+    X <- stats::model.matrix(mean_mods, data = data)
     mu <- as.numeric(X %*% beta)
     expect_equal(mu, all_preds$mu)
   }
@@ -1131,7 +1134,7 @@ check_predictions <- function(
   if (is.null(var_mods)) {
     expect_equal(exp(gamma), unique(all_preds$tau2))
   } else {
-    U <- model.matrix(var_mods, data = dat)
+    U <- stats::model.matrix(var_mods, data = data)
     tau2 <- as.numeric(exp(U %*% gamma))
     expect_equal(tau2, all_preds$tau2)
   }
@@ -1149,13 +1152,19 @@ check_predictions <- function(
       )
       
     } else {
-      Z <- model.matrix(sel_mods, data = dat)
+      Z <- stats::model.matrix(sel_mods, data = data)
       zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
       lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
       lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
       expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
     }
   }
+  
+  # Check prediction of subset of observations
+  sub <- sample(1:nrow(data), 10L)
+  newdata <- data[sub,]
+  sub_preds <- predict(mod, newdata = newdata)
+  expect_equal(sub_preds, all_preds[sub,])
   
   return(all_preds)
 }

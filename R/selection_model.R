@@ -797,12 +797,21 @@ selection_model <- function(
   }
   
   # Evaluate predictions
-  predictions <- parse_step_params(
-    theta = res$est$Est,
-    yi = yi, sei = sei, pi = pi, ai = ai, 
-    steps = steps, 
-    X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
-  )
+  if (selection_type == "step") {
+    predictions <- parse_step_params(
+      theta = res$est$Est,
+      yi = yi, sei = sei, pi = pi, ai = ai, 
+      steps = steps, 
+      X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
+    )
+  } else if (selection_type == "beta") {
+    predictions <- parse_beta_params(
+      theta = res$est$Est,
+      yi = yi, sei = sei, pi = pi, 
+      alpha = steps, 
+      X = X, U = U, calc_Ai = TRUE
+    )
+  }
   
   # Finish building selmodel object
   

@@ -51,23 +51,52 @@ predict.step.selmodel <- function(
   
   if (is.null(newdata)) {
     
+    predictions <- object$predictions
+    
     res <- data.frame(row.names = row.names(object$mf))
     
-    if (location) res$mu <- object$predictions$mu
-    if (scale) res$tau2 <- object$predictions$tausq
-    if (selection) {
-      colnames(object$predictions$lambda_full) <- paste0("lambda", 1:ncol(object$predictions$lambda_full) - 1L)
-      res <- cbind(res, object$predictions$lambda_full)
-    }
-    if (obs_prob) res$obs_prob <- object$predictions$Ai
-
-    return(res)
-    
   } else {
+
+    cl <- object$cl
+    sei <- eval(cl$sei, envir = newdata)
+    steps <- object$steps
     
+    X <- if (is.null(cl$mean_mods)) NULL else do.call(model.matrix, list(object = cl$mean_mods, data = newdata))
+    U <- if (is.null(cl$var_mods)) NULL else do.call(model.matrix, list(object = cl$var_mods, data = newdata))
+    Z0 <- if (is.null(cl$sel_zero_mods)) NULL else do.call(model.matrix, list(object = cl$sel_zero_mods, data = newdata))
+    if (is.null(cl$sel_mods)) {
+      Z <- NULL
+    } else {
+      if (is.list(cl$sel_mods)) {
+        if (length(cl$sel_mods) != length(steps)) stop("sel_mods must be a list with length equal to the number of steps.")
+        Z <- lapply(cl$sel_mods, model.matrix, data = newdata)
+      } else {
+        Z1 <- do.call(model.matrix, list(object = cl$sel_mods, data = newdata))
+        Z <- rep(list(Z1), times = length(steps))
+      }
+    }
+    
+    predictions <- parse_step_params(
+      theta = object$est$Est,
+      sei = sei, pi = NULL, ai = NULL, 
+      steps = steps, 
+      X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
+    )
+    
+    res <- data.frame(row.names = row.names(newdata))
   }
   
-  res
+  
+  if (location) res$mu <- predictions$mu
+  if (scale) res$tau2 <- predictions$tausq
+  if (selection) {
+    colnames(predictions$lambda_full) <- paste0("lambda", 1:ncol(predictions$lambda_full) - 1L)
+    res <- cbind(res, predictions$lambda_full)
+  }
+  if (obs_prob) res$obs_prob <- predictions$Ai
+  
+  return(res)
+  
 }
 
 #' @title Predict method for fitted `beta.selmodel`
@@ -107,17 +136,33 @@ predict.beta.selmodel <- function(
   
   if (is.null(newdata)) {
     
+    predictions <- object$predictions
     res <- data.frame(row.names = row.names(object$mf))
-    
-    if (location) res$mu <- object$predictions$mu
-    if (scale) res$tau2 <- object$predictions$tausq
-    if (obs_prob) res$obs_prob <- object$predictions$Ai
-    
-    return(res)
     
   } else {
     
+    cl <- object$cl
+    sei <- eval(cl$sei, envir = newdata)
+    steps <- object$steps
+    
+    X <- if (is.null(cl$mean_mods)) NULL else do.call(model.matrix, list(object = cl$mean_mods, data = newdata))
+    U <- if (is.null(cl$var_mods)) NULL else do.call(model.matrix, list(object = cl$var_mods, data = newdata))
+
+    predictions <- parse_beta_params(
+      theta = object$est$Est,
+      sei = sei, pi = NULL, 
+      alpha = steps, 
+      X = X, U = U, calc_Ai = TRUE
+    )
+    
+    res <- data.frame(row.names = row.names(newdata))
+    
   }
   
-  res
+  if (location) res$mu <- predictions$mu
+  if (scale) res$tau2 <- predictions$tausq
+  if (obs_prob) res$obs_prob <- predictions$Ai
+  
+  return(res)
+  
 }

@@ -5,7 +5,7 @@ parse_step_params <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = NULL,                                  # one-sided p-values
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -20,7 +20,7 @@ parse_step_params <- function(
 ) {
   
   # number of observations
-  k <- length(yi)
+  k <- length(sei)
   
   # parameter dimensions and names
   if (is.null(X)) {
@@ -83,20 +83,26 @@ parse_step_params <- function(
   } 
   lambda_full <- cbind(lambda0, lambda)
   
-  cats <- cut(pi, breaks = c(0, steps, 1), include.lowest = TRUE)
-  cats_index <- cbind(1:k, cats)
-  weight_vec <- lambda_full[cats_index]
-
-  # solve for beta if missing
-  if (all(is.na(beta))) {
-    wt <- if (is.null(ai)) 1 / (eta * weight_vec) else ai / (eta * weight_vec)
-    if (is.null(X)) {
-      beta <- stats::weighted.mean(yi, w = wt)
-      names(beta) <- "beta"
-    } else {
-      beta <- stats::lm.wfit(x = X, y = yi, w = wt)$coefficients
-      names(beta) <- colnames(X)
+  if (!missing(yi)) {
+    if (is.null(pi)) pi <- pnorm(yi / sei, lower.tail = FALSE)
+    cats <- cut(pi, breaks = c(0, steps, 1), include.lowest = TRUE)
+    cats_index <- cbind(1:k, cats)
+    weight_vec <- lambda_full[cats_index]
+    
+    # solve for beta if missing
+    if (all(is.na(beta))) {
+      wt <- if (is.null(ai)) 1 / (eta * weight_vec) else ai / (eta * weight_vec)
+      if (is.null(X)) {
+        beta <- stats::weighted.mean(yi, w = wt)
+        names(beta) <- "beta"
+      } else {
+        beta <- stats::lm.wfit(x = X, y = yi, w = wt)$coefficients
+        names(beta) <- colnames(X)
+      }
     }
+  } else {
+    weight_vec <- NULL
+    cats <- NULL
   }
   
   mu <- if (is.null(X)) beta else as.vector(X %*% beta)

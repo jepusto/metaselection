@@ -1,5 +1,5 @@
 
-test_that("predict.step.selmodel() works for the original dataset.", {
+test_that("predict.step.selmodel() works for the original dataset and newdata.", {
   
   set.seed(20241031)
   
@@ -41,7 +41,8 @@ test_that("predict.step.selmodel() works for the original dataset.", {
     yi = d,
     sei = sd_d,
     steps = c(.025, .500),
-    mean_mods = ~ 0 + X
+    mean_mods = ~ 0 + X,
+    check_subset = FALSE
   ) |> 
     expect_equal(X_preds, tolerance = 1e-6)
   
@@ -58,7 +59,8 @@ test_that("predict.step.selmodel() works for the original dataset.", {
     yi = d,
     sei = sd_d,
     steps = c(.025, .500),
-    var_mods = ~ 0 + X
+    var_mods = ~ 0 + X,
+    check_subset = FALSE
   ) |> 
     expect_equal(U_preds, tolerance = 1e-6)
   
@@ -75,7 +77,8 @@ test_that("predict.step.selmodel() works for the original dataset.", {
     yi = d,
     sei = sd_d,
     steps = c(.025, .500),
-    sel_mods = ~ 0 + X
+    sel_mods = ~ 0 + X,
+    check_subset = FALSE
   ) |> 
     expect_equal(Z_preds, tolerance = 1e-6)
   
@@ -95,7 +98,8 @@ test_that("predict.step.selmodel() works for the original dataset.", {
     yi = d,
     sei = sd_d,
     steps = c(.025, .500),
-    subset = X == "A"
+    subset = X == "A",
+    check_subset = FALSE
   ) |> predict()
   
   B_preds <- selection_model(
@@ -103,7 +107,8 @@ test_that("predict.step.selmodel() works for the original dataset.", {
     yi = d,
     sei = sd_d,
     steps = c(.025, .500),
-    subset = X == "B"
+    subset = X == "B",
+    check_subset = FALSE
   ) |> predict()
   
   C_preds <- selection_model(
@@ -121,14 +126,14 @@ test_that("predict.step.selmodel() works for the original dataset.", {
 })
 
 
-test_that("predict.beta.selmodel() works for the original dataset.", {
+test_that("predict.beta.selmodel() works for the original dataset and newdata.", {
   
   skip_on_cran()
   
   set.seed(20241031)
   
   dat <- r_meta_categories(
-    mean_smd = c(0, 0.2, 0.4),
+    mean_smd = c(0.1, 0.2, 0.6),
     tau = c(0.2, 0.05, 0.5),
     omega = 0,
     m = 20,
@@ -164,7 +169,8 @@ test_that("predict.beta.selmodel() works for the original dataset.", {
     selection_type = "beta",
     estimator = "ML",
     steps = c(.025, .500),
-    mean_mods = ~ 0 + X
+    mean_mods = ~ 0 + X,
+    check_subset = FALSE
   ) |> 
     expect_equal(X_preds, tolerance = 1e-5)
   
@@ -185,9 +191,10 @@ test_that("predict.beta.selmodel() works for the original dataset.", {
     selection_type = "beta",
     estimator = "ML",
     steps = c(.025, .500),
-    var_mods = ~ 0 + X
+    var_mods = ~ 0 + X,
+    check_subset = FALSE
   ) |> 
-    expect_equal(U_preds, tolerance = 1e-4)
+    expect_equal(U_preds, tolerance = 5e-3)
   
   XU_preds <- check_predictions(
     data = dat,

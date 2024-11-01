@@ -4,10 +4,10 @@ parse_beta_params <- function(
     theta,                                     # full parameter vector
     yi,                                        # outcome vector
     sei,                                       # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),  # one-sided p-values
+    pi = NULL,                                 # one-sided p-values
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
-    zeta = NULL,                              # selection model coefficients
+    zeta = NULL,                               # selection model coefficients
     alpha = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
@@ -16,7 +16,7 @@ parse_beta_params <- function(
 ) {
   
   # number of observations
-  k <- length(yi)
+  k <- length(sei)
   
   # parameter dimensions and names
   if (is.null(X)) {
@@ -53,8 +53,14 @@ parse_beta_params <- function(
   alpha_lambda <- (alpha ^ lambda[1]) * ((1 - alpha) ^ lambda[2])
 
   # calculate weights 
-  pi_tilde <- pmin(alpha[2], pmax(alpha[1], pi))
-  weight_vec <- (pi_tilde ^ lambda[1]) * ((1 - pi_tilde) ^ lambda[2])
+  if (!missing(yi)) {
+    if (is.null(pi)) pi <- pnorm(yi / sei, lower.tail = FALSE)
+    pi_tilde <- pmin(alpha[2], pmax(alpha[1], pi))
+    weight_vec <- (pi_tilde ^ lambda[1]) * ((1 - pi_tilde) ^ lambda[2])
+  } else {
+    pi_tilde <- NULL
+    weight_vec <- NULL
+  }
 
   params <- list(k = k,
                  x_dim = x_dim,
