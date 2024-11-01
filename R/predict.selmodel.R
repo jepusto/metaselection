@@ -35,6 +35,9 @@
 #' predict(res)
 #'
 #' newdat <- data.frame(sample_population = c("Students","Students"))
+#' predict(res, newdata = newdat, obs_prob = FALSE)
+#' 
+#' newdat$sei <- c(0.10, 0.15)
 #' predict(res, newdata = newdat)
 
 
@@ -58,20 +61,26 @@ predict.step.selmodel <- function(
   } else {
 
     cl <- object$cl
-    sei <- eval(cl$sei, envir = newdata)
+    
+    if (obs_prob) {
+      sei <- eval(cl$sei, envir = newdata)
+    } else {
+      sei <- rep(.10, nrow(newdata))
+    }
+    
     steps <- object$steps
     
-    X <- if (is.null(cl$mean_mods)) NULL else do.call(model.matrix, list(object = cl$mean_mods, data = newdata))
-    U <- if (is.null(cl$var_mods)) NULL else do.call(model.matrix, list(object = cl$var_mods, data = newdata))
-    Z0 <- if (is.null(cl$sel_zero_mods)) NULL else do.call(model.matrix, list(object = cl$sel_zero_mods, data = newdata))
+    X <- if (is.null(cl$mean_mods)) NULL else do.call(stats::model.matrix, list(object = eval(cl$mean_mods), data = newdata))
+    U <- if (is.null(cl$var_mods)) NULL else do.call(stats::model.matrix, list(object = eval(cl$var_mods), data = newdata))
+    Z0 <- if (is.null(cl$sel_zero_mods)) NULL else do.call(stats::model.matrix, list(object = eval(cl$sel_zero_mods), data = newdata))
     if (is.null(cl$sel_mods)) {
       Z <- NULL
     } else {
       if (is.list(cl$sel_mods)) {
         if (length(cl$sel_mods) != length(steps)) stop("sel_mods must be a list with length equal to the number of steps.")
-        Z <- lapply(cl$sel_mods, model.matrix, data = newdata)
+        Z <- lapply(cl$sel_mods, \(x) stats::model.matrix(x, data = newdata))
       } else {
-        Z1 <- do.call(model.matrix, list(object = cl$sel_mods, data = newdata))
+        Z1 <- do.call(stats::model.matrix, list(object = eval(cl$sel_mods), data = newdata))
         Z <- rep(list(Z1), times = length(steps))
       }
     }
@@ -123,7 +132,11 @@ predict.step.selmodel <- function(
 #' predict(res)
 #'
 #' newdat <- data.frame(sample_population = c("Students","Students"))
+#' predict(res, newdata = newdat, obs_prob = FALSE)
+#' 
+#' newdat$sei <- c(0.10, 0.15)
 #' predict(res, newdata = newdat)
+
 
 predict.beta.selmodel <- function(
     object, 
@@ -142,11 +155,17 @@ predict.beta.selmodel <- function(
   } else {
     
     cl <- object$cl
-    sei <- eval(cl$sei, envir = newdata)
+    
+    if (obs_prob) {
+      sei <- eval(cl$sei, envir = newdata)
+    } else {
+      sei <- rep(.10, nrow(newdata))
+    }
+    
     steps <- object$steps
     
-    X <- if (is.null(cl$mean_mods)) NULL else do.call(model.matrix, list(object = cl$mean_mods, data = newdata))
-    U <- if (is.null(cl$var_mods)) NULL else do.call(model.matrix, list(object = cl$var_mods, data = newdata))
+    X <- if (is.null(cl$mean_mods)) NULL else do.call(stats::model.matrix, list(object = eval(cl$mean_mods), data = newdata))
+    U <- if (is.null(cl$var_mods)) NULL else do.call(stats::model.matrix, list(object = eval(cl$var_mods), data = newdata))
 
     predictions <- parse_beta_params(
       theta = object$est$Est,

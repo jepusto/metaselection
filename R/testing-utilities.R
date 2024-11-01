@@ -1050,36 +1050,33 @@ check_selmodel_summary <- function(mod, ...) {
 
 check_selection_weights <- function(dat, steps, estimator = "ML", bootstrap = "none", R = 9) {
 
-  step_fit <- selection_model(
-    data = dat,
-    yi = d,
-    sei = sd_d,
-    cluster = studyid,
-    steps = steps,
-    estimator = estimator,
-    bootstrap = bootstrap,
-    R = R
+  mod_args <- list(
+    data = dat, 
+    yi = as.symbol("d"), sei = as.symbol("sd_d"), cluster = as.symbol("studyid"), 
+    steps = steps, estimator = estimator, 
+    bootstrap = bootstrap, R = R
   )
+  step_fit <- do.call(selection_model, args = mod_args)
   
   
   if (bootstrap == "none") {
     
-    zeta_est <- subset(step_fit$est, grepl("zeta", param))
+    zeta_est <- step_fit$est[grepl("zeta", step_fit$est$param),]
     lambda_est <- exp(zeta_est$Est)
     
     dat_wts <- selection_wts(step_fit)
     
     unique_wts <- tapply(dat_wts$wt, cut(dat_wts$p, c(0,steps, 1), include.lowest = TRUE), unique, simplify = FALSE)[-1]
-    expect_equal(as.integer(lengths(unique_wts)), rep(1L, length(steps)))
-    expect_equal(as.numeric(unlist(unique_wts)), lambda_est)
+    testthat::expect_equal(as.integer(lengths(unique_wts)), rep(1L, length(steps)))
+    testthat::expect_equal(as.numeric(unlist(unique_wts)), lambda_est)
     
     other_wts <- selection_wts(step_fit, pvals = seq(0, 1, 0.02))
     unique_other_wts <- tapply(other_wts$wt, cut(other_wts$p, c(0,steps, 1), include.lowest = TRUE), unique, simplify = FALSE)[-1]
-    expect_equal(unique_wts, unique_other_wts)
+    testthat::expect_equal(unique_wts, unique_other_wts)
     
   } else {
     
-    zeta_est <- subset(step_fit$bootstrap_reps, grepl("zeta", param))
+    zeta_est <- step_fit$bootstrap_reps[grepl("zeta", step_fit$bootstrap_reps$param),]
     lambda_est <- exp(zeta_est$Est)
     R <- nrow(zeta_est) / step_fit$param_dim["sel"]
     
@@ -1087,13 +1084,13 @@ check_selection_weights <- function(dat, steps, estimator = "ML", bootstrap = "n
     
     unique_wts <- tapply(dat_wts$wt, list(dat_wts$rep, cut(dat_wts$p, c(0,steps, 1), include.lowest = TRUE)), unique, simplify = FALSE)[,-1,drop=FALSE]
     dimnames(unique_wts) <- NULL
-    expect_equal(lengths(unique_wts), matrix(1L, R, length(steps)))
-    expect_equal(unlist(t(unique_wts)), lambda_est)
+    testthat::expect_equal(lengths(unique_wts), matrix(1L, R, length(steps)))
+    testthat::expect_equal(unlist(t(unique_wts)), lambda_est)
     
     other_wts <- selection_wts(step_fit, pvals = seq(0, 1, 0.02))$boot_wts
     unique_other_wts <- tapply(other_wts$wt, list(other_wts$rep, cut(other_wts$p, c(0,steps, 1), include.lowest = TRUE)), unique, simplify = FALSE)[,-1,drop=FALSE]
     dimnames(unique_other_wts) <- NULL
-    expect_equal(unique_wts, unique_other_wts)
+    testthat::expect_equal(unique_wts, unique_other_wts)
     
   }
   
@@ -1116,7 +1113,7 @@ check_predictions <- function(
     mod <- eval(cl, parent.frame())
   )
   
-  all_preds <- predict(mod)
+  all_preds <- stats::predict(mod)
 
   params <- mod$est$param
   beta <- mod$est$Est[grepl("^beta", params)]
@@ -1124,29 +1121,29 @@ check_predictions <- function(
   zeta <- mod$est$Est[grepl("^zeta", params)]
   
   if (is.null(mean_mods)) {
-    expect_equal(beta, unique(all_preds$mu))
+    testthat::expect_equal(beta, unique(all_preds$mu))
   } else {
     X <- stats::model.matrix(mean_mods, data = data)
     mu <- as.numeric(X %*% beta)
-    expect_equal(mu, all_preds$mu)
+    testthat::expect_equal(mu, all_preds$mu)
   }
   
   if (is.null(var_mods)) {
-    expect_equal(exp(gamma), unique(all_preds$tau2))
+    testthat::expect_equal(exp(gamma), unique(all_preds$tau2))
   } else {
     U <- stats::model.matrix(var_mods, data = data)
     tau2 <- as.numeric(exp(U %*% gamma))
-    expect_equal(tau2, all_preds$tau2)
+    testthat::expect_equal(tau2, all_preds$tau2)
   }
   
   if (selection_type == "step") {
     if (is.null(sel_mods)) {
       
       lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
-      expect_equal(exp(zeta), as.numeric(lambda[-1]))
+      testthat::expect_equal(exp(zeta), as.numeric(lambda[-1]))
       
       sel_wts <- selection_wts(mod)
-      expect_equal(
+      testthat::expect_equal(
         as.numeric(lambda[mod$predictions$cats]),
         sel_wts$wt
       )
@@ -1156,15 +1153,15 @@ check_predictions <- function(
       zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
       lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
       lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
-      expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
+      testthat::expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
     }
   }
   
   # Check prediction of subset of observations
   sub <- sample(1:nrow(data), 10L)
   newdata <- data[sub,]
-  sub_preds <- predict(mod, newdata = newdata)
-  expect_equal(sub_preds, all_preds[sub,])
+  sub_preds <- stats::predict(mod, newdata = newdata)
+  testthat::expect_equal(sub_preds, all_preds[sub,])
   
   return(all_preds)
 }

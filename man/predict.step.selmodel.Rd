@@ -55,5 +55,8 @@ res <- selection_model(
 predict(res)
 
 newdat <- data.frame(sample_population = c("Students","Students"))
+predict(res, newdata = newdat, obs_prob = FALSE)
+
+newdat$sei <- c(0.10, 0.15)
 predict(res, newdata = newdat)
 }
