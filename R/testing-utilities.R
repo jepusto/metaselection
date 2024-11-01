@@ -1099,3 +1099,63 @@ check_selection_weights <- function(dat, steps, estimator = "ML", bootstrap = "n
   
 }
 
+check_predictions <- function(
+    data, yi, sei, pi, ai, 
+    selection_type = "step", 
+    steps = NULL,
+    mean_mods = NULL,
+    var_mods = NULL,
+    sel_mods = NULL,
+    estimator = "hybrid"
+) {
+  
+  cl <- match.call()
+  cl[[1L]] <- str2lang("metaselection:::selection_model")
+  mod <- eval(cl, parent.frame())
+  
+  all_preds <- predict(mod)
+
+  params <- mod$est$param
+  beta <- mod$est$Est[grepl("^beta", params)]
+  gamma <- mod$est$Est[grepl("^gamma", params)]
+  zeta <- mod$est$Est[grepl("^zeta", params)]
+  
+  if (is.null(mean_mods)) {
+    expect_equal(beta, unique(all_preds$mu))
+  } else {
+    X <- model.matrix(mean_mods, data = dat)
+    mu <- as.numeric(X %*% beta)
+    expect_equal(mu, all_preds$mu)
+  }
+  
+  if (is.null(var_mods)) {
+    expect_equal(exp(gamma), unique(all_preds$tau2))
+  } else {
+    U <- model.matrix(var_mods, data = dat)
+    tau2 <- as.numeric(exp(U %*% gamma))
+    expect_equal(tau2, all_preds$tau2)
+  }
+  
+  if (selection_type == "step") {
+    if (is.null(sel_mods)) {
+      
+      lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
+      expect_equal(exp(zeta), as.numeric(lambda[-1]))
+      
+      sel_wts <- selection_wts(mod)
+      expect_equal(
+        as.numeric(lambda[mod$predictions$cats]),
+        sel_wts$wt
+      )
+      
+    } else {
+      Z <- model.matrix(sel_mods, data = dat)
+      zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
+      lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
+      lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
+      expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
+    }
+  }
+  
+  return(all_preds)
+}

@@ -51,12 +51,12 @@ predict.step.selmodel <- function(
   
   if (is.null(newdata)) {
     
-    res <- data.frame()
+    res <- data.frame(row.names = row.names(object$mf))
     
     if (location) res$mu <- object$predictions$mu
-    if (scale) res$tau2 <- object$predictions$tau2
+    if (scale) res$tau2 <- object$predictions$tausq
     if (selection) {
-      names(object$predictions$lambda_full) <- paste0("lambda", 0:ncol(object$predictions$lambda_full))
+      colnames(object$predictions$lambda_full) <- paste0("lambda", 1:ncol(object$predictions$lambda_full) - 1L)
       res <- cbind(res, object$predictions$lambda_full)
     }
     if (obs_prob) res$obs_prob <- object$predictions$Ai
@@ -78,6 +78,7 @@ predict.step.selmodel <- function(
 #'
 #' @param object Fitted model of class inheriting from \code{"beta.selmodel"}.
 #' @inheritParams predict.step.selmodel
+#' 
 #' @export
 #'
 #' @examples
@@ -95,8 +96,6 @@ predict.step.selmodel <- function(
 #' newdat <- data.frame(sample_population = c("Students","Students"))
 #' predict(res, newdata = newdat)
 
-
-
 predict.beta.selmodel <- function(
     object, 
     newdata = NULL, 
@@ -108,10 +107,10 @@ predict.beta.selmodel <- function(
   
   if (is.null(newdata)) {
     
-    res <- data.frame()
+    res <- data.frame(row.names = row.names(object$mf))
     
     if (location) res$mu <- object$predictions$mu
-    if (scale) res$tau2 <- object$predictions$tau2
+    if (scale) res$tau2 <- object$predictions$tausq
     if (obs_prob) res$obs_prob <- object$predictions$Ai
     
     return(res)
