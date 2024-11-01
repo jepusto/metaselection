@@ -431,7 +431,7 @@ check_model_structure <- function(
   if (cor_mu > 0) {
     Vmat <- metafor::vcalc(
       vi = dat$var_d, cluster = dat$studyid, obs = dat$esid,  
-      rho = cor_mu, checkpd = FALSE
+      rho = cor_mu, checkpd = FALSE, sparse = TRUE
     )
     
     suppressWarnings(

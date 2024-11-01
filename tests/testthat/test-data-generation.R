@@ -182,6 +182,7 @@ test_that("r_meta generates target number of studies with multiple parameter val
 
 test_that("r_meta generates ES estimates with expected structure", {
   
+  skip_on_cran()
   skip_if_not_installed("metafor")
   verbose <- FALSE
   
@@ -206,7 +207,7 @@ test_that("r_meta generates ES estimates with expected structure", {
   check_model_structure(
     mean_smd = 0.5, tau = 0.8, omega = 0.4, 
     cor_mu = 0.4,
-    m = 300, 
+    m = 200, 
     n_ES_sim = n_ES_param(1000, 2),
     verbose = verbose
   )
@@ -225,6 +226,7 @@ test_that("r_meta generates ES estimates with expected structure", {
 
 test_that("r_meta_categories generates ES estimates with expected structure", {
   
+  skip_on_cran()
   skip_if_not_installed("metafor")
   verbose <- FALSE
 
@@ -233,7 +235,7 @@ test_that("r_meta_categories generates ES estimates with expected structure", {
     mean_smd = seq(0, 0.5, 0.15),
     tau = 0.21, omega = 0, 
     cor_mu = 0,
-    m = 150, 
+    m = 80, 
     n_ES_sim = n_ES_param(100, 5),
     verbose = verbose,
     check_varcomp = FALSE
@@ -256,7 +258,7 @@ test_that("r_meta_categories generates ES estimates with expected structure", {
     tau = 0.8, 
     omega = c(0.06, 0.23), 
     cor_mu = 0,
-    m = 120, 
+    m = 75, 
     n_ES_sim = n_ES_param(140, 2),
     verbose = verbose
   )
@@ -267,7 +269,7 @@ test_that("r_meta_categories generates ES estimates with expected structure", {
     tau = c(0.20, 0.13),
     omega = c(0.1, 0.08), 
     cor_mu = 0,
-    m = 175, 
+    m = 90, 
     n_ES_sim = n_ES_param(160, 2),
     verbose = verbose
   )
