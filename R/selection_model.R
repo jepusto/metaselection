@@ -804,6 +804,9 @@ selection_model <- function(
       steps = steps, 
       X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
     )
+    sel_params <- sum(predictions$z_dim)
+    sel_zero_params <- predictions$z0_dim
+    
   } else if (selection_type == "beta") {
     predictions <- parse_beta_params(
       theta = res$est$Est,
@@ -811,6 +814,9 @@ selection_model <- function(
       alpha = steps, 
       X = X, U = U, calc_Ai = TRUE
     )
+    sel_params <- 2L
+    sel_zero_params <- 0L
+    
   }
   
   # Finish building selmodel object
@@ -825,8 +831,8 @@ selection_model <- function(
   res$param_dim <- c(
     mean = predictions$x_dim, 
     var = predictions$u_dim, 
-    sel = sum(predictions$z_dim), 
-    sel_zero = predictions$z0_dim
+    sel = sel_params, 
+    sel_zero = sel_zero_params
   )
   res$predictions <- predictions[c("mu","tausq","eta","lambda_full","weight_vec","cats","B_mat","Ai")]
   
