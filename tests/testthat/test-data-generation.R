@@ -196,7 +196,7 @@ test_that("r_meta generates ES estimates with expected structure", {
   
   set.seed(20240505)
   check_model_structure(
-    mean_smd = 0.3, tau = 0.08, omega = 0.01, 
+    mean_smd = 0.3, tau = 0.18, omega = 0.12, 
     cor_mu = 0.3,
     m = 250, 
     n_ES_sim = n_ES_param(140, 2),
