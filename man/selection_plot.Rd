@@ -6,11 +6,12 @@
 \alias{selection_plot.boot.selmodel}
 \title{Plot the selection weights implied by an estimated selection model.}
 \usage{
-selection_plot(mod, pts = 200L, ...)
+selection_plot(mod, pts = 200L, ref_pval = NULL, ...)
 
 \method{selection_plot}{selmodel}(
   mod,
   pts = 200L,
+  ref_pval = NULL,
   fill = "blue",
   alpha = 0.5,
   step_linetype = "dashed",
@@ -20,6 +21,7 @@ selection_plot(mod, pts = 200L, ...)
 \method{selection_plot}{boot.selmodel}(
   mod,
   pts = 200L,
+  ref_pval = NULL,
   color = "black",
   linewidth = 1.2,
   step_linetype = "dashed",
@@ -34,6 +36,11 @@ selection_plot(mod, pts = 200L, ...)
 
 \item{pts}{Number of points for which to calculate selection weights, with a
 default of 200 points, evenly spaced between 0 and 1.}
+
+\item{ref_pval}{Numeric value of a p-value at which to standardize the
+weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
+selection weight of 1 and selection weights for all other p-values will be
+calculated relative to \code{ref_pval}.}
 
 \item{...}{further arguments passed to some methods.}
 

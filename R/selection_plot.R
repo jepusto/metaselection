@@ -275,6 +275,7 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #' @param mod Fitted model of class \code{"selmodel"}.
 #' @param pts Number of points for which to calculate selection weights, with a
 #'   default of 200 points, evenly spaced between 0 and 1.
+#' @inheritParams selection_wts
 #' @param ... further arguments passed to some methods.
 #'
 #' @returns A \code{ggplot2} object.
@@ -312,12 +313,12 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'  selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
 #' 
 
-selection_plot <- function(mod, pts = 200L, ...) UseMethod("selection_plot")
+selection_plot <- function(mod, pts = 200L, ref_pval = NULL, ...) UseMethod("selection_plot")
 
 
 #' @export
 
-selection_plot.default <- function(mod, pts = 200L, ...) {
+selection_plot.default <- function(mod, pts = 200L, ref_pval = NULL, ...) {
   mod_class <- paste(class(mod), collapse = ", ")
   msg <- paste0("There is no `selection_plot` method available for objects of class ", mod_class, ".")
   stop(msg)
@@ -339,6 +340,7 @@ selection_plot.default <- function(mod, pts = 200L, ...) {
 selection_plot.selmodel <- function(
   mod, 
   pts = 200L, 
+  ref_pval = NULL,
   fill = "blue",
   alpha = 0.5,
   step_linetype = "dashed",
@@ -349,7 +351,7 @@ selection_plot.selmodel <- function(
   
   pts <- seq(0, 1, length.out = pts)
   steps <- mod$steps
-  dat <- selection_wts(mod, pvals = pts, bootstrap = FALSE)
+  dat <- selection_wts(mod, pvals = pts, ref_pval = ref_pval, bootstrap = FALSE)
   
   ggplot2::ggplot(dat) + 
     ggplot2::aes(x = .data$p, y = .data$wt) + 
@@ -392,6 +394,7 @@ selection_plot.selmodel <- function(
 selection_plot.boot.selmodel <- function(
     mod, 
     pts = 200L, 
+    ref_pval = NULL,
     color = "black",
     linewidth = 1.2, 
     step_linetype = "dashed",
@@ -406,7 +409,7 @@ selection_plot.boot.selmodel <- function(
   pts <- seq(0, 1, length.out = pts)
   steps <- mod$steps
   
-  dat <- selection_wts(mod, pvals = pts, bootstraps = TRUE)
+  dat <- selection_wts(mod, pvals = pts, ref_pval = ref_pval, bootstraps = TRUE)
   R <- eval(mod$cl$R, envir = parent.frame())
   
   p <- ggplot2::ggplot(dat$wts) + 

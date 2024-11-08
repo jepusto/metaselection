@@ -29,6 +29,10 @@ test_that("selection_plot() works for 3PSM.", {
   expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
+  wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.9)
+  p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.9)
+  expect_identical(wt_r_noboot, p_r_noboot$data)
+
   suppressWarnings(
     ML_boot <- selection_model(
       data = dat,
@@ -61,6 +65,11 @@ test_that("selection_plot() works for 3PSM.", {
   expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
   expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
+  
+  wt_r_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200), ref_pval = 0.3)
+  p_r_boot <- selection_plot(ML_boot, ref_pval = 0.3)
+  expect_identical(wt_r_boot$wts, p_r_boot$data)
+  expect_identical(wt_r_boot$boot_wts, p_r_boot$layers[[3]]$data)
   
 
   hybrid_noboot <- selection_model(
@@ -147,6 +156,10 @@ test_that("selection_plot() works for 4PSM.", {
   expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
   
+  wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.47)
+  p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.47)
+  expect_identical(wt_r_noboot, p_r_noboot$data)
+  
   ML_boot <- selection_model(
     data = dat,
     yi = d,
@@ -179,6 +192,10 @@ test_that("selection_plot() works for 4PSM.", {
   expect_identical(wt_boot$wts, p_boot$data)
   expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
+  wt_r_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200), ref_pval = 0.34)
+  p_r_boot <- selection_plot(ML_boot, ref_pval = 0.34)
+  expect_identical(wt_r_boot$wts, p_r_boot$data)
+  expect_identical(wt_r_boot$boot_wts, p_r_boot$layers[[3]]$data)
   
   hybrid_noboot <- selection_model(
     data = dat,
@@ -266,6 +283,10 @@ test_that("selection_plot() works for beta model", {
   expect_s3_class(p_noboot, "ggplot")
   expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
+
+  wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.6)
+  p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.6)
+  expect_identical(wt_r_noboot, p_r_noboot$data)
   
   suppressWarnings(
     ML_boot <- selection_model(
@@ -300,6 +321,12 @@ test_that("selection_plot() works for beta model", {
   expect_s3_class(p_boot$layers[[4]]$geom, "GeomLine")
   expect_identical(wt_boot$wts, p_boot$data)
   expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
+
+  wt_r_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200), ref_pval = 0.25)
+  p_r_boot <- selection_plot(ML_boot, ref_pval = 0.25)
+
+  expect_identical(wt_r_boot$wts, p_r_boot$data)
+  expect_identical(wt_r_boot$boot_wts, p_r_boot$layers[[3]]$data)
   
 })
 
