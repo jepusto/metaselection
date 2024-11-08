@@ -1,3 +1,34 @@
+data("CigaretteDemand", package = "ivreg")
+
+debug(ivreg)
+m <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+           data = CigaretteDemand)
+
+
+
+test_that("predict() works with newdata that does not have all levels observed.", {
+
+  res <- selection_model(
+    data = self_control,
+    yi = g,
+    sei = se_g,
+    cluster = studyid,
+    selection_type = "step",
+    steps = 0.025,
+    mean_mods = ~ 0 + sample_population,
+    var_mods = ~ 0 + sample_population
+  )
+
+  all_preds <- predict(res)
+
+  newdat <- data.frame(sample_population = c("Students","Students"))
+  
+  newdat_basic_preds <- predict(res, newdata = newdat, obs_prob = FALSE)
+
+  newdat$se_g <- c(0.10, 0.15)
+  predict(res, newdata = newdat)
+})
+
 
 test_that("predict.step.selmodel() works for the original dataset and newdata.", {
   
