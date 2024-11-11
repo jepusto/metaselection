@@ -22,9 +22,7 @@
 #'@source \href{https://doi.org/10.1370/afm.1312}{Table 1 of Baskerville et al.
 #'  (2012)}
 #'
-#'@references Baskerville, N. B., Liddy, C., & Hogg, W. (2012). Systematic
-#'  review and meta-analysis of practice facilitation within primary care
-#'  settings. \emph{Annals of Family Medicine, 10}(1), 63-74.
-#'  \doi{doi:10.1370/afm.1312}
+#' @references 
+#' \insertRef{baskerville2012}{metaselection}
 #'
 "practice_facilitation"

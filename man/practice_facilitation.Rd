@@ -33,9 +33,6 @@ effect of practice facilitation on the uptake of evidence-based practices
 (EBPs) in primary care settings.
 }
 \references{
-Baskerville, N. B., Liddy, C., & Hogg, W. (2012). Systematic
-review and meta-analysis of practice facilitation within primary care
-settings. \emph{Annals of Family Medicine, 10}(1), 63-74.
-\doi{doi:10.1370/afm.1312}
+\insertRef{baskerville2012}{metaselection}
 }
 \keyword{datasets}
