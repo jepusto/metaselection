@@ -60,12 +60,13 @@ parameter estimates.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selection_plot</span><span class="op">(</span><span class="va">mod</span>, pts <span class="op">=</span> <span class="fl">200L</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selection_plot</span><span class="op">(</span><span class="va">mod</span>, pts <span class="op">=</span> <span class="fl">200L</span>, ref_pval <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'selmodel'</span></span>
 <span><span class="fu">selection_plot</span><span class="op">(</span></span>
 <span>  <span class="va">mod</span>,</span>
 <span>  pts <span class="op">=</span> <span class="fl">200L</span>,</span>
+<span>  ref_pval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fill <span class="op">=</span> <span class="st">"blue"</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  step_linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
@@ -76,6 +77,7 @@ parameter estimates.</p>
 <span><span class="fu">selection_plot</span><span class="op">(</span></span>
 <span>  <span class="va">mod</span>,</span>
 <span>  pts <span class="op">=</span> <span class="fl">200L</span>,</span>
+<span>  ref_pval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  linewidth <span class="op">=</span> <span class="fl">1.2</span>,</span>
 <span>  step_linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
@@ -97,6 +99,13 @@ parameter estimates.</p>
 <dt id="arg-pts">pts<a class="anchor" aria-label="anchor" href="#arg-pts"></a></dt>
 <dd><p>Number of points for which to calculate selection weights, with a
 default of 200 points, evenly spaced between 0 and 1.</p></dd>
+
+
+<dt id="arg-ref-pval">ref_pval<a class="anchor" aria-label="anchor" href="#arg-ref-pval"></a></dt>
+<dd><p>Numeric value of a p-value at which to standardize the
+weights. If not <code>NULL</code>, then a p-value of <code>ref_pval</code> will have
+selection weight of 1 and selection weights for all other p-values will be
+calculated relative to <code>ref_pval</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

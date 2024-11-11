@@ -51,13 +51,13 @@ for a user-specified p-value or set of p-values.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, <span class="va">pvals</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, <span class="va">pvals</span>, <span class="va">ref_pval</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'step.selmodel'</span></span>
-<span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, <span class="va">pvals</span>, bootstraps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, pvals <span class="op">=</span> <span class="cn">NULL</span>, ref_pval <span class="op">=</span> <span class="cn">NULL</span>, bootstraps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'beta.selmodel'</span></span>
-<span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, <span class="va">pvals</span>, bootstraps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">selection_wts</span><span class="op">(</span><span class="va">mod</span>, pvals <span class="op">=</span> <span class="cn">NULL</span>, ref_pval <span class="op">=</span> <span class="cn">NULL</span>, bootstraps <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,6 +71,13 @@ for a user-specified p-value or set of p-values.</p>
 <dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
 <dd><p>Numeric vector of p-values for which to calculate selection
 weights.</p></dd>
+
+
+<dt id="arg-ref-pval">ref_pval<a class="anchor" aria-label="anchor" href="#arg-ref-pval"></a></dt>
+<dd><p>Numeric value of a p-value at which to standardize the
+weights. If not <code>NULL</code>, then a p-value of <code>ref_pval</code> will have
+selection weight of 1 and selection weights for all other p-values will be
+calculated relative to <code>ref_pval</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -148,59 +155,59 @@ an additional variable, <code>rep</code>, identifying the bootstrap replicate.</
 <span class="r-out co"><span class="r-pr">#&gt;</span> $boot_wts</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    rep   p        wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    1 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1 0.2 0.9893249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    1 0.4 0.9893249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1 0.6 0.2897322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1 0.8 0.2897322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1 1.0 0.2897322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1 0.2 0.9273514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    1 0.4 0.9273514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1 0.6 0.3464184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1 0.8 0.3464184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1 1.0 0.3464184</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7    2 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    2 0.2 0.8408823</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    2 0.4 0.8408823</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   2 0.6 0.3392195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   2 0.8 0.3392195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   2 1.0 0.3392195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    2 0.2 0.2656371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    2 0.4 0.2656371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   2 0.6 0.1885424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   2 0.8 0.1885424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   2 1.0 0.1885424</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13   3 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   3 0.2 1.2379700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   3 0.4 1.2379700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   3 0.6 0.7158056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   3 0.8 0.7158056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   3 1.0 0.7158056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   3 0.2 0.5625173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   3 0.4 0.5625173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16   3 0.6 0.2187850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   3 0.8 0.2187850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   3 1.0 0.2187850</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19   4 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   4 0.2 0.7109054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   4 0.4 0.7109054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   4 0.6 0.3367876</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23   4 0.8 0.3367876</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   4 1.0 0.3367876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20   4 0.2 1.2701629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   4 0.4 1.2701629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   4 0.6 0.5067402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23   4 0.8 0.5067402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   4 1.0 0.5067402</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25   5 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   5 0.2 0.5776662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   5 0.4 0.5776662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   5 0.6 0.1866829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   5 0.8 0.1866829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5 1.0 0.1866829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   5 0.2 1.3752388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   5 0.4 1.3752388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28   5 0.6 0.5670352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   5 0.8 0.5670352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5 1.0 0.5670352</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31   6 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   6 0.2 0.5696899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33   6 0.4 0.5696899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34   6 0.6 0.2514365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35   6 0.8 0.2514365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36   6 1.0 0.2514365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   6 0.2 1.1451944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33   6 0.4 1.1451944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34   6 0.6 1.0487932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35   6 0.8 1.0487932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36   6 1.0 1.0487932</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 37   7 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38   7 0.2 0.7180944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39   7 0.4 0.7180944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40   7 0.6 0.2427214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41   7 0.8 0.2427214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42   7 1.0 0.2427214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38   7 0.2 0.4779856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39   7 0.4 0.4779856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40   7 0.6 0.1511367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41   7 0.8 0.1511367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42   7 1.0 0.1511367</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 43   8 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44   8 0.2 0.8126387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45   8 0.4 0.8126387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46   8 0.6 0.9759344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47   8 0.8 0.9759344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48   8 1.0 0.9759344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44   8 0.2 0.5690712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45   8 0.4 0.5690712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46   8 0.6 0.1832612</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47   8 0.8 0.1832612</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48   8 1.0 0.1832612</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 49   9 0.0 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50   9 0.2 1.0135422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51   9 0.4 1.0135422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52   9 0.6 0.5519481</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53   9 0.8 0.5519481</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54   9 1.0 0.5519481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50   9 0.2 0.4343720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51   9 0.4 0.4343720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52   9 0.6 0.2790007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53   9 0.8 0.2790007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54   9 1.0 0.2790007</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

@@ -26,6 +26,7 @@ reference:
   contents:
   - self_control
   - interleaved_learning
+  - practice_facilitation
   - wwc_es
 - title: "Data Simulation"
   desc: "Functions to simulate meta-analytic data, including data subject to selective outcome reporting"

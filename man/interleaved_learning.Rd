@@ -50,9 +50,6 @@ Meta-analytic dataset containing results of primary studies examining the
 effect of interleaved learning.
 }
 \references{
-Brunmair, M., & Richter, T. (2019). Similarity matters:
-A meta-analysis of interleaved learning and its moderators.
-\emph{Psychological Bulletin, 145}(11), 1029.
-\doi{doi:10.1037/bul0000209}
+\insertRef{brunmair2019similarity}{metaselection}
 }
 \keyword{datasets}
