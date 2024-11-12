@@ -35,6 +35,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   n_effects <- object$n_effects
   steps <- paste(object$steps, collapse = ", ")
   call <- object$cl
+  ptable <- object$ptable
   
   estimates <- object$est
   estimator <- estimates$estimator[1]
@@ -94,11 +95,36 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
     estimates$param <- sub("^zeta","lambda_", estimates$param)
     zeta_estimates <- estimates[zeta_params, vars_display]
+    
+    if (inherits(object, "step.selmodel")){
+      
+      first_step <- data.frame(param = "",
+                               Est = 1.0,
+                               SE = NA,
+                               CI_lo = NA,
+                               CI_hi = NA)
+      
+      zeta_estimates <- rbind(first_step, zeta_estimates)
+      zeta_estimates <- cbind(ptable, zeta_estimates)
+      
+    }
 
   } else {
     
     zeta_estimates <- estimates[zeta_params, vars_display]
-      
+    
+    if (inherits(object, "step.selmodel")){
+    
+    first_step <- data.frame(param = "",
+                             Est = 0.0,
+                             SE = NA,
+                             CI_lo = NA,
+                             CI_hi = NA)
+    
+    zeta_estimates <- rbind(first_step, zeta_estimates)
+    zeta_estimates <- cbind(ptable, zeta_estimates)
+    
+    }
   }
   
 
@@ -156,5 +182,8 @@ print_with_header <- function(x, digits, ...) {
   
   x_format <- format(x[,vars_display], digits = digits, ...)
   x_print <- rbind(all_vars[,vars_display], x_format)
-  print(unname(x_print), row.names = FALSE)
+  print(unname(x_print), row.names = FALSE, na.print = "")
 }
+
+
+

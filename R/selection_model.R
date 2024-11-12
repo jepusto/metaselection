@@ -809,6 +809,8 @@ selection_model <- function(
       }
     }
     
+    
+    
     class(res) <- c("boot.selmodel", class(res))
     
   }
@@ -856,6 +858,10 @@ selection_model <- function(
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
   res$n_effects <- predictions$k
   
+  res$ptable <- create_ptable(pvals = pi,
+                              studies = cluster,
+                              steps = steps)
+  
   return(res)
 }
 
@@ -883,6 +889,45 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
     SIMPLIFY = FALSE,
     future.seed = TRUE
   )
+  
+}
+
+
+
+create_ptable <- function(pvals = pi,
+                          studies = cluster,
+                          steps = steps){
+  
+  steps <- c(steps, 1)
+  
+  pgrp     <- sapply(pvals, function(p) which(p <= steps)[1])
+  psteps_l <- as.character(c(0, steps[-length(steps)]))
+  psteps_r <- as.character(steps)
+  len_l    <- nchar(psteps_l)
+  #pad_l    <- sapply(max(len_l) - len_l, function(x) paste0(rep(" ", x), collapse=""))
+  #psteps_l <- paste0(psteps_l, pad_l)
+  psteps   <- paste0(psteps_l, " < p <= ", psteps_r)
+  
+  effects_group <- factor(pgrp, levels = seq_along(steps), labels = psteps)
+  
+  ptable   <- table(effects_group)
+  ptable   <- data.frame(param = names(ptable), k = as.vector(ptable))
+  
+  if(!is.null(studies)){
+  
+    dat_ptable <- data.frame(effects_group = effects_group,
+                             studies = studies,
+                             pvals = pvals) 
+    
+    m <- aggregate(studies ~ effects_group, dat_ptable, function(x) length(unique(x)))
+    ptable$m <- m$studies
+  
+  
+  }
+  
+  
+  return(ptable)
+
   
 }
 
