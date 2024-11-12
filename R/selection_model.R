@@ -5,6 +5,7 @@
 build_model_frame <- function(
     data,
     yi,
+    vi,
     sei,
     pi,
     ai,
@@ -38,7 +39,9 @@ build_model_frame <- function(
 }
 
 find_starting_values <- function(
-  yi, sei, 
+  yi, 
+  vi,
+  sei, 
   selection_type,
   steps, 
   X = NULL, 
@@ -81,7 +84,11 @@ find_starting_values <- function(
 }
 
 fit_selection_model <- function(
-  yi, sei, pi, steps, 
+  yi, 
+  vi, 
+  sei, 
+  pi, 
+  steps, 
   ai = NULL, 
   cluster = NULL, 
   X = NULL, 
@@ -422,6 +429,7 @@ fit_selection_model <- function(
 
 bootstrap_selmodel <- function(
     yi, 
+    vi,
     sei, 
     pi, 
     steps, 
@@ -514,6 +522,7 @@ bootstrap_selmodel <- function(
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
 #'   data
 #' @param yi vector of effect sizes estimates.
+#' @param vi vector of sample variances.
 #' @param sei vector of sampling standard errors.
 #' @param pi optional vector of one-sided p-values. If not specified, p-values
 #'   will be computed from \code{yi} and \code{sei}.
@@ -611,6 +620,7 @@ bootstrap_selmodel <- function(
 selection_model <- function(
     data,
     yi,
+    vi,
     sei,
     pi,
     ai,
@@ -676,7 +686,7 @@ selection_model <- function(
   # Create common model frame
   
   cl <- match.call()
-  m <- match(c("data","yi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
+  m <- match(c("data","yi", "vi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
   mf[[1L]] <- str2lang("metaselection:::build_model_frame")
@@ -685,7 +695,10 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
-  sei <- eval(cl$sei, envir = mf)
+  
+  vi <- if(missing(vi)) NULL else eval(cl$vi, envir = mf)
+  sei <- if(missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
+  
   pi <- if (missing(pi)) pnorm(yi / sei, lower.tail = FALSE) else eval(cl$pi, envir = mf)
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
