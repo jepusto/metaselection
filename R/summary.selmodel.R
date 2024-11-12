@@ -98,11 +98,9 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     
     if (inherits(object, "step.selmodel")){
       
-      first_step <- data.frame(param = "",
-                               Est = 1.0,
-                               SE = NA,
-                               CI_lo = NA,
-                               CI_hi = NA)
+      first_step <- zeta_estimates[1, ]
+      first_step[1, ] <- NA
+      first_step$Est <- 1
       
       zeta_estimates <- rbind(first_step, zeta_estimates)
       zeta_estimates <- cbind(ptable, zeta_estimates)
@@ -115,11 +113,9 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     
     if (inherits(object, "step.selmodel")){
     
-    first_step <- data.frame(param = "",
-                             Est = 0.0,
-                             SE = NA,
-                             CI_lo = NA,
-                             CI_hi = NA)
+      first_step <- zeta_estimates[1, ]
+      first_step[1, ] <- NA
+      first_step$Est <- 0
     
     zeta_estimates <- rbind(first_step, zeta_estimates)
     zeta_estimates <- cbind(ptable, zeta_estimates)
