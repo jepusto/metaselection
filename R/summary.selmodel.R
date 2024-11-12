@@ -181,7 +181,13 @@ print_with_header <- function(x, digits, ...) {
   vars_display <- intersect(names(x), names(all_vars))
   
   x_format <- format(x[,vars_display], digits = digits, ...)
+  
+  
+  x_small <- x[,vars_display]
+  x_format[is.na(x_small)] <- ""
+
   x_print <- rbind(all_vars[,vars_display], x_format)
+  
   print(unname(x_print), row.names = FALSE, na.print = "")
 }
 
