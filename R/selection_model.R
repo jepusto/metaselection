@@ -921,6 +921,8 @@ create_ptable <- function(pvals = pi,
     
     m <- aggregate(studies ~ effects_group, dat_ptable, function(x) length(unique(x)))
     ptable$m <- m$studies
+    
+    ptable <- ptable[, c("param", "m", "k")]
   
   
   }

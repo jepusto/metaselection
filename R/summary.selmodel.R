@@ -167,6 +167,8 @@ print_with_header <- function(x, digits, ...) {
  
   all_vars <- data.frame(
     param = c(" ", "Coef."),
+    m = c(" ", "Studies"),
+    k = c(" ", "Effects"),
     Est   = c(" ", "Estimate"),
     SE    = c(" ", "Std. Error"),
     CI_lo = c("Large", "Lower"),
@@ -178,6 +180,8 @@ print_with_header <- function(x, digits, ...) {
     student_lower = c("Studentized","Lower"),
     student_upper = c("Bootstrap", "Upper")
   )
+
+  
   vars_display <- intersect(names(x), names(all_vars))
   
   x_format <- format(x[,vars_display], digits = digits, ...)
