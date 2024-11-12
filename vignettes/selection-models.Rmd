@@ -312,7 +312,7 @@ mod_3PSM <- selection_model(
 mod_3PSM
 ```
 
-The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`].
+The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`]. In the results, note that we do not output the p-values. We did so to emphasize the estimation and interpretation of parameter estimates and confidence intervals instead of focusing on the statistical significance of results. 
 
 The estimates of the total heterogeneity parameter and the selection parameter are on the log-scale. We can obtain an estimate of the total variance by setting the argument `transf_gamma` to `TRUE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the probability scale by setting `transf_zeta = TRUE`:
 ```{r}
