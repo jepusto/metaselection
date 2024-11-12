@@ -184,7 +184,7 @@ print_with_header <- function(x, digits, ...) {
   
   
   x_small <- x[,vars_display]
-  x_format[is.na(x_small)] <- ""
+  x_format[is.na(x_small)] <- "---"
 
   x_print <- rbind(all_vars[,vars_display], x_format)
   
