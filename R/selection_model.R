@@ -508,7 +508,8 @@ bootstrap_selmodel <- function(
 #'
 #' @description Estimate step or beta selection model, with standard errors and
 #'   confidence intervals based on either cluster-robust variance estimators
-#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates.
+#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle
+#'   dependent effect size estimates.
 #'
 #'
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
@@ -570,7 +571,23 @@ bootstrap_selmodel <- function(
 #' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
-#' @returns A numeric vector.
+#' @returns An object of class \code{"selmodel"} containing the following
+#'   components:
+#' \describe{
+#'   \item{\code{est}}{A data frame with parameter estimates, standard errors, and
+#'   confidence intervals. Note that the results do not include p-values so
+#'   as to focus interpretation on the parameter estimates, rather than on
+#'   the statistical significance of any given parameter.}
+#'   \item{\code{vcov}}{A matrix containing the estimated variance-covariance matrix
+#'   of the parameter estiamtes}
+#'   \item{\code{method}}{Character string indicating the optimization method used to solve for parameter estimates.}
+#'   \item{\code{info}}{Further informaton about the optimization results.}
+#'   \item{\code{ll}}{Log likelihood of the model evaluated at the reported parameter estimates.}
+#'   \item{\code{wpll}}{Weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities}
+#'   \item{\code{n_clusters}}{Number of independent clusters of effect sizes.}
+#'   \item{\code{n_effects}}{Number of effect size estimates in the data.}
+#'   \item{\code{...}}{Some additional elements containing information about the methods used to estimate the model.}
+#' }
 #'
 #' @export
 #'
