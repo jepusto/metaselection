@@ -49,7 +49,7 @@ print.selmodel <- function(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 
     zeta_params <- grepl("^zeta", estimates$param)
     estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
     estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
-    estimates$param <- sub("^zeta","lambda_", estimates$param)
+    estimates$param <- sub("^zeta","lambda", estimates$param)
   }
   
   col_names <- setdiff(names(estimates), c("estimator","bootstrap","bootstraps"))
