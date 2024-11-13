@@ -862,6 +862,8 @@ selection_model <- function(
                               studies = cluster,
                               steps = steps)
   
+  res$selmods <- Z
+  
   return(res)
 }
 
