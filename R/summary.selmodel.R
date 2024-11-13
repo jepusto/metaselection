@@ -35,7 +35,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   n_effects <- object$n_effects
   steps <- paste(object$steps, collapse = ", ")
   call <- object$cl
-  ptable <- object$ptable
+ 
   
   estimates <- object$est
   estimator <- estimates$estimator[1]
@@ -43,6 +43,11 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   vcov_type <- object$vcov_type
   clog_lik <- object$ll
   wt_partial_log_lik <- object$wpll
+  
+  # for the p table
+  ptable <- object$ptable
+  selection_mods <- !(is.null(object$selmods))
+  steps_original <- object$steps
   
 
   # bootstrap information  --------------------------------------------------
@@ -89,21 +94,22 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
 
   zeta_params <- grepl("^zeta", estimates$param)
   
+
+  
   if (transf_zeta) {
     
     estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
     estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
-    estimates$param <- sub("^zeta","lambda_", estimates$param)
+    estimates$param <- sub("^zeta","lambda", estimates$param)
     zeta_estimates <- estimates[zeta_params, vars_display]
     
-    if (inherits(object, "step.selmodel") & is.null(object$selmods)){
+    if (inherits(object, "step.selmodel")){
       
-      first_step <- zeta_estimates[1, ]
-      first_step[1, ] <- NA
-      first_step$Est <- 1
-      
-      zeta_estimates <- rbind(first_step, zeta_estimates)
-      zeta_estimates <- cbind(ptable, zeta_estimates)
+    zeta_estimates <- clean_zetas(zeta_estimates_dat = zeta_estimates,
+                                  transform_zeta = transf_zeta,
+                                  selmods = selection_mods,
+                                  pval_table = ptable,
+                                  steps = steps_original)
       
     }
 
@@ -111,31 +117,16 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     
     zeta_estimates <- estimates[zeta_params, vars_display]
     
-    if (inherits(object, "step.selmodel") & is.null(object$selmods)){
+    if (inherits(object, "step.selmodel")){
     
-      first_step <- zeta_estimates[1, ]
-      first_step[1, ] <- NA
-      first_step$Est <- 0
-    
-      zeta_estimates <- rbind(first_step, zeta_estimates)
-      zeta_estimates <- cbind(ptable, zeta_estimates)
-    
-    } else if (inherits(object, "step.selmodel") & !is.null(object$selmods)){
-      
-      first_step <- zeta_estimates[1, ]
-      first_step[1, ] <- NA
-      first_step$Est <- 0
-      first_step$param <- "zeta0_first"
-      
-      zeta_estimates <- rbind(first_step, zeta_estimates)
-      zeta_estimates$zeta <- sapply(strsplit(zeta_estimates$param, "_"),"[[",1)
-      z_name <- paste0("zeta", 0:length(object$steps))
-      ptable$zeta <- z_name
-      names(ptable)[1] <- "step"
-      
-      zeta_estimates <- merge(ptable, zeta_estimates, by = "zeta")
+      zeta_estimates <- clean_zetas(zeta_estimates_dat = zeta_estimates,
+                                    transform_zeta = transf_zeta,
+                                    selmods = selection_mods,
+                                    pval_table = ptable,
+                                    steps = steps_original)
       
     }
+      
   }
   
 
@@ -171,11 +162,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   print_with_header(gamma_estimates, digits = digits, ...)
   
   cat("\n", "Selection process estimates:", sep = "")
-  if(is.null(object$selmods)){
-   print_with_header(zeta_estimates, digits = digits, ...)
-  } else if(!is.null(object$selmods)){
-    print_with_header(zeta_estimates, digits = digits, selmods = TRUE, ...)
-  }
+  print_with_header(zeta_estimates, digits = digits, selmods = TRUE, ...)
 }
 
 print_with_header <- function(x, digits, selmods = FALSE, ...) {
@@ -235,4 +222,47 @@ print_with_header <- function(x, digits, selmods = FALSE, ...) {
 }
 
 
+
+clean_zetas <- function(zeta_estimates_dat,
+                        transform_zeta,
+                        selmods,
+                        pval_table,
+                        steps){
+  
+  if(transform_zeta){
+    
+    param_name <- "lambda"
+    
+  } else{
+    
+    param_name <- "zeta"
+    
+  }
+  
+  
+  first_step <- zeta_estimates_dat[1, ]
+  first_step[1, ] <- NA
+  first_step$Est <- as.numeric(transform_zeta)
+  first_step$param <- paste0(param_name, "0_first")
+  
+  zeta_estimates <- rbind(first_step, zeta_estimates_dat)
+  
+  if(selmods == FALSE){
+    
+    zeta_estimates <- cbind(pval_table, zeta_estimates)
+    
+  } else if(selmods == TRUE){
+    
+    zeta_estimates$zeta <- sapply(strsplit(zeta_estimates$param, "_"),"[[",1)
+    z_name <- paste0(param_name, 0:length(steps))
+    pval_table$zeta <- z_name
+    
+    zeta_estimates <- merge(pval_table, zeta_estimates, by = "zeta")
+    
+  }
+  
+  
+  return(zeta_estimates)
+  
+}
 

@@ -913,7 +913,7 @@ create_ptable <- function(pvals = pi,
   effects_group <- factor(pgrp, levels = seq_along(steps), labels = psteps)
   
   ptable   <- table(effects_group)
-  ptable   <- data.frame(param = names(ptable), k = as.vector(ptable))
+  ptable   <- data.frame(step = names(ptable), k = as.vector(ptable))
   
   if(!is.null(studies)){
   
@@ -924,7 +924,7 @@ create_ptable <- function(pvals = pi,
     m <- aggregate(studies ~ effects_group, dat_ptable, function(x) length(unique(x)))
     ptable$m <- m$studies
     
-    ptable <- ptable[, c("param", "m", "k")]
+    ptable <- ptable[, c("step", "m", "k")]
   
   
   }
