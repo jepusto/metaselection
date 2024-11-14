@@ -313,20 +313,21 @@ mod_3PSM
 ```
 
 The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`]. Note that the results do not include p-values for any parameters. We omit p-values to focus interpretation on the parameter estimates and confidence intervals of the model results, rather than on the statistical significance of any given parameter. 
-
-The estimates of the total heterogeneity parameter and the selection parameter are on the log-scale. We can obtain an estimate of the total variance by setting the argument `transf_gamma` to `TRUE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the probability scale by setting `transf_zeta = TRUE`:
-```{r}
-print(mod_3PSM, transf_gamma = TRUE, transf_zeta = TRUE)
-```
 The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
-The selection parameter is now called `lambda_1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided p-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
+
+The selection parameter is called `lambda_1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided p-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
 The selection parameter estimate is quite imprecise, with a 95% confidence interval of `r round(exp(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="zeta1"]), 3)`, which includes the value $\lambda_1 = 1$ corresponding to no selective reporting.
 
-For more detailed information about the results, the `metaselection` package also provides a `summary()` function which also includes the `transf_gamma` and `transf_zeta` arguments:
+The total heterogeneity parameter and the selection parameter are actually estimated on log scales but are exponentiated (along with the confidence interval end-points) by default in `print()`. We can obtain an estimate on the original scale of the log-variance by setting the argument `transf_gamma` to `FALSE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the log-probability scale by setting `transf_zeta = FALSE`:
 ```{r}
-summary(mod_3PSM, transf_gamma = TRUE, transf_zeta = TRUE)
+print(mod_3PSM, transf_gamma = FALSE, transf_zeta = FALSE)
 ```
 
+For more detailed information about the results, the `metaselection` package also provides a `summary()` function:
+```{r}
+summary(mod_3PSM)
+```
+The `summary()` function also includes the `transf_gamma` and `transf_zeta` arguments, set to `TRUE` by default.
 
 Furthermore, the `metaselection` package provides a function `selection_plot()` to visualize the estimated selection weights:
 
@@ -375,7 +376,7 @@ mod_beta <- selection_model(
   steps = c(.025, .975)
 )
 
-print(mod_beta, transf_gamma = TRUE, transf_zeta = TRUE)
+print(mod_beta)
 ```
 
 The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models. The average effect estimate based on the beta function is not statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`].
