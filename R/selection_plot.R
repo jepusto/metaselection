@@ -145,7 +145,7 @@ selection_wts.step.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
   
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
 
-  R <- eval(mod$cl$R, envir = parent.frame())
+  R <- mod$R
   sel_param_boots <- mod$bootstrap_reps[grepl("zeta", mod$bootstrap_reps$param),]
   sel_param_boots$rep <- rep(1:R, each = nrow(sel_param_boots) / R)
   sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
@@ -213,7 +213,7 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
   
   if (!inherits(mod, "boot.selmodel") | !bootstraps) return(wts)
   
-  R <- eval(mod$cl$R, envir = parent.frame())
+  R <- mod$R
   sel_param_boots <- mod$bootstrap_reps[grepl("zeta", mod$bootstrap_reps$param),]
   sel_param_boots$rep <- rep(1:R, each = nrow(sel_param_boots) / R)
   sel_param_boots <- stats::reshape(sel_param_boots, direction = "wide", idvar = "rep", timevar = "param")
@@ -410,7 +410,7 @@ selection_plot.boot.selmodel <- function(
   steps <- mod$steps
   
   dat <- selection_wts(mod, pvals = pts, ref_pval = ref_pval, bootstraps = TRUE)
-  R <- eval(mod$cl$R, envir = parent.frame())
+  R <- mod$R
   
   p <- ggplot2::ggplot(dat$wts) + 
     ggplot2::expand_limits(y = 0) + 
@@ -424,9 +424,20 @@ selection_plot.boot.selmodel <- function(
     ggplot2::theme_minimal()
   
   if (draw_boots) {
-    p <- p + ggplot2::geom_line(data = dat$boot_wts, ggplot2::aes(x = .data$p, y = .data$wt, group = .data$rep), color = boot_color, alpha = 100 * boot_alpha / R)
+    p <- p + 
+      ggplot2::geom_line(
+        data = dat$boot_wts, 
+        ggplot2::aes(x = .data$p, y = .data$wt, group = .data$rep), 
+        color = boot_color, 
+        alpha = 100 * boot_alpha / R
+      )
   }
   
-  p + ggplot2::geom_line(ggplot2::aes(x = .data$p, y = .data$wt), color = color, linewidth = linewidth)
+  p + 
+    ggplot2::geom_line(
+      ggplot2::aes(x = .data$p, y = .data$wt), 
+      color = color, 
+      linewidth = linewidth
+    )
     
 }

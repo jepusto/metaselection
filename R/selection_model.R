@@ -793,6 +793,7 @@ selection_model <- function(
       )
     }, simplify = FALSE, future.seed = TRUE)
     
+    res$R <- R
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$bootstrap_type <- bootstrap
     

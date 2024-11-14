@@ -1,4 +1,13 @@
 #-------------------------------------------------------------------------------
+# Variant of selection_model() with bootstrap default R = 4L
+
+quick_boot_selection_args <- formals(selection_model)
+quick_boot_selection_args$R <- 4L
+quick_boot_selection_model <- selection_model
+formals(quick_boot_selection_model) <- quick_boot_selection_args
+
+
+#-------------------------------------------------------------------------------
 # Functions for comparing scores to numerical derivatives
 
 diffentiate_loglik <- function(

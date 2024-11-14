@@ -43,7 +43,7 @@ test_that("selection_plot() works for 3PSM.", {
       estimator = "ML",
       bootstrap = "multinomial",
       CI_type = "percentile",
-      R = 29
+      R = 8
     )
   )
   
@@ -99,7 +99,7 @@ test_that("selection_plot() works for 3PSM.", {
     estimator = "hybrid",
     bootstrap = "multinomial",
     CI_type = "percentile",
-    R = 199
+    R = 49
   )
   
   expect_equal(hybrid_noboot$est$Est, hybrid_boot$est$Est)
@@ -122,6 +122,23 @@ test_that("selection_plot() works for 3PSM.", {
   expect_identical(wt_boot$wts, p_boot$data)
   expect_identical(wt_boot$boot_wts, p_boot$layers[[3]]$data)
   
+
+  hybrid_boot_default <- quick_boot_selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    steps = 0.025,
+    estimator = "hybrid",
+    bootstrap = "multinomial",
+    CI_type = "percentile"
+  )
+  
+  p_boot_default <- selection_plot(hybrid_boot_default, draw_boots = FALSE)
+  
+  p_boot_default
+  expect_s3_class(p_boot_default, "ggplot")
+  expect_s3_class(p_boot_default$layers[[3]]$geom, "GeomLine")
 })
 
 test_that("selection_plot() works for 4PSM.", {
@@ -169,7 +186,7 @@ test_that("selection_plot() works for 4PSM.", {
     estimator = "ML",
     bootstrap = "multinomial",
     CI_type = "percentile",
-    R = 29
+    R = 11
   )
   
   expect_equal(ML_noboot$est$Est, ML_boot$est$Est)
@@ -196,6 +213,25 @@ test_that("selection_plot() works for 4PSM.", {
   p_r_boot <- selection_plot(ML_boot, ref_pval = 0.34)
   expect_identical(wt_r_boot$wts, p_r_boot$data)
   expect_identical(wt_r_boot$boot_wts, p_r_boot$layers[[3]]$data)
+  
+  
+  ML_boot_default <- quick_boot_selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    steps = c(0.025,0.500),
+    estimator = "ML",
+    bootstrap = "multinomial",
+    CI_type = "percentile"
+  )
+  
+  p_boot_default <- selection_plot(ML_boot_default)
+  
+  p_boot_default
+  expect_s3_class(p_boot_default, "ggplot")
+  expect_s3_class(p_boot_default$layers[[3]]$geom, "GeomLine")
+  
   
   hybrid_noboot <- selection_model(
     data = dat,
@@ -224,7 +260,7 @@ test_that("selection_plot() works for 4PSM.", {
     estimator = "hybrid",
     bootstrap = "multinomial",
     CI_type = "percentile",
-    R = 199
+    R = 39
   )
   
   expect_equal(hybrid_noboot$est$Est, hybrid_boot$est$Est)
@@ -299,7 +335,7 @@ test_that("selection_plot() works for beta model", {
       estimator = "ML",
       bootstrap = "multinomial",
       CI_type = "percentile",
-      R = 19
+      R = 6
     )
   )
   
