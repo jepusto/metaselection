@@ -259,6 +259,10 @@ clean_zetas <- function(zeta_estimates_dat,
     
     zeta_estimates <- merge(pval_table, zeta_estimates, by = "zeta")
     
+    
+    # zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
+    # zeta_estimates_split <- split(zeta_estimates, zeta_estimates$label)
+    
   }
   
   
