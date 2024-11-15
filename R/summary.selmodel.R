@@ -101,34 +101,23 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
     estimates[zeta_params, transf_variables] <- exp(estimates[zeta_params, transf_variables])
     estimates$SE[zeta_params] <- estimates$Est[zeta_params] * estimates$SE[zeta_params]
     estimates$param <- sub("^zeta","lambda", estimates$param)
-    zeta_estimates <- estimates[zeta_params, vars_display]
     
-    if (inherits(object, "step.selmodel")){
-      
-    zeta_estimates <- clean_zetas(zeta_estimates_dat = zeta_estimates,
-                                  transform_zeta = transf_zeta,
-                                  selmods = selection_mods,
-                                  pval_table = ptable,
-                                  steps = steps_original)
-      
-    }
-
-  } else {
-    
-    zeta_estimates <- estimates[zeta_params, vars_display]
-    
-    if (inherits(object, "step.selmodel")){
-    
-      zeta_estimates <- clean_zetas(zeta_estimates_dat = zeta_estimates,
-                                    transform_zeta = transf_zeta,
-                                    selmods = selection_mods,
-                                    pval_table = ptable,
-                                    steps = steps_original)
-      
-    }
-      
   }
   
+  zeta_estimates <- estimates[zeta_params, vars_display]
+  
+  if (inherits(object, "step.selmodel")) {
+    
+    zeta_estimates <- clean_zetas(
+      zeta_estimates_dat = zeta_estimates,
+      transform_zeta = transf_zeta,
+      selmods = selection_mods,
+      pval_table = ptable,
+      steps = steps_original
+    )
+      
+  }
+
 
   # output ------------------------------------------------------------------
 
@@ -165,7 +154,9 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   print_with_header(zeta_estimates, digits = digits, selmods = TRUE, ...)
 }
 
-print_with_header <- function(x, digits, selmods = FALSE, ...) {
+print_with_header <- function(x, digits, selmods = FALSE, ...) UseMethod("print_with_header")
+
+print_with_header.data.frame <- function(x, digits, selmods = FALSE, ...) {
  
   all_vars <- data.frame(
     param = c(" ", "Coef."),
@@ -183,7 +174,7 @@ print_with_header <- function(x, digits, selmods = FALSE, ...) {
     student_upper = c("Bootstrap", "Upper")
   )
   
-  if(selmods == TRUE){
+  if (selmods == TRUE) {
     
     
     all_vars <- data.frame(
@@ -221,6 +212,13 @@ print_with_header <- function(x, digits, selmods = FALSE, ...) {
   print(unname(x_print), row.names = FALSE, na.print = "")
 }
 
+print_with_header.list <- function(x, digits, selmods = FALSE, ...) {
+  for (h in seq_along(x)) {
+    cat("\n", names(x)[[h]])
+    print_with_header.data.frame(x[[h]], digits = digits, selmods = selmods, ...)
+  }
+}
+
 
 
 clean_zetas <- function(zeta_estimates_dat,
@@ -229,7 +227,7 @@ clean_zetas <- function(zeta_estimates_dat,
                         pval_table,
                         steps){
   
-  if(transform_zeta){
+  if (transform_zeta) {
     
     param_name <- "lambda"
     
@@ -247,11 +245,11 @@ clean_zetas <- function(zeta_estimates_dat,
   
   zeta_estimates <- rbind(first_step, zeta_estimates_dat)
   
-  if(selmods == FALSE){
+  if (selmods == FALSE) {
     
     zeta_estimates <- cbind(pval_table, zeta_estimates)
     
-  } else if(selmods == TRUE){
+  } else if (selmods == TRUE) {
     
     zeta_estimates$zeta <- sapply(strsplit(zeta_estimates$param, "_"),"[[",1)
     z_name <- paste0(param_name, 0:length(steps))
@@ -260,8 +258,8 @@ clean_zetas <- function(zeta_estimates_dat,
     zeta_estimates <- merge(pval_table, zeta_estimates, by = "zeta")
     
     
-    # zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
-    # zeta_estimates_split <- split(zeta_estimates, zeta_estimates$label)
+    zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
+    zeta_estimates <- split(zeta_estimates, zeta_estimates$label)
     
   }
   
