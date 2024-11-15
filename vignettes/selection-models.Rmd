@@ -253,7 +253,7 @@ dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
 dat.lehmann2018$esid <- 1:nrow(dat.lehmann2018) 
 ```
 
-## Prelminary Analysis 
+## Preliminary Analysis 
 
 As a point of comparison, we first run an analysis that ignores the possibility of selective reporting bias but accounts for the dependence structure of the effect sizes using a correlated-and-hierarchical effects (CHE) working model and CRVE [@pustejovsky2022preventionscience]. 
 The following code first creates a sampling variance-covariance matrix assuming that effect size estimates from the same study have sampling errors that are correlated at 0.8. It then fits a CHE working model and applies robust variance estimation, clustering by study.
