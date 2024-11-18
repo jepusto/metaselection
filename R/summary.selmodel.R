@@ -151,17 +151,15 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   print_with_header(gamma_estimates, digits = digits, ...)
   
   cat("\n", "Selection process estimates:", sep = "")
-  print_with_header(zeta_estimates, digits = digits, selmods = TRUE, ...)
+  print_with_header(zeta_estimates, digits = digits, ...)
 }
 
-print_with_header <- function(x, digits, selmods = FALSE, ...) UseMethod("print_with_header")
+print_with_header <- function(x, digits, ...) UseMethod("print_with_header")
 
-print_with_header.data.frame <- function(x, digits, selmods = FALSE, ...) {
+print_with_header.data.frame <- function(x, digits, ...) {
  
   all_vars <- data.frame(
     param = c(" ", "Coef."),
-    m = c(" ", "Studies"),
-    k = c(" ", "Effects"),
     Est   = c(" ", "Estimate"),
     SE    = c(" ", "Std. Error"),
     CI_lo = c("Large", "Lower"),
@@ -174,32 +172,8 @@ print_with_header.data.frame <- function(x, digits, selmods = FALSE, ...) {
     student_upper = c("Bootstrap", "Upper")
   )
   
-  if (selmods == TRUE) {
-    
-    
-    all_vars <- data.frame(
-      step = c(" ", "Steps"),
-      param = c(" ", "Coef."),
-      m = c(" ", "Studies"),
-      k = c(" ", "Effects"),
-      Est   = c(" ", "Estimate"),
-      SE    = c(" ", "Std. Error"),
-      CI_lo = c("Large", "Lower"),
-      CI_hi = c("Sample", "Upper"),
-      percentile_lower = c("Percentile","Lower"),
-      percentile_upper = c("Bootstrap", "Upper"),
-      basic_lower = c("Basic","Lower"),
-      basic_upper = c("Bootstrap", "Upper"),
-      student_lower = c("Studentized","Lower"),
-      student_upper = c("Bootstrap", "Upper")
-    )
-    
-    
-    
-  }
-
   
-  vars_display <- intersect(names(x), names(all_vars))
+  vars_display <- intersect(names(all_vars), names(x))
   
   x_format <- format(x[,vars_display], digits = digits, ...)
   
@@ -212,10 +186,10 @@ print_with_header.data.frame <- function(x, digits, selmods = FALSE, ...) {
   print(unname(x_print), row.names = FALSE, na.print = "")
 }
 
-print_with_header.list <- function(x, digits, selmods = FALSE, ...) {
+print_with_header.list <- function(x, digits, ...) {
   for (h in seq_along(x)) {
     cat("\n", names(x)[[h]])
-    print_with_header.data.frame(x[[h]], digits = digits, selmods = selmods, ...)
+    print_with_header.data.frame(x[[h]], digits = digits, ...)
   }
 }
 
@@ -258,10 +232,10 @@ clean_zetas <- function(zeta_estimates_dat,
     zeta_estimates <- merge(pval_table, zeta_estimates, by = "zeta")
     
     
-    zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
-    zeta_estimates <- split(zeta_estimates, zeta_estimates$label)
-    
   }
+  
+  zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
+  zeta_estimates <- split(zeta_estimates, zeta_estimates$label)
   
   
   return(zeta_estimates)
