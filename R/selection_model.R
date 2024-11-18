@@ -16,13 +16,14 @@ build_model_frame <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL
 ) {
-  if (missing(yi) || missing(sei)) stop("You must specify an effect size variable yi and a standard error variable sei.")
+  if (missing(yi) || (missing(sei) & missing(vi))) stop("You must specify an effect size variable yi and a standard error variable sei or a variance variable vi.")
   yi_str <- deparse(substitute(yi))
-  sei_str <- deparse(substitute(sei))
+  vi_str <- if (missing(vi)) NULL else deparse(substitute(vi))
+  sei_str <- if(missing(sei)) NULL else deparse(substitute(sei))
   pi_str <- if (missing(pi)) NULL else deparse(substitute(pi))
   ai_str <- if (missing(ai)) NULL else deparse(substitute(ai))
   cl_str <- if (missing(cluster)) NULL else deparse(substitute(cluster))
-  yi_sei <- reformulate(c(sei_str, pi_str, ai_str, cl_str), response = yi_str)
+  yi_sei <- reformulate(c(vi_str, sei_str, pi_str, ai_str, cl_str), response = yi_str)
   subset <- eval(substitute(subset), envir = data)
   
   formula_list <- list(yi_sei = yi_sei)
@@ -85,7 +86,6 @@ find_starting_values <- function(
 
 fit_selection_model <- function(
   yi, 
-  vi, 
   sei, 
   pi, 
   steps, 
