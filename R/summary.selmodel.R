@@ -113,7 +113,8 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
       transform_zeta = transf_zeta,
       selmods = selection_mods,
       pval_table = ptable,
-      steps = steps_original
+      steps = steps_original,
+      clusters = n_clusters
     )
       
   }
@@ -199,7 +200,8 @@ clean_zetas <- function(zeta_estimates_dat,
                         transform_zeta,
                         selmods,
                         pval_table,
-                        steps){
+                        steps,
+                        clusters){
   
   if (transform_zeta) {
     
@@ -234,7 +236,18 @@ clean_zetas <- function(zeta_estimates_dat,
     
   }
   
-  zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
+  if(!is.null(clusters)){
+    
+    zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
+  
+  } else if(is.null(clusters)){
+    
+    zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Effects: ", k))
+    
+    
+  }
+  
+  
   zeta_estimates <- split(zeta_estimates, zeta_estimates$label)
   
   
