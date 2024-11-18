@@ -41,7 +41,6 @@ build_model_frame <- function(
 
 find_starting_values <- function(
   yi, 
-  vi,
   sei, 
   selection_type,
   steps, 
@@ -429,7 +428,6 @@ fit_selection_model <- function(
 
 bootstrap_selmodel <- function(
     yi, 
-    vi,
     sei, 
     pi, 
     steps, 
