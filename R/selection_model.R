@@ -16,7 +16,8 @@ build_model_frame <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL
 ) {
-  if (missing(yi) || (missing(sei) & missing(vi))) stop("You must specify an effect size variable yi and a standard error variable sei or a variance variable vi.")
+  if (missing(yi) || (missing(sei) & missing(vi))) stop("You must specify an effect size variable yi and a variance variable vi or a standard error variable sei.")
+  if (!missing(sei) & !missing(vi)) stop("You must specify either a variance variable vi or a standard error variable sei, but not both.")
   yi_str <- deparse(substitute(yi))
   vi_str <- if (missing(vi)) NULL else deparse(substitute(vi))
   sei_str <- if(missing(sei)) NULL else deparse(substitute(sei))
@@ -514,14 +515,17 @@ bootstrap_selmodel <- function(
 #'
 #' @description Estimate step or beta selection model, with standard errors and
 #'   confidence intervals based on either cluster-robust variance estimators
-#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates.
+#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle
+#'   dependent effect size estimates.
 #'
 #'
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
 #'   data
 #' @param yi vector of effect sizes estimates.
-#' @param vi vector of sample variances.
-#' @param sei vector of sampling standard errors.
+#' @param vi vector of sample variances. If \code{vi} is specified,
+#'   then the \code{sei} argument must be omitted.
+#' @param sei vector of sampling standard errors. If \code{sei} is specified,
+#'   then the \code{vi} argument must be omitted.
 #' @param pi optional vector of one-sided p-values. If not specified, p-values
 #'   will be computed from \code{yi} and \code{sei}.
 #' @param ai optional vector of analytic weights.
@@ -694,8 +698,8 @@ selection_model <- function(
   
   yi <- eval(cl$yi, envir = mf)
   
-  vi <- if(missing(vi)) NULL else eval(cl$vi, envir = mf)
-  sei <- if(missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
+  vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
+  sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
   
   pi <- if (missing(pi)) pnorm(yi / sei, lower.tail = FALSE) else eval(cl$pi, envir = mf)
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)

@@ -15,6 +15,7 @@ test_that("build_model_frame works properly.", {
     sz2 = rnorm(k),
     cl = sample(LETTERS[1:4], size = k, replace = TRUE)
   )
+  dat$v <- dat$se^2
   
   build_model_frame(data = dat, yi = smd, sei = se) |>
     check_dims(k, 2L)
@@ -22,11 +23,22 @@ test_that("build_model_frame works properly.", {
     check_dims(k, 3L)
   build_model_frame(data = dat, yi = smd, sei = se, ai = aweights) |>
     check_dims(k, 3L)
-  build_model_frame(data = dat, yi = smd, sei = se, pi = pvalues, ai = aweights) |>
+  build_model_frame(data = dat, yi = smd, vi = v) |>
+    check_dims(k, 2L)
+  build_model_frame(data = dat, yi = smd, vi = v, pi = pvalues) |>
+    check_dims(k, 3L)
+  build_model_frame(data = dat, yi = smd, vi = v, ai = aweights) |>
+    check_dims(k, 3L)
+  build_model_frame(data = dat, yi = smd, vi = v, pi = pvalues, ai = aweights) |>
     check_dims(k, 4L)
+  
   build_model_frame(data = dat, yi = smd, sei = se, pi = pvalues, ai = aweights, subset = NULL) |>
     check_dims(k, 4L)
   build_model_frame(data = dat, yi = smd, sei = se, pi = pvalues, ai = aweights, subset = cl != "D") |>
+    check_dims(sum(dat$cl != "D"), 4L)  
+  build_model_frame(data = dat, yi = smd, vi = v, pi = pvalues, ai = aweights, subset = NULL) |>
+    check_dims(k, 4L)
+  build_model_frame(data = dat, yi = smd, vi = v, pi = pvalues, ai = aweights, subset = cl != "D") |>
     check_dims(sum(dat$cl != "D"), 4L)  
   
   build_model_frame(data = dat, yi = smd, sei = se, cluster = cl) |>
@@ -51,6 +63,10 @@ test_that("build_model_frame works properly.", {
   build_model_frame(data = dat, yi = smd, sei = se, sel_zero_mods = ~ 0 + sz1 * sz2) |>
     check_dims(k, 4L)
   build_model_frame(data = dat, yi = smd, sei = se, sel_zero_mods = ~ 0 + sz1 * sz2, subset = aweights > 4) |>
+    check_dims(sum(dat$aweights > 4), 4L)
+  build_model_frame(data = dat, yi = smd, vi = v, sel_zero_mods = ~ 0 + sz1 * sz2) |>
+    check_dims(k, 4L)
+  build_model_frame(data = dat, yi = smd, vi = v, sel_zero_mods = ~ 0 + sz1 * sz2, subset = aweights > 4) |>
     check_dims(sum(dat$aweights > 4), 4L)
   
   build_model_frame(data = dat, yi = smd, sei = se, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1) |>
@@ -110,15 +126,21 @@ test_that("build_model_frame works properly.", {
   build_model_frame(data = dat, yi = smd, sei = se, pi = pvalues, ai = aweights, cluster = cl, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = list(~ z1, ~ z1 + z2), sel_zero_mods = ~ 0 + sz1 * sz2) |>
     check_dims(k, 11L)
   
-  # Error if yi or sei or data arguments missing
+  # Error if yi or (sei and vi) or data arguments missing
   expect_error(
     build_model_frame(data = dat, sei = se, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = ~ z1 + z2 + z1:z2, sel_zero_mods = ~ 0 + sz1 * sz2)     
+  )
+  expect_error(
+    build_model_frame(data = dat, vi = v, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = ~ z1 + z2 + z1:z2, sel_zero_mods = ~ 0 + sz1 * sz2)     
   )
   expect_error(
     build_model_frame(data = dat, yi = smd, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = ~ z1 + z2 + z1:z2, sel_zero_mods = ~ 0 + sz1 * sz2) 
   )
   expect_error(
     build_model_frame(yi = smd, sei = se, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = ~ z1 + z2 + z1:z2, sel_zero_mods = ~ 0 + sz1 * sz2)     
+  )
+  expect_error(
+    build_model_frame(yi = smd, vi = v, sei = se, pi = pvalues, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = ~ z1 + z2 + z1:z2, sel_zero_mods = ~ 0 + sz1 * sz2)     
   )
   
   # Error if variable names do not occur in data
@@ -127,6 +149,9 @@ test_that("build_model_frame works properly.", {
   )
   expect_error(
     build_model_frame(data = dat, yi = smd, sei = sei, pi = pvalues, ai = aweights, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = list(~ z1, ~ z1 + z2), sel_zero_mods = ~ 0 + sz1 * sz2)
+  )
+  expect_error(
+    build_model_frame(data = dat, yi = smd, vi = Var_i, pi = pvalues, ai = aweights, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = list(~ z1, ~ z1 + z2), sel_zero_mods = ~ 0 + sz1 * sz2)
   )
   expect_error(
     build_model_frame(data = dat, yi = smd, sei = se, pi = pval, ai = aweights, mean_mods = ~ 0 + x1, var_mods = ~ v1, sel_mods = list(~ z1, ~ z1 + z2), sel_zero_mods = ~ 0 + sz1 * sz2)
@@ -177,13 +202,13 @@ test_that("selection_model() returns results of correct dimension when estimator
   expect_equal(nrow(m1a$est), 4L)
   expect_equal(nrow(m1a$est), nrow(m1a$vcov))
   
-  m1b <- selection_model(data = dat, yi = d, sei = sda, steps = c(.025, .500), 
+  m1b <- selection_model(data = dat, yi = d, vi = Va, steps = c(.025, .500), 
                          cluster = studyid,
                          optimizer = methods)
   expect_equal(m1a$est, m1b$est)
   expect_equal(m1a$vcov, m1b$vcov)
   
-  m2_est <- selection_model(data = dat, yi = d, sei = sda, 
+  m2_est <- selection_model(data = dat, yi = d, vi = Va, 
                             mean_mods = ~ X1, sel_mods = ~ Z1, 
                             steps = c(.025, .500), 
                             vcov_type = "raw", 
@@ -191,7 +216,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   expect_s3_class(m2_est, "data.frame")
   expect_true(all(methods %in% rownames(m2_est)))
   
-  m2a <- selection_model(data = dat, yi = d, sei = sda, 
+  m2a <- selection_model(data = dat, yi = d, vi = Va, 
                          mean_mods = ~ X1, sel_mods = ~ Z1, 
                          steps = c(.025, .500), 
                          optimizer = methods)
@@ -236,12 +261,12 @@ test_that("selection_model() returns results of correct dimension when estimator
   expect_equal(nrow(m1a$est), 4L)
   expect_equal(nrow(m1a$est), nrow(m1a$vcov))
   
-  m1b <- selection_model(data = dat, yi = d, sei = sda, steps = c(.025, .500), 
+  m1b <- selection_model(data = dat, yi = d, vi = Va, steps = c(.025, .500), 
                          cluster = studyid, estimator = "hybrid")
   expect_equal(m1a$est, m1b$est)
   expect_equal(m1a$vcov, m1b$vcov)
   
-  m2_est <- selection_model(data = dat, yi = d, sei = sda, 
+  m2_est <- selection_model(data = dat, yi = d, vi = Va, 
                             mean_mods = ~ X1, sel_mods = ~ Z1, 
                             steps = c(.025, .500), 
                             vcov_type = "raw", 
@@ -249,7 +274,7 @@ test_that("selection_model() returns results of correct dimension when estimator
   expect_identical(names(m2_est), c("est","max_method","info"))
   expect_identical(names(m2_est$info$nleqslv), c("fvec","termcd","message","scalex","nfcnt","njcnt","iter","jac","f_norm"))
   
-  m2a <- selection_model(data = dat, yi = d, sei = sda, 
+  m2a <- selection_model(data = dat, yi = d, vi = Va, 
                          mean_mods = ~ X1, sel_mods = ~ Z1, 
                          steps = c(.025, .500),
                          estimator = "hybrid")
@@ -319,7 +344,7 @@ test_that("selection_model() works with the subset argument.", {
       data = dat,
       subset = Z1 == "B",
       yi = d,
-      sei = sda,
+      vi = Va,
       steps = c(.025, .500),
       vcov_type = "robust",
       estimator = "ML",
@@ -386,7 +411,7 @@ test_that("selection_model() works with the subset argument.", {
     selection_model(
       data = subset(dat, Z1 == "B"),
       yi = d,
-      sei = sda,
+      vi = Va,
       steps = c(.025, .500),
       vcov_type = "robust",
       estimator = "hybrid"
