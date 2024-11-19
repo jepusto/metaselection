@@ -217,7 +217,7 @@ clean_zetas <- function(zeta_estimates_dat,
   first_step <- zeta_estimates_dat[1, ]
   first_step[1, ] <- NA
   first_step$Est <- as.numeric(transform_zeta)
-  first_step$param <- paste0(param_name, "0_first")
+  first_step$param <- paste0(param_name, "0")
   
   zeta_estimates <- rbind(first_step, zeta_estimates_dat)
   
@@ -236,11 +236,11 @@ clean_zetas <- function(zeta_estimates_dat,
     
   }
   
-  if(!is.null(clusters)){
+  if (!is.null(clusters)) {
     
     zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Studies: ", m, "; Effects: ", k))
   
-  } else if(is.null(clusters)){
+  } else if (is.null(clusters)) {
     
     zeta_estimates$label <- with(zeta_estimates, paste0("Step: ", step, "; Effects: ", k))
     
