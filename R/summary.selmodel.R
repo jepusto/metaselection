@@ -157,6 +157,8 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
 
 print_with_header <- function(x, digits, ...) UseMethod("print_with_header")
 
+#' @exportS3Method
+
 print_with_header.data.frame <- function(x, digits, ...) {
  
   all_vars <- data.frame(
@@ -186,6 +188,8 @@ print_with_header.data.frame <- function(x, digits, ...) {
   
   print(unname(x_print), row.names = FALSE, na.print = "")
 }
+
+#' @exportS3Method
 
 print_with_header.list <- function(x, digits, ...) {
   for (h in seq_along(x)) {
