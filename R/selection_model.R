@@ -5,6 +5,7 @@
 build_model_frame <- function(
     data,
     yi,
+    vi,
     sei,
     pi,
     ai,
@@ -15,13 +16,15 @@ build_model_frame <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL
 ) {
-  if (missing(yi) || missing(sei)) stop("You must specify an effect size variable yi and a standard error variable sei.")
+  if (missing(yi) || (missing(sei) & missing(vi))) stop("You must specify an effect size variable yi and a variance variable vi or a standard error variable sei.")
+  if (!missing(sei) & !missing(vi)) stop("You must specify either a variance variable vi or a standard error variable sei, but not both.")
   yi_str <- deparse(substitute(yi))
-  sei_str <- deparse(substitute(sei))
+  vi_str <- if (missing(vi)) NULL else deparse(substitute(vi))
+  sei_str <- if(missing(sei)) NULL else deparse(substitute(sei))
   pi_str <- if (missing(pi)) NULL else deparse(substitute(pi))
   ai_str <- if (missing(ai)) NULL else deparse(substitute(ai))
   cl_str <- if (missing(cluster)) NULL else deparse(substitute(cluster))
-  yi_sei <- reformulate(c(sei_str, pi_str, ai_str, cl_str), response = yi_str)
+  yi_sei <- reformulate(c(vi_str, sei_str, pi_str, ai_str, cl_str), response = yi_str)
   subset <- eval(substitute(subset), envir = data)
   
   formula_list <- list(yi_sei = yi_sei)
@@ -38,7 +41,8 @@ build_model_frame <- function(
 }
 
 find_starting_values <- function(
-  yi, sei, 
+  yi, 
+  sei, 
   selection_type,
   steps, 
   X = NULL, 
@@ -81,7 +85,10 @@ find_starting_values <- function(
 }
 
 fit_selection_model <- function(
-  yi, sei, pi, steps, 
+  yi, 
+  sei, 
+  pi, 
+  steps, 
   ai = NULL, 
   cluster = NULL, 
   X = NULL, 
@@ -515,7 +522,10 @@ bootstrap_selmodel <- function(
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
 #'   data
 #' @param yi vector of effect sizes estimates.
-#' @param sei vector of sampling standard errors.
+#' @param vi vector of sample variances. If \code{vi} is specified,
+#'   then the \code{sei} argument must be omitted.
+#' @param sei vector of sampling standard errors. If \code{sei} is specified,
+#'   then the \code{vi} argument must be omitted.
 #' @param pi optional vector of one-sided p-values. If not specified, p-values
 #'   will be computed from \code{yi} and \code{sei}.
 #' @param ai optional vector of analytic weights.
@@ -628,6 +638,7 @@ bootstrap_selmodel <- function(
 selection_model <- function(
     data,
     yi,
+    vi,
     sei,
     pi,
     ai,
@@ -693,7 +704,7 @@ selection_model <- function(
   # Create common model frame
   
   cl <- match.call()
-  m <- match(c("data","yi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
+  m <- match(c("data","yi", "vi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
   mf[[1L]] <- str2lang("metaselection:::build_model_frame")
@@ -702,7 +713,10 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
-  sei <- eval(cl$sei, envir = mf)
+  
+  vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
+  sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
+  
   pi <- if (missing(pi)) pnorm(yi / sei, lower.tail = FALSE) else eval(cl$pi, envir = mf)
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)

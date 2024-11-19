@@ -7,6 +7,7 @@
 selection_model(
   data,
   yi,
+  vi,
   sei,
   pi,
   ai,
@@ -37,7 +38,11 @@ data}
 
 \item{yi}{vector of effect sizes estimates.}
 
-\item{sei}{vector of sampling standard errors.}
+\item{vi}{vector of sample variances. If \code{vi} is specified,
+then the \code{sei} argument must be omitted.}
+
+\item{sei}{vector of sampling standard errors. If \code{sei} is specified,
+then the \code{vi} argument must be omitted.}
 
 \item{pi}{optional vector of one-sided p-values. If not specified, p-values
 will be computed from \code{yi} and \code{sei}.}
