@@ -311,8 +311,8 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
   expect_output(mod_print <- print(mod))
   mod_print <- print_and_parse(mod)
   expect_identical(mod_print[1,], c("param","Est","SE","student_lower","student_upper"))
-  expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
+  expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
+  expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
   
@@ -323,3 +323,4 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
   check_selmodel_summary(mod, transf_gamma = FALSE, transf_zeta = FALSE)
   
 })
+
