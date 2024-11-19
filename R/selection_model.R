@@ -900,38 +900,29 @@ create_ptable <- function(pvals = pi,
                           studies = cluster,
                           steps = steps){
   
-  steps <- c(steps, 1)
+  steps <- c(0, steps, 1)
   
-  pgrp     <- sapply(pvals, function(p) which(p <= steps)[1])
-  psteps_l <- as.character(c(0, steps[-length(steps)]))
-  psteps_r <- as.character(steps)
+  psteps_l <- as.character(steps[-length(steps)])
+  psteps_r <- as.character(steps[-1])
   len_l    <- nchar(psteps_l)
-  #pad_l    <- sapply(max(len_l) - len_l, function(x) paste0(rep(" ", x), collapse=""))
-  #psteps_l <- paste0(psteps_l, pad_l)
   psteps   <- paste0(psteps_l, " < p <= ", psteps_r)
   
-  effects_group <- factor(pgrp, levels = seq_along(steps), labels = psteps)
+  effects_group <- cut(pvals, breaks = steps, include.lowest = TRUE, labels = psteps)
   
   ptable   <- table(effects_group)
   ptable   <- data.frame(step = names(ptable), k = as.vector(ptable))
   
-  if(!is.null(studies)){
+  if (!is.null(studies)) {
   
-    dat_ptable <- data.frame(effects_group = effects_group,
-                             studies = studies,
-                             pvals = pvals) 
-    
-    m <- aggregate(studies ~ effects_group, dat_ptable, function(x) length(unique(x)))
-    ptable$m <- m$studies
+    m <- tapply(studies, effects_group, function(x) length(unique(x)))
+    m[is.na(m)] <- 0L
+    ptable$m <- m
     
     ptable <- ptable[, c("step", "m", "k")]
   
-  
   }
   
-  
   return(ptable)
-
   
 }
 
