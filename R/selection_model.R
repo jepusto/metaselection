@@ -727,7 +727,11 @@ selection_model <- function(
   
   X <- if (is.null(mean_mods)) NULL else do.call(model.matrix, list(object = mean_mods, data = mf))
   U <- if (is.null(var_mods)) NULL else do.call(model.matrix, list(object = var_mods, data = mf))
-  Z0 <- if (is.null(sel_zero_mods)) NULL else do.call(model.matrix, list(object = sel_zero_mods, data = mf))
+  Z0 <- if (is.null(sel_zero_mods)) NULL else {
+    sel_zero_terms <- stats::terms(sel_zero_mods)
+    attr(sel_zero_terms, "intercept") <- 0L
+    do.call(model.matrix, list(object = sel_zero_terms, data = mf))
+  }
   if (is.null(sel_mods)) {
     Z <- NULL
   } else {
@@ -824,6 +828,8 @@ selection_model <- function(
       }
     }
     
+    
+    
     class(res) <- c("boot.selmodel", class(res))
     
   }
@@ -871,6 +877,14 @@ selection_model <- function(
   if (!is.null(cluster)) res$n_clusters <- n_clusters else res$n_clusters <- NULL
   res$n_effects <- predictions$k
   
+  res$ptable <- create_ptable(
+    pvals = pi,
+    cluster = cluster,
+    steps = steps
+  )
+  
+  res$selmods <- Z
+  
   return(res)
 }
 
@@ -898,6 +912,40 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
     SIMPLIFY = FALSE,
     future.seed = TRUE
   )
+  
+}
+
+
+
+create_ptable <- function(
+    pvals,
+    cluster,
+    steps
+) {
+  
+  steps <- c(0, steps, 1)
+  
+  psteps_l <- as.character(steps[-length(steps)])
+  psteps_r <- as.character(steps[-1])
+  len_l    <- nchar(psteps_l)
+  psteps   <- paste0(psteps_l, " < p <= ", psteps_r)
+  
+  effects_group <- cut(pvals, breaks = steps, include.lowest = TRUE, labels = psteps)
+  
+  ptable   <- table(effects_group)
+  ptable   <- data.frame(step = names(ptable), k = as.vector(ptable))
+  
+  if (!is.null(cluster)) {
+  
+    m <- tapply(cluster, effects_group, function(x) length(unique(x)))
+    m[is.na(m)] <- 0L
+    ptable$m <- m
+    
+    ptable <- ptable[, c("step", "m", "k")]
+  
+  }
+  
+  return(ptable)
   
 }
 

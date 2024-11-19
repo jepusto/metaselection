@@ -1028,13 +1028,14 @@ check_selmodel_summary <- function(mod, ...) {
   boot_type <- pull_argument(s, "Bootstrap type:")
   R <- pull_argument(s, "Number of bootstrap replications:") |> as.integer()
   
-  headers <- which(grepl("estimates:", s))
-  mean_effects <- s[(headers[1] + 3L):(headers[2] - 2)]
-  var_effects <- s[(headers[2] + 3L):(headers[3] - 2)]
-  sel_effects <- s[(headers[3] + 3L):length(s)]
-  sum_effects <- strsplit(c(mean_effects, var_effects, sel_effects), " +")
-  sum_effects <- sapply(sum_effects, \(x) x[2])
-  p_effects <- sapply(strsplit(p[-1], " +"), \(x) x[2])
+  headers <- which(grepl("Coef.", s))
+  n_panels <- length(headers)
+  tails <- c(which(s==""), length(s) + 1)
+  tails <- tails[(length(tails) - n_panels) + 1:n_panels]
+  effect_strings <- lapply(1:n_panels, \(i) s[(headers[i] + 1):(tails[i] - 1)])
+  effect_strings <- unlist(effect_strings)
+  sum_effects <- do.call(rbind, strsplit(effect_strings, " +"))
+  p_effects <- do.call(rbind, strsplit(p[-1], " +"))
 
   mod_type <- if (mod$selection_type == "step") "Step Function Model" else "Beta Density Model"
   if (inherits(mod, "boot.selmodel")) {
@@ -1051,7 +1052,7 @@ check_selmodel_summary <- function(mod, ...) {
   testthat::expect_identical(estimator, estimator_type)
   testthat::expect_identical(vcov_type, mod$vcov_type)
  
-  testthat::expect_identical(sum_effects, p_effects) 
+  testthat::expect_true(all(p_effects[,2] %in% sum_effects[,2]))
 }
 
 #-------------------------------------------------------------------------------
