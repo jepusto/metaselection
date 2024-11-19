@@ -713,7 +713,11 @@ selection_model <- function(
   
   X <- if (is.null(mean_mods)) NULL else do.call(model.matrix, list(object = mean_mods, data = mf))
   U <- if (is.null(var_mods)) NULL else do.call(model.matrix, list(object = var_mods, data = mf))
-  Z0 <- if (is.null(sel_zero_mods)) NULL else do.call(model.matrix, list(object = sel_zero_mods, data = mf))
+  Z0 <- if (is.null(sel_zero_mods)) NULL else {
+    sel_zero_terms <- terms(sel_zero_mods)
+    attr(sel_zero_terms, "intercept") <- 0L
+    do.call(model.matrix, list(object = sel_zero_terms, data = mf))
+  }
   if (is.null(sel_mods)) {
     Z <- NULL
   } else {
