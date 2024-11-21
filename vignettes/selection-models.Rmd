@@ -415,10 +415,11 @@ print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 
 The overall estimate of the average effect does not change when bootstrapping is applied (`r round(mod_3PSM_boot$est$Est[mod_3PSM_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(mod_3PSM_boot$est$percentile_lower[mod_3PSM_boot$est$param=="beta"], 3)`, `r round(mod_3PSM_boot$est$percentile_upper[mod_3PSM_boot$est$param=="beta"], 3)`] (due partially to the use of a smaller-than-desirable number of bootstrap replications).
 
-The bootstrapping routine is implemented to work with the `future` and `future.apply` packages for parallel processing. For example, the following code specifies to use a `multisession` future processing plan with 4 worker nodes, then fits the same model as above:
+### Parallel processing
+
+The bootstrapping routine is implemented to work with the `future` package for parallel processing. For example, the following code specifies to use a `multisession` future processing plan with 4 worker nodes, then fits the same model as above:
 ```{r parallel-boot}
 library(future)
-library(future.apply)
 plan(multisession, workers = 4L)
 
 system.time(
@@ -442,6 +443,34 @@ Setting a `sequential` plan will discontinue use of parallel processing:
 ```{r sequential-boot}
 plan(sequential)
 ```
+
+### Progress bars
+
+The package is also designed to work with the `progressr` package, which provides customizable progress bars for long-running calculations. 
+To use a progress bar for only one instance of bootstrapping, wrap the `selection_model()` call in `progressr::with_progress()`:
+```{r, eval = FALSE}
+library(progressr)
+
+with_progress(
+  sel_fit <- selection_model(
+    data = dat.lehmann2018, 
+    yi = yi,
+    sei = sei,
+    cluster = study,
+    selection_type = "step",
+    steps = .025,
+    CI_type = "percentile",
+    bootstrap = "multinomial",
+    R = 199
+  )  
+)
+
+```
+To turn on progress bars for all bootstrap calculations, use
+```{r, eval = FALSE}
+progressr::handlers(global = TRUE)
+```
+See `vignette("progressr-intro")` for further details.
 
 # References
 

@@ -55,8 +55,12 @@ to assess uncertainty in the model parameter estimates.
 You can install the development version of the package from GitHub with:
 
 ``` r
-remotes::install_github("jepusto/metaselection")
+remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
 ```
+
+It may take a few minutes to install the package with the vignette.
+Setting `build_vignettes = FALSE` will lead to faster installation,
+although it will preclude viewing the package vignette.
 
 ## Example
 
@@ -86,38 +90,93 @@ mod_3PSM_boot <- selection_model(
   steps = .025,
   CI_type = "percentile",
   bootstrap = "multinomial",
-  R = 19
+  R = 19 # Set to a much bigger number of bootstraps for real applications
 )
 
-print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
+summary(mod_3PSM_boot)
 ```
 
-    ##     param    Est     SE percentile_lower percentile_upper
-    ##      beta 0.1328 0.1373          -0.0327            0.377
-    ##      tau2 0.0811 0.0845           0.0015            0.198
-    ##  lambda_1 0.5485 0.6160           0.0888            3.055
+    ## Step Function Model with Cluster Bootstrapping 
+    ##  
+    ## Call: 
+    ## selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, 
+    ##     selection_type = "step", steps = 0.025, CI_type = "percentile", 
+    ##     bootstrap = "multinomial", R = 19)
+    ## 
+    ## Number of clusters = 41; Number of effects = 81
+    ## 
+    ## Steps: 0.025 
+    ## Estimator: maximum likelihood 
+    ## Variance estimator: robust 
+    ## Bootstrap type: multinomial 
+    ## Number of bootstrap replications: 19 
+    ## 
+    ## Log composite likelihood of selection model: -44.46436
+    ## Inverse selection weighted partial log likelihood: 58.35719 
+    ## 
+    ## Mean effect estimates:                                               
+    ##                            Percentile Bootstrap
+    ##  Coef. Estimate Std. Error      Lower     Upper
+    ##   beta    0.133      0.137    -0.0327     0.377
+    ## 
+    ## Heterogeneity estimates:                                               
+    ##                            Percentile Bootstrap
+    ##  Coef. Estimate Std. Error      Lower     Upper
+    ##   tau2   0.0811     0.0845     0.0015     0.198
+    ## 
+    ## Selection process estimates:
+    ##  Step: 0 < p <= 0.025; Studies: 16; Effects: 25                                                 
+    ##                              Percentile Bootstrap
+    ##    Coef. Estimate Std. Error      Lower     Upper
+    ##  lambda0        1        ---        ---       ---
+    ## 
+    ##  Step: 0.025 < p <= 1; Studies: 29; Effects: 56                                                 
+    ##                              Percentile Bootstrap
+    ##    Coef. Estimate Std. Error      Lower     Upper
+    ##  lambda1    0.548      0.616     0.0888      3.05
+
+The package is designed to work with the `progressr` package. To turn on
+progress bars for all bootstrap calculations, use
+
+``` r
+progressr::handlers(global = TRUE)
+```
+
+See `vignette("progressr-intro")` for further details.
+
+The package is also designed to work with the `future` package for
+parallel computing. To enable parallel computation of bootstrap
+calculations, simply set an appropriate parallelization plan such as
+
+``` r
+library(future)
+plan(multisession)
+```
+
+See the `metaselection` package vignette for a more detailed
+demonstration.
 
 ## Related Work
 
-We want to recognize other packages that provide functions to selection
-modeling.
+We want to recognize other packages that provide functions for fitting
+selection models and closely related techniques.
 
-Several existing packages provide tools for estimating selection models
-assuming that effects are independent. The `metafor` package
-(Viechtbauer 2010) includes the `selmodel()` function, which allows
-users to fit many different types of selection models. The `weightr`
-package (Coburn and Vevea 2019) includes functions to estimate a class
-of p-value selection models described in Vevea and Hedges (1995).
+Several existing packages provide implementations of selection models
+assuming that effect size estimates are independent. The `metafor`
+package (Viechtbauer 2010) includes the `selmodel()` function, which
+allows users to fit many different types of selection models. The
+`weightr` package (Coburn and Vevea 2019) includes functions to estimate
+a class of p-value selection models described in Vevea and Hedges (1995)
 However, the functions available in these packages can only be applied
-to meta-analytic data assuming that the effects are independent. In
+to meta-analytic data assuming that the effect sizes are independent. In
 addition, the `PublicationBias` package (Braginsky, Mathur, and
 VanderWeele 2023) implements sensitivity analyses for selective
-reporting bias that incorporate robust variance estimation methods for
-handling dependent effect sizes. However, the sensitivity analyses
-implemented in the package are based on a pre-specified degree of
-selective reporting, rather than allowing the degree of selection to be
-estimated from the data. The sensitivity analyses are also based on a
-specific and simple form of the step-function model, and do not allow
+reporting bias that incorporate cluster-robust variance estimation
+methods for handling dependent effect sizes. However, the sensitivity
+analyses implemented in the package are based on a pre-specified degree
+of selective reporting, rather than allowing the degree of selection to
+be estimated from the data. The sensitivity analyses are also based on a
+specific and simple form of selection model, and do not allow
 consideration of more complex forms of selection functions.
 
 ## Acknowledgements
@@ -143,19 +202,19 @@ Weight-Function Models for Publication Bias*.
 
 </div>
 
-<div id="ref-vevea1995" class="csl-entry">
+<div id="ref-vevea1995general" class="csl-entry">
 
-Vevea, Jack L., and Larry V. Hedges. 1995. “A General Linear Model for
+Vevea, Jack L, and Larry V Hedges. 1995. “A General Linear Model for
 Estimating Effect Size in the Presence of Publication Bias.”
-*Psychometrika* 60 (3): 419435. <https://doi.org/10.1007/BF02294384>.
+*Psychometrika* 60 (3): 419–35. <https://doi.org/10.1007/BF02294384>.
 
 </div>
 
-<div id="ref-metafor" class="csl-entry">
+<div id="ref-Viechtbauer2010conducting" class="csl-entry">
 
-Viechtbauer, Wolfgang. 2010. “Conducting Meta-Analyses in R with the
-<span class="nocase">metafor</span> Package.” *Journal of Statistical
-Software* 36 (3): 1–48. <https://doi.org/10.18637/jss.v036.i03>.
+Viechtbauer, Wolfgang. 2010. “<span class="nocase">Conducting
+meta-analyses in R with the metafor package</span>.” *Journal of
+Statistical Software* 36 (3): 1–48.
 
 </div>
 

@@ -40,8 +40,10 @@ The main function, `selection_model()`, fits step function and beta density sele
 You can install the development version of the package from GitHub with:
 
 ```{r, eval = FALSE}
-remotes::install_github("jepusto/metaselection")
+remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
 ```
+
+It may take a few minutes to install the package with the vignette. Setting `build_vignettes = FALSE` will lead to faster installation, although it will preclude viewing the package vignette.
 
 ## Example
 
@@ -68,19 +70,32 @@ mod_3PSM_boot <- selection_model(
   steps = .025,
   CI_type = "percentile",
   bootstrap = "multinomial",
-  R = 19
+  R = 19 # Set to a much bigger number of bootstraps for real applications
 )
 
-print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
+summary(mod_3PSM_boot)
 ```
+
+The package is designed to work with the `progressr` package. To turn on progress bars for all bootstrap calculations, use
+```{r, eval = FALSE}
+progressr::handlers(global = TRUE)
+```
+See `vignette("progressr-intro")` for further details.
+
+The package is also designed to work with the `future` package for parallel computing. To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as
+```{r, eval = FALSE}
+library(future)
+plan(multisession)
+```
+See the `metaselection` package vignette for a more detailed demonstration.
 
 ## Related Work
 
-We want to recognize other packages that provide functions to selection modeling.
+We want to recognize other packages that provide functions for fitting selection models and closely related techniques.
 
 Several existing packages provide implementations of selection models assuming that effect size estimates are independent.
-The `metafor` package [@metafor] includes the `selmodel()` function, which allows users to fit many different types of selection models.
-The `weightr` package [@weightr] includes functions to estimate a class of p-value selection models described in @vevea1995.
+The `metafor` package [@Viechtbauer2010conducting] includes the `selmodel()` function, which allows users to fit many different types of selection models.
+The `weightr` package [@weightr] includes functions to estimate a class of p-value selection models described in @vevea1995general
 However, the functions available in these packages can only be applied to meta-analytic data assuming that the effect sizes are independent.
 In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
 However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
