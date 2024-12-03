@@ -60,7 +60,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   }
   
 
-  all_vars <- c("param", "Est", "SE", "CI_lo", "CI_hi", "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper")
+  all_vars <- c("param", "Est", "SE", "p_value", "CI_lo", "CI_hi", "percentile_lower", "percentile_upper", "basic_lower", "basic_upper", "student_lower", "student_upper")
   vars_display <- intersect(names(estimates), all_vars)
   
   # mean model results -----------------------------------------------------
@@ -72,7 +72,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
 
   # do we need to have a transf_gamma argument or just display tau2 and the se 
   
-  transf_variables <- intersect(names(estimates), setdiff(all_vars, c("param","SE")))
+  transf_variables <- intersect(names(estimates), setdiff(all_vars, c("param","SE", "p_value")))
 
   gamma_params <- grepl("^gamma", estimates$param)
   
@@ -165,6 +165,7 @@ print_with_header.data.frame <- function(x, digits, ...) {
     param = c(" ", "Coef."),
     Est   = c(" ", "Estimate"),
     SE    = c(" ", "Std. Error"),
+    p_value = c(" ", "p-value"),
     CI_lo = c("Large", "Lower"),
     CI_hi = c("Sample", "Upper"),
     percentile_lower = c("Percentile","Lower"),

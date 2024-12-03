@@ -772,6 +772,9 @@ selection_model <- function(
   
   if ("large-sample" %in% CI_type) {
     qz <- qnorm(1 - (1 - conf_level) / 2)
+    
+    res$est$p_value <- 2 * pnorm(abs(res$est$Est / res$est$SE), lower.tail = FALSE)
+    
     res$est$CI_lo <- res$est$Est - qz * res$est$SE
     res$est$CI_hi <- res$est$Est + qz * res$est$SE
   } 
