@@ -27,11 +27,14 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
   
   expect_output(print(mod))
   mod_print <- print_and_parse(mod)
-  expect_identical(mod_print[1,], c("param","Est","SE","CI_lo","CI_hi"))
+  expect_identical(mod_print[1,], c("param","Est","SE","p_value","CI_lo","CI_hi"))
   expect_identical(mod_print[-1,1], c("beta","tau2","lambda1"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma","lambda1"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2","zeta1"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma","zeta1"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma","zeta1"))
+  expect_identical(raw_params, row.names(mod$est))
+  
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -50,6 +53,9 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
   expect_output(summary(mod))
   check_selmodel_summary(mod)
   
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, row.names(mod$est))
+  
   mod <- selection_model(
     data = dat,
     yi = d,
@@ -62,11 +68,13 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
   
   expect_output(print(mod))
   mod_print <- print_and_parse(mod)
-  expect_identical(mod_print[1,], c("param","Est","SE","CI_lo","CI_hi"))
+  expect_identical(mod_print[1,], c("param","Est","SE","p_value","CI_lo","CI_hi"))
   expect_identical(mod_print[-1,1], c("beta","tau2","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2","zeta1","zeta2"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma","zeta1","zeta2"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma","zeta1","zeta2"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -89,7 +97,9 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
   expect_identical(mod_print[-1,1], c("beta","tau2","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2","zeta1","zeta2"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma","zeta1","zeta2"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma","zeta1","zeta2"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -122,7 +132,9 @@ test_that("print() and summary() work for selmodel objects with mean predictors.
   expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","zeta1","zeta2"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","zeta1","zeta2"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta_XA","beta_XB","beta_XC","gamma","zeta1","zeta2"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -139,11 +151,13 @@ test_that("print() and summary() work for selmodel objects with mean predictors.
   
   expect_output(print(mod))
   mod_print <- print_and_parse(mod)
-  expect_identical(mod_print[1,], c("param","Est","SE","CI_lo","CI_hi"))
+  expect_identical(mod_print[1,], c("param","Est","SE","p_value","CI_lo","CI_hi"))
   expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda1","lambda2"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","zeta1","zeta2"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","zeta1","zeta2"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta_XA","beta_XB","beta_XC","gamma","zeta1","zeta2"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -170,11 +184,13 @@ test_that("print() works for selmodel objects with variance predictors.", {
   
   expect_output(mod_print <- print(mod))
   mod_print <- print_and_parse(mod)
-  expect_identical(mod_print[1,], c("param","Est","SE","CI_lo","CI_hi","basic_lower","basic_upper"))
+  expect_identical(mod_print[1,], c("param","Est","SE","p_value","CI_lo","CI_hi","basic_lower","basic_upper"))
   expect_identical(mod_print[-1,1], c("beta","tau2_XA","tau2_XB","tau2_XC","lambda1"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma_XA","gamma_XB","gamma_XC","lambda1"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2_XA","tau2_XB","tau2_XC","zeta1"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma_XA","gamma_XB","gamma_XC","zeta1"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma_XA","gamma_XB","gamma_XC","zeta1"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -199,7 +215,9 @@ test_that("print() works for selmodel objects with variance predictors.", {
   expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2_XA","tau2_XB","tau2_XC","lambda1"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma_XA","gamma_XB","gamma_XC","lambda1"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2_XA","tau2_XB","tau2_XC","zeta1"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma_XA","gamma_XB","gamma_XC","zeta1"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta_XA","beta_XB","beta_XC","gamma_XA","gamma_XB","gamma_XC","zeta1"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -230,7 +248,9 @@ test_that("print() works for selmodel objects with selection predictors.", {
   expect_identical(mod_print[-1,1], c("beta","tau2","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2","zeta1_XA","zeta1_XB","zeta1_XC"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma","zeta1_XA","zeta1_XB","zeta1_XC"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma","zeta1_XA","zeta1_XB","zeta1_XC"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -254,8 +274,9 @@ test_that("print() works for selmodel objects with selection predictors.", {
   expect_identical(mod_print[1,], c("param","Est","SE","student_lower","student_upper"))
   expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda1_XA","lambda1_XB","lambda1_XC"))
-  expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","zeta1_XA","zeta1_XB","zeta1_XC"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","zeta1_XA","zeta1_XB","zeta1_XC"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta_XA","beta_XB","beta_XC","gamma","zeta1_XA","zeta1_XB","zeta1_XC"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
@@ -284,12 +305,14 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
   
   expect_output(mod_print <- print(mod))
   mod_print <- print_and_parse(mod)
-  expect_identical(mod_print[1,], c("param","Est","SE","CI_lo","CI_hi"))
+  expect_identical(mod_print[1,], c("param","Est","SE","p_value","CI_lo","CI_hi"))
   expect_identical(mod_print[-1,1], c("beta","tau2","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta","gamma","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta","tau2","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta","gamma","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
-  
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta","gamma","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
+  expect_identical(raw_params, row.names(mod$est))
+
   expect_output(summary(mod))
   check_selmodel_summary(mod)
   
@@ -314,7 +337,9 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
   expect_identical(mod_print[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_gamma = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","lambda0_XisA","lambda1_XA","lambda1_XB","lambda1_XC"))
   expect_identical(print_and_parse(mod, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","tau2","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
-  expect_identical(print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1], c("beta_XA","beta_XB","beta_XC","gamma","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
+  raw_params <- print_and_parse(mod, transf_gamma = FALSE, transf_zeta = FALSE)[-1,1]
+  expect_identical(raw_params, c("beta_XA","beta_XB","beta_XC","gamma","zeta0_XisA","zeta1_XA","zeta1_XB","zeta1_XC"))
+  expect_identical(raw_params, row.names(mod$est))
   
   expect_output(summary(mod))
   check_selmodel_summary(mod)
