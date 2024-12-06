@@ -91,7 +91,7 @@ Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observe
 Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. 
 The package includes two different forms of selection functions: step functions and beta-density functions. 
 
-It is important to note that, although it is possible to implement both selection functions using two-tailed $p$-values, our focus is on the implementation of these functions using one-tailed $p$-values. This is because, although researchers frequently conduct two-tailed tests, prejudice against nonsignificant results is generally directional. Thus, our formulation and discussion of these functions is on one-tailed $p$-values. 
+It is important to note that, although it is possible to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, our focus is on the implementation of these functions using one-tailed $p$-values. Although researchers routinely report two-tailed $p$-values from two-tailed, we focus on one-tailed because prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect. Thus, our formulation and discussion of these functions is on one-tailed $p$-values based on the null hypothesis of $H_0: \theta \leq 0$ versus the alternative $H_A: $\theta > 0$.
 
 ### Step functions
 
@@ -149,7 +149,7 @@ ggplot(dat, aes(x = pvals)) +
 ### Beta-density functions
 
 @Citkowicz2017parsimonious proposed a selection model based on an alternative form of selection function, where the probability of reporting follows a beta density. Compared to a step function, the beta density selection function can capture a very different set of shapes, with selection probabilities that vary smoothly over the range of possible one-sided $p$-values. 
-The `metaselection` package implements a modification of the beta-density function originally proposed in @Citkowicz2017parsimonious, which involves truncating the selection probabilities at user-specified steps $\alpha_1$ and $\alpha_2$. The truncated beta density is given by
+The `metaselection` package implements a modification of the beta-density function as originally proposed in @Citkowicz2017parsimonious. The modification involves truncating the selection probabilities at user-specified steps $\alpha_1$ and $\alpha_2$, so that the selection function is given by
 $$
 \text{Pr}(O_{ij} = 1 | p_{ij}) = \tilde{p}_{ij}^{(\lambda_1 - 1)} \left(1 - \tilde{p}_{ij}\right)^{(\lambda_2 - 1)},
 $$
@@ -317,7 +317,7 @@ mod_3PSM
 The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`]. Note that the results do not include $p$-values for any parameters. We omit $p$-values to focus interpretation on the parameter estimates and confidence intervals of the model results, rather than on the statistical significance of any given parameter. 
 The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
 
-The selection parameter is called `lambda_1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
+The selection parameter is called `lambda1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
 The selection parameter estimate is quite imprecise, with a 95% confidence interval of `r round(exp(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="zeta1"]), 3)`, which includes the value $\lambda_1 = 1$ corresponding to no selective reporting.
 
 The total heterogeneity parameter and the selection parameter are actually estimated on log scales but are exponentiated (along with the confidence interval end-points) by default in `print()`. We can obtain an estimate on the original scale of the log-variance by setting the argument `transf_gamma` to `FALSE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the log-probability scale by setting `transf_zeta = FALSE`:
@@ -337,7 +337,7 @@ Furthermore, the `metaselection` package provides a function `selection_plot()` 
 selection_plot(mod_3PSM)
 ```
 
-The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate. In this example, the plot shows that studies with $p$-values > 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`$) to be published than studies with smaller $p$-values.
+The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate. In this example, the plot shows that studies with $p$-values > 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than studies with smaller $p$-values.
 
 ## Four-Parameter Step Model with RVE
 
@@ -366,7 +366,7 @@ However, as can be seen from the robust confidence intervals in the model output
 
 ## Three-Parameter Step Model with RVE and Moderators
 
-The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study was published in a peer reviewed journal or not. We specify the moderator by setting  `mean_mods = ~PRPublication`.
+The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study used a within-subjects design compared to a within-subjects design. We specify the moderator by setting  `mean_mods = ~ Design`.
 
 ```{r 3PSM-mod}
 mod_3PSM_mod <- selection_model(
@@ -376,21 +376,20 @@ mod_3PSM_mod <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = .025,
-  mean_mods = ~PRPublication
+  mean_mods = ~ Design
 )
 
 mod_3PSM_mod
 ```
 
-The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)`, indicating that studies published in a peer reviewed journal have an average effect that is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)` larger than studies that were not. This is consistent with selective reporting bias. The moderator also accounts for some of the between-study variability, as show by the `tau2` estimate, which goes down from `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="tau2"], 3)` to `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="tau2"], 3)` when comparing the three-parameter step function model without and with the moderator.
-
-However, the selection parameter `lambda_1` remains virtually unchanged (from `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="zeta1"]), 3)`), which can be seen in the plot below.
+The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)`, indicating that studies using within-subjects designs have an average effect that is `r round(mod_3PSM_mod$est["beta_DesignWithin Subjects","Est"], 3)` larger than studies that were not. The moderator accounts for very little of the between-study variability, as show by the `tau2` estimate, which goes down only slightly from `r round(exp(mod_3PSM$est["gamma","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["gamma","Est"]), 3)` when comparing the three-parameter step function model without and with the moderator.
+Similarly, the selection parameter `lambda_1` remains virtually unchanged (from `r round(exp(mod_3PSM$est["zeta1","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["zeta1","Est"]), 3)`), which can be seen in the plot below.
 
 ```{r 3PSMmod-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
 selection_plot(mod_3PSM_mod)
 ```
 
-The plot shows that studies with $p$-values > 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="zeta1"]), 3)`$) to be published than studies with smaller $p$-values.
+The plot shows that studies with one-sided $p$-values larger than 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM_mod$est["zeta1","Est"]), 3)`$) to be published compared to studies with smaller $p$-values.
 
 ## Beta Function with RVE
 
