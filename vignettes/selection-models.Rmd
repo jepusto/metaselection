@@ -364,6 +364,34 @@ selection_plot(mod_4PSM)
 As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided $p$-value > .50) are even less likely to be observed than effects that are positive but not statistically significant.
 However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated. 
 
+## Three-Parameter Step Model with RVE and Moderators
+
+The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study was published in a peer reviewed journal or not. We specify the moderator by setting  `mean_mods = ~PRPublication`.
+
+```{r 3PSM-mod}
+mod_3PSM_mod <- selection_model(
+  data = dat.lehmann2018, 
+  yi = yi,
+  sei = sei,
+  cluster = study,
+  selection_type = "step",
+  steps = .025,
+  mean_mods = ~PRPublication
+)
+
+mod_3PSM_mod
+```
+
+The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)`, indicating that studies published in a peer reviewed journal have an average effect that is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)` larger than studies that were not. This is consistent with selective reporting bias. The moderator also accounts for some of the between-study variability, as show by the `tau2` estimate, which goes down from `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="tau2"], 3)` to `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="tau2"], 3)` when comparing the three-parameter step function model without and with the moderator.
+
+However, the selection parameter `lambda_1` remains virtually unchanged (from `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="zeta1"]), 3)`), which can be seen in the plot below.
+
+```{r 3PSMmod-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
+selection_plot(mod_3PSM_mod)
+```
+
+The plot shows that studies with $p$-values > 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="zeta1"]), 3)`$) to be published than studies with smaller $p$-values.
+
 ## Beta Function with RVE
 
 The `selection_model()` function also allows fitting models based on beta density selection functions by specifying `selection_type = "beta"`. The default estimator for the beta function model is maximum likelihood; the hybrid estimator is not yet available.  
