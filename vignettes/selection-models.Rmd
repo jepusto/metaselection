@@ -91,7 +91,7 @@ Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observe
 Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. 
 The package includes two different forms of selection functions: step functions and beta-density functions. 
 
-It is important to note that, although it is possible to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, our focus is on the implementation of these functions using one-tailed $p$-values. Although researchers routinely report two-tailed $p$-values from two-tailed, we focus on one-tailed because prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect. Thus, our formulation and discussion of these functions is on one-tailed $p$-values based on the null hypothesis of $H_0: \theta \leq 0$ versus the alternative $H_A: $\theta > 0$.
+It is important to note that, although it is possible to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, our focus is on the implementation of these functions using one-tailed $p$-values. Although researchers routinely report two-tailed $p$-values from two-tailed hypothesis tests, we focus on one-tailed $p$-values because prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect. Thus, our formulation and discussion of these functions is on one-tailed $p$-values based on the null hypothesis of $H_0: \theta \leq 0$ versus the alternative $H_A: $\theta > 0$.
 
 ### Step functions
 
@@ -337,7 +337,7 @@ Furthermore, the `metaselection` package provides a function `selection_plot()` 
 selection_plot(mod_3PSM)
 ```
 
-The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate. In this example, the plot shows that studies with $p$-values > 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than studies with smaller $p$-values.
+The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate. In this example, the plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
 
 ## Four-Parameter Step Model with RVE
 
@@ -366,7 +366,7 @@ However, as can be seen from the robust confidence intervals in the model output
 
 ## Three-Parameter Step Model with RVE and Moderators
 
-The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study used a within-subjects design compared to a within-subjects design. We specify the moderator by setting  `mean_mods = ~ Design`.
+The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study used a within-subjects design compared to a between-subjects design. We specify the moderator by setting  `mean_mods = ~ Design`.
 
 ```{r 3PSM-mod}
 mod_3PSM_mod <- selection_model(
@@ -382,14 +382,14 @@ mod_3PSM_mod <- selection_model(
 mod_3PSM_mod
 ```
 
-The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_PRPublicationYes"], 3)`, indicating that studies using within-subjects designs have an average effect that is `r round(mod_3PSM_mod$est["beta_DesignWithin Subjects","Est"], 3)` larger than studies that were not. The moderator accounts for very little of the between-study variability, as show by the `tau2` estimate, which goes down only slightly from `r round(exp(mod_3PSM$est["gamma","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["gamma","Est"]), 3)` when comparing the three-parameter step function model without and with the moderator.
+The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_DesignWithin Subjects"], 3)`, indicating that studies using within-subjects designs have an average effect that is `r round(mod_3PSM_mod$est["beta_DesignWithin Subjects","Est"], 3)` larger than studies using between-subjects designs. The moderator accounts for very little of the between-study variability, as show by the `tau2` estimate, which goes down only slightly from `r round(exp(mod_3PSM$est["gamma","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["gamma","Est"]), 3)` when comparing the three-parameter step function model without and with the moderator.
 Similarly, the selection parameter `lambda_1` remains virtually unchanged (from `r round(exp(mod_3PSM$est["zeta1","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["zeta1","Est"]), 3)`), which can be seen in the plot below.
 
 ```{r 3PSMmod-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
 selection_plot(mod_3PSM_mod)
 ```
 
-The plot shows that studies with one-sided $p$-values larger than 0.025 are about half as likely ($\lambda_1 = `r round(exp(mod_3PSM_mod$est["zeta1","Est"]), 3)`$) to be published compared to studies with smaller $p$-values.
+The plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
 
 ## Beta Function with RVE
 
@@ -416,7 +416,7 @@ To see how the probability of selection differs across studies with different $p
 selection_plot(mod_beta)
 ```
 
-The plot shows that effect sizes with smaller $p$-values are more likely to be published than effects with larger $p$-values. For example, an effect size estimate of zero (with one-sided $p$-value of $p = .500$) is about half as likely to be published as an effect with a statistically significant, positive effect.
+The plot shows that effect sizes with smaller $p$-values are more likely to be published than effects with larger $p$-values. For example, an effect size estimate of zero (with a one-sided $p$-value of $p = .500$) is about half as likely to be published as an effect with a statistically significant, positive effect.
 
 ## Bootstrap Confidence Intervals
 
