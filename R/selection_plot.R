@@ -356,7 +356,7 @@ selection_plot.selmodel <- function(
   ggplot2::ggplot(dat) + 
     ggplot2::aes(x = .data$p, y = .data$wt) + 
     ggplot2::expand_limits(y = 0) + 
-    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
+    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01), ...) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,0))) + 
     ggplot2::geom_vline(xintercept = steps, linetype = step_linetype) + 
     ggplot2::geom_area(fill = fill, alpha = alpha) + 
