@@ -25,6 +25,8 @@ test_that("selection_plot() works for 3PSM.", {
   wt_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(ML_noboot)
   p_noboot
+  
+
   expect_s3_class(p_noboot, "ggplot")
   expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
@@ -32,7 +34,12 @@ test_that("selection_plot() works for 3PSM.", {
   wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.9)
   p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.9)
   expect_identical(wt_r_noboot, p_r_noboot$data)
-
+  
+  p_noboot_sqrt <- selection_plot(ML_noboot, transform = "sqrt")
+  expect_s3_class(p_noboot_sqrt, "ggplot")
+  p_noboot_arcsin <- selection_plot(ML_noboot, transform = "asn")
+  expect_s3_class(p_noboot_arcsin, "ggplot")
+  
   suppressWarnings(
     ML_boot <- selection_model(
       data = dat,
@@ -176,6 +183,12 @@ test_that("selection_plot() works for 4PSM.", {
   wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.47)
   p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.47)
   expect_identical(wt_r_noboot, p_r_noboot$data)
+  
+  p_noboot_sqrt <- selection_plot(ML_noboot, transform = "sqrt")
+  expect_s3_class(p_noboot_sqrt, "ggplot")
+  p_noboot_arcsin <- selection_plot(ML_noboot, transform = "asn")
+  expect_s3_class(p_noboot_arcsin, "ggplot")
+  
   
   ML_boot <- selection_model(
     data = dat,
@@ -323,6 +336,12 @@ test_that("selection_plot() works for beta model", {
   wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.6)
   p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.6)
   expect_identical(wt_r_noboot, p_r_noboot$data)
+  
+  
+  p_noboot_sqrt <- selection_plot(ML_noboot, transform = "sqrt")
+  expect_s3_class(p_noboot_sqrt, "ggplot")
+  p_noboot_arcsin <- selection_plot(ML_noboot, transform = "asn")
+  expect_s3_class(p_noboot_arcsin, "ggplot")
   
   suppressWarnings(
     ML_boot <- selection_model(
