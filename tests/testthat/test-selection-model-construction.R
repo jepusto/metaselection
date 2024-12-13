@@ -475,15 +475,15 @@ test_that("selection_model() works with the subset argument.", {
     )
   
   expect_equal(
-    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1A", select = c(-param,-estimator)),
-    subset(m1_hybrid_full_A1$est, select = c(-param,-estimator)),
+    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1A", select = c(-param,-estimator,-p_value)),
+    subset(m1_hybrid_full_A1$est, select = c(-param,-estimator,-p_value)),
     ignore_attr = TRUE,
     tolerance = 1e-6
   )
   
   expect_equal(
-    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1B", select = c(-param,-estimator)),
-    subset(m1_hybrid_full_B1$est, select = c(-param,-estimator)),
+    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1B", select = c(-param,-estimator,-p_value)),
+    subset(m1_hybrid_full_B1$est, select = c(-param,-estimator,-p_value)),
     ignore_attr = TRUE,
     tolerance = 1e-6
   )

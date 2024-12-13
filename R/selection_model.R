@@ -775,7 +775,7 @@ selection_model <- function(
     
     res$est$p_value <- 2 * pnorm(abs(res$est$Est / res$est$SE), lower.tail = FALSE)
     
-    if(is.null(var_mods)){
+    if (is.null(var_mods)) {
       
       res$est["gamma", "p_value"] <- NA
       
@@ -783,7 +783,6 @@ selection_model <- function(
       
       gamma_intercept <- grepl("gamma_\\(Intercept\\)", res$est$param)
       res$est[gamma_intercept, "p_value"] <- NA
-      
       
     }
     
