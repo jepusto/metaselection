@@ -25,6 +25,8 @@ test_that("selection_plot() works for 3PSM.", {
   wt_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200))
   p_noboot <- selection_plot(ML_noboot)
   p_noboot
+  
+
   expect_s3_class(p_noboot, "ggplot")
   expect_s3_class(p_noboot$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_noboot$data)
@@ -32,6 +34,12 @@ test_that("selection_plot() works for 3PSM.", {
   wt_r_noboot <- selection_wts(ML_noboot, pvals = seq(0,1,length.out = 200), ref_pval = 0.9)
   p_r_noboot <- selection_plot(ML_noboot, ref_pval = 0.9)
   expect_identical(wt_r_noboot, p_r_noboot$data)
+  
+  # not sure if this is what you meant but here are examples
+  p_noboot_transform <- selection_plot(ML_noboot, transform = "log10")
+  p_noboot_transform
+  p_noboot_transform_sqrt <- selection_plot(ML_noboot, transform = "sqrt")
+  p_noboot_transform_sqrt
 
   suppressWarnings(
     ML_boot <- selection_model(
