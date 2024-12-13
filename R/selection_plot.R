@@ -273,10 +273,13 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   parameter estimates.
 #'
 #' @param mod Fitted model of class \code{"selmodel"}.
+#' @param limits numeric vector of length 2 specifying the minimum and maximum p-values to plot.
 #' @param pts Number of points for which to calculate selection weights, with a
-#'   default of 200 points, evenly spaced between 0 and 1.
+#'   default of 200 points, evenly spaced between the specified limits.
+#' @param transform Character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.
+#' @param expand Passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.
 #' @inheritParams selection_wts
-#' @param ... further arguments passed to some methods.
+#' @param ... further arguments passed to \code{ggplot2::scale_x_continuous}.
 #'
 #' @returns A \code{ggplot2} object.
 #'
@@ -295,6 +298,9 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #' 
 #' selection_plot(mod, fill = "purple")
 #' 
+#' # rescale the horizontal axis using arc-sin square root
+#' selection_plot(mod, fill = "purple", transform = "asn") 
+#' 
 #' 
 #' mod_boot <- selection_model(
 #'   data = self_control,
@@ -308,17 +314,17 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   R = 9
 #' )
 #' 
-#'  selection_plot(mod_boot)
-#'  selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
-#'  selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
+#'  selection_plot(mod_boot, transform = "sqrt")
+#'  selection_plot(mod_boot, transform = "sqrt", draw_boots = FALSE) # turn off bootstrap lines
+#'  selection_plot(mod_boot, transform = "sqrt", color = "red", boot_color = "orange") # change colors
 #' 
 
-selection_plot <- function(mod, pts = 200L, ref_pval = NULL, ...) UseMethod("selection_plot")
+selection_plot <- function(mod, limits = c(0,1), pts = 200L, ref_pval = NULL, transform = "identity", expand = ggplot2::expansion(0, 0.01), ...) UseMethod("selection_plot")
 
 
 #' @export
 
-selection_plot.default <- function(mod, pts = 200L, ref_pval = NULL, ...) {
+selection_plot.default <- function(mod, limits = c(0,1), pts = 200L, ref_pval = NULL, transform = "identity", expand = ggplot2::expansion(0, 0.01), ...) {
   mod_class <- paste(class(mod), collapse = ", ")
   msg <- paste0("There is no `selection_plot` method available for objects of class ", mod_class, ".")
   stop(msg)
@@ -339,8 +345,11 @@ selection_plot.default <- function(mod, pts = 200L, ref_pval = NULL, ...) {
 
 selection_plot.selmodel <- function(
   mod, 
+  limits = c(0,1),
   pts = 200L, 
   ref_pval = NULL,
+  transform = "identity",
+  expand = ggplot2::expansion(0, 0.01),
   fill = "blue",
   alpha = 0.5,
   step_linetype = "dashed",
@@ -349,20 +358,28 @@ selection_plot.selmodel <- function(
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
-  pts <- seq(0, 1, length.out = pts)
+  if (identical(transform, "identity")) {
+    pts <- seq(from = limits[1], to = limits[2], length.out = pts)
+  } else {
+    transf <- scales::as.transform(transform)
+    limits_trans <- transf$transform(limits)
+    pts_trans <- seq(from = limits_trans[1], to = limits_trans[2], length.out = pts)
+    pts <- transf$inverse(pts_trans)
+  }
+  
   steps <- mod$steps
   dat <- selection_wts(mod, pvals = pts, ref_pval = ref_pval, bootstrap = FALSE)
   
   ggplot2::ggplot(dat) + 
     ggplot2::aes(x = .data$p, y = .data$wt) + 
     ggplot2::expand_limits(y = 0) + 
-    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01), ...) + 
+    ggplot2::scale_x_continuous(limits = limits, expand = expand, transform = transform, ...) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,0))) + 
     ggplot2::geom_vline(xintercept = steps, linetype = step_linetype) + 
     ggplot2::geom_area(fill = fill, alpha = alpha) + 
     ggplot2::labs(
       x = "p-value (one-sided)",
-      y = "Selection weight"
+      y = "Relative probability of selection"
     )
   
 }
@@ -393,8 +410,11 @@ selection_plot.selmodel <- function(
 
 selection_plot.boot.selmodel <- function(
     mod, 
+    limits = c(0,1),
     pts = 200L, 
     ref_pval = NULL,
+    transform = "identity",
+    expand = ggplot2::expansion(0, 0.01),
     color = "black",
     linewidth = 1.2, 
     step_linetype = "dashed",
@@ -406,7 +426,15 @@ selection_plot.boot.selmodel <- function(
   
   if (!is.null(mod$cl$sel_mods)) stop("selection_plot() is not available for models that include moderators of the selection parameters.")
   
-  pts <- seq(0, 1, length.out = pts)
+  if (identical(transform, "identity")) {
+    pts <- seq(from = limits[1], to = limits[2], length.out = pts)
+  } else {
+    transf <- scales::as.transform(transform)
+    limits_trans <- transf$transform(limits)
+    pts_trans <- seq(from = limits_trans[1], to = limits_trans[2], length.out = pts)
+    pts <- transf$inverse(pts_trans)
+  }
+  
   steps <- mod$steps
   
   dat <- selection_wts(mod, pvals = pts, ref_pval = ref_pval, bootstraps = TRUE)
@@ -414,11 +442,11 @@ selection_plot.boot.selmodel <- function(
   
   p <- ggplot2::ggplot(dat$wts) + 
     ggplot2::expand_limits(y = 0) + 
-    ggplot2::scale_x_continuous(limits = c(0, 1), expand = ggplot2::expansion(0, 0.01)) + 
+    ggplot2::scale_x_continuous(limits = limits, expand = expand, transform = transform, ...) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, c(0,NA))) + 
     ggplot2::labs(
       x = "p-value (one-sided)",
-      y = "Selection weight"
+      y = "Relative probability of selection"
     ) + 
     ggplot2::geom_vline(xintercept = steps, linetype = step_linetype) + 
     ggplot2::theme_minimal()

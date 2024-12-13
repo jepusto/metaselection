@@ -6,12 +6,23 @@
 \alias{selection_plot.boot.selmodel}
 \title{Plot the selection weights implied by an estimated selection model.}
 \usage{
-selection_plot(mod, pts = 200L, ref_pval = NULL, ...)
+selection_plot(
+  mod,
+  limits = c(0, 1),
+  pts = 200L,
+  ref_pval = NULL,
+  transform = "identity",
+  expand = ggplot2::expansion(0, 0.01),
+  ...
+)
 
 \method{selection_plot}{selmodel}(
   mod,
+  limits = c(0, 1),
   pts = 200L,
   ref_pval = NULL,
+  transform = "identity",
+  expand = ggplot2::expansion(0, 0.01),
   fill = "blue",
   alpha = 0.5,
   step_linetype = "dashed",
@@ -20,8 +31,11 @@ selection_plot(mod, pts = 200L, ref_pval = NULL, ...)
 
 \method{selection_plot}{boot.selmodel}(
   mod,
+  limits = c(0, 1),
   pts = 200L,
   ref_pval = NULL,
+  transform = "identity",
+  expand = ggplot2::expansion(0, 0.01),
   color = "black",
   linewidth = 1.2,
   step_linetype = "dashed",
@@ -34,15 +48,21 @@ selection_plot(mod, pts = 200L, ref_pval = NULL, ...)
 \arguments{
 \item{mod}{Fitted model of class \code{"selmodel"}.}
 
+\item{limits}{numeric vector of length 2 specifying the minimum and maximum p-values to plot.}
+
 \item{pts}{Number of points for which to calculate selection weights, with a
-default of 200 points, evenly spaced between 0 and 1.}
+default of 200 points, evenly spaced between the specified limits.}
 
 \item{ref_pval}{Numeric value of a p-value at which to standardize the
 weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
 selection weight of 1 and selection weights for all other p-values will be
 calculated relative to \code{ref_pval}.}
 
-\item{...}{further arguments passed to some methods.}
+\item{transform}{Character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.}
+
+\item{expand}{Passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.}
+
+\item{...}{further arguments passed to \code{ggplot2::scale_x_continuous}.}
 
 \item{fill}{character string specifying the fill-color to use when \code{mod}
 does not include bootstrap replications, with a default of \code{"blue"}.
@@ -101,6 +121,9 @@ mod <- selection_model(
 
 selection_plot(mod, fill = "purple")
 
+# rescale the horizontal axis using arc-sin square root
+selection_plot(mod, fill = "purple", transform = "asn") 
+
 
 mod_boot <- selection_model(
   data = self_control,
@@ -114,8 +137,8 @@ mod_boot <- selection_model(
   R = 9
 )
 
- selection_plot(mod_boot)
- selection_plot(mod_boot, draw_boots = FALSE) # turn off bootstrap lines
- selection_plot(mod_boot, color = "red", boot_color = "orange") # change colors
+ selection_plot(mod_boot, transform = "sqrt")
+ selection_plot(mod_boot, transform = "sqrt", draw_boots = FALSE) # turn off bootstrap lines
+ selection_plot(mod_boot, transform = "sqrt", color = "red", boot_color = "orange") # change colors
 
 }

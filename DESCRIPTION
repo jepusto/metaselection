@@ -32,6 +32,7 @@ Imports:
     progressr,
     rlang,
     ggplot2,
+    scales,
     Rdpack,
     simhelpers (> 0.2.1)
 Suggests: 
