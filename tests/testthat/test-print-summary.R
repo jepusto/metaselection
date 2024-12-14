@@ -21,7 +21,7 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     sei = sd_d,
     cluster = studyid,
     steps = 0.025,
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -44,7 +44,7 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     yi = d,
     sei = sd_d,
     steps = 0.025,
-    estimator = "ML",
+    estimator = "CML",
     vcov_type = "model-based",
     bootstrap = "none"
   )
@@ -62,7 +62,7 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     sei = sd_d,
     cluster = studyid,
     selection_type = "beta",
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -85,7 +85,7 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
     sei = sd_d,
     cluster = studyid,
     steps = c(0.025,0.500),
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "multinomial",
     CI_type = "percentile",
     R = 9
@@ -120,7 +120,7 @@ test_that("print() and summary() work for selmodel objects with mean predictors.
     cluster = studyid,
     steps = c(0.025,0.500),
     mean_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "multinomial",
     CI_type = c("percentile","student"),
     R = 9
@@ -146,7 +146,7 @@ test_that("print() and summary() work for selmodel objects with mean predictors.
     cluster = studyid,
     mean_mods = ~ 0 + X, 
     selection_type = "beta",
-    estimator = "ML"
+    estimator = "CML"
   )
   
   expect_output(print(mod))
@@ -176,7 +176,7 @@ test_that("print() works for selmodel objects with variance predictors.", {
     cluster = studyid,
     steps = c(0.05),
     var_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "multinomial",
     CI_type = c("large-sample","basic"),
     R = 9
@@ -203,7 +203,7 @@ test_that("print() works for selmodel objects with variance predictors.", {
     steps = c(0.05),
     mean_mods = ~ 0 + X,
     var_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "multinomial",
     CI_type = "student",
     R = 9
@@ -236,7 +236,7 @@ test_that("print() works for selmodel objects with selection predictors.", {
     cluster = studyid,
     steps = c(0.05),
     sel_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "exponential",
     CI_type = "percentile",
     R = 9
@@ -263,7 +263,7 @@ test_that("print() works for selmodel objects with selection predictors.", {
     steps = c(0.05),
     mean_mods = ~ 0 + X,
     sel_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "exponential",
     CI_type = "student",
     R = 9
@@ -299,7 +299,7 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
     steps = c(0.05),
     sel_zero_mods = ~ XisA,
     sel_mods = ~ 0 + X, 
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -325,7 +325,7 @@ test_that("print() works for selmodel objects with sel_zero predictors.", {
     mean_mods = ~ 0 + X,
     sel_zero_mods = ~ XisA,
     sel_mods = ~ 0 + X, 
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "exponential",
     CI_type = "student",
     R = 9

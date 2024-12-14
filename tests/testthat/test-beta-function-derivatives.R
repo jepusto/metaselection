@@ -295,7 +295,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     yi = d, sei = sd_d, 
     selection_type = "beta",
     steps = c(.025, .500),
-    estimator = "ML",
+    estimator = "CML",
     optimizer = c("BFGS","nlminb","Rvmmin"),
     crit = qnorm(0.92)
   )
@@ -310,7 +310,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     yi = d, sei = sd_d, 
     selection_type = "beta",
     steps = c(.025, .975),
-    estimator = "ML",
+    estimator = "CML",
     optimizer = c("BFGS","nlminb","Rvmmin"),
     params = c(1L, 3L, 4L)
   )
@@ -338,7 +338,7 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     yi = d, sei = sd_d, 
     selection_type = "beta",
     steps = c(.025, .500),
-    estimator = "ML"
+    estimator = "CML"
   )
   beta_derivs$selmod_fit$est
   beta_derivs$score_diff_over_range

@@ -98,7 +98,7 @@ fit_selection_model <- function(
   subset = NULL,
   vcov_type = "robust",
   selection_type = "step",
-  estimator = "ML",
+  estimator = "CML",
   theta = NULL,
   optimizer = "BFGS",
   optimizer_control = list(),
@@ -135,7 +135,7 @@ fit_selection_model <- function(
     calc_Ai = FALSE
   )
   
-  if (estimator == "ML") {
+  if (estimator %in% c("ML","CML")) {
     
     # Optimize the log likelihood using optimx()
     
@@ -185,7 +185,7 @@ fit_selection_model <- function(
       return(theta)
     }
     
-  } else if (estimator == "hybrid-full") {
+  } else if (estimator %in% c("ARGL-full","hybrid-full")) {
     
     info <- list()
 
@@ -236,7 +236,7 @@ fit_selection_model <- function(
       return(theta)
     }
     
-  }  else if (estimator == "hybrid") {
+  }  else if (estimator %in% c("ARGL","hybrid")) {
     
     info <- list()
     
@@ -336,7 +336,7 @@ fit_selection_model <- function(
 
   # Compute score contributions using MLEs
   
-  if (estimator == "ML") {
+  if (estimator %in% c("ML","CML")) {
     
     if (selection_type == "step") {
       
@@ -355,7 +355,7 @@ fit_selection_model <- function(
     }
     
   
-  } else if (estimator %in% c("hybrid-full","hybrid")) {
+  } else if (estimator %in% c("ARGL-full","ARGL","hybrid-full","hybrid")) {
     
     scores <- step_hybrid_score(theta = theta, 
                                 yi = yi, sei = sei, pi = pi, ai = ai,
@@ -368,7 +368,7 @@ fit_selection_model <- function(
   
   # Compute Hessian using MLEs
   
-  if (estimator == "ML") {
+  if (estimator %in% c("ML","CML")) {
     if (selection_type == "step") {
       
       hess <- step_hessian(theta = theta, 
@@ -386,7 +386,7 @@ fit_selection_model <- function(
     }
     
   
-  } else if (estimator %in% c("hybrid-full","hybrid")) {
+  } else if (estimator %in% c("ARGL-full","ARGL","hybrid-full","hybrid")) {
     
     hess <- step_hybrid_jacobian(theta = theta, 
                                  yi = yi, sei = sei, pi = pi, ai = ai,
@@ -440,7 +440,7 @@ bootstrap_selmodel <- function(
     Z = NULL, 
     vcov_type = "robust",
     selection_type = "step",
-    estimator = "ML",
+    estimator = "CML",
     theta = NULL,
     optimizer = "BFGS",
     optimizer_control = list(),
@@ -522,8 +522,8 @@ bootstrap_selmodel <- function(
 #' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
 #'   data
 #' @param yi vector of effect sizes estimates.
-#' @param vi vector of sample variances. If \code{vi} is specified,
-#'   then the \code{sei} argument must be omitted.
+#' @param vi vector of sample variances. If \code{vi} is specified, then the
+#'   \code{sei} argument must be omitted.
 #' @param sei vector of sampling standard errors. If \code{sei} is specified,
 #'   then the \code{vi} argument must be omitted.
 #' @param pi optional vector of one-sided p-values. If not specified, p-values
@@ -550,11 +550,12 @@ bootstrap_selmodel <- function(
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
-#' @param estimator vector indicating whether to use the maximum likelihood or
-#'   the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
-#'   and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
-#'   maximum likelihood estimator, \code{"ML"}, is available. For step function
-#'   models, both maximum likelihood and hybrid estimators are available.
+#' @param estimator vector indicating whether to use the composite marginal
+#'   likelihood estimator (option \code{"CML"}) or the augmented and reweighted
+#'   Gaussian likelihood estimator (option \code{"ARGL"} or \code{"ARGL-full"}).
+#'   If \code{selection_type = "beta"}, only the composite marginal likelihood
+#'   estimator, \code{"CML"}, is available. For step function models, both
+#'   estimators are available.
 #' @param vcov_type character string specifying the type of variance-covariance
 #'   matrix to calculate, with possible options \code{"robust"} for robust or
 #'   cluster-robust standard errors, \code{"model-based"} for model-based
@@ -569,7 +570,7 @@ bootstrap_selmodel <- function(
 #' @param theta optional numeric vector of starting values to use in
 #'   optimization routines.
 #' @param optimizer character string indicating the optimizer to use. Ignored if
-#'   \code{estimator = "hybrid"} or \code{"hybrid-full"}.
+#'   \code{estimator = "ARGL"} or \code{"ARGL-full"}.
 #' @param optimizer_control an optional list of control parameters to be used
 #'   for optimization
 #' @param use_jac logical with \code{TRUE} (the default) indicating to use the
@@ -608,7 +609,7 @@ bootstrap_selmodel <- function(
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = 0.025,
-#'   estimator = "ML",
+#'   estimator = "CML",
 #'   bootstrap = "none"
 #' )
 #'
@@ -624,7 +625,7 @@ bootstrap_selmodel <- function(
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = 0.025,
-#'   estimator = "hybrid",
+#'   estimator = "ARGL",
 #'   bootstrap = "multinomial",
 #'   CI_type = "percentile",
 #'   R = 19
@@ -650,7 +651,7 @@ selection_model <- function(
     sel_mods = NULL,
     sel_zero_mods = NULL,
     subset = NULL,
-    estimator = "ML",
+    estimator = "CML",
     vcov_type = "robust",
     CI_type = "large-sample",
     conf_level = .95,
@@ -664,13 +665,13 @@ selection_model <- function(
 ) {
   
   selection_type <- match.arg(selection_type)
-  estimator <- match.arg(estimator, c("ML","hybrid","hybrid-full"))
+  estimator <- match.arg(estimator, c("CML","ML","ARGL","ARGL-full","hybrid","hybrid-full"))
   vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
   bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
   CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
 
   if (vcov_type == "model-based") {
-    if (estimator != "ML") stop("vcov_type = 'model-based' is only allowed for estimator = 'ML'.")
+    if (!(estimator %in% c("ML","CML"))) stop("vcov_type = 'model-based' is only allowed for estimator = 'CML'.")
     if (!missing(cluster)) stop("vcov_type = 'model-based' does not allow the use of a clustering variable.")
   }
   if (bootstrap %in% c("exponential","multinomial")) {
@@ -683,7 +684,7 @@ selection_model <- function(
 
   if (is.null(optimizer)) {
     if (selection_type == "step") {
-      optimizer <- if (estimator == "ML") "Rvmmin" else "nleqslv"
+      optimizer <- if (estimator %in% c("ML","CML")) "Rvmmin" else "nleqslv"
     } else {
       optimizer <- "nlminb"
     }
@@ -698,7 +699,7 @@ selection_model <- function(
     if (length(steps) != 2L) stop("steps must be a numeric vector of length 2 when selection_type = 'beta'.")
     if (!is.null(sel_mods)) stop("sel_mods must be NULL when selection_type = 'beta'.")
     if (!is.null(sel_zero_mods)) stop("sel_zero_mods must be NULL when selection_type = 'beta'.")
-    if (estimator != "ML") stop("estimator must be equal to 'ML' when selection_type = 'beta'.")
+    if (!(estimator %in% c("ML","CML"))) stop("estimator must be equal to 'CML' when selection_type = 'beta'.")
   }
   
   # Create common model frame

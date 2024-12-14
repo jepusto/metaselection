@@ -14,7 +14,7 @@
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = 0.025,
-#'   estimator = "ML",
+#'   estimator = "CML",
 #'   bootstrap = "none"
 #' )
 #' 
@@ -39,7 +39,7 @@ summary.selmodel <- function(object, transf_gamma = TRUE, transf_zeta = TRUE, di
   
   estimates <- object$est
   estimator <- estimates$estimator[1]
-  estimator <- ifelse(estimator == "ML", "maximum likelihood", "hybrid estimating equations")
+  estimator <- ifelse(estimator %in% c("ML","CML"), "composite marginal likelihood", "augmented and reweighted Gaussian likelihood")
   vcov_type <- object$vcov_type
   clog_lik <- object$ll
   wt_partial_log_lik <- object$wpll

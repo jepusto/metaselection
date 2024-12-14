@@ -56,7 +56,7 @@ diffentiate_loglik <- function(
 check_all_derivatives <- function(
     steps = .025,
     selection_type = "step",
-    estimator = "ML",
+    estimator = "CML",
     ...,
     N = 100,
     crit = qnorm(0.975),
@@ -88,11 +88,11 @@ check_all_derivatives <- function(
   to <- selmod_fit$est$Est + crit * selmod_fit$est$SE
   
   if (selection_type == "step") {
-    if (estimator == "ML") {
+    if (estimator %in% c("ML","CML")) {
       f_ll <- step_loglik
       f_score <- step_score
       f_hess <- step_hessian
-    } else if (estimator == "hybrid") {
+    } else if (estimator %in% c("hybrid","ARGL")) {
       f_ll <- step_weighted_logpartlik
       f_score <- step_hybrid_score
       f_hess <- step_hybrid_jacobian
@@ -223,7 +223,7 @@ check_against_metafor_selmodel <- function(
         steps = steps,
         mean_mods = mods,
         selection_type = "step",
-        estimator = "ML",
+        estimator = "CML",
         vcov_type = "model-based",
         theta = metafor_est
       )
@@ -271,7 +271,7 @@ check_against_metafor_selmodel <- function(
         steps = steps,
         mean_mods = mods,
         selection_type = "beta",
-        estimator = "ML",
+        estimator = "CML",
         vcov_type = "model-based",
         theta = metafor_est
       )
@@ -872,7 +872,7 @@ check_profiling_equivalence <- function(
     subset = subset,
     vcov_type = vcov_type,
     selection_type = "step",
-    estimator = "hybrid-full",
+    estimator = "ARGL-full",
     optimizer_control = list(),
   )
 
@@ -1048,7 +1048,7 @@ check_selmodel_summary <- function(mod, ...) {
   testthat::expect_identical(mod_str, mod_type)
   testthat::expect_identical(steps, mod$steps)
   
-  estimator_type <- if (mod$estimator == "ML") "maximum likelihood" else "hybrid estimating equations"
+  estimator_type <- if (mod$estimator %in% c("ML","CML")) "composite marginal likelihood" else "augmented and reweighted Gaussian likelihood"
   testthat::expect_identical(estimator, estimator_type)
   testthat::expect_identical(vcov_type, mod$vcov_type)
  
@@ -1058,7 +1058,7 @@ check_selmodel_summary <- function(mod, ...) {
 #-------------------------------------------------------------------------------
 # Functions for checking selection_wts()
 
-check_selection_weights <- function(dat, steps, estimator = "ML", bootstrap = "none", R = 9) {
+check_selection_weights <- function(dat, steps, estimator = "CML", bootstrap = "none", R = 9) {
 
   mod_args <- list(
     data = dat, 
@@ -1113,7 +1113,7 @@ check_predictions <- function(
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
-    estimator = "hybrid",
+    estimator = "ARGL",
     check_subset = TRUE
 ) {
   
