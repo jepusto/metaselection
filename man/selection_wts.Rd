@@ -58,7 +58,7 @@ mod <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = c(0.025, .5),
-  estimator = "ML",
+  estimator = "CML",
   bootstrap = "none"
 )
 
@@ -70,7 +70,7 @@ mod_boot <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = c(0.025, .5),
-  estimator = "ML",
+  estimator = "CML",
   bootstrap = "multinomial",
   CI_type = "percentile",
   R = 9

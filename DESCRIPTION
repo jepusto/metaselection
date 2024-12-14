@@ -31,7 +31,7 @@ Imports:
     future.apply,
     progressr,
     rlang,
-    ggplot2,
+    ggplot2 (>= 3.5.0),
     scales,
     Rdpack,
     simhelpers (> 0.2.1)

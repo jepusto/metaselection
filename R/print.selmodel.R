@@ -18,7 +18,7 @@
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = 0.025,
-#'   estimator = "ML",
+#'   estimator = "CML",
 #'   bootstrap = "none"
 #' )
 #' 

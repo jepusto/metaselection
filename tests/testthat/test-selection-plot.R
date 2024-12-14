@@ -18,7 +18,7 @@ test_that("selection_plot() works for 3PSM.", {
     sei = sd_d,
     cluster = studyid,
     steps = 0.025,
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -47,7 +47,7 @@ test_that("selection_plot() works for 3PSM.", {
       sei = sd_d,
       cluster = studyid,
       steps = 0.025,
-      estimator = "ML",
+      estimator = "CML",
       bootstrap = "multinomial",
       CI_type = "percentile",
       R = 8
@@ -168,7 +168,7 @@ test_that("selection_plot() works for 4PSM.", {
     sei = sd_d,
     cluster = studyid,
     steps = c(0.025,0.500),
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -196,7 +196,7 @@ test_that("selection_plot() works for 4PSM.", {
     sei = sd_d,
     cluster = studyid,
     steps = c(0.025,0.500),
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "multinomial",
     CI_type = "percentile",
     R = 11
@@ -234,7 +234,7 @@ test_that("selection_plot() works for 4PSM.", {
     sei = sd_d,
     cluster = studyid,
     steps = c(0.025,0.500),
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "multinomial",
     CI_type = "percentile"
   )
@@ -321,7 +321,7 @@ test_that("selection_plot() works for beta model", {
     cluster = studyid,
     selection_type = "beta",
     steps = c(0.025,0.975),
-    estimator = "ML",
+    estimator = "CML",
     bootstrap = "none"
   )
   
@@ -351,7 +351,7 @@ test_that("selection_plot() works for beta model", {
       cluster = studyid,
       steps = c(0.025,0.975),
       selection_type = "beta",
-      estimator = "ML",
+      estimator = "CML",
       bootstrap = "multinomial",
       CI_type = "percentile",
       R = 6

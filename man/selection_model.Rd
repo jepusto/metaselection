@@ -19,7 +19,7 @@ selection_model(
   sel_mods = NULL,
   sel_zero_mods = NULL,
   subset = NULL,
-  estimator = "ML",
+  estimator = "CML",
   vcov_type = "robust",
   CI_type = "large-sample",
   conf_level = 0.95,
@@ -38,8 +38,8 @@ data}
 
 \item{yi}{vector of effect sizes estimates.}
 
-\item{vi}{vector of sample variances. If \code{vi} is specified,
-then the \code{sei} argument must be omitted.}
+\item{vi}{vector of sample variances. If \code{vi} is specified, then the
+\code{sei} argument must be omitted.}
 
 \item{sei}{vector of sampling standard errors. If \code{sei} is specified,
 then the \code{vi} argument must be omitted.}
@@ -78,11 +78,12 @@ probability of selection for p-values below the lowest threshold value of
 \item{subset}{optional logical expression indicating a subset of observations
 to use for estimation.}
 
-\item{estimator}{vector indicating whether to use the maximum likelihood or
-the hybrid estimator, with possible options \code{"ML"}, \code{"hybrid"},
-and \code{"hybrid-full"}. If \code{selection_type = "beta"}, only the
-maximum likelihood estimator, \code{"ML"}, is available. For step function
-models, both maximum likelihood and hybrid estimators are available.}
+\item{estimator}{vector indicating whether to use the composite marginal
+likelihood estimator (option \code{"CML"}) or the augmented and reweighted
+Gaussian likelihood estimator (option \code{"ARGL"} or \code{"ARGL-full"}).
+If \code{selection_type = "beta"}, only the composite marginal likelihood
+estimator, \code{"CML"}, is available. For step function models, both
+estimators are available.}
 
 \item{vcov_type}{character string specifying the type of variance-covariance
 matrix to calculate, with possible options \code{"robust"} for robust or
@@ -102,7 +103,7 @@ default value set to \code{.95}}
 optimization routines.}
 
 \item{optimizer}{character string indicating the optimizer to use. Ignored if
-\code{estimator = "hybrid"} or \code{"hybrid-full"}.}
+\code{estimator = "ARGL"} or \code{"ARGL-full"}.}
 
 \item{optimizer_control}{an optional list of control parameters to be used
 for optimization}
@@ -151,7 +152,7 @@ res_ML <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = 0.025,
-  estimator = "ML",
+  estimator = "CML",
   bootstrap = "none"
 )
 
@@ -167,7 +168,7 @@ res_hybrid <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = 0.025,
-  estimator = "hybrid",
+  estimator = "ARGL",
   bootstrap = "multinomial",
   CI_type = "percentile",
   R = 19
