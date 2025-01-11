@@ -288,7 +288,7 @@ CHE_mod <- rma.mv(
 CHE_mod
 ```
 
-The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta), 3)`, 95% CI [`r round(as.numeric(CHE_mod$ci.lb), 3)`, `r round(as.numeric(CHE_mod$ci.ub), 3)`], which is significantly different from zero (p = `r round(CHE_mod$pval, 3)`). 
+The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta), 3)`, 95% CI [`r round(as.numeric(CHE_mod$ci.lb), 3)`, `r round(as.numeric(CHE_mod$ci.ub), 3)`], which is significantly different from zero ($p$ = `r round(CHE_mod$pval, 3)`). 
 The estimated total variance (including both between- and within-study heterogeneity) is `r round(sum(CHE_mod$sigma2), 3)`, corresponding to a total standard deviation of `r round(sqrt(sum(CHE_mod$sigma2)), 3)`.
 Next, we examine how this average effect size estimate differs from the estimates based on a step-function or beta-function selection model, fitted using the `metaselection` package.
 
@@ -314,7 +314,8 @@ mod_3PSM <- selection_model(
 mod_3PSM
 ```
 
-The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, which is over a third smaller than the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is no longer statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`]. Note that the results do not include $p$-values for any parameters. We omit $p$-values to focus interpretation on the parameter estimates and confidence intervals of the model results, rather than on the statistical significance of any given parameter. 
+The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`],  which is nearly half the size of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`). This estimate is also no longer statistically distinct from zero ($p$ = `r round(mod_3PSM$est$p_value[mod_3PSM$est$param=="beta"], 3)`).
+Note that although the `metaselection` package calculates $p$-values, we recommend focusing on the interpretation of the parameter estimates and confidence intervals of the model results, as meta-analyses are frequently underpowered.
 The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
 
 The selection parameter is called `lambda1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than .025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < .025$). 
@@ -354,7 +355,7 @@ mod_4PSM <- selection_model(
 
 print(mod_4PSM, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
-The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, even smaller than the estimated effect from the three-parameter step model and only one third the magnitude of the estimate that does not account for selection bias.
+The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_4PSM$est$CI_lo[mod_4PSM$est$param=="beta"], 3)`, `r round(mod_4PSM$est$CI_hi[mod_4PSM$est$param=="beta"], 3)`], even smaller than the estimated effect from the three-parameter step model (`r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`) and only one third the magnitude of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`).
 
 We can visualize the estimated selection function with `selection_plot()`:
 ```{r 4PSM-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
@@ -408,7 +409,7 @@ mod_beta <- selection_model(
 print(mod_beta)
 ```
 
-The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models. The average effect estimate based on the beta function is not statistically distinct from zero, as indicated by the 95% confidence interval [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`].
+The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, 95% CI [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`], which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models. The average effect estimate based on the beta function is not statistically distinct from zero ($p$ = `r round(mod_beta$est$p_value[mod_beta$est$param=="beta"], 3)`).
 
 To see how the probability of selection differs across studies with different $p$-values, we can again visualize the selection function:
 
