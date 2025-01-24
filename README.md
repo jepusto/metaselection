@@ -14,36 +14,49 @@ Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUF
 Selective reporting occurs when statistically significant, affirmative
 results are more likely to be reported (and therefore more likely to be
 available for meta-analysis) compared to null, non-affirmative results.
-Selective reporting is a major concern for research synthesis because it
-distorts the evidence base available for meta-analysis. Failure to
-account for selective reporting can inflate effect size estimates from
-meta-analysis and bias estimates of heterogeneity, making it difficult
+This can take place at the study level, with entire studies left
+unpublished, or at the effect size level, with only positive effects
+reported and those with negative or non-affirming effects omitted from
+the publication. Selective reporting is a major concern for research
+syntheses because it distorts the evidence base available for a
+meta-analysis, skewing meta-analytic averages toward favorable findings
+and misrepresenting the true population of effects. Failure to account
+for selective reporting can lead to inflated effect size estimates from
+meta-analysis and biased estimates of heterogeneity, making it difficult
 to draw accurate conclusions from a synthesis.
 
 There are many tools available already to investigate and correct for
-selective outcome reporting. Widely used methods include: graphical
-diagnostics like funnel plots; tests and adjustments for funnel plot
-asymmetry like trim-and-fill, Egger’s regression, PET/PEESE, selection
-models, and p-value diagnostics. However, very few methods available for
-investigating selective reporting can accommodate dependent effect
-sizes. Such limitation poses a problem for meta-analyses in education,
-psychology and other social sciences, where dependent effects are a very
-common feature of meta-analytic data.
+selective reporting. Widely used methods include: graphical diagnostics
+like funnel plots, tests and adjustments for funnel plot asymmetry like
+trim-and-fill, Egger’s regression, PET/PEESE, selection models, and
+$p$-value diagnostics. However, very few methods for investigating
+selective reporting can accommodate dependent effect sizes. This
+limitation poses a problem for meta-analyses in education, psychology
+and other social sciences, where dependent effects are a common feature
+of meta-analytic data.
 
-Dependent effect sizes occur when primary studies report multiple
-measures of the outcomes or repeated measures of the outcome. Failing to
-account for dependency can result in misleading conclusions too narrow
-confidence intervals and hypothesis tests that have inflated type one
-error rates.
+Dependent effect sizes occur when primary studies report results for
+multiple measures of an outcome construct, collect repeated measures of
+an outcome across multiple time-points, or involve comparisons between
+multiple intervention conditions. This dependency violates statistical
+assumptions of independent errors, leading to overly narrow confidence
+intervals, hypothesis tests with inflated type one error rates, and
+incorrect inferences. Numerous methods have been developed to account
+for effect size dependencies, and some of these have been combined with
+a few of the available techniques for investigating selective reporting.
+However, these combined methods are currently limited to techniques
+based on regression adjustment or sensitivity analyses based on simple
+forms of selection.
 
 X (2024) developed and examined methods for investigating and accounting
-for selective reporting in meta-analysis that account for dependent
-effect sizes. The results showed that selection models combined with
-robust variance estimation led to lower bias in the estimate of the
-overall effect size. Combining the selection models with cluster
-bootstrapping led to close to nominal coverage rates.
+for selective reporting in meta-analytic models that also account for
+dependent effect sizes. Their simulation results show that combining
+selection models with robust variance estimation to account for
+dependent effects reduces bias in the estimate of the overall effect
+size. Combining the selection models with cluster bootstrapping leads to
+confidence intervals with close-to-nominal coverage rates.
 
-Our metaselection package provides a set of functions that implements
+Our metaselection package provides a set of functions that implement
 these methods. The main function, `selection_model()`, fits step
 function and beta density selection models. To handle dependence in the
 effect size estimates, the function provides options to use
@@ -52,15 +65,16 @@ to assess uncertainty in the model parameter estimates.
 
 ## Installation
 
-You can install the development version of the package from GitHub with:
+You can install the development version of the package, along with a
+vignette demonstrating how to use it, from GitHub with:
 
 ``` r
 remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
 ```
 
-It may take a few minutes to install the package with the vignette.
-Setting `build_vignettes = FALSE` will lead to faster installation,
-although it will preclude viewing the package vignette.
+It may take a few minutes to install the package and vignette. Setting
+`build_vignettes = FALSE` will lead to faster installation, although it
+will preclude viewing the package vignette.
 
 ## Example
 
@@ -90,7 +104,7 @@ mod_3PSM_boot <- selection_model(
   steps = .025,
   CI_type = "percentile",
   bootstrap = "multinomial",
-  R = 19 # Set to a much bigger number of bootstraps for real applications
+  R = 19 # Set to a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates
 )
 
 summary(mod_3PSM_boot)
@@ -106,7 +120,7 @@ summary(mod_3PSM_boot)
     ## Number of clusters = 41; Number of effects = 81
     ## 
     ## Steps: 0.025 
-    ## Estimator: maximum likelihood 
+    ## Estimator: composite marginal likelihood 
     ## Variance estimator: robust 
     ## Bootstrap type: multinomial 
     ## Number of bootstrap replications: 19 
@@ -142,8 +156,6 @@ progress bars for all bootstrap calculations, use
 progressr::handlers(global = TRUE)
 ```
 
-See `vignette("progressr-intro")` for further details.
-
 The package is also designed to work with the `future` package for
 parallel computing. To enable parallel computation of bootstrap
 calculations, simply set an appropriate parallelization plan such as
@@ -153,38 +165,35 @@ library(future)
 plan(multisession)
 ```
 
-See the `metaselection` package vignette for a more detailed
-demonstration.
-
 ## Related Work
 
-We want to recognize other packages that provide functions for fitting
-selection models and closely related techniques.
-
-Several existing packages provide implementations of selection models
-assuming that effect size estimates are independent. The `metafor`
-package (Viechtbauer 2010) includes the `selmodel()` function, which
-allows users to fit many different types of selection models. The
-`weightr` package (Coburn and Vevea 2019) includes functions to estimate
-a class of p-value selection models described in Vevea and Hedges (1995)
-However, the functions available in these packages can only be applied
-to meta-analytic data assuming that the effect sizes are independent. In
-addition, the `PublicationBias` package (Braginsky, Mathur, and
-VanderWeele 2023) implements sensitivity analyses for selective
-reporting bias that incorporate cluster-robust variance estimation
-methods for handling dependent effect sizes. However, the sensitivity
-analyses implemented in the package are based on a pre-specified degree
-of selective reporting, rather than allowing the degree of selection to
-be estimated from the data. The sensitivity analyses are also based on a
-specific and simple form of selection model, and do not allow
-consideration of more complex forms of selection functions.
+Several existing meta-analysis packages provide implementations of
+selection models, but are limited by the assumption of independent
+effects. The `metafor` package (Viechtbauer 2010) includes the
+`selmodel()` function, which allows users to fit many different types of
+selection models. The `weightr` package (Coburn and Vevea 2019) includes
+functions to estimate a class of $p$-value selection models described in
+Vevea and Hedges (1995). However, because these packages assume effect
+sizes to be independent, they produce biased estimates for datasets
+containing multiple effects drawn from the same study. In addition, the
+`PublicationBias` package (Braginsky, Mathur, and VanderWeele 2023)
+implements sensitivity analyses for selective reporting bias that
+incorporate cluster-robust variance estimation methods for handling
+dependent effect sizes. However, the sensitivity analyses implemented in
+the package are based on a pre-specified degree of selective reporting,
+rather than allowing the degree of selection to be estimated from the
+data. The sensitivity analyses are also based on a specific and simple
+form of selection model, and do not allow consideration of more complex
+forms of selection functions. Our package goes beyond these existing
+related tools by correcting for selective reporting while accommodating
+meta-analytic datasets that include dependent effect sizes and
+considering more complex forms of selection.
 
 ## Acknowledgements
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
 <div id="ref-PublicationBias" class="csl-entry">
 
