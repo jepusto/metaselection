@@ -207,6 +207,14 @@ that include dependent effect sizes.
 
 ## Acknowledgements
 
+The development of this software was supported, in whole or in part, by
+the Institute of Education Sciences, U.S. Department of Education,
+through grant
+[R305D220026](https://ies.ed.gov/funding/grantsearch/details.asp?ID=5730)
+to the American Institutes for Research. The opinions expressed are
+those of the authors and do not represent the views of the Institute or
+the U.S. Department of Education.
+
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
