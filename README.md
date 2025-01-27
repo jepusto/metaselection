@@ -4,9 +4,14 @@
 [![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
 [![Codecov
 Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
-<!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-<!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-<!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+\< !– [![CRAN
+Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
+–\> \< !–
+[![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection)
+–\> \< !–
+[![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection)
+–\>
+
 <!-- badges: end -->
 
 # metaselection
@@ -74,13 +79,13 @@ will preclude viewing the package vignette.
 
 ## Example
 
-The following example uses data from a meta-analysis by Lehmann
-meta-analysis which examined the effects of color red on attractiveness
-judgments. The dataset is included in the `metadat` package (White et
-al. 2022) as `dat.lehmann`. In the code below, we fit a step function
-selection model to the Lehmann dataset using the `selection_model()`
-function, with confidence intervals computed using cluster
-bootstrapping. For further details, please see the vignette.
+The following example uses data from a meta-analysis by Lehmann, Elliot,
+and Calin-Jageman (2018) which examined the effects of color red on
+attractiveness judgments. The dataset is included in the `metadat`
+package (White et al. 2022) as `dat.lehmann`. In the code below, we fit
+a step function selection model to the Lehmann dataset using the
+`selection_model()` function, with confidence intervals computed using
+cluster bootstrapping. For further details, please see the vignette.
 
 ``` r
 library(metaselection)
@@ -150,13 +155,13 @@ summary(mod_3PSM_boot)
 
 The beta estimate of 0.133, with a 95% confidence interval -0.033,
 0.377, represents the overall average effect after accounting for both
-selection bias and dependent effects. Tau (0.081) is the estimated total
-variance, including both between- and within-study heterogeneity.
-`lambda1` is the selection parameter. The estimate of 0.548 indicates
-that effect size estimates with one-sided $p$-values greater than 0.025
-are only about half as likely to be reported as estimates that are
-positive and statistically significant (i.e., estimates with
-$p < 0.025$).
+selection bias and dependent effects. The tau estimate of 0.081 is the
+estimated total variance, including both between- and within-study
+heterogeneity. `lambda1` is the selection parameter. The estimate of
+0.548 indicates that effect size estimates with one-sided $p$-values
+greater than 0.025 are only about half as likely to be reported as
+estimates that are positive and statistically significant (i.e.,
+estimates with $p < 0.025$).
 
 The package is designed to work with the `progressr` package. To turn on
 progress bars for all bootstrap calculations, use
@@ -217,8 +222,7 @@ the U.S. Department of Education.
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
 <div id="ref-PublicationBias" class="csl-entry">
 
@@ -233,6 +237,14 @@ Meta-Analyses*. <https://CRAN.R-project.org/package=PublicationBias>.
 Coburn, Kathleen M., and Jack L. Vevea. 2019. *Weightr: Estimating
 Weight-Function Models for Publication Bias*.
 <https://CRAN.R-project.org/package=weightr>.
+
+</div>
+
+<div id="ref-lehmann2018meta" class="csl-entry">
+
+Lehmann, Gabrielle K, Andrew J Elliot, and Robert J Calin-Jageman. 2018.
+“Meta-Analysis of the Effect of Red on Perceived Attractiveness.”
+*Evolutionary Psychology* 16 (4): 1474704918802412.
 
 </div>
 

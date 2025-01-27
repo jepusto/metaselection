@@ -7,18 +7,18 @@ editor_options:
 ---
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
-[![Codecov Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
-<!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-<!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-<!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+
+[![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml) [![Codecov Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection) <
+!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) --> <
+!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) --> <
+!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+
 <!-- badges: end -->
 
 # metaselection
 
 Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results.
-<!-- This can take place at the study level, with entire studies left unpublished, or at the effect size level, with only positive effects reported and those with negative or non-affirming effects omitted from the publication. -->
-Selective reporting is a major concern for research syntheses because it distorts the evidence base available for a meta-analysis, skewing meta-analytic averages toward favorable findings and misrepresenting the true population of effects.
+<!-- This can take place at the study level, with entire studies left unpublished, or at the effect size level, with only positive effects reported and those with negative or non-affirming effects omitted from the publication. --> Selective reporting is a major concern for research syntheses because it distorts the evidence base available for a meta-analysis, skewing meta-analytic averages toward favorable findings and misrepresenting the true population of effects.
 Failure to account for selective reporting can lead to inflated effect size estimates from meta-analysis and biased estimates of heterogeneity, making it difficult to draw accurate conclusions from a synthesis.
 
 There are many tools available already to investigate and correct for selective reporting.
@@ -26,16 +26,15 @@ Widely used methods include: graphical diagnostics like funnel plots, tests and 
 However, very few methods for investigating selective reporting can accommodate dependent effect sizes.
 This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a common feature of meta-analytic data.
 
-Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions. 
+Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions.
 Ignoring the dependency of effect size estimates included in a meta-analysis leads to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences.
-<!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. -->
-<!-- However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. -->
-X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analytic models that also account for dependent effect sizes.
+<!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. --> <!-- However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. --> X (2024) developed and examined methods for investigating and accounting for selective reporting in meta-analytic models that also account for dependent effect sizes.
 Their simulation results show that combining selection models with robust variance estimation to account for dependent effects reduces bias in the estimate of the overall effect size.
 Combining the selection models with cluster bootstrapping leads to confidence intervals with close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several meta-analytic selection models.
-The main function, `selection_model()`, fits step function and beta density selection models. To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates.
+The main function, `selection_model()`, fits step function and beta density selection models.
+To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates.
 
 ## Installation
 
@@ -47,11 +46,12 @@ You can install the development version of the package, along with a vignette de
 remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
 ```
 
-It may take a few minutes to install the package and vignette. Setting `build_vignettes = FALSE` will lead to faster installation, although it will preclude viewing the package vignette.
+It may take a few minutes to install the package and vignette.
+Setting `build_vignettes = FALSE` will lead to faster installation, although it will preclude viewing the package vignette.
 
 ## Example
 
-The following example uses data from a meta-analysis by Lehmann meta-analysis which examined the effects of color red on attractiveness judgments. 
+The following example uses data from a meta-analysis by @lehmann2018meta which examined the effects of color red on attractiveness judgments.
 The dataset is included in the `metadat` package [@metadat] as `dat.lehmann`.
 In the code below, we fit a step function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using cluster bootstrapping.
 For further details, please see the vignette.
@@ -83,19 +83,28 @@ mod_3PSM_boot <- selection_model(
 summary(mod_3PSM_boot)
 ```
 
-The beta estimate of `r round(mod_3PSM_boot$est["beta","Est"], 3)`, with a 95% confidence interval `r round(mod_3PSM_boot$est["beta","percentile_lower"], 3)`, `r round(mod_3PSM_boot$est["beta","percentile_upper"], 3)`, represents the overall average effect after accounting for both selection bias and dependent effects. Tau (`r round( exp(mod_3PSM_boot$est["gamma","Est"]), 3)`) is the estimated total variance, including both between- and within-study heterogeneity. `lambda1` is the selection parameter. The estimate of `r round(exp(mod_3PSM_boot$est["zeta1","Est"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$).
+The beta estimate of `r round(mod_3PSM_boot$est["beta","Est"], 3)`, with a 95% confidence interval `r round(mod_3PSM_boot$est["beta","percentile_lower"], 3)`, `r round(mod_3PSM_boot$est["beta","percentile_upper"], 3)`, represents the overall average effect after accounting for both selection bias and dependent effects.
+The tau estimate of `r round( exp(mod_3PSM_boot$est["gamma","Est"]), 3)` is the estimated total variance, including both between- and within-study heterogeneity.
+`lambda1` is the selection parameter.
+The estimate of `r round(exp(mod_3PSM_boot$est["zeta1","Est"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$).
 
-The package is designed to work with the `progressr` package. To turn on progress bars for all bootstrap calculations, use
+The package is designed to work with the `progressr` package.
+To turn on progress bars for all bootstrap calculations, use
+
 ```{r, eval = FALSE}
 progressr::handlers(global = TRUE)
 ```
+
 See `vignette("progressr-intro")` for further details.
 
-The package is also designed to work with the `future` package for parallel computing. To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as
+The package is also designed to work with the `future` package for parallel computing.
+To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as
+
 ```{r, eval = FALSE}
 library(future)
 plan(multisession)
 ```
+
 The `metaselection` package vignette includes a more detailed demonstration.
 
 ## Related Work
@@ -105,11 +114,14 @@ The `metafor` package [@Viechtbauer2010conducting] includes the `selmodel()` fun
 The `weightr` package [@weightr] includes functions to estimate a class of $p$-value selection models described in @vevea1995general.
 However, because these packages assume effect sizes to be independent, the results they produce will have incorrect standard errors and misleadingly narrow confidence intervals for datasets containing multiple effects drawn from the same study.
 In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
-However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
+However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data.
+The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
 The `metaselection` package goes beyond these other tools both by considering more complex forms of selective reporting and by correcting for selective reporting bias while accommodating meta-analytic datasets that include dependent effect sizes.
 
 ## Acknowledgements
 
-The development of this software was supported, in whole or in part, by the Institute of Education Sciences, U.S. Department of Education, through grant [R305D220026](https://ies.ed.gov/funding/grantsearch/details.asp?ID=5730) to the American Institutes for Research. The opinions expressed are those of the authors and do not represent the views of the Institute or the U.S. Department of Education.
+The development of this software was supported, in whole or in part, by the Institute of Education Sciences, U.S. Department of Education, through grant [R305D220026](https://ies.ed.gov/funding/grantsearch/details.asp?ID=5730) to the American Institutes for Research.
+The opinions expressed are those of the authors and do not represent the views of the Institute or the U.S.
+Department of Education.
 
 ## References
