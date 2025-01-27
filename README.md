@@ -4,13 +4,10 @@
 [![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
 [![Codecov
 Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
-\< !– [![CRAN
+[![CRAN
 Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
-–\> \< !–
-[![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection)
-–\> \< !–
-[![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection)
-–\>
+<!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+<!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 
 <!-- badges: end -->
 
@@ -45,8 +42,7 @@ multiple intervention conditions. Ignoring the dependency of effect size
 estimates included in a meta-analysis leads to overly narrow confidence
 intervals, hypothesis tests with inflated type one error rates, and
 incorrect inferences.
-<!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. -->
-<!-- However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. -->
+<!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. -->
 X (2024) developed and examined methods for investigating and accounting
 for selective reporting in meta-analytic models that also account for
 dependent effect sizes. Their simulation results show that combining
@@ -222,7 +218,8 @@ the U.S. Department of Education.
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-PublicationBias" class="csl-entry">
 
