@@ -16,7 +16,6 @@ Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-proj
 Selective reporting occurs when statistically significant, affirmative
 results are more likely to be reported (and therefore more likely to be
 available for meta-analysis) compared to null, non-affirmative results.
-<!-- This can take place at the study level, with entire studies left unpublished, or at the effect size level, with only positive effects reported and those with negative or non-affirming effects omitted from the publication. -->
 Selective reporting is a major concern for research syntheses because it
 distorts the evidence base available for a meta-analysis, skewing
 meta-analytic averages toward favorable findings and misrepresenting the
@@ -24,6 +23,7 @@ true population of effects. Failure to account for selective reporting
 can lead to inflated effect size estimates from meta-analysis and biased
 estimates of heterogeneity, making it difficult to draw accurate
 conclusions from a synthesis.
+<!-- This can take place at the study level, with entire studies left unpublished, or at the effect size level, with only positive effects reported and those with negative or non-affirming effects omitted from the publication. -->
 
 There are many tools available already to investigate and correct for
 selective reporting. Widely used methods include: graphical diagnostics
@@ -41,15 +41,15 @@ an outcome across multiple time-points, or involve comparisons between
 multiple intervention conditions. Ignoring the dependency of effect size
 estimates included in a meta-analysis leads to overly narrow confidence
 intervals, hypothesis tests with inflated type one error rates, and
-incorrect inferences.
+incorrect inferences. X (2024) developed and examined methods for
+investigating and accounting for selective reporting in meta-analytic
+models that also account for dependent effect sizes. Their simulation
+results show that combining selection models with robust variance
+estimation to account for dependent effects reduces bias in the estimate
+of the overall effect size. Combining the selection models with cluster
+bootstrapping leads to confidence intervals with close-to-nominal
+coverage rates.
 <!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. -->
-X (2024) developed and examined methods for investigating and accounting
-for selective reporting in meta-analytic models that also account for
-dependent effect sizes. Their simulation results show that combining
-selection models with robust variance estimation to account for
-dependent effects reduces bias in the estimate of the overall effect
-size. Combining the selection models with cluster bootstrapping leads to
-confidence intervals with close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several
 meta-analytic selection models. The main function, `selection_model()`,
