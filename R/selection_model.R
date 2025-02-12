@@ -989,7 +989,7 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
     boot_CIs <- future.apply::future_mapply(
       \(e, s, b) simhelpers::bootstrap_CIs(
         boot_est = b$Est, boot_se = b$SE, 
-        est = e, se = s, influence = i,
+        est = e, se = s, 
         CI_type = CI_type, level = conf_level, B_vals = R, ...
       ),
       e = est,

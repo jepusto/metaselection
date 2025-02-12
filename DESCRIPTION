@@ -38,7 +38,7 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0),
     future,
-    metafor,
+    metafor (>= 4.8-0),
     metadat,
     clubSandwich,
     DescTools,
