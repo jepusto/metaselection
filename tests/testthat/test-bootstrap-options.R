@@ -74,7 +74,7 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
 
 })  
 
-test_that("bootstrap_CI options for selection_model() work when bootstrap = 'multinomial'.", {
+test_that("CI_type options for selection_model() work when bootstrap = 'multinomial'.", {
   
   aseed <- 20241030
   
@@ -120,6 +120,27 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   
   set.seed(aseed)
   
+  step_normal <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "multinomial", 
+      CI_type = "normal",
+      R = 19
+    )
+  
+  expect_s3_class(step_normal, "boot.selmodel")
+  expect_identical(names(step_normal$est), c("estimator","param","Est","SE","bootstraps","normal_lower","normal_upper"))
+  expect_identical(table(step_normal$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
+  expect_identical(step_normal$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
+  
+  set.seed(aseed)
+  
   step_t <- 
     selection_model(
       data = dat,
@@ -159,6 +180,48 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstraps","basic_lower","basic_upper"))
   expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
+
+  set.seed(aseed)
+  
+  step_BC <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "multinomial", 
+      CI_type = "bias-corrected",
+      R = 19
+    )
+  
+  expect_s3_class(step_BC, "boot.selmodel")
+  expect_identical(names(step_BC$est), c("estimator","param","Est","SE","bootstraps","biascorrected_lower","biascorrected_upper"))
+  expect_identical(table(step_BC$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
+  expect_identical(step_BC$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
+
+  set.seed(aseed)
+  
+  step_BCa <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "multinomial", 
+      CI_type = "BCa",
+      R = 19
+    )
+  
+  expect_s3_class(step_BCa, "boot.selmodel")
+  expect_identical(names(step_BCa$est), c("estimator","param","Est","SE","bootstraps","BCa_lower","BCa_upper"))
+  expect_identical(table(step_BCa$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
+  expect_identical(step_BCa$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
   
   set.seed(aseed)
   
@@ -172,21 +235,27 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "CML",
       bootstrap = "multinomial", 
-      CI_type = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic","bias-corrected","normal","BCa"),
       R = 19
     )
   
   expect_s3_class(step_all, "boot.selmodel")
-  expect_identical(names(step_all$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
+  expect_identical(names(step_all$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi","bootstraps",
+                                          "normal_lower","normal_upper","basic_lower","basic_upper",
+                                          "student_lower","student_upper","percentile_lower","percentile_upper",
+                                          "biascorrected_lower","biascorrected_upper","BCa_lower","BCa_upper"))
   expect_identical(table(step_all$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 19L)))
   expect_identical(step_all$bootstrap_reps, step_t$bootstrap_reps)
   
   expect_equal(
     dplyr::bind_cols(
       step_large$est, 
-      step_basic$est[,c("bootstraps","basic_lower","basic_upper")], 
+      step_normal$est[,c("bootstraps","normal_lower","normal_upper")], 
+      step_basic$est[,c("basic_lower","basic_upper")], 
       step_t$est[,c("student_lower","student_upper")],
-      step_perc$est[,c("percentile_lower","percentile_upper")]
+      step_perc$est[,c("percentile_lower","percentile_upper")],
+      step_BC$est[,c("biascorrected_lower","biascorrected_upper")],
+      step_BCa$est[,c("BCa_lower","BCa_upper")]
     ), 
     step_all$est
   )
@@ -203,7 +272,7 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
       steps = 0.025,
       estimator = "CML",
       bootstrap = "multinomial", 
-      CI_type = c("large-sample","student","percentile","basic"),
+      CI_type = c("large-sample","student","percentile","basic","bias-corrected","normal","BCa"),
       R = 19,
       format = "long"
     )
@@ -225,11 +294,15 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'mul
   
   all_CIs <- 
     dplyr::bind_rows(
+      normal = dplyr::select(step_normal$est, param, bootstraps, lower = normal_lower, upper = normal_upper),
       basic = dplyr::select(step_basic$est, param, bootstraps, lower = basic_lower, upper = basic_upper),
       percentile = dplyr::select(step_perc$est, param, bootstraps, lower = percentile_lower, upper = percentile_upper),
       student = dplyr::select(step_t$est, param, bootstraps, lower = student_lower, upper = student_upper),
+      `bias-corrected` = dplyr::select(step_BC$est, param, bootstraps, lower = biascorrected_lower, upper = biascorrected_upper),
+      BCa = dplyr::select(step_BCa$est, param, bootstraps, lower = BCa_lower, upper = BCa_upper),
       .id = "type"
-    )
+    ) |>
+    dplyr::arrange(type)
   rownames(all_CIs) <- NULL
   expect_equal(long_CIs, all_CIs)
   
@@ -359,7 +432,9 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
     )
   
   expect_s3_class(step_all, "boot.selmodel")
-  expect_identical(names(step_all$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi","bootstraps","basic_lower","basic_upper","student_lower","student_upper","percentile_lower","percentile_upper"))
+  expect_identical(names(step_all$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi",
+                                          "bootstraps","basic_lower","basic_upper","student_lower","student_upper",
+                                          "percentile_lower","percentile_upper"))
   expect_identical(table(step_all$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
   expect_identical(step_all$bootstrap_reps, step_t$bootstrap_reps)
   
@@ -452,14 +527,14 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "CML",
         bootstrap = "multinomial", 
-        CI_type = c("student","percentile","basic"),
+        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
         R = 39,
         seed = 20241031,
         format = "long"
       )
   )
   
-  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("percentile","student","basic"), R = 39, format = "long")
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), R = 39, format = "long")
   
   expect_equal(step_multinomial$est$boot_CIs, multi_boot)
   
@@ -474,14 +549,18 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "CML",
         bootstrap = "multinomial", 
-        CI_type = c("student","percentile","basic"),
+        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
         R = 59,
         seed = 20240819,
         format = "long"
       )
   )
   
-  multi_boot_multiR <- get_boot_CIs(step_multinomial_multiR, CI_type = c("percentile","student","basic"), R = 59, seed = 20240819, format = "long")
+  multi_boot_multiR <- get_boot_CIs(
+    step_multinomial_multiR, 
+    CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), 
+    R = 59, seed = 20240819, format = "long"
+  )
   
   expect_equal(step_multinomial_multiR$est$boot_CIs, multi_boot_multiR)
 
@@ -496,14 +575,14 @@ test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
         steps = 0.025,
         estimator = "CML",
         bootstrap = "exp", 
-        CI_type = c("student","percentile"),
+        CI_type = c("student","BCa"),
         R = 49,
         seed = 20241101,
         format = "long"
       )
   )
   
-  exp_boot <- get_boot_CIs(step_exponential, CI_type = c("percentile","student"), R = 49, format = "long")
+  exp_boot <- get_boot_CIs(step_exponential, CI_type = c("BCa","student"), R = 49, format = "long")
 
   expect_equal(step_exponential$est$boot_CIs, exp_boot)
   

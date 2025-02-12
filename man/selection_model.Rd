@@ -92,9 +92,12 @@ standard errors, or \code{"none"}.}
 
 \item{CI_type}{character string specifying the type of confidence interval to
 calculate, with possible options \code{"large-sample"} for large-sample
-normal (the default), \code{"percentile"} for percentile bootstrap,
-\code{"basic"} for basic bootstrap, \code{"student"} for studentized
-bootstrap, or \code{"none"}.}
+normal interval (the default), \code{"percentile"} for a percentile
+interval, \code{"BCa"} for a bias-corrected-and-accelerated interval,
+\code{"bias-corrected"} for a bias-corrected percentile interval (without
+acceleration correction), \code{"normal"} for a standard normal interval,
+\code{"basic"} for a basic interval, \code{"student"} for a studentized
+interval, or \code{"none"}.}
 
 \item{conf_level}{desired coverage level for confidence intervals, with the
 default value set to \code{.95}}
