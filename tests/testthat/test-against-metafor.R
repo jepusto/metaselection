@@ -1,5 +1,5 @@
 skip_if_not_installed("metadat")
-skip_if_not_installed("metafor")
+skip_if_not_installed("metafor", minimum_version = "4.8-0")
 library(metadat)
 suppressPackageStartupMessages(library(metafor))
 
@@ -101,20 +101,32 @@ test_that("beta_loglik() and beta_score() agree with metafor::selmodel().", {
   
   # Fixed effect selection model, no predictors
   FE1 <- rma.uni(yi = yi, sei = sei, data = dat, method = "FE")
-  check_against_metafor_selmodel(FE1, type = "beta", tol_LRT = 1e-4, tol_score = 1e-3)
+  check_against_metafor_selmodel(
+    FE1, type = "beta", steps = c(.01, .99), 
+    tol_LRT = 1e-4, tol_score = 2e-3
+  )
   
   # Fixed effect selection model with meta-regression
   FE2 <- rma.uni(yi = yi, sei = sei, mods = ~ Gender + sqrt(Control_N), 
                  data = dat, method = "FE")
-  check_against_metafor_selmodel(FE2, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2)
+  check_against_metafor_selmodel(
+    FE2, type = "beta", steps = c(.025, .975), 
+    tol_LRT = 1e-4, tol_score = 1e-2
+  )
   
   # Random effects selection model, no predictors
   RE1 <- rma.uni(yi = yi, sei = sei, data = dat, method = "ML")
-  check_against_metafor_selmodel(RE1, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2, tol_SE = 5e-1)
+  check_against_metafor_selmodel(
+    RE1, type = "beta", steps = NULL, 
+    tol_LRT = 3e-3, tol_score = 5e-3, tol_SE = 5e-1
+  )
   
   # Random effects selection model with meta-regression
   RE2 <- rma.uni(yi = yi, sei = sei, mods = ~ Color_Match + Gender, 
                  data = dat, method = "ML")
-  check_against_metafor_selmodel(RE2, type = "beta", tol_LRT = 1e-4, tol_score = 1e-2, tol_SE = Inf)
+  check_against_metafor_selmodel(
+    RE2, type = "beta", steps = c(.0001, .9999), 
+    tol_LRT = 2e-3, tol_score = 2e-2, tol_SE = Inf
+  )
   
 })

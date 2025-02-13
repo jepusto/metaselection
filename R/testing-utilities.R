@@ -162,7 +162,7 @@ get_selmodel_params <- function(sel_mod, theta = TRUE) {
 }
 
 check_against_metafor_selmodel <- function(
-    mod, type = "stepfun", steps = .025, 
+    mod, type = "stepfun", steps = .025,
     tol_LRT = 1e-8, tol_ll = 1e-4, tol_score = 5e-5, 
     tol_param = 1e-4, tol_SE = 1e-4,
     ...,
@@ -170,10 +170,18 @@ check_against_metafor_selmodel <- function(
 ) {
 
   suppressWarnings(
-    sel_mod <- metafor::selmodel(
-      mod, type = type, steps = steps, 
-      control=list(optimizer = "nlminb", rel.tol = 1e-10, ...)
-    )
+    if (is.null(steps)) {
+      sel_mod <- metafor::selmodel(
+        mod, type = type, 
+        control=list(optimizer = "nlminb", rel.tol = 1e-10, ...)
+      )
+      steps <- c(1e-5, 1 - 1e-5)
+    } else {
+      sel_mod <- metafor::selmodel(
+        mod, type = type, steps = steps, 
+        control=list(optimizer = "nlminb", rel.tol = 1e-10, ...)
+      )
+    }
   )
 
   theta <- get_selmodel_params(sel_mod)
@@ -232,7 +240,6 @@ check_against_metafor_selmodel <- function(
     
   } else if (type == "beta") {
     
-    steps <- c(1e-05, 1 - 1e-05)
     ll_full <- beta_loglik(theta = theta, 
                            yi = sel_mod$yi, sei = sqrt(sel_mod$vi), 
                            X = sel_mod$X,
