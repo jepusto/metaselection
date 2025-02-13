@@ -511,6 +511,59 @@ bootstrap_selmodel <- function(
   return(est)
 }
 
+
+
+jackknife_selmodel <- function(
+    est,
+    yi, 
+    sei, 
+    pi, 
+    steps, 
+    ai = NULL,
+    cluster = NULL, 
+    X = NULL, 
+    U = NULL, 
+    Z0 = NULL, 
+    Z = NULL, 
+    selection_type = "step",
+    estimator = "CML",
+    optimizer = "BFGS",
+    optimizer_control = list(),
+    use_jac = TRUE
+) {
+  
+  if (is.null(cluster)) {
+    cluster_jk <- 1:length(yi)
+    index_jk <- cluster_jk
+  } else {
+    cluster_jk <- cluster
+    index_jk <- unique(cluster)
+  }
+  
+  q <- progressr::progressor(length(index_jk))
+  
+  inf_vals <- future.apply::future_lapply(
+    index_jk, \(i) {
+      q()
+      res_i <- fit_selection_model(
+        yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+        X = X, U = U, Z0 = Z0, Z = Z,
+        subset = cluster_jk != i,
+        steps = steps,
+        vcov_type = "none", 
+        selection_type = selection_type,
+        estimator = estimator, 
+        theta = est,
+        optimizer = optimizer, 
+        optimizer_control = optimizer_control,
+        use_jac = use_jac
+      )
+      est - res_i
+    })
+  
+  do.call(rbind, inf_vals)
+}
+
 #' @title Estimate step or beta selection model
 #'
 #' @description Estimate step or beta selection model, with standard errors and
@@ -562,9 +615,12 @@ bootstrap_selmodel <- function(
 #'   standard errors, or \code{"none"}.
 #' @param CI_type character string specifying the type of confidence interval to
 #'   calculate, with possible options \code{"large-sample"} for large-sample
-#'   normal (the default), \code{"percentile"} for percentile bootstrap,
-#'   \code{"basic"} for basic bootstrap, \code{"student"} for studentized
-#'   bootstrap, or \code{"none"}.
+#'   normal interval (the default), \code{"percentile"} for a percentile
+#'   interval, \code{"BCa"} for a bias-corrected-and-accelerated interval,
+#'   \code{"bias-corrected"} for a bias-corrected percentile interval (without
+#'   acceleration correction), \code{"normal"} for a standard normal interval,
+#'   \code{"basic"} for a basic interval, \code{"student"} for a studentized
+#'   interval, or \code{"none"}.
 #' @param conf_level desired coverage level for confidence intervals, with the
 #'   default value set to \code{.95}
 #' @param theta optional numeric vector of starting values to use in
@@ -668,7 +724,7 @@ selection_model <- function(
   estimator <- match.arg(estimator, c("CML","ML","ARGL","ARGL-full","hybrid","hybrid-full"))
   vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
   bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
-  CI_type <- match.arg(CI_type, c("large-sample","percentile","student","basic", "none"), several.ok = TRUE)  
+  CI_type <- match.arg(CI_type, c("large-sample","percentile","normal","student","basic","bias-corrected","BCa", "none"), several.ok = TRUE)  
 
   if (vcov_type == "model-based") {
     if (!(estimator %in% c("ML","CML"))) stop("vcov_type = 'model-based' is only allowed for estimator = 'CML'.")
@@ -677,7 +733,7 @@ selection_model <- function(
   if (bootstrap %in% c("exponential","multinomial")) {
     if (identical(as.integer(R), 0L)) stop("Bootstrap methods require setting R > 0.") 
   }
-  if (any(c("percentile","basic","student") %in% CI_type)) {
+  if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {
     if (identical(as.integer(R), 0L)) stop("Bootstrap confidence intervals require setting R > 0.")
     if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'multinomial' or 'exponential'.")
   }
@@ -831,7 +887,22 @@ selection_model <- function(
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$bootstrap_type <- bootstrap
     
-    if (any(c("percentile","basic","student") %in% CI_type)) {
+    # Jackknife estimate of empirical influence
+    if ("BCa" %in% CI_type) {
+      res$inf_vals <- jackknife_selmodel(
+        est = res$est$Est,
+        yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+        X = X, U = U, Z0 = Z0, Z = Z,
+        steps = steps,
+        selection_type = selection_type,
+        estimator = estimator, 
+        optimizer = optimizer, 
+        optimizer_control = optimizer_control,
+        use_jac = use_jac
+      )
+    }
+    
+    if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {
       
       boot_CIs <- get_boot_CIs(bmod = res, CI_type = CI_type, conf_level = conf_level, R = R, ...)
 
@@ -843,8 +914,6 @@ selection_model <- function(
         res$est$boot_CIs <- boot_CIs
       }
     }
-    
-    
     
     class(res) <- c("boot.selmodel", class(res))
     
@@ -915,19 +984,40 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
     factor(bmod$bootstrap_reps$param, levels = levels(param_f)), 
     identity
   )
-
-  future.apply::future_mapply(
-    \(e, s, b) simhelpers::bootstrap_CIs(
-      boot_est = b$Est, boot_se = b$SE, 
-      est = e, se = s, 
-      CI_type = CI_type, level = conf_level, B_vals = R, ...
-    ),
-    e = est,
-    s = se,
-    b = boots,
-    SIMPLIFY = FALSE,
-    future.seed = TRUE
-  )
+  if (is.null(bmod$inf_vals)) {
+    
+    boot_CIs <- future.apply::future_mapply(
+      \(e, s, b) simhelpers::bootstrap_CIs(
+        boot_est = b$Est, boot_se = b$SE, 
+        est = e, se = s, 
+        CI_type = CI_type, level = conf_level, B_vals = R, ...
+      ),
+      e = est,
+      s = se,
+      b = boots,
+      SIMPLIFY = FALSE,
+      future.seed = TRUE
+    )
+  } else {
+    
+    inf_vals <- apply(bmod$inf_vals, 2, identity, simplify = FALSE)
+    
+    boot_CIs <- future.apply::future_mapply(
+      \(e, s, b, i) simhelpers::bootstrap_CIs(
+        boot_est = b$Est, boot_se = b$SE, 
+        est = e, se = s, influence = i,
+        CI_type = CI_type, level = conf_level, B_vals = R, ...
+      ),
+      e = est,
+      s = se,
+      b = boots,
+      i = inf_vals,
+      SIMPLIFY = FALSE,
+      future.seed = TRUE
+    )
+  }
+  
+  boot_CIs
   
 }
 

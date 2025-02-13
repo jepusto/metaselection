@@ -229,10 +229,12 @@ The package also implements a different variation of bootstrapping, known as the
 This variation involves assigning a random weight to each cluster of dependent observations, where the weights are simulated from an exponential distribution with mean 1. 
 
 Several different methods can be used to construct confidence intervals from a bootstrap distribution [@davison1997bootstrap], which use various approximations and therefore vary in the accuracy of their coverage levels.
-The `metaselection` package implements three different techniques, following the same methods and terminology as in the `boot` package [@boot]:
+The `metaselection` package implements five different techniques, following the same methods and terminology as in the `boot` package [@boot]:
 
 * The percentile  confidence interval (`CI_method = "percentile"`) is based on quantiles of the bootstrap distribution. 
 * The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate. 
+* The bias-corrected and accelerated confidence interval (`CI_method = "BCa"`) adjusts the percentile confidence interval based on the bias of the sampling distribution and an "acceleration" adjustment for the relationship between the parameter and the variance of the estimator's sampling distribution.
+* The standard normal confidence interval (`CI_method = "normal"`) uses the bootstrap standard error with a standard normal critical value. 
 * The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. 
 
 Our simulation results indicate that bootstrap confidence intervals, particularly using the multinomial bootstrap approach with percentile confidence intervals, leads to coverage rates that are close to the nominal level of 0.95 whereas the coverage rates provided by the CRVE method are below nominal. 
