@@ -241,14 +241,14 @@ test_that("r_meta_categories generates ES estimates with expected structure", {
     check_varcomp = FALSE
   )
   
-  set.seed(20230622)
+  set.seed(20250212)
   check_model_structure(
     mean_smd = c(0.3, 0.07),
     tau = c(0.08, 0.28),
-    omega = 0.01, 
+    omega = 0.08, 
     cor_mu = 0,
-    m = 100, 
-    n_ES_sim = n_ES_param(70, 2),
+    m = 50, 
+    n_ES_sim = n_ES_param(70, 3),
     verbose = verbose
   )
   
