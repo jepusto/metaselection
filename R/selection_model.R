@@ -542,7 +542,7 @@ jackknife_selmodel <- function(
   
   q <- progressr::progressor(length(index_jk))
   
-  inf_vals <- future.apply::future_lapply(
+  jack_vals <- future.apply::future_lapply(
     index_jk, \(i) {
       q()
       res_i <- fit_selection_model(
@@ -558,10 +558,10 @@ jackknife_selmodel <- function(
         optimizer_control = optimizer_control,
         use_jac = use_jac
       )
-      est - res_i
+      res_i
     })
   
-  do.call(rbind, inf_vals)
+  do.call(rbind, jack_vals)
 }
 
 #' @title Estimate step or beta selection model
@@ -622,7 +622,7 @@ jackknife_selmodel <- function(
 #'   \code{"basic"} for a basic interval, \code{"student"} for a studentized
 #'   interval, or \code{"none"}.
 #' @param conf_level desired coverage level for confidence intervals, with the
-#'   default value set to \code{.95}
+#'   default value set to \code{.95}.
 #' @param theta optional numeric vector of starting values to use in
 #'   optimization routines.
 #' @param optimizer character string indicating the optimizer to use. Ignored if
@@ -889,7 +889,7 @@ selection_model <- function(
     
     # Jackknife estimate of empirical influence
     if ("BCa" %in% CI_type) {
-      res$inf_vals <- jackknife_selmodel(
+      res$jack_vals <- jackknife_selmodel(
         est = res$est$Est,
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
@@ -984,7 +984,7 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
     factor(bmod$bootstrap_reps$param, levels = levels(param_f)), 
     identity
   )
-  if (is.null(bmod$inf_vals)) {
+  if (is.null(bmod$jack_vals)) {
     
     boot_CIs <- future.apply::future_mapply(
       \(e, s, b) simhelpers::bootstrap_CIs(
@@ -999,8 +999,10 @@ get_boot_CIs <- function(bmod, CI_type, R, conf_level = 0.95, ...) {
       future.seed = TRUE
     )
   } else {
-    
-    inf_vals <- apply(bmod$inf_vals, 2, identity, simplify = FALSE)
+    inf_vals <- 
+      bmod$jack_vals |>
+      apply(1, \(x) bmod$est$Est - x) |>
+      apply(1, identity, simplify = FALSE)
     
     boot_CIs <- future.apply::future_mapply(
       \(e, s, b, i) simhelpers::bootstrap_CIs(

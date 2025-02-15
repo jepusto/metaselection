@@ -100,7 +100,7 @@ acceleration correction), \code{"normal"} for a standard normal interval,
 interval, or \code{"none"}.}
 
 \item{conf_level}{desired coverage level for confidence intervals, with the
-default value set to \code{.95}}
+default value set to \code{.95}.}
 
 \item{theta}{optional numeric vector of starting values to use in
 optimization routines.}
