@@ -394,7 +394,11 @@ fit_selection_model <- function(
                                  X = X, U = U, Z0 = Z0, Z = Z)
   }
   
-  hess_inv <- MASS::ginv(hess)
+  hess_inv <- tryCatch(MASS::ginv(hess), error = function(e) e)
+  if (inherits(hess_inv, "error")) {
+    warning("Hessian matrix is not invertible. Cluster-robust standard errors cannot be computed.")
+    hess_inv <- matrix(NA_real_, nrow = nrow(hess), ncol = ncol(hess))
+  }
   
   if (vcov_type == "robust") {
     
@@ -479,24 +483,29 @@ bootstrap_selmodel <- function(
   
   non_zero_cl <- cluster_w > 0
   cl_subset <- if (all(non_zero_cl)) NULL else non_zero_cl[cluster_numeric]
-  res <- fit_selection_model(
-    yi = yi, 
-    sei = sei, 
-    pi = pi, 
-    steps = steps,
-    ai = wi, 
-    cluster = cluster, 
-    subset = cl_subset,
-    X = X, U = U, Z0 = Z0, Z = Z,
-    vcov_type = vcov_type, 
-    selection_type = selection_type,
-    estimator = estimator, 
-    theta = theta,
-    optimizer = optimizer, 
-    optimizer_control = optimizer_control,
-    use_jac = use_jac
+  res <- tryCatch(
+    fit_selection_model(
+      yi = yi, 
+      sei = sei, 
+      pi = pi, 
+      steps = steps,
+      ai = wi, 
+      cluster = cluster, 
+      subset = cl_subset,
+      X = X, U = U, Z0 = Z0, Z = Z,
+      vcov_type = vcov_type, 
+      selection_type = selection_type,
+      estimator = estimator, 
+      theta = theta,
+      optimizer = optimizer, 
+      optimizer_control = optimizer_control,
+      use_jac = use_jac
+    ),
+    error = \(e) e
   )
-
+  
+  if (inherits(res, "error")) return(NULL)
+  
   if (vcov_type != "none") {
     est <- data.frame(
       param = names(res$est),
@@ -547,18 +556,21 @@ jackknife_selmodel <- function(
   jack_vals <- future.apply::future_lapply(
     index_jk, \(i) {
       q()
-      res_i <- fit_selection_model(
-        yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
-        X = X, U = U, Z0 = Z0, Z = Z,
-        subset = cluster_jk != i,
-        steps = steps,
-        vcov_type = "none", 
-        selection_type = selection_type,
-        estimator = estimator, 
-        theta = est,
-        optimizer = optimizer, 
-        optimizer_control = optimizer_control,
-        use_jac = use_jac
+      res_i <- tryCatch(
+        fit_selection_model(
+          yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+          X = X, U = U, Z0 = Z0, Z = Z,
+          subset = cluster_jk != i,
+          steps = steps,
+          vcov_type = "none", 
+          selection_type = selection_type,
+          estimator = estimator, 
+          theta = est,
+          optimizer = optimizer, 
+          optimizer_control = optimizer_control,
+          use_jac = use_jac
+        ),
+        error = \(e) NULL
       )
       res_i
     })
@@ -888,7 +900,7 @@ selection_model <- function(
       )
     }, simplify = FALSE, future.seed = TRUE)
     
-    res$R <- R
+    res$R <- sum(!sapply(booties_df, is.null))
     res$bootstrap_reps <- do.call(rbind, booties_df)
     res$bootstrap_type <- bootstrap
     
