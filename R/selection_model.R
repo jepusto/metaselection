@@ -181,6 +181,8 @@ fit_selection_model <- function(
     info <- mle_est[max_method, -theta_names]
     names(theta) <- params$H_names
     
+    if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
+    
     if (vcov_type == "none") {
       return(theta)
     }
@@ -231,6 +233,8 @@ fit_selection_model <- function(
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
+    
+    if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
     
     if (vcov_type == "none") {
       return(theta)
@@ -297,6 +301,8 @@ fit_selection_model <- function(
       return(list(est = theta, max_method = max_method, info = info))
     }
 
+    if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
+    
     if (vcov_type == "none") {
       return(theta)
     }
@@ -483,7 +489,7 @@ bootstrap_selmodel <- function(
   
   non_zero_cl <- cluster_w > 0
   cl_subset <- if (all(non_zero_cl)) NULL else non_zero_cl[cluster_numeric]
-  res <- tryCatch(
+  res <- suppressWarnings(tryCatch(
     fit_selection_model(
       yi = yi, 
       sei = sei, 
@@ -502,7 +508,7 @@ bootstrap_selmodel <- function(
       use_jac = use_jac
     ),
     error = \(e) e
-  )
+  ))
   
   if (inherits(res, "error")) return(NULL)
   
@@ -556,7 +562,7 @@ jackknife_selmodel <- function(
   jack_vals <- future.apply::future_lapply(
     index_jk, \(i) {
       q()
-      res_i <- tryCatch(
+      res_i <- suppressWarnings(tryCatch(
         fit_selection_model(
           yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
           X = X, U = U, Z0 = Z0, Z = Z,
@@ -571,7 +577,7 @@ jackknife_selmodel <- function(
           use_jac = use_jac
         ),
         error = \(e) NULL
-      )
+      ))
       res_i
     })
   
@@ -921,7 +927,11 @@ selection_model <- function(
     
     if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {
       
-      boot_CIs <- get_boot_CIs(bmod = res, CI_type = CI_type, conf_level = conf_level, R = R, ...)
+      boot_CIs <- get_boot_CIs(
+        bmod = res, 
+        CI_type = CI_type, conf_level = conf_level, 
+        R = pmin(R, res$R), ...
+      )
 
       boot_lengths <- sapply(boot_CIs, nrow)
       if (all(boot_lengths == 1L)) {
