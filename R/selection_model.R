@@ -458,8 +458,10 @@ bootstrap_selmodel <- function(
   }
   
   if (wtype == "multinomial") {
-    
-    i <- sample.int(n = m, replace = TRUE)
+    i <- 1L
+    while (length(unique(i)) == 1) {
+      i <- sample.int(n = m, replace = TRUE)
+    }
     dim(i) <- c(1, m)
     cluster_w <- apply(i, 1, tabulate, m)
     
