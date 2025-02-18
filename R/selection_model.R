@@ -780,7 +780,10 @@ selection_model <- function(
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
   
-  n_clusters <- if (!is.null(cluster)) length(unique(cluster))
+  if (!is.null(cluster)) {
+    n_clusters <- length(unique(cluster))
+    if (n_clusters < 3L) stop("The data contain fewer than three unique clusters. This method will not provide valid results.")
+  }
   
   # Create matrices X, U, Z0, Z_1,... from data formulas
   
