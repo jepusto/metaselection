@@ -455,7 +455,8 @@ bootstrap_selmodel <- function(
     optimizer = "BFGS",
     optimizer_control = list(),
     use_jac = TRUE,
-    wtype = c("multinomial", "exponential")
+    wtype = c("multinomial", "exponential"),
+    retry = 0L
 ) {
   
   if (!is.null(cluster)) {
@@ -510,7 +511,33 @@ bootstrap_selmodel <- function(
     error = \(e) e
   ))
   
-  if (inherits(res, "error")) return(NULL)
+  if (inherits(res, "error")) {
+    browser()
+    if (retry == 0L) return(NULL)
+    
+    res <- bootstrap_selmodel(
+      yi = yi, 
+      sei = sei, 
+      pi = pi, 
+      steps = steps, 
+      ai = ai,
+      cluster = cluster, 
+      X = X, 
+      U = U, 
+      Z0 = Z0, 
+      Z = Z, 
+      vcov_type = vcov_type,
+      selection_type = selection_type,
+      estimator = estimator,
+      theta = theta,
+      optimizer = optimizer,
+      optimizer_control = optimizer_control,
+      use_jac = use_jac,
+      wtype = wtype,
+      retry = retry - 1L
+    )
+    return(res)
+  }
   
   if (vcov_type != "none") {
     est <- data.frame(
@@ -656,6 +683,7 @@ jackknife_selmodel <- function(
 #'   the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
 #'   a conventional clustered bootstrap.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
+#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
 #' @returns An object of class \code{"selmodel"} containing the following
@@ -737,6 +765,7 @@ selection_model <- function(
     use_jac = TRUE,
     bootstrap = "none",
     R = 1999,
+    retry_bootstrap = 0L,
     ...
 ) {
   
@@ -902,7 +931,8 @@ selection_model <- function(
         optimizer = optimizer, 
         optimizer_control = optimizer_control,
         use_jac = use_jac,
-        wtype = bootstrap
+        wtype = bootstrap,
+        retry = retry_bootstrap
       )
     }, simplify = FALSE, future.seed = TRUE)
     

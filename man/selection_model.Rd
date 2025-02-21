@@ -29,6 +29,7 @@ selection_model(
   use_jac = TRUE,
   bootstrap = "none",
   R = 1999,
+  retry_bootstrap = 0L,
   ...
 )
 }
@@ -120,6 +121,8 @@ the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
 a conventional clustered bootstrap.}
 
 \item{R}{number of bootstrap replications, with a default of \code{1999}.}
+
+\item{retry_bootstrap}{number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.}
 
 \item{...}{further arguments passed to \code{simhelpers::bootstrap_CIs}.}
 }
