@@ -511,8 +511,7 @@ bootstrap_selmodel <- function(
     error = \(e) e
   ))
   
-  if (inherits(res, "error")) {
-    browser()
+  if (inherits(res, "error") || (vcov_type != "none" && any(is.na(diag(res$vcov))))) {
     if (retry == 0L) return(NULL)
     
     res <- bootstrap_selmodel(
