@@ -9,7 +9,11 @@ Authors@R: c(
     person(given = "Megha", family = "Joshi",  
            email = "megha.j456@gmail.com", 
            role = "aut",
-           comment = c(ORCID = "0000-0001-7936-076X")))
+           comment = c(ORCID = "0000-0001-7936-076X")),
+    person(given = "Martyna", family = "Citkowicz",  
+           email = "martyna.citkowicz@gmail.com", 
+           role = "aut",
+           comment = c(ORCID = "0000-0002-2048-0625")))
 Description: Fits a flexible class of p-value selection models for meta-analysis and meta-regression models, 
     providing standard errors and confidence intervals based on either cluster-robust variance estimators
     (i.e., sandwich estimators) or cluster-level bootstrapping to handle dependent effect size estimates. Supported models include generalizations of the 
