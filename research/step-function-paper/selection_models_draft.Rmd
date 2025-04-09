@@ -1,0 +1,202 @@
+---
+title             : "Estimation and inference for step-function selection models in meta-analysis with dependent effects"
+shorttitle        : "Step-function selection models"
+
+author: 
+  - name          : "James E. Pustejovsky"
+    corresponding : yes    # Define only one corresponding author
+    affiliation   : "1"
+    address       : "1082C Educational Sciences, 1025 W Johnson St. Madison, WI 53706-1706"
+    email         : "pustejovsky@wisc.edu"
+  - name          : "Martyna Citkowicz"
+    affiliation   : "2"
+    address       : "Address"
+    email         : "mcitkowicz@air.org"
+  - name          : "Megha Joshi"
+    affiliation   : "2"
+    address       : "Address"
+    email         : "megha.j456@gmail.com"
+    
+affiliation:
+  - id            : "1"
+    institution   : "University of Wisconsin-Madison"
+  - id            : "2"
+    institution   : "American Institutes for Research"
+
+note              : "\\ \\newline `r format(Sys.Date(), '%B %d, %Y')`"
+
+authornote: |
+  Code and data for replicating the empirical examples presented in this paper are available on the Open Science Framework at .
+
+abstract: |
+  Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates, necessitating use of statistical methods for dependent observations such as multi-level modeling or robust variance estimation. A second challenge is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for the meta-analyses involving dependent effect sizes. Step-function selection models are conceptually appealing and have shown promise in previous simulations, but have not been extended to handle dependent effect sizes. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We demonstrate the methods by re-analyzing data from a synthesis of ego depletion effects and evaluate the performance of the estimators through an extensive simulation study. Simulation findings indicate that simple forms of step-function selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels.
+  
+keywords          : "meta-analysis; dependent effect sizes; selection models; selective reporting; publication bias"
+
+bibliography      : references.bib
+
+figsintext        : yes
+figurelist        : no
+floatsintext      : yes 
+tablelist         : no
+footnotelist      : no
+lineno            : no
+mask              : no
+numbersections    : yes
+keep_tex          : yes
+lang              : "en-US"
+documentclass     : "apa7"
+classoption       : "man, donotrepeattitle"
+output            : 
+  papaja::apa6_pdf
+csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
+replace_ampersands: yes
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{multirow}
+- \usepackage{multicol}
+- \usepackage{amsthm}
+- \newtheorem{thm}{Theorem}
+- \newtheorem{lem}{Lemma}
+- \usepackage{amsfonts}
+- \usepackage{caption}
+- \usepackage{multirow}
+- \usepackage{float}
+- \usepackage{subfig}
+- \usepackage{longtable}
+- \usepackage[figuresright]{rotating}
+- \geometry{twoside=false, top=1in, bottom=1in, left=1in, right=1in}
+- \usepackage{hyperref}
+- \hypersetup{hidelinks}
+- \raggedbottom
+- \usepackage{setspace}
+- \AtBeginEnvironment{tabular}{\singlespacing}
+- \newcommand{\Prob}{\text{Pr}}
+- \newcommand{\E}{\text{E}}
+- \newcommand{\Cov}{\text{Cov}}
+- \newcommand{\cor}{\text{cor}}
+- \newcommand{\Var}{\text{Var}}
+- \newcommand{\diag}{\text{diag}}
+- \newcommand{\mat}[1]{\mathbf{#1}}
+- \newcommand{\bs}{\boldsymbol}
+- \newcommand{\trace}{\text{tr}}
+
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+library(papaja)
+library(metaselection)
+library(tidyverse)
+library(CRediTas)
+
+opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(tinytex.clean = FALSE, knitr.kable.NA = '')
+
+appendix_prefix <- "Appendix"
+replication_materials_URL <- "<URL>"
+```
+
+# Introduction {#introduction}
+
+```{r child = "introduction.Rmd"}
+```
+
+# Models and Estimation Methods {#model-and-estimation}
+
+```{r child = "model_and_estimation_methods.Rmd"}
+```
+
+# Empirical Example {#empirical-example}
+
+```{r child = "empirical_example.Rmd"}
+```
+
+# Simulation Methods {#simulation-methods}
+
+```{r child = "simulation_methods.Rmd"}
+```
+
+# Simulation Results {#simulation-results}
+
+```{r child = "simulation_results.Rmd"}
+```
+
+# Discussion {#discussion}
+
+```{r child = "discussion.Rmd"}
+```
+
+# Author Contributions {-}
+
+```{r CRediT}
+#| results: asis
+
+JEP_credit <- 
+  template_create(authors = "JEP") %>%
+  mutate(
+    Conceptualization = 1,
+    Methodology = 1,
+    Software = 1,
+    Validation = 1,
+    `Formal Analysis` = 1,
+    Investigation = 1,
+    Resources = 1,
+    `Writing - original draft` = 1,
+    `Writing - review & editing` = 1,
+    Supervision = 1
+  )
+
+MJ_credit <- 
+  template_create(authors = "MJ") %>%
+  mutate(
+    Methodology = 1,
+    Software = 1,
+    Validation = 1,
+    `Formal Analysis` = 1,
+    Investigation = 1,
+    `Writing - original draft` = 1,
+    `Writing - review & editing` = 1,
+    Visualization = 1
+  )
+
+MC_credit <- 
+  template_create(authors = "MC") %>%
+  mutate(
+    Conceptualization = 1,
+    Methodology = 1,
+    Investigation = 1,
+    `Writing - original draft` = 1,
+    `Writing - review & editing` = 1,
+    `Project administration` = 1,
+    `Funding acquisition` = 1
+  )
+
+bind_rows(JEP_credit, MJ_credit, MC_credit) %>%
+  cras_write() %>%
+  cat()
+```
+
+\newpage
+
+# References {-}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
+
+# (APPENDIX) Appendix {-}
+
+```{r child = "appendix-CML-derivatives.Rmd"}
+```
+
+```{r child = "appendix-ARGL-derivatives.Rmd"}
+```
+
+```{r child = "appendix-bootstrap-details.Rmd"}
+```
+
+```{r child = "appendix-simulation-results.Rmd"}
+```

@@ -1,0 +1,46 @@
+---
+title: "Modified Step-Function Selection Model"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Bootstrap confidence interval construction {#bootstrap-CIs}
+
+We describe three methods for constructing a $1 - 2\alpha$ confidence interval (CI) from a set of $B$ bootstrap replications.
+Consider a parameter $\theta$ that is a scalar component of $\bs\beta$, $\gamma$, or $\bs\zeta$.
+Let $\hat\theta$ denote an estimator of $\theta$ with sandwich variance estimator $V$.
+Let $\hat\theta^*_{b}$ denote the same estimator computed from bootstrap pseudo-sample $b$, with corresponding sandwich variance estimator  $V^*_{b}$. 
+Let $\hat\theta^*_{(1)},...,\hat\theta^*_{(B)}$ denote the pseudo-sample estimators sorted in ascending order.
+An estimator for the standard error of $\hat\theta$ can be computed by taking the standard deviation of the $\hat\theta^*_1,...,\hat\theta^*_{B}$. 
+
+First, the percentile CI is calculated by taking the $\alpha$ and $1 - \alpha$ quantiles of the bootstrap distribution, with end-points $$\left[\hat\theta^*_{((B+1) \alpha)}, \hat\theta^*_{((B+1)(1 - \alpha))}\right].$$
+Second, the so-called "basic" CI pivots the bootstrap distribution around the original estimator $\hat\theta$. Its end-points are given by 
+$$\left[2 \hat\theta - \hat\theta^*_{((B+1)(1 - \alpha)}, 2 \hat\theta - \hat\theta^*_{((B+1)\alpha)}\right].$$
+Third, a studentized CI uses the bootstrap distribution of $t$-statistics rather than point estimators. 
+The $t$ statistic for pseudo-sample $b$ is computed as $t^*_b = \left(\hat\theta^*_{b} - \hat\theta\right) / \sqrt{V^*_b}$.
+The studentized CI is computed using the percentiles of the bootstrap distribution of $t^*_1,...,t^*_B$, taking 
+$$\left[\hat\theta - \sqrt{V} \times t^*_{((B+1)(1 - \alpha)}, \ \hat\theta - \sqrt{V} \times t^*_{((B+1)\alpha)}\right].$$
+Fourth, the bias-corrected-and-accelerated (BCa) CI is similar to the percentile CI in that its end-points are defined by quantiles of the bootstrap distribution. However, instead using the $\alpha$ and $1 - \alpha$ quantiles, it uses quantiles that are adjusted to take into account the bias of the estimator and the degree to which its sampling variance is related to the underlying parameter, as measured using an acceleration coefficient. 
+These adjustments are defined in terms of the empirical influence function, which we approximate using a leave-one-cluster-out jackknife. 
+The jackknife influence value for cluster $j$ is $\hat\theta - \hat\theta^+_{-j}$, where $\hat\theta^+_{-j}$ denotes the estimator of $\theta$ computed while leaving out the observations in cluster $j$ for $j = 1,...,J$. 
+The acceleration coefficient is then
+$$
+\hat{a} = \frac{\sum_{j=1}^J \left(\hat\theta - \hat\theta^+_{-j}\right)^3}{6 \left[\sum_{j=1}^J \left(\hat\theta - \hat\theta^+_{-j}\right)^2\right]^{3/2}}.
+$$
+The bias coefficient is calculated as the proportion of the bootstrap distribution that falls below the original estimator:
+$$
+\hat\beta = \frac{1}{B} \sum_{b=1}^B I\left(\hat\theta^*_b < \hat\theta\right).
+$$
+With the acceleration and bias coefficients defined, define the adjustment function $f(\alpha)$ as
+$$
+f(\alpha) = \Phi\left(\Phi^{-1}(\hat\beta) + \frac{\Phi^{-1}(\hat\beta) + \Phi^{-1}(\alpha)}{1 - \hat{a}\left[\Phi^{-1}(\hat\beta) + \Phi^{-1}(\alpha)\right]}\right)
+$$
+for $0 < \alpha < 1$. The end-points of the BCa CI are then given by 
+$$
+\left[\hat\theta^*_{((B+1) \times f(\alpha))}, \hat\theta^*_{((B+1)\times f(1 - \alpha))}\right].
+$$
+Notably, the basic and studentized confidence intervals depend on the scale of the parameter $\theta$, and the accuracy of their coverage levels therefore depends on the parameterization. In contrast, the percentile and bias-corrected-and-accelerated confidence intervals are invariant to transformation of $\theta$. 
+

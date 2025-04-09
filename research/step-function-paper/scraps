@@ -1,0 +1,39 @@
+<!-- JEP: Do we need all of this review of empirical evidence on selective reporting practices? I think for RSM, this would all be broadly understood and we wouldn't necessarily need to get into this level of detail.
+Evidence from medical sciences, education research, and allied social sciences indicates that both types of selective reporting---publication bias and outcome reporting bias---are of concern.
+In the medical sciences, @chan2004empirical found that statistically significant outcomes were 2.4 to 4.7 times more likely to be published than non-significant outcomes, depending on the type of outcome.
+@lancee2017outcome compared the published results of clinical trials of antipsychotic medications with the preregistered outcomes on ClinicalTrials.gov and found that 85% of studies had some form of incomplete outcome reporting and 23% of studies did not fully report their preregistered primary outcome.
+Similar evidence of outcome reporting bias has been found in research areas such as neurology [@benjamin2018redefine], antidepressants for anxiety disorders [@roest2015reporting], and psychotherapy for depressive disorders [@flint2015there].
+
+<!-- JEP: Same question with this paragraph
+Social scientists have also examined the presence and consequence of selective reporting [@matthes2015questionable].
+In a survey of more than 2,000 academic psychologists, 63% admitted to incomplete outcome reporting [@john2012measuring].
+A study of education intervention dissertations published between 2001 and 2005 found that 36 of 79 dissertations (46%) appeared to have some amount of incomplete outcome reporting driven by statistical significance (i.e., a discrepancy in the proportion of statistically significant results in the published report and the dissertation).
+The estimated odds that a statistically significant outcome would be published was 2.41 times those for nonsignificant outcomes [@pigott2013outcome]. These reporting practices have consequences.
+Reviews of dissertations in other fields provide corroborating evidence of selective outcome reporting, including in management research [@oBoyle2017chrysalis] and social psychology [@cairo2020gray].
+
+One can distinguish between selective reporting practices occurring at the level of the entire study versus those occurring at the level of a specific findings within a study.
+At the study level, publication bias occurs when full study reports are withheld from public availability as a function of some aspect of their findings [@polanin2016estimating].
+Reports with statistical conclusions that support research hypotheses may be more likely to be published than those that do not.
+At the level of individual findings within studies, results might be disclosed for only a subset of the analyses conducted or for only some of the outcome measures actually collected, leading to outcome reporting bias.
+<!-- JEP: I don't think we need to draw this distinction here? -->
+
+When estimating summary meta-analysis or meta-regression models, analysts , .
+Some simple methods include (1) ignoring the problem of dependency and treating the effect sizes as if they were each from an independent study; (2) conducting separate analyses for each subgroup (e.g., outcome measure or time point); or (3) averaging effects within studies to yield a single aggregated effect size per study [@becker2000multivariate].
+While commonly used, these simplistic methods have severe limitations.
+Ignoring dependencies will tend to lead to inflated Type I error rates for tests of selective reporting.
+Analysis within subgroups may also lead to inflated Type I error rates due to the multiplicity of tests (unless a familywise correction is used) and will hinder power due to reduced sample size.
+Aggregating effects is problematic because it only addresses the publication-level effects, accounting for publication bias but neglecting more nuanced outcome reporting bias.
+Furthermore, a recent simulation study examined using aggregated effects with methods to detect selective reporting bias and also found inflated Type I error rates for trim and fill and Egger's regression tests based on aggregated effect sizes [@rodgers2021evaluating].
+
+A more robust method for accounting for effect size dependencies is robust variance estimation (RVE).
+@hedges2010robust proposed using RVE techniques to adjust the variance of conventional meta-analysis model estimates and account for effect size dependencies.
+Under this method, an approximate "working" covariance matrix is assumed so that the exact covariance structure is not needed.
+Based on the working covariance, standard errors of average effect sizes and meta-regression coefficients converge on the true uncertainty as the number of studies, not the number of effect sizes within studies, increases.
+@tipton2015small and @tiptonpusto2015small developed small-sample adjustments for standard errors and hypothesis tests based on RVE so that the desirable asymptotic properties are maintained even when the number of studies is small.
+
+
+
+[^2]: Selective reporting is usually described in the context of statistically significant effects, which tend to support researcher hypotheses (e.g., of intervention effects). However, selective reporting could also occasionally favor null effects that support researcher hypotheses (e.g., preintervention differences in key measures, achievement gaps).
+
+Publication bias is a long-standing concern in meta-analysis, with a range of methods available to investigate its potential effects [@Rothstein2005].
+However, traditional methods are insufficient because they do not address the second type of bias: outcome reporting bias. 

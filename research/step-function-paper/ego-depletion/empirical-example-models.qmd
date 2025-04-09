@@ -1,0 +1,286 @@
+---
+title: "Empirical Example: Ego-Depletion"
+author: "Megha Joshi"
+format: 
+  html:
+    toc: true
+    embed-resources: true
+editor: visual
+---
+
+## The Data and Number of Studies and Effects
+
+```{r, message = FALSE, warning = FALSE}
+# Data cleaning
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(broom)
+
+# Parallel processing
+library(future)
+plan(multisession, workers = 4L)
+
+# timing
+library(tictoc)
+
+# Meta-analysis
+library(metafor)
+library(metaselection)
+source("estimate_comparison_methods.R")
+
+ed_dat <- readRDS("Carter-et-al-data.rds")
+
+#-------------------------------------------------------------------------------
+# Limit to published studies, exclude large outlier
+
+ed_dat_clean <- 
+  ed_dat %>%
+  filter(
+    pub_type == 1,
+    yi < 2
+  )
+
+ed_dat_clean %>%
+  summarize(
+    num_studies = n_distinct(study_id),
+    num_effects = n_distinct(es_id)
+  )
+```
+
+## CHE Estimate
+
+```{r}
+V_mat <- vcalc(
+    vi = vi, 
+    cluster = sample,
+    obs = es_id, 
+    data = ed_dat_clean,
+    rho = 0.5,
+    sparse = TRUE
+  )
+
+
+  
+che_res <- rma.mv(yi = yi,
+                  V = V_mat,
+                  random = ~ 1 | study_id / es_id, 
+                  data = ed_dat_clean, 
+                  sparse = TRUE, 
+                  digits = 3) |> 
+    robust(cluster = study_id, clubSandwich = TRUE)
+
+che_res
+```
+
+## Funnel Plot
+
+```{r}
+funnel(che_res, refline = 0, level = c(90, 95, 99))
+```
+
+## Selection Model - Single Step CML Large Sample and Bootstrap
+
+```{r}
+set.seed(20250220)
+
+tic()
+
+mod_3PSM_boot_CML <- selection_model(
+  data = ed_dat_clean, 
+  yi = yi,
+  vi = vi,
+  cluster = study_id,
+  selection_type = "step",
+  steps = 0.025,
+  estimator = "CML",
+  bootstrap = "multinomial",
+  CI_type = c("large-sample", "percentile"),
+  R = 1999
+)
+
+toc()
+
+mod_3PSM_boot_CML
+
+selection_plot(mod_3PSM_boot_CML, transform = "sqrt")
+
+```
+
+## Selection Model - Single Step ARGL Large Sample and Bootstrap
+
+```{r}
+set.seed(20250220)
+
+mod_3PSM_boot_ARGL <- selection_model(
+  data = ed_dat_clean, 
+  yi = yi,
+  vi = vi,
+  cluster = study_id,
+  selection_type = "step",
+  steps = 0.025,
+  estimator = "ARGL",
+  bootstrap = "multinomial",
+  CI_type = c("large-sample", "percentile"),
+  R = 1999
+)
+
+mod_3PSM_boot_ARGL
+
+selection_plot(mod_3PSM_boot_ARGL, transform = "sqrt")
+```
+
+## Selection Model - Two Step CML Large Sample and Bootstrap
+
+```{r}
+set.seed(20250220)
+
+mod_4PSM_boot_CML <- selection_model(
+  data = ed_dat_clean, 
+  yi = yi,
+  vi = vi,
+  cluster = study_id,
+  selection_type = "step",
+  steps = c(0.025, .5),
+  estimator = "CML",
+  bootstrap = "multinomial",
+  CI_type = c("large-sample", "percentile"),
+  R = 1999
+)
+
+print(mod_4PSM_boot_CML)
+selection_plot(mod_4PSM_boot_CML, transform = "sqrt")
+```
+
+## Selection Model - Two Step ARGL Large Sample and Bootstrap
+
+```{r}
+set.seed(20250220)
+
+mod_4PSM_boot_ARGL <- selection_model(
+  data = ed_dat_clean, 
+  yi = yi,
+  vi = vi,
+  cluster = study_id,
+  selection_type = "step",
+  steps = c(0.025, .5),
+  estimator = "ARGL",
+  bootstrap = "multinomial",
+  CI_type = c("large-sample", "percentile"),
+  R = 1999
+)
+
+mod_4PSM_boot_ARGL
+
+selection_plot(mod_4PSM_boot_ARGL, transform = "sqrt")
+```
+
+## Comparison Methods
+
+```{r}
+comp_res <- 
+  estimate_comparison_methods(
+    dat = ed_dat_clean,
+    yi = yi, 
+    vi = vi, 
+    study_id = study_id, 
+    es_id = es_id
+  ) %>%
+  rename(p_value = p)
+
+
+comp_res |>
+  select(estimator, everything()) |>
+  mutate_if(is.numeric, round, 3)
+```
+
+## All Together
+
+```{r}
+pub_studies_res <- 
+  bind_rows(
+    `One-step CML` = print(mod_3PSM_boot_CML, trans_gamma = TRUE, transf_zeta = TRUE),
+    `Two-step CML` = print(mod_4PSM_boot_CML, trans_gamma = TRUE, transf_zeta = TRUE), 
+    `One-step ARGL` = print(mod_3PSM_boot_ARGL, trans_gamma = TRUE, transf_zeta = TRUE),
+    `Two-step ARGL` = print(mod_4PSM_boot_ARGL, trans_gamma = TRUE, transf_zeta = TRUE), 
+    .id = "estimator"
+  ) %>%
+  remove_rownames() %>%
+  bind_rows(comp_res) %>%
+  select(-R_conv) %>%
+  select(estimator, param, everything())
+
+saveRDS(pub_studies_res, file = "pub_studies_res.rds")
+
+pub_studies_res |>
+  kbl(digits = 3, row.names = FALSE) |>
+  kable_styling()
+```
+
+## Table
+
+```{r}
+
+format_it <- function(x){
+  
+  format(round(x, 2), nsmall = 2)
+  
+}
+
+table_step <- 
+  pub_studies_res %>%
+  filter(str_detect(estimator, "-step")) %>%
+  separate(estimator, sep = " ", into = c("step","estimator")) %>%
+  arrange(step) %>%
+  mutate(
+    across(
+      c(Est, SE, CI_lo, CI_hi, percentile_lower, percentile_upper), 
+      format_it
+    )
+  ) %>%
+  select(-p_value, -df) %>%
+  mutate(
+    est_se = paste0(Est, " (", SE, ")"),
+    large_sample_ci = paste0("[", CI_lo, ",", CI_hi, "]"),
+    bootstrap_ci = paste0("[", percentile_lower, ", ", percentile_upper, "]")
+  ) %>%
+  select(-c(Est:percentile_upper)) %>%
+  pivot_wider(
+    names_from = estimator,
+    values_from = c(est_se, large_sample_ci, bootstrap_ci)
+  ) %>%
+  select(
+    step, param,
+    est_se_CML, large_sample_ci_CML, bootstrap_ci_CML, 
+    est_se_ARGL, large_sample_ci_ARGL, bootstrap_ci_ARGL
+  ) %>%
+  mutate(
+    param_order = case_match(
+      param, 
+      "beta" ~ 1,
+      "tau2" ~ 2,
+      "lambda1" ~ 3, 
+      "lambda2" ~ 4
+    ),
+    param = case_match(
+      param,
+      "beta" ~ "$\\beta$",
+      "tau2" ~ "$\\tau^2$",
+      "lambda1" ~ "$\\lambda_1$",
+      "lambda2" ~ "$\\lambda_2$"
+    )
+  ) %>%
+  arrange(step, param_order) %>%
+  select(-param_order)
+
+
+table_step %>%
+  select(-step) %>%
+kbl(
+  col.names = c("Parameter", "Estimate (SE)", "Large Sample CI", "Percentile Bootstrap CI", "Estimate (SE)", "Large Sample CI", "Percentile Bootstrap CI"),
+  booktabs = TRUE
+) %>%
+  add_header_above(c(" ", "CML" = 3, "ARGL" = 3)) %>%
+  pack_rows(index = table(table_step$step))
+
+```

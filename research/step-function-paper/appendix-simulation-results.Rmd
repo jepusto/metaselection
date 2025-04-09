@@ -1,0 +1,488 @@
+---
+title: "Additional simulation results"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+```{r}
+source("process-simulation-results.R")
+```
+
+# Additional simulation results for estimators of average effect size $(\mu)$ {#mu-simulation-results}
+
+```{r convergence-rates}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Convergence rates of CML and ARGL estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
+
+mu_graph_res %>%
+  filter(estimator %in% c("CML","ARGL")) %>%
+  group_by(mean_smd, tau, weights, estimator) %>%
+  summarize(
+    min = min(convergence),
+    Q10 = quantile(convergence, 0.1),
+    median = median(convergence),
+    Q90 = quantile(convergence, 0.9),
+    max = max(convergence),
+    .groups = "drop"
+  ) %>%
+ggplot() + 
+  aes(x = weights, y = median, ymin = min, max = max, color = estimator, fill = estimator) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) + 
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  expand_limits(y = 0.99) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Convergence rate", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r rmse-ARGL-CML}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res, "CML","ARGL")
+```
+
+```{r rmse-CHE-CML}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res, "CML","CHE-ISCW")
+```
+
+```{r rmse-CHE-ARGL}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
+```
+
+```{r rmse-PET-CML}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res, "CML","PET/PEESE")
+```
+
+
+```{r rmse-PET-ARGL}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
+```
+
+```{r comparison-coverage-full}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    CI_type %in% c("large-sample")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r CML-coverage-full}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("CML"),
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r ARGL-coverage-full}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("ARGL"),
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+# Additional simulation results for estimators of log-heterogeneity $(\gamma)$ {#gamma-simulation-results}
+
+```{r heterogeneity-bias}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Bias for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
+
+gamma_graph_res %>%
+  filter(estimator %in% c("CHE","CML","ARGL")) %>%
+ggplot() + 
+  aes(x = weights, y = bias, color = estimator, fill = estimator) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(-2,2)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Bias", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r heterogeneity-rmse}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Scaled root mean-squared error for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
+
+gamma_graph_res %>%
+  filter(estimator %in% c("CHE","CML","ARGL")) %>%
+ggplot() + 
+  aes(x = weights, y = scrmse_trunc, color = estimator, fill = estimator) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Scaled Root Mean-Squared Error", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+```{r heterogeneity-rmse-CML-CHE}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for CML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(gamma_wide_res, "CHE","CML")
+```
+
+```{r heterogeneity-rmse-ARGL-CHE}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(gamma_wide_res, "CHE","ARGL")
+```
+
+```{r heterogeneity-rmse-ARGL-CML}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(gamma_wide_res, "CML","ARGL")
+```
+
+# Additional simulation results for estimators of selection parameter $(\zeta_1)$ {#zeta-simulation-results}
+
+```{r selection-bias}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Bias for estimators of log-selection parameter by selection probability, average SMD, and between-study heterogeneity"
+
+zeta_graph_res %>%
+  filter(estimator %in% c("CML","ARGL")) %>%
+ggplot() + 
+  aes(x = weights, y = bias, color = estimator, fill = estimator) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(-2,2)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Bias", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r selection-rmse}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Scaled root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
+
+zeta_graph_res %>%
+  filter(estimator %in% c("CML","ARGL")) %>%
+ggplot() + 
+  aes(x = weights, y = scrmse, color = estimator, fill = estimator) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(0, 10)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Scaled Root Mean-Squared Error", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r selection-rmse-ARGL-CML}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 7.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for ARGL log-selection parameter estimator to root mean-squared error of CML log-selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(zeta_wide_res, "CML","ARGL")
+```
+
+```{r CML-zeta-coverage-full}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the CML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+zeta_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("CML"),
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  coord_cartesian(ylim = c(0.4, 1)) + 
+  scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r ARGL-zeta-coverage-full}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+zeta_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("ARGL"),
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  coord_cartesian(ylim = c(0.4, 1)) + 
+  scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```

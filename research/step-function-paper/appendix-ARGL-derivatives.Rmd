@@ -1,0 +1,49 @@
+---
+title: "Modified Step-Function Selection Model"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Sandwich estimator for the augmented, re-weighted Gaussian likelihood estimator {#ARGL-derivatives}
+
+The augmented, re-weighted Gaussian likelihood (ARGL) estimators are defined as the solution to the estimating equations given in Equation \@ref(eq:hybrid-score) and \@ref(eq:hybrid-total-score).
+Sandwich variance approximations for the ARGL estimators involve the estimating equations and their Jacobian.
+
+Let $\mat{J}$ denote the Jacobian matrix of the ARGL estimating equations, given by
+\begin{equation}
+\mat{J}(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J a_j \frac{\partial \mat{M}_j(\bs\beta, \gamma, \bs\zeta)}{\partial (\bs\beta' \gamma \bs\zeta')}.
+\end{equation}
+The exact form of the Jacobian is described below.
+Let $\mat{\tilde{M}}_j = \mat{M}_j(\bs{\tilde\beta}, \tilde\gamma, \bs{\tilde\zeta})$ and $\mat{\tilde{J}} = \mat{J}(\bs{\tilde\beta}, \tilde\gamma, \bs{\tilde\zeta})$ denote the score vectors and Jacobian matrix evaluated at the solutions to the ARGL estimating equations.
+A cluster-robust sandwich estimator is then given by:
+\begin{equation}
+\label{eq:hybrid-sandwich-variance}
+\mat{V}^{ARGL} = \mat{\tilde{J}}^{-1}\left(\sum_{j=1}^J a_j \mat{\tilde{M}}_j {\mat{\tilde{M}}_j}'\right) \left(\mat{\tilde{J}}^{-1}\right)'.
+\end{equation}
+
+The Jacobian of \@ref(eq:hybrid-total-score) is given by
+$$
+\mat{J} = \sum_{j=1}^J a_j \times \left[\begin{array}{ccc}
+\mat{J}_j^{\bs\beta\bs\beta'} & \mat{J}_j^{\bs\beta \bs\gamma'} & \mat{J}_j^{\bs\beta \bs\zeta'} \\ 
+\mat{J}_j^{\bs\gamma\bs\beta'} & \mat{J}_j^{\bs\gamma \bs\gamma'} & \mat{J}_j^{\bs\gamma \bs\zeta'} \\
+\mat{J}_j^{\bs\zeta\bs\beta'} & \mat{J}_j^{\bs\zeta \bs\gamma'} & \mat{J}_j^{\bs\zeta \bs\zeta'},
+\end{array}\right]
+$$
+where 
+$$
+\begin{aligned}
+\mat{J}_j^{\bs\beta\bs\beta'} &= - \sum_{i=1}^{k_j}  \frac{\mat{x}_{ij}' \mat{x}_{ij}}{w_{ij} \eta_{ij}} \\
+\mat{J}_j^{\bs\beta \gamma} &= - \sum_{i=1}^{k_j} \mat{x}_{ij}' \tau^2 \left(\frac{y_{ij} - \mu_{ij}}{w_{ij} \eta_{ij}^2} \right) \\
+\mat{J}_j^{\bs\beta \zeta_h} &= - \sum_{i=1}^{k_j} \mat{x}_{ij}' \lambda_h \left(\frac{y_{ij} - \mu_{ij}}{w_{ij}^2 \eta_{ij}} \right) \\
+\mat{J}_j^{\gamma \bs\beta'} &= \left(\mat{J}_j^{\bs\beta \gamma}\right)' \\
+\mat{J}_j^{\gamma \gamma} &= - \sum_{i=1}^{k_j} \frac{\tau^4}{w_{ij}} \left(\frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2 \eta_{ij}^3}\right) - \frac{\tau^2}{w_{ij}} \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta}{2 \eta_{ij}^2}\right) \\
+\mat{J}_j^{\gamma \zeta_h} &= - \sum_{i=1}^{k_j} \frac{\tau^2 \lambda_h}{w_{ij}^2}  \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^2}\right)\\  
+\mat{J}_j^{\zeta_h \bs\beta'} &= \left(\mat{H}_{j}^{\bs\beta \zeta_h}\right)' \\
+\mat{J}_j^{\zeta_h \gamma} &= \mat{H}_{j}^{\gamma \zeta_h} \\
+\mat{J}_j^{\zeta_f \zeta_h} &= \mat{H}_{j}^{\zeta_f \zeta_h'},
+\end{aligned}
+$$
+with $\mat{H}_{j}^{\bs\beta \zeta_h}$, $\mat{H}_{j}^{\gamma \zeta_h}$, and $\mat{H}_{j}^{\zeta_f \zeta_h}$ as given in Equations \@ref(eq:H-beta-zeta), \@ref(eq:H-gamma-zeta), and \@ref(eq:H-zeta-zeta).

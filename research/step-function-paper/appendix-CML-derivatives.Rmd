@@ -1,0 +1,62 @@
+---
+title: "Modified Step-Function Selection Model"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Score and Hessian of the step-function marginal log likelihood {#CML-derivatives}
+
+From Equation \@ref(eq:log-like-ij), the log of the marginal likelihood contribution for effect size estimate $i$ from study $j$ is given by
+\begin{align}
+l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &\propto \log w\left(y_{ij}, \sigma_{ij}; \bs\zeta \right) - \frac{1}{2} \frac{\left(y_{ij} - \mat{x}_{ij} \bs\beta\right)^2}{\exp(\gamma) + \sigma_{ij}^2} \nonumber \\
+& \qquad \qquad  - \frac{1}{2}\log\left(\exp(\gamma) + \sigma_{ij}^2\right) - \log A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right).
+\end{align}
+The components of the score contribution of study $j$ given in Equations \@ref(eq:score-M-beta), \@ref(eq:score-M-gamma), and \@ref(eq:score-M-zeta) involve derivatives of $l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right)$ with respect to all model parameters.
+Let $w_{ij} = w\left(y_{ij}, \sigma_{ij}; \bs\lambda \right)$, $\mu_{ij} = \mat{x}_{ij} \bs\beta$, $\eta_{ij} = \exp(\gamma) + \sigma_{ij}^2$, and $A_{ij} = A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right)$ as defined in Equation \@ref(eq:step-function-A).
+The score contribution of study $j$ for the meta-regression coefficients has the general form
+\begin{equation}
+\mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j} \mat{x}_{ij}' \left(\frac{\left(y_{ij} - \mu_{ij} \right)}{\eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial  \mu_{ij}}\right).
+\end{equation}
+The score for the variance parameter has the general form
+\begin{equation}
+S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right).
+\end{equation}
+The score for the $h^{th}$ selection parameter has the general form
+\begin{equation}
+S_{\zeta_h j} = \sum_{i=1}^{k_j} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right),
+\end{equation}
+for $h = 1,...,H$. 
+For the step-function selection model, the derivatives of $w_{ij}$ and $A_{ij}$ are given by 
+\begin{align}
+\frac{\partial w_{ij}}{\partial \lambda_h} &= I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right) \\
+\label{eq:step-function-dAdmu}
+\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\eta_{ij}^{1/2}} \sum_{h=0}^H \lambda_h \left[\phi\left(c_{h+1,ij}\right) - \phi\left(c_{hij}\right)\right] \\
+\label{eq:step-function-dAdeta}
+\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \sum_{h=0}^H \lambda_h \left[c_{h+1,ij} \phi\left(c_{h+1,ij}\right) - c_{hij} \phi\left(c_{hij}\right)\right] \\
+\label{eq:step-function-dAdlambda}
+\frac{\partial A_{ij}}{\partial \lambda_h} &= B_{hij},
+\end{align}
+with $c_{hij}$ and $B_{hij}$ as defined in Equation \@ref(eq:step-function-Bhij).
+
+The sub-components of the Hessian matrix from study $j$ have the following forms:
+\begin{align}
+\mat{H}_{j}^{\bs\beta \bs\beta'} &= \frac{\partial}{\partial \bs\beta'} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j} \mat{x}_{ij}' \mat{x}_{ij} \left(\frac{1}{A_{ij}^2}\left(\frac{\partial A_{ij}}{\partial \mu_{ij}}\right)^2 - \frac{1}{A_{ij}} \frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} - \frac{1}{\eta_{ij}} \right) \\
+\mat{H}_{j}^{\bs\beta \gamma} &= \frac{\partial}{\partial \gamma} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j} \mat{x}_{ij}' \tau^2 \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} - \frac{y_{ij} - \mu_{ij}}{\eta_{ij}^2} \right) \\
+\label{eq:H-beta-zeta} \mat{H}_{j}^{\bs\beta \zeta_h} &= \frac{\partial}{\partial \zeta_h} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j} \mat{x}_{ij}' \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} \right) \\
+\mat{H}_{j}^{\gamma \gamma} &= \frac{\partial}{\partial \gamma} S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \nonumber \\
+& \qquad \qquad \qquad \qquad  + \tau^4 \left(\frac{1}{A_{ij}^2} \left(\frac{\partial A_{ij}}{\partial \eta_{ij}}\right)^2 - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2}  - \frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^3}\right) \\
+\label{eq:H-gamma-zeta} \mat{H}_{j}^{\gamma \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \eta_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} \right) \\
+\mat{H}_{j}^{\zeta_f \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\zeta_f j} = \sum_{i=1}^{k_j} \lambda_f \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \lambda_f}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{w_{ij}^2}\frac{\partial w_{ij}}{\partial \lambda_f}\frac{\partial w_{ij}}{\partial \lambda_h} \right) \nonumber \\
+& \qquad \qquad \qquad \qquad  + I(f = h) \lambda_h\left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h}\right), \label{eq:H-zeta-zeta}
+\end{align}
+where the second partial derivatives of $A_{ij}$ are given by 
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} &= \frac{1}{\eta_{ij}} \sum_{h=0}^H \lambda_h \left[c_{h+1,ij} \phi(c_{h+1,ij}) - c_{hij} \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \sum_{h=0}^H \lambda_h \left[(c_{h+1,ij}^2 - 1) \phi(c_{h+1,ij}) - (c_{hij}^2 - 1) \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} &= \frac{\phi\left(c_{h+1,ij}\right) - \phi\left(c_{hij}\right)}{\eta_{ij}^{1/2}} \\
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2} &= \frac{1}{4 \eta_{ij}^2} \sum_{h=0}^H \lambda_h \left[(c_{h+1,ij}^3 - 3 c_{h+1,ij}) \phi(c_{h+1,ij}) - (c_{hij}^3 - 3 c_{hij}) \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} &= \frac{c_{h+1,ij} \phi\left(c_{h+1,ij}\right) - c_{hij} \phi\left(c_{hij}\right)}{2\eta_{hij}}.
+\end{align}
