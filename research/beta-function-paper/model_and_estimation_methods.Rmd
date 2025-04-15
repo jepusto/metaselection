@@ -1,0 +1,138 @@
+---
+title: "Modified Beta-Function Selection Model"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+
+Selection models comprises two components. The first component, herein after termed the _evidence-generating process_, models the distribution of effect sizes before selection, typically using a conventional random-effects model or meta-regression model. The second component, hereinafter termed the _selection process_, identifies how the distribution is changed based on the likelihood of an effect size being reported. The combined model provides parameter estimates that define the selection process, along with meta-analytic estimates that are adjusted for selective reporting.
+
+Following the approach outlined in our previous paper [@pustejovsky2025step], we model the _marginal_ distribution of effect size estimates rather than the joint distribution within studies. To account for dependence among effect sizes, we use cluster-robust variance estimation or clustered bootstrap methods, which accommodate within-study correlation without requiring explicit modeling of the dependence structure. While this strategy limits interpretation to the marginal distribution and does not distinguish between study-level and outcome-level selection, it remains a practical and plausible framework for modeling selective reporting based on the significance of individual estimates.
+
+We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising $J$ studies, where study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote the $i$th effect size estimate from study $j$, with associated standard error $\sigma_{ij}$ and one-sided $p$-value $p_{ij}$. The one-sided $p$-value is defined relative to the null hypothesis that the true effect is less than or equal to zero. Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use $\Phi()$ to denote the standard normal cumulative distribution function and $\phi()$ to denote the standard normal density function.
+
+## Evidence-generating process
+
+We assume an evidence-generating process based on a standard random-effects meta-regression model. Let $Y^*$ denote a potentially reported effect size estimate, with standard error $\sigma^*$, one-sided $p$-value $p^*$, and predictor vector $\mathbf{x}^*$. Then the evidence-generating process is defined as
+
+\begin{equation}
+\label{eq:meta-mean-regression}
+\left(Y^* | \sigma^*, \mathbf{x}^*\right) \sim N\left(\mathbf{x}^* \boldsymbol\beta, \ \tau^2 + \sigma^{*2}\right),
+\end{equation}
+
+where $\boldsymbol\beta$ is an $x \times 1$ vector of regression coefficients and $\tau^2$ is the marginal variance of the effect size distribution. This model treats effect sizes as independent and characterizes _total_ heterogeneity without decomposing within- and between-study variation.
+
+## Selection process
+
+A $p$-value selection process is defined by a selection function that specifies the probability that an effect size is reported, conditional on its $p$-value. Let $O$ indicate whether $Y^*$ is observed. The process implies that
+\begin{equation}
+\label{eq:selection-process}
+\Pr\left(O = 1 | p^* \right) \propto w\left(p^*; \boldsymbol\lambda \right)
+\end{equation}
+where $w\left(.; \boldsymbol\lambda\right)$ is a known, strictly positive function on the interval $[0, 1]$ with an unknown $h \times 1$ parameter vector $\boldsymbol\lambda$.
+
+@citkowicz2017parsimonious defined the selection function using a truncated beta density with two parameters, offering flexibility to capture diverse selection patterns more parsimoniously than the step functions developed by @hedges1992modeling and @vevea1995general. Since the beta density can be unbounded near 0 and 1, they proposed truncating it to make the model computationally tractable, assuming constant selection probabilities for $p$-values in the range $[0, \alpha_1]$ and $[\alpha_2, 1]$. Given these pre-specified thresholds $\alpha_1$ and $\alpha_2$ and selection parameters $\boldsymbol\lambda = (\lambda_1, \lambda_2)$, the beta density selection function is expressed by
+\begin{equation}
+\label{eq:beta-density-p}
+w(p^*_i, \boldsymbol\lambda) =  \begin{cases} 
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad p^*_i \leq \alpha_1 \\
+\left(p^*_i\right)^{\lambda_1 - 1} (1 - p^*_i)^{\lambda_2 - 1} & \text{if} \quad \alpha_1 < p^*_i < \alpha_2 \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad \alpha_2 \leq p^*_i.
+\end{cases}
+\end{equation}
+Equation (\ref{eq:beta-density-p}) can be written equivalently as 
+\begin{equation}
+\label{eq:beta-density-y}
+w(Y^*_i / \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_1) \leq Y^*_i \\
+\left[\Phi\left(-Y^*_i / \sigma^*_i\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^*_i / \sigma^*_i\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_2) < Y^*_i < \sigma^*_i \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^*_i \leq \sigma^*_i \Phi^{-1}(1 - \alpha_2).
+\end{cases}
+\end{equation}
+
+@citkowicz2017parsimonious used extreme truncation points ($\alpha_1 = 10^{-5}$, $\alpha_2 = 1 - 10^{-5}$), but such choices can make the model overly sensitive to rare, extreme $p$-values, potentially producing implausible estimates [@hedges2017plausibility]. Using more moderate, psychologically salient thresholds such as $\alpha_1 = .025$ and $\alpha_2 = .975$ could potentially reduce this sensitivity and yield more plausible selection patterns.
+
+\@ref(fig:beta-functions) shows several shapes the beta density can assume. \@ref(fig:beta-functions)a. presents a typical situation in which strong preference is shown for highly significant one-sided $p$-values, where $\lambda_1 = 0.5$ and $\lambda_2 = 2.0$. \@ref(fig:beta-functions)b. presents $\lambda_1 = 1$ and $\lambda_2 = 1$, which signifies no selection.
+
+```{r beta-functions}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 3.5
+#| out.width: 49%
+#| fig.cap: "Examples of beta density functions"
+#| fig.subcap:
+#|    - "$Selection: \\lambda_1 = 0.5, \\lambda_2 = 2.0$"
+#|    - "$No selection: \\lambda_1 = 1, \\lambda_2 = 1$"
+#| fig.pos: tb 
+
+library(metaselection)
+library(ggplot2)
+
+pvals <- seq(0,1,0.005)
+beta_sel <- beta_fun(delta_1 = 0.5, delta_2 = 2.0, trunc_1 = 0.025, trunc_2 = 0.975)
+beta_none <- beta_fun(delta_1 = 1, delta_2 = 1, trunc_1 = 0.025, trunc_2 = 0.975)
+
+dat <- data.frame(p = pvals, strong = beta_sel(pvals), mild = beta_none(pvals))
+
+beta_sel <- 
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, 0.975), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = strong), fill = "darkred", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+beta_none <- 
+ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, 0.975), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = mild), fill = "purple", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+beta_sel
+beta_none
+```
+
+## Distribution of observed effect size estimates
+
+The combined model for the marginal density of an observed effect size estimate $Y$ with standard error $\sigma$ has the form
+\begin{equation}
+\label{eq:generic-selection}
+f(Y = y | \sigma, \mathbf{x}) = \frac{1}{A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)} \times w\left(y, \sigma; \boldsymbol\lambda \right) \times \frac{1}{\sqrt{\tau^2 + \sigma^2}} \phi\left(\frac{y - \mathbf{x} \boldsymbol\beta}{\sqrt{\tau^2 + \sigma^2}}\right),
+\end{equation}
+where 
+\begin{equation}
+\label{eq:generic-selection-A}
+A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) =  \int_\mathbb{R} w\left(y, \sigma; \boldsymbol\lambda \right) \times  \frac{1}{\sqrt{\tau^2 + \sigma^2}}\phi\left(\frac{y - \mathbf{x}\boldsymbol\beta}{\sqrt{\tau^2 + \sigma^2}}\right) dy.
+\end{equation}
+If $w(y, \sigma; \boldsymbol\lambda) = 1$, then $A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) = 1$ and there is no selective reporting, as depicted in \@ref(fig:beta-functions)b. The density then reduces to the unweighted density of the evidence-generating process and the $\boldsymbol\beta$ estimates from the adjusted beta function selection model will approximate those of the standard meta-analytic model.
+
+For the beta-function selection process, the $A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)$ term in the beta-function composite likelihood can be computed using the closed-form expression
+\begin{equation}
+\label{eq:beta-function-A}
+A_{ij} = A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) = \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} + E_Y(1 | \lambda_1,\lambda_2) + \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}
+\end{equation}
+where 
+\begin{equation}
+\label{eq:beta-function-Ey}
+E_Y\left[f(Y)| \lambda_1, \lambda_2\right] = \int_{\sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{\sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-Y / \sigma_{ij})\right]^{\lambda_1} \left[\Phi(Y / \sigma_{ij})\right]^{\lambda_2} \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY,
+\end{equation}
+$c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mathbf{x}_{ij}\boldsymbol\beta\right) / \sqrt{\tau^2 + \sigma_{ij}^2}$ for $h = 1,2$, $B_{0ij} = 1 - \Phi(c_{1ij})$, and $B_{2ij} = \Phi(c_{2ij})$ [@citkowicz2017parsimonious].
+
+## Estimation Method {#estimation-method}
+
+We estimate model parameters using maximum composite marginal likelihood (CML), which treats each observed effect size estimate as if it were marginally independent, following established composite likelihood approaches [e.g., @cox2004note; @lindsay1988composite; @varin2008composite]. Estimation proceeds by maximizing a weighted log-likelihood function defined over the marginal contributions of each observation, using reparameterizations of the variance and selection parameters. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper [@pustejovsky2025step], and the exact expressions used for estimating the beta-function selection model are presented in APPENDIX <!--`r appendix_prefix` \@ref(CML-derivatives). -->
+
+## Bootstrap inference
+
+To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We consider both the non-parametric clustered bootstrap and the fractional random weight bootstrap [@xu2020applications], which differ in how they preserve the dependence structure across clusters. Confidence intervals are then computed using standard bootstrap-based methods such as the percentile, basic, studentized, and bias-corrected-and-accelerated intervals [@davison1997bootstrap; @efron1987better]. These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly. Further details are included in APPENDIX <!--`r appendix_prefix` \@ref(bootstrap-CIs) --> provides further details about the bootstrap CI calculations.
+<!-- If we're only applying the bootstrap approaches we decided were best based on the step function simulations, we should adjust the list here and add a note about this. -->
