@@ -1,16 +1,16 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.20)  16 APR 2025 22:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.2)  17 APR 2025 15:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **selection_models_draft.tex
 (./selection_models_draft.tex
-LaTeX2e <2024-11-01> patch level 1
-L3 programming layer <2024-12-25>
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/apa7.cls
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/apa7.cls
 Document Class: apa7 2022/07/25 v2.16 APA formatting (7th edition)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count196
@@ -24,12 +24,12 @@ File: size12.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen141
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count270
 )
 Class apa7 Info: No bibliography package was specified; defaulting to (but not loading) Biblatex on input line 218.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
 Package: lmodern 2015/05/01 v1.6.1 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -63,19 +63,19 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 116.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2024/12/12 v1.0g TeX engine tests
 ))
 \Gm@cnth=\count271
@@ -90,24 +90,24 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 \Gm@layouthoffset=\dimen148
 \Gm@layoutvoffset=\dimen149
 \Gm@dimlist=\toks18
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 106.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen150
 \Gin@req@width=\dimen151
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/scalerel/scalerel.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/scalerel/scalerel.sty
 Package: scalerel 2016/12/29 v1.8 Routines for constrained scaling and stretching of objects, relative to a reference object or in absolute terms
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count274
 \calc@Bcount=\count275
@@ -127,22 +127,22 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \mnxsrwidth=\skip58
 \LMex=\skip59
 \LMpt=\skip60
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks19
 \pgfutil@tempdima=\dimen154
 \pgfutil@tempdimb=\dimen155
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
 \pgfutil@abb=\box52
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision.tex)
 Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
 ))
 Package: pgf 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
 Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks20
 \pgfkeys@temptoks=\toks21
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
 \pgfkeys@tmptoks=\toks22
 ))
 \pgf@x=\dimen156
@@ -165,27 +165,27 @@ Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
 \t@pgf@tokb=\toks24
 \t@pgf@tokc=\toks25
 \pgf@sys@id@count=\count281
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
 )
 Driver file for pgf: pgfsys-pdftex.def
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
 File: pgfsys-pdftex.def 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
 File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfsyssoftpath@smallbuffer@items=\count282
 \pgfsyssoftpath@bigbuffer@items=\count283
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
 File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 274.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
 Package xcolor Info: Model `RGB' extended on input line 1365.
@@ -195,18 +195,18 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
 Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen166
 \pgfmath@count=\count284
 \pgfmath@box=\box53
 \pgfmath@toks=\toks26
 \pgfmath@stack@operand=\toks27
 \pgfmath@stack@operation=\toks28
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count285
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@picminx=\dimen167
 \pgf@picmaxx=\dimen168
@@ -222,75 +222,75 @@ File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@yy=\dimen178
 \pgf@zx=\dimen179
 \pgf@zy=\dimen180
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@path@lastx=\dimen181
 \pgf@path@lasty=\dimen182
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
 File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@shorten@end@additional=\dimen183
 \pgf@shorten@start@additional=\dimen184
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
 File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfpic=\box54
 \pgf@hbox=\box55
 \pgf@layerbox@main=\box56
 \pgf@picture@serial@count=\count286
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgflinewidth=\dimen185
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
 File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@pt@x=\dimen186
 \pgf@pt@y=\dimen187
 \pgf@pt@temp=\dimen188
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
 File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
 File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
 File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfarrowsep=\dimen189
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@max=\dimen190
 \pgf@sys@shading@range@num=\count287
 \pgf@shadingcount=\count288
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
 File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfexternal@startupbox=\box57
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
 File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
 File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
 File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
 File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfnodeparttextbox=\box58
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
 File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
 Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
 \pgf@nodesepstart=\dimen191
 \pgf@nodesepend=\dimen192
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
 Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
 Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
 \pgffor@iter=\dimen193
 \pgffor@skip=\dimen194
 \pgffor@stack=\toks29
 \pgffor@toks=\toks30
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@plot@mark@count=\count289
 \pgfplotmarksize=\dimen195
@@ -311,60 +311,60 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikznumberofchildren=\count291
 \tikznumberofcurrentchild=\count292
 \tikz@fig@count=\count293
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfmatrixcurrentrow=\count294
 \pgfmatrixcurrentcolumn=\count295
 \pgf@matrix@numberofcolumns=\count296
 )
 \tikz@expandcount=\count297
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
+))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2024-11-05 v7.01l Hypertext links for LaTeX
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count298
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
 \@linkdim=\dimen260
 \Hy@linkcounter=\count299
 \Hy@pagecounter=\count300
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2024-11-05 v7.01l Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count301
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2024-11-05 v7.01l Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
@@ -378,15 +378,15 @@ Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
 \c@Hy@tempcnt=\count302
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4763.
 \XeTeXLinkMargin=\dimen261
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
 \Fld@menulength=\count303
@@ -399,7 +399,7 @@ Package hyperref Info: backreferencing OFF on input line 6057.
 Package hyperref Info: Link coloring OFF on input line 6062.
 Package hyperref Info: Link coloring with OCG OFF on input line 6067.
 Package hyperref Info: PDF/A mode OFF on input line 6072.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
@@ -408,27 +408,27 @@ package with kernel methods
 \c@Hfootnote=\count306
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2024-11-05 v7.01l Hyperref driver for pdfTeX
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 )
 \Fld@listcount=\count307
 \c@bookmark@seq@number=\count308
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
 \Hy@SectionHShift=\skip61
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
 File: tikzlibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
 File: pgflibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
 File: pgfmoduleparser.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfparserdef@arg@count=\count309
 )
@@ -438,7 +438,7 @@ File: pgfmoduleparser.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@lib@svg@last@c@y=\dimen267
 \pgf@lib@svg@count=\count310
 \pgf@lib@svg@max@num=\count311
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen268
 \lightrulewidth=\dimen269
@@ -457,7 +457,7 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count314
 \@lastruleclass=\count315
 \@thisrulewidth=\dimen280
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
 \@tempboxb=\box63
 )
@@ -471,9 +471,9 @@ Package: threeparttable 2003/06/13  v 3.0
 \e@level@four@skip=\skip69
 \b@level@five@skip=\skip70
 \e@level@five@skip=\skip71
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen281
 \captionmargin=\dimen282
@@ -495,7 +495,7 @@ Package caption Info: threeparttable package is loaded.
 \gr@box=\box64
 \gr@boxwidth=\skip73
 \gr@boxheight=\skip74
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty
 Package: bm 2023/12/19 v1.2f Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup4
 \symboldletters=\mathgroup5
@@ -504,8 +504,8 @@ Package bm Info: No bold for \OMX/lmex/m/n, using \pmb.
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
 )
 \c@appendix=\count319
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-Package: fancyhdr 2025/01/07 v5.1.1 Extensive control of page headers and footers
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@headwidth=\skip75
 \f@nch@offset@elh=\skip76
 \f@nch@offset@erh=\skip77
@@ -521,7 +521,7 @@ Package: fancyhdr 2025/01/07 v5.1.1 Extensive control of page headers and footer
 \f@nch@widthC=\skip87
 \f@nch@widthR=\skip88
 \@temptokenb=\toks31
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/endfloat/endfloat.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/endfloat/endfloat.sty
 Package: endfloat 2019/04/15 v2.7 LaTeX2e package puts figures and tables at end (jdm)
 \c@posttable=\count320
 \efloat@postttt=\write4
@@ -529,28 +529,28 @@ Package: endfloat 2019/04/15 v2.7 LaTeX2e package puts figures and tables at end
 \c@postfigure=\count322
 \efloat@postfff=\write5
 \@ef@fffopen=\count323
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count324
 \float@exts=\toks32
 \float@box=\box65
 \@float@everytoks=\toks33
 \@floatcapt=\box66
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2024/11/05 v2.17t AMS math features
 \@mathmargin=\skip89
 For additional information on amsmath, use the `?' option.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks34
 \ex@=\dimen289
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 LaTeX Info: Redefining \boldsymbol on input line 28.
 \pmbraise@=\dimen290
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count325
@@ -600,156 +600,184 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks38
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup7
 \symAMSb=\mathgroup8
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks39
 \inpenc@posthook=\toks40
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2025/02/11 v3.2a Micro-typographical refinements (RS)
+\MT@toks=\toks41
+\MT@tempbox=\box69
+\MT@count=\count337
+LaTeX Info: Redefining \noprotrusionifhmode on input line 1087.
+LaTeX Info: Redefining \leftprotrusion on input line 1088.
+\MT@prot@toks=\toks42
+LaTeX Info: Redefining \rightprotrusion on input line 1107.
+LaTeX Info: Redefining \textls on input line 1449.
+\MT@outer@kern=\dimen298
+LaTeX Info: Redefining \microtypecontext on input line 2053.
+LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
+\MT@listname@count=\count338
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype-pdftex.def
+File: microtype-pdftex.def 2025/02/11 v3.2a Definitions specific to pdftex (RS)
+LaTeX Info: Redefining \lsstyle on input line 944.
+LaTeX Info: Redefining \lslig on input line 944.
+\MT@outer@space=\skip92
 )
-\cslhangindent=\skip92
-\csllabelwidth=\skip93
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2025/01/01 v25.1 The multilingual framework for pdfLaTeX, LuaLaTeX and XeLaTeX
-\babel@savecnt=\count337
-\U@D=\dimen298
-\l@unhyphenated=\language5
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/txtbabel.def)
+Package microtype Info: Loading configuration file microtype.cfg.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2025/02/11 v3.2a microtype main configuration file (RS)
+)
+LaTeX Info: Redefining \microtypesetup on input line 3065.
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/parskip/parskip.sty
+Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
+)
+\cslhangindent=\skip93
+\csllabelwidth=\skip94
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2025/03/27 v25.6 The multilingual framework for pdfLaTeX, LuaLaTeX and XeLaTeX
+\babel@savecnt=\count339
+\U@D=\dimen299
+\l@unhyphenated=\language6
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read3
-\bbl@dirlevel=\count338
+\bbl@dirlevel=\count340
 Package babel Info: You haven't specified a language as a class or package
-(babel)             option. I'll load 'nil'. Reported on input line 4184.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
-Language: nil 2025/01/01 v25.1 Nil language
-\l@nil=\language6
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/locale/en/babel-american.tex)
+(babel)             option. I'll load 'nil'. Reported on input line 4213.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
+Language: nil 2025/03/27 v25.6 Nil language
+\l@nil=\language7
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/locale/en/babel-american.tex)
 Package babel Info: Importing data for american
 (babel)             from babel-en-US.ini. Reported on input line 117.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/was/upgreek.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/was/upgreek.sty
 Package: upgreek 2003/02/12 v2.0 (WaS)
 Package upgreek Info: Using Euler Roman for upright Greek on input line 31.
 \symugrf@m=\mathgroup9
 LaTeX Font Info:    Overwriting symbol font `ugrf@m' in version `bold'
 (Font)                  U/eur/m/n --> U/eur/b/n on input line 38.
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2024-10-27 v4.22 Multi-page Table package (DPC)
-\LTleft=\skip94
-\LTright=\skip95
-\LTpre=\skip96
-\LTpost=\skip97
-\LTchunksize=\count339
-\LTcapwidth=\dimen299
-\LT@head=\box69
-\LT@firsthead=\box70
-\LT@foot=\box71
-\LT@lastfoot=\box72
-\LT@gbox=\box73
-\LT@cols=\count340
-\LT@rows=\count341
-\c@LT@tables=\count342
-\c@LT@chunks=\count343
-\LT@p@ftn=\toks41
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
+\LTleft=\skip95
+\LTright=\skip96
+\LTpre=\skip97
+\LTpost=\skip98
+\LTchunksize=\count341
+\LTcapwidth=\dimen300
+\LT@head=\box70
+\LT@firsthead=\box71
+\LT@foot=\box72
+\LT@lastfoot=\box73
+\LT@gbox=\box74
+\LT@cols=\count342
+\LT@rows=\count343
+\c@LT@tables=\count344
+\c@LT@chunks=\count345
+\LT@p@ftn=\toks43
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
-\multirow@colwidth=\skip98
-\multirow@cntb=\count344
-\multirow@dima=\skip99
-\bigstrutjot=\dimen300
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
+\multirow@colwidth=\skip99
+\multirow@cntb=\count346
+\multirow@dima=\skip100
+\bigstrutjot=\dimen301
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2024/10/17 v2.6g Tabular extension package (FMi)
-\col@sep=\dimen301
-\ar@mcellbox=\box74
-\extrarowheight=\dimen302
-\NC@list=\toks42
-\extratabsurround=\skip100
-\backup@length=\skip101
-\ar@cellbox=\box75
+\col@sep=\dimen302
+\ar@mcellbox=\box75
+\extrarowheight=\dimen303
+\NC@list=\toks44
+\extratabsurround=\skip101
+\backup@length=\skip102
+\ar@cellbox=\box76
 )
-\TX@col@width=\dimen303
-\TX@old@table=\dimen304
-\TX@old@col=\dimen305
-\TX@target=\dimen306
-\TX@delta=\dimen307
-\TX@cols=\count345
-\TX@ftn=\toks43
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
+\TX@col@width=\dimen304
+\TX@old@table=\dimen305
+\TX@old@col=\dimen306
+\TX@target=\dimen307
+\TX@delta=\dimen308
+\TX@cols=\count347
+\TX@ftn=\toks45
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
 Package: threeparttablex 2013/07/23 v0.3 by daleif
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
-\TPTL@width=\skip102
+\TPTL@width=\skip103
 )
-\longtablewidth=\skip103
+\longtablewidth=\skip104
 Failed to patch abstract.
 Failed to patch title.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2024-12-25 L3 programming layer (loader) 
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2025-01-18 L3 programming layer (loader) 
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count346
-\l__pdf_internal_box=\box76
+\l__color_backend_stack_int=\count348
+\l__pdf_internal_box=\box77
 ))
 Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2024-08-16 L3 Experimental document command parser
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2024-04-04 v5.2o context-sensitive quotations (JAW)
-\csq@reset=\count347
-\csq@gtype=\count348
-\csq@glevel=\count349
-\csq@qlevel=\count350
-\csq@maxlvl=\count351
-\csq@tshold=\count352
-\csq@ltx@everypar=\toks44
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.def
+\csq@reset=\count349
+\csq@gtype=\count350
+\csq@glevel=\count351
+\csq@qlevel=\count352
+\csq@maxlvl=\count353
+\csq@tshold=\count354
+\csq@ltx@everypar=\toks46
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2024-04-04 v5.2o csquotes generic definitions (JAW)
 )
 Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.cfg
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.cfg
 File: csquotes.cfg 
-)) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
+)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2024/09/14 v1.9i multicolumn formatting (FMi)
-\c@tracingmulticols=\count353
-\mult@box=\box77
-\multicol@leftmargin=\dimen308
-\c@unbalance=\count354
-\c@collectmore=\count355
-\doublecol@number=\count356
-\multicoltolerance=\count357
-\multicolpretolerance=\count358
-\full@width=\dimen309
-\page@free=\dimen310
-\premulticols=\dimen311
-\postmulticols=\dimen312
-\multicolsep=\skip104
-\multicolbaselineskip=\skip105
-\partial@page=\box78
-\last@line=\box79
-\mc@boxedresult=\box80
-\maxbalancingoverflow=\dimen313
-\mult@rightbox=\box81
-\mult@grightbox=\box82
-\mult@firstbox=\box83
-\mult@gfirstbox=\box84
-\@tempa=\box85
+\c@tracingmulticols=\count355
+\mult@box=\box78
+\multicol@leftmargin=\dimen309
+\c@unbalance=\count356
+\c@collectmore=\count357
+\doublecol@number=\count358
+\multicoltolerance=\count359
+\multicolpretolerance=\count360
+\full@width=\dimen310
+\page@free=\dimen311
+\premulticols=\dimen312
+\postmulticols=\dimen313
+\multicolsep=\skip105
+\multicolbaselineskip=\skip106
+\partial@page=\box79
+\last@line=\box80
+\mc@boxedresult=\box81
+\maxbalancingoverflow=\dimen314
+\mult@rightbox=\box82
+\mult@grightbox=\box83
+\mult@firstbox=\box84
+\mult@gfirstbox=\box85
 \@tempa=\box86
 \@tempa=\box87
 \@tempa=\box88
@@ -785,68 +813,69 @@ Package: multicol 2024/09/14 v1.9i multicolumn formatting (FMi)
 \@tempa=\box118
 \@tempa=\box119
 \@tempa=\box120
-\c@minrows=\count359
-\c@columnbadness=\count360
-\c@finalcolumnbadness=\count361
-\last@try=\dimen314
-\multicolovershoot=\dimen315
-\multicolundershoot=\dimen316
-\mult@nat@firstbox=\box121
-\colbreak@box=\box122
-\mc@col@check@num=\count362
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
+\@tempa=\box121
+\c@minrows=\count361
+\c@columnbadness=\count362
+\c@finalcolumnbadness=\count363
+\last@try=\dimen315
+\multicolovershoot=\dimen316
+\multicolundershoot=\dimen317
+\mult@nat@firstbox=\box122
+\colbreak@box=\box123
+\mc@col@check@num=\count364
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2020/05/29 v2.20.6
-\thm@style=\toks45
-\thm@bodyfont=\toks46
-\thm@headfont=\toks47
-\thm@notefont=\toks48
-\thm@headpunct=\toks49
-\thm@preskip=\skip106
-\thm@postskip=\skip107
-\thm@headsep=\skip108
-\dth@everypar=\toks50
+\thm@style=\toks47
+\thm@bodyfont=\toks48
+\thm@headfont=\toks49
+\thm@notefont=\toks50
+\thm@headpunct=\toks51
+\thm@preskip=\skip107
+\thm@postskip=\skip108
+\thm@headsep=\skip109
+\dth@everypar=\toks52
 )
-\c@thm=\count363
-\c@lem=\count364
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/subfig/subfig.sty
+\c@thm=\count365
+\c@lem=\count366
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
-\c@KVtest=\count365
-\sf@farskip=\skip109
-\sf@captopadj=\dimen317
-\sf@capskip=\skip110
-\sf@nearskip=\skip111
-\c@subfigure=\count366
-\c@subfigure@save=\count367
-\c@lofdepth=\count368
-\c@subtable=\count369
-\c@subtable@save=\count370
-\c@lotdepth=\count371
-\sf@top=\skip112
-\sf@bottom=\skip113
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/rotating.sty
+\c@KVtest=\count367
+\sf@farskip=\skip110
+\sf@captopadj=\dimen318
+\sf@capskip=\skip111
+\sf@nearskip=\skip112
+\c@subfigure=\count368
+\c@subfigure@save=\count369
+\c@lofdepth=\count370
+\c@subtable=\count371
+\c@subtable@save=\count372
+\c@lotdepth=\count373
+\sf@top=\skip113
+\sf@bottom=\skip114
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/rotating.sty
 Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 )
-\c@r@tfl@t=\count372
-\rotFPtop=\skip114
-\rotFPbot=\skip115
-\rot@float@box=\box123
-\rot@mess@toks=\toks51
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.sty
+\c@r@tfl@t=\count374
+\rotFPtop=\skip115
+\rotFPbot=\skip116
+\rot@float@box=\box124
+\rot@mess@toks=\toks53
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
-) (c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO)
-\BKM@id=\count373
+\BKM@id=\count375
 ))
-\c@NumberOfAuthors=\count374
-\c@NumberOfSuperscripts=\count375
+\c@NumberOfAuthors=\count376
+\c@NumberOfSuperscripts=\count377
 
-Class apa7 Warning: Deprecated: see documentation for \authorsaffiliations on input line 245.
+Class apa7 Warning: Deprecated: see documentation for \authorsaffiliations on input line 243.
 
-\c@NumberOfAffiliations=\count376
+\c@NumberOfAffiliations=\count378
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -854,24 +883,24 @@ Package csquotes Info: Redefining alias 'default' -> 'american'.
 (./selection_models_draft.aux)
 \openout1 = `selection_models_draft.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 255.
-LaTeX Font Info:    ... okay on input line 255.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 253.
+LaTeX Font Info:    ... okay on input line 253.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -906,57 +935,86 @@ LaTeX Font Info:    ... okay on input line 255.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 255.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/config/APA7american.txt
+Package hyperref Info: Link coloring OFF on input line 253.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/config/APA7american.txt
 File: APA7american.txt 2020/12/02 v1.02 apa7 configuration for American English
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: longtable package is loaded.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
+LaTeX Info: Redefining \microtypecontext on input line 253.
+Package microtype Info: Applying patch `item' on input line 253.
+Package microtype Info: Applying patch `toc' on input line 253.
+Package microtype Info: Applying patch `eqnum' on input line 253.
+
+Package microtype Warning: Unable to apply patch `footnote' on input line 253.
+
+Package microtype Info: Applying patch `verbatim' on input line 253.
+LaTeX Info: Redefining \microtypesetup on input line 253.
+Package microtype Info: Generating PDF output.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using protrusion set `basicmath'.
+Package microtype Info: Automatic font expansion enabled (level 2),
+(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
+Package microtype Info: Using default expansion set `alltext-nott'.
+LaTeX Info: Redefining \showhyphens on input line 253.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of interword spacing.
+Package microtype Info: No adjustment of character kerning.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
+)
+Couldn't patch \deferred@thm@head!
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 256.
+(Font)              <12> on input line 254.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 256.
+(Font)              <8> on input line 254.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 256.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+(Font)              <6> on input line 254.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 256.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+LaTeX Font Info:    Trying to load font information for U+msb on input line 254.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-eur.cfg
+File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 )
 
-[1{c:/Users/James/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
+[1{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 
 ]
 
@@ -964,14 +1022,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 [3]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 270.
+(Font)              <10> on input line 268.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 270.
+(Font)              <7> on input line 268.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 270.
+(Font)              <5> on input line 268.
 
 
-[4{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
+[4{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
 
 [5]
 
@@ -983,18 +1041,18 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 [9]
 
-[10{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
+[10{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
 
 [11]
 <selection_models_draft_files/figure-latex/step-functions-1.pdf, id=88, 361.35pt x 252.945pt>
 File: selection_models_draft_files/figure-latex/step-functions-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/step-functions-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/step-functions-1.pdf  used on input line 401.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/step-functions-1.pdf  used on input line 399.
 (pdftex.def)             Requested size: 230.18251pt x 161.12776pt.
 <selection_models_draft_files/figure-latex/step-functions-2.pdf, id=89, 361.35pt x 252.945pt>
 File: selection_models_draft_files/figure-latex/step-functions-2.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/step-functions-2.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/step-functions-2.pdf  used on input line 401.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/step-functions-2.pdf  used on input line 399.
 (pdftex.def)             Requested size: 230.18251pt x 161.12776pt.
 
 
@@ -1017,8 +1075,8 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/step-function
 [20]
 
 [21]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 602.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 600.
+(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 
@@ -1033,7 +1091,7 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 [26]
 
 [27]
-Overfull \hbox (12.50217pt too wide) in paragraph at lines 764--778
+Overfull \hbox (12.50217pt too wide) in paragraph at lines 762--776
  [][] 
  []
 
@@ -1047,7 +1105,7 @@ Overfull \hbox (12.50217pt too wide) in paragraph at lines 764--778
 <selection_models_draft_files/figure-latex/mu-bias-1.pdf, id=263, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/mu-bias-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/mu-bias-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-bias-1.pdf  used on input line 842.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-bias-1.pdf  used on input line 840.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
 
 
@@ -1057,7 +1115,7 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-bias-1.pdf
 <selection_models_draft_files/figure-latex/mu-rmse-1.pdf, id=288, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/mu-rmse-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/mu-rmse-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-rmse-1.pdf  used on input line 865.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-rmse-1.pdf  used on input line 863.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
 
 
@@ -1069,7 +1127,7 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/mu-rmse-1.pdf
 <selection_models_draft_files/figure-latex/comparison-coverage-1.pdf, id=332, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/comparison-coverage-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/comparison-coverage-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-1.pdf  used on input line 903.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-1.pdf  used on input line 901.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
 
 
@@ -1079,7 +1137,7 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-co
 <selection_models_draft_files/figure-latex/CML-coverage-1.pdf, id=359, 722.7pt x 397.485pt>
 File: selection_models_draft_files/figure-latex/CML-coverage-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/CML-coverage-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-1.pdf  used on input line 914.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-1.pdf  used on input line 912.
 (pdftex.def)             Requested size: 650.43501pt x 357.73926pt.
 
 
@@ -1121,87 +1179,87 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1304 \end{align}
+l.1317 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1308 \begin{equation}
+l.1321 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1308 \begin{equation}
+l.1321 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1308 \begin{equation}
+l.1321 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1308 \begin{equation}
+l.1321 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1325 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1325 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1325 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1325 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1329 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1329 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1329 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1329 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1329 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1329 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1329 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.8}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1329 \end{align}
+l.1342 \end{align}
                   
 
 [56
@@ -1210,57 +1268,57 @@ l.1329 \end{align}
 pdfTeX warning (ext4): destination with the same identifier (name{equation.9}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.12}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.13}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.14}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1342 \end{align}
+l.1355 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.15}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1350 \end{align}
+l.1363 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.16}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1350 \end{align}
+l.1363 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.17}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1350 \end{align}
+l.1363 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.18}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1350 \end{align}
+l.1363 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.19}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1350 \end{align}
+l.1363 \end{align}
                   
 
 [57]
@@ -1269,42 +1327,42 @@ l.1350 \end{align}
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1358 \begin{equation}
+l.1371 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1358 \begin{equation}
+l.1371 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1358 \begin{equation}
+l.1371 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1358 \begin{equation}
+l.1371 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1364 \begin{equation}
+l.1377 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1364 \begin{equation}
+l.1377 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1364 \begin{equation}
+l.1377 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1364 \begin{equation}
+l.1377 \begin{equation}
                        
 
 [59
@@ -1318,50 +1376,50 @@ l.1364 \begin{equation}
 ]
 
 [62]
-<selection_models_draft_files/figure-latex/convergence-rates-1.pdf, id=662, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/convergence-rates-1.pdf, id=665, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/convergence-rates-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/convergence-rates-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/convergence-rates-1.pdf  used on input line 1433.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/convergence-rates-1.pdf  used on input line 1446.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf, id=663, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf, id=666, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1437.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1450.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf, id=664, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf, id=667, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1441.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1454.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=665, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=668, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1445.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1458.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf, id=666, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf, id=669, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1449.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1462.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf, id=667, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf, id=670, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1453.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1466.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf, id=668, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf, id=671, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1457.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1470.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf, id=669, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf, id=672, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf  used on input line 1461.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf  used on input line 1474.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf, id=670, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf, id=673, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf  used on input line 1465.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf  used on input line 1478.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
 
 
@@ -1386,30 +1444,30 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-coverage
 [71 <./selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf>]
 
 [72 <./selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf>]
-<selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf, id=796, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf, id=799, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1471.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1484.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf, id=797, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf, id=800, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1475.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1488.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=798, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=801, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1478.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1491.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=799, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=802, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1482.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1495.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=800, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=803, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1486.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1499.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
 
 
@@ -1426,30 +1484,30 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity
 [77 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>]
 
 [78 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>]
-<selection_models_draft_files/figure-latex/selection-bias-1.pdf, id=876, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/selection-bias-1.pdf, id=879, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/selection-bias-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-bias-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-bias-1.pdf  used on input line 1492.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-bias-1.pdf  used on input line 1505.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/selection-rmse-1.pdf, id=877, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/selection-rmse-1.pdf, id=880, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/selection-rmse-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-rmse-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-1.pdf  used on input line 1496.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-1.pdf  used on input line 1509.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=878, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=881, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1500.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1513.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf, id=879, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf, id=882, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf  used on input line 1504.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf  used on input line 1517.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf, id=880, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf, id=883, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf  used on input line 1508.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf  used on input line 1521.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
 AED endfloat: Processing end Figures and Tables
 
@@ -1467,18 +1525,18 @@ AED endfloat: Processing end Figures and Tables
 
 [84 <./selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf>] (./selection_models_draft.aux)
  ***********
-LaTeX2e <2024-11-01> patch level 1
+LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 27950 strings out of 475177
- 534573 string characters out of 5764471
- 931136 words of memory out of 5000000
- 50138 multiletter control sequences out of 15000+600000
- 639456 words of font info for 108 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 99i,14n,107p,1577b,611s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 30186 strings out of 475110
+ 579291 string characters out of 5761178
+ 997292 words of memory out of 5000000
+ 52167 multiletter control sequences out of 15000+600000
+ 648975 words of font info for 206 fonts, out of 8000000 for 9000
+ 36 hyphenation exceptions out of 8191
+ 99i,14n,105p,1752b,623s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.5} has been referenced but does not exist, replaced by a fixed one
 
@@ -1494,11 +1552,11 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
-<c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on selection_models_draft.pdf (84 pages, 1902519 bytes).
+<c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on selection_models_draft.pdf (84 pages, 1909486 bytes).
 PDF statistics:
- 1238 PDF objects out of 1440 (max. 8388607)
- 1038 compressed objects within 11 object streams
- 272 named destinations out of 1000 (max. 500000)
- 418 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1250 PDF objects out of 1440 (max. 8388607)
+ 1050 compressed objects within 11 object streams
+ 275 named destinations out of 1000 (max. 500000)
+ 43450 words of extra memory for PDF output out of 51595 (max. 10000000)
 
