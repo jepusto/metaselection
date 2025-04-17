@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.20)  16 APR 2025 16:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.20)  16 APR 2025 22:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1096,12 +1096,8 @@ Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-
 [43]
 
 [44]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1008.
-(c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
 
-[45{c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+[45]
 
 [46]
 
@@ -1120,47 +1116,59 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 [53]
 
 [54]
+
+[55]
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1308 \end{align}
+l.1304 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1308 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1308 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1312 \begin{equation}
+l.1308 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
+l.1308 \begin{equation}
+                       
+pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
 l.1312 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1312 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1316 \begin{equation}
+l.1312 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
+l.1312 \begin{equation}
+                       
+pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
 l.1316 \begin{equation}
                        
-pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.1316 \begin{equation}
@@ -1168,317 +1176,307 @@ l.1316 \begin{equation}
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1320 \begin{equation}
+l.1316 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1320 \begin{equation}
-                       
-pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1320 \begin{equation}
-                       
-pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1320 \begin{equation}
+l.1316 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1333 \end{align}
+l.1329 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1333 \end{align}
+l.1329 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1333 \end{align}
+l.1329 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.8}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1333 \end{align}
+l.1329 \end{align}
                   
 
-[55
+[56
 
 ]
 pdfTeX warning (ext4): destination with the same identifier (name{equation.9}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.12}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.13}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.14}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1346 \end{align}
+l.1342 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.15}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1354 \end{align}
+l.1350 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.16}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1354 \end{align}
+l.1350 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.17}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1354 \end{align}
+l.1350 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.18}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1354 \end{align}
+l.1350 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.19}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1354 \end{align}
+l.1350 \end{align}
                   
 
-[56]
-
 [57]
+
+[58]
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1362 \begin{equation}
-                       
-pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1362 \begin{equation}
-                       
-pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1362 \begin{equation}
+l.1358 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1362 \begin{equation}
+l.1358 \begin{equation}
+                       
+pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1358 \begin{equation}
+                       
+pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1358 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1368 \begin{equation}
+l.1364 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1368 \begin{equation}
+l.1364 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1368 \begin{equation}
+l.1364 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1368 \begin{equation}
+l.1364 \begin{equation}
                        
 
-[58
+[59
 
 ]
 
-[59]
+[60]
 
-[60
+[61
 
 ]
 
-[61]
-<selection_models_draft_files/figure-latex/convergence-rates-1.pdf, id=657, 722.7pt x 542.025pt>
+[62]
+<selection_models_draft_files/figure-latex/convergence-rates-1.pdf, id=662, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/convergence-rates-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/convergence-rates-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/convergence-rates-1.pdf  used on input line 1437.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/convergence-rates-1.pdf  used on input line 1433.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf, id=658, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf, id=663, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1441.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1437.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf, id=659, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf, id=664, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1445.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1441.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=660, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=665, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1449.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1445.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf, id=661, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf, id=666, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1453.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1449.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf, id=662, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf, id=667, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1457.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1453.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf, id=663, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf, id=668, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1461.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1457.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf, id=664, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf, id=669, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf  used on input line 1465.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf  used on input line 1461.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf, id=665, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf, id=670, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf  used on input line 1469.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf  used on input line 1465.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
 
 
-[62
+[63
 
 ]
 
-[63 <./selection_models_draft_files/figure-latex/convergence-rates-1.pdf>]
+[64 <./selection_models_draft_files/figure-latex/convergence-rates-1.pdf>]
 
-[64 <./selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf>]
+[65 <./selection_models_draft_files/figure-latex/rmse-ARGL-CML-1.pdf>]
 
-[65 <./selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf>]
+[66 <./selection_models_draft_files/figure-latex/rmse-CHE-CML-1.pdf>]
 
-[66 <./selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf>]
+[67 <./selection_models_draft_files/figure-latex/rmse-CHE-ARGL-1.pdf>]
 
-[67 <./selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf>]
+[68 <./selection_models_draft_files/figure-latex/rmse-PET-CML-1.pdf>]
 
-[68 <./selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf>]
+[69 <./selection_models_draft_files/figure-latex/rmse-PET-ARGL-1.pdf>]
 
-[69 <./selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf>]
+[70 <./selection_models_draft_files/figure-latex/comparison-coverage-full-1.pdf>]
 
-[70 <./selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf>]
+[71 <./selection_models_draft_files/figure-latex/CML-coverage-full-1.pdf>]
 
-[71 <./selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf>]
-<selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf, id=791, 722.7pt x 469.755pt>
+[72 <./selection_models_draft_files/figure-latex/ARGL-coverage-full-1.pdf>]
+<selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf, id=796, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1475.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1471.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf, id=792, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf, id=797, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1479.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1475.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=793, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=798, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1482.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1478.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=794, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=799, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1486.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1482.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=795, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=800, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1490.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1486.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
 
 
-[72
+[73
 
 ]
 
-[73 <./selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf>]
+[74 <./selection_models_draft_files/figure-latex/heterogeneity-bias-1.pdf>]
 
-[74 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf>]
+[75 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-1.pdf>]
 
-[75 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>]
+[76 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>]
 
-[76 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>]
+[77 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>]
 
-[77 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>]
-<selection_models_draft_files/figure-latex/selection-bias-1.pdf, id=871, 722.7pt x 469.755pt>
+[78 <./selection_models_draft_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>]
+<selection_models_draft_files/figure-latex/selection-bias-1.pdf, id=876, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/selection-bias-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-bias-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-bias-1.pdf  used on input line 1496.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-bias-1.pdf  used on input line 1492.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/selection-rmse-1.pdf, id=872, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/selection-rmse-1.pdf, id=877, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/selection-rmse-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-rmse-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-1.pdf  used on input line 1500.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-1.pdf  used on input line 1496.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=873, 722.7pt x 542.025pt>
+<selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=878, 722.7pt x 542.025pt>
 File: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1504.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1500.
 (pdftex.def)             Requested size: 650.43501pt x 487.82625pt.
-<selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf, id=874, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf, id=879, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf  used on input line 1508.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf  used on input line 1504.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
-<selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf, id=875, 722.7pt x 469.755pt>
+<selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf, id=880, 722.7pt x 469.755pt>
 File: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf Graphic file (type pdf)
 <use selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf>
-Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf  used on input line 1512.
+Package pdftex.def Info: selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf  used on input line 1508.
 (pdftex.def)             Requested size: 650.43501pt x 422.78276pt.
 AED endfloat: Processing end Figures and Tables
 
-[78
+[79
 
 ]
 
-[79 <./selection_models_draft_files/figure-latex/selection-bias-1.pdf>]
+[80 <./selection_models_draft_files/figure-latex/selection-bias-1.pdf>]
 
-[80 <./selection_models_draft_files/figure-latex/selection-rmse-1.pdf>]
+[81 <./selection_models_draft_files/figure-latex/selection-rmse-1.pdf>]
 
-[81 <./selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>]
+[82 <./selection_models_draft_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>]
 
-[82 <./selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf>]
+[83 <./selection_models_draft_files/figure-latex/CML-zeta-coverage-full-1.pdf>]
 
-[83 <./selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf>] (./selection_models_draft.aux)
+[84 <./selection_models_draft_files/figure-latex/ARGL-zeta-coverage-full-1.pdf>] (./selection_models_draft.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 27984 strings out of 475177
- 535507 string characters out of 5764471
- 931103 words of memory out of 5000000
- 50169 multiletter control sequences out of 15000+600000
- 639831 words of font info for 109 fonts, out of 8000000 for 9000
+ 27950 strings out of 475177
+ 534573 string characters out of 5764471
+ 931136 words of memory out of 5000000
+ 50138 multiletter control sequences out of 15000+600000
+ 639456 words of font info for 108 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  99i,14n,107p,1577b,611s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
@@ -1497,10 +1495,10 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/James/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on selection_models_draft.pdf (83 pages, 1901929 bytes).
+Output written on selection_models_draft.pdf (84 pages, 1902519 bytes).
 PDF statistics:
- 1235 PDF objects out of 1440 (max. 8388607)
- 1035 compressed objects within 11 object streams
- 270 named destinations out of 1000 (max. 500000)
+ 1238 PDF objects out of 1440 (max. 8388607)
+ 1038 compressed objects within 11 object streams
+ 272 named destinations out of 1000 (max. 500000)
  418 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -333,7 +333,7 @@ The remainder of the paper is organized as follows.
 In the next section, we describe the step-function selection model and detail our estimation and inference strategies.
 In the following section, we illustrate the methods by re-analyzing data from a previously reported meta-analysis.
 In subsequent sections, we describe the methods and results from a simulation study that rigorously evaluates the estimators and confidence intervals across a wide range of meta-analytic conditions.
-In the final section, we discuss findings, limitations, and implications for practice.
+In the final section, we discuss findings, limitations, and initial implications for practice.
 
 \section{Models and Estimation Methods}\label{model-and-estimation}
 
@@ -994,27 +994,20 @@ We have not directly evaluated how well the estimators work as diagnostic \emph{
 In univariate random effects models, likelihood ratio tests based on step-function selection models have been found to provide much stronger power for detecting selective reporting compared to alternatives such as Egger's regression or non-parametric symmetry tests (Pustejovsky \& Rodgers, 2019).
 Extension of such tests for meta-analyses of dependent effect sizes requires further development.
 
-\subsection{Implications for Practice}\label{implications-for-practice}
+\subsection{Conclusions}\label{conclusions}
 
 The potential for selective reporting of primary study results to distort and create biases in meta-analytic results is simultaneously of great concern to meta-analysts and a vexing problem to address---even in the simpler context of meta-analysis of independent effects (i.e., when each sample reports at most a single effect size estimate).
 The challenge of detecting and adjusting for bias from selective reporting is all the more challenging in a corpus of primary study results that includes dependent effect sizes.
 Nonetheless, meta-analysts must critically evaluate the evidence summarized in a synthesis, and this includes weighing the potential for bias from selective reporting and selective publication.
 
-Considering both the simulation results and the limitations that we have described, we
+Based on the simulation results we have presented, we recommend that researchers add step function selection models with clustered bootstrap confidence intervals to the toolkit ---currently, quite a limited one---of methods for investigating selective reporting bias in syntheses of dependent effect sizes.
+As a parametric model that makes specific assumptions about the selection process, marginal step function models provide a useful complement to more agnostic techniques for identifying small-study effects, such as funnel plots and regression adjustment methods, the bias and accuracy of which are quite variable across data-generating processes.
+Likewise, estimated step functions could inform the sensitivity analysis approach proposed by Mathur and VanderWeele (2020), by using estimates of the strength of selection to inform assumptions about the maximal plausible degree of selection.
 
-\begin{itemize}
-\tightlist
-\item
-  Current practice is spaghetti-against-the-wall.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Past methodological work indicates that the performance of most available bias-correction methods is variable
-  \item
-    Carter et al., McShane et al.~argue that there needs to be more discerning use of bias-correction methods, with attention to the conditions under which a given method provides credible adjusted estimates.
-  \end{itemize}
-\end{itemize}
+Consistent with recommendations from past work in the context of independent effect sizes (Carter et al., 2019; McShane et al., 2016), interpretation of any bias-corrected effect estimates needs to give consideration to the conditions under which the estimation method could be expected to perform well.
+Interpretation of marginal step-function models should focus mostly on the bias-adjusted average effect size, and selection parameter estimates should be interpreted cautiously in light of the poor performance of their cluster bootstrapped confidence intervals.
+More broadly, it is critical that meta-analysts applying and interpreting step function models do so while also considering the context of the evidence included in the synthesis, such as whether the effect size estimates are for focal results or merely incidental findings and whether studies were conducted under conditions where pressures to selectively reporting findings are present.
+As with inferences from any statistical model, one's conclusions should be informed by knowledge of the
 
 \section*{Author Contributions}\label{author-contributions}
 \addcontentsline{toc}{section}{Author Contributions}
@@ -1171,6 +1164,9 @@ Marks‐Anglin, A., \& Chen, Y. (2020). A historical review of publication bias.
 
 \bibitem[\citeproctext]{ref-mathur2020sensitivity}
 Mathur, M. B., \& VanderWeele, T. J. (2020). Sensitivity analysis for publication bias in meta‐analyses. \emph{Journal of the Royal Statistical Society: Series C (Applied Statistics)}, \emph{69}(5), 1091--1119. \url{https://doi.org/10.1111/rssc.12440}
+
+\bibitem[\citeproctext]{ref-mcshane2016adjusting}
+McShane, B. B., Böckenholt, U., \& Hansen, K. T. (2016). Adjusting for publication bias in meta-analysis an evaluation of selection methods and some cautionary notes. \emph{Perspectives on Psychological Science}, \emph{11}(5), 730--749. \url{http://pps.sagepub.com/content/11/5/730.short}
 
 \bibitem[\citeproctext]{ref-moreno2012generalized}
 Moreno, S. G., Sutton, A. J., Thompson, J. R., Ades, A., Abrams, K. R., \& Cooper, N. J. (2012). A generalized weighting regression-derived meta-analysis estimator robust to small-study effects and heterogeneity. \emph{Statistics in Medicine}, \emph{31}(14), 1407--1417.
