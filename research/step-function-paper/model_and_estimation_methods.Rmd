@@ -151,7 +151,7 @@ The quantity $B_{hij}$ corresponds to the probability that, prior to selection, 
 Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider several estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 With both approaches, we allow for incorporation of prior weights. 
 Doing so permits inference based on the fractional random weight bootstrap [@xu2020applications], also known as the Bayesian bootstrap [@rubin1981bayesian], a technique that can be applied to estimation strategies that admit the use of weights.[^efficiency-weights]
-Thus, let $a_1,...,a_J$ be a set of prior weights assigned to each study.
+Thus, let $a_{11},...,a_{J k_j}$ be a set of prior weights assigned to each study.
 
 [^efficiency-weights]: Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by @Hedges2010robust for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with $k_j$ observed effect size estimates could contribute somewhat less than $k_j$ independent pieces of information. Down-weighting the effect sizes from study $j$ based on the number of reported effect sizes $k_j$ might therefore improve the efficiency of the estimator for the average effect size $\beta$ and variance $\tau^2$. 
 
@@ -169,33 +169,32 @@ l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &= \log f\left(Y = y_{ij} | \si
 The weighted composite marginal log-likelihood across all $J$ studies is then
 \begin{equation}
 \label{eq:marginal-likelihood}
-l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J  a_j \sum_{i=1}^{k_j} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right).
+l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right).
 \end{equation}
 The composite marginal likelihood (CML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the composite likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
 Under the assumption that the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
 \begin{equation}
-\sum_{j=1}^J a_j \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
+\sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
 \end{equation}
 where $\mat{S}_j = \left(\mat{S}_{\bs\beta j}' \  S_{\gamma j} \ \mat{S}_{\bs\zeta j}'\right)'$ denotes the score vector from study $j$, consisting of the derivatives of the likelihood contributions for each study with respect to the component parameters:
 \begin{align}
-\mat{S}_{\bs\beta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\beta} \label{eq:score-M-beta} \\
-S_{\gamma j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j}\frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \gamma} \label{eq:score-M-gamma} \\
-\mat{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\zeta}. \label{eq:score-M-zeta} 
+\mat{S}_{\bs\beta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\beta} \label{eq:score-M-beta} \\
+S_{\gamma j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \gamma} \label{eq:score-M-gamma} \\
+\mat{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\zeta}. \label{eq:score-M-zeta} 
 \end{align}
 `r appendix_prefix` \@ref(CML-derivatives) provides exact expressions for the score vectors of the step-function selection model.
-<!-- The assumption that the true parameter values are not at the extremes of their ranges rules out the possibility that the true effect sizes are perfectly explained by the predictors (i.e., a common effect model) and the possibility that effect size estimates with p-values in certain ranges are _never_ published (e.g., only statistically significant effect size estimates are reported).   -->
 
 Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in CML estimators. Let $\mat{H}$ denote the Hessian matrix of the composite log-likelihood,
 \begin{equation}
-\mat{H}(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J a_j \frac{\partial \mat{S}_j(\bs\beta, \gamma, \bs\zeta)}{\partial \left(\bs\beta' \ \gamma \ \bs\zeta'\right)},
+\mat{H}(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \frac{\partial \mat{S}_j(\bs\beta, \gamma, \bs\zeta)}{\partial \left(\bs\beta' \ \gamma \ \bs\zeta'\right)},
 \end{equation}
 exact expressions for which are given in `r appendix_prefix` \@ref(CML-derivatives).
 Let $\mat{\hat{S}}_j = \mat{S}_j(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ and $\mat{\hat{H}} = \mat{H}(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ denote the score vectors and Hessian matrix evaluated at the maximum of the composite likelihood.
 We then estimate the sampling variance of the CML estimator using a cluster-robust sandwich formula:
 \begin{equation}
 \label{eq:sandwich-variance}
-\mat{V}^{CML} = \mat{\hat{H}}^{-1}\left(\sum_{j=1}^J a_j^2 \mat{\hat{S}}_j {\mat{\hat{S}}_j}'\right) \mat{\hat{H}}^{-1}.
+\mat{V}^{CML} = \mat{\hat{H}}^{-1}\left(\sum_{j=1}^J \mat{\hat{S}}_j {\mat{\hat{S}}_j}'\right) \mat{\hat{H}}^{-1}.
 \end{equation}
 We construct confidence intervals for model parameters using $\mat{V}^{CML}$ with Wald-type large sample approximations. For instance, the $(1 - 2\alpha)$-level large-sample confidence interval for a meta-regression parameter $\beta_g$ is constructed as
 $$
@@ -216,39 +215,35 @@ Given the parameters of the selection process, we can calculate relative probabi
 $$
 l^G_{ij}(\bs\beta, \gamma) \propto - \frac{1}{2}\frac{(y_{ij} - \mat{x}_{ij} \bs\beta)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log(\exp(\gamma) + \sigma_{ij}^2).
 $$
-Allowing for study-level prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
+Allowing for prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
 $$
-l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J a_j \sum_{i=1}^{k_j} \frac{1}{w_{ij}} \times l^G_{ij}(\bs\beta, \gamma).
+l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\bs\beta, \gamma).
 $$
 If the parameters of the selection process were known, we could find estimators for $\bs\beta$ and $\gamma$ by maximizing $l^G(\bs\beta, \gamma, \bs\zeta)$ for a fixed value of $\bs\zeta$. 
 Equivalently, we could find the estimators as the solutions to the weighted score equations 
 \begin{align}
-\sum_{j=1}^J a_j \times \mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= 0 \label{eq:hybrid-score-beta} \\
-\sum_{j=1}^J a_j \times \mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= 0, \label{eq:hybrid-score-gamma}
+\sum_{j=1}^J \mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= 0 \label{eq:hybrid-score-beta} \\
+\sum_{j=1}^J \mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= 0, \label{eq:hybrid-score-gamma}
 \end{align}
 where the score contributions for study $j$ are
 \begin{align}
-\mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} \mat{x}_{ij}' \frac{y_{ij} - \mat{x}_{ij} \bs\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
-\mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mat{x}_{ij} \bs\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
+\mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \mat{x}_{ij}' \frac{y_{ij} - \mat{x}_{ij} \bs\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
+\mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mat{x}_{ij} \bs\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
 \end{align}
 The question remains how to obtain an estimator for $\bs\zeta$.
 
 We propose to estimate $\bs\zeta$ by augmenting the Gaussian log-likelihood with the marginal score equation with respect to $\bs\zeta$.
-Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \@ref(eq:hybrid-score-beta) and \@ref(eq:hybrid-score-gamma) together with the estimating equation for $\bs\zeta$ given by
-\begin{equation}
-\label{eq:hybrid-score-zeta}
-\mathbf{S}_{\bs\zeta}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \sum_{j=1}^J a_j \times \mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \mathbf{0},
-\end{equation}
-where $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ is as given in Equation  \@ref(eq:score-M-zeta). 
-Denoting the full set of estimating equations as
+Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \@ref(eq:hybrid-score-beta) and \@ref(eq:hybrid-score-gamma) together with the estimating equation for $\bs\zeta$ from the composite marginal likelihood approach.
+ 
+With $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as given in Equation  \@ref(eq:score-M-zeta), the full set of estimating equations is
 \begin{equation}
 \label{eq:hybrid-score}
-\mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \left[\begin{array}{c} \mat{S}^G_{\bs\beta j}(\bs\beta, \gamma, \bs\zeta) \\ S^G_{\gamma j}(\bs\beta, \gamma, \bs\zeta) \\ \mat{S}_{\bs\zeta j}(\bs\beta, \gamma, \bs\zeta) \end{array}\right]
+\mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \left[\begin{array}{c} \mat{S}^G_{\bs\beta j}(\bs\beta, \gamma, \bs\zeta) \\ S^G_{\gamma j}(\bs\beta, \gamma, \bs\zeta) \\ \mat{S}_{\bs\zeta j}(\bs\beta, \gamma, \bs\zeta) \end{array}\right],
 \end{equation}
-we define the ARGL estimator as the solution to the estimating equations 
+based on which we define the ARGL estimator as the solution to the estimating equations 
 \begin{equation}
 \label{eq:hybrid-total-score}
-\sum_{j=1}^J a_j \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \mat{0}.
+\sum_{j=1}^J \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \mat{0}.
 \end{equation}
 We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamma$, and $\bs{\tilde\zeta}$.[^profiling]
 
@@ -259,14 +254,14 @@ We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamm
     where $v_{ij} = \frac{a_j}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)}$.
     The weighted least squares solution allows $\bs\beta$ to be profiled out of the estimating equations, so that Equation \@ref(eq:hybrid-total-score) need be solved only for $\gamma$ and  $\bs\zeta$.
 
-For the step-function selection process, the score equation with respect to $\bs\zeta$ (Equation \@ref(eq:hybrid-score-zeta)) has an interesting and intuitively intepretable form. 
+For the step-function selection process, the score equation with respect to $\bs\zeta$ has an interesting and intuitively intepretable form. 
 Observe that the probability that an observed effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$ is $E_{hij} = \exp(\zeta_h) \times B_{hij} / A_{ij}$, where $B_{hij}$ is given in Equation \@ref(eq:step-function-Bhij).
 Accounting for the prior weights, the expected number of observed effect size estimates falling into the interval $(\alpha_h, \alpha_{h+1}]$ is therefore 
 \begin{equation}
 \label{eq:expected-h}
-E_h = \sum_{j=1}^J  a_j \sum_{i=1}^{k_j} \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
+E_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
 \end{equation}
-Let $K_h = \sum_{j=1}^J a_j \sum_{i=1}^{k_j} I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)$ denote the weighted count of observed effect size estimates with $p$-values falling into the interval $(\alpha_h, \alpha_{h+1}]$, for $h = 0,...,H$.
+Let $K_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)$ denote the weighted count of observed effect size estimates with $p$-values falling into the interval $(\alpha_h, \alpha_{h+1}]$, for $h = 0,...,H$.
 The score of the step-function model with respect to the $h^{th}$ component of $\bs\zeta$ can then be written simply as
 \begin{equation}
 S_{\zeta h} = K_h - E_h.
@@ -281,19 +276,21 @@ We construct confidence intervals for model parameters using Wald-type large sam
 
 Sandwich estimators such as those in Equations \@ref(eq:sandwich-variance) require a large number of independent clusters (i.e., large $J$) to provide accurate assessments of uncertainty. 
 For regular meta-analysis or meta-regression models, small-sample refinements are available that provide accurate inference even with a limited number of clusters [@tipton2015small; @tiptonpusto2015small]. 
-However, these small-sample refinements have not been extended to the selection models that we consider here. 
-We therefore consider alternative inference techniques, including several forms of bootstrapping, that might provide more accurate inference with a limited number of clusters.
+However, these small-sample refinements have not been extended to step-function selection models. 
+We instead consider alternative inference techniques, including several forms of bootstrapping, that might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
 The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a means to calculate standard errors and confidence intervals.
 
 Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions [@davison1997bootstrap].
 For data involving dependent observations, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure. 
 Techniques that do so include the non-parametric clustered bootstrap (also known as the clustered pairs bootstrap) and the fractional random weight bootstrap [@xu2020applications; @rubin1981bayesian]. 
+
 In the non-parametric clustered bootstrap, each pseudo-sample is generated by randomly drawing $J$ clusters of observations, with replacement, from the original sample.
 Because clusters are drawn with replacement, some will necessarily be included multiple times and some clusters might not be included in a given pseudo-sample. 
 The process is equivalent to assigning a random set of weights to each cluster, where the weights for pseudo-sample $b$ are drawn from a multinomial distribution with $J$ trials and equal probability on each of $J$ categories.
+
 The fractional random weight bootstrap follows a very similar process in which each pseudo-sample is generated by assigning a random weight to every observation.
-Rather than using a multinomial distribution, the weights follow independent exponential distributions with mean 1, so that the weights for pseudo-sample $b$ are generated as $a^{(b)}_j \sim Exp(1)$ for $j = 1,...,J$. 
+Rather than using a multinomial distribution, the weights follow independent exponential distributions with mean 1, so that the weights for pseudo-sample $b$ are generated as $a^{(b)}_j \sim Exp(1)$, with $a_{ij}^{(b)} = a^{(b)}_j$ for $i = 1,...,k_j$ and $j = 1,...,J$. 
 A crucial difference between these bootstrap techniques is that the fractional random weight bootstrap puts strictly positive weight on every cluster of observations in every pseudo-sample, whereas the non-parametric bootstrap can assign zero weight to some clusters [@xu2020applications].
 If the existence of an estimator hinges on the inclusion of one or a small number of clusters, this will create computational problems for the non-parametric bootstrap but not for the fractional random weight bootstrap.
 

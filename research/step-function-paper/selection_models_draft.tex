@@ -244,10 +244,10 @@ Correspondence concerning this article should be addressed to James E. Pustejovs
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} University of Wisconsin-Madison\\\textsuperscript{2} American Institutes for Research}
 
-\note{~\newline April 09, 2025}
+\note{~\newline April 16, 2025}
 
 \abstract{%
-Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates, necessitating use of statistical methods for dependent observations such as multi-level modeling or robust variance estimation. A second challenge is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for the meta-analyses involving dependent effect sizes. Step-function selection models are conceptually appealing and have shown promise in previous simulations, but have not been extended to handle dependent effect sizes. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We demonstrate the methods by re-analyzing data from a synthesis of ego depletion effects and evaluate the performance of the estimators through an extensive simulation study. Simulation findings indicate that simple forms of step-function selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels.
+Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates, necessitating use of statistical methods for dependent observations such as multi-level modeling or robust variance estimation. A second challenge is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two methods, demonstrate them by re-analyzing data from a synthesis of ego depletion effects, and evaluate their performance through an extensive simulation study. Simulation findings indicate that simple forms of step-function selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels.
 }
 
 
@@ -262,13 +262,13 @@ Because they rely on findings from primary studies as input data, the validity o
 If the findings accessible to meta-analysts are not a complete or representative record of the research that has been conducted on a topic, then meta-analytic summaries could be systematically biased (Rothstein et al., 2005).
 Of particular concern is the possibility that results from primary studies are selectively reported in ways that can distort the evidence available for synthesis, such as reporting findings that are statistically significant but omitting findings that are null or not consistent with researchers' hypotheses (Carter et al., 2019).
 
-Evidence from medical, educational, and social sciences speaks to the prevalence of selective reporting. For example, studies have found that statistically significant outcomes were 2.4 to 4.7 times more likely to be published than non-significant outcomes in the medical sciences (Chan et al., 2004) and 2.4 times more likely in education (Pigott et al., 2013). Research across various fields, from clinical trials of antipsychotics (e.g., Lancee et al., 2017) to psychology studies (Franco et al., 2016; e.g., John et al., 2012) and management research (e.g., O'Boyle Jr et al., 2017), indicates that selective outcome reporting is widespread and often driven by statistical significance.
+Evidence from medical, educational, and social sciences provides indications of the prevalence of selective reporting. For example, studies have found that statistically significant outcomes were 2.4 to 4.7 times more likely to be published than non-significant outcomes in the medical sciences (Chan et al., 2004) and 2.4 times more likely in education (Pigott et al., 2013). Research across various fields, from clinical trials of antipsychotics (e.g., Lancee et al., 2017) to psychology studies (Franco et al., 2016; e.g., John et al., 2012) and management research (e.g., O'Boyle Jr et al., 2017), indicates that selective outcome reporting is widespread and often driven by statistical significance.
 
 Because selective reporting is of such central concern for meta-analysis, a wide range of statistical tools have been developed for assessing the presence of selective reporting and reducing the biases it creates (Marks‐Anglin \& Chen, 2020; Rothstein et al., 2005).
-One common graphical diagnostic is the funnel plot, a simple scatterplot of effect size estimates versus a measure of their precision (Kossmeier et al., 2020; Light \& Pillemer, 1984; Sterne et al., 2005). Widely used statistical diagnostics include the rank correlation test by Begg and Mazumdar (1994); Egger's regression test (Egger et al., 1997; Harbord et al., 2006; Macaskill et al., 2001; Moreno et al., 2012; Peters et al., 2006; Pustejovsky \& Rodgers, 2019; Stanley, 2008; Thompson \& Sharp, 1999); the trim-and-fill adjustment (Duval \& Tweedie, 2000a, 2000b); and various regression adjustment methods including the precision effect test (PET), precision effect estimate with standard error (PEESE), PET-PEESE by Stanley and Doucouliagos (2014), and the endogenous kink meta-regression (Bom \& Rachinger, 2019).
+One common graphical diagnostic is the funnel plot, a simple scatterplot of effect size estimates versus a measure of their precision (Kossmeier et al., 2020; Light \& Pillemer, 1984; Sterne et al., 2005). Widely used statistical diagnostics include the rank correlation test by Begg and Mazumdar (1994); Egger's regression test (Egger et al., 1997; Harbord et al., 2006; Macaskill et al., 2001; Moreno et al., 2012; Peters et al., 2006; Pustejovsky \& Rodgers, 2019; Stanley, 2008; Thompson \& Sharp, 1999); the trim-and-fill adjustment (Duval \& Tweedie, 2000a, 2000b); and various regression adjustment methods including the precision effect test (PET), precision effect estimate with standard error (PEESE), and PET-PEESE technique by Stanley and Doucouliagos (2014), and the endogenous kink meta-regression (Bom \& Rachinger, 2019).
 
 Another class of methods for assessing and correcting selective reporting are \(p\)-value selection models.\footnote{A further class of selection models exists that depends both on the effect size estimate and its standard error (e.g., Copas, 1999; Copas \& Li, 1997; Copas \& Shi, 2001). We focus here on the selection models that depend solely on the \(p\)-value because they have shown more promise (Carter et al., 2019; Terrin et al., 2003) and because the second set of selection models have identification issues that make them more useful as sensitivity analyses than as estimation methods (Hedges \& Vevea, 2005; Sutton, 2009).}
-Such models build on summary meta-analysis or meta-regression models by making specific, explicit assumptions about the selection function, or how the probability that an effect size estimate is reported relates to sign and statistical significance level of the effect. Early proposals of this form include work by Hedges (1984), Iyengar and Greenhouse (1988), and Dear and Begg (1992). Hedges (1992) and Vevea and Hedges (1995) proposed \emph{step-function} models where the selection function is piece-wise constant, with steps at psychologically salient significance levels such as \(\alpha = .05\).
+Such models build on summary meta-analysis or meta-regression models by making specific, explicit assumptions about the selection function, or how the probability that an effect size estimate is reported relates to sign and statistical significance level of the effect. Early proposals of this form include Hedges (1984), Iyengar and Greenhouse (1988), and Dear and Begg (1992). Hedges (1992) and Vevea and Hedges (1995) proposed \emph{step-function} models where the selection function is piece-wise constant, with steps at psychologically salient significance levels such as \(\alpha = .05\).
 Other forms involve selection functions based on beta densities (Citkowicz \& Vevea, 2017), power curves, and a variety of other parametric forms (Preston et al., 2004).
 
 Selection models have several advantages over other available methods for diagnosing and adjusting for selective reporting bias.
@@ -286,7 +286,7 @@ Effect size dependencies occur when multiple effect sizes are extracted from the
 Dependent effect size estimates commonly occur (1) when multiple outcome measures are collected on the same sample; (2) when the same sample is measured over multiple time points; or (3) when multiple treatment groups are compared to the same control group.
 Dependence can also arise when effect sizes are extracted from multiple samples involving the same operational features, such as multiple studies conducted by the same research group.
 
-Effect size dependencies are very common in many areas of social science research and beyond.
+Effect size dependencies are very common in social science synthesis, as well as in other research areas.
 For example, for the more than 1,000 educational intervention studies reviewed by the What Works Clearinghouse since 2017, most (73\%) included more than one intervention effect estimate, with a median of four effect sizes per study (WWC, 2020).
 In a survey of systematic reviews published in 2016 across several prominent journals, Tipton et al. (2019) found that primary studies contributed an average of 3.1 effect sizes to systematic reviews published in \emph{Psychological Bulletin}; 11.0 effect sizes to reviews published in \emph{Journal of Applied Psychology}; and 5.0 effect sizes to reviews published in \emph{Review of Educational Research}.
 Surveys of recent meta-analyses on topics in environmental sciences (Nakagawa et al., 2023) and neurobiological research involving animal models (Yang et al., 2023) have also documented a high prevalence of dependent effect sizes.
@@ -300,14 +300,14 @@ The original form of RVE was based on asymptotic approximations that required a 
 Tipton (2015) and Tipton and Pustejovsky (2015) developed small-sample adjustments for standard errors and hypothesis tests based on RVE so that the desirable asymptotic properties are maintained even when the number of studies is small.
 A closely related strategy is to use bootstrap re-sampling to approximate the distribution of test statistics.
 For instance, Joshi et al. (2022) examined a cluster-wild bootstrap method for hypothesis testing in meta-regression with dependent effects, finding that it led to refined type I error rates and improved power compared to analytic approximations.
-However, extant developments in RVE and bootstrapping methods are limited to summary meta-analysis and meta-regression models
+However, extant developments in RVE and bootstrapping methods are limited to summary meta-analysis and meta-regression models.
 Applications to selection models remain to be explored.
 
 \subsection{Investigating selective reporting with dependent effect sizes}\label{investigating-selective-reporting-with-dependent-effect-sizes}
 
 Methodologists have only recently begun to examine selective reporting detection or bias correction methods in meta-analysis involving dependent effect sizes.
 Mathur and VanderWeele (2020) proposed a sensitivity analysis based on the simplest possible form of the Vevea and Hedges (1995) step-function selection model.
-This sensitivity analysis provides an estimate of the average effect size after correcting for selective reporting based on a threshold statistical significance level, where the strength of selection is pre-specified by the analyst. It handles effect size dependence using RVE methods (Hedges et al., 2010).
+This sensitivity analysis provides an estimate of the average effect size after correcting for selective reporting based on a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst. It handles effect size dependence using RVE methods (Hedges et al., 2010).
 However, this approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
 
 Another alternative is to use a regression test for small-study effects (as in Egger et al., 1997), combined with RVE or multilevel meta-analysis to handle dependent effect sizes (Fernández-Castilla et al., 2019; Rodgers \& Pustejovsky, 2021).
@@ -316,7 +316,7 @@ It also has the same limitations as univariate Egger's regression, in that it te
 Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting.
 
 Chen and Pustejovsky (2024) reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and proposed adaptations of some existing methods to accommodate dependent effect sizes.
-The proposed adaptations applied to methods that could be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using RVE.
+The proposed adaptations applied to methods that could be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
 In an extensive simulation study, they examined the performance of proposed adaptations as well as of existing methods that ignore effect size dependence.
 Although no single bias-correction method performed best across all conditions examined, simple forms of the step-function selection model emerged as strong candidates.
 Across a wide range of conditions, one-step and two-step selection models yielded average effect size estimates with low bias that were usually more accurate than alternative bias-adjusted estimators, even though the selection models ignore the dependence structure of the data.
@@ -437,7 +437,7 @@ The quantity \(B_{hij}\) corresponds to the probability that, prior to selection
 Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent (Citkowicz \& Vevea, 2017; Hedges, 1992; Vevea \& Hedges, 1995) or on sensitivity analysis methods that treat the selection model as known (Mathur \& VanderWeele, 2020; Vevea \& Woods, 2005). We consider several estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 With both approaches, we allow for incorporation of prior weights.
 Doing so permits inference based on the fractional random weight bootstrap (Xu et al., 2020), also known as the Bayesian bootstrap (Rubin, 1981), a technique that can be applied to estimation strategies that admit the use of weights.\footnote{Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by Hedges et al. (2010) for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with \(k_j\) observed effect size estimates could contribute somewhat less than \(k_j\) independent pieces of information. Down-weighting the effect sizes from study \(j\) based on the number of reported effect sizes \(k_j\) might therefore improve the efficiency of the estimator for the average effect size \(\beta\) and variance \(\tau^2\).}
-Thus, let \(a_1,...,a_J\) be a set of prior weights assigned to each study.
+Thus, let \(a_{11},...,a_{J k_j}\) be a set of prior weights assigned to each study.
 
 \subsubsection{Maximum composite marginal likelihood}\label{maximum-composite-marginal-likelihood}
 
@@ -453,32 +453,32 @@ l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta \right) &= \log f\left(
 The weighted composite marginal log-likelihood across all \(J\) studies is then
 \begin{equation}
 \label{eq:marginal-likelihood}
-l^M\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J  a_j \sum_{i=1}^{k_j} l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right).
+l^M\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right).
 \end{equation}
 The composite marginal likelihood (CML) estimators, denoted as \(\boldsymbol{\hat\beta}\), \(\hat\gamma\), and \(\boldsymbol{\hat\zeta}\), are obtained as the set of parameter values that maximize the composite likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
 Under the assumption that the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations,
 \begin{equation}
-\sum_{j=1}^J a_j \mathbf{S}_{j}\left(\boldsymbol{\hat\beta}, \hat\gamma, \boldsymbol{\hat\zeta}\right) = \mathbf{0}
+\sum_{j=1}^J \mathbf{S}_{j}\left(\boldsymbol{\hat\beta}, \hat\gamma, \boldsymbol{\hat\zeta}\right) = \mathbf{0}
 \end{equation}
 where \(\mathbf{S}_j = \left(\mathbf{S}_{\boldsymbol\beta j}' \  S_{\gamma j} \ \mathbf{S}_{\boldsymbol\zeta j}'\right)'\) denotes the score vector from study \(j\), consisting of the derivatives of the likelihood contributions for each study with respect to the component parameters:
 \begin{align}
-\mathbf{S}_{\boldsymbol\beta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j} \frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \boldsymbol\beta} \label{eq:score-M-beta} \\
-S_{\gamma j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j}\frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \gamma} \label{eq:score-M-gamma} \\
-\mathbf{S}_{\boldsymbol\zeta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j} \frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \boldsymbol\zeta}. \label{eq:score-M-zeta} 
+\mathbf{S}_{\boldsymbol\beta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \boldsymbol\beta} \label{eq:score-M-beta} \\
+S_{\gamma j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \gamma} \label{eq:score-M-gamma} \\
+\mathbf{S}_{\boldsymbol\zeta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta\right)}{\partial \boldsymbol\zeta}. \label{eq:score-M-zeta} 
 \end{align}
 Appendix \ref{CML-derivatives} provides exact expressions for the score vectors of the step-function selection model.
 
 Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in CML estimators. Let \(\mathbf{H}\) denote the Hessian matrix of the composite log-likelihood,
 \begin{equation}
-\mathbf{H}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J a_j \frac{\partial \mathbf{S}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta)}{\partial \left(\boldsymbol\beta' \ \gamma \ \boldsymbol\zeta'\right)},
+\mathbf{H}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J \frac{\partial \mathbf{S}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta)}{\partial \left(\boldsymbol\beta' \ \gamma \ \boldsymbol\zeta'\right)},
 \end{equation}
 exact expressions for which are given in Appendix \ref{CML-derivatives}.
 Let \(\mathbf{\hat{S}}_j = \mathbf{S}_j(\boldsymbol{\hat\beta}, \hat\gamma, \boldsymbol{\hat\zeta})\) and \(\mathbf{\hat{H}} = \mathbf{H}(\boldsymbol{\hat\beta}, \hat\gamma, \boldsymbol{\hat\zeta})\) denote the score vectors and Hessian matrix evaluated at the maximum of the composite likelihood.
 We then estimate the sampling variance of the CML estimator using a cluster-robust sandwich formula:
 \begin{equation}
 \label{eq:sandwich-variance}
-\mathbf{V}^{CML} = \mathbf{\hat{H}}^{-1}\left(\sum_{j=1}^J a_j^2 \mathbf{\hat{S}}_j {\mathbf{\hat{S}}_j}'\right) \mathbf{\hat{H}}^{-1}.
+\mathbf{V}^{CML} = \mathbf{\hat{H}}^{-1}\left(\sum_{j=1}^J \mathbf{\hat{S}}_j {\mathbf{\hat{S}}_j}'\right) \mathbf{\hat{H}}^{-1}.
 \end{equation}
 We construct confidence intervals for model parameters using \(\mathbf{V}^{CML}\) with Wald-type large sample approximations. For instance, the \((1 - 2\alpha)\)-level large-sample confidence interval for a meta-regression parameter \(\beta_g\) is constructed as
 \[
@@ -498,39 +498,35 @@ Given the parameters of the selection process, we can calculate relative probabi
 \[
 l^G_{ij}(\boldsymbol\beta, \gamma) \propto - \frac{1}{2}\frac{(y_{ij} - \mathbf{x}_{ij} \boldsymbol\beta)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log(\exp(\gamma) + \sigma_{ij}^2).
 \]
-Allowing for study-level prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
+Allowing for prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
 \[
-l^G(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J a_j \sum_{i=1}^{k_j} \frac{1}{w_{ij}} \times l^G_{ij}(\boldsymbol\beta, \gamma).
+l^G(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\boldsymbol\beta, \gamma).
 \]
 If the parameters of the selection process were known, we could find estimators for \(\boldsymbol\beta\) and \(\gamma\) by maximizing \(l^G(\boldsymbol\beta, \gamma, \boldsymbol\zeta)\) for a fixed value of \(\boldsymbol\zeta\).
 Equivalently, we could find the estimators as the solutions to the weighted score equations
 \begin{align}
-\sum_{j=1}^J a_j \times \mathbf{S}^G_{\boldsymbol\beta j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= 0 \label{eq:hybrid-score-beta} \\
-\sum_{j=1}^J a_j \times \mathbf{S}^G_{\gamma j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= 0, \label{eq:hybrid-score-gamma}
+\sum_{j=1}^J \mathbf{S}^G_{\boldsymbol\beta j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= 0 \label{eq:hybrid-score-beta} \\
+\sum_{j=1}^J \mathbf{S}^G_{\gamma j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= 0, \label{eq:hybrid-score-gamma}
 \end{align}
 where the score contributions for study \(j\) are
 \begin{align}
-\mathbf{S}^G_{\boldsymbol\beta j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \frac{y_{ij} - \mathbf{x}_{ij} \boldsymbol\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
-\mathbf{S}^G_{\gamma j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= \sum_{i=1}^{k_j} \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mathbf{x}_{ij} \boldsymbol\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
+\mathbf{S}^G_{\boldsymbol\beta j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \mathbf{x}_{ij}' \frac{y_{ij} - \mathbf{x}_{ij} \boldsymbol\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
+\mathbf{S}^G_{\gamma j} (\boldsymbol\beta, \gamma, \boldsymbol\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mathbf{x}_{ij} \boldsymbol\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
 \end{align}
 The question remains how to obtain an estimator for \(\boldsymbol\zeta\).
 
 We propose to estimate \(\boldsymbol\zeta\) by augmenting the Gaussian log-likelihood with the marginal score equation with respect to \(\boldsymbol\zeta\).
-Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \eqref{eq:hybrid-score-beta} and \eqref{eq:hybrid-score-gamma} together with the estimating equation for \(\boldsymbol\zeta\) given by
-\begin{equation}
-\label{eq:hybrid-score-zeta}
-\mathbf{S}_{\boldsymbol\zeta}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) = \sum_{j=1}^J a_j \times \mathbf{S}_{\boldsymbol\zeta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right) = \mathbf{0},
-\end{equation}
-where \(\mathbf{S}_{\boldsymbol\zeta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right)\) is as given in Equation \eqref{eq:score-M-zeta}.
-Denoting the full set of estimating equations as
+Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \eqref{eq:hybrid-score-beta} and \eqref{eq:hybrid-score-gamma} together with the estimating equation for \(\boldsymbol\zeta\) from the composite marginal likelihood approach.
+
+With \(\mathbf{S}_{\boldsymbol\zeta j}\left(\boldsymbol{\beta}, \gamma, \boldsymbol{\zeta}\right)\) as given in Equation \eqref{eq:score-M-zeta}, the full set of estimating equations is
 \begin{equation}
 \label{eq:hybrid-score}
-\mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \left[\begin{array}{c} \mathbf{S}^G_{\boldsymbol\beta j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \\ S^G_{\gamma j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \\ \mathbf{S}_{\boldsymbol\zeta j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \end{array}\right]
+\mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \left[\begin{array}{c} \mathbf{S}^G_{\boldsymbol\beta j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \\ S^G_{\gamma j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \\ \mathbf{S}_{\boldsymbol\zeta j}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) \end{array}\right],
 \end{equation}
-we define the ARGL estimator as the solution to the estimating equations
+based on which we define the ARGL estimator as the solution to the estimating equations
 \begin{equation}
 \label{eq:hybrid-total-score}
-\sum_{j=1}^J a_j \mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \mathbf{0}.
+\sum_{j=1}^J \mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \mathbf{0}.
 \end{equation}
 We will denote the ARGL parameter estimators as \(\boldsymbol{\tilde\beta}\), \(\tilde\gamma\), and \(\boldsymbol{\tilde\zeta}\).\footnote{For computational purposes, it is useful to observe that the solution to Equation \eqref{eq:hybrid-score-beta} involves a weighted least squares estimator for \(\boldsymbol\beta\). Given values of \(\gamma\) and \(\boldsymbol\zeta\), \(\boldsymbol{\tilde\beta}\) is
   \[
@@ -539,14 +535,14 @@ We will denote the ARGL parameter estimators as \(\boldsymbol{\tilde\beta}\), \(
   where \(v_{ij} = \frac{a_j}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)}\).
   The weighted least squares solution allows \(\boldsymbol\beta\) to be profiled out of the estimating equations, so that Equation \eqref{eq:hybrid-total-score} need be solved only for \(\gamma\) and \(\boldsymbol\zeta\).}
 
-For the step-function selection process, the score equation with respect to \(\boldsymbol\zeta\) (Equation \eqref{eq:hybrid-score-zeta}) has an interesting and intuitively intepretable form.
+For the step-function selection process, the score equation with respect to \(\boldsymbol\zeta\) has an interesting and intuitively intepretable form.
 Observe that the probability that an observed effect size estimate with predictor \(\mathbf{x}_{ij}\) and standard error \(\sigma_{ij}\) will have a p-value falling in the interval \(\alpha_h < p^* \leq \alpha_{h+1}\) is \(E_{hij} = \exp(\zeta_h) \times B_{hij} / A_{ij}\), where \(B_{hij}\) is given in Equation \eqref{eq:step-function-Bhij}.
 Accounting for the prior weights, the expected number of observed effect size estimates falling into the interval \((\alpha_h, \alpha_{h+1}]\) is therefore
 \begin{equation}
 \label{eq:expected-h}
-E_h = \sum_{j=1}^J  a_j \sum_{i=1}^{k_j} \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
+E_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
 \end{equation}
-Let \(K_h = \sum_{j=1}^J a_j \sum_{i=1}^{k_j} I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)\) denote the weighted count of observed effect size estimates with \(p\)-values falling into the interval \((\alpha_h, \alpha_{h+1}]\), for \(h = 0,...,H\).
+Let \(K_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)\) denote the weighted count of observed effect size estimates with \(p\)-values falling into the interval \((\alpha_h, \alpha_{h+1}]\), for \(h = 0,...,H\).
 The score of the step-function model with respect to the \(h^{th}\) component of \(\boldsymbol\zeta\) can then be written simply as
 \begin{equation}
 S_{\zeta h} = K_h - E_h.
@@ -561,19 +557,21 @@ We construct confidence intervals for model parameters using Wald-type large sam
 
 Sandwich estimators such as those in Equations \eqref{eq:sandwich-variance} require a large number of independent clusters (i.e., large \(J\)) to provide accurate assessments of uncertainty.
 For regular meta-analysis or meta-regression models, small-sample refinements are available that provide accurate inference even with a limited number of clusters (Tipton, 2015; Tipton \& Pustejovsky, 2015).
-However, these small-sample refinements have not been extended to the selection models that we consider here.
-We therefore consider alternative inference techniques, including several forms of bootstrapping, that might provide more accurate inference with a limited number of clusters.
+However, these small-sample refinements have not been extended to step-function selection models.
+We instead consider alternative inference techniques, including several forms of bootstrapping, that might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
 The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a means to calculate standard errors and confidence intervals.
 
 Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions (Davison \& Hinkley, 1997).
 For data involving dependent observations, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure.
 Techniques that do so include the non-parametric clustered bootstrap (also known as the clustered pairs bootstrap) and the fractional random weight bootstrap (Rubin, 1981; Xu et al., 2020).
+
 In the non-parametric clustered bootstrap, each pseudo-sample is generated by randomly drawing \(J\) clusters of observations, with replacement, from the original sample.
 Because clusters are drawn with replacement, some will necessarily be included multiple times and some clusters might not be included in a given pseudo-sample.
 The process is equivalent to assigning a random set of weights to each cluster, where the weights for pseudo-sample \(b\) are drawn from a multinomial distribution with \(J\) trials and equal probability on each of \(J\) categories.
+
 The fractional random weight bootstrap follows a very similar process in which each pseudo-sample is generated by assigning a random weight to every observation.
-Rather than using a multinomial distribution, the weights follow independent exponential distributions with mean 1, so that the weights for pseudo-sample \(b\) are generated as \(a^{(b)}_j \sim Exp(1)\) for \(j = 1,...,J\).
+Rather than using a multinomial distribution, the weights follow independent exponential distributions with mean 1, so that the weights for pseudo-sample \(b\) are generated as \(a^{(b)}_j \sim Exp(1)\), with \(a_{ij}^{(b)} = a^{(b)}_j\) for \(i = 1,...,k_j\) and \(j = 1,...,J\).
 A crucial difference between these bootstrap techniques is that the fractional random weight bootstrap puts strictly positive weight on every cluster of observations in every pseudo-sample, whereas the non-parametric bootstrap can assign zero weight to some clusters (Xu et al., 2020).
 If the existence of an estimator hinges on the inclusion of one or a small number of clusters, this will create computational problems for the non-parametric bootstrap but not for the fractional random weight bootstrap.
 
@@ -595,13 +593,13 @@ To mitigate possible effect of selective reporting, Carter et al. (2015) include
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
 We conducted the analyses using R Version 4.4.3 (R Core Team, 2025).
 
-If selective reporting were not a concern, one could summarize the distribution of ego depletion effects using a correlated-and-hierarchical effects model (CHE, Pustejovsky \& Tipton, 2022) to account for the effect size dependency.
-Based on the CHE model, the overall average effect estimate was 0.46, 95\% CI {[}0.34, 0.59{]}.
+If selective reporting were not a concern, a correlated-and-hierarchical effects model (CHE, Pustejovsky \& Tipton, 2022) would be one way to summarize the distribution of ego depletion effects.
+Based on a CHE model, the overall average effect estimate was 0.46, 95\% CI {[}0.34, 0.59{]}.
 Alternately, Chen and Pustejovsky (2024) proposed estimating average effect sizes using a CHE model with inverse sampling covariance weighting (CHE-ISCW), which does use the between-study or within-study variance estimates in forming weights. The CHE-ISCW estimator places relatively more weight on larger studies (those with smaller sampling variances), which are less biased by selective reporting.
-Applying CHE-ISCW, reduces the overall effect estimate to 0.39, 95\% CI {[}0.24, 0.54{]}.
+Applying CHE-ISCW reduces the overall effect estimate to 0.39, 95\% CI {[}0.24, 0.54{]}.
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment (Stanley \& Doucouliagos, 2014), clustering the standard errors by study. This yielded an overall average effect of -0.09, 95\% CI {[}-0.76, 0.58{]}. The CHE and CHE-ISCW estimates are both positive, significant, and similar in magnitude. The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects.
 
-We used the \texttt{selection\_model()} function from the \texttt{metaselection} package to fit single-step and two-step selection models (J. Pustejovsky \& Joshi, 2025).
+We used the \texttt{selection\_model()} function from the \texttt{metaselection} package to fit single-step and two-step selection models (Pustejovsky \& Joshi, 2025).
 The single-step model used a threshold at \(\alpha_1 = 0.025\); the two-step model used thresholds at \(\alpha_1 = 0.025\) and \(\alpha_2 = 0.5\).
 For comparison purposes, we estimated model parameters using both CML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
 For bootstrapping, we used multinomial cluster bootstrap re-sampling with 1999 replicates.
@@ -639,10 +637,10 @@ Parameter & Estimate (SE) & Cluster-Robust CI & Percentile Bootstrap CI & Estima
 \end{table}
 
 Table \ref{tab:empirical} presents the parameter estimates from the one-step and two-step selection models.
-The estimated selection parameters are similar across the one- and two-step models and for both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones.
+The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones.
 The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from 0.23 to 0.27 depending on the model specification and estimation method.
 In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero.
-Thus, an analyst might reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment.
+Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment.
 
 The estimates in Table \ref{tab:empirical} point towards some potential differences between estimation methods.
 Generally, the CML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
@@ -667,8 +665,7 @@ The simulation code drew on functionality from several R packages, including \te
 
 \subsection{Data generation}\label{data-generation}
 
-We simulated meta-analyses based on a correlated-and-hierarchical
-effects (CHE) working model, with individual effect size estimates selected
+We simulated meta-analyses based on a CHE working model, with individual effect size estimates selected
 for inclusion based on the step-function selection model with a single step at \(\alpha_1 = .025\).
 For each replication, we generated a total of \(J^*\) studies with a two-group comparison
 design, where study \(j\) contributed \(k_j^* \geq 1\) effect size estimates prior to selective reporting. Let
@@ -679,7 +676,7 @@ denote the effective sample size from study \(j\).
 To generate each meta-analytic dataset, we sampled effective sample sizes and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database.
 The total effective sample size per study was divided equally into two groups, treatment and control.
 We then generated \(r_j\), an outcome correlation for study \(j\), by drawing from a beta distribution with mean \(\rho\) and standard deviation 0.05.
-We assumed constant correlation between pairs of outcomes within a study but allowed the correlation value to vary from study to study.
+We assumed constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
 
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
@@ -702,19 +699,18 @@ After simulating results for study \(j\), we applied a step-function selection
 model to the individual effect size estimates, with a one-sided selection
 threshold at \(\alpha = 0.025\). Specifically, we let result \((y^*_{ij},
 \sigma_{ij}^*, p_{ij}^*)\) be included in the observed dataset with probability
-1 if \(p_{ij}^*\) was less than 0.025 and probability \(0 < \lambda_1 \leq 1\) if \(p_{ij}^* \ge 0.025\).
+1 if \(p_{ij}^*\) was less than 0.025 and with probability \(0 < \lambda_1 \leq 1\) if \(p_{ij}^* \ge 0.025\).
 We repeated the process of generating studies until the database included a total of \(J\) studies with at least one observed result, where observed study \(j\) includes \(k_j\) effect size estimates for \(1 \leq k_j \leq k_j^*\).
 
 \subsection{Estimation methods}\label{estimation-methods-1}
 
 We estimated step-function selection models with a single step at \(\alpha_1 = 0.025\), so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
-We estimated both CML and ARGL estimators as described in Section \ref{estimation-methods}.
-For both the estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas.
+We estimated CML and ARGL estimators as described in Section \ref{estimation-methods}.
+For both estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas.
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric clustered bootstrap and the fractional random weight bootstrap.
 To maintain computational feasibility, we used \(B = 399\) bootstrap replications of each estimator.
 
-We compared the performance of the CML and ARGL estimators of the step-function model to two
-existing methods.
+We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency.
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by Chen and Pustejovsky (2024).
 This approach uses the working model
@@ -724,7 +720,7 @@ y_{ij} = \mu + u_j + v_{ij} + e_{ij},
 \end{equation}
 where \(u_j \sim N(0, \tau^2)\), \(v_{ij} \sim N(0, \omega^2)\), and \(e_{ij} \sim N(0, \sigma_{ij}^2)\).
 We estimated the variance components \(\tau^2\) and \(\omega^2\) using restricted maximum likelihood, treating the sample variances \(\sigma_{ij}\) as known.
-We assumed \(cor(e_{hj},e_{ij} )=0.80\) for all pairs of effect size estimates from the same study, which leads to a
+We assumed \(\text{cor}(e_{hj},e_{ij} )=0.80\) for all pairs of effect size estimates from the same study, which leads to a
 degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 Rather than estimating \(\mu\) using weights based on the full working model, CHE-ISCW instead uses generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors \(e_{1j},...,e_{k_j j}\) only.
 This has the effect of allocating more weight to studies with smaller sampling variances, providing some robustness to selective reporting of study results.
@@ -739,12 +735,12 @@ T_{ij} = \mu + \beta \times \frac{2}{\sqrt{N_j}} + e_{ij}
 variance instead of the sampling standard error: \begin{equation}
 \label{eq:peese}
 T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
-\end{equation} For both estimators, we assumed
-\(e_{ij} \sim N(0, \sigma_{ij}^2)\) and \(cor(e_{hj},e_{ij} )=0.80\) and
+\end{equation} For both estimating equations, we assumed
+\(e_{ij} \sim N(0, \sigma_{ij}^2)\) and \(\text{cor}(e_{hj},e_{ij} )=0.80\) and
 estimated the model just as with the CHE-ISCW model, including using
 CR2 cluster-robust standard errors. Following Stanley and Doucouliagos (2014), we combined
 the estimators by using PEESE if the PET estimator is statistically
-distinct from zero with an \(\alpha\)-level of 0.10, and otherwise using PET.
+distinct from zero at an \(\alpha\)-level of 0.10, and otherwise using PET.
 
 \subsection{Experimental design}\label{experimental-design}
 
@@ -754,7 +750,7 @@ Manipulated parameters included overall average standardized mean difference
 (\(\omega^2 / \tau^2\)), average correlation between outcomes (\(\rho\)),
 probability of selection for non-affirmative results (\(\lambda_1\)), number of observed studies (\(J\)), and primary study sample size.
 Parameters were fully crossed for a total of \(4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = 3,840\) conditions in the full simulation study.
-Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with a smaller number of studies, for which we expected bootstrapping to be relatively more effective.
+Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with a smaller number of studies, for which we expected large-sample cluster-robust CIs to be relatively less effective.
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
 (e.g., \(\tau = 0.30\)).
@@ -782,7 +778,7 @@ Primary study sample size & Typical, Small & Typical, Small\\
 \end{table}
 
 In the full simulation, we examined values for the overall average SMD (\(\mu\)) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions by Kraft (2020).
-We used values of \(\tau\) ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (an large degree of heterogeneity).
+We used values of \(\tau\) ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity).
 We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of \(\omega^2\) to between-study heterogeneity \(\tau^2\) at either 0 (i.e., no within-study heterogeneity) or 0.5.
 
 For the average correlation between outcomes from the same study, we
@@ -798,7 +794,7 @@ We examined a wide range of conditions for the number of primary studies include
 We chose these values to cover the conditions found in real meta-analyses of education and psychology research (Tipton et al., 2019).
 
 Lastly, we investigated the primary study sample size.
-For the typical primary study sample sizes, we used the empirical distribution of studies included in the What Works Clearinghouse database of findings from educational intervention studies.
+For the typical primary study sample sizes, we used the empirical distribution of sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
 The sample sizes in the database ranged from 37 to 2,295 with a median of 211.
 The number of effect sizes ranged from 1 to 48 with a median of 3.
 To explore the influence of the effective sample size distribution, we also ran conditions in which we divided the sample
@@ -809,10 +805,10 @@ such as those used in psychology laboratory studies.
 
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95\% confidence interval coverage for the overall average effect size \(\mu\).
-Bias characterizes whether an estimator generates values that are systematically (on average) above or below
+Bias measures whether an estimator generates values that are systematically (on average) above or below
 the true parameter.
-RMSE characterizes the overall accuracy of an estimator, capturing both systematic bias and sampling variance.
-Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by \(\sqrt{J}\) to reduce variation across the range of the number of studies included in each meta-analysis.
+RMSE measures the overall accuracy of an estimator, capturing both systematic bias and sampling variance.
+Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by \(\sqrt{J}\) to reduce variation across the number of studies included in each meta-analysis.
 Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.
 Specifically, we defined a lower fence of 2.5 times the inter-quartile range below the 25th percentile and an upper fence of 2.5 times the inter-quartile range above the 75th percentile.
 Estimates falling below the lower fence or above the upper fence were set to the corresponding fence values.
@@ -851,7 +847,7 @@ The box plot for each estimator depicts variation in bias over the remaining fac
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
 The CML estimator has negligible or small bias across all conditions.
-Its largest bias, of 0.08 occurs when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
+Its largest bias was 0.08, occurring when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
 The small bias of the CML estimator is stable across varying degrees of outcome correlation, within-study heterogeneity, number of observed studies, and primary study sample size.
 Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although it becomes biased when average effect is zero and selection is very strong.
 
@@ -892,14 +888,14 @@ The pattern of relative accuracy is very similar for the ARGL estimator (Figure 
 
 The bias-variance trade-offs faced by all the estimators arise because the CHE-ISCW estimator (which does not directly adjust for selection) is substantially biased by selective reporting, whereas the CML and ARGL estimators have at most small biases.
 However, under conditions where selection is absent or small and where average effect size is larger, the CHE-ISCW estimator has greater precision than the estimators that adjust for selective reporting.
-Because selective reporting does not create much bias under these conditions, the additional variability that comes with estimating a selection model or PET/PEESE adjustment dominates the small reduction in bias that these methods provide.
+Because selective reporting does not create much bias under such conditions, the additional variability that comes with estimating a selection model or PET/PEESE adjustment dominates the small reduction in bias that these methods provide.
 
 \subsubsection{Confidence Interval Coverage}\label{confidence-interval-coverage}
 
-Figure \ref{fig:comparison-coverage} shows the coverage rates of 95\% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.\footnote{To provide greater detail, the vertical axis of Figure \ref{fig:comparison-coverage} is limited to the range {[}0.5, 1.0{]}. Consequently, coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \ref{fig:comparison-coverage-full} depicts the full range of coverage rates.}
+Figure \ref{fig:comparison-coverage} shows the coverage rates of 95\% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.\footnote{To provide greater detail, the vertical axis of Figure \ref{fig:comparison-coverage} is limited to the range {[}0.5, 1.0{]}, and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \ref{fig:comparison-coverage-full} depicts the full range of coverage rates.}
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
 The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity,\\
-Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but were often still unacceptably low even when \(J = 90\) or greater.
+Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when \(J = 90\) or greater.
 In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated due to the biases of these estimators.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
 
@@ -920,11 +916,23 @@ Coverage levels of intervals based on the ARGL estimator followed very similar p
 
 \subsection{Effect Size Variance}\label{effect-size-variance}
 
-Here, we detail results on the bias and accuracy of the marginal variance of the effect size distribution. Figure \ref{fig:heterogeneity-bias} depicts the bias for the CHE, CML, and ARGL estimators of log-heterogeneity. Note that, for these graphs, we present the results for the CHE method instead of CHE-ISCW as the estimates of total heterogeneity are the same across the two methods. In most conditions, the estimators are biased in the negative direction. Bias is high for all three estimators in conditions where the between-study heterogeneity is low (\(\tau = 0.05\)) with bias improving as between-study heterogeneity increases. Bias of the CML estimator is closer to zero than that of CHE in conditions where there is strong selection. The ARGL estimator, particularly, has degrading bias especially in conditions where selection is strong, average SMD is low and between-study heterogeneity is low (the y axis cuts off at -2 and the bias of ARGL is lower than that). Figure \ref{fig:heterogeneity-rmse} depicts the scaled RMSE for estimators of log-heterogeneity. Figures \ref{fig:heterogeneity-rmse-ARGL-CHE} through \ref{fig:heterogeneity-rmse-ARGL-CML} provide greater detail about the relative accuracy of the three methods. In most conditions, the CML estimator outperforms ARGL in terms of RMSE. The RMSE of CML is closer to zero than that of CHE especially in conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
+We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE, CML, and ARGL methods are all relevant.\footnote{We omitted the variance estimator from the CHE-ISCW method because it is identical to that of CHE.}
+Figure \ref{fig:heterogeneity-bias} depicts the bias for the CHE, CML, and ARGL estimators of log-heterogeneity \(\gamma = \log(\tau^2)\).
+In most conditions, the estimators are biased in the negative direction. Bias is high for all three estimators in conditions where the between-study heterogeneity is low (\(\tau = 0.05\)) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE estimator under conditions where there is strong selection.
+However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low.
+Figure \ref{fig:heterogeneity-rmse} depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \ref{fig:heterogeneity-rmse-ARGL-CHE} and \ref{fig:heterogeneity-rmse-ARGL-CML} providing greater detail about the relative accuracy of the three methods.
+Under nearly all conditions, the CML estimator is much more accurate than the ARGL estimator.
+The RMSE of CML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
+However, just as with the estimators of average effect size, the CHE estimator is more accurate when selection is mild or absent, leading to a bias-variance trade-off.
 
 \subsection{Selection Parameter}\label{selection-parameter}
 
-Here, we detail results on the bias, accuracy and coverage of the CML and ARGL estimators of the log-selection parameter in the step-function models. Figure \ref{fig:selection-bias} shows that bias is similar for the two estimators. Both estimators show bias close to zero in conditions with low average SMD and high between-study heterogeneity but high negative bias in conditions with strong selection probability and high average SMD, particularly with low between-study heterogeneity. In conditions with high SMD, there may not be much selection occurring as non-significant effects are not as likely. Figure \ref{fig:selection-rmse} depicts the RMSE for the ARGL and CML estimators of the log-selection parameter with Figure \ref{fig:selection-rmse-ARGL-CML} depicting a more detailed view of the relative accuracy of the ARGL versus the CML estimators. The CML estimator outperforms ARGL, especially in conditions with strong selection. Figures \ref{fig:CML-zeta-coverage-full} and \ref{fig:ARGL-zeta-coverage-full} depict the confidence interval coverage of the two estimators with various combinations of cluster bootstrapping methods and bootstrap confidence interval estimation approaches. None of the methods provide adequate coverage.
+The CML and ARGL methods both estimate the log-selection parameter of the step-function model, a parameter that may be of substantive interest.
+Figure \ref{fig:selection-bias} shows that the bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have large negative biases under conditions with strong selection probability and high average SMD, especially with low between-study heterogeneity.
+Figure \ref{fig:selection-rmse} depicts the RMSE for the ARGL and CML estimators of the log-selection parameter with Figure \ref{fig:selection-rmse-ARGL-CML} providing a more detailed view of the relative accuracy of the ARGL versus the CML estimators.
+The CML estimator of the selection parameter generally outperforms the ARGL estimator, especially under conditions with strong selection.
+Figures \ref{fig:CML-zeta-coverage-full} and \ref{fig:ARGL-zeta-coverage-full} depict the confidence interval coverage of the two estimators with various combinations of cluster bootstrapping methods and bootstrap confidence interval estimation approaches.
+Broadly, none of the methods provide coverage rates that are close to the nominal 95\% level.
 
 \section{Discussion}\label{discussion}
 
@@ -941,26 +949,30 @@ We also implemented and studied two estimation methods for the marginal step-fun
 
 Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at \(\alpha_1 = .025\)), relative to estimators that account for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE.
 Across an extensive range of conditions, we found that both estimators of the marginal step-function model showed little bias, which was consistently smaller than the bias of PET/PEESE and much smaller than the bias of CHE-ISCW under conditions with meaningful selective reporting.
-However, the selection model estimators face a bias-variance trade-off. The bias reduction from using the selection model comes at the cost of increased variance from using a marginal model. Consequently, the RMSE of these estimators is higher than for the CHE-ISCW model under conditions where selective reporting is not strong or does not create meaningful bias. The marginal step-function model estimators also have better coverage compared to the other methods, with coverage rates of the cluster-bootstrapped confidence intervals approaching the nominal level of 0.95 for larger sample sizes. Compared to the ARGL estimator, the CML estimator was usually more accurate and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
+However, the selection model estimators face a bias-variance trade-off.
+The bias reduction from using the selection model comes at the cost of increased variance from using a marginal model. As a result, the step-function estimators are less accurate than the CHE-ISCW estimator under conditions where selective reporting is not strong or does not create meaningful bias.
+The marginal step-function model estimators also have better coverage compared to the other methods, with coverage rates of the cluster-bootstrapped confidence intervals approaching the nominal level of 0.95 for larger sample sizes.
+Compared to the ARGL estimator, the CML estimator of the marginal mean was usually more accurate and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
+CML consistently out-performed ARGL for estimating between-study heterogeneity and the strength of selective reporting.
 
 \subsection{Limitations and Further Directions}\label{limitations-and-further-directions}
 
 Both the methods we have developed and the findings from our simulation study have limitations that are important to recognize.
 On a conceptual level, the strategy of modeling the marginal distribution of effect sizes presents several limitations.
 First, such models do not attempt to describe the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
-Consequently, they do not fully align with contemporary approaches to summary meta-analysis and meta-regression analysis, which emphasize use of models that align with the hierarchical structure of dependent effect sizes (Pustejovsky \& Tipton, 2022; Van den Noortgate et al., 2013).
+Because of this, they do not fully align with contemporary approaches to summary meta-analysis and meta-regression analysis, which emphasize use of models that align with the hierarchical structure of dependent effect sizes (Pustejovsky \& Tipton, 2022; Van den Noortgate et al., 2013).
 
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates.
 Accounting for the dependence structure would allow for construction of more efficient estimators of the parameters of the evidence-generating process.
-A useful direction for further research would be to explore how to refine the CML and ARGL estimators by incorporating weights connected with the dependence structure of the effect sizes.
+A useful direction for further research would be to explore how to refine the CML and ARGL estimators by incorporating analytic weights connected with the dependence structure of the effect sizes.
 
 Third, the marginal model provides no way to distinguish between study-level publication bias and effect-level selective outcome reporting.
-Consequently, this strategy does not allow for examination of more nuanced forms of selection, such as one where the probability that a given effect size is reported depends on the significance levels of other effect size estimates drawn from the same sample or on some broader feature of the study's results.
+This strategy therefore precludes examination of more nuanced forms of selection, such as one where the probability that a given effect size is reported depends on the significance levels of other effect size estimates drawn from the same sample or on some broader feature of the study's results.
 This strikes us as an area in need of further theoretical development---even simply to catalog a wider variety of plausible selective reporting mechanisms.
 However, developing more nuanced models would require shifting to estimation frameworks that can handle multivariate models, such as multivariate likelihood-based estimation or pairwise composite likelihood methods (e.g., Rao et al., 2013; Yi et al., 2016).
 
 In addition to conceptual limitations, our simulation findings also need to be interpreted cautiously in light of the study's scope limitations.
-First, although we tried to cover a wide range of plausible conditions in the simulation study (7,200 conditions for the full simulation and 216 conditions for the bootstrap simulation), the results are only generalizable to the data-generating process presented in the study.
+First, although we tried to cover a wide range of plausible conditions in the simulation study (3,840 conditions for the full simulation and 288 conditions for the bootstrap simulation), the results are only generalizable to the data-generating process presented in the study.
 Of particular note, the evidence-generating process we used followed a CHE effects model with primary study sample sizes and the number of effect sizes per study drawn from an empirical distribution of educational research studies.
 The performance of the step-function selection models and alternative selective reporting adjustments could vary depending on features of studies included in the synthesis, such as studies drawn from areas of research that tend to use very small or very large samples or that tend to assess a larger number of outcomes.
 Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions (Hedges \& Vevea, 1996).
@@ -973,12 +985,12 @@ Nonetheless, there may be meta-analytic datasets where a more complex set of ste
 
 Third and related to the previous point, the simulations were limited to evidence-generating processes that did not involve systematic predictors of the effect size distribution and where the strength of selective reporting was uniform and solely dependent on the p-value of each individual effect size.
 There may be other factors besides statistical significance of findings that affect a study's publication status.
-For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research.
+For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research (Van Aert, 2025).
 Further evaluation of the CML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
 In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status (Coburn \& Vevea, 2015).
 
-Fourth and finally, the simulation findings we have reported here focused on the performance of the estimators and confidence intervals for the overall average effect size.
-We have not yet evaluated how well the estimators work as diagnostic \emph{tests} for the presence of selective reporting of study results.
+Fourth and finally, the simulation findings we have reported here focused mostly on the performance of the estimators and confidence intervals for the overall average effect size.
+We have not directly evaluated how well the estimators work as diagnostic \emph{tests} for the presence of selective reporting of study results, although the below-nominal coverage rates of confidence intervals for the selection parameter suggests that they may not work well diagnostically.
 In univariate random effects models, likelihood ratio tests based on step-function selection models have been found to provide much stronger power for detecting selective reporting compared to alternatives such as Egger's regression or non-parametric symmetry tests (Pustejovsky \& Rodgers, 2019).
 Extension of such tests for meta-analyses of dependent effect sizes requires further development.
 
@@ -1187,14 +1199,14 @@ Preston, C., Ashby, D., \& Smyth, R. (2004). Adjusting for publication bias: Mod
 \bibitem[\citeproctext]{ref-clubSandwich}
 Pustejovsky, J. E. (2024). \emph{clubSandwich: Cluster-robust (sandwich) variance estimators with small-sample corrections}. \url{https://CRAN.R-project.org/package=clubSandwich}
 
+\bibitem[\citeproctext]{ref-metaselection}
+Pustejovsky, J. E., \& Joshi, M. (2025). \emph{Metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates}. \url{https://github.com/jepusto/metaselection}
+
 \bibitem[\citeproctext]{ref-pustejovsky2019testing}
 Pustejovsky, J. E., \& Rodgers, M. A. (2019). Testing for funnel plot asymmetry of standardized mean differences. \emph{Research Synthesis Methods}, \emph{10}(1), 57--71.
 
 \bibitem[\citeproctext]{ref-pustejovsky2022preventionscience}
 Pustejovsky, J. E., \& Tipton, E. (2022). Meta-Analysis with Robust Variance Estimation: {Expanding} the Range of Working Models. \emph{Prevention Science}, \emph{23}, 425--438. \url{https://doi.org/10.1016/j.jsp.2018.02.003}
-
-\bibitem[\citeproctext]{ref-metaselection}
-Pustejovsky, J., \& Joshi, M. (2025). \emph{Metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates}. \url{https://github.com/jepusto/metaselection}
 
 \bibitem[\citeproctext]{ref-rcoreteam}
 R Core Team. (2025). \emph{R: A language and environment for statistical computing}. R Foundation for Statistical Computing. \url{https://www.R-project.org/}
@@ -1247,6 +1259,9 @@ Tipton, E., \& Pustejovsky, J. E. (2015). Small-sample adjustments for tests of 
 \bibitem[\citeproctext]{ref-tipton2019current}
 Tipton, E., Pustejovsky, J. E., \& Ahmadi, H. (2019). Current practices in meta-regression in psychology, education, and medicine. \emph{Research Synthesis Methods}, \emph{10}(2), 180--194.
 
+\bibitem[\citeproctext]{ref-vanaert2025metaanalyzing}
+Van Aert, R. C. M. (2025). Meta-analyzing nonpreregistered and preregistered studies. \emph{Psychological Methods}. \url{https://doi.org/10.1037/met0000719}
+
 \bibitem[\citeproctext]{ref-vandennoortgate2013threelevel}
 Van den Noortgate, W., López-López, J. A., Marín-Martínez, F., \& Sánchez-Meca, J. (2013). Three-level meta-analysis of dependent effect sizes. \emph{Behavior Research Methods}, \emph{45}(2), 576--594. \url{https://doi.org/10.3758/s13428-012-0261-6}
 
@@ -1295,15 +1310,15 @@ The components of the score contribution of study \(j\) given in Equations \eqre
 Let \(w_{ij} = w\left(y_{ij}, \sigma_{ij}; \boldsymbol\lambda \right)\), \(\mu_{ij} = \mathbf{x}_{ij} \boldsymbol\beta\), \(\eta_{ij} = \exp(\gamma) + \sigma_{ij}^2\), and \(A_{ij} = A\left(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \gamma, \boldsymbol\zeta \right)\) as defined in Equation \eqref{eq:step-function-A}.
 The score contribution of study \(j\) for the meta-regression coefficients has the general form
 \begin{equation}
-\mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \left(\frac{\left(y_{ij} - \mu_{ij} \right)}{\eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial  \mu_{ij}}\right).
+\mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mathbf{x}_{ij}' \left(\frac{\left(y_{ij} - \mu_{ij} \right)}{\eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial  \mu_{ij}}\right).
 \end{equation}
 The score for the variance parameter has the general form
 \begin{equation}
-S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right).
+S_{\gamma j} = \sum_{i=1}^{k_j} a_{ij} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right).
 \end{equation}
 The score for the \(h^{th}\) selection parameter has the general form
 \begin{equation}
-S_{\zeta_h j} = \sum_{i=1}^{k_j} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right),
+S_{\zeta_h j} = \sum_{i=1}^{k_j} a_{ij} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right),
 \end{equation}
 for \(h = 1,...,H\).
 For the step-function selection model, the derivatives of \(w_{ij}\) and \(A_{ij}\) are given by
@@ -1320,14 +1335,14 @@ with \(c_{hij}\) and \(B_{hij}\) as defined in Equation \eqref{eq:step-function-
 
 The sub-components of the Hessian matrix from study \(j\) have the following forms:
 \begin{align}
-\mathbf{H}_{j}^{\boldsymbol\beta \boldsymbol\beta'} &= \frac{\partial}{\partial \boldsymbol\beta'} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \mathbf{x}_{ij} \left(\frac{1}{A_{ij}^2}\left(\frac{\partial A_{ij}}{\partial \mu_{ij}}\right)^2 - \frac{1}{A_{ij}} \frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} - \frac{1}{\eta_{ij}} \right) \\
-\mathbf{H}_{j}^{\boldsymbol\beta \gamma} &= \frac{\partial}{\partial \gamma} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \tau^2 \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} - \frac{y_{ij} - \mu_{ij}}{\eta_{ij}^2} \right) \\
-\label{eq:H-beta-zeta} \mathbf{H}_{j}^{\boldsymbol\beta \zeta_h} &= \frac{\partial}{\partial \zeta_h} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} \right) \\
-\mathbf{H}_{j}^{\gamma \gamma} &= \frac{\partial}{\partial \gamma} S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \nonumber \\
-& \qquad \qquad \qquad \qquad  + \tau^4 \left(\frac{1}{A_{ij}^2} \left(\frac{\partial A_{ij}}{\partial \eta_{ij}}\right)^2 - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2}  - \frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^3}\right) \\
-\label{eq:H-gamma-zeta} \mathbf{H}_{j}^{\gamma \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\gamma j} = \sum_{i=1}^{k_j} \tau^2 \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \eta_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} \right) \\
-\mathbf{H}_{j}^{\zeta_f \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\zeta_f j} = \sum_{i=1}^{k_j} \lambda_f \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \lambda_f}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{w_{ij}^2}\frac{\partial w_{ij}}{\partial \lambda_f}\frac{\partial w_{ij}}{\partial \lambda_h} \right) \nonumber \\
-& \qquad \qquad \qquad \qquad  + I(f = h) \lambda_h\left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h}\right), \label{eq:H-zeta-zeta}
+\mathbf{H}_{j}^{\boldsymbol\beta \boldsymbol\beta'} &= \frac{\partial}{\partial \boldsymbol\beta'} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mathbf{x}_{ij}' \mathbf{x}_{ij} \left(\frac{1}{A_{ij}^2}\left(\frac{\partial A_{ij}}{\partial \mu_{ij}}\right)^2 - \frac{1}{A_{ij}} \frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} - \frac{1}{\eta_{ij}} \right) \\
+\mathbf{H}_{j}^{\boldsymbol\beta \gamma} &= \frac{\partial}{\partial \gamma} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mathbf{x}_{ij}' \tau^2 \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} - \frac{y_{ij} - \mu_{ij}}{\eta_{ij}^2} \right) \\
+\label{eq:H-beta-zeta} \mathbf{H}_{j}^{\boldsymbol\beta \zeta_h} &= \frac{\partial}{\partial \zeta_h} \mathbf{S}_{\boldsymbol\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mathbf{x}_{ij}' \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} \right) \\
+\mathbf{H}_{j}^{\gamma \gamma} &= \frac{\partial}{\partial \gamma} S_{\gamma j} = \sum_{i=1}^{k_j} a_{ij} \left[ \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \right.  \nonumber \\
+& \qquad \qquad \qquad \qquad  + \left. \tau^4 \left(\frac{1}{A_{ij}^2} \left(\frac{\partial A_{ij}}{\partial \eta_{ij}}\right)^2 - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2}  - \frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^3}\right)\right] \\
+\label{eq:H-gamma-zeta} \mathbf{H}_{j}^{\gamma \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\gamma j} = \sum_{i=1}^{k_j}  a_{ij} \tau^2 \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \eta_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} \right) \\
+\mathbf{H}_{j}^{\zeta_f \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\zeta_f j} = \sum_{i=1}^{k_j}  a_{ij} \left[ \lambda_f \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \lambda_f}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{w_{ij}^2}\frac{\partial w_{ij}}{\partial \lambda_f}\frac{\partial w_{ij}}{\partial \lambda_h} \right) \right. \nonumber \\
+& \qquad \qquad \qquad \qquad  + \left.I(f = h) \lambda_h\left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h}\right)\right], \label{eq:H-zeta-zeta}
 \end{align}
 where the second partial derivatives of \(A_{ij}\) are given by
 \begin{align}
@@ -1345,19 +1360,19 @@ Sandwich variance approximations for the ARGL estimators involve the estimating 
 
 Let \(\mathbf{J}\) denote the Jacobian matrix of the ARGL estimating equations, given by
 \begin{equation}
-\mathbf{J}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J a_j \frac{\partial \mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta)}{\partial (\boldsymbol\beta' \gamma \boldsymbol\zeta')}.
+\mathbf{J}(\boldsymbol\beta, \gamma, \boldsymbol\zeta) = \sum_{j=1}^J \frac{\partial \mathbf{M}_j(\boldsymbol\beta, \gamma, \boldsymbol\zeta)}{\partial (\boldsymbol\beta' \gamma \boldsymbol\zeta')}.
 \end{equation}
 The exact form of the Jacobian is described below.
 Let \(\mathbf{\tilde{M}}_j = \mathbf{M}_j(\boldsymbol{\tilde\beta}, \tilde\gamma, \boldsymbol{\tilde\zeta})\) and \(\mathbf{\tilde{J}} = \mathbf{J}(\boldsymbol{\tilde\beta}, \tilde\gamma, \boldsymbol{\tilde\zeta})\) denote the score vectors and Jacobian matrix evaluated at the solutions to the ARGL estimating equations.
 A cluster-robust sandwich estimator is then given by:
 \begin{equation}
 \label{eq:hybrid-sandwich-variance}
-\mathbf{V}^{ARGL} = \mathbf{\tilde{J}}^{-1}\left(\sum_{j=1}^J a_j \mathbf{\tilde{M}}_j {\mathbf{\tilde{M}}_j}'\right) \left(\mathbf{\tilde{J}}^{-1}\right)'.
+\mathbf{V}^{ARGL} = \mathbf{\tilde{J}}^{-1}\left(\sum_{j=1}^J \mathbf{\tilde{M}}_j {\mathbf{\tilde{M}}_j}'\right) \left(\mathbf{\tilde{J}}^{-1}\right)'.
 \end{equation}
 
 The Jacobian of \eqref{eq:hybrid-total-score} is given by
 \[
-\mathbf{J} = \sum_{j=1}^J a_j \times \left[\begin{array}{ccc}
+\mathbf{J} = \sum_{j=1}^J \left[\begin{array}{ccc}
 \mathbf{J}_j^{\boldsymbol\beta\boldsymbol\beta'} & \mathbf{J}_j^{\boldsymbol\beta \boldsymbol\gamma'} & \mathbf{J}_j^{\boldsymbol\beta \boldsymbol\zeta'} \\ 
 \mathbf{J}_j^{\boldsymbol\gamma\boldsymbol\beta'} & \mathbf{J}_j^{\boldsymbol\gamma \boldsymbol\gamma'} & \mathbf{J}_j^{\boldsymbol\gamma \boldsymbol\zeta'} \\
 \mathbf{J}_j^{\boldsymbol\zeta\boldsymbol\beta'} & \mathbf{J}_j^{\boldsymbol\zeta \boldsymbol\gamma'} & \mathbf{J}_j^{\boldsymbol\zeta \boldsymbol\zeta'},
@@ -1366,12 +1381,12 @@ The Jacobian of \eqref{eq:hybrid-total-score} is given by
 where
 \[
 \begin{aligned}
-\mathbf{J}_j^{\boldsymbol\beta\boldsymbol\beta'} &= - \sum_{i=1}^{k_j}  \frac{\mathbf{x}_{ij}' \mathbf{x}_{ij}}{w_{ij} \eta_{ij}} \\
-\mathbf{J}_j^{\boldsymbol\beta \gamma} &= - \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \tau^2 \left(\frac{y_{ij} - \mu_{ij}}{w_{ij} \eta_{ij}^2} \right) \\
-\mathbf{J}_j^{\boldsymbol\beta \zeta_h} &= - \sum_{i=1}^{k_j} \mathbf{x}_{ij}' \lambda_h \left(\frac{y_{ij} - \mu_{ij}}{w_{ij}^2 \eta_{ij}} \right) \\
+\mathbf{J}_j^{\boldsymbol\beta\boldsymbol\beta'} &= - \sum_{i=1}^{k_j} a_{ij} \frac{\mathbf{x}_{ij}' \mathbf{x}_{ij}}{w_{ij} \eta_{ij}} \\
+\mathbf{J}_j^{\boldsymbol\beta \gamma} &= - \sum_{i=1}^{k_j} a_{ij} \mathbf{x}_{ij}' \tau^2 \left(\frac{y_{ij} - \mu_{ij}}{w_{ij} \eta_{ij}^2} \right) \\
+\mathbf{J}_j^{\boldsymbol\beta \zeta_h} &= - \sum_{i=1}^{k_j} a_{ij} \mathbf{x}_{ij}' \lambda_h \left(\frac{y_{ij} - \mu_{ij}}{w_{ij}^2 \eta_{ij}} \right) \\
 \mathbf{J}_j^{\gamma \boldsymbol\beta'} &= \left(\mathbf{J}_j^{\boldsymbol\beta \gamma}\right)' \\
-\mathbf{J}_j^{\gamma \gamma} &= - \sum_{i=1}^{k_j} \frac{\tau^4}{w_{ij}} \left(\frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2 \eta_{ij}^3}\right) - \frac{\tau^2}{w_{ij}} \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta}{2 \eta_{ij}^2}\right) \\
-\mathbf{J}_j^{\gamma \zeta_h} &= - \sum_{i=1}^{k_j} \frac{\tau^2 \lambda_h}{w_{ij}^2}  \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^2}\right)\\  
+\mathbf{J}_j^{\gamma \gamma} &= - \sum_{i=1}^{k_j} a_{ij} \left[\frac{\tau^4}{w_{ij}} \left(\frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2 \eta_{ij}^3}\right) - \frac{\tau^2}{w_{ij}} \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta}{2 \eta_{ij}^2}\right)\right] \\
+\mathbf{J}_j^{\gamma \zeta_h} &= - \sum_{i=1}^{k_j} a_{ij} \frac{\tau^2 \lambda_h}{w_{ij}^2}  \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^2}\right)\\  
 \mathbf{J}_j^{\zeta_h \boldsymbol\beta'} &= \left(\mathbf{H}_{j}^{\boldsymbol\beta \zeta_h}\right)' \\
 \mathbf{J}_j^{\zeta_h \gamma} &= \mathbf{H}_{j}^{\gamma \zeta_h} \\
 \mathbf{J}_j^{\zeta_f \zeta_h} &= \mathbf{H}_{j}^{\zeta_f \zeta_h'},

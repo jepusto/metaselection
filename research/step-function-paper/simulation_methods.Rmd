@@ -18,8 +18,7 @@ The simulation code drew on functionality from several R packages, including `me
 
 ## Data generation
 
-We simulated meta-analyses based on a correlated-and-hierarchical
-effects (CHE) working model, with individual effect size estimates selected
+We simulated meta-analyses based on a CHE working model, with individual effect size estimates selected
 for inclusion based on the step-function selection model with a single step at $\alpha_1 = .025$. 
 For each replication, we generated a total of $J^*$ studies with a two-group comparison
 design, where study $j$ contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting. Let
@@ -30,7 +29,7 @@ denote the effective sample size from study $j$.
 To generate each meta-analytic dataset, we sampled effective sample sizes and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
-We assumed constant correlation between pairs of outcomes within a study but allowed the correlation value to vary from study to study.
+We assumed constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
 
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
@@ -53,19 +52,18 @@ After simulating results for study $j$, we applied a step-function selection
 model to the individual effect size estimates, with a one-sided selection
 threshold at $\alpha = 0.025$. Specifically, we let result $(y^*_{ij},
 \sigma_{ij}^*, p_{ij}^*)$ be included in the observed dataset with probability
-1 if $p_{ij}^*$ was less than 0.025 and probability $0 < \lambda_1 \leq 1$ if $p_{ij}^* \ge 0.025$. 
+1 if $p_{ij}^*$ was less than 0.025 and with probability $0 < \lambda_1 \leq 1$ if $p_{ij}^* \ge 0.025$. 
 We repeated the process of generating studies until the database included a total of $J$ studies with at least one observed result, where observed study $j$ includes $k_j$ effect size estimates for $1 \leq k_j \leq k_j^*$.
 
 ## Estimation methods
 
 We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
-We estimated both CML and ARGL estimators as described in Section \@ref(estimation-methods). 
-For both the estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas. 
+We estimated CML and ARGL estimators as described in Section \@ref(estimation-methods). 
+For both estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas. 
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric clustered bootstrap and the fractional random weight bootstrap.
 To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
 
-We compared the performance of the CML and ARGL estimators of the step-function model to two
-existing methods.
+We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting. 
 This approach uses the working model 
@@ -75,7 +73,7 @@ y_{ij} = \mu + u_j + v_{ij} + e_{ij},
 \end{equation}
 where $u_j \sim N(0, \tau^2)$, $v_{ij} \sim N(0, \omega^2)$, and $e_{ij} \sim N(0, \sigma_{ij}^2)$. 
 We estimated the variance components $\tau^2$ and $\omega^2$ using restricted maximum likelihood, treating the sample variances $\sigma_{ij}$ as known. 
-We assumed $cor(e_{hj},e_{ij} )=0.80$ for all pairs of effect size estimates from the same study, which leads to a
+We assumed $\cor(e_{hj},e_{ij} )=0.80$ for all pairs of effect size estimates from the same study, which leads to a
 degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 Rather than estimating $\mu$ using weights based on the full working model, CHE-ISCW instead uses generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors $e_{1j},...,e_{k_j j}$ only. 
 This has the effect of allocating more weight to studies with smaller sampling variances, providing some robustness to selective reporting of study results.
@@ -90,12 +88,12 @@ T_{ij} = \mu + \beta \times \frac{2}{\sqrt{N_j}} + e_{ij}
 variance instead of the sampling standard error: \begin{equation}
 \label{eq:peese}
 T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
-\end{equation} For both estimators, we assumed
-$e_{ij} \sim N(0, \sigma_{ij}^2)$ and $cor(e_{hj},e_{ij} )=0.80$ and
+\end{equation} For both estimating equations, we assumed
+$e_{ij} \sim N(0, \sigma_{ij}^2)$ and $\cor(e_{hj},e_{ij} )=0.80$ and
 estimated the model just as with the CHE-ISCW model, including using
 CR2 cluster-robust standard errors. Following @stanley2014meta, we combined
 the estimators by using PEESE if the PET estimator is statistically
-distinct from zero with an $\alpha$-level of 0.10, and otherwise using PET.
+distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
 
 ## Experimental design
 
@@ -105,7 +103,7 @@ Manipulated parameters included overall average standardized mean difference
 ($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$),
 probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
 Parameters were fully crossed for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions in the full simulation study. 
-Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with a smaller number of studies, for which we expected bootstrapping to be relatively more effective.
+Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with a smaller number of studies, for which we expected large-sample cluster-robust CIs to be relatively less effective.
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
 (e.g., $\tau = 0.30$). 
@@ -158,10 +156,8 @@ kable(
 ```
 
 In the full simulation, we examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions by @kraft2020interpreting.
-We used values of $\tau$ ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (an large degree of heterogeneity). 
-<!-- Justification for this range? -->
+We used values of $\tau$ ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
 We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of $\omega^2$ to between-study heterogeneity $\tau^2$ at either 0 (i.e., no within-study heterogeneity) or 0.5. 
-<!-- Rationale and citation? -->
 
 For the average correlation between outcomes from the same study, we
 examined the values of 0.40 or 0.80. The default value of the average
@@ -176,7 +172,7 @@ We examined a wide range of conditions for the number of primary studies include
 We chose these values to cover the conditions found in real meta-analyses of education and psychology research [@tipton2019current]. 
 
 Lastly, we investigated the primary study sample size. 
-For the typical primary study sample sizes, we used the empirical distribution of studies included in the What Works Clearinghouse database of findings from educational intervention studies.
+For the typical primary study sample sizes, we used the empirical distribution of sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
 <!--# did we restrict the data? -->
 The sample sizes in the database ranged from 37 to 2,295 with a median of 211. 
 The number of effect sizes ranged from 1 to 48 with a median of 3.
@@ -188,10 +184,10 @@ such as those used in psychology laboratory studies.
 
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
-Bias characterizes whether an estimator generates values that are systematically (on average) above or below
+Bias measures whether an estimator generates values that are systematically (on average) above or below
 the true parameter. 
-RMSE characterizes the overall accuracy of an estimator, capturing both systematic bias and sampling variance. 
-Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the range of the number of studies included in each meta-analysis. 
+RMSE measures the overall accuracy of an estimator, capturing both systematic bias and sampling variance. 
+Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
 Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.
 Specifically, we defined a lower fence of 2.5 times the inter-quartile range below the 25th percentile and an upper fence of 2.5 times the inter-quartile range above the 75th percentile. 
 Estimates falling below the lower fence or above the upper fence were set to the corresponding fence values.

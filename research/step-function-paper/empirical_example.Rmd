@@ -30,10 +30,10 @@ To mitigate possible effect of selective reporting, @carter2015series included m
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
 We conducted the analyses using R Version 4.4.3 [@rcoreteam]. 
 
-If selective reporting were not a concern, one could summarize the distribution of ego depletion effects using a correlated-and-hierarchical effects model [CHE, @pustejovsky2022preventionscience] to account for the effect size dependency.
-Based on the CHE model, the overall average effect estimate was `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "CHE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "CHE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "CHE"]), 2)`]. 
+If selective reporting were not a concern, a correlated-and-hierarchical effects model [CHE, @pustejovsky2022preventionscience] would be one way to summarize the distribution of ego depletion effects.
+Based on a CHE model, the overall average effect estimate was `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "CHE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "CHE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "CHE"]), 2)`]. 
 Alternately, @chen2024adapting proposed estimating average effect sizes using a CHE model with inverse sampling covariance weighting (CHE-ISCW), which does use the between-study or within-study variance estimates in forming weights. The CHE-ISCW estimator places relatively more weight on larger studies (those with smaller sampling variances), which are less biased by selective reporting.
-Applying CHE-ISCW, reduces the overall effect estimate to `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "FEC"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "FEC"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "FEC"]), 2)`]. 
+Applying CHE-ISCW reduces the overall effect estimate to `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "FEC"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "FEC"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "FEC"]), 2)`]. 
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment [@stanley2014meta], clustering the standard errors by study. This yielded an overall average effect of `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "PET/PEESE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "PET/PEESE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "PET/PEESE"]), 2)`]. The CHE and CHE-ISCW estimates are both positive, significant, and similar in magnitude. The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects. 
 
 We used the `selection_model()` function from the `metaselection` package to fit single-step and two-step selection models [@metaselection]. 
@@ -119,10 +119,10 @@ kbl(
 ```
 
 Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
-The estimated selection parameters are similar across the one- and two-step models and for both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
+The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
 The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
 In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero. 
-Thus, an analyst might reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
+Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
 
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
 Generally, the CML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
