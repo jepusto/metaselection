@@ -990,7 +990,7 @@ test_that("bootstrap reps differ by bootstrap type.", {
     multinomial_perc$bootstrap_reps$Est == exponential_perc$bootstrap_reps$Est
   ))
   expect_false(any(
-    exponential_perc$bootstrap_reps$Est == exponential_perc$bootstrap_reps$Est
+    twostage_perc$bootstrap_reps$Est == exponential_perc$bootstrap_reps$Est
   ))
   
 })
