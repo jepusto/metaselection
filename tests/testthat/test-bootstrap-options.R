@@ -514,6 +514,190 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
   
 })
 
+test_that("bootstrap_CI options for selection_model() work when bootstrap = 'two-stage'.", {
+  
+  aseed <- 20250418
+  set.seed(aseed)
+  
+  step_large <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = "large-sample",
+      R = 24L
+    )
+  
+  expect_s3_class(step_large, "selmodel")
+  expect_identical(names(step_large$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi"))
+  expect_false(is.null(step_large$bootstrap_reps))
+  
+  set.seed(aseed)
+  
+  step_perc <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      CI_type = "percentile",
+      bootstrap = "two-stage", 
+      R = 24
+    )
+  
+  expect_s3_class(step_perc, "boot.selmodel")
+  expect_identical(names(step_perc$est), c("estimator","param","Est","SE","bootstraps","percentile_lower","percentile_upper"))
+  expect_identical(table(step_perc$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
+  
+  set.seed(aseed)
+  
+  step_t <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = "student",
+      R = 24
+    )
+  
+  expect_s3_class(step_t, "boot.selmodel")
+  expect_identical(names(step_t$est), c("estimator","param","Est","SE","bootstraps","student_lower","student_upper"))
+  expect_identical(table(step_t$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
+  expect_identical(step_t$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
+  
+  set.seed(aseed)
+  
+  step_basic <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = "basic",
+      R = 24
+    )
+  
+  expect_s3_class(step_basic, "boot.selmodel")
+  expect_identical(names(step_basic$est), c("estimator","param","Est","SE","bootstraps","basic_lower","basic_upper"))
+  expect_identical(table(step_basic$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
+  expect_identical(step_basic$bootstrap_reps$Est, step_perc$bootstrap_reps$Est)
+  
+  set.seed(aseed)
+  
+  step_all <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = c("large-sample","student","percentile","basic"),
+      R = 24
+    )
+  
+  expect_s3_class(step_all, "boot.selmodel")
+  expect_identical(names(step_all$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi",
+                                          "bootstraps","basic_lower","basic_upper","student_lower","student_upper",
+                                          "percentile_lower","percentile_upper"))
+  expect_identical(table(step_all$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
+  expect_identical(step_all$bootstrap_reps, step_t$bootstrap_reps)
+  
+  expect_equal(
+    dplyr::bind_cols(
+      step_large$est, 
+      step_basic$est[,c("bootstraps","basic_lower","basic_upper")], 
+      step_t$est[,c("student_lower","student_upper")],
+      step_perc$est[,c("percentile_lower","percentile_upper")]
+    ), 
+    step_all$est
+  )
+  
+  set.seed(aseed)
+  
+  step_long <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = c("large-sample","student","percentile","basic"),
+      R = 24,
+      format = "long"
+    )
+  
+  expect_s3_class(step_long, "boot.selmodel")
+  expect_identical(names(step_long$est), c("estimator","param","Est","SE","p_value","CI_lo","CI_hi","boot_CIs"))
+  expect_identical(table(step_long$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 24L)))
+  expect_identical(step_all$bootstrap_reps, step_long$bootstrap_reps)
+  
+  expect_equal(
+    step_all$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")],
+    step_long$est[,c("estimator","param","Est","SE","CI_lo","CI_hi")]
+  )
+  
+  long_CIs <- 
+    dplyr::bind_rows(step_long$est$boot_CIs, .id = "param") |>
+    dplyr::arrange(type, param) |>
+    dplyr::select(type, param, bootstraps, lower, upper)
+  
+  all_CIs <- 
+    dplyr::bind_rows(
+      basic = dplyr::select(step_basic$est, param, bootstraps, lower = basic_lower, upper = basic_upper),
+      percentile = dplyr::select(step_perc$est, param, bootstraps, lower = percentile_lower, upper = percentile_upper),
+      student = dplyr::select(step_t$est, param, bootstraps, lower = student_lower, upper = student_upper),
+      .id = "type"
+    )
+  rownames(all_CIs) <- NULL
+  expect_equal(long_CIs, all_CIs)
+  
+  set.seed(aseed)
+  
+  step_none <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      bootstrap = "two-stage", 
+      CI_type = "none",
+      R = 37
+    )
+  
+  expect_s3_class(step_none, "boot.selmodel")
+  expect_identical(step_large$est[,c("estimator","param","Est","SE")], step_none$est)
+  expect_identical(names(step_none$est), c("estimator","param","Est","SE"))
+  expect_identical(table(step_none$bootstrap_reps$param), table(rep(c("beta","gamma","zeta1"), 37L)))
+  expect_identical(step_none$bootstrap_reps[1:(3*24),], step_t$bootstrap_reps[,c("param","Est")])
+  
+})
+
 test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
 
   suppressWarnings(

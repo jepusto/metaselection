@@ -437,6 +437,27 @@ fit_selection_model <- function(
   
 }
 
+two_stage_sample <- function(cluster) {
+  m <- nlevels(cluster)
+  i <- 1L
+  while (length(unique(i)) == 1) {
+    i <- sample.int(n = m, replace = TRUE)
+  }
+  dim(i) <- c(1, m)
+  bi <- apply(i, 1, tabulate, m)
+  
+  ki <- table(cluster)
+  bi_list <- mapply(
+    function(ki,a) tabulate(sample.int(ki, a * ki, replace = TRUE), nbins = ki),
+    ki = ki, 
+    a = bi[,1],
+    SIMPLIFY = FALSE
+  )
+  
+  unsplit(bi_list,cluster)
+  
+}
+
 bootstrap_selmodel <- function(
     yi, 
     sei, 
@@ -455,7 +476,7 @@ bootstrap_selmodel <- function(
     optimizer = "BFGS",
     optimizer_control = list(),
     use_jac = TRUE,
-    wtype = c("multinomial", "exponential"),
+    wtype = c("two-stage","multinomial", "exponential"),
     retry = 0L
 ) {
   
@@ -468,28 +489,44 @@ bootstrap_selmodel <- function(
     cluster_numeric <- 1:m
   }
   
-  if (wtype == "multinomial") {
-    i <- 1L
-    while (length(unique(i)) == 1) {
-      i <- sample.int(n = m, replace = TRUE)
+  if (wtype == "two-stage") {
+    
+    wi <- two_stage_sample(cluster)
+    
+    if (!is.null(ai)) {
+      wi <- ai * wi
     }
-    dim(i) <- c(1, m)
-    cluster_w <- apply(i, 1, tabulate, m)
     
-  } else if (wtype == "exponential") {
+    non_zero_cl <- wi > 0
+    cl_subset <- if (all(non_zero_cl)) NULL else non_zero_cl
     
-    cluster_w <- stats::rexp(n = m)
-    
-  }
-  
-  if (is.null(ai)) {
-    wi <- cluster_w[cluster_numeric]
   } else {
-    wi <- ai * cluster_w[cluster_numeric]
+    
+    if (wtype == "multinomial") {
+      i <- 1L
+      while (length(unique(i)) == 1) {
+        i <- sample.int(n = m, replace = TRUE)
+      }
+      dim(i) <- c(1, m)
+      cluster_w <- apply(i, 1, tabulate, m)
+      
+    } else if (wtype == "exponential") {
+      
+      cluster_w <- stats::rexp(n = m)
+      
+    }
+    
+    if (is.null(ai)) {
+      wi <- cluster_w[cluster_numeric]
+    } else {
+      wi <- ai * cluster_w[cluster_numeric]
+    }
+    
+    non_zero_cl <- cluster_w > 0
+    cl_subset <- if (all(non_zero_cl)) NULL else non_zero_cl[cluster_numeric]
+    
   }
   
-  non_zero_cl <- cluster_w > 0
-  cl_subset <- if (all(non_zero_cl)) NULL else non_zero_cl[cluster_numeric]
   res <- suppressWarnings(tryCatch(
     fit_selection_model(
       yi = yi, 
@@ -679,8 +716,9 @@ jackknife_selmodel <- function(
 #'   Jacobian of the estimating equations for optimization.
 #' @param bootstrap character string specifying the type of bootstrap to run,
 #'   with possible options \code{"none"} (the default), \code{"exponential"} for
-#'   the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
-#'   a conventional clustered bootstrap.
+#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for
+#'   a conventional clustered bootstrap, or , \code{"two-stage"} for
+#'   a two-stage clustered bootstrap.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param retry_bootstrap number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
@@ -771,14 +809,14 @@ selection_model <- function(
   selection_type <- match.arg(selection_type)
   estimator <- match.arg(estimator, c("CML","ML","ARGL","ARGL-full","hybrid","hybrid-full"))
   vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
-  bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial"))
+  bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial","two-stage"))
   CI_type <- match.arg(CI_type, c("large-sample","percentile","normal","student","basic","bias-corrected","BCa", "none"), several.ok = TRUE)  
 
   if (vcov_type == "model-based") {
     if (!(estimator %in% c("ML","CML"))) stop("vcov_type = 'model-based' is only allowed for estimator = 'CML'.")
     if (!missing(cluster)) stop("vcov_type = 'model-based' does not allow the use of a clustering variable.")
   }
-  if (bootstrap %in% c("exponential","multinomial")) {
+  if (bootstrap %in% c("exponential","multinomial","two-stage")) {
     if (identical(as.integer(R), 0L)) stop("Bootstrap methods require setting R > 0.") 
   }
   if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {

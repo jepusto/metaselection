@@ -117,8 +117,9 @@ Jacobian of the estimating equations for optimization.}
 
 \item{bootstrap}{character string specifying the type of bootstrap to run,
 with possible options \code{"none"} (the default), \code{"exponential"} for
-the fractionally re-weighted cluster bootstrap, or \code{"multinomial"} for
-a conventional clustered bootstrap.}
+the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for
+a conventional clustered bootstrap, or , \code{"two-stage"} for
+a two-stage clustered bootstrap.}
 
 \item{R}{number of bootstrap replications, with a default of \code{1999}.}
 
