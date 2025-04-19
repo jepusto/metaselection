@@ -931,3 +931,66 @@ test_that("bootstrap CIs appear in the right order in models with predictors.", 
   )
   
 })  
+
+test_that("bootstrap reps differ by bootstrap type.", {
+  
+  aseed <- 20250419
+  set.seed(aseed)
+  
+  multinomial_perc <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      CI_type = "percentile",
+      bootstrap = "multinomial", 
+      R = 24
+    )
+
+  set.seed(aseed)
+  
+  twostage_perc <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      CI_type = "percentile",
+      bootstrap = "two-stage", 
+      R = 24
+    )
+  
+  set.seed(aseed)
+  
+  exponential_perc <- 
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sd_d,
+      pi = p_onesided,
+      cluster = studyid,
+      steps = 0.025,
+      estimator = "CML",
+      CI_type = "percentile",
+      bootstrap = "exponential", 
+      R = 24
+    )
+  
+  expect_false(any(
+    multinomial_perc$bootstrap_reps$Est == twostage_perc$bootstrap_reps$Est
+  ))
+  expect_false(any(
+    multinomial_perc$bootstrap_reps$Est == exponential_perc$bootstrap_reps$Est
+  ))
+  expect_false(any(
+    exponential_perc$bootstrap_reps$Est == exponential_perc$bootstrap_reps$Est
+  ))
+  
+})
