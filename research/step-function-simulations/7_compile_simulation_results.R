@@ -5,15 +5,15 @@ library(future)
 library(furrr)
 
 rows <- 
-  read_csv("simulation-step-paper/batch-results/batches-to-run.csv", col_names = "row") %>%
+  read_csv("research/step-function-simulations/batch-results/batches-to-run.csv", col_names = "row") %>%
   mutate(
     i = row_number()
   )
 
-params <- readRDS("simulation-step-paper/simulation_parameters.rds")
+params <- readRDS("research/step-function-simulations/simulation_parameters.rds")
 
 res_list <- tibble(
-  file = list.files("simulation-step-paper/batch-results", pattern = "simulation_results_batch", full.names = TRUE)
+  file = list.files("research/step-function-simulations/batch-results", pattern = "simulation_results_batch", full.names = TRUE)
 ) %>%
   mutate(
     row = str_extract(file, "batch[0-9]+.rds") |> str_sub(6,-5) |> as.integer()
@@ -34,7 +34,7 @@ nrow(outstanding_conditions)
 
 outstanding_conditions %>%
   select(row) %>%
-  write_csv(file = "simulation-step-paper/batches-to-run.csv", col_names = FALSE)
+  write_csv(file = "research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 
 #-------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ dat <-
   map_dfr(file_list[[1]]$file, .f = readRDS) %>%
   unnest(res)
 
-source("simulation-step-paper/3_performance_criteria.R")
+source("research/step-function-simulations/3_performance_criteria.R")
 
 summarize_bootstraps <- function(file_list) {
   dat <- map_dfr(file_list$file, .f = readRDS)
@@ -181,8 +181,8 @@ toc()
 
 plan(sequential)
 
-write_rds(bootstrap_res, file = "simulation-step-paper/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
-bootstrap_res <- readRDS("simulation-step-paper/sim-step-function-bootstrap-performance-results.rds")
+write_rds(bootstrap_res, file = "research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
+bootstrap_res <- readRDS("research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds")
 
 convergence_rates <- 
   bootstrap_res %>%
@@ -210,7 +210,7 @@ timings <-
   select(-res, -summarize_performance) %>%
   mutate(time_hrs = time / 60^2)
 
-write_rds(timings, file = "simulation-step-paper/sim-step-function-timings.rds", compress = "gz", compression = 9L)
+write_rds(timings, file = "research/step-function-simulations/sim-step-function-timings.rds", compress = "gz", compression = 9L)
 
 
 timings %>%
@@ -265,7 +265,7 @@ res_point_estimator %>%
   count(n_res)
 
 
-write_rds(res_point_estimator, file = "simulation-step-paper/sim-step-function-point-estimator-results.rds", compress = "gz", compression = 9L)
+write_rds(res_point_estimator, file = "research/step-function-simulations/sim-step-function-point-estimator-results.rds", compress = "gz", compression = 9L)
 
 # variance estimation and confidence interval results
 
@@ -327,4 +327,4 @@ res_conf_int %>%
 res_conf_int %>%
   group_by(model, estimator, param, bootstrap_type) %>% count()
 
-write_rds(res_conf_int, file = "simulation-step-paper/sim-step-function-confidence-interval-results.rds", compress = "gz", compression = 9L)
+write_rds(res_conf_int, file = "research/step-function-simulations/sim-step-function-confidence-interval-results.rds", compress = "gz", compression = 9L)

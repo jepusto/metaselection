@@ -17,16 +17,16 @@ library(tidyr)
 library(purrr)
 library(tictoc)
 
-source("simulation-step-paper/2_estimation.R")
-source("simulation-step-paper/3_performance_criteria.R")
-source("simulation-step-paper/4_simulation_driver.R")
+source("research/step-function-simulations/2_estimation.R")
+source("research/step-function-simulations/3_performance_criteria.R")
+source("research/step-function-simulations/4_simulation_driver.R")
 
 #-------------------------------------------------------------------------------
 # Load experimental design parameters
 
-load("simulation-step-paper/wwc_es.RData")
+load("research/step-function-simulations/wwc_es.RData")
 
-all_params <- readRDS("simulation-step-paper/simulation_parameters.rds")
+all_params <- readRDS("research/step-function-simulations/simulation_parameters.rds")
 
 #-------------------------------------------------------------------------------
 # run simulations for specified batch

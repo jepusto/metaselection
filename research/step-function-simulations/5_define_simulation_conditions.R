@@ -46,21 +46,32 @@ all_params <-
   all_params %>%
   filter(bootstrap == "exponential") %>%
   mutate(bootstrap = "multinomial") %>%
-  bind_rows(all_params) %>%
+  bind_rows(all_params)
+
+all_params <- 
+  all_params %>%
+  filter(bootstrap == "exponential") %>%
+  mutate(bootstrap = "two-stage") %>%
+  bind_rows(all_params, .) %>%
   mutate(
     row = row_number(),
-    comparison_methods = if_else(bootstrap == "exponential","None","All")
+    comparison_methods = if_else(bootstrap %in% c("exponential","two-stage"),"None","All")
   )
 
 all_params %>%
   count(bootstrap)
 nrow(all_params)
 
-saveRDS(all_params, file = "simulation-step-paper/simulation_parameters.rds")
+saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
 
 all_params %>%
   group_by(bootstrap) %>%
   sample_n(size = 1000L) %>%
   ungroup() %>%
   select(row) %>%
-  write_csv("simulation-step-paper/batches-to-run.csv", col_names = FALSE)
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "two-stage") %>%
+  select(row) %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
