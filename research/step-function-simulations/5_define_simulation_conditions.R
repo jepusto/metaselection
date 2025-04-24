@@ -65,6 +65,10 @@ nrow(all_params)
 saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
 
 all_params %>%
+  select(row) %>%
+  write_csv("research/step-function-simulations/batch-results/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
   group_by(bootstrap) %>%
   sample_n(size = 1000L) %>%
   ungroup() %>%

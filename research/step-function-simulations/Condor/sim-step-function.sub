@@ -2,7 +2,7 @@
 # Simulation of 3-parameter selection models with RVE
 #
 universe = docker
-docker_image = jepusto/metaselection:v7
+docker_image = jepusto/metaselection:v8
 log = /home/pustejovsky/3PSM-RVE/log/cluster_$(Cluster).log
 error = /home/pustejovsky/3PSM-RVE/err/cluster_$(Cluster)_$(Process).err
 #
@@ -21,7 +21,7 @@ initialdir = /home/pustejovsky/3PSM-RVE
 #  used if there were any other files needed for the executable to use.
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
-transfer_input_files = step-function-simulations
+transfer_input_files = research
 #
 # Tell HTCondor what amount of compute resources
 #  each job will need on the computer where it runs.
