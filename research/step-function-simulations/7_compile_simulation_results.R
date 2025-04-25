@@ -130,7 +130,7 @@ bootstrap_files <-
 
 file_list <- 
   bootstrap_files %>%
-  filter(mean_smd == 0.8, tau == 0.05, cor_mu == 0.8, m == 60, omega == 0, weights == 0.05, n_multiplier == 1/3, bootstrap == "multinomial") %>%
+  filter(mean_smd == 0.0, tau == 0.05, cor_mu == 0.8, m == 60, omega == 0, weights == 0.05, n_multiplier == 1/3, bootstrap == "multinomial") %>%
   pull(files)
 
 dat <- 
@@ -165,6 +165,8 @@ summarize_bootstraps <- function(file_list) {
     )
   
 }
+
+summary_dat <- summarize_bootstraps(file_list = file_list[[1]])
 
 plan(multisession, workers = 10L)
 
