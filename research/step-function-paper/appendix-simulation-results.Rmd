@@ -128,6 +128,7 @@ mu_graph_res_ci %>%
   ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(NA, 1), expand = expansion(0,0)) + 
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
@@ -149,77 +150,113 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r CML-coverage-full}
+```{r CML-coverage-two-stage}
 #| cache: true
 #| fig.width: 10
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition == "bootstrap",
     estimator %in% c("CML"),
+    bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
-  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  geom_hline(yintercept = 0.95, linetype = "dashed") +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Number of studies (J)", 
-    y = "Coverage rate", 
-    color = "Method",
-    fill = "Method"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+  coverage_plot()
 
 ```
 
-```{r ARGL-coverage-full}
+```{r CML-coverage-multinomial}
 #| cache: true
 #| fig.width: 10
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("CML"),
+    bootstrap_type == "multinomial",
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r CML-coverage-exponential}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("CML"),
+    bootstrap_type == "exponential",
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r ARGL-coverage-two-stage}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition == "bootstrap",
     estimator %in% c("ARGL"),
+    bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
-  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  geom_hline(yintercept = 0.95, linetype = "dashed") +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Number of studies (J)", 
-    y = "Coverage rate", 
-    color = "Method",
-    fill = "Method"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+  coverage_plot
+
+```
+
+
+```{r ARGL-coverage-multinomial}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("ARGL"),
+    bootstrap_type == "multinomial",
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  coverage_plot
+
+```
+
+
+```{r ARGL-coverage-exponential}
+#| cache: true
+#| fig.width: 10
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("ARGL"),
+    bootstrap_type == "exponential",
+    CI_type %in% c("percentile","basic","student","BCa")
+  ) %>%
+  coverage_plot
 
 ```
 
@@ -295,6 +332,7 @@ ggplot() +
   theme(legend.position = "top")
 
 ```
+  
 ```{r heterogeneity-rmse-CML-CHE}
 #| cache: true
 #| fig.width: 10
@@ -409,17 +447,18 @@ ggplot() +
 RMSE_comparison_plot(zeta_wide_res, "CML","ARGL")
 ```
 
-```{r CML-zeta-coverage-full}
+```{r CML-zeta-coverage-two-stage}
 #| cache: true
 #| fig.width: 10
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the CML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
     bootstrap_condition == "bootstrap",
     estimator %in% c("CML"),
+    bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
@@ -448,17 +487,18 @@ zeta_graph_res_ci %>%
 
 ```
 
-```{r ARGL-zeta-coverage-full}
+```{r ARGL-zeta-coverage-two-stage}
 #| cache: true
 #| fig.width: 10
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
     bootstrap_condition == "bootstrap",
     estimator %in% c("ARGL"),
+    bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +

@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-We have described and evaluated several methods for estimating @vevea1995general step-function selection models while accounting for dependent effect sizes, a common feature of meta-analyses in social science fields. 
+We have described and evaluated several methods for estimating step-function selection models while accounting for dependent effect sizes, a common feature of meta-analyses in social science fields. 
 We focused on the step-function selection model because it offers a number of advantages over other available methods for diagnosing and correcting selective reporting bias. 
 First, step-function models are generative, in that they include parameters describing the selective reporting process under simple yet plausible forms of selective reporting connected to statistical significance.
 In contrast, regression-based estimators such as PET/PEESE [@stanley2014meta] or the endogenous kink meta-regression [@bom2019kinked] are agnostic as to selection mechanisms and thus are only indirectly informative about the strength or form of selection.
@@ -19,10 +19,10 @@ This strategy is appealing for its feasibility and because it connects to a sele
 We also implemented and studied two estimation methods for the marginal step-function model, composite marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
 
 Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at $\alpha_1 = .025$), compared to estimators that account for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE. 
-Across an extensive range of conditions, we found that both estimators of the marginal step-function model showed little bias, which was consistently smaller than the bias of PET/PEESE and much smaller than the bias of CHE-ISCW under conditions with meaningful selective reporting.
+Across an broad range of conditions, we found that both estimators of the marginal step-function model showed little bias, which was consistently smaller than the bias of PET/PEESE and much smaller than the bias of CHE-ISCW under conditions with meaningful selective reporting.
 However, the selection model estimators face a bias-variance trade-off. 
 The bias reduction from using the selection model comes at the cost of increased variance from using a marginal model. As a result, the step-function estimators are less accurate than the CHE-ISCW estimator under conditions where selective reporting is not strong or does not create meaningful bias. 
-The marginal step-function model estimators have better coverage compared to the other methods, with coverage rates of the cluster-bootstrapped confidence intervals approaching the nominal level of 0.95 for larger sample sizes. 
+The marginal step-function model estimators have better coverage compared to the other methods, with coverage rates of the two-stage cluster-bootstrapped confidence intervals approaching the nominal level of 0.95 for moderate sample sizes. 
 Compared to the ARGL estimator, the CML estimator of the marginal mean was usually more accurate  and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
 CML consistently out-performed ARGL for estimating between-study heterogeneity and the strength of selective reporting.
 
@@ -68,13 +68,13 @@ Extension of such tests for meta-analyses of dependent effect sizes requires fur
 ## Conclusions
 
 The potential for selective reporting of primary study results to distort and create biases in meta-analytic results is simultaneously of great concern to meta-analysts and a vexing problem to address---even in the simpler context of meta-analysis of independent effects.
-The challenge of detecting and adjusting for bias from selective reporting is all the more challenging in a corpus of primary study results that includes dependent effect sizes. 
+Detecting and adjusting for bias from selective reporting is all the more challenging in a corpus of primary study results that includes dependent effect sizes. 
 Nonetheless, meta-analysts must critically evaluate the evidence summarized in a synthesis, and this includes weighing the potential for bias from selective reporting and selective publication.
 
-Based on the simulation results we have presented, we recommend that researchers add step function selection models with clustered bootstrap confidence intervals to their toolkit ---currently, quite a limited one---of methods for investigating selective reporting bias in syntheses of dependent effect sizes.
+Based on the simulation results we have presented, we recommend that researchers add step function selection models with two-stage clustered bootstrap confidence intervals to their toolkit---currently, quite a limited one---of methods for investigating selective reporting bias in syntheses of dependent effect sizes.
 As a parametric model that makes specific assumptions about the selection process, marginal step function models provide a useful complement to more agnostic techniques for identifying small-study effects, such as funnel plots and regression adjustment methods, and to sensitivity analyses such as the one proposed by @mathur2020sensitivity. Step function models could even be applied in combination with the sensitivity analysis by using estimates of the strength of selection to inform assumptions about the maximal plausible degree of selection. 
 
 Consistent with recommendations from past work in the context of independent effect sizes [@carter2019correcting; @mcshane2016adjusting], interpretation of any bias-corrected effect estimates needs to give consideration to the conditions under which the estimation method could be expected to perform well.
-Interpretation of marginal step-function models should focus mostly on the bias-adjusted average effect size, and selection parameter estimates should be interpreted cautiously in light of the poor performance of their cluster bootstrapped confidence intervals.
+Interpretation of marginal step-function models should focus mostly on the bias-adjusted average effect size, and selection parameter estimates should be interpreted cautiously in light of the miscalibrated coverage levels of their cluster bootstrapped confidence intervals.
 More broadly, it is critical that meta-analysts consider the context of the evidence included in the synthesis, such as whether the effect size estimates are for focal results or merely incidental findings and whether studies were conducted under conditions where pressures to selectively reporting findings are present, when applying and interpretting step function models.
-As with inferences from any model, one's conclusions should be informed not only by the statistical results but also by knowledge of the problem context.
+As with inferences from any model, one's conclusions should be informed not only by the statistical results but also by knowledge of the research context.

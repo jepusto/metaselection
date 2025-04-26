@@ -60,7 +60,7 @@ We repeated the process of generating studies until the database included a tota
 We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
 We estimated CML and ARGL estimators as described in Section \@ref(estimation-methods). 
 For both estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas. 
-For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric clustered bootstrap and the fractional random weight bootstrap.
+For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap.
 To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
 
 We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
@@ -125,18 +125,18 @@ dat <- tibble(
     "Primary study sample size"
   ),
   `Full Simulation` = c(
-    "0.0, 0.20, 0.40, 0.80",
+    "0.0, 0.2, 0.4, 0.8",
     "0.05, 0.15, 0.30, 0.45",
-    "0.0, 0.50",
+    "0.0, 0.5",
     "0.40, 0.80",
     "0.02, 0.05, 0.10, 0.20, 0.50, 1.0",
     "15, 30, 60, 90, 120",
     "Typical, Small"
   ),
   `Bootstrap Simulation` = c(
-    "0, 0.2, 0.40, 0.80",
+    "0.0, 0.2, 0.4, 0.8",
     "0.15, 0.45",
-    "0.0, 0.50",
+    "0.0, 0.5",
     "0.80",
     "0.05, 0.20, 1.0",
     "15, 30, 60",

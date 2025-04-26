@@ -94,7 +94,7 @@ mod_3PSM_boot_CML <- selection_model(
   selection_type = "step",
   steps = 0.025,
   estimator = "CML",
-  bootstrap = "multinomial",
+  bootstrap = "two-stage",
   CI_type = c("large-sample", "percentile"),
   R = 1999
 )
@@ -120,7 +120,7 @@ mod_3PSM_boot_ARGL <- selection_model(
   selection_type = "step",
   steps = 0.025,
   estimator = "ARGL",
-  bootstrap = "multinomial",
+  bootstrap = "two-stage",
   CI_type = c("large-sample", "percentile"),
   R = 1999
 )
@@ -143,7 +143,7 @@ mod_4PSM_boot_CML <- selection_model(
   selection_type = "step",
   steps = c(0.025, .5),
   estimator = "CML",
-  bootstrap = "multinomial",
+  bootstrap = "two-stage",
   CI_type = c("large-sample", "percentile"),
   R = 1999
 )
@@ -165,7 +165,7 @@ mod_4PSM_boot_ARGL <- selection_model(
   selection_type = "step",
   steps = c(0.025, .5),
   estimator = "ARGL",
-  bootstrap = "multinomial",
+  bootstrap = "two-stage",
   CI_type = c("large-sample", "percentile"),
   R = 1999
 )

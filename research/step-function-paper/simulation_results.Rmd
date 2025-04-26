@@ -192,11 +192,12 @@ mu_graph_res_ci %>%
 ```
 
 Bootstrap intervals for the step-function model provide more accurate coverage levels.
-Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of $J = 60$. Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either multinomial (non-parametric) or exponential (fractional reweighted) bootstrap resampling.
-Although none of the intervals provide exactly nominal coverage, both versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation. 
-In particular, the percentile intervals with multinomial bootstrap re-sampling provided the best coverage levels, exceeding 90% coverage across data-generating conditions when the number of studies was 30 or greater. 
-Coverage levels of the other bootstrap intervals, including studentized, basic, and BCa intervals, were not as accurate as percentile intervals (see Supplementary Figure \@ref(fig:CML-coverage-full) for detailed results).
-Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figure \@ref(fig:ARGL-coverage-full)).
+Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of $J = 60$. 
+Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial (non-parametric), or exponential (fractional reweighted) bootstrap resampling.
+Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation. 
+In particular, the percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, exceeding 90% coverage across nearly all data-generating conditions, even with only $J = 15$ primary studies per meta-analysis. 
+Coverage levels of the other bootstrap intervals, including studentized, basic, and BCa intervals, were not as accurate as percentile intervals (see Supplementary Figures \@ref(fig:CML-coverage-two-stage)-\@ref(fig:CML-coverage-exponential) for detailed results).
+Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-two-stage)-\@ref(fig:ARGL-coverage-exponential)).
 
 ```{r CML-coverage}
 #| fig.width: 10
@@ -241,6 +242,7 @@ We briefly consider estimation of the marginal heterogeneity of the effect size 
 Figure \@ref(fig:heterogeneity-bias) depicts the bias for the CHE, CML, and ARGL estimators of log-heterogeneity $\gamma = \log(\tau^2)$. 
 In most conditions, the estimators are biased in the negative direction. Bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau = 0.05$) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE estimator under conditions where there is strong selection. 
 However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low. 
+
 Figure \@ref(fig:heterogeneity-rmse) depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-CHE) and \@ref(fig:heterogeneity-rmse-ARGL-CML) providing greater detail about the relative accuracy of the three methods. 
 Under nearly all conditions, the CML estimator is much more accurate than the ARGL estimator. 
 The RMSE of CML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
@@ -252,5 +254,5 @@ The CML and ARGL methods both estimate the log-selection parameter of the step-f
 Figure \@ref(fig:selection-bias) shows that the bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have large negative biases under conditions with strong selection probability and high average SMD, especially with low between-study heterogeneity. 
 Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and CML estimators of the log-selection parameter with Figure \@ref(fig:selection-rmse-ARGL-CML) providing a more detailed view of the relative accuracy of the ARGL versus the CML estimators. 
 The CML estimator of the selection parameter generally outperforms the ARGL estimator, especially under conditions with strong selection. 
-Figures \@ref(fig:CML-zeta-coverage-full) and \@ref(fig:ARGL-zeta-coverage-full) depict the confidence interval coverage of the two estimators with various combinations of cluster bootstrapping methods and bootstrap confidence interval estimation approaches. 
-Broadly, none of the methods provide coverage rates that are close to the nominal 95% level.
+Figures \@ref(fig:CML-zeta-coverage-two-stage) and \@ref(fig:ARGL-zeta-coverage-two-stage) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
+Broadly, none of the methods provide coverage rates that are close to the nominal 95% level across all conditions examined.

@@ -108,9 +108,12 @@ results_ci <-
     ),
     CI_boot_method = fct(
       CI_boot_method,
-      levels = c("cluster-robust","percentile (multinomial)","percentile (exponential)",
-                 "biascorrected (multinomial)","biascorrected (exponential)","BCa (multinomial)","BCa (exponential)",
-                 "basic (multinomial)","basic (exponential)","student (multinomial)","student (exponential)")
+      levels = c("cluster-robust",
+                 "percentile (two-stage)","percentile (multinomial)","percentile (exponential)",
+                 "biascorrected (two-stage)","biascorrected (multinomial)","biascorrected (exponential)",
+                 "BCa (two-stage)","BCa (multinomial)","BCa (exponential)",
+                 "basic (two-stage)","basic (multinomial)","basic (exponential)",
+                 "student (two-stage)","student (multinomial)","student (exponential)")
     )
   ) %>%
   select(-cor_sd, -n_multiplier)
@@ -167,6 +170,32 @@ RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_l
       x = "Selection probability",
       y = y_lab,
       shape = col_lab, color = col_lab
+    ) + 
+    theme_bw() +
+    theme(legend.position = "top")
+}
+
+coverage_plot <- function(data) {
+  
+  ggplot(data, aes(x = J, y = coverage, color = CI_type, fill = CI_type)) +
+    geom_boxplot(alpha = .5, coef = Inf) +
+    geom_hline(yintercept = 0.95, linetype = "dashed") +
+    scale_y_continuous(limits = c(NA, 1), expand = expansion(0,0)) + 
+    scale_color_brewer(palette = "Dark2") +
+    scale_fill_brewer(palette = "Dark2") +
+    facet_grid(
+      tau ~ mean_smd, 
+      labeller = label_bquote(
+        rows = tau == .(tau),
+        cols = mu == .(mean_smd)
+      ),
+      scales = "free_y"
+    ) +
+    labs(
+      x = "Number of studies (J)", 
+      y = "Coverage rate", 
+      color = "Method",
+      fill = "Method"
     ) + 
     theme_bw() +
     theme(legend.position = "top")

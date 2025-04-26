@@ -39,7 +39,7 @@ As a further point of comparison, we estimated the overall average effect using 
 We used the `selection_model()` function from the `metaselection` package to fit single-step and two-step selection models [@metaselection]. 
 The single-step model used a threshold at $\alpha_1 = 0.025$; the two-step model used thresholds at $\alpha_1 = 0.025$ and $\alpha_2 = 0.5$. 
 For comparison purposes, we estimated model parameters using both CML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
-For bootstrapping, we used multinomial cluster bootstrap re-sampling with 1999 replicates.
+For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 replicates.
 
 ```{r empirical, echo=F, message=FALSE, warning=FALSE, tab.cap="Carter et al. (2015) Re-Analysis: Ego-Depletion"}
 format_it <- function(x, trunc = Inf) {
@@ -131,5 +131,5 @@ For the ARGL estimator, the bootstrap CIs were similar to the cluster-robust CIs
 For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme.
 
 The patterns that we have noted suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
-However, these results are based on a single empirical dataset where the true data-generating process is uncertain. 
+However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
 To draw firmer conclusion about the comparative performance of these methods, we conducted simulations to evaluate the methods in terms of bias, accuracy, and confidence interval coverage across a range of conditions. 
