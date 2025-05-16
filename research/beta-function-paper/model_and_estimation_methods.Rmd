@@ -1,9 +1,11 @@
 ---
 title: "Modified Beta-Function Selection Model"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 bibliography: references.bib
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: sentence
 ---
 
@@ -130,9 +132,9 @@ $c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mathbf{x}_{ij
 
 ## Estimation Method {#estimation-method}
 
-We estimate model parameters using maximum composite marginal likelihood (CML), which treats each observed effect size estimate as if it were marginally independent, following established composite likelihood approaches [e.g., @cox2004note; @lindsay1988composite; @varin2008composite]. Estimation proceeds by maximizing a weighted log-likelihood function defined over the marginal contributions of each observation, using reparameterizations of the variance and selection parameters. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper [@pustejovsky2025step], and the exact expressions used for estimating the beta-function selection model are presented in APPENDIX <!--`r appendix_prefix` \@ref(CML-derivatives). -->
+We estimate model parameters using maximum composite marginal likelihood (CML), which treats each observed effect size estimate as if it were mutually independent, following established composite likelihood approaches [e.g., @cox2004note; @lindsay1988composite; @varin2008composite]. Estimation proceeds by maximizing a weighted log-likelihood function defined over the marginal contributions of each observation, using reparameterizations of the variance and selection parameters. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper [@pustejovsky2025step], and the exact expressions used for estimating the beta-function selection model are presented in APPENDIX.
 
 ## Bootstrap inference
 
-To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We consider both the non-parametric clustered bootstrap and the fractional random weight bootstrap [@xu2020applications], which differ in how they preserve the dependence structure across clusters. Confidence intervals are then computed using standard bootstrap-based methods such as the percentile, basic, studentized, and bias-corrected-and-accelerated intervals [@davison1997bootstrap; @efron1987better]. These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly. Further details are included in APPENDIX <!--`r appendix_prefix` \@ref(bootstrap-CIs) --> provides further details about the bootstrap CI calculations.
+To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We consider both the non-parametric clustered bootstrap and the fractional random weight bootstrap [@xu2020applications], which differ in how they preserve the dependence structure across clusters. Confidence intervals are then computed using standard bootstrap-based methods such as the percentile, basic, studentized, and bias-corrected-and-accelerated intervals [@davison1997bootstrap; @efron1987better]. These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly. APPENDIX provides further details about the bootstrap CI calculations.
 <!-- If we're only applying the bootstrap approaches we decided were best based on the step function simulations, we should adjust the list here and add a note about this. -->

@@ -1,0 +1,91 @@
+---
+title: "Simulation Methods"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+We conducted Monte Carlo simulation studies to assess the performance of the new beta-function selection model. The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates. We compared the new model to three exiting methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting [@chen2024adapting]; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures [@stanley2014meta]; and (3) our recently developed step-function selection model that accounts for both selective reporting and dependent effects [@pustejovsky2025step]. We evaluated the model estimates based on convergence rates, bias, accuracy, and confidence interval coverage for estimating the average effect size from the unselected distribution. Bootstrap confidence intervals were assessed under a narrower set of conditions to limit computational burden. Simulations were conducted in R Version 4.X.X <!-- add version --> [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin–Madison [@CHTC]. The code relied on several R packages, including metafor [@Viechtbauer2010conducting], clubSandwich [@clubSandwich], simhelpers [@simhelpers], optimx [@optimx], nleqslv [@nleqslv], and tidyverse [@tidyverse].
+
+## Data generation
+
+We generated simulated data using an approach similar to @pustejovsky2025step, with the key difference that effect size estimates were selected for inclusion based on the beta-function selection model. For each simulated meta-analysis, we generated a pool of primary studies using a CHE model, with effect size estimates selected for inclusion according to probabilities defined by the beta-function selection model. Each study followed a two-group design, with sample sizes and numbers of effect sizes per study drawn from an empirical distribution based on the What Works Clearinghouse database. We generated outcome correlations across studies by sampling from a beta distribution with mean $\rho$ and standard deviation 0.05, but assumed a constant correlation between pairs of outcomes within a study.
+
+Within each study, we simulated a study-level average effect size $\delta_j$, and then generated individual effect size parameters from a normal distribution centered at $\delta_j$ with variance $\omega^2$. Using these parameters, we drew multivariate normal outcomes for participants equally divided into treatment and control groups and computed standardized mean differences with Hedges’s $g$ small sample bias correction. One-sided $p$-values were computed for each effect size, and weights from the beta-function selection model were applied to determine the probability of selection. We repeated this process until the simulated meta-analytic dataset included at total of $J$ studies with at least one observed result. See @pustejovsky2025step for details.
+
+## Estimation methods
+
+We estimated the beta-function selection model using the CML approach described in Section \@ref(estimation-methods). We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap. <!-- Update with approaches applied, and possibly a note of others we tested in our previous paper and thus didn't apply here. --> To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
+
+We compared the performance of the beta-function selection model to three other methods. First, we estimated a summary meta-analysis model using the CHE-ISCW approach proposed by @chen2024adapting, which accounts for effect size dependence but does not adjust for selective reporting. This method fits a CHE working model, but it allocates more weight to studies with smaller sampling variances by using generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors only. We assumed a correlation of 0.80, which allows for some misspecification when the average correlation used in the data-generating process differs from 0.80. Confidence intervals were computed using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.
+
+Second, we estimated a variation of the PET/PEESE model originally proposed by @stanley2014meta, adapted to handle dependent effect sizes. The PET model regresses effect size estimates on their standard errors, while the PEESE model uses sampling variances instead. Both models assume normally distributed errors with a correlation of 0.80 and were estimated using the same procedure as the CHE-ISCW model, including using CR2 cluster-robust standard errors. Following @stanley2014meta, we used the PET estimate if it was not statistically distinguishable from zero at an $\alpha$-level of 0.10; otherwise, we used the PEESE estimate.
+
+Third, we estimated the step-function selection model using the CML approach described in @pustejovsky2025step. We estimated two step-function selection models: (1) a three-parameter selection model (3PSM) with a single step at $\alpha_1 = 0.025$, and (2) a four-parameter selection model (4PSM) with steps at $\alpha_1 = 0.025$ and $\alpha_2 = 0.500$. Like the beta-function selection model, the 3PSM and 4PSM are $p$-value selection models designed to address selective reporting. The new models account for effect size dependency using cluster-robust standard errors, modeling the marginal rather than joint distribution of estimates within studies. The main distinction between the step-function and beta-function selection models lies in their assumptions about the selection mechanism. By fitting the 3PSM and 4PSM to data simulated under a beta-function selection process, we can assess how robust these models are to misspecification of the selection function and whether the form of selection affects their performance. <!-- We may want to elevate some of these to earlier sections. -->
+
+## Experimental design
+
+We examined performance across a range of simulation conditions, summarized in Table \@ref(tab:sim-design). Manipulated parameters included overall average standardized mean difference ($\mu$), between-study heterogeneity ($\tau$), ratio of within- to between-study heterogeneity ($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$), probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. The full simulation crossed all parameter values for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions. For the more computationally intensive bootstrap simulations, we limited the design to a smaller subset ($4 \times 2 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 2 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions), focusing on smaller meta-analyses and reducing values for factors where results were stable (e.g., $\tau = 0.30$). For each condition, we generated 2,000 replications. 
+
+```{r sim-design, tab.cap="Simulation design parameters"}
+library(kableExtra)
+library(tidyverse)
+
+dat <- tibble(
+  Parameter = c(
+    "Overall average SMD ($\\mu$)",
+    "Between-study heterogeneity ($\\tau$)",
+    "Heterogeneity ratio ($\\omega^2 / \\tau^2$)",
+    "Average correlation between outcomes ($\\rho$)",
+    "Probability of selection for non-affirmative effects ($\\lambda_1, \\lambda_2$)",
+    "Number of observed studies ($J$)",
+    "Primary study sample size"
+  ),
+  `Full Simulation` = c(
+    "0.0, 0.2, 0.4, 0.8",
+    "0.05, 0.15, 0.30, 0.45",
+    "0.0, 0.5",
+    "0.40, 0.80",
+    "(0.01,0.90),(0.20,0.90),(0.50,0.90),(0.80,0.90),(1.00,1.00)",
+    "15, 30, 60, 90, 120",
+    "Typical, Small"
+  ),
+  `Bootstrap Simulation` = c(
+    "0.0, 0.2, 0.4, 0.8",
+    "0.15, 0.45",
+    "0.0, 0.5",
+    "0.80",
+    "(0.20,0.90),(0.50,0.90),(1.00,1.00)",
+    "15, 30, 60",
+    "Typical, Small"
+  )
+)
+
+kable(
+  dat, 
+  caption = "Parameter values examined in the simulation study",
+  booktabs = TRUE, 
+  escape = FALSE
+) |>
+  kable_styling() |>
+  column_spec(1, width = "2.5in")
+  
+```
+
+In the full simulation, we varied $\mu$ from 0.0 to 0.80, reflecting the range of effects observed in a large-scale review of education randomized controlled trials [@kraft2020interpreting], and $\tau$ from 0.05 (minimal heterogeneity) to 0.45 (substantial heterogeneity). Within-study heterogeneity was specified relative to between-study heterogeneity using a ratio of $\omega^2 / \tau^2$ equal to 0 (no within-study heterogeneity) or 0.5.
+
+To assess the impact of working model misspecification, we manipulated the average within-study correlation $\rho$ across two levels: 0.80 (the default used in RVE software and correctly specified when $\rho = 0.80$) and 0.40 (representing misspecification).
+
+Selective reporting was modeled as the probability of selecting non-affirmative results based on the weights fed into the beta-function selection model ($\lambda_1$ and $\lambda_2$). Weights ranged from $\lambda_1 = 1.00$ and $\lambda_2 = 1.00$ (no selection) to $\lambda_1 = 0.01$ and $\lambda_2 = 0.90$ (severe selection bias). <!-- Double check the values here and in the table. -->
+
+The number of observed studies ($J$) ranged from 15 to 120, covering the typical size of meta-analyses in education and psychology [@tipton2019current].
+
+Primary study sample sizes were drawn from an empirical distribution in the What Works Clearinghouse database. The sample sizes in the database ranged from 37 to 2,295 with a median of 211, and the number of effect sizes ranged from 1 to 48 with a median of 3. To represent smaller studies, such as those in psychology lab settings, we also included conditions in which these sizes were divided by three. <!-- I think we skipped this. If so, we could say we investigated it in our previous study and it didn't matter so we didn't do it here. -->
+
+## Performance criteria
+
+We evaluated each method’s performance in terms of convergence rates, bias, scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall effect size $\mu$. Bias reflects systematic deviation from the true parameter value, while RMSE captures both bias and sampling variability. To account for expected reductions in RMSE with more studies, we scaled RMSE by $\sqrt{J}$. Bias and scaled RMSE were calculated after winsorizing to limit the influence of extreme outliers, using fences set at 2.5 times the interquartile range beyond the 25th and 75th percentiles.
+
+For confidence intervals based on cluster-robust variance estimation, we defined coverage as the proportion of intervals that contained the true parameter value. For bootstrap intervals, we used $B = 399$ replicates per simulation due to computational limits---fewer than ideal for applied use. To estimate practical coverage rates, we followed an approach similar to @boos2000montecarlo: we calculated coverage for smaller subsamples ($B = 49, 99, 199, 299$) randomly selected without replacement from the full set of $B = 399$ bootstraps, fit a regression of coverage on $1/B$, and used the intercept to extrapolate expected coverage for $B = 1999$.
