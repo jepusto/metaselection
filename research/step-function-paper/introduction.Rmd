@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-Meta-analysis methods are used to synthesize quantitative findings across multiple sources of evidence, such as multiple studies conducted on a common topic.
+Meta-analysis methods are used to synthesize quantitative findings across multiple sources of evidence, such as multiple studies that evaluate the effects of the same intervention.
 Because they rely on findings from primary studies as input data, the validity of conclusions from a meta-analytic synthesis depends critically on the reporting practices of researchers, journal editors, and peer reviewers.
 If the findings accessible to meta-analysts are not a complete or representative record of the research that has been conducted on a topic, then meta-analytic summaries could be systematically biased [@Rothstein2005publication].
 Of particular concern is the possibility that results from primary studies are selectively reported in ways that can distort the evidence available for synthesis, such as reporting findings that are statistically significant but omitting findings that are null or not consistent with researchers' hypotheses [@carter2019correcting].
@@ -60,17 +60,17 @@ Methodologists have only recently begun to examine selective reporting detection
 This sensitivity analysis provides an estimate of the average effect size after correcting for selective reporting based on a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst. It handles effect size dependence using RVE methods [@Hedges2010robust].
 However, this approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
 
-Another alternative is to use a regression test for small-study effects [as in @egger1997bias], combined with RVE or multilevel meta-analysis to handle dependent effect sizes [@fernandezcastilla2019detecting; @rodgers2021evaluating].
+Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors  [as in @egger1997bias], combined with RVE or multilevel meta-analysis to handle dependent effect sizes [@fernandezcastilla2019detecting; @rodgers2021evaluating].
 @rodgers2021evaluating found that this method has limited power to detect selective reporting under common meta-analytic scenarios.
 It also has the same limitations as univariate Egger's regression, in that it tests for small-study effects (or asymmetry in the funnel plot distribution), which could have causes other than selective reporting.
 Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting.
 
 @chen2024adapting reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and proposed adaptations of some existing methods to accommodate dependent effect sizes.
 The proposed adaptations applied to methods that could be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
-In an extensive simulation study, they examined the performance of proposed adaptations as well as of existing methods that ignore effect size dependence. 
+In an extensive simulation study, they examined the performance of proposed adaptations alongside existing methods that ignore effect size dependence. 
 Although no single bias-correction method performed best across all conditions examined, simple forms of the step-function selection model emerged as strong candidates.
 Across a wide range of conditions, one-step and two-step selection models yielded average effect size estimates with low bias that were usually more accurate than alternative bias-adjusted estimators, even though the selection models ignore the dependence structure of the data.
-However, because selection models make the assumption that all effect sizes are independent, confidence intervals generated from the selection models did not have accurate coverage. 
+However, because selection models rely on the assumption that all effect sizes are independent, confidence intervals generated from the selection models did not have accurate coverage. 
 In light of these findings, @chen2024adapting noted a need to further develop selection models that can account for dependent effect sizes.
 
 To address this need, we investigate how to estimate selection models and provide valid assessments of uncertainty in parameter estimates for meta-analyses that involve dependent effect sizes. 
@@ -81,6 +81,6 @@ Third, we use simulation to evaluate the performance of RVE and bootstrap re-sam
 
 The remainder of the paper is organized as follows. 
 In the next section, we describe the step-function selection model and detail our estimation and inference strategies. 
-In the following section, we illustrate the methods by re-analyzing data from a previously reported meta-analysis. 
+In the following section, we provide an empirical example that illustrates the methods by re-analyzing data from a previously reported meta-analysis. 
 In subsequent sections, we describe the methods and results from a simulation study that rigorously evaluates the estimators and confidence intervals across a wide range of meta-analytic conditions.
 In the final section, we discuss findings, limitations, and initial implications for practice.

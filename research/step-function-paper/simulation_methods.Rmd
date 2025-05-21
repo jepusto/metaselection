@@ -9,9 +9,9 @@ editor_options:
 
 We conducted Monte Carlo simulation studies to examine the performance
 of the CML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
-We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment [@stanley2014meta], a commonly used method for correcting selective reporting that has been adapted to handle dependent effects.
+We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment [@stanley2014meta].
 We evaluated the point estimators and robust variance estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size of the unselected distribution.
-To limit the computational burden, we evaluated the performance of bootstrap confidence intervals across a more limited range of conditions. 
+To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only in a subset of the conditions. 
 We ran the simulation in R Version 4.4.1
 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison [@CHTC].
 The simulation code drew on functionality from several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
@@ -26,10 +26,12 @@ $T_{ij}$ denote effect size estimate $i$ from study $j$ and let $\sigma_{ij}$
 denote its standard error, for $i = 1,...,k_j^*$ and $j = 1,...,J^*$. Let $N_j$
 denote the effective sample size from study $j$.
 
-To generate each meta-analytic dataset, we sampled effective sample sizes and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
+To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
 We assumed constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
+
+[^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
 
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
@@ -65,35 +67,33 @@ To maintain computational feasibility, we used $B = 399$ bootstrap replications 
 
 We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
-Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting. 
-This approach uses the working model 
-\begin{equation}
-\label{eq:che}
-y_{ij} = \mu + u_j + v_{ij} + e_{ij},
-\end{equation}
-where $u_j \sim N(0, \tau^2)$, $v_{ij} \sim N(0, \omega^2)$, and $e_{ij} \sim N(0, \sigma_{ij}^2)$. 
-We estimated the variance components $\tau^2$ and $\omega^2$ using restricted maximum likelihood, treating the sample variances $\sigma_{ij}$ as known. 
-We assumed $\cor(e_{hj},e_{ij} )=0.80$ for all pairs of effect size estimates from the same study, which leads to a
-degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-Rather than estimating $\mu$ using weights based on the full working model, CHE-ISCW instead uses generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors $e_{1j},...,e_{k_j j}$ only. 
-This has the effect of allocating more weight to studies with smaller sampling variances, providing some robustness to selective reporting of study results.
+Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting.[^ISCW] 
+We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 For this estimator, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.
+Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
+We estimated the PET and PEESE models using the same methods as for CHE-ISCW, including using CR2 clustered standard errors. 
+Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
 
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to
-accommodate dependent effect sizes. The PET estimator is based on the
-working model \begin{equation}
-\label{eq:pet}
-T_{ij} = \mu + \beta \times \frac{2}{\sqrt{N_j}} + e_{ij}
-\end{equation} The PEESE estimator is similar, but uses the sampling
-variance instead of the sampling standard error: \begin{equation}
-\label{eq:peese}
-T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
-\end{equation} For both estimating equations, we assumed
-$e_{ij} \sim N(0, \sigma_{ij}^2)$ and $\cor(e_{hj},e_{ij} )=0.80$ and
-estimated the model just as with the CHE-ISCW model, including using
-CR2 cluster-robust standard errors. Following @stanley2014meta, we combined
-the estimators by using PEESE if the PET estimator is statistically
-distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
+[^ISCW]: CHE-ISCW is based on the working model 
+  \begin{equation}
+  \label{eq:che}
+  y_{ij} = \mu + u_j + v_{ij} + e_{ij},
+  \end{equation}
+  where $u_j \sim N(0, \tau^2)$, $v_{ij} \sim N(0, \omega^2)$, $e_{ij} \sim N(0, \sigma_{ij}^2)$, and $\cor(e_{hj},e_{ij}) = \rho$, with the sampling variances treated as known and assuming a common correlation between sampling errors within the same study. 
+  Rather than estimating $\mu$ using weights based on the full working model, CHE-ISCW instead uses generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors $e_{1j},...,e_{k_j j}$ only. 
+  This has the effect of allocating more weight to studies with smaller sampling variances, providing some robustness to selective reporting of study results.
+
+[^PET-PEESE]: The PET estimator is based on the working model \begin{equation}
+  \label{eq:pet}
+  T_{ij} = \mu + \beta \times \frac{2}{\sqrt{N_j}} + e_{ij}
+  \end{equation} 
+  The PEESE estimator is similar, but uses the sampling variance instead of the sampling standard error: \begin{equation}
+  \label{eq:peese}
+  T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
+  \end{equation} 
+  For both estimating equations, sampling errors are assumed to have fixed variances 
+  $\Var(e_{ij}) = \sigma_{ij}^2$ and constant sampling correlation within studies, $\cor(e_{hj},e_{ij} )=\rho$.
+
 
 ## Experimental design
 
@@ -103,10 +103,10 @@ Manipulated parameters included overall average standardized mean difference
 ($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$),
 probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
 Parameters were fully crossed for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions in the full simulation study. 
-Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with a smaller number of studies, for which we expected large-sample cluster-robust CIs to be relatively less effective.
+Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with fewer studies per meta-analysis, for which we expected large-sample cluster-robust CIs to be relatively less effective.
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
-(e.g., $\tau = 0.30$). 
+(e.g., excluding $\tau = 0.30$). 
 This resulted in $4 \times 2 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 2 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
 For each condition, we generated 2,000 replications. 
 

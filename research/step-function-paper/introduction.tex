@@ -1,0 +1,663 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Introduction},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Introduction}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+Meta-analysis methods are used to synthesize quantitative findings
+across multiple sources of evidence, such as multiple studies that
+evaluate the effects of the same intervention. Because they rely on
+findings from primary studies as input data, the validity of conclusions
+from a meta-analytic synthesis depends critically on the reporting
+practices of researchers, journal editors, and peer reviewers. If the
+findings accessible to meta-analysts are not a complete or
+representative record of the research that has been conducted on a
+topic, then meta-analytic summaries could be systematically biased
+(Rothstein, Sutton, and Borenstein 2005). Of particular concern is the
+possibility that results from primary studies are selectively reported
+in ways that can distort the evidence available for synthesis, such as
+reporting findings that are statistically significant but omitting
+findings that are null or not consistent with researchers' hypotheses
+(Carter et al. 2019).
+
+Evidence from medical, educational, and social sciences provides
+indications of the prevalence of selective reporting. For example,
+studies have found that statistically significant outcomes were 2.4 to
+4.7 times more likely to be published than non-significant outcomes in
+the medical sciences (Chan et al. 2004) and 2.4 times more likely in
+education (Pigott et al. 2013). Research across various fields, from
+clinical trials of antipsychotics (e.g., Lancee et al. 2017) to
+psychology studies (e.g., John, Loewenstein, and Prelec 2012; Franco,
+Malhotra, and Simonovits 2016) and management research (e.g., O'Boyle
+Jr, Banks, and Gonzalez-Mulé 2017), indicates that selective outcome
+reporting is widespread and often driven by statistical significance.
+
+Because selective reporting is of such central concern for
+meta-analysis, a wide range of statistical tools have been developed for
+assessing the presence of selective reporting and reducing the biases it
+creates (Rothstein, Sutton, and Borenstein 2005; Marks‐Anglin and Chen
+2020). One common graphical diagnostic is the funnel plot, a simple
+scatterplot of effect size estimates versus a measure of their precision
+(Light and Pillemer 1984; Sterne, Becker, and Egger 2005; Kossmeier,
+Tran, and Voracek 2020). Widely used statistical diagnostics include the
+rank correlation test by Begg and Mazumdar (1994); Egger's regression
+test (Egger et al. 1997; Harbord, Egger, and Sterne 2006; Macaskill,
+Walter, and Irwig 2001; Moreno et al. 2012; Peters et al. 2006; James E.
+Pustejovsky and Rodgers 2019; Stanley 2008; Thompson and Sharp 1999);
+the trim-and-fill adjustment (Duval and Tweedie 2000a, 2000b); and
+various regression adjustment methods including the precision effect
+test (PET), precision effect estimate with standard error (PEESE), and
+PET-PEESE technique by Stanley and Doucouliagos (2014), and the
+endogenous kink meta-regression (Bom and Rachinger 2019).
+
+Another class of methods for assessing and correcting selective
+reporting are \(p\)-value selection models.\footnote{A further class of
+  selection models exists that depends both on the effect size estimate
+  and its standard error (e.g., Copas 1999; Copas and Li 1997; Copas and
+  Shi 2001). We focus here on the selection models that depend solely on
+  the \(p\)-value because they have shown more promise (Carter et al.
+  2019; Terrin et al. 2003) and because the second set of selection
+  models have identification issues that make them more useful as
+  sensitivity analyses than as estimation methods (Hedges and Vevea
+  2005; Sutton 2009).} Such models build on summary meta-analysis or
+meta-regression models by making specific, explicit assumptions about
+the selection function, or how the probability that an effect size
+estimate is reported relates to sign and statistical significance level
+of the effect. Early proposals of this form include Hedges (1984),
+Iyengar and Greenhouse (1988), and Dear and Begg (1992). Hedges (1992)
+and Vevea and Hedges (1995) proposed \emph{step-function} models where
+the selection function is piece-wise constant, with steps at
+psychologically salient significance levels such as \(\alpha = .05\).
+Other forms involve selection functions based on beta densities
+(Citkowicz and Vevea 2017), power curves, and a variety of other
+parametric forms (Preston, Ashby, and Smyth 2004).
+
+Selection models have several advantages over other available methods
+for diagnosing and adjusting for selective reporting bias. First, they
+are generative models with parameters that directly describe the
+selective reporting process; they are therefore more interpretable than
+tests or adjustments for small-study effects, which are agnostic with
+respect to the specific mechanism of selective reporting. Second,
+selection models can allow for effect heterogeneity with a random effect
+term. Findings from simulations indicate that selection models
+outperform simpler alternative methods when effect sizes are
+heterogeneous (Carter et al. 2019; Terrin et al. 2003). Third, selection
+models can incorporate both discrete and continuous moderators, enabling
+one to distinguish between selective reporting bias and systematic
+differences in effect size that can be predicted by primary study
+characteristics. In addition to these features, Vevea and Hedges (1995)
+step-function's model is particularly useful because it allows one to
+specify cut points that capture simple but plausible forms of selective
+reporting (e.g., p \textless{} 0.01 and p \textless{} 0.05, see, e.g.,
+Greenwald 1975; Nelson, Rosenthal, and Rosnow 1986; Rosenthal and Gaito
+1963, 1964).
+
+\subsection{Dependent effect sizes}\label{dependent-effect-sizes}
+
+The vast majority of the work on selective reporting---including the
+development of selection models---has focused on methods appropriate for
+relatively simple summary meta-analyses in which each included study
+contributes a single independent effect size estimate. This presents a
+problem for syntheses in education, psychology, and many other areas,
+where meta-analyses routinely include studies with multiple, dependent
+effect sizes. Effect size dependencies occur when multiple effect sizes
+are extracted from the same sample, resulting in statistically dependent
+estimates. Dependent effect size estimates commonly occur (1) when
+multiple outcome measures are collected on the same sample; (2) when the
+same sample is measured over multiple time points; or (3) when multiple
+treatment groups are compared to the same control group. Dependence can
+also arise when effect sizes are extracted from multiple samples
+involving the same operational features, such as multiple studies
+conducted by the same research group.
+
+Effect size dependencies are very common in social science synthesis, as
+well as in other research areas. For example, for the more than 1,000
+educational intervention studies reviewed by the What Works
+Clearinghouse since 2017, most (73\%) included more than one
+intervention effect estimate, with a median of four effect sizes per
+study (WWC, 2020). In a survey of systematic reviews published in 2016
+across several prominent journals, Tipton, Pustejovsky, and Ahmadi
+(2019) found that primary studies contributed an average of 3.1 effect
+sizes to systematic reviews published in \emph{Psychological Bulletin};
+11.0 effect sizes to reviews published in \emph{Journal of Applied
+Psychology}; and 5.0 effect sizes to reviews published in \emph{Review
+of Educational Research}. Surveys of recent meta-analyses on topics in
+environmental sciences (Nakagawa et al. 2023) and neurobiological
+research involving animal models (Yang et al. 2023) have also documented
+a high prevalence of dependent effect sizes. Thus, multiple effects are
+the norm, rather than the exception, in many fields that use
+quantitative synthesis.
+
+Meta-analysts now have access to an array of methods for summarizing and
+modeling dependent effect sizes, including multi-level meta-analyses
+(Konstantopoulos 2011; Van den Noortgate et al. 2013, 2015), robust
+variance estimation (RVE, Hedges, Tipton, and Johnson 2010; Tipton 2015;
+Tipton and Pustejovsky 2015), and combinations thereof (James E.
+Pustejovsky and Tipton 2022). Among these, RVE has proven to be an
+attractive strategy because it provides a means to assess uncertainty in
+model parameter estimates that does not rely on strong assumptions about
+the exact dependence structure of the effect size estimates. Instead,
+RVE involves specifying a tentative working model for the dependence,
+but calculating standard errors, hypothesis tests, and confidence
+intervals using sandwich estimators that do not require the working
+model to be correct.
+
+The original form of RVE was based on asymptotic approximations that
+required a relatively large number of independent studies. Tipton (2015)
+and Tipton and Pustejovsky (2015) developed small-sample adjustments for
+standard errors and hypothesis tests based on RVE so that the desirable
+asymptotic properties are maintained even when the number of studies is
+small. A closely related strategy is to use bootstrap re-sampling to
+approximate the distribution of test statistics. For instance, Joshi,
+Pustejovsky, and Beretvas (2022) examined a cluster-wild bootstrap
+method for hypothesis testing in meta-regression with dependent effects,
+finding that it led to refined type I error rates and improved power
+compared to analytic approximations. However, extant developments in RVE
+and bootstrapping methods are limited to summary meta-analysis and
+meta-regression models. Applications to selection models remain to be
+explored.
+
+\subsection{Investigating selective reporting with dependent effect
+sizes}\label{investigating-selective-reporting-with-dependent-effect-sizes}
+
+Methodologists have only recently begun to examine selective reporting
+detection or bias correction methods in meta-analysis involving
+dependent effect sizes. Mathur and VanderWeele (2020) proposed a
+sensitivity analysis based on the simplest possible form of the Vevea
+and Hedges (1995) step-function selection model. This sensitivity
+analysis provides an estimate of the average effect size after
+correcting for selective reporting based on a single, threshold
+statistical significance level, where the maximum strength of selection
+is pre-specified by the analyst. It handles effect size dependence using
+RVE methods (Hedges, Tipton, and Johnson 2010). However, this approach
+is premised on an assumed degree of selective reporting; thus, it does
+not estimate the strength of selection, nor does it have extensions to
+more complex forms of selection models (such as step functions with
+multiple thresholds).
+
+Another alternative is to use a regression test for small-study effects,
+or association between effect sizes and standard errors (as in Egger et
+al. 1997), combined with RVE or multilevel meta-analysis to handle
+dependent effect sizes (Fernández-Castilla et al. 2019; Rodgers and
+Pustejovsky 2021). Rodgers and Pustejovsky (2021) found that this method
+has limited power to detect selective reporting under common
+meta-analytic scenarios. It also has the same limitations as univariate
+Egger's regression, in that it tests for small-study effects (or
+asymmetry in the funnel plot distribution), which could have causes
+other than selective reporting. Further, Egger's regression is not based
+on a generative model and is therefore not directly informative about
+the degree or pattern of selective reporting.
+
+Chen and Pustejovsky (2024) reviewed a range of existing techniques for
+estimating average effect sizes in the presence of selective reporting
+and proposed adaptations of some existing methods to accommodate
+dependent effect sizes. The proposed adaptations applied to methods that
+could be formulated as meta-regressions, such as PET/PEESE and the
+endogenous kink method, with dependence addressed using a particular
+working model combined with RVE. In an extensive simulation study, they
+examined the performance of proposed adaptations alongside existing
+methods that ignore effect size dependence. Although no single
+bias-correction method performed best across all conditions examined,
+simple forms of the step-function selection model emerged as strong
+candidates. Across a wide range of conditions, one-step and two-step
+selection models yielded average effect size estimates with low bias
+that were usually more accurate than alternative bias-adjusted
+estimators, even though the selection models ignore the dependence
+structure of the data. However, because selection models rely on the
+assumption that all effect sizes are independent, confidence intervals
+generated from the selection models did not have accurate coverage. In
+light of these findings, Chen and Pustejovsky (2024) noted a need to
+further develop selection models that can account for dependent effect
+sizes.
+
+To address this need, we investigate how to estimate selection models
+and provide valid assessments of uncertainty in parameter estimates for
+meta-analyses that involve dependent effect sizes. We make three main
+contributions. First, we describe extensions of RVE and bootstrap
+re-sampling techniques to assess uncertainty in selection model
+parameter estimates. Second, we describe and evaluate two different
+strategies for estimating model parameters: one using conventional
+maximum likelihood estimation methods and a novel strategy based on a
+reweighted random effects model with inverse probability of selection
+weights. Third, we use simulation to evaluate the performance of RVE and
+bootstrap re-sampling for constructing confidence intervals for average
+effect sizes.
+
+The remainder of the paper is organized as follows. In the next section,
+we describe the step-function selection model and detail our estimation
+and inference strategies. In the following section, we provide an
+empirical example that illustrates the methods by re-analyzing data from
+a previously reported meta-analysis. In subsequent sections, we describe
+the methods and results from a simulation study that rigorously
+evaluates the estimators and confidence intervals across a wide range of
+meta-analytic conditions. In the final section, we discuss findings,
+limitations, and initial implications for practice.
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-begg1994operating}
+Begg, Colin B, and Madhuchhanda Mazumdar. 1994. {``Operating
+Characteristics of a Rank Correlation Test for Publication Bias.''}
+\emph{Biometrics}, 1088--1101.
+
+\bibitem[\citeproctext]{ref-bom2019kinked}
+Bom, Pedro R. D., and Heiko Rachinger. 2019. {``A Kinked Meta-Regression
+Model for Publication Bias Correction.''} \emph{Research Synthesis
+Methods} 10 (4): 497--514. \url{https://doi.org/10.1002/jrsm.1352}.
+
+\bibitem[\citeproctext]{ref-carter2019correcting}
+Carter, Evan C, Felix D Schönbrodt, Will M Gervais, and Joseph Hilgard.
+2019. {``Correcting for Bias in Psychology: A Comparison of
+Meta-Analytic Methods.''} \emph{Advances in Methods and Practices in
+Psychological Science} 2 (2): 115--44.
+
+\bibitem[\citeproctext]{ref-chan2004empirical}
+Chan, An-Wen, Asbjørn Hróbjartsson, Mette T Haahr, Peter C Gøtzsche, and
+Douglas G Altman. 2004. {``Empirical Evidence for Selective Reporting of
+Outcomes in Randomized Trials: Comparison of Protocols to Published
+Articles.''} \emph{Jama} 291 (20): 2457--65.
+
+\bibitem[\citeproctext]{ref-chen2024adapting}
+Chen, Man, and James E. Pustejovsky. 2024. {``Adapting Methods for
+Correcting Selective Reporting Bias in Meta-Analysis of Dependent Effect
+Sizes.''} \url{https://doi.org/10.31222/osf.io/jq52s}.
+
+\bibitem[\citeproctext]{ref-citkowicz2017parsimonious}
+Citkowicz, Martyna, and Jack L Vevea. 2017. {``{A parsimonious weight
+function for modeling publication bias}.''} \emph{Psychological Methods}
+22 (1): 28--41. \url{https://doi.org/10.1037/met0000119}.
+
+\bibitem[\citeproctext]{ref-copas1999what}
+Copas, John B. 1999. {``What Works?: {Selectivity} Models and
+Meta-Analysis.''} \emph{Journal of the Royal Statistical Society Series
+A: Statistics in Society} 162 (1): 95--109.
+\url{https://doi.org/10.1111/1467-985X.00123}.
+
+\bibitem[\citeproctext]{ref-copas1997inference}
+Copas, John B., and H. G. Li. 1997. {``Inference for Non-Random
+Samples.''} \emph{Journal of the Royal Statistical Society Series B:
+Statistical Methodology} 59 (1): 55--95.
+\url{https://doi.org/10.1111/1467-9868.00055}.
+
+\bibitem[\citeproctext]{ref-Copas2001sensitivity}
+Copas, John B., and Jian Qing Shi. 2001. {``{A sensitivity analysis for
+publication bias in systematic reviews.}''} \emph{Statistical Methods in
+Medical Research} 10: 251--65.
+
+\bibitem[\citeproctext]{ref-dear1992approach}
+Dear, K B G, and C B Begg. 1992. {``{An approach for assessing
+publication bias prior to performing a meta-analysis}.''}
+\emph{Statistical Science} 7 (2): 237--45.
+
+\bibitem[\citeproctext]{ref-duval2000nonparametric}
+Duval, Sue, and Richard Tweedie. 2000a. {``A Nonparametric {`Trim and
+Fill'} Method of Accounting for Publication Bias in Meta-Analysis.''}
+\emph{Journal of the American Statistical Association} 95 (449): 89--98.
+
+\bibitem[\citeproctext]{ref-duval2000trim}
+---------. 2000b. {``Trim and Fill: A Simple Funnel-Plot--Based Method
+of Testing and Adjusting for Publication Bias in Meta-Analysis.''}
+\emph{Biometrics} 56 (2): 455--63.
+
+\bibitem[\citeproctext]{ref-egger1997bias}
+Egger, Matthias, George Davey Smith, Martin Schneider, and Christoph
+Minder. 1997. {``Bias in Meta-Analysis Detected by a Simple, Graphical
+Test.''} \emph{BMJ} 315 (7109): 629--34.
+
+\bibitem[\citeproctext]{ref-fernandezcastilla2019detecting}
+Fernández-Castilla, Belén, Lies Declercq, Laleh Jamshidi, S. Natasha
+Beretvas, Patrick Onghena, and Wim Van den Noortgate. 2019. {``Detecting
+Selection Bias in Meta-Analyses with Multiple Outcomes: A Simulation
+Study.''} \emph{The Journal of Experimental Education}, April, 1--20.
+\url{https://doi.org/10.1080/00220973.2019.1582470}.
+
+\bibitem[\citeproctext]{ref-franco2016underreporting}
+Franco, Annie, Neil Malhotra, and Gabor Simonovits. 2016.
+{``Underreporting in Psychology Experiments: Evidence from a Study
+Registry.''} \emph{Social Psychological and Personality Science} 7 (1):
+8--12. \url{https://doi.org/10.1177/1948550615598377}.
+
+\bibitem[\citeproctext]{ref-greenwald1975prejudice}
+Greenwald, A G. 1975. {``Consequences of Prejudice Against the Null
+Hypothesis.''} \emph{Psychological Bulletin} 82 (1): 1--20.
+\url{https://doi.org/10.1037/h0076157}.
+
+\bibitem[\citeproctext]{ref-harbord2006modified}
+Harbord, Roger M, Matthias Egger, and Jonathan AC Sterne. 2006. {``A
+Modified Test for Small-Study Effects in Meta-Analyses of Controlled
+Trials with Binary Endpoints.''} \emph{Statistics in Medicine} 25 (20):
+3443--57.
+
+\bibitem[\citeproctext]{ref-hedges1984estimation}
+Hedges, Larry V. 1984. {``Estimation of Effect Size Under Nonrandom
+Sampling: The Effects of Censoring Studies Yielding Statistically
+Insignificant Mean Differences.''} \emph{Journal of Educational
+Statistics} 9 (1): 61--85.
+
+\bibitem[\citeproctext]{ref-hedges1992modeling}
+---------. 1992. {``Modeling Publication Selection Effects in
+Meta-Analysis.''} \emph{Statistical Science} 7 (2): 246--55.
+
+\bibitem[\citeproctext]{ref-Hedges2010robust}
+Hedges, Larry V, Elizabeth Tipton, and Matthew C Johnson. 2010.
+{``{Robust variance estimation in meta-regression with dependent effect
+size estimates}.''} \emph{Research Synthesis Methods} 1 (1): 39--65.
+\url{https://doi.org/10.1002/jrsm.5}.
+
+\bibitem[\citeproctext]{ref-hedges2005selection}
+Hedges, Larry V, and Jack Vevea. 2005. {``Selection Method
+Approaches.''} In \emph{Publication Bias in Meta-Analysis}, edited by
+Hannah R. Rothstein, Alexander J. Sutton, and Michael Borenstein,
+145--74. {Chichester, UK}: {John Wiley \& Sons, Ltd}.
+\url{https://doi.org/10.1002/0470870168.ch9}.
+
+\bibitem[\citeproctext]{ref-iyengar1988selection}
+Iyengar, Satish, and Joel B. Greenhouse. 1988. {``Selection {Models} and
+the {File} {Drawer} {Problem}.''} \emph{Statistical Science} 3 (1):
+109--17. \url{https://doi.org/10.1214/ss/1177013012}.
+
+\bibitem[\citeproctext]{ref-john2012measuring}
+John, Leslie K, George Loewenstein, and Drazen Prelec. 2012.
+{``Measuring the Prevalence of Questionable Research Practices with
+Incentives for Truth Telling.''} \emph{Psychological Science} 23 (5):
+524--32.
+
+\bibitem[\citeproctext]{ref-joshi2022cluster}
+Joshi, Megha, James E. Pustejovsky, and S. Natasha Beretvas. 2022.
+{``Cluster Wild Bootstrapping to Handle Dependent Effect Sizes in
+Meta-Analysis with a Small Number of Studies.''} \emph{Research
+Synthesis Methods} 13 (4): 457--77.
+\url{https://doi.org/10.1002/jrsm.1554}.
+
+\bibitem[\citeproctext]{ref-konstantopoulos2011fixed}
+Konstantopoulos, Spyros. 2011. {``Fixed Effects and Variance Components
+Estimation in Three-Level Meta-Analysis: {Three}-Level Meta-Analysis.''}
+\emph{Research Synthesis Methods} 2 (1): 61--76.
+\url{https://doi.org/10.1002/jrsm.35}.
+
+\bibitem[\citeproctext]{ref-kossmeier2020PowerEnhanced}
+Kossmeier, Michael, Ulrich S. Tran, and Martin Voracek. 2020.
+{``Power-Enhanced Funnel Plots for Meta-Analysis.''} \emph{Zeitschrift
+Für Psychologie}, March.
+\url{https://econtent.hogrefe.com/doi/10.1027/2151-2604/a000392}.
+
+\bibitem[\citeproctext]{ref-lancee2017outcome}
+Lancee, M, CMC Lemmens, RS Kahn, CH Vinkers, and JJ Luykx. 2017.
+{``Outcome Reporting Bias in Randomized-Controlled Trials Investigating
+Antipsychotic Drugs.''} \emph{Translational Psychiatry} 7 (9):
+e1232--32.
+
+\bibitem[\citeproctext]{ref-light1984Summing}
+Light, Richard J., and David B. Pillemer. 1984. \emph{Summing {Up}}.
+{Harvard University Press}.
+\url{https://books.google.com?id=qel3lAm4K6gC}.
+
+\bibitem[\citeproctext]{ref-macaskill2001comparison}
+Macaskill, P, S D Walter, and L Irwig. 2001. {``A Comparison of Methods
+to Detect Publication Bias in Meta-Analysis.''} \emph{Statistics in
+Medicine} 20 (4): 641--54. \url{https://doi.org/10.1002/sim.698}.
+
+\bibitem[\citeproctext]{ref-marksanglin2020historical}
+Marks‐Anglin, Arielle, and Yong Chen. 2020. {``A Historical Review of
+Publication Bias.''} \emph{Research Synthesis Methods} 11 (6): 725--42.
+\url{https://doi.org/10.1002/jrsm.1452}.
+
+\bibitem[\citeproctext]{ref-mathur2020sensitivity}
+Mathur, Maya B, and Tyler J VanderWeele. 2020. {``Sensitivity Analysis
+for Publication Bias in Meta‐analyses.''} \emph{Journal of the Royal
+Statistical Society: Series C (Applied Statistics)} 69 (5): 1091--1119.
+\url{https://doi.org/10.1111/rssc.12440}.
+
+\bibitem[\citeproctext]{ref-moreno2012generalized}
+Moreno, Santiago G, Alex J Sutton, John R Thompson, AE Ades, Keith R
+Abrams, and Nicola J Cooper. 2012. {``A Generalized Weighting
+Regression-Derived Meta-Analysis Estimator Robust to Small-Study Effects
+and Heterogeneity.''} \emph{Statistics in Medicine} 31 (14): 1407--17.
+
+\bibitem[\citeproctext]{ref-nakagawa2023quantitative}
+Nakagawa, Shinichi, Yefeng Yang, Erin L. Macartney, Rebecca Spake, and
+Malgorzata Lagisz. 2023. {``Quantitative Evidence Synthesis: A Practical
+Guide on Meta-Analysis, Meta-Regression, and Publication Bias Tests for
+Environmental Sciences.''} \emph{Environmental Evidence} 12 (1): 8.
+\url{https://doi.org/10.1186/s13750-023-00301-6}.
+
+\bibitem[\citeproctext]{ref-Nelson1986significance}
+Nelson, N, R Rosenthal, and R L Rosnow. 1986. {``Interpretation of
+Significance Levels and Effect Sizes by Psychological Researchers.''}
+\emph{American Psychologist} 41 (11): 1299--1301.
+\url{https://doi.org/10.1037/0003-066X.41.11.1299}.
+
+\bibitem[\citeproctext]{ref-oBoyle2017chrysalis}
+O'Boyle Jr, Ernest Hugh, George Christopher Banks, and Erik
+Gonzalez-Mulé. 2017. {``The Chrysalis Effect: How Ugly Initial Results
+Metamorphosize into Beautiful Articles.''} \emph{Journal of Management}
+43 (2): 376--99.
+
+\bibitem[\citeproctext]{ref-peters2006comparison}
+Peters, J L, Alex J. Sutton, David R. Jones, Keith R. Abrams, and Lesley
+Rushton. 2006. {``Comparison of Two Methods to Detect Publication Bias
+in Meta-Analysis.''} \emph{Journal of the American Medical Association}
+295 (6): 676--80.
+
+\bibitem[\citeproctext]{ref-pigott2013outcome}
+Pigott, Therese D, Jeffrey C Valentine, Joshua R Polanin, Ryan T
+Williams, and Dericka D Canada. 2013. {``Outcome-Reporting Bias in
+Education Research.''} \emph{Educational Researcher} 42 (8): 424--32.
+
+\bibitem[\citeproctext]{ref-preston2004adjusting}
+Preston, Carrol, Deborah Ashby, and Rosalind Smyth. 2004. {``Adjusting
+for Publication Bias: Modelling the Selection Process.''} \emph{Journal
+of Evaluation in Clinical Practice} 10 (2): 313--22.
+\url{https://doi.org/10.1111/j.1365-2753.2003.00457.x}.
+
+\bibitem[\citeproctext]{ref-pustejovsky2019testing}
+Pustejovsky, James E, and Melissa A Rodgers. 2019. {``Testing for Funnel
+Plot Asymmetry of Standardized Mean Differences.''} \emph{Research
+Synthesis Methods} 10 (1): 57--71.
+
+\bibitem[\citeproctext]{ref-pustejovsky2022preventionscience}
+Pustejovsky, James E., and Elizabeth Tipton. 2022. {``Meta-Analysis with
+Robust Variance Estimation: {Expanding} the Range of Working Models.''}
+\emph{Prevention Science} 23 (April): 425--38.
+\url{https://doi.org/10.1016/j.jsp.2018.02.003}.
+
+\bibitem[\citeproctext]{ref-rodgers2021evaluating}
+Rodgers, Melissa A, and James E Pustejovsky. 2021. {``Evaluating
+Meta-Analytic Methods to Detect Selective Reporting in the Presence of
+Dependent Effect Sizes.''} \emph{Psychological Methods} 26 (2): 141.
+
+\bibitem[\citeproctext]{ref-Rosenthal1963significance}
+Rosenthal, R, and J Gaito. 1963. {``The Interpretation of Levels of
+Significance by Psychological Researchers.''} \emph{The Journal of
+Psychology: Interdisciplinary and Applied} 55 (1): 33--38.
+\url{https://doi.org/10.1080/00223980.1963.9916596}.
+
+\bibitem[\citeproctext]{ref-Rosenthal1964significance}
+---------. 1964. {``Further Evidence for the Cliff Effect in the
+Interpretation of Levels of Significance.''} \emph{Psychological
+Reports} 15 (2): 570. \url{https://doi.org/10.2466/pr0.1964.15.2.570}.
+
+\bibitem[\citeproctext]{ref-Rothstein2005publication}
+Rothstein, Hannah R, Alexander J Sutton, and Michael Borenstein. 2005.
+{``Publication Bias in Meta-Analysis.''} In \emph{Publication {Bias} in
+{Meta-Analysis}: {Prevention}, {Assessment}, and {Adjustments}}, edited
+by Hannah R Rothstein, Alex J Sutton, and Michael Borenstein, 1--7.
+{West Sussex, England}: {John Wiley \& Sons}.
+\url{https://doi.org/10.1002/0470870168}.
+
+\bibitem[\citeproctext]{ref-stanley2008meta}
+Stanley, Tom D. 2008. {``Meta-Regression Methods for Detecting and
+Estimating Empirical Effects in the Presence of Publication
+Selection.''} \emph{Oxford Bulletin of Economics and Statistics} 70 (1):
+103--27.
+
+\bibitem[\citeproctext]{ref-stanley2014meta}
+Stanley, Tom D, and Hristos Doucouliagos. 2014. {``Meta-Regression
+Approximations to Reduce Publication Selection Bias.''} \emph{Research
+Synthesis Methods} 5 (1): 60--78.
+
+\bibitem[\citeproctext]{ref-Sterne2005funnel}
+Sterne, Jonathan A. C., Betsy Jane Becker, and Matthias Egger. 2005.
+{``The Funnel Plot.''} In \emph{Publication {Bias} in {Meta-Analysis}:
+{Prevention}, {Assessment}, and {Adjustments}}, edited by Hannah R
+Rothstein, Alex J Sutton, and Michael Borenstein, 73--98. {West Sussex,
+England}: {John Wiley \& Sons}.
+\url{https://doi.org/10.1002/0470870168}.
+
+\bibitem[\citeproctext]{ref-sutton2009publication}
+Sutton, AJ. 2009. {``Publication Bias.''} In \emph{The Handbook of
+Research Synthesis and Meta-Analysis}, 435--45. Russell Sage Foundation.
+
+\bibitem[\citeproctext]{ref-Terrin2003heterogeneity}
+Terrin, N, C H Schmid, J Lau, and I Olkin. 2003. {``Adjusting for
+Publication Bias in the Presence of Heterogeneity.''} \emph{Statistics
+in Medicine} 22 (13): 2113--26. \url{https://doi.org/10.1002/sim.1461}.
+
+\bibitem[\citeproctext]{ref-thompson1999explaining}
+Thompson, Simon G, and Stephen J Sharp. 1999. {``Explaining
+Heterogeneity in Meta-Analysis: A Comparison of Methods.''}
+\emph{Statistics in Medicine} 18 (20): 2693--2708.
+
+\bibitem[\citeproctext]{ref-tipton2015small}
+Tipton, Elizabeth. 2015. {``Small Sample Adjustments for Robust Variance
+Estimation with Meta-Regression.''} \emph{Psychological Methods} 20 (3):
+375.
+
+\bibitem[\citeproctext]{ref-tiptonpusto2015small}
+Tipton, Elizabeth, and James E Pustejovsky. 2015. {``Small-Sample
+Adjustments for Tests of Moderators and Model Fit Using Robust Variance
+Estimation in Meta-Regression.''} \emph{Journal of Educational and
+Behavioral Statistics} 40 (6): 604--34.
+
+\bibitem[\citeproctext]{ref-tipton2019current}
+Tipton, Elizabeth, James E Pustejovsky, and Hedyeh Ahmadi. 2019.
+{``Current Practices in Meta-Regression in Psychology, Education, and
+Medicine.''} \emph{Research Synthesis Methods} 10 (2): 180--94.
+
+\bibitem[\citeproctext]{ref-vandennoortgate2013threelevel}
+Van den Noortgate, Wim, José Antonio López-López, Fulgencio
+Marín-Martínez, and Julio Sánchez-Meca. 2013. {``Three-Level
+Meta-Analysis of Dependent Effect Sizes.''} \emph{Behavior Research
+Methods} 45 (2): 576--94.
+\url{https://doi.org/10.3758/s13428-012-0261-6}.
+
+\bibitem[\citeproctext]{ref-vandennoortgate2015metaanalysis}
+---------. 2015. {``Meta-Analysis of Multiple Outcomes: A Multilevel
+Approach.''} \emph{Behavior Research Methods} 47 (4): 1274--94.
+\url{https://doi.org/10.3758/s13428-014-0527-2}.
+
+\bibitem[\citeproctext]{ref-vevea1995general}
+Vevea, Jack L, and Larry V Hedges. 1995. {``A General Linear Model for
+Estimating Effect Size in the Presence of Publication Bias.''}
+\emph{Psychometrika} 60 (3): 419--35.
+\url{https://doi.org/10.1007/BF02294384}.
+
+\bibitem[\citeproctext]{ref-yang2023advanced}
+Yang, Yefeng, Malcolm Macleod, Jinming Pan, Malgorzata Lagisz, and
+Shinichi Nakagawa. 2023. {``Advanced Methods and Implementations for the
+Meta-Analyses of Animal Models: {Current} Practices and Future
+Recommendations.''} \emph{Neuroscience \& Biobehavioral Reviews} 146
+(March): 105016. \url{https://doi.org/10.1016/j.neubiorev.2022.105016}.
+
+\end{CSLReferences}
+
+\end{document}

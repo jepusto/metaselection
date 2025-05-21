@@ -47,7 +47,7 @@ classoption       : "man, donotrepeattitle"
 output            : 
   papaja::apa6_pdf
 csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
-replace_ampersands: no
+replace_ampersands: yes
 
 header-includes:
 - \usepackage{booktabs}
@@ -87,6 +87,8 @@ library(papaja)
 library(metaselection)
 library(tidyverse)
 library(CRediTas)
+
+options(tinytex.verbose = TRUE)
 
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')

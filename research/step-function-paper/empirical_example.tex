@@ -1,0 +1,277 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Empirical Application},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Empirical Application}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+To demonstrate the proposed modeling strategy and examine potential
+differences between CML and ARGL estimation methods, we re-analyzed the
+data from a meta-analysis reported by Carter et al. (2015). The original
+meta-analysis examined a large corpus of primary studies on the ego
+depletion effect, which refers to the theory that an individual's
+ability to exercise self-control diminishes with repeated exertion
+(Hagger et al. 2010). Carter et al. (2015) argued that the apparent
+strength of ego-depletion effects may be overstated due to selective
+reporting. Their review included a variety of self-control manipulation
+tasks as well as a range of outcomes. Some primary studies reported
+effects for multiple outcome tasks, leading to dependent effects. Effect
+sizes were measured as standardized mean differences, defined so that
+positive effects correspond to depletion of self-control (i.e.,
+consistent with the theory of ego depletion).
+
+To mitigate possible effects of selective reporting, Carter et al.
+(2015) included many unpublished studies, so that the full meta-analysis
+included 116 effects from 66 studies. For illustrative purposes, we
+re-analyzed the findings from the subset of published studies only; we
+also excluded a single outlying effect size estimate that was greater
+than 2. This analytic sample includes 66 effect size estimates from 45
+distinct studies. We conducted the analyses using R Version 4.4.3 (R
+Core Team 2025).
+
+If selective reporting were not a concern, a correlated-and-hierarchical
+effects model (CHE, Pustejovsky and Tipton 2022) would be one way to
+summarize the distribution of ego depletion effects. Based on a CHE
+model, the overall average effect estimate was 0.46, 95\% CI {[}0.34,
+0.59{]}. Alternately, Chen and Pustejovsky (2024) proposed estimating
+average effect sizes using a CHE model with inverse sampling covariance
+weighting (CHE-ISCW), which places relatively more weight on larger
+studies (those with smaller sampling variances) and thus is less biased
+by selective reporting. Applying CHE-ISCW reduces the overall effect
+estimate to 0.39, 95\% CI {[}0.24, 0.54{]}. As a further point of
+comparison, we estimated the overall average effect using the PET/PEESE
+regression adjustment (Stanley and Doucouliagos 2014), clustering the
+standard errors by study. This yielded an overall average effect of
+-0.09, 95\% CI {[}-0.76, 0.58{]}. The CHE and CHE-ISCW estimates are
+both positive, significant, and similar in magnitude. The PET-PEESE
+estimate is negative and much smaller than the CHE and CHE-ISCW
+estimates, indicating a pattern of small study effects.
+
+We used the \texttt{selection\_model()} function from the
+\texttt{metaselection} package to fit single-step and two-step selection
+models (Pustejovsky and Joshi 2025). The single-step model used a
+threshold at \(\alpha_1 = 0.025\); the two-step model used thresholds at
+\(\alpha_1 = 0.025\) and \(\alpha_2 = 0.5\). For comparison purposes, we
+estimated model parameters using both CML and ARGL and computed
+cluster-robust and percentile bootstrap confidence intervals. For
+bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999
+replicates.
+
+\begin{table}
+\centering
+\caption{\label{tab:empirical}Single-step and two-step selection model parameter estimates fit to ego depletion effects data from Carter et al. (2015)}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{l>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{CML estimator} & \multicolumn{3}{c}{ARGL estimator} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+Parameter & Estimate (SE) & Cluster-Robust CI & Percentile Bootstrap CI & Estimate (SE) & Cluster-Robust CI & Percentile Bootstrap CI\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{One-step}}\\
+\hspace{1em}$\beta$ & 0.25 (0.09) & {}[ 0.07,      0.44] & {}[ 0.05, 0.47] & 0.27 (0.07) & {}[ 0.14,      0.41] & {}[ 0.11, 0.47]\\
+\hspace{1em}$\tau^2$ & 0.11 (0.04) & {}[ 0.06,      0.20] & {}[ 0.02, 0.19] & 0.11 (0.04) & {}[ 0.06,      0.21] & {}[ 0.01, 0.21]\\
+\hspace{1em}$\lambda_1$ & 0.27 (0.14) & {}[ 0.10,      0.75] & {}[ 0.07, 0.87] & 0.30 (0.10) & {}[ 0.16,      0.56] & {}[ 0.05, 1.20]\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Two-step}}\\
+\hspace{1em}$\beta$ & 0.23 (0.11) & {}[ 0.02,      0.44] & {}[-0.01, 0.48] & 0.25 (1.45) & {}[-2.59,      3.10] & {}[-0.05, 0.54]\\
+\hspace{1em}$\tau^2$ & 0.11 (0.04) & {}[ 0.06,      0.21] & {}[ 0.03, 0.19] & 0.12 (0.33) & {}[ 0.00,     32.00] & {}[ 0.00, 0.20]\\
+\hspace{1em}$\lambda_1$ & 0.27 (0.14) & {}[ 0.10,      0.74] & {}[ 0.07, 0.86] & 0.29 (1.65) & {}[ 0.00,>100] & {}[ 0.05, 1.28]\\
+\hspace{1em}$\lambda_2$ & 0.22 (0.16) & {}[ 0.06,      0.90] & {}[ 0.04, 1.18] & 0.26 (2.17) & {}[ 0.00,>100] & {}[ 0.01, 3.14]\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item ARGL = augmented, reweighted gaussian likelihood; CML = composite maximum likelihood; CI = confidence interval; SE = standard error.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table}
+
+Table @ref(tab:empirical) presents the parameter estimates from the
+one-step and two-step selection models. The estimated selection
+parameters are similar across the one- and two-step models and across
+both estimators, all indicating that non-significant or negative effect
+size estimates were less likely to be reported than statistically
+significant, affirmative ones. The one-step and two-step selection model
+estimates of average effect size are positive but substantially smaller
+than the CHE-ISCW estimates, ranging from 0.23 to 0.27 depending on the
+model specification and estimation method. In contrast to the PET/PEESE
+estimate, the selection model estimates using CML are positive and
+statistically distinct from zero. Thus, an analyst would reach different
+conclusions about overall average effect size depending on whether they
+use an unadjusted model, a step-function model, or the PET/PEESE
+adjustment.
+
+The estimates in Table @ref(tab:empirical) point towards some potential
+differences between estimation methods. Generally, the CML and ARGL
+parameter estimates are similar in magnitude, but the confidence
+intervals based on the CML estimator are narrower than those for the
+ARGL estimator. For the CML estimator, the bootstrap CIs are similar or
+slightly wider than the cluster-robust CIs. These patterns suggest that
+there could be differences in the performance of the estimators, as well
+as differences in performance between the step-function estimators and
+alternative adjustment methods such as PET/PEESE. However, these results
+are based on a single empirical dataset where the true data-generating
+process is unknown. To draw firmer conclusion about the comparative
+performance of these methods, we conducted simulations to evaluate the
+methods in terms of bias, accuracy, and confidence interval coverage
+across a range of conditions.
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-carter2015series}
+Carter, Evan C, Lilly M Kofler, Daniel E Forster, and Michael E
+McCullough. 2015. {``A Series of Meta-Analytic Tests of the Depletion
+Effect: Self-Control Does Not Seem to Rely on a Limited Resource.''}
+\emph{Journal of Experimental Psychology: General} 144 (4): 796.
+
+\bibitem[\citeproctext]{ref-chen2024adapting}
+Chen, Man, and James E. Pustejovsky. 2024. {``Adapting Methods for
+Correcting Selective Reporting Bias in Meta-Analysis of Dependent Effect
+Sizes.''} \url{https://doi.org/10.31222/osf.io/jq52s}.
+
+\bibitem[\citeproctext]{ref-hagger2010ego}
+Hagger, Martin S., Chantelle Wood, Chris Stiff, and Nikos L. D.
+Chatzisarantis. 2010. {``Ego Depletion and the Strength Model of
+Self-Control: {A} Meta-Analysis.''} \emph{Psychological Bulletin} 136
+(4): 495--525. \url{https://doi.org/10.1037/a0019486}.
+
+\bibitem[\citeproctext]{ref-metaselection}
+Pustejovsky, James E., and Megha Joshi. 2025. \emph{Metaselection:
+Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap
+Standard Errors for Dependent Effect Size Estimates}.
+\url{https://github.com/jepusto/metaselection}.
+
+\bibitem[\citeproctext]{ref-pustejovsky2022preventionscience}
+Pustejovsky, James E., and Elizabeth Tipton. 2022. {``Meta-Analysis with
+Robust Variance Estimation: {Expanding} the Range of Working Models.''}
+\emph{Prevention Science} 23 (April): 425--38.
+\url{https://doi.org/10.1016/j.jsp.2018.02.003}.
+
+\bibitem[\citeproctext]{ref-rcoreteam}
+R Core Team. 2025. \emph{R: A Language and Environment for Statistical
+Computing}. Vienna, Austria: R Foundation for Statistical Computing.
+\url{https://www.R-project.org/}.
+
+\bibitem[\citeproctext]{ref-stanley2014meta}
+Stanley, Tom D, and Hristos Doucouliagos. 2014. {``Meta-Regression
+Approximations to Reduce Publication Selection Bias.''} \emph{Research
+Synthesis Methods} 5 (1): 60--78.
+
+\end{CSLReferences}
+
+\end{document}

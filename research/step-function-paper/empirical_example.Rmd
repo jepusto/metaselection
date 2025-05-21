@@ -20,19 +20,19 @@ max_est <- max(step_mod_res$Est)
 ```
 
 To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed the data from a meta-analysis reported by @carter2015series. 
-The meta-analyses examined a large corpus of primary studies on the ego depletion effect, which refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
+The original meta-analysis examined a large corpus of primary studies on the ego depletion effect, which refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
 @carter2015series argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting. 
 Their review included a variety of self-control manipulation tasks as well as a range of outcomes. 
 Some primary studies reported effects for multiple outcome tasks, leading to dependent effects. 
 Effect sizes were measured as standardized mean differences, defined so that positive effects correspond to depletion of self-control (i.e., consistent with the theory of ego depletion).
 
-To mitigate possible effect of selective reporting, @carter2015series included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
+To mitigate possible effects of selective reporting, @carter2015series included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
 We conducted the analyses using R Version 4.4.3 [@rcoreteam]. 
 
 If selective reporting were not a concern, a correlated-and-hierarchical effects model [CHE, @pustejovsky2022preventionscience] would be one way to summarize the distribution of ego depletion effects.
 Based on a CHE model, the overall average effect estimate was `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "CHE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "CHE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "CHE"]), 2)`]. 
-Alternately, @chen2024adapting proposed estimating average effect sizes using a CHE model with inverse sampling covariance weighting (CHE-ISCW), which does use the between-study or within-study variance estimates in forming weights. The CHE-ISCW estimator places relatively more weight on larger studies (those with smaller sampling variances), which are less biased by selective reporting.
+Alternately, @chen2024adapting proposed estimating average effect sizes using a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.
 Applying CHE-ISCW reduces the overall effect estimate to `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "FEC"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "FEC"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "FEC"]), 2)`]. 
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment [@stanley2014meta], clustering the standard errors by study. This yielded an overall average effect of `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "PET/PEESE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "PET/PEESE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "PET/PEESE"]), 2)`]. The CHE and CHE-ISCW estimates are both positive, significant, and similar in magnitude. The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects. 
 
@@ -127,9 +127,8 @@ Thus, an analyst would reach different conclusions about overall average effect 
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
 Generally, the CML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
 For the CML estimator, the bootstrap CIs are similar or slightly wider than the cluster-robust CIs.
-For the ARGL estimator, the bootstrap CIs were similar to the cluster-robust CIs for the one-step model but quite discrepant for the two-step model. 
-For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme.
-
-The patterns that we have noted suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
+<!-- For the ARGL estimator, the bootstrap CIs were similar to the cluster-robust CIs for the one-step model but quite discrepant for the two-step model.  -->
+<!-- For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme. -->
+These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
 To draw firmer conclusion about the comparative performance of these methods, we conducted simulations to evaluate the methods in terms of bias, accuracy, and confidence interval coverage across a range of conditions. 

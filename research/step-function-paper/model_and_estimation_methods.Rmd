@@ -96,6 +96,7 @@ PSM3 <-
   scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
   geom_vline(xintercept = 0.025, linetype = "dashed") + 
   geom_hline(yintercept = 0) + 
+  annotate(geom = "text", x = .06, y = 1.03, label = ".025") + 
   geom_area(aes(y = PSM3), fill = "darkred", alpha = 0.6) +   
   theme_minimal() + 
   labs(x = "p-value (one-sided)", y = "Selection probability")
@@ -106,6 +107,8 @@ PSM4 <-
   scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
   geom_vline(xintercept = c(0.025, .500), linetype = "dashed") + 
   geom_hline(yintercept = 0) + 
+  annotate(geom = "text", x = .06, y = 1.03, label = ".025") + 
+  annotate(geom = "text", x = .535, y = 1.03, label = ".500") + 
   geom_area(aes(y = PSM4), fill = "purple", alpha = 0.6) +   
   theme_minimal() + 
   labs(x = "p-value (one-sided)", y = "Selection probability")
@@ -150,7 +153,7 @@ The quantity $B_{hij}$ corresponds to the probability that, prior to selection, 
 
 Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider several estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.[^efficiency-weights]
-Thus, let $a_{11},...,a_{J k_j}$ be a set of prior weights assigned to each study.
+Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of prior weights assigned to each study; in a typical, unweighted analysis, all weights will will be equal to $a_{ij} = 1$.
 
 [^efficiency-weights]: Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by @Hedges2010robust for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with $k_j$ observed effect size estimates could contribute somewhat less than $k_j$ independent pieces of information. Down-weighting the effect sizes from study $j$ based on the number of reported effect sizes $k_j$ might therefore improve the efficiency of the estimator for the average effect size $\beta$ and variance $\tau^2$. 
 
@@ -253,7 +256,7 @@ We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamm
     where $v_{ij} = \frac{a_j}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)}$.
     The weighted least squares solution allows $\bs\beta$ to be profiled out of the estimating equations, so that Equation \@ref(eq:hybrid-total-score) need be solved only for $\gamma$ and  $\bs\zeta$.
 
-For the step-function selection process, the score equation with respect to $\bs\zeta$ has an interesting and intuitively intepretable form. 
+For the step-function selection process, the score equation with respect to $\bs\zeta$ has an interesting and intuitively interpretable form. 
 Observe that the probability that an observed effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$ is $E_{hij} = \exp(\zeta_h) \times B_{hij} / A_{ij}$, where $B_{hij}$ is given in Equation \@ref(eq:step-function-Bhij).
 Accounting for the prior weights, the expected number of observed effect size estimates falling into the interval $(\alpha_h, \alpha_{h+1}]$ is therefore 
 \begin{equation}

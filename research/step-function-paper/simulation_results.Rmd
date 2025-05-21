@@ -78,7 +78,7 @@ Note that the range of the vertical axis differs by grid row because the bias of
 The CML estimator has negligible or small bias across all conditions. 
 Its largest bias was `r round(CML_bias$max_abs_bias,2)`, occurring when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
 The small bias of the CML estimator is stable across varying degrees of outcome correlation, within-study heterogeneity, number of observed studies, and primary study sample size.
-Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although it becomes biased when average effect is zero and selection is very strong.
+Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although it becomes more biased when average effect is zero and selection is very strong.
 
 In contrast to the estimators based on the marginal selection model, the comparison estimators are systematically biased under many conditions. 
 The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
@@ -86,7 +86,7 @@ When average effect size is large $(\mu = 0.8)$, its bias remains quite small ev
 However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger, exceeding 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
 Although the PET/PEESE estimator uses a regression adjustment to account for possible selective reporting, it too becomes severely biased when selective reporting is strong.
 For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced; its bias grows stronger for smaller values of average effect size and higher levels of heterogeneity.
-For larger values of average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased---especially at high levels of heterogeneity.
+For larger values of average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
 
 ### Scaled RMSE
 
@@ -136,7 +136,7 @@ Under conditions with small or moderate average effect size and moderate or stro
 The CML estimator has lower RMSE than CHE-ISCW under most conditions where selective reporting creates meaningful bias---specifically, for $\lambda_1 <= 0.2$ and $\mu \leq 0.2$ (Figure \@ref(fig:rmse-CHE-CML)).
 The relative accuracy of the ARGL estimator versus CHE-ISCW follows a similar pattern  (Figure \@ref(fig:rmse-CHE-ARGL)).
 
-Third, the CML estimator also has lower RMSE than PET/PEESE under conditions where where selective reporting creates meaningful bias, although it is not uniformly more accurate than PET/PEESE (Figure \@ref(fig:rmse-PET-CML)). 
+Third, the CML estimator also has lower RMSE than PET/PEESE under conditions where selective reporting creates meaningful bias, although it is not uniformly more accurate than PET/PEESE (Figure \@ref(fig:rmse-PET-CML)). 
 Rather, PET/PEESE is more accurate under _some_ conditions involving moderate or large effect size $(\mu \geq 0.4)$ and varying degrees of between-study heterogeneity, 
 which correspond to conditions where the bias of PET/PEESE is small.
 The relative accuracy is difficult to characterize generally because it follows a non-linear pattern involving interactions among the data-generating parameters. 
