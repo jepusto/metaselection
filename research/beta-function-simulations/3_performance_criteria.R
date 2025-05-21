@@ -35,7 +35,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     }
     
   } else {
-
+    
     res <- 
       results_NA %>%
       summarize(
@@ -43,7 +43,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
         calc_relative_var(estimates = Est, var_estimates = var_est, criteria = c("relative bias","relative rmse"), winz = winz),
         calc_coverage(lower_bound = CI_lo, upper_bound = CI_hi, true_param = true_param, criteria = c("coverage","width"), winz = winz),
         .groups = "drop"
-      )
+      )  
     
     if ("boot_CIs" %in% names(results)) {
       
@@ -59,7 +59,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
       
     }
   }
-
+  
   return(res)
- 
+  
 }

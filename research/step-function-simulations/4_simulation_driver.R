@@ -31,7 +31,7 @@ run_sim <- function(
     ARGL_optimizer_control = list(),
     bootstrap = "multinomial",
     CI_type = c("large-sample","basic","percentile","student","bias-corrected","BCa"),
-    R = c(49,99,199,299,399),
+    R = c(49,99,199,299),
     retry_bootstrap = 3L,
     winz = 2.5,
     B_target = 1999,
