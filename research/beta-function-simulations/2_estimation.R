@@ -28,10 +28,12 @@ estimate_step_models <- function(
     sel_zero_mods = NULL,
     conf_level = .95,
     bootstrap = "exp",
-    boot_CI = c("large-sample","basic","percentile","student","bias-corrected"),
+    CI_type = c("large-sample","basic","percentile","student","bias-corrected"),
     R = 399,
     retry_bootstrap = 3L
 ) {
+  
+  if (bootstrap == "none") CI_type <- "large-sample"
   
   error_res <- list(
     est = data.frame(
@@ -62,7 +64,7 @@ estimate_step_models <- function(
         conf_level = conf_level,
         estimator = "CML",
         bootstrap = bootstrap,
-        CI_type = boot_CI,
+        CI_type = CI_type,
         R = R,
         retry_bootstrap = retry_bootstrap
       ),

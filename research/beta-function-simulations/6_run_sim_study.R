@@ -37,6 +37,7 @@ res <- subset(all_params, row == row_to_run)
 res$batch <- NULL
 res$row <- NULL
 
+
 tic()
 
 res$res <- pmap(

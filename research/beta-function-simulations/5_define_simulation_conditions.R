@@ -17,7 +17,7 @@ design_factors <- list(
   cor_sd = c(0.05), # sd correlation between outcomes
   delta_1 = c(0.01, 0.2, 0.5, 0.8, 1), # selection parameters
   m = c(90, 60, 30, 15),	# number of studies in each meta analysis					
-  batch = 1:50
+  batch = 1:80
 )
 
 params <- do.call(expand_grid, design_factors)
@@ -32,7 +32,7 @@ all_params <-
       "two-stage",
       "none"
     ),
-    iterations = case_match(bootstrap, "two-stage" ~ 40L, "none" ~ 2000L),
+    iterations = case_match(bootstrap, "two-stage" ~ 25L, "none" ~ 2000L),
     summarize_performance = bootstrap == "none",
     seed = 20250520L + 1:dplyr::n(),
     row = row_number()
@@ -43,6 +43,7 @@ all_params <-
 saveRDS(all_params, file = "research/beta-function-simulations/simulation_parameters.rds")
 
 all_params %>% 
+  filter(batch < 40) %>%
   slice_sample(n = 20, by = bootstrap) %>%
   select(row) %>%
   write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)

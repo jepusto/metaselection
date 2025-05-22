@@ -27,7 +27,7 @@ run_sim <- function(iterations,
                     summarize_performance = TRUE,
                     winz = 2.5,
                     bootstrap = "two-stage",
-                    boot_CI = c("large-sample","basic","percentile","student","bias-corrected"),
+                    CI_type = c("large-sample","basic","percentile","student","bias-corrected"),
                     R_beta = c(49,99,199,299,399),
                     retry_bootstrap = 3L,
                     R_step = R_beta,
@@ -61,8 +61,6 @@ run_sim <- function(iterations,
                     censor_fun =  censor_fun_param,  
                     n_ES_sim = n_ES_sim)
       
-      if (is.null(beta_methods) & is.null(step_models) & is.null(comparison_methods)) return(dat)
-      
       res_selection <- estimate_step_models(
         dat = dat,
         selection_type = "beta",
@@ -74,7 +72,7 @@ run_sim <- function(iterations,
         sel_zero_mods = sel_zero_mods,
         conf_level = conf_level,
         bootstrap = bootstrap,
-        boot_CI = boot_CI,
+        CI_type = CI_type,
         R = R_beta,
         retry_bootstrap = retry_bootstrap
       ) %>%
@@ -92,7 +90,7 @@ run_sim <- function(iterations,
           sel_zero_mods = sel_zero_mods,
           conf_level = conf_level,
           bootstrap = bootstrap,
-          boot_CI = boot_CI,
+          CI_type = CI_type,
           R = R_step,
           retry_bootstrap = retry_bootstrap
         ) %>%
@@ -116,7 +114,7 @@ run_sim <- function(iterations,
           sel_zero_mods = sel_zero_mods,
           conf_level = conf_level,
           bootstrap = bootstrap,
-          boot_CI = boot_CI,
+          CI_type = CI_type,
           R = R_step,
           retry_bootstrap = retry_bootstrap
         ) %>%
@@ -138,7 +136,7 @@ run_sim <- function(iterations,
       
     }, .id = "rep")
   
-  if (!summarize_performance || (is.null(beta_methods) & is.null(comparison_methods))) {
+  if (!summarize_performance) {
     
     return(results)
     

@@ -14,24 +14,25 @@ source("research/beta-function-simulations/2_estimation.R")
 source("research/beta-function-simulations/3_performance_criteria.R")
 source("research/beta-function-simulations/4_simulation_driver.R")
 
+# debug(estimate_step_models)
 tic()
 
 check <-
   run_sim(
-    iterations = 5L,
-    mean_smd = 0.1,
-    tau = 0.3,
+    iterations = 20L,
+    mean_smd = 0.0,
+    tau = 0.05,
     omega = 0,
     m = 60,
     cor_mu = 0.4,
     cor_sd = 0.05,
-    delta_1 = 0.2,
+    delta_1 = 0.05,
     delta_2 = 0.9,
     step_models = c("3PSM","4PSM"),
     comparison_methods = "All",
-    bootstrap = "two-stage",
+    bootstrap = "none",
     R_beta = c(49,99,199,299),
-    summarize_performance = FALSE,
+    summarize_performance = TRUE,
     seed = 20250541L
   )
 
