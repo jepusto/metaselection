@@ -240,7 +240,7 @@ Correspondence concerning this article should be addressed to James E. Pustejovs
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} University of Wisconsin-Madison\\\textsuperscript{2} American Institutes for Research}
 
-\note{~\newline May 26, 2025}
+\note{~\newline May 27, 2025}
 
 \abstract{%
 Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates. Another is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
@@ -823,8 +823,8 @@ We evaluated the performance characteristics of these estimators across replicat
 \includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1} \caption{Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity}\label{fig:mu-bias}
 \end{sidewaysfigure}
 
-Figure \ref{fig:mu-bias} depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (represented on the horizontal axis of each plot), average effect size parameter (varying by grid column), and between-study heterogeneity (\(\tau\), varying by grid row).
-The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design.
+Figure \ref{fig:mu-bias} depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and between-study heterogeneity (\(\tau\), varying by grid row).
+The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
 The CML estimator has negligible or small bias across all conditions.

@@ -71,8 +71,8 @@ ggplot(mu_graph_res) +
 
 ```
 
-Figure \@ref(fig:mu-bias) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (represented on the horizontal axis of each plot), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau$, varying by grid row).
-The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design.
+Figure \@ref(fig:mu-bias) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau$, varying by grid row).
+The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
 The CML estimator has negligible or small bias across all conditions. 
