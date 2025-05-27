@@ -22,8 +22,6 @@ outstanding_conditions <-
 outstanding_conditions 
 
 outstanding_conditions %>%
-  filter(batch < 40) %>%
-  slice_sample(n = 2000, by = bootstrap) %>%
   select(row) %>%
   write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)
 
@@ -61,8 +59,7 @@ no_bootstraps_res %>%
     model, estimator, param, 
     K_absolute:rmse_mcse, 
     est_winsor_pct, est_winsor_pct_mcse
-  ) %>%
-  View()
+  )
 
 #-------------------------------------------------------------------------------
 # Check bootstrapping completeness
@@ -97,7 +94,7 @@ bootstrap_reps <-
   bootstraps_res %>%
   group_by(run_date, file, model) %>%
   summarize(
-    complete = all(n == 100),
+    complete = all(n == 25),
     almost = all(R %in% c(0,399)),
     has_zeros = any(R == 0),
     .groups = "drop"
