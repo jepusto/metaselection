@@ -69,7 +69,7 @@ We compared the performance of the step-function CML and ARGL estimators to two 
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting.[^ISCW] 
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-For this estimator, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.
+For this estimator, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@@chen2024adapting].
 Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
 We estimated the PET and PEESE models using the same methods as for CHE-ISCW, including using CR2 clustered standard errors. 
 Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
@@ -167,8 +167,7 @@ correctly specified. We included conditions where $\rho = 0.4$ to examine perfor
 working model is not correctly specified. 
 
 We examined a wide range of values for the probability of selection for non-affirmative effect sizes, ranging from no selective reporting ($\lambda_1 = 1$) to very severe selective reporting $(\lambda_1 = 0.02)$.
-
-We examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
+We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
 We chose these values to cover the conditions found in real meta-analyses of education and psychology research [@tipton2019current]. 
 
 Lastly, we investigated the primary study sample size. 

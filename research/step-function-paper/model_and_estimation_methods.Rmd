@@ -7,7 +7,8 @@ editor_options:
     wrap: sentence
 ---
 
-Selection models involve two components [@hedges2005selection]. The first component, which we shall call the evidence-generating process, involves assumptions about the distribution of effect size estimates prior to selective reporting.
+Selection models involve two components [@hedges2005selection]. 
+The first component, which we shall call the evidence-generating process, involves assumptions about the distribution of effect size estimates prior to selective reporting.
 This component is usually a random effects model or meta-regression model.
 The second component, which we shall call the selection process, involves assumptions about how effect size estimates come to be observed and therefore available for inclusion in the meta-analysis. 
 Combining the assumptions of both components leads to a model for the distribution of observed effect size estimates, with interpretable parameters describing both the evidence-generating process and the selection process. 
@@ -18,7 +19,7 @@ This strategy does have the limitation that the model parameter estimates pertai
 Likewise, models for the marginal distribution do not allow one to distinguish between selective publication of full studies versus selective reporting of individual outcomes.
 Nonetheless, we believe that the strategy is worth pursuing both because it is feasible and because it captures a plausible form of selection, in which reporting is influenced by the significance level of individual effect size estimates.
 
-We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, with standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij}$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
+We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij}$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
 
 ## Evidence-generating process
 
@@ -61,7 +62,6 @@ w(Y^*, \sigma^*; \bs\lambda) =  \lambda_h \quad \text{if} \quad \sigma^* \Phi^{-
 \end{equation}
 Setting $\lambda_0 = 1$ is necessary for identification because the absolute probabilities of selection cannot be estimated. 
 The remaining parameters are therefore interpreted as _relative_ probabilities of selection, compared to the probability of selection for an effect size with $p^* \leq \alpha_1$. 
-
 
 In practice, meta-analysts will often use only a small number of steps in the selection model. 
 One common choice is the three-parameter selection model, which has a single step at $\alpha_1 = .025$, as depicted in Figure \@ref(fig:step-functions)a. 
@@ -153,7 +153,7 @@ The quantity $B_{hij}$ corresponds to the probability that, prior to selection, 
 
 Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider several estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.[^efficiency-weights]
-Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of prior weights assigned to each study; in a typical, unweighted analysis, all weights will will be equal to $a_{ij} = 1$.
+Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of prior weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will will be equal to $a_{ij} = 1$.
 
 [^efficiency-weights]: Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by @Hedges2010robust for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with $k_j$ observed effect size estimates could contribute somewhat less than $k_j$ independent pieces of information. Down-weighting the effect sizes from study $j$ based on the number of reported effect sizes $k_j$ might therefore improve the efficiency of the estimator for the average effect size $\beta$ and variance $\tau^2$. 
 

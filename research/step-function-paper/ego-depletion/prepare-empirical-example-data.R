@@ -6,34 +6,14 @@ library(janitor)
 
 setwd("research/step-function-paper")
 
-load("ego-depletion/DataFrames/FC.Rdata")
-load("ego-depletion/DataFrames/HG.Rdata")
-load("ego-depletion/DataFrames/IA.Rdata")
-load("ego-depletion/DataFrames/IP.Rdata")
-load("ego-depletion/DataFrames/PA.Rdata")
-load("ego-depletion/DataFrames/S.Rdata")
-load("ego-depletion/DataFrames/ST.Rdata")
-load("ego-depletion/DataFrames/WM.Rdata")
-# 
-# HG <- HG %>% 
-#   mutate(
-#     Exp = as.factor(as.character(Exp)),
-#     Year = as.factor(as.character(Year))
-#   )
-# 
-# IA <- IA %>% mutate(Year = as.factor(as.character(Year)))
-# 
-# PA <- PA %>% 
-#   mutate(
-#     Exp = as.factor(as.character(Exp)),
-#     Year = as.factor(as.character(Year))
-#   )
-# 
-# S <- S %>% mutate(Exp = as.factor(as.character(Exp)))
-# 
-# ST <- ST %>% mutate(Year = as.factor(as.character(Year)))
-# 
-# WM <- WM  %>% mutate(Year = as.factor(as.character(Year)))
+load("ego-depletion/raw-data/FC.Rdata")
+load("ego-depletion/raw-data/HG.Rdata")
+load("ego-depletion/raw-data/IA.Rdata")
+load("ego-depletion/raw-data/IP.Rdata")
+load("ego-depletion/raw-data/PA.Rdata")
+load("ego-depletion/raw-data/S.Rdata")
+load("ego-depletion/raw-data/ST.Rdata")
+load("ego-depletion/raw-data/WM.Rdata")
 
 ed_dat <- 
   bind_rows(
