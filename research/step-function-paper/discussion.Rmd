@@ -18,11 +18,11 @@ We treated the step-function model as a description of the _marginal_ distributi
 This strategy is appealing for its feasibility and because it connects to a selection process in which each individual effect size is selected on the basis of its statistical significance.
 We also implemented and studied two estimation methods for the marginal step-function model, composite marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
 
-Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at $\alpha_1 = .025$), compared to estimators that account for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE. 
+Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at $\alpha_1 = .025$), compared to an estimator that accounts for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE.
 Across an broad range of conditions, we found that both estimators of the marginal step-function model showed little bias overall and consistently out-performed PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
 However, the selection model estimators face a bias-variance trade-off: 
 the reduced bias that they provide comes at the expense of increased variance from using a marginal model. As a result, the step-function estimators are less accurate than the CHE-ISCW estimator under conditions where selective reporting is not strong or does not create meaningful bias. 
-The marginal step-function model estimators have better coverage compared to the other methods, with coverage rates of the two-stage cluster-bootstrapped confidence intervals approaching the nominal level of 0.95 for moderate sample sizes. 
+The marginal step-function model estimators have better coverage compared to the other methods, with coverage rates of the two-stage bootstrapped percentile confidence intervals approaching the nominal level of 0.95 for moderate sample sizes.
 Compared to the ARGL estimator, the CML estimator of the marginal mean was usually more accurate  and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
 CML consistently out-performed ARGL for estimating between-study heterogeneity and the strength of selective reporting.
 
@@ -60,7 +60,7 @@ For instance, results from pre-registered replication studies might be insulated
 Further evaluation of the CML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
 In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status [@Coburn2015publication].
 
-Fourth and finally, the simulation findings we have reported here focused mostly on the performance of the estimators and confidence intervals for the overall average effect size.
+Fourth and finally, the simulation findings we have reported here focused mostly on the performance of the estimators and confidence intervals for the overall average effect size, heterogeneity parameter, and selection parameter.
 We have not directly evaluated how well the estimators work as diagnostic _tests_ for the presence of selective reporting of study results, although the below-nominal coverage rates of confidence intervals for the selection parameter suggests that they may not work well diagnostically. 
 In univariate random effects models, likelihood ratio tests based on step-function selection models have been found to provide much stronger power for detecting selective reporting compared to alternatives such as Egger's regression or non-parametric symmetry tests [@pustejovsky2019testing].
 Extension of such tests for meta-analyses of dependent effect sizes requires further development.

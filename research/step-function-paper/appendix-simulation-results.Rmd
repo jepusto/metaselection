@@ -14,8 +14,8 @@ source("process-simulation-results.R")
 
 ```{r convergence-rates}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Convergence rates of CML and ARGL estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
 
@@ -65,8 +65,8 @@ ggplot() +
 
 ```{r rmse-ARGL-CML}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -75,8 +75,8 @@ RMSE_comparison_plot(mu_wide_res, "CML","ARGL")
 
 ```{r rmse-CHE-CML}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -85,8 +85,8 @@ RMSE_comparison_plot(mu_wide_res, "CML","CHE-ISCW")
 
 ```{r rmse-CHE-ARGL}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -95,8 +95,8 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 
 ```{r rmse-PET-CML}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -106,8 +106,8 @@ RMSE_comparison_plot(mu_wide_res, "CML","PET/PEESE")
 
 ```{r rmse-PET-ARGL}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -116,8 +116,8 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
 
 ```{r comparison-coverage-full}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -152,8 +152,8 @@ mu_graph_res_ci %>%
 
 ```{r CML-coverage-two-stage}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -170,8 +170,8 @@ mu_graph_res_ci %>%
 
 ```{r CML-coverage-multinomial}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -188,8 +188,8 @@ mu_graph_res_ci %>%
 
 ```{r CML-coverage-exponential}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -206,8 +206,8 @@ mu_graph_res_ci %>%
 
 ```{r ARGL-coverage-two-stage}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -218,15 +218,15 @@ mu_graph_res_ci %>%
     bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
-  coverage_plot
+  coverage_plot()
 
 ```
 
 
 ```{r ARGL-coverage-multinomial}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -237,15 +237,15 @@ mu_graph_res_ci %>%
     bootstrap_type == "multinomial",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
-  coverage_plot
+  coverage_plot()
 
 ```
 
 
 ```{r ARGL-coverage-exponential}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -256,7 +256,7 @@ mu_graph_res_ci %>%
     bootstrap_type == "exponential",
     CI_type %in% c("percentile","basic","student","BCa")
   ) %>%
-  coverage_plot
+  coverage_plot()
 
 ```
 
@@ -264,7 +264,7 @@ mu_graph_res_ci %>%
 
 ```{r heterogeneity-bias}
 #| cache: true
-#| fig.width: 10
+#| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
@@ -300,7 +300,7 @@ ggplot() +
 
 ```{r heterogeneity-rmse}
 #| cache: true
-#| fig.width: 10
+#| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Scaled root mean-squared error for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
@@ -335,8 +335,8 @@ ggplot() +
   
 ```{r heterogeneity-rmse-CML-CHE}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -345,8 +345,8 @@ RMSE_comparison_plot(gamma_wide_res, "CHE","CML")
 
 ```{r heterogeneity-rmse-ARGL-CHE}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -355,8 +355,8 @@ RMSE_comparison_plot(gamma_wide_res, "CHE","ARGL")
 
 ```{r heterogeneity-rmse-ARGL-CML}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -367,7 +367,7 @@ RMSE_comparison_plot(gamma_wide_res, "CML","ARGL")
 
 ```{r selection-bias}
 #| cache: true
-#| fig.width: 10
+#| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of log-selection parameter by selection probability, average SMD, and between-study heterogeneity"
@@ -403,7 +403,7 @@ ggplot() +
 
 ```{r selection-rmse}
 #| cache: true
-#| fig.width: 10
+#| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Scaled root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
@@ -439,8 +439,8 @@ ggplot() +
 
 ```{r selection-rmse-ARGL-CML}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL log-selection parameter estimator to root mean-squared error of CML log-selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -449,8 +449,8 @@ RMSE_comparison_plot(zeta_wide_res, "CML","ARGL")
 
 ```{r CML-zeta-coverage-two-stage}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -489,8 +489,8 @@ zeta_graph_res_ci %>%
 
 ```{r ARGL-zeta-coverage-two-stage}
 #| cache: true
-#| fig.width: 10
-#| fig.height: 6.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 

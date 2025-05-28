@@ -13,7 +13,7 @@ selection_levels <- c(
 results <- 
   readRDS("../step-function-simulations/sim-step-function-point-estimator-results.rds") %>%
   mutate(
-    estimator = fct(estimator, levels = c("CHE","CHE-ISCW","PET","PEESE","PET/PEESE","CML","ARGL")),
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights = as.character(weights),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -86,7 +86,7 @@ zeta_wide_res <-
 results_ci <- 
   readRDS("../step-function-simulations/sim-step-function-confidence-interval-results.rds") %>%
   mutate(
-    estimator = fct(estimator, levels = c("CHE","CHE-ISCW","PET","PEESE","PET/PEESE","CML","ARGL")),
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights = as.character(weights),
     het_ratio = omega ^ 2 / tau ^ 2,

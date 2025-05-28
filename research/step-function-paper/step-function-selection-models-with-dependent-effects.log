@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  27 MAY 2025 11:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  27 MAY 2025 20:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1105,31 +1105,21 @@ Overfull \hbox (12.50217pt too wide) in paragraph at lines 746--760
 [28]
 
 [29]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf, id=265, 722.7pt x 542.025pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf, id=265, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf  used on input line 823.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 823--823
-[][] 
- []
-
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
 [30]
 
 [31 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf, id=291, 722.7pt x 542.025pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf, id=291, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf  used on input line 846.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 846--846
-[][] 
- []
-
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
 [32]
@@ -1137,34 +1127,23 @@ Overfull \hbox (72.26822pt too wide) in paragraph at lines 846--846
 [33 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>]
 
 [34]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=335, 722.7pt x 542.025pt>
+
+[35]
+<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=343, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf  used on input line 884.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 884--884
-[][] 
- []
-
-
-
-[35]
-
-[36 <./step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=362, 722.7pt x 397.485pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=349, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf  used on input line 896.
-(pdftex.def)             Requested size: 722.69823pt x 397.48402pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 896--896
-[][] 
- []
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
 
+[36]
 
-[37]
+[37 <./step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>]
 
 [38 <./step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>]
 
@@ -1403,136 +1382,71 @@ l.1369 \begin{equation}
 [62]
 
 [63]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf, id=689, 722.7pt x 542.025pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf, id=689, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf  used on input line 1457.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1457--1457
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf, id=690, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf, id=690, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1461.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1461--1461
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf, id=691, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf, id=691, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1465.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1465--1465
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=692, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=692, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1469.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1469--1469
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf, id=693, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf, id=693, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1473.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1473--1473
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf, id=694, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf, id=694, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1477.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1477--1477
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf, id=695, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf, id=695, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1481.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1481--1481
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf, id=696, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf, id=696, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf  used on input line 1485.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1485--1485
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf, id=697, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf, id=697, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf  used on input line 1489.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1489--1489
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf, id=698, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf, id=698, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf  used on input line 1493.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1493--1493
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf, id=699, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf, id=699, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf  used on input line 1497.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1497--1497
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf, id=700, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf, id=700, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf  used on input line 1501.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1501--1501
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf, id=701, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf, id=701, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf  used on input line 1505.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1505--1505
-[][] 
- []
-
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
 
 [64
@@ -1564,56 +1478,31 @@ Overfull \hbox (72.26822pt too wide) in paragraph at lines 1505--1505
 [76 <./step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf>]
 
 [77 <./step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf, id=882, 722.7pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf, id=882, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1511.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1511--1511
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf, id=883, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf, id=883, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1515.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1515--1515
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=884, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=884, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1519.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1519--1519
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=885, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=885, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1523.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1523--1523
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=886, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=886, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1527.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1527--1527
-[][] 
- []
-
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
 [78
@@ -1629,56 +1518,31 @@ Overfull \hbox (72.26822pt too wide) in paragraph at lines 1527--1527
 [82 <./step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>]
 
 [83 <./step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf, id=963, 722.7pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf, id=963, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf  used on input line 1533.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1533--1533
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf, id=964, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf, id=964, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf  used on input line 1537.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1537--1537
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=965, 722.7pt x 542.025pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=965, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1541.
-(pdftex.def)             Requested size: 722.69823pt x 542.02367pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1541--1541
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf, id=966, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf, id=966, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf  used on input line 1545.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1545--1545
-[][] 
- []
-
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf, id=967, 722.7pt x 469.755pt>
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf, id=967, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf>
 Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf  used on input line 1549.
-(pdftex.def)             Requested size: 722.69823pt x 469.75386pt.
-
-Overfull \hbox (72.26822pt too wide) in paragraph at lines 1549--1549
-[][] 
- []
-
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 AED endfloat: Processing end Figures and Tables
 
 [84
@@ -1706,7 +1570,7 @@ Here is how much of TeX's memory you used:
  55681 multiletter control sequences out of 15000+600000
  720418 words of font info for 216 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,14n,105p,1656b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,14n,105p,1656b,623s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.8} has been referenced but does not exist, replaced by a fixed one
 
@@ -1732,7 +1596,7 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on step-function-selection-models-with-dependent-effects.pdf (89 pages, 1946443 bytes).
+Output written on step-function-selection-models-with-dependent-effects.pdf (89 pages, 1939548 bytes).
 PDF statistics:
  1344 PDF objects out of 1440 (max. 8388607)
  1130 compressed objects within 12 object streams

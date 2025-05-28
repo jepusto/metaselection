@@ -183,8 +183,8 @@ such as those used in psychology laboratory studies.
 
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
-Bias measures whether an estimator generates values that are systematically (on average) above or below
-the true parameter. 
+Convergence measures the proportion of replications in which an estimation algorithm provides a valid numerical solution.
+Bias measures whether an estimator generates values that are systematically (on average) above or below the true parameter. 
 RMSE measures the overall accuracy of an estimator, capturing both systematic bias and sampling variance. 
 Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
 Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.

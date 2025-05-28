@@ -40,8 +40,8 @@ We evaluated the performance characteristics of these estimators across replicat
 ### Bias
 
 ```{r mu-bias}
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
 
@@ -78,21 +78,21 @@ Note that the range of the vertical axis differs by grid row because the bias of
 The CML estimator has negligible or small bias across all conditions. 
 Its largest bias was `r round(CML_bias$max_abs_bias,2)`, occurring when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
 The small bias of the CML estimator is stable across varying degrees of outcome correlation, within-study heterogeneity, number of observed studies, and primary study sample size.
-Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although it becomes more biased when average effect is zero and selection is very strong.
+Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although its bias increases when average effect is zero and selection is very strong.
 
 In contrast to the estimators based on the marginal selection model, the comparison estimators are systematically biased under many conditions. 
 The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
 When average effect size is large $(\mu = 0.8)$, its bias remains quite small even when selective reporting is very strong.
-However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger, exceeding 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
+However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger; its bias exceeds 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
 Although the PET/PEESE estimator uses a regression adjustment to account for possible selective reporting, it too becomes severely biased when selective reporting is strong.
-For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced; its bias grows stronger for smaller values of average effect size and higher levels of heterogeneity.
+For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced. Its bias grows larger (and closer to that of CHE-ISCW) for smaller values of average effect size and higher levels of heterogeneity.
 For larger values of average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
 
 ### Scaled RMSE
 
 ```{r mu-rmse}
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Scaled root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
 
@@ -126,7 +126,7 @@ Figure \@ref(fig:mu-rmse) depicts the scaled RMSE of each estimator of average e
 Figures \@ref(fig:rmse-ARGL-CML) through \@ref(fig:rmse-PET-ARGL) in Appendix \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods. 
 These figures illustrate several findings.
 
-First, across most data-generating conditions, the ARGL estimator has higher RMSE than the CML estimator. (This is evident in Figure \@ref(fig:rmse-ARGL-CML), which shows that that the RMSE ratio comparing ARGL to CML is greater than one across most conditions examined.) 
+First, across most data-generating conditions, the ARGL estimator has higher RMSE than the CML estimator. As evident in Figure \@ref(fig:rmse-ARGL-CML), the RMSE ratio comparing ARGL to CML is greater than one across most conditions examined.
 The ARGL estimator has lower RMSE only under conditions of very high heterogeneity and in databases with few studies.
 Thus, the CML will typically be preferable to the ARGL estimator.
 
@@ -151,13 +151,13 @@ Because selective reporting does not create much bias under such conditions, the
 Figure \@ref(fig:comparison-coverage) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full) depicts the full range of coverage rates.]
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions. 
 The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity,  
-Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J = 90$ or greater.
-In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated due to the biases of these estimators.
+Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J \geq 90$ or greater.
+In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated because of the biases of the point estimators around which the intervals are centered.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
 
 ```{r comparison-coverage}
-#| fig.width: 10
-#| fig.height: 7.5
+#| fig.width: 9
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5"
 
@@ -200,8 +200,8 @@ Coverage levels of the other bootstrap intervals, including studentized, basic, 
 Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-two-stage)-\@ref(fig:ARGL-coverage-exponential)).
 
 ```{r CML-coverage}
-#| fig.width: 10
-#| fig.height: 5.5
+#| fig.width: 9
+#| fig.height: 5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -214,10 +214,11 @@ mu_graph_res_ci %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0.75, 1.0), breaks = seq(0.75,0.95,0.05), expand = expansion(0,0)) +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    tau ~ mean_smd, 
+    tau ~ mean_smd,
     labeller = label_bquote(
       rows = tau == .(tau),
       cols = mu == .(mean_smd)
@@ -225,11 +226,11 @@ mu_graph_res_ci %>%
     scales = "free_y"
   ) +
   labs(
-    x = "Number of studies (J)", 
-    y = "Coverage rate", 
+    x = "Number of studies (J)",
+    y = "Coverage rate",
     color = "Method",
     fill = "Method"
-  ) + 
+  ) +
   theme_bw() +
   theme(legend.position = "top")
 
