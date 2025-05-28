@@ -12,8 +12,8 @@ of the CML and ARGL estimators for a step-function selection model with a single
 We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment [@stanley2014meta].
 We evaluated the point estimators and robust variance estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size of the unselected distribution.
 To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only in a subset of the conditions. 
-We ran the simulation in R Version 4.4.1
-[@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison [@CHTC].
+
+We ran the simulation in R Version 4.4.1 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison [@CHTC].
 The simulation code drew on functionality from several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
 
 ## Data generation
@@ -69,10 +69,9 @@ We compared the performance of the step-function CML and ARGL estimators to two 
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting.[^ISCW] 
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-For this estimator, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@@chen2024adapting].
 Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
-We estimated the PET and PEESE models using the same methods as for CHE-ISCW, including using CR2 clustered standard errors. 
 Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
+For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
 
 [^ISCW]: CHE-ISCW is based on the working model 
   \begin{equation}
@@ -184,7 +183,7 @@ such as those used in psychology laboratory studies.
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
 Convergence measures the proportion of replications in which an estimation algorithm provides a valid numerical solution.
-Bias measures whether an estimator generates values that are systematically (on average) above or below the true parameter. 
+Bias measures whether an estimator generates values that fall systematically above or below the true parameter. 
 RMSE measures the overall accuracy of an estimator, capturing both systematic bias and sampling variance. 
 Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
 Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.

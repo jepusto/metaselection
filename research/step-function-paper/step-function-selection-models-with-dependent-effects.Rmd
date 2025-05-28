@@ -182,6 +182,10 @@ bind_rows(JEP_credit, MJ_credit, MC_credit) %>%
 This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research.
 The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
 
+# Acknowledgements {-}
+
+We thank Laura Michaelson for feedback on a draft version of this article.
+
 # Data and Replication Materials {-}
 
 Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at <https://osf.io/v25rx/>.

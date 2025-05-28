@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  27 MAY 2025 20:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  28 MAY 2025 16:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1094,7 +1094,7 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 [25]
 
 [26]
-Overfull \hbox (12.50217pt too wide) in paragraph at lines 746--760
+Overfull \hbox (12.50217pt too wide) in paragraph at lines 745--759
  [][] 
  []
 
@@ -1108,7 +1108,7 @@ Overfull \hbox (12.50217pt too wide) in paragraph at lines 746--760
 <step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf, id=265, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf  used on input line 823.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf  used on input line 822.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
@@ -1118,7 +1118,7 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 <step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf, id=291, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf  used on input line 846.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf  used on input line 845.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
@@ -1127,23 +1127,24 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 [33 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>]
 
 [34]
-
-[35]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=343, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=335, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf  used on input line 884.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf  used on input line 883.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=349, 650.43pt x 361.35pt>
+
+
+[35]
+
+[36 <./step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>]
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=362, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf  used on input line 896.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf  used on input line 895.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
 
-[36]
-
-[37 <./step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>]
+[37]
 
 [38 <./step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>]
 
@@ -1183,87 +1184,87 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1309 \end{align}
+l.1314 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1313 \begin{equation}
+l.1318 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1313 \begin{equation}
+l.1318 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1313 \begin{equation}
+l.1318 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1313 \begin{equation}
+l.1318 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1317 \begin{equation}
+l.1322 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1317 \begin{equation}
+l.1322 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1317 \begin{equation}
+l.1322 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1317 \begin{equation}
+l.1322 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1321 \begin{equation}
+l.1326 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1321 \begin{equation}
+l.1326 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1321 \begin{equation}
+l.1326 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1321 \begin{equation}
+l.1326 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.5}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1334 \end{align}
+l.1339 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.6}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1334 \end{align}
+l.1339 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.7}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1334 \end{align}
+l.1339 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.8}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1334 \end{align}
+l.1339 \end{align}
                   
 
 [56
@@ -1272,57 +1273,57 @@ l.1334 \end{align}
 pdfTeX warning (ext4): destination with the same identifier (name{equation.9}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.10}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.11}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.12}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.13}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.14}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1347 \end{align}
+l.1352 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.15}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1355 \end{align}
+l.1360 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.16}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1355 \end{align}
+l.1360 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.17}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1355 \end{align}
+l.1360 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.18}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1355 \end{align}
+l.1360 \end{align}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{equation.19}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1355 \end{align}
+l.1360 \end{align}
                   
 
 [57]
@@ -1331,42 +1332,42 @@ l.1355 \end{align}
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1363 \begin{equation}
+l.1368 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1363 \begin{equation}
+l.1368 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1363 \begin{equation}
+l.1368 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1363 \begin{equation}
+l.1368 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1369 \begin{equation}
+l.1374 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1369 \begin{equation}
+l.1374 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1369 \begin{equation}
+l.1374 \begin{equation}
                        
 pdfTeX warning (ext4): destination with the same identifier (name{equation.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1369 \begin{equation}
+l.1374 \begin{equation}
                        
 
 [59
@@ -1382,70 +1383,70 @@ l.1369 \begin{equation}
 [62]
 
 [63]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf, id=689, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf, id=688, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf  used on input line 1457.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-1.pdf  used on input line 1462.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf, id=690, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf, id=689, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1461.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-ARGL-CML-1.pdf  used on input line 1466.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf, id=691, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf, id=690, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1465.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-CML-1.pdf  used on input line 1470.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=692, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf, id=691, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1469.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-ARGL-1.pdf  used on input line 1474.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf, id=693, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf, id=692, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1473.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-CML-1.pdf  used on input line 1478.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf, id=694, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf, id=693, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1477.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-ARGL-1.pdf  used on input line 1482.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf, id=695, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf, id=694, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1481.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-1.pdf  used on input line 1486.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf, id=696, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf, id=695, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf  used on input line 1485.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-two-stage-1.pdf  used on input line 1490.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf, id=697, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf, id=696, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf  used on input line 1489.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-multinomial-1.pdf  used on input line 1494.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf, id=698, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf, id=697, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf  used on input line 1493.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-exponential-1.pdf  used on input line 1498.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf, id=699, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf, id=698, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf  used on input line 1497.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-two-stage-1.pdf  used on input line 1502.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf, id=700, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf, id=699, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf  used on input line 1501.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf  used on input line 1506.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf, id=701, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf, id=700, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf  used on input line 1505.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf  used on input line 1510.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
 
@@ -1478,30 +1479,30 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 [76 <./step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-multinomial-1.pdf>]
 
 [77 <./step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-coverage-exponential-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf, id=882, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf, id=881, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1511.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 1516.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf, id=883, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf, id=882, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1515.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 1520.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=884, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf, id=883, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1519.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-CML-CHE-1.pdf  used on input line 1524.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=885, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf, id=884, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1523.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf  used on input line 1528.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=886, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf, id=885, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1527.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf  used on input line 1532.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
@@ -1518,30 +1519,30 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 [82 <./step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CHE-1.pdf>]
 
 [83 <./step-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-ARGL-CML-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf, id=963, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf, id=962, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf  used on input line 1533.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-bias-1.pdf  used on input line 1538.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf, id=964, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf, id=963, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf  used on input line 1537.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-1.pdf  used on input line 1542.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=965, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf, id=964, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1541.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/selection-rmse-ARGL-CML-1.pdf  used on input line 1546.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf, id=966, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf, id=965, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf  used on input line 1545.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-zeta-coverage-two-stage-1.pdf  used on input line 1550.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
-<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf, id=967, 650.43pt x 361.35pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf, id=966, 650.43pt x 361.35pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf  used on input line 1549.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/ARGL-zeta-coverage-two-stage-1.pdf  used on input line 1554.
 (pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 AED endfloat: Processing end Figures and Tables
 
@@ -1564,16 +1565,13 @@ L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30133 strings out of 471510
- 589061 string characters out of 5515717
- 982146 words of memory out of 5000000
- 55681 multiletter control sequences out of 15000+600000
+ 30135 strings out of 471510
+ 589085 string characters out of 5515717
+ 982190 words of memory out of 5000000
+ 55683 multiletter control sequences out of 15000+600000
  720418 words of font info for 216 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  99i,14n,105p,1656b,623s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{Hfootnote.8} has been referenced but does not exist, replaced by a fixed one
-
 
 pdfTeX warning (dest): name{Hfootnote.7} has been referenced but does not exist, replaced by a fixed one
 
@@ -1596,10 +1594,10 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on step-function-selection-models-with-dependent-effects.pdf (89 pages, 1939548 bytes).
+Output written on step-function-selection-models-with-dependent-effects.pdf (89 pages, 1938375 bytes).
 PDF statistics:
- 1344 PDF objects out of 1440 (max. 8388607)
- 1130 compressed objects within 12 object streams
+ 1346 PDF objects out of 1440 (max. 8388607)
+ 1132 compressed objects within 12 object streams
  292 named destinations out of 1000 (max. 500000)
- 45534 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 45542 words of extra memory for PDF output out of 51595 (max. 10000000)
 

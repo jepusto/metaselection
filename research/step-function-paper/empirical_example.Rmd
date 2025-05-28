@@ -131,4 +131,4 @@ For the CML estimator, the bootstrap CIs are similar or slightly wider than the 
 <!-- For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme. -->
 These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
-To draw firmer conclusion about the comparative performance of these methods, we conducted simulations to evaluate the methods in terms of bias, accuracy, and confidence interval coverage across a range of conditions. 
+To draw firmer conclusion about these methods, we conducted simulations to evaluate their performance characteristics across a range of conditions. 

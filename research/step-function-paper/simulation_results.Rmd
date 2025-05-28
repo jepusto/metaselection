@@ -24,7 +24,7 @@ convergence_min <-
 
 ```
 
-We organize our presentation of simulation study results by first considering the properties of point and interval estimators for the average effect size. 
+We organize our presentation of simulation results by first considering the properties of point and interval estimators for the average effect size. 
 For this parameter, we compare the bias and accuracy of the CML and ARGL estimators to that of the CHE-ISCW estimator and the PET/PEESE estimator.
 We also examine the calibration of cluster-robust and bootstrap confidence intervals based on the CML and ARGL estimators. 
 We then briefly consider the bias and accuracy of estimators  of the marginal variance of the effect size distribution and the selection parameter in the step-function model. 
@@ -35,7 +35,7 @@ The CHE-ISCW and PET/PEESE estimators produced results for every replication in 
 The CML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions, although the CML estimator did exhibit rates of convergence below 99% under conditions with the lowest degree of heterogeneity $\tau = 0.05$, with the lowest convergence rate of `r round(100 * convergence_min %>% filter(estimator == "CML") %>% pull(convergence), 1)`%.
 For the ARGL estimator, convergence was above `r round(100 * convergence_min %>% filter(estimator == "ARGL") %>% pull(convergence), 1)`% across all conditions.
 Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the CML and ARGL estimators.
-We evaluated the performance characteristics of these estimators across replications where they converged.
+We evaluated the performance characteristics of each estimator across the replications where it converged.
 
 ### Bias
 
@@ -151,8 +151,8 @@ Because selective reporting does not create much bias under such conditions, the
 Figure \@ref(fig:comparison-coverage) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full) depicts the full range of coverage rates.]
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions. 
 The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity,  
-Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J \geq 90$ or greater.
-In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated because of the biases of the point estimators around which the intervals are centered.
+Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J$ is 90 or greater.
+In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
 
 ```{r comparison-coverage}
@@ -239,9 +239,10 @@ mu_graph_res_ci %>%
 
 ## Effect Size Variance
 
-We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE, CML, and ARGL methods are all relevant.^[We omitted the variance estimator from the CHE-ISCW method because it is identical to that of CHE.]
-Figure \@ref(fig:heterogeneity-bias) depicts the bias for the CHE, CML, and ARGL estimators of log-heterogeneity $\gamma = \log(\tau^2)$. 
-In most conditions, the estimators are biased in the negative direction. Bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau = 0.05$) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE estimator under conditions where there is strong selection. 
+We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE-ISCW, CML, and ARGL methods are all relevant.
+Figure \@ref(fig:heterogeneity-bias) depicts the bias for the CHE-ISCW, CML, and ARGL estimators of log-heterogeneity $\gamma = \log(\tau^2)$. 
+In most conditions, the estimators are biased in the negative direction.
+Bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau = 0.05$) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection. 
 However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low. 
 
 Figure \@ref(fig:heterogeneity-rmse) depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-CHE) and \@ref(fig:heterogeneity-rmse-ARGL-CML) providing greater detail about the relative accuracy of the three methods. 

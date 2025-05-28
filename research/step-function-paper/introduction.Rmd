@@ -26,7 +26,7 @@ First, they are generative models with parameters that directly describe the sel
 Second, selection models can allow for effect heterogeneity with a random effect term. 
 Findings from simulations indicate that selection models outperform simpler alternative methods when effect sizes are heterogeneous [@carter2019correcting; @Terrin2003heterogeneity].
 Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
-In addition to these features, @vevea1995general step-function's model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting [e.g., p < 0.01 and p < 0.05, see, e.g., @greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance].
+In addition to these features, the @vevea1995general step-function model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting [e.g., p < 0.01 and p < 0.05, see, e.g., @greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance].
 
 ## Dependent effect sizes
 

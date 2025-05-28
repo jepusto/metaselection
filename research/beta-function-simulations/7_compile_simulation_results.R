@@ -113,7 +113,7 @@ bootstrap_reps %>%
 
 
 bootstrap_reps %>%
-  group_by(complete, has_zeros, date) %>%
+  group_by(complete, has_zeros) %>%
   count()
 
 #-------------------------------------------------------------------------------
