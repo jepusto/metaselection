@@ -23,7 +23,6 @@ true population of effects. Failure to account for selective reporting
 can lead to inflated effect size estimates from meta-analysis and biased
 estimates of heterogeneity, making it difficult to draw accurate
 conclusions from a synthesis.
-<!-- This can take place at the study level, with entire studies left unpublished, or at the effect size level, with only positive effects reported and those with negative or non-affirming effects omitted from the publication. -->
 
 There are many tools available already to investigate and correct for
 selective reporting. Widely used methods include: graphical diagnostics
@@ -41,15 +40,14 @@ an outcome across multiple time-points, or involve comparisons between
 multiple intervention conditions. Ignoring the dependency of effect size
 estimates included in a meta-analysis leads to overly narrow confidence
 intervals, hypothesis tests with inflated type one error rates, and
-incorrect inferences. X (2024) developed and examined methods for
-investigating and accounting for selective reporting in meta-analytic
-models that also account for dependent effect sizes. Their simulation
-results show that combining selection models with robust variance
-estimation to account for dependent effects reduces bias in the estimate
-of the overall effect size. Combining the selection models with cluster
-bootstrapping leads to confidence intervals with close-to-nominal
-coverage rates.
-<!-- Numerous methods have been developed to account for effect size dependencies, and some of these have been combined with a few of the available techniques for investigating selective reporting. However, these combined methods are currently limited to techniques based on regression adjustment or sensitivity analyses based on simple forms of selection. -->
+incorrect inferences. Pustejovsky, Citkowicz, and Joshi (2025) developed
+and examined methods for investigating and accounting for selective
+reporting in meta-analytic models that also account for dependent effect
+sizes. Their simulation results show that combining selection models
+with robust variance estimation to account for dependent effects reduces
+bias in the estimate of the overall effect size. Combining the selection
+models with cluster bootstrapping leads to confidence intervals with
+close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several
 meta-analytic selection models. The main function, `selection_model()`,
@@ -242,6 +240,15 @@ Weight-Function Models for Publication Bias*.
 Lehmann, Gabrielle K, Andrew J Elliot, and Robert J Calin-Jageman. 2018.
 “Meta-Analysis of the Effect of Red on Perceived Attractiveness.”
 *Evolutionary Psychology* 16 (4): 1474704918802412.
+
+</div>
+
+<div id="ref-pustejovsky2025estimation" class="csl-entry">
+
+Pustejovsky, James E., Martyna Citkowicz, and Megha Joshi. 2025.
+“Estimation and Inference for Step-Function Selection Models in
+Meta-Analysis with Dependent Effects.”
+<https://doi.org/10.31222/osf.io/qg5x6_v1>.
 
 </div>
 

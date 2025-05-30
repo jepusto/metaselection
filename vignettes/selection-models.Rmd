@@ -43,9 +43,8 @@ Meta-analysts now have access to an array of methods for summarizing and modelin
 The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes. In particular, the package provides methods for investigating and accounting for selective reporting based on selection models, where prior developments were limited to data with independent effect sizes.
 The available models describe the _marginal_ distribution of effect size estimates and so do not attempt to directly capture the dependence structure among effect size estimates. 
 However, the package implements two distinct methods to account for dependent effect sizes after fitting the model, using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping techniques. 
-Simulation results show that applying selection models to dependent effect size estimates reduces bias in the estimate of the overall effect size. 
-Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates. 
-<!-- Cite paper when available -->
+Simulation results show that applying selection models to dependent effect size estimates reduces bias in the estimate of the overall effect size [@pustejovsky2025estimation]. 
+Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates [@pustejovsky2025estimation]. 
 
 Several existing packages provide implementations of selection models, but none can accommodate dependent effect size estimates.
 For example, the `metafor` package [@Viechtbauer2010conducting] includes the `selmodel()` function, which allows users to fit many different types of selection models.
@@ -154,8 +153,6 @@ ggplot(dat, aes(x = pvals)) +
 ### Beta-density functions
 
 @Citkowicz2017parsimonious proposed a selection model based on an alternative form of selection function, where the probability of reporting follows a beta density. Compared to a step function, the beta density selection function can capture a very different set of shapes, with selection probabilities that vary smoothly over the range of possible one-sided $p$-values.
-<!-- In contrast to step-function models, it does not require the pre-specification of $p$-value thresholds.  -->
-<!-- JEP: Took this out because the truncation values _are_ pre-specified thresholds. -->
 The `metaselection` package implements a modification of the beta-density function as originally proposed in @Citkowicz2017parsimonious. The modification involves truncating the selection probabilities at user-specified steps $\alpha_1$ and $\alpha_2$, so that the selection function is given by
 $$
 \text{Pr}(O_{ij} = 1 | p_{ij}) = \tilde{p}_{ij}^{(\lambda_1 - 1)} \left(1 - \tilde{p}_{ij}\right)^{(\lambda_2 - 1)},
@@ -238,8 +235,7 @@ The `metaselection` package implements five different techniques, following the 
 * The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the $t$ statistic rather than the point estimator of a parameter. 
 
 Our simulation results indicate that bootstrap confidence intervals, particularly using the multinomial bootstrap approach with percentile confidence intervals, leads to coverage rates that are close to the nominal level of 0.95 whereas the coverage rates provided by the CRVE method are below nominal. 
-Therefore, we strongly recommend using the multinomial bootstrap with the percentile confidence intervals. 
-<!-- Cite paper when available -->
+Therefore, we strongly recommend using the multinomial bootstrap with the percentile confidence intervals [@pustejovsky2025estimation]. 
 
 Bootstrap confidence intervals require re-estimating the selection model and re-calculating parameter estimates on each re-sampled dataset, which is a computationally demanding process.
 Furthermore, obtaining accurate confidence intervals requires using a relatively large number of bootstrap replications [@davidson2000bootstrap]; using an insufficient number will produce confidence intervals that are too narrow and have below-nominal coverage. 
@@ -330,7 +326,6 @@ mod_3PSM
 
 The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`],  which over 40% smaller than the estimate that does not account for selection bias (`r round(as.numeric(CHE_mod$beta), 3)`). This estimate is also no longer statistically distinct from zero ($p$ = `r round(mod_3PSM$est$p_value[mod_3PSM$est$param=="beta"], 3)`).
 Note that although the `metaselection` package calculates $p$-values, we recommend focusing on the interpretation of the parameter estimates and confidence intervals of the model results, which convey information about the magnitude of the parameters rather than only about whether the parameters differ from a null value.
-<!-- JEP: Revised to remove claim about under-powered meta-analysis. -->
 
 The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
 We omit the $p$-value for $\tau^2$ because the $p$-value pertains to an arbitrary and uninteresting null hypothesis, namely that $\gamma = log(\tau^2) = 0$ (i.e., that $\tau^2 = 1$).
