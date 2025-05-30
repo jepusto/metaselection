@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-Selection models involve two components [@hedges2005selection]. 
+Step-function selection models involve two components. [@hedges2005selection] 
 The first component, which we shall call the evidence-generating process, involves assumptions about the distribution of effect size estimates prior to selective reporting.
 This component is usually a random effects model or meta-regression model.
 The second component, which we shall call the selection process, involves assumptions about how effect size estimates come to be observed and therefore available for inclusion in the meta-analysis. 
@@ -15,8 +15,7 @@ Combining the assumptions of both components leads to a model for the distributi
 
 In applying selection models to datasets involving dependent effects, we propose to model the _marginal_ distribution of the effect size estimates---that is, the distribution of each estimate considered singly---rather than modeling the joint distribution of the multiple observed effects reported in a primary study. 
 To account for dependence, we consider cluster-robust variance estimation or clustered bootstrap inference methods that allow for dependent observations even though the dependence is not explicitly modeled. 
-This strategy does have the limitation that the model parameter estimates pertain only to the marginal distribution and so would not, for instance, allow for a decomposition of heterogeneity into between-study and within-study variance. 
-Likewise, models for the marginal distribution do not allow one to distinguish between selective publication of full studies versus selective reporting of individual outcomes.
+This strategy does have the limitation that the model parameter estimates pertain only to the marginal distribution and do not distinguish between selective publication of full studies versus selective reporting of individual outcomes.
 Nonetheless, we believe that the strategy is worth pursuing both because it is feasible and because it captures a plausible form of selection, in which reporting is influenced by the significance level of individual effect size estimates.
 
 We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij}$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.

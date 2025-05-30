@@ -69,11 +69,13 @@ header-includes:
 - \raggedbottom
 - \usepackage{setspace}
 - \AtBeginEnvironment{tabular}{\singlespacing}
-- \usepackage{perpage}
-- \MakePerPage{footnote}
-- \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+- \renewcommand*{\thesection}{Appendix \Alph{section}}
+- \numberwithin{table}{section}
+- \renewcommand\thetable{\Alph{section}\arabic{table}}
+- \numberwithin{equation}{section}
+- \renewcommand\theequation{\Alph{section}\arabic{equation}}
 - \usepackage{xr}
-- \externaldocument{step-function-selection-models-supplementary-materials}
+- \externaldocument{step-function-selection-models-with-dependent-effects}
 - \newcommand{\Prob}{\text{Pr}}
 - \newcommand{\E}{\text{E}}
 - \newcommand{\Cov}{\text{Cov}}
@@ -91,112 +93,24 @@ library(knitr)
 library(papaja)
 library(metaselection)
 library(tidyverse)
-library(CRediTas)
 
 options(tinytex.verbose = TRUE)
 
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
-
-appendix_prefix <- "Online Appendix"
 ```
 
-# Introduction {#introduction}
-
-```{r child = "introduction.Rmd"}
+```{r child = "appendix-CML-derivatives.Rmd"}
 ```
 
-# Models and Estimation Methods {#model-and-estimation}
-
-```{r child = "model_and_estimation_methods.Rmd"}
+```{r child = "appendix-ARGL-derivatives.Rmd"}
 ```
 
-# Empirical Example {#empirical-example}
-
-```{r child = "empirical_example.Rmd"}
+```{r child = "appendix-bootstrap-details.Rmd"}
 ```
 
-# Simulation Methods {#simulation-methods}
-
-```{r child = "simulation_methods.Rmd"}
+```{r child = "appendix-simulation-results.Rmd"}
 ```
-
-# Simulation Results {#simulation-results}
-
-```{r child = "simulation_results.Rmd"}
-```
-
-# Discussion {#discussion}
-
-```{r child = "discussion.Rmd"}
-```
-
-# Author Contributions {-}
-
-```{r CRediT}
-#| results: asis
-
-JEP_credit <- 
-  template_create(authors = "JEP") %>%
-  mutate(
-    Conceptualization = 1,
-    Methodology = 1,
-    Software = 1,
-    Validation = 1,
-    `Formal Analysis` = 1,
-    Investigation = 1,
-    Resources = 1,
-    `Writing - original draft` = 1,
-    `Writing - review & editing` = 1,
-    Supervision = 1
-  )
-
-MJ_credit <- 
-  template_create(authors = "MJ") %>%
-  mutate(
-    Methodology = 1,
-    Software = 1,
-    Validation = 1,
-    `Formal Analysis` = 1,
-    Investigation = 1,
-    `Writing - original draft` = 1,
-    `Writing - review & editing` = 1,
-    Visualization = 1
-  )
-
-MC_credit <- 
-  template_create(authors = "MC") %>%
-  mutate(
-    Conceptualization = 1,
-    Methodology = 1,
-    Investigation = 1,
-    `Writing - original draft` = 1,
-    `Writing - review & editing` = 1,
-    `Project administration` = 1,
-    `Funding acquisition` = 1
-  )
-
-bind_rows(JEP_credit, MJ_credit, MC_credit) %>%
-  cras_write() %>%
-  cat()
-```
-
-# Funding {-}
-
-This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research.
-The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
-
-# Acknowledgements {-}
-
-We thank Laura Michaelson for feedback on a draft version of this article.
-
-# Data and Replication Materials {-}
-
-Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at <https://osf.io/v25rx/>.
-
-# Conflict of Interest Statement {-}
-
-The authors declare no conflicts of interest.
 
 # References {-}
 
@@ -204,3 +118,6 @@ The authors declare no conflicts of interest.
 \setlength{\parindent}{-0.5in}
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
+
+# (APPENDIX) Appendix {-}
+
