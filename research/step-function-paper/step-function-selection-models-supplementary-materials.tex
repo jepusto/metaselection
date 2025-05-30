@@ -204,11 +204,13 @@
 \raggedbottom
 \usepackage{setspace}
 \AtBeginEnvironment{tabular}{\singlespacing}
-\renewcommand*{\thesection}{Appendix \Alph{section}}
+\renewcommand*{\thesection}{\Alph{section}}
 \numberwithin{table}{section}
 \renewcommand\thetable{\Alph{section}\arabic{table}}
 \numberwithin{equation}{section}
 \renewcommand\theequation{\Alph{section}\arabic{equation}}
+\numberwithin{figure}{section}
+\renewcommand\thefigure{\Alph{section}\arabic{figure}}
 \usepackage{xr}
 \externaldocument{step-function-selection-models-with-dependent-effects}
 \newcommand{\Prob}{\text{Pr}}
@@ -466,7 +468,20 @@ Notably, the basic and studentized confidence intervals depend on the scale of t
 \includegraphics{step-function-selection-models-supplementary-materials_files/figure-latex/ARGL-coverage-exponential-1} \caption{Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:ARGL-coverage-exponential}
 \end{sidewaysfigure}
 
+\newpage
+
 \section{\texorpdfstring{Additional simulation results for estimators of log-heterogeneity \((\gamma)\)}{Additional simulation results for estimators of log-heterogeneity (\textbackslash gamma)}}\label{gamma-simulation-results}
+
+We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE-ISCW, CML, and ARGL methods are all relevant.
+Figure \ref{fig:heterogeneity-bias} depicts the bias for the CHE-ISCW, CML, and ARGL estimators of log-heterogeneity \(\gamma = \log(\tau^2)\).
+In most conditions, the estimators are biased in the negative direction.
+Bias is high for all three estimators in conditions where the between-study heterogeneity is low (\(\tau = 0.05\)) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection.
+However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low.
+
+Figure \ref{fig:heterogeneity-rmse} depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \ref{fig:heterogeneity-rmse-ARGL-CHE} and \ref{fig:heterogeneity-rmse-ARGL-CML} providing greater detail about the relative accuracy of the three methods.
+Under nearly all conditions, the CML estimator is much more accurate than the ARGL estimator.
+The RMSE of CML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
+However, just as with the estimators of average effect size, the CHE estimator is more accurate when selection is mild or absent, leading to a bias-variance trade-off.
 
 \begin{sidewaysfigure}
 \includegraphics{step-function-selection-models-supplementary-materials_files/figure-latex/heterogeneity-bias-1} \caption{Bias for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-bias}
@@ -488,7 +503,16 @@ Notably, the basic and studentized confidence intervals depend on the scale of t
 \includegraphics{step-function-selection-models-supplementary-materials_files/figure-latex/heterogeneity-rmse-ARGL-CML-1} \caption{Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse-ARGL-CML}
 \end{sidewaysfigure}
 
+\newpage
+
 \section{\texorpdfstring{Additional simulation results for estimators of selection parameter \((\zeta_1)\)}{Additional simulation results for estimators of selection parameter (\textbackslash zeta\_1)}}\label{zeta-simulation-results}
+
+The CML and ARGL methods both estimate the log-selection parameter of the step-function model, a parameter that may be of substantive interest.
+Figure \ref{fig:selection-bias} shows that the bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have large negative biases under conditions with strong selection probability and high average SMD, especially with low between-study heterogeneity.
+Figure \ref{fig:selection-rmse} depicts the RMSE for the ARGL and CML estimators of the log-selection parameter with Figure \ref{fig:selection-rmse-ARGL-CML} providing a more detailed view of the relative accuracy of the ARGL versus the CML estimators.
+The CML estimator of the selection parameter generally outperforms the ARGL estimator, especially under conditions with strong selection.
+Figures \ref{fig:CML-zeta-coverage-two-stage} and \ref{fig:ARGL-zeta-coverage-two-stage} depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
+Broadly, none of the methods provide coverage rates that are close to the nominal 95\% level across all conditions examined.
 
 \begin{sidewaysfigure}
 \includegraphics{step-function-selection-models-supplementary-materials_files/figure-latex/selection-bias-1} \caption{Bias for estimators of log-selection parameter by selection probability, average SMD, and between-study heterogeneity}\label{fig:selection-bias}

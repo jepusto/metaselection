@@ -65,11 +65,13 @@ header-includes:
 - \raggedbottom
 - \usepackage{setspace}
 - \AtBeginEnvironment{tabular}{\singlespacing}
-- \renewcommand*{\thesection}{Appendix \Alph{section}}
+- \renewcommand*{\thesection}{\Alph{section}}
 - \numberwithin{table}{section}
 - \renewcommand\thetable{\Alph{section}\arabic{table}}
 - \numberwithin{equation}{section}
 - \renewcommand\theequation{\Alph{section}\arabic{equation}}
+- \numberwithin{figure}{section}
+- \renewcommand\thefigure{\Alph{section}\arabic{figure}}
 - \usepackage{xr}
 - \externaldocument{step-function-selection-models-with-dependent-effects}
 - \newcommand{\Prob}{\text{Pr}}
