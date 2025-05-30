@@ -41,6 +41,12 @@ The single-step model used a threshold at $\alpha_1 = 0.025$; the two-step model
 For comparison purposes, we estimated model parameters using both CML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
 For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 replicates.
 
+Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
+The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
+The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
+In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero. 
+Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
+
 ```{r empirical, echo=F, message=FALSE, warning=FALSE, tab.cap="Carter et al. (2015) Re-Analysis: Ego-Depletion"}
 format_it <- function(x, trunc = Inf) {
   
@@ -105,7 +111,8 @@ kbl(
   caption = "Single-step and two-step selection model parameter estimates fit to ego depletion effects data from Carter et al. (2015)",
   col.names = c("Parameter", "Estimate (SE)", "Cluster-Robust CI", "Percentile Bootstrap CI", "Estimate (SE)", "Cluster-Robust CI", "Percentile Bootstrap CI"),
   booktabs = TRUE,
-  escape = FALSE
+  escape = FALSE,
+  position = "tb"
 ) %>%
   kable_styling(latex_options = c("scale_down")) %>%
   add_header_above(c(" ", "CML estimator" = 3, "ARGL estimator" = 3)) %>%
@@ -118,17 +125,9 @@ kbl(
 
 ```
 
-Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
-The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
-The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
-In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero. 
-Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
-
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
 Generally, the CML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
 For the CML estimator, the bootstrap CIs are similar or slightly wider than the cluster-robust CIs.
-<!-- For the ARGL estimator, the bootstrap CIs were similar to the cluster-robust CIs for the one-step model but quite discrepant for the two-step model.  -->
-<!-- For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme. -->
 These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
 To draw firmer conclusion about these methods, we conducted simulations to evaluate their performance characteristics across a range of conditions. 
