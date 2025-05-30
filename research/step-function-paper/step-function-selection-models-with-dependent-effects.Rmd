@@ -98,7 +98,7 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
-appendix_prefix <- "Online"
+appendix_prefix <- "Online Appendix"
 ```
 
 # Introduction {#introduction}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  30 MAY 2025 13:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.21)  30 MAY 2025 16:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1109,7 +1109,7 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 [19]
 
 [20]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 629.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 625.
 (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1119,7 +1119,7 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 [22]
 
 [23]
-Overfull \hbox (12.50217pt too wide) in paragraph at lines 709--723
+Overfull \hbox (12.50217pt too wide) in paragraph at lines 682--696
  [][] 
  []
 
@@ -1128,22 +1128,22 @@ Overfull \hbox (12.50217pt too wide) in paragraph at lines 709--723
 [24]
 
 [25]
-
-[26]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf, id=237, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf, id=227, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf  used on input line 786.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf  used on input line 752.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
-[27]
+[26]
 
-[28 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf, id=260, 650.43pt x 469.755pt>
+[27 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-1.pdf>]
+
+[28]
+<step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf, id=254, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf  used on input line 809.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf  used on input line 775.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 
 
@@ -1152,26 +1152,25 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 [30 <./step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-1.pdf>]
 
 [31]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=300, 650.43pt x 469.755pt>
+<step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf, id=297, 650.43pt x 469.755pt>
 File: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf Graphic file (type pdf)
 <use step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf  used on input line 847.
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf  used on input line 813.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=303, 650.43pt x 361.35pt>
+File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf Graphic file (type pdf)
+<use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>
+Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf  used on input line 825.
+(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
 
 [32]
 
 [33 <./step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-1.pdf>]
-<step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf, id=326, 650.43pt x 361.35pt>
-File: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf Graphic file (type pdf)
-<use step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>
-Package pdftex.def Info: step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf  used on input line 859.
-(pdftex.def)             Requested size: 650.4284pt x 361.34912pt.
 
+[34 <./step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>]
 
-[34]
-
-[35 <./step-function-selection-models-with-dependent-effects_files/figure-latex/CML-coverage-1.pdf>]
+[35]
 
 [36]
 
@@ -1180,51 +1179,47 @@ Package pdftex.def Info: step-function-selection-models-with-dependent-effects_f
 [38]
 
 [39]
-
-[40]
-
-[41]
-Underfull \hbox (badness 1210) in paragraph at lines 995--995
+Underfull \hbox (badness 1210) in paragraph at lines 939--939
 []|\T1/lmr/m/n/12 (+20) Rothstein HR, Sut-ton AJ, Boren-stein M. Pub-li-ca-tion bias in meta-analysis.
  []
 
 
+
+[40]
+
+[41]
 
 [42]
 
 [43]
 
 [44]
-
-[45]
-
-[46]
-Underfull \hbox (badness 10000) in paragraph at lines 1207--1207
+Underfull \hbox (badness 10000) in paragraph at lines 1151--1151
 []|\T1/lmr/m/n/12 (+20) Varin C. On com-pos-ite marginal like-li-hoods. \T1/lmr/m/it/12 (+20) AStA\T1/lmr/m/n/12 (+20) . 2008;92(1):1-28.
  []
 
 
-Underfull \hbox (badness 2165) in paragraph at lines 1223--1223
+Underfull \hbox (badness 2165) in paragraph at lines 1167--1167
 \T1/lmr/m/n/12 (+20) random-weight boot-strap. \T1/lmr/m/it/12 (+20) The Amer-i-can Statis-ti-cian\T1/lmr/m/n/12 (+20) . 2020;74(4):345-358.
  []
 
 
 
-[47]
-Underfull \hbox (badness 1248) in paragraph at lines 1263--1263
+[45]
+Underfull \hbox (badness 1248) in paragraph at lines 1207--1207
 \T1/lmr/m/n/12 (+20) tem users: op-timx for R. \T1/lmr/m/it/12 (+20) Jour-nal of Sta-tis-ti-cal Soft-ware\T1/lmr/m/n/12 (+20) . 2011;43(9):1-14.
  []
 
 
-Underfull \hbox (badness 1454) in paragraph at lines 1283--1283
+Underfull \hbox (badness 1454) in paragraph at lines 1227--1227
 []|\T1/lmr/m/n/12 (+20) Boos DD, Zhang J. Monte carlo eval-u-a-tion of resampling-based hy-poth-e-sis
  []
 
 
 
-[48] AED endfloat: Processing end Figures and Tables
+[46] AED endfloat: Processing end Figures and Tables
 
-[49] (./step-function-selection-models-with-dependent-effects.aux)
+[47] (./step-function-selection-models-with-dependent-effects.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
@@ -1234,30 +1229,24 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 29996 strings out of 471510
- 568948 string characters out of 5515717
- 975506 words of memory out of 5000000
- 55585 multiletter control sequences out of 15000+600000
- 721633 words of font info for 230 fonts, out of 8000000 for 9000
+ 29966 strings out of 471510
+ 568580 string characters out of 5515717
+ 974147 words of memory out of 5000000
+ 55573 multiletter control sequences out of 15000+600000
+ 718336 words of font info for 225 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  99i,14n,105p,1656b,641s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist, replaced by a fixed one
-
 
 pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist, replaced by a fixed one
 
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
-<c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on step-function-selection-models-with-dependent-effects.pdf (49 pages, 527373 bytes).
+<c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on step-function-selection-models-with-dependent-effects.pdf (47 pages, 505952 bytes).
 PDF statistics:
- 827 PDF objects out of 1000 (max. 8388607)
- 708 compressed objects within 8 object streams
- 207 named destinations out of 1000 (max. 500000)
- 49459 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 784 PDF objects out of 1000 (max. 8388607)
+ 672 compressed objects within 7 object streams
+ 198 named destinations out of 1000 (max. 500000)
+ 47395 words of extra memory for PDF output out of 51595 (max. 10000000)
 
