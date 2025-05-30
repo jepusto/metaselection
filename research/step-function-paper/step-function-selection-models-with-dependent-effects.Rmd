@@ -55,7 +55,7 @@ header-includes:
 - \usepackage{multicol}
 - \usepackage{amsthm}
 - \newtheorem{thm}{Theorem}
-- \newtheorem{lem}{Lemma}
+- \newtheorem{lem}{Lemma} 
 - \usepackage{amsfonts}
 - \usepackage{caption}
 - \usepackage{multirow}
@@ -98,7 +98,7 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
-appendix_prefix <- "Online Appendix"
+appendix_prefix <- "Online"
 ```
 
 # Introduction {#introduction}
@@ -201,6 +201,8 @@ The authors declare no conflicts of interest.
 # References {-}
 
 \begingroup
+\singlespacing
 \setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup

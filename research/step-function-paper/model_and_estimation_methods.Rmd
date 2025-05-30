@@ -30,22 +30,18 @@ The evidence-generating process can then be expressed as
 \left(Y^* | \sigma^*, \mat{x}^*\right) \sim N\left(\mat{x}^* \bs\beta, \ \tau^2 + \sigma^{*2}\right),
 \end{equation}
 where $\bs\beta$ is an $x \times 1$ vector of regression coefficients that relate the predictors to average effect size and $\tau^2$ is the variance of the distribution of effect size parameters. 
-
-This random-effects meta-regression treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. As a result, the regression coefficients $\boldsymbol\beta$ describe the overall expected effect size (given the predictors) and the variance parameter $\tau^2$ describes the marginal or _total_ heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-study and between-study components. 
+This random-effects meta-regression treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. 
+As a result, the regression coefficients $\boldsymbol\beta$ describe the overall expected effect size (given the predictors) and the variance parameter $\tau^2$ describes the marginal or _total_ heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-study and between-study components. 
 
 ## Selection process
 
 At a general level, a $p$-value selection process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value. 
 Letting $O$ be an indicator for whether the effect size estimate $Y^*$ is observed, the selection process defines $\text{Pr}(O = 1 \ | \ p^*) = \text{Pr}(O = 1 \ | \ Y^*, \sigma^*)$. 
 In particular, such models assume that 
-\begin{equation}
-\label{eq:selection-process}
-\Pr\left(O = 1 | p^* \right) \propto w\left(p^*; \bs\lambda \right)
-\end{equation}
-for some known function $w\left(.; \bs\lambda\right)$ that maps $p$-values in the interval $[0,1]$ to strictly positive weights and that involves an unknown $h \times 1$ parameter vector $\bs\lambda$. 
+$\Pr\left(O = 1 | p^* \right)$ is proportional to a function $w\left(p^*; \bs\lambda \right)$ that maps $p$-values in the interval $[0,1]$ to strictly positive weights and that involves an unknown $h \times 1$ parameter vector $\bs\lambda$. 
 
 Many different specific selection functions have been proposed in the literature. 
-Building on work by @hedges1992modeling on random effects models without predictors, @vevea1995general described a random effects meta-regression model where selection probabilities vary depending on a set of pre-specified thresholds for the one-sided $p$-value. 
+Building on work on random effects models without predictors[@hedges1992modeling], Vevea and Hedges [@vevea1995general] described a random effects meta-regression model where selection probabilities vary depending on a set of pre-specified thresholds for the one-sided $p$-value. 
 The thresholds are chosen based on conventional, psychologically salient cut-offs for judging statistical significance.
 Let $\alpha_1,...,\alpha_H$ be a set of thresholds for the one-sided p-values, and set $\alpha_0 = 0$, $\alpha_{H+1} = 1$, and $\lambda_0 = 1$. 
 A step function selection model is then given by 
@@ -118,11 +114,8 @@ PSM4
 
 ## Distribution of observed effect size estimates
 
-Combining the assumptions of the evidence-generating process and the selection process leads to a model for an observed effect size estimate. The distribution of an observed effect size estimate is equivalent to the distribution of $Y^*$ given that $O = 1$. By Bayes rule,
-$$
-\Pr(Y^* = y | O = 1, \sigma^* = \sigma) = \frac{\Pr(O = 1 | Y^* = y, \sigma^* = \sigma) \times \Pr(Y^* = y | \sigma^* = \sigma)}{\Pr(O = 1 | \sigma^* = \sigma)},
-$$
-where the selection process defines the first term in the numerator and the evidence-generating process defines the second term in the numerator. The marginal density of an observed effect size estimate $Y$ with standard error $\sigma$ therefore has the form
+Combining the assumptions of the evidence-generating process and the selection process leads to a model for an observed effect size estimate. The distribution of an observed effect size estimate is equivalent to the distribution of $Y^*$ given that $O = 1$. 
+The marginal density of an observed effect size estimate $Y$ with standard error $\sigma$ has the form
 \begin{equation}
 \label{eq:generic-selection}
 f(Y = y | \sigma, \mat{x}) = \frac{1}{A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)} \times w\left(y, \sigma; \bs\lambda \right) \times \frac{1}{\sqrt{\tau^2 + \sigma^2}} \phi\left(\frac{y - \mat{x} \bs\beta}{\sqrt{\tau^2 + \sigma^2}}\right),
@@ -133,8 +126,7 @@ where
 A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda) =  \int_\mathbb{R} w\left(y, \sigma; \bs\lambda \right) \times  \frac{1}{\sqrt{\tau^2 + \sigma^2}}\phi\left(\frac{y - \mat{x}\bs\beta}{\sqrt{\tau^2 + \sigma^2}}\right) dy.
 \end{equation}
 If $w(y, \sigma; \bs\lambda) = 1$, then there is no selective reporting, $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda) = 1$, and the density reduces to the unweighted density of the evidence-generating process (i.e., the density of a random-effects meta-regression).
-
-For the step-function selection process, the $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)$ term in the step-function composite likelihood can be computed using the closed-form expression
+The $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)$ term can be computed using the closed-form expression
 \begin{equation}
 \label{eq:step-function-A}
 A_{ij} = A(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \tau^2, \bs\lambda) = \sum_{h=0}^H \lambda_h B_{hij}
@@ -144,21 +136,18 @@ where
 \label{eq:step-function-Bhij}
 B_{hij} = \Phi\left(c_{hij}\right) - \Phi\left(c_{h+1,ij}\right),
 \end{equation}
-and $c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mat{x}_{ij}\bs\beta\right) / \sqrt{\tau^2 + \sigma_{ij}^2}$ for $h = 0,...,H$ [@vevea1995general]. 
-The quantity $B_{hij}$ corresponds to the probability that, prior to selection, a generated effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$.
+and $c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mat{x}_{ij}\bs\beta\right) / \sqrt{\tau^2 + \sigma_{ij}^2}$ for $h = 0,...,H$. [@vevea1995general]
 
 
 ## Estimation Methods {#estimation-methods}
 
-Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider several estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
-With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.[^efficiency-weights]
+Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
+With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.
 Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of prior weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will will be equal to $a_{ij} = 1$.
-
-[^efficiency-weights]: Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by @Hedges2010robust for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with $k_j$ observed effect size estimates could contribute somewhat less than $k_j$ independent pieces of information. Down-weighting the effect sizes from study $j$ based on the number of reported effect sizes $k_j$ might therefore improve the efficiency of the estimator for the average effect size $\beta$ and variance $\tau^2$. 
 
 ### Maximum composite marginal likelihood
 
-Composite marginal likelihood techniques involve working with the marginal distribution of each observation (here, each observed effect size estimate) as if all observations were mutually independent [@cox2004note; @lindsay1988composite; @varin2008composite]. 
+Composite marginal likelihood techniques involve working with the marginal distribution of each observed effect size estimate as if they were all mutually independent [@cox2004note; @lindsay1988composite; @varin2008composite]. 
 Thus, we assume that the observed effect size estimates were generated from Equation \@ref(eq:generic-selection). 
 For purposes of estimation, we write the likelihoods using natural log transformations of the variance parameter and selection parameters, with $\gamma = \log \tau^2$, $\zeta_h = \log \lambda_h$, and $\bs\zeta = \left[\zeta_1,...,\zeta_H\right]'$. 
 The log of the marginal likelihood contribution for effect size estimate $i$ from study $j$ is given by
@@ -174,7 +163,7 @@ l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij
 \end{equation}
 The composite marginal likelihood (CML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the composite likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
-Under the assumption that the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
+If the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
 \begin{equation}
 \sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
 \end{equation}
@@ -207,19 +196,19 @@ where $V^{CML}_{gg}$ is the $g^{th}$ diagonal entry of $\mat{V}^{CML}$.
 ### Augmented, re-weighted Gaussian likelihood
 
 Composite marginal likelihood is not the only possible basis for deriving estimators of selection model parameters. 
-In the framework of a sensitivity analysis for worst-case selection bias, @mathur2020sensitivity proposed using regular meta-analytic estimators for $\bs\beta$, but with weights defined by the inverse probability of selection under a step-function selection model with a single step at $\alpha_1 = .025$.
+In the framework of a sensitivity analysis for worst-case selection bias, Mathur and VanderWeele @mathur2020sensitivity proposed using regular meta-analytic estimators for $\bs\beta$, but with weights defined by the inverse probability of selection under a step-function selection model with a single step at $\alpha_1 = .025$.
 Because they were working in the context of sensitivity analysis, they assumed a maximum plausible degree of selection rather than estimating the parameters of a selection model, so that the weights were fixed and known quantities. 
 In contrast, here we will consider a more general model, possibly with multiple steps, using weights derived by estimating the selection model parameters.
 We describe the estimators as augmented, re-weighted Gaussian likelihood (ARGL) estimators because the Gaussian likelihood of the evidence-generating process is re-weighted based on the selection process, with selection process parameters identified by augmenting the likelihood with an additional estimating equation.
 
-Given the parameters of the selection process, we can calculate relative probabilities of selection for each effect size estimate, $w_{ij} = w(y_{ij}, \sigma_{ij}; \bs\zeta)$. Following @mathur2020sensitivity, we use these selection probabilities to form weighted estimating equations for the evidence-generating process. Under the evidence-generation model, the marginal log-likelihood of effect size estimate $i$ from study $j$ is Gaussian, given by
+Given the parameters of the selection process, we can calculate relative probabilities of selection for each effect size estimate, $w_{ij} = w(y_{ij}, \sigma_{ij}; \bs\zeta)$. We use these selection probabilities to form weighted estimating equations for the evidence-generating process. Under the evidence-generation model, the marginal log-likelihood of effect size estimate $i$ from study $j$ is Gaussian, given by
 $$
 l^G_{ij}(\bs\beta, \gamma) \propto - \frac{1}{2}\frac{(y_{ij} - \mat{x}_{ij} \bs\beta)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log(\exp(\gamma) + \sigma_{ij}^2).
 $$
 Allowing for prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
-$$
+\begin{equation}
 l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\bs\beta, \gamma).
-$$
+\end{equation}
 If the parameters of the selection process were known, we could find estimators for $\bs\beta$ and $\gamma$ by maximizing $l^G(\bs\beta, \gamma, \bs\zeta)$ for a fixed value of $\bs\zeta$. 
 Equivalently, we could find the estimators as the solutions to the weighted score equations 
 \begin{align}
@@ -235,8 +224,7 @@ The question remains how to obtain an estimator for $\bs\zeta$.
 
 We propose to estimate $\bs\zeta$ by augmenting the Gaussian log-likelihood with the marginal score equation with respect to $\bs\zeta$.
 Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \@ref(eq:hybrid-score-beta) and \@ref(eq:hybrid-score-gamma) together with the estimating equation for $\bs\zeta$ from the composite marginal likelihood approach.
- 
-With $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as given in Equation  \@ref(eq:score-M-zeta), the full set of estimating equations is
+ With $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as given in Equation  \@ref(eq:score-M-zeta), the full set of estimating equations is
 \begin{equation}
 \label{eq:hybrid-score}
 \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \left[\begin{array}{c} \mat{S}^G_{\bs\beta j}(\bs\beta, \gamma, \bs\zeta) \\ S^G_{\gamma j}(\bs\beta, \gamma, \bs\zeta) \\ \mat{S}_{\bs\zeta j}(\bs\beta, \gamma, \bs\zeta) \end{array}\right],
@@ -246,52 +234,29 @@ based on which we define the ARGL estimator as the solution to the estimating eq
 \label{eq:hybrid-total-score}
 \sum_{j=1}^J \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \mat{0}.
 \end{equation}
-We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamma$, and $\bs{\tilde\zeta}$.[^profiling]
+We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamma$, and $\bs{\tilde\zeta}$.
 
-[^profiling]: For computational purposes, it is useful to observe that the solution to Equation \@ref(eq:hybrid-score-beta) involves a weighted least squares estimator for $\bs\beta$. Given values of $\gamma$ and $\bs\zeta$, $\bs{\tilde\beta}$ is 
-    $$
-    \bs{\tilde\beta}(\gamma, \bs\zeta) = \left(\sum_{j=1}^J \sum_{i=1}^{k_j} v_{ij} \mat{x}_{ij}' \mat{x}_{ij}\right)^{-1} \sum_{j=1}^J \sum_{i=1}^{k_j} v_{ij} \mat{x}_{ij}' \mat{y}_{ij},
-    $$
-    where $v_{ij} = \frac{a_j}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)}$.
-    The weighted least squares solution allows $\bs\beta$ to be profiled out of the estimating equations, so that Equation \@ref(eq:hybrid-total-score) need be solved only for $\gamma$ and  $\bs\zeta$.
-
-For the step-function selection process, the score equation with respect to $\bs\zeta$ has an interesting and intuitively interpretable form. 
-Observe that the probability that an observed effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$ is $E_{hij} = \exp(\zeta_h) \times B_{hij} / A_{ij}$, where $B_{hij}$ is given in Equation \@ref(eq:step-function-Bhij).
-Accounting for the prior weights, the expected number of observed effect size estimates falling into the interval $(\alpha_h, \alpha_{h+1}]$ is therefore 
-\begin{equation}
-\label{eq:expected-h}
-E_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
-\end{equation}
-Let $K_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)$ denote the weighted count of observed effect size estimates with $p$-values falling into the interval $(\alpha_h, \alpha_{h+1}]$, for $h = 0,...,H$.
-The score of the step-function model with respect to the $h^{th}$ component of $\bs\zeta$ can then be written simply as
-\begin{equation}
-S_{\zeta h} = K_h - E_h.
-\end{equation}
-Thus, by setting $\mat{S}_{\bs\zeta} = \mat{0}$, the estimator of $\bs\zeta$ is taken to be the values that equate the observed number of effect size estimates in each interval with the expected number of estimates under the step-function model.
-
-We will consider conducting inferences for the ARGL estimators using cluster-robust sandwich variance estimators that have the same form as (\ref{eq:sandwich-variance}). 
+We consider conducting inferences for the ARGL estimators using cluster-robust sandwich variance estimators that have the same form as (\ref{eq:sandwich-variance}). 
 `r appendix_prefix` \@ref(ARGL-derivatives) provides further details.
 We construct confidence intervals for model parameters using Wald-type large sample approximations, just as with the CML estimators.
 
 ## Bootstrap inference
 
 Sandwich estimators such as those in Equations \@ref(eq:sandwich-variance) require a large number of independent clusters (i.e., large $J$) to provide accurate assessments of uncertainty. 
-For regular meta-analysis or meta-regression models, small-sample refinements are available that provide accurate inference even with a limited number of clusters [@tipton2015small; @tiptonpusto2015small]. 
-However, these small-sample refinements have not been extended to step-function selection models. 
-We instead consider alternative inference techniques, including several forms of bootstrapping, that might provide more accurate inference with a limited number of clusters.
+We consider alternative inference techniques based on bootstrapping, which might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
-The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a means to calculate standard errors and confidence intervals.
+The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.
 
 Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions [@davison1997bootstrap].
 For data involving dependent observations, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure. 
-Techniques that do so include the non-parametric clustered bootstrap, two-stage bootstrap [@field2007bootstrapping; @leeuw2008resampling], and fractional random weight bootstrap [@xu2020applications; @rubin1981bayesian]. 
+Techniques that do so include the non-parametric clustered bootstrap, two-stage bootstrap [@field2007bootstrapping; @leeuw2008resampling], and fractional random weight bootstrap [@xu2020applications]. 
 Here, we focus on the two-stage bootstrap; details about other bootstrap techniques can be found in `r appendix_prefix` \@ref(bootstrap-details).
 
-In the two-stage bootstrap, each pseudo-sample is generated by, first, randomly drawing $J$ clusters of observations with replacement from the original sample and then, second, randomly re-sampling observations with replacement from each selected cluster. 
+In the two-stage bootstrap, each pseudo-sample is generated by randomly drawing $J$ clusters of observations with replacement from the original sample and then randomly re-sampling observations with replacement from each selected cluster. 
 This process amounts to simulating set of weights. Let $a_j^{(b)}$ be a first-stage weight for cluster $j$ and $a_{ij}^{(b)}$ be the weight assigned to observation $i$ in cluster $j$ for pseudo-sample $b$.
 The two-stage bootstrap is equivalent to first drawing $a_1^{(b)},...,a_J^{(b)}$ from a multinomial distribution with $J$ trials and equal probability on each of $J$ categories, then drawing $a_{1j}^{(b)},...,a_{k_j j}^{(b)}$ from a multinomial distribution with $a_j^{(b)} \times k_j$ trials and equal probability on each of $k_j$ categories, for $j = 1,...,J$.
 
 For constructing confidence intervals, bootstrapping entails generating a total of $B$ pseudo-samples, where $B$ is a large number such as 1999, and re-calculating the estimator for each pseudo-sample. 
 There are several methods for constructing confidence intervals from a bootstrap distribution.
-We consider four standard methods, all as described by @davison1997bootstrap, including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by @efron1987better. 
+We consider four standard methods [@davison1997bootstrap], including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by @efron1987better. 
 `r appendix_prefix` \@ref(bootstrap-details) provides further details about the bootstrap CI calculations.

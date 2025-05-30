@@ -1,6 +1,6 @@
 ---
-title             : "Estimation and inference for step-function selection models in meta-analysis with dependent effects"
-shorttitle        : "Step-function selection models"
+title             : "Supplementary materials for _Estimation and inference for step-function selection models in meta-analysis with dependent effects_"
+shorttitle        : "Supplementary materials"
 
 author: 
   - name          : "James E. Pustejovsky"
@@ -25,11 +25,6 @@ affiliation:
 
 note              : "\\ \\newline `r format(Sys.Date(), '%B %d, %Y')`"
 
-abstract: |
-  Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates. Another is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
-  
-keywords          : "meta-analysis; dependent effect sizes; selection models; selective reporting; publication bias"
-
 bibliography      : references.bib
 
 figsintext        : yes
@@ -38,9 +33,10 @@ floatsintext      : yes
 tablelist         : no
 footnotelist      : no
 lineno            : no
-mask              : no
+mask              : yes
 numbersections    : yes
 keep_tex          : yes
+toc               : yes
 lang              : "en-US"
 documentclass     : "apa7"
 classoption       : "man, donotrepeattitle"
@@ -100,24 +96,30 @@ opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
 ```
 
+\newpage
+
 ```{r child = "appendix-CML-derivatives.Rmd"}
 ```
+
+\newpage
 
 ```{r child = "appendix-ARGL-derivatives.Rmd"}
 ```
 
+\newpage
+
 ```{r child = "appendix-bootstrap-details.Rmd"}
 ```
 
+\newpage
+
 ```{r child = "appendix-simulation-results.Rmd"}
 ```
+\newpage
 
-# References {-}
+# Additional References {-}
 
 \begingroup
 \setlength{\parindent}{-0.5in}
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
-
-# (APPENDIX) Appendix {-}
-

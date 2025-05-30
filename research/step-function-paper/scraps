@@ -37,3 +37,30 @@ Based on the working covariance, standard errors of average effect sizes and met
 
 Publication bias is a long-standing concern in meta-analysis, with a range of methods available to investigate its potential effects [@Rothstein2005].
 However, traditional methods are insufficient because they do not address the second type of bias: outcome reporting bias. 
+
+[^efficiency-weights]: Another reason to consider weights is that analytic weights could be used to improve the efficiency of the parameter estimators, similar to the working model weights proposed by @Hedges2010robust for random effects meta-analysis and meta-regression. For instance, consider the basic meta-analysis context with no predictors. If effect size estimates from the same study are correlated, then a study with $k_j$ observed effect size estimates could contribute somewhat less than $k_j$ independent pieces of information. Down-weighting the effect sizes from study $j$ based on the number of reported effect sizes $k_j$ might therefore improve the efficiency of the estimator for the average effect size $\beta$ and variance $\tau^2$. 
+
+[^profiling]
+
+[^profiling]: For computational purposes, it is useful to observe that the solution to Equation \@ref(eq:hybrid-score-beta) involves a weighted least squares estimator for $\bs\beta$. Given values of $\gamma$ and $\bs\zeta$, $\bs{\tilde\beta}$ is 
+    $$
+    \bs{\tilde\beta}(\gamma, \bs\zeta) = \left(\sum_{j=1}^J \sum_{i=1}^{k_j} v_{ij} \mat{x}_{ij}' \mat{x}_{ij}\right)^{-1} \sum_{j=1}^J \sum_{i=1}^{k_j} v_{ij} \mat{x}_{ij}' \mat{y}_{ij},
+    $$
+    where $v_{ij} = \frac{a_j}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)}$.
+    The weighted least squares solution allows $\bs\beta$ to be profiled out of the estimating equations, so that Equation \@ref(eq:hybrid-total-score) need be solved only for $\gamma$ and  $\bs\zeta$.
+
+The quantity $B_{hij}$ corresponds to the probability that, prior to selection, a generated effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$.
+    
+For the step-function selection process, the score equation with respect to $\bs\zeta$ has an interesting and intuitively interpretable form. 
+Observe that the probability that an observed effect size estimate with predictor $\mat{x}_{ij}$ and standard error $\sigma_{ij}$ will have a p-value falling in the interval $\alpha_h < p^* \leq \alpha_{h+1}$ is $E_{hij} = \exp(\zeta_h) \times B_{hij} / A_{ij}$, where $B_{hij}$ is given in Equation \@ref(eq:step-function-Bhij).
+Accounting for the prior weights, the expected number of observed effect size estimates falling into the interval $(\alpha_h, \alpha_{h+1}]$ is therefore 
+\begin{equation}
+\label{eq:expected-h}
+E_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\zeta_h) \times B_{hij}}{A_{ij}}.
+\end{equation}
+Let $K_h = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} \times I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right)$ denote the weighted count of observed effect size estimates with $p$-values falling into the interval $(\alpha_h, \alpha_{h+1}]$, for $h = 0,...,H$.
+The score of the step-function model with respect to the $h^{th}$ component of $\bs\zeta$ can then be written simply as
+\begin{equation}
+S_{\zeta h} = K_h - E_h.
+\end{equation}
+Thus, by setting $\mat{S}_{\bs\zeta} = \mat{0}$, the estimator of $\bs\zeta$ is taken to be the values that equate the observed number of effect size estimates in each interval with the expected number of estimates under the step-function model.

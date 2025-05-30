@@ -1,0 +1,10 @@
+\babel@toc {american}{}\relax 
+\contentsline {section}{\numberline {Appendix A}Score and Hessian of the step-function marginal log likelihood}{3}{section.1}%
+\contentsline {section}{\numberline {Appendix B}Sandwich estimator for the augmented, re-weighted Gaussian likelihood estimator}{6}{section.2}%
+\contentsline {section}{\numberline {Appendix C}Further details about bootstrapping}{8}{section.3}%
+\contentsline {subsection}{Other bootstrap sampling methods}{8}{section*.2}%
+\contentsline {subsection}{Bootstrap confidence interval construction}{9}{section*.3}%
+\contentsline {section}{\numberline {Appendix D}Additional simulation results for estimators of average effect size \((\mu )\)}{11}{section.4}%
+\contentsline {section}{\numberline {Appendix E}Additional simulation results for estimators of log-heterogeneity \((\gamma )\)}{11}{section.5}%
+\contentsline {section}{\numberline {Appendix F}Additional simulation results for estimators of selection parameter \((\zeta _1)\)}{11}{section.6}%
+\contentsline {section}{Additional References}{35}{section*.27}%
