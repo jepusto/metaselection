@@ -1,12 +1,10 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+%
 \documentclass[
-  american,
   man, donotrepeattitle,floatsintext]{apa7}
-\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -37,6 +35,24 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -59,21 +75,6 @@
   \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
   \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-\makeatother
-\usepackage{graphicx}
-\makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
-% Set default figure placement to htbp
-\def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
@@ -109,16 +110,14 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \ifLuaTeX
-\usepackage[bidi=basic,shorthands=off,]{babel}
+\usepackage[bidi=basic]{babel}
 \else
-\usepackage[bidi=default,shorthands=off,]{babel}
+\usepackage[bidi=default]{babel}
 \fi
-\ifLuaTeX
-  \usepackage{selnolig} % disable illegal ligatures
-\fi
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\babelprovide[main,import]{american}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
 % Manuscript styling
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -214,6 +213,9 @@
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\bs}{\boldsymbol}
 \newcommand{\trace}{\text{tr}}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -240,7 +242,7 @@ Correspondence concerning this article should be addressed to James E. Pustejovs
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} University of Wisconsin-Madison\\\textsuperscript{2} American Institutes for Research}
 
-\note{~\newline May 28, 2025}
+\note{~\newline June 03, 2025}
 
 \abstract{%
 Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates. Another is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
@@ -288,7 +290,7 @@ In a survey of systematic reviews published in 2016 across several prominent jou
 Surveys of recent meta-analyses on topics in environmental sciences (Nakagawa et al., 2023) and neurobiological research involving animal models (Yang et al., 2023) have also documented a high prevalence of dependent effect sizes.
 Thus, multiple effects are the norm, rather than the exception, in many fields that use quantitative synthesis.
 
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses (Konstantopoulos, 2011; Van den Noortgate et al., 2013, 2015), robust variance estimation (RVE, Hedges et al., 2010; Tipton, 2015; Tipton \& Pustejovsky, 2015), and combinations thereof (Pustejovsky \& Tipton, 2022).
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses (Konstantopoulos, 2011; Noortgate et al., 2013, 2015), robust variance estimation (RVE, Hedges et al., 2010; Tipton, 2015; Tipton \& Pustejovsky, 2015), and combinations thereof (Pustejovsky \& Tipton, 2022).
 Among these, RVE has proven to be an attractive strategy because it provides a means to assess uncertainty in model parameter estimates that does not rely on strong assumptions about the exact dependence structure of the effect size estimates.
 Instead, RVE involves specifying a tentative working model for the dependence, but calculating standard errors, hypothesis tests, and confidence intervals using sandwich estimators that do not require the working model to be correct.
 
@@ -943,7 +945,7 @@ CML consistently out-performed ARGL for estimating between-study heterogeneity a
 Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations (Chen \& Pustejovsky, 2024) indicating that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias.
 However, this approach has several conceptual limitations that are important to note.
 First, such models do not reflect the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
-Because of this, they do not fully align with contemporary approaches to summary meta-analysis and meta-regression analysis, which emphasize use of models that align with the hierarchical structure of dependent effect sizes (Pustejovsky \& Tipton, 2022; Van den Noortgate et al., 2013).
+Because of this, they do not fully align with contemporary approaches to summary meta-analysis and meta-regression analysis, which emphasize use of models that align with the hierarchical structure of dependent effect sizes (Noortgate et al., 2013; Pustejovsky \& Tipton, 2022).
 
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates.
 Accounting for the dependence structure would allow for construction of more efficient estimators of the parameters of the evidence-generating process.
@@ -968,7 +970,7 @@ Nonetheless, there may be meta-analytic datasets where a more complex set of ste
 
 Third and related to the previous point, the simulations were limited to evidence-generating processes that did not involve systematic predictors of the effect size distribution and where the strength of selective reporting was uniform and solely dependent on the p-value of each individual effect size.
 There may be other factors besides statistical significance of findings that affect a study's publication status.
-For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research (Van Aert, 2025).
+For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research (Aert, 2025).
 Further evaluation of the CML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
 In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status (Coburn \& Vevea, 2015).
 
@@ -1023,16 +1025,19 @@ The authors declare no conflicts of interest.
 \begingroup
 \setlength{\parindent}{-0.5in}
 
-\protect\phantomsection\label{refs}
+\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-vanaert2025metaanalyzing}
+Aert, R. C. M. van. (2025). Meta-analyzing nonpreregistered and preregistered studies. \emph{Psychological Methods}. \url{https://doi.org/10.1037/met0000719}
+
 \bibitem[\citeproctext]{ref-vanaert2016conducting}
 Aert, R. C. M. van, Wicherts, J. M., \& Assen, M. A. L. M. van. (2016). Conducting meta-analyses based on \emph{p} values: Reservations and recommendations for applying \emph{p} -uniform and \emph{p} -curve. \emph{Perspectives on Psychological Science}, \emph{11}(5), 713--729. \url{https://doi.org/10.1177/1745691616650874}
 
 \bibitem[\citeproctext]{ref-VanAssen2015meta}
-Assen, M. A. L. M. van, Van Aert, R. C. M., \& Wicherts, J. M. (2015). {Meta-analysis using effect size distributions of only statistically significant studies}. \emph{Psychological Methods}, \emph{20}(3), 293--309. https://doi.org/\url{http://dx.doi.org/10.1037/met0000025}
+Assen, M. A. L. M. van, Aert, R. C. M. van, \& Wicherts, J. M. (2015). Meta-analysis using effect size distributions of only statistically significant studies. \emph{Psychological Methods}, \emph{20}(3), 293--309. \url{https://doi.org/10.1037/met0000025}
 
 \bibitem[\citeproctext]{ref-Becker2000multivariate}
-Becker, B. J. (2000). {Multivariate Meta-analysis}. In S. D. Brown \& H. E. A. Tinsley (Eds.), \emph{Handbook of applied multivariate statistics and mathematical modeling} (pp. 499--525). Academic Press. \url{https://doi.org/10.1016/B978-012691360-6/50018-5}
+Becker, B. J. (2000). Multivariate meta-analysis. In S. D. Brown \& H. E. A. Tinsley (Eds.), \emph{Handbook of applied multivariate statistics and mathematical modeling} (pp. 499--525). Academic Press. \url{https://doi.org/10.1016/B978-012691360-6/50018-5}
 
 \bibitem[\citeproctext]{ref-begg1994operating}
 Begg, C. B., \& Mazumdar, M. (1994). Operating characteristics of a rank correlation test for publication bias. \emph{Biometrics}, 1088--1101.
@@ -1056,7 +1061,7 @@ Carter, E. C., Schönbrodt, F. D., Gervais, W. M., \& Hilgard, J. (2019). Correc
 Center for High Throughput Computing. (2006). \emph{Center for high throughput computing}. Center for High Throughput Computing. \url{https://doi.org/10.21231/GNT1-HW21}
 
 \bibitem[\citeproctext]{ref-chan2004empirical}
-Chan, A.-W., Hróbjartsson, A., Haahr, M. T., Gøtzsche, P. C., \& Altman, D. G. (2004). Empirical evidence for selective reporting of outcomes in randomized trials: Comparison of protocols to published articles. \emph{Jama}, \emph{291}(20), 2457--2465.
+Chan, A.-W., Hróbjartsson, A., Haahr, M. T., Gøtzsche, P. C., \& Altman, D. G. (2004). Empirical evidence for selective reporting of outcomes in randomized trials: Comparison of protocols to published articles. \emph{JAMA}, \emph{291}(20), 2457--2465.
 
 \bibitem[\citeproctext]{ref-chen2024adapting}
 Chen, M., \& Pustejovsky, J. E. (2024). \emph{Adapting methods for correcting selective reporting bias in meta-analysis of dependent effect sizes}. \url{https://doi.org/10.31222/osf.io/jq52s}
@@ -1098,7 +1103,7 @@ Efron, B. (1987). Better bootstrap confidence intervals. \emph{Journal of the Am
 Egger, M., Smith, G. D., Schneider, M., \& Minder, C. (1997). Bias in meta-analysis detected by a simple, graphical test. \emph{BMJ}, \emph{315}(7109), 629--634.
 
 \bibitem[\citeproctext]{ref-fernandezcastilla2019detecting}
-Fernández-Castilla, B., Declercq, L., Jamshidi, L., Beretvas, S. N., Onghena, P., \& Van den Noortgate, W. (2019). Detecting selection bias in meta-analyses with multiple outcomes: A simulation study. \emph{The Journal of Experimental Education}, 1--20. \url{https://doi.org/10.1080/00220973.2019.1582470}
+Fernández-Castilla, B., Declercq, L., Jamshidi, L., Beretvas, S. N., Onghena, P., \& Noortgate, W. van den. (2019). Detecting selection bias in meta-analyses with multiple outcomes: A simulation study. \emph{The Journal of Experimental Education}, 1--20. \url{https://doi.org/10.1080/00220973.2019.1582470}
 
 \bibitem[\citeproctext]{ref-field2007bootstrapping}
 Field, C. A., \& Welsh, A. H. (2007). Bootstrapping clustered data. \emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, \emph{69}(3), 369--390. \url{https://doi.org/10.1111/j.1467-9868.2007.00593.x}
@@ -1134,22 +1139,22 @@ Hedges, L. V., \& Vevea, J. (2005). Selection method approaches. In H. R. Rothst
 Hedges, L. V., \& Vevea, J. L. (1996). {Estimating effect size under publication bias: Small sample properties and robustness of a random effects selection model}. \emph{Journal of Educational and Behavioral Statistics}, \emph{21}(4), 299. \url{https://doi.org/10.3102/10769986021004299}
 
 \bibitem[\citeproctext]{ref-iyengar1988selection}
-Iyengar, S., \& Greenhouse, J. B. (1988). Selection {Models} and the {File} {Drawer} {Problem}. \emph{Statistical Science}, \emph{3}(1), 109--117. \url{https://doi.org/10.1214/ss/1177013012}
+Iyengar, S., \& Greenhouse, J. B. (1988). Selection models and the file drawer problem. \emph{Statistical Science}, \emph{3}(1), 109--117. \url{https://doi.org/10.1214/ss/1177013012}
 
 \bibitem[\citeproctext]{ref-john2012measuring}
 John, L. K., Loewenstein, G., \& Prelec, D. (2012). Measuring the prevalence of questionable research practices with incentives for truth telling. \emph{Psychological Science}, \emph{23}(5), 524--532.
 
 \bibitem[\citeproctext]{ref-simhelpers}
-Joshi, M., \& Pustejovsky, J. E. (2024). \emph{Simhelpers: Helper functions for simulation studies}. \url{https://meghapsimatrix.github.io/simhelpers/}
+Joshi, M., \& Pustejovsky, J. E. (2024). \emph{Simhelpers: Helper functions for simulation studies}. \url{https://CRAN.R-project.org/package=simhelpers}
 
 \bibitem[\citeproctext]{ref-joshi2022cluster}
-Joshi, M., Pustejovsky, J. E., \& Beretvas, S. N. (2022). Cluster Wild Bootstrapping to Handle Dependent Effect Sizes in Meta-Analysis with a Small Number of Studies. \emph{Research Synthesis Methods}, \emph{13}(4), 457--477. \url{https://doi.org/10.1002/jrsm.1554}
+Joshi, M., Pustejovsky, J. E., \& Beretvas, S. N. (2022). Cluster wild bootstrapping to handle dependent effect sizes in meta-analysis with a small number of studies. \emph{Research Synthesis Methods}, \emph{13}(4), 457--477. \url{https://doi.org/10.1002/jrsm.1554}
 
 \bibitem[\citeproctext]{ref-konstantopoulos2011fixed}
 Konstantopoulos, S. (2011). Fixed effects and variance components estimation in three-level meta-analysis: {Three}-level meta-analysis. \emph{Research Synthesis Methods}, \emph{2}(1), 61--76. \url{https://doi.org/10.1002/jrsm.35}
 
 \bibitem[\citeproctext]{ref-kossmeier2020PowerEnhanced}
-Kossmeier, M., Tran, U. S., \& Voracek, M. (2020). Power-enhanced funnel plots for meta-analysis. \emph{Zeitschrift Für Psychologie}. \url{https://econtent.hogrefe.com/doi/10.1027/2151-2604/a000392}
+Kossmeier, M., Tran, U. S., \& Voracek, M. (2020). Power-enhanced funnel plots for meta-analysis. \emph{Zeitschrift Für Psychologie}. \url{https://doi.org/10.1027/2151-2604/a000392}
 
 \bibitem[\citeproctext]{ref-kraft2020interpreting}
 Kraft, M. A. (2020). Interpreting effect sizes of education interventions. \emph{Educational Researcher}, \emph{49}(4), 241--253.
@@ -1176,7 +1181,7 @@ Marks‐Anglin, A., \& Chen, Y. (2020). A historical review of publication bias.
 Mathur, M. B., \& VanderWeele, T. J. (2020). Sensitivity analysis for publication bias in meta‐analyses. \emph{Journal of the Royal Statistical Society: Series C (Applied Statistics)}, \emph{69}(5), 1091--1119. \url{https://doi.org/10.1111/rssc.12440}
 
 \bibitem[\citeproctext]{ref-mcshane2016adjusting}
-McShane, B. B., Böckenholt, U., \& Hansen, K. T. (2016). Adjusting for publication bias in meta-analysis an evaluation of selection methods and some cautionary notes. \emph{Perspectives on Psychological Science}, \emph{11}(5), 730--749. \url{http://pps.sagepub.com/content/11/5/730.short}
+McShane, B. B., Böckenholt, U., \& Hansen, K. T. (2016). Adjusting for publication bias in meta-analysis an evaluation of selection methods and some cautionary notes. \emph{Perspectives on Psychological Science}, \emph{11}(5), 730--749. \url{https://doi.org/10.1177/1745691616662243}
 
 \bibitem[\citeproctext]{ref-moreno2012generalized}
 Moreno, S. G., Sutton, A. J., Thompson, J. R., Ades, A., Abrams, K. R., \& Cooper, N. J. (2012). A generalized weighting regression-derived meta-analysis estimator robust to small-study effects and heterogeneity. \emph{Statistics in Medicine}, \emph{31}(14), 1407--1417.
@@ -1189,6 +1194,12 @@ Nash, J. C., \& Varadhan, R. (2011). Unifying optimization algorithms to aid sof
 
 \bibitem[\citeproctext]{ref-Nelson1986significance}
 Nelson, N., Rosenthal, R., \& Rosnow, R. L. (1986). Interpretation of significance levels and effect sizes by psychological researchers. \emph{American Psychologist}, \emph{41}(11), 1299--1301. \url{https://doi.org/10.1037/0003-066X.41.11.1299}
+
+\bibitem[\citeproctext]{ref-vandennoortgate2013threelevel}
+Noortgate, W. van den, López-López, J. A., Marín-Martínez, F., \& Sánchez-Meca, J. (2013). Three-level meta-analysis of dependent effect sizes. \emph{Behavior Research Methods}, \emph{45}(2), 576--594. \url{https://doi.org/10.3758/s13428-012-0261-6}
+
+\bibitem[\citeproctext]{ref-vandennoortgate2015metaanalysis}
+Noortgate, W. van den, López-López, J. A., Marín-Martínez, F., \& Sánchez-Meca, J. (2015). Meta-analysis of multiple outcomes: A multilevel approach. \emph{Behavior Research Methods}, \emph{47}(4), 1274--1294. \url{https://doi.org/10.3758/s13428-014-0527-2}
 
 \bibitem[\citeproctext]{ref-oBoyle2017chrysalis}
 O'Boyle Jr, E. H., Banks, G. C., \& Gonzalez-Mulé, E. (2017). The chrysalis effect: How ugly initial results metamorphosize into beautiful articles. \emph{Journal of Management}, \emph{43}(2), 376--399.
@@ -1264,15 +1275,6 @@ Tipton, E., \& Pustejovsky, J. E. (2015). Small-sample adjustments for tests of 
 
 \bibitem[\citeproctext]{ref-tipton2019current}
 Tipton, E., Pustejovsky, J. E., \& Ahmadi, H. (2019). Current practices in meta-regression in psychology, education, and medicine. \emph{Research Synthesis Methods}, \emph{10}(2), 180--194.
-
-\bibitem[\citeproctext]{ref-vanaert2025metaanalyzing}
-Van Aert, R. C. M. (2025). Meta-analyzing nonpreregistered and preregistered studies. \emph{Psychological Methods}. \url{https://doi.org/10.1037/met0000719}
-
-\bibitem[\citeproctext]{ref-vandennoortgate2013threelevel}
-Van den Noortgate, W., López-López, J. A., Marín-Martínez, F., \& Sánchez-Meca, J. (2013). Three-level meta-analysis of dependent effect sizes. \emph{Behavior Research Methods}, \emph{45}(2), 576--594. \url{https://doi.org/10.3758/s13428-012-0261-6}
-
-\bibitem[\citeproctext]{ref-vandennoortgate2015metaanalysis}
-Van den Noortgate, W., López-López, J. A., Marín-Martínez, F., \& Sánchez-Meca, J. (2015). Meta-analysis of multiple outcomes: A multilevel approach. \emph{Behavior Research Methods}, \emph{47}(4), 1274--1294. \url{https://doi.org/10.3758/s13428-014-0527-2}
 
 \bibitem[\citeproctext]{ref-varin2008composite}
 Varin, C. (2008). On composite marginal likelihoods. \emph{AStA Advances in Statistical Analysis}, \emph{92}(1), 1--28. \url{https://doi.org/10.1007/s10182-008-0060-7}
