@@ -1,12 +1,10 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+%
 \documentclass[
-  american,
   man, donotrepeattitle,floatsintext]{apa7}
-\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -37,6 +35,24 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -59,21 +75,6 @@
   \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
   \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-\makeatother
-\usepackage{graphicx}
-\makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
-% Set default figure placement to htbp
-\def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
@@ -109,16 +110,14 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \ifLuaTeX
-\usepackage[bidi=basic,shorthands=off,]{babel}
+\usepackage[bidi=basic]{babel}
 \else
-\usepackage[bidi=default,shorthands=off,]{babel}
+\usepackage[bidi=default]{babel}
 \fi
-\ifLuaTeX
-  \usepackage{selnolig} % disable illegal ligatures
-\fi
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\babelprovide[main,import]{american}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
 % Manuscript styling
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -219,6 +218,9 @@
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\bs}{\boldsymbol}
 \newcommand{\trace}{\text{tr}}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -256,7 +258,44 @@ Meta-analyses in social science fields face multiple methodological challenges a
 \begin{document}
 \maketitle
 
-\section{Introduction}\label{introduction}
+\section*{Highlights}\label{highlights}
+\addcontentsline{toc}{section}{Highlights}
+
+\subsection*{What is already known}\label{what-is-already-known}
+\addcontentsline{toc}{subsection}{What is already known}
+
+\begin{itemize}
+\item
+  Selective reporting of primary study results can distort the findings from meta-analyses.
+\item
+  In many fields of application, meta-analyses include primary studies providing multiple, statistically dependent effect size estimates.
+\item
+  Step-function selection models are a theoretically appealing tool for correcting bias from selective reporting, but these models were developed for meta-analyses that include only one effect size estimate per study.
+\end{itemize}
+
+\subsection*{What is new}\label{what-is-new}
+\addcontentsline{toc}{subsection}{What is new}
+
+\begin{itemize}
+\item
+  We examine strategies for estimating step-function selection models in meta-analyses with dependent effect sizes.
+\item
+  We report a large simulation study demonstrating that step-function models can be estimated using composite maximum likelihood methods, combined with bootstrapping techniques to account for dependent effect size estimates.
+\end{itemize}
+
+\subsection*{Potential impact for RSM readers}\label{potential-impact-for-rsm-readers}
+\addcontentsline{toc}{subsection}{Potential impact for RSM readers}
+
+\begin{itemize}
+\item
+  The proposed estimation methods can be applied to adjust for selective reporting of study results in meta-analyses that include dependent effect sizes.
+\item
+  This strategy complements other existing methods for examining selective reporting bias in meta-analyses with dependent effect sizes.
+\end{itemize}
+
+\newpage
+
+\section{Estimation and inference for step-function selection models in meta-analysis with dependent effects}\label{introduction}
 
 The validity of conclusions from meta-analytic syntheses depend critically on the reporting practices of researchers, journal editors, and peer reviewers.
 If the findings accessible to meta-analysts are not a representative record of the research that has been conducted on a topic, then meta-analytic summaries may be systematically biased.\textsuperscript{1}
@@ -926,7 +965,7 @@ The authors declare no conflicts of interest.
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
 
-\protect\phantomsection\label{refs}
+\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}
 \bibitem[\citeproctext]{ref-Rothstein2005publication}
 \CSLLeftMargin{1. }%

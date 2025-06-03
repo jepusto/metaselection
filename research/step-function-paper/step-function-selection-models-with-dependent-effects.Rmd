@@ -101,7 +101,31 @@ options(tinytex.clean = FALSE, knitr.kable.NA = '')
 appendix_prefix <- "Online Appendix"
 ```
 
-# Introduction {#introduction}
+# Highlights {-}
+
+## What is already known {-}
+
+* Selective reporting of primary study results can distort the findings from meta-analyses.
+
+* In many fields of application, meta-analyses include primary studies providing multiple, statistically dependent effect size estimates.
+
+* Step-function selection models are a theoretically appealing tool for correcting bias from selective reporting, but these models were developed for meta-analyses that include only one effect size estimate per study.
+
+## What is new {-}
+
+* We examine strategies for estimating step-function selection models in meta-analyses with dependent effect sizes.
+
+* We report a large simulation study demonstrating that step-function models can be estimated using composite maximum likelihood methods, combined with bootstrapping techniques to account for dependent effect size estimates.
+
+## Potential impact for RSM readers {-}
+
+* The proposed estimation methods can be applied to adjust for selective reporting of study results in meta-analyses that include dependent effect sizes.
+
+* This strategy complements other existing methods for examining selective reporting bias in meta-analyses with dependent effect sizes.
+
+\newpage
+
+# Estimation and inference for step-function selection models in meta-analysis with dependent effects {#introduction}
 
 ```{r child = "introduction.Rmd"}
 ```
