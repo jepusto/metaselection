@@ -1,0 +1,706 @@
+---
+title: "metaselection"
+subtitle: "Selection models for meta-analyses of dependent effect sizes"
+author: "James E. Pustejovsky and Martyna Citkowicz" 
+date: "June 13, 2025"
+format: 
+  revealjs:
+    math: true
+    html-math-method: mathjax
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    css: styles.css
+    theme: [simple, mytheme.scss]
+editor: source
+bibliography: references.bib
+---
+
+## {background="#43464B"}
+
+### Collaborators from the American Institutes for Research
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Megha Joshi
+
+![](images/Joshi.jpg)
+:::
+
+::: {.column width="50%"}
+Ryan Williams
+
+Joshua Polanin
+
+Melissa Rodgers
+
+David Miller
+:::
+
+::::
+
+::: fragment
+
+### Acknowledgement
+
+The research reported here was supported, in whole or in part, by the Institute of Education Sciences, U.S. Department of Education, through grant R305D220026 to the American Institutes for Research. The opinions expressed are those of the authors and do not represent the views of the Institute or the U.S. Department of Education.
+:::
+
+## Selective reporting of primary study results
+
+:::: {.columns}
+
+::: {.column width="60%"}
+- Selective reporting occurs if affirmative findings are more likely to be reported and available for inclusion in meta-analysis
+
+- Selective reporting distorts the evidence base available for systematic review/meta-analysis
+  - Inflates average effect size estimates from meta-analysis
+  - Biases estimates of heterogeneity [@augusteijn2019effect]
+  
+- Concerns about selective reporting span the social, behavioral, and health sciences.
+
+:::
+
+
+::: {.column width="40%"}
+![](images/carnival-mirror.jpeg)
+:::
+::::
+
+::: {.notes}
+- For a given meta-analysis, we expect strength of selection to depend on
+
+    - Rigor of the systematic review search process.
+    
+    - Whether effect sizes are from focal or ancillary analysis.
+:::
+
+## Many available tools for investigating selective reporting {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Graphical diagnostics
+
+    - Funnel plots
+    - Contour-enhanced funnel plots
+    - Power-enhanced funnel plots (sunset plots)
+
+![](images/toolbelt.jpg)
+:::
+
+::: {.column width="50%"}
+    
+- Tests/adjustments for funnel plot asymmetry
+    
+    - Trim-and-fill
+    - Egger's regression
+    - PET/PEESE
+    - Kinked meta-regression
+    
+- Selection models
+
+    - Weight-function models
+    - Copas models
+    - Sensitivity analysis
+    
+- p-value diagnostics
+
+    - Test of Excess Significance
+    - $p$-curve / $p$-uniform / $p\text{-uniform}^*$
+
+:::
+
+::::
+
+## But few that accommodate dependent effect sizes
+
+::::: {.columns}
+
+::: {.column width="40%"}
+![](images/Multiple-outcomes.png)
+![](images/Multiple-timepoints.png)
+![](images/Multiple-treatments.png)
+
+
+:::
+
+
+:::: {.column width="60%"}
+::: {.fragment}
+
+- Dependent effect sizes are ubiquitous in education and social science meta-analyses.
+
+- We have well-developed methods for modeling dependent effect sizes assuming no selection.
+
+- But only very recent developments for investigating selective reporting in databases with dependent effect sizes [@chen2024adapting].
+:::
+
+::::
+
+:::::
+
+## Selection models have two parts
+
+::: {.fragment}
+
+- Random effects model for the evidence-generating process (_before_ selective reporting):
+    $$T_{ij} \sim N\left(\ \mu, \ \tau^2 + \sigma_{ij}^2 \right)$$
+
+:::
+
+::: {.fragment}
+
+- A model describing $\text{Pr}(\ T_{ij} \text{ is observed} \ )$ as a function of its $p$-value $(p_{ij})$
+
+:::
+
+::::: {.columns}
+
+:::: {.column width="50%"}
+
+::: {.fragment}
+
+@vevea1995general step-function model
+:::
+::::
+
+:::: {.column width="50%"}
+
+::: {.fragment}
+
+@citkowicz2017parsimonious beta-function model
+
+:::
+::::
+
+:::::
+
+## A piece-wise normal distribution {.smaller}
+
+Under @vevea1995general step-function model, the distribution of observed effect size estimates is piece-wise normal.
+
+```{ojs}
+math = require("mathjs")
+norm = import('https://unpkg.com/norm-dist@3.1.0/index.js?module')
+
+eta = math.sqrt(tau**2 + sigma**2)
+H = 2
+alpha = [alpha1, alpha2]
+lambda = [1, lambda1, lambda2_ratio * lambda1]
+lambda_max = math.max(lambda)
+
+function findlambda(p, alp, lam) {
+  var m = 0;
+  while (p >= alp[m]) {
+    m += 1;
+  }
+  return lam[m];
+}
+
+function findMoments(mu, tau, sigma, alp, lam) {
+  let H = alp.length;
+  let eta = math.sqrt(tau**2 + sigma**2);
+  
+  let gamma_h = Array(H+2).fill(null).map((x,i) => {
+    if (i==0) {
+      return Infinity;
+    } else if (i==H+1) {
+      return -Infinity;
+    } else {
+      return sigma * norm.icdf(1 - alp[i-1]);
+    }
+  });
+  
+  let c_h = Array(H+2).fill(null).map((x,i) => {
+    return (gamma_h[i] - mu) / eta;
+  });
+
+  let B_h = Array(H+1).fill(null).map((x,i) => {
+    return norm.cdf(c_h[i]) - norm.cdf(c_h[i+1])
+  });
+
+  let Ai = 0;
+  for (let i = 0; i <= H; i++) {
+  	Ai += lam[i] * B_h[i];
+  }
+  
+  let psi_h = Array(H+1).fill(null).map((x,i) => {
+    return (norm.pdf(c_h[i+1]) - norm.pdf(c_h[i])) / B_h[i]
+  }); 
+
+  let psi_top = 0;
+  for (let i = 0; i <= H; i++) {
+  	psi_top += lam[i] * B_h[i] * psi_h[i];
+  }
+  
+  let psi_bar = psi_top / Ai;
+
+  let ET = mu + eta * psi_bar;
+
+  let dc_h = c_h.map((c_val) => {
+    if (math.abs(c_val) == Infinity) {
+      return 0;
+    } else {
+      return c_val * norm.pdf(c_val);
+    }
+  });
+
+  let kappa_h = Array(H+1).fill(null).map((x,i) => {
+    return (dc_h[i] - dc_h[i+1]) / B_h[i];
+  });
+
+  let kappa_top = 0;
+  for (let i = 0; i <= H; i++) {
+  	kappa_top += lam[i] * B_h[i] * kappa_h[i];
+  }
+  let kappa_bar = kappa_top / Ai;
+  let SDT = eta * math.sqrt(1 - kappa_bar - psi_bar**2);
+  
+  return ({Ai: Ai, ET: ET, SDT: SDT});
+}
+
+moments = findMoments(mu, tau, sigma, alpha, lambda)
+Ai_toprint = moments.Ai.toFixed(3)
+ET_toprint = moments.ET.toFixed(3)
+eta_toprint = eta.toFixed(3)
+SDT_toprint = moments.SDT.toFixed(3)
+
+```
+
+```{ojs}
+pts = 201
+
+density_dat = Array(pts).fill().map((element, index) => {
+  let t = mu - 3 * eta + index * eta * 6 / (pts - 1);
+  let p = 1 - norm.cdf(t / sigma);
+  let dt = norm.pdf((t - mu) / eta) / eta;
+  let lambda_val = findlambda(p, alpha, lambda);
+  return ({
+    t: t,
+    d_unselected: dt,
+    d_selected: lambda_val * dt / lambda_max
+  })
+})
+
+```
+
+::::: {.columns}
+
+:::: {.column width="30%"}
+
+```{ojs}
+//| panel: input
+
+viewof mu = Inputs.range(
+  [-2, 2], 
+  {value: 0.1, step: 0.01, label: tex`\mu`}
+)
+
+viewof tau = Inputs.range(
+  [0, 2], 
+  {value: 0.15, step: 0.01, label: tex`\tau`}
+)
+
+viewof sigma = Inputs.range(
+  [0, 1], 
+  {value: 0.25, step: 0.01, label: tex`\sigma_i`}
+)
+
+viewof alpha1 = Inputs.range(
+  [0, 1],
+  {value: 0.025, step: 0.005, label: tex`\alpha_1`}
+)
+
+viewof alpha2 = Inputs.range(
+  [0, 1],
+  {value: 0.50, step: 0.005, label: tex`\alpha_2`}
+)
+
+viewof lambda1 = Inputs.range(
+  [0, 2],
+  {value: 1, step: 0.01, label: tex`\lambda_1`}
+)
+
+viewof lambda2_ratio = Inputs.range(
+  [0, 2],
+  {value: 1, step: 0.01, label: tex`\lambda_2 / \lambda_1`}
+)
+
+```
+::::
+
+:::: {.column width="70%"}
+
+```{ojs}
+Plot.plot({
+  height: 500,
+  width: 1000,
+  y: {
+    grid: false,
+    label: "Density"
+  },
+  x: {
+    label: "Effect size estimate (Ti)"
+  },   
+  marks: [
+    Plot.ruleY([0]),
+    Plot.ruleX([0]),
+    Plot.areaY(density_dat, {x: "t", y: "d_unselected", fillOpacity: 0.3}),
+    Plot.areaY(density_dat, {x: "t", y: "d_selected", fill: "blue", fillOpacity: 0.5}),
+    Plot.lineY(density_dat, {x: "t", y: "d_selected", stroke: "blue"})
+  ]
+})
+```
+
+:::{.moments}
+
+```{ojs}
+tex`
+\begin{aligned}
+\mu &= ${mu} & \qquad \sqrt{\tau^2 + \sigma_{ij}} &= ${eta_toprint} \\
+\mathbb{E}\left(T_{ij}\right) &= ${ET_toprint}
+& \qquad \sqrt{\mathbb{V}\left(T_{ij}\right)} &= ${SDT_toprint} \\ 
+\Pr(T_{ij} \text{ is observed}) &= ${Ai_toprint}
+\end{aligned}
+`
+```
+:::
+
+::::
+
+:::::
+
+## Estimation Strategy
+
+- Model the marginal distribution of observed effects, ignoring the dependence structure
+
+    - Maximum likelihood (composite marginal likelihood)
+    
+    - Augmented, reweighted Gaussian likelihood
+
+::::: {.fragment}
+
+### Two methods of handling dependence
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+- Cluster-robust variance estimation (sandwich estimators)
+
+![](images/baloney-sandwich.jpg)
+:::
+
+::: {.column width="50%"}
+
+
+- Clustered bootstrap re-sampling
+
+![](images/boot.png){width=50% fig-align="center"}
+
+:::
+
+::::
+:::::
+
+
+## Color priming
+
+@lehmann2018meta reported a systematic review of studies on __color-priming__, examining whether exposure to the color red influenced attractiveness judgments.
+
+  - Many published studies where selective reporting was suspected.
+  
+```{r}
+library(tinytable)
+# options(tinytable_html_mathjax = TRUE)
+library(metafor)
+library(metaselection)
+
+options(width = 200)
+
+data("dat.lehmann2018", package = "metadat")
+dat.lehmann2018$study <- dat.lehmann2018$Full_Citation
+dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
+dat.lehmann2018$Design <- factor(
+  dat.lehmann2018$Design, 
+  levels = c("Between Subjects","Within Subjects"), 
+  labels = c("Between","Within")
+)
+
+make_table <- function(mod, labs) {
+  if (inherits(mod, "rma.uni")) {
+    if (missing(labs)) labs <- row.names(mod$beta)
+    dat <- data.frame(
+      coef = labs,
+      Est = as.vector(mod$beta),
+      Est_SE = mod$se,
+      Het_Var = mod$tau2, 
+      Het_SE = mod$se.tau2
+    )
+  } 
+  
+  if (inherits(mod, "selmodel")) {
+    params <- mod$est$param
+    if (missing(labs)) labs <- params[grepl("beta",params)]
+    dat <- data.frame(
+      coef = labs,
+      Est = mod$est[grepl("beta",params),3],
+      Est_SE = mod$est[grepl("beta",params),4],
+      Het_Var = exp(mod$est[grepl("gamma",params),3]), 
+      Het_SE = exp(mod$est[grepl("gamma",params),3]) * mod$est[grepl("gamma",params),4],
+      Sel = exp(mod$est[grepl("zeta",params),3]), 
+      sel_SE = exp(mod$est[grepl("zeta",params),3]) * mod$est[grepl("zeta",params),4]
+    )
+  }
+  
+  dat
+}
+```
+  
+:::: {.r-stack}
+
+::: {.fragment}
+
+```{r}
+rma0 <- rma.uni(
+  yi = yi, sei = sei, 
+  data = dat.lehmann2018
+) |>
+  robust(cluster = study, clubSandwich = TRUE) |>
+  make_table(labs = "Overall")
+
+rma1 <- rma.uni(
+  yi = yi, sei = sei, 
+  mods = ~ 0 + Design,
+  data = dat.lehmann2018
+) |>
+  robust(cluster = study, clubSandwich = TRUE) |>
+  make_table(labs = c("Between-Subjects","Within-Subjects"))
+
+
+rbind(rma0, rma1) |>
+  tt(digits = 3, theme = "bootstrap") |>
+  style_tt(bootstrap_class = "table table-bordered") |>
+  setNames(c("Coef.","Est.","SE","Est.","SE")) |>
+  group_tt(
+    i = list("(A) Summary meta-analysis" = 1, "(B) Moderation by study type" = 2),
+    j = list(" " = 1, "Mean ES" = 2:3, "Heterogeneity Variance" = 4:5)
+  ) |>
+  style_tt(
+    i = c(1, 3),
+    background = "lightgray",
+    bold = TRUE
+  ) |>
+  style_tt(
+    i = 3:5,
+    background = "white",
+    color = "white"
+  )
+
+```
+
+:::
+
+::: {.fragment}
+
+```{r}
+rbind(rma0,rma1) |>
+  tt(digits = 3, theme = "bootstrap") |>
+  style_tt(bootstrap_class = "table table-bordered") |>
+  setNames(c("Coef.","Est.","SE","Est.","SE")) |>
+  group_tt(
+    i = list("(A) Summary meta-analysis" = 1, "(B) Moderation by design type" = 2),
+    j = list(" " = 1, "Mean ES" = 2:3, "Heterogeneity Variance" = 4:5)
+  ) |>
+  style_tt(
+    i = c(1, 3),
+    background = "lightgray",
+    bold = TRUE
+  )
+```
+
+:::
+
+::::
+
+## Color-priming selection models {.scrollable}
+
+```{r, echo = TRUE}
+library(metaselection)
+
+# load the data
+data("dat.lehmann2018", package = "metadat")
+
+# tidy up
+dat.lehmann2018$study <- dat.lehmann2018$Full_Citation
+dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
+dat.lehmann2018$Design <- factor(dat.lehmann2018$Design, levels = c("Between Subjects","Within Subjects"), labels = c("Between","Within"))
+
+# fit a one-step selection model
+sel1 <- selection_model(
+  yi = yi,                 # effect size est.
+  sei = sei,               # standard error
+  cluster = study,         # identifier for independent clusters
+  data = dat.lehmann2018,  # dataset
+  selection_type = "step", # type of selection model
+  steps = .025,            # single threshold for step-function
+  estimator = "CML",       # estimation method
+  bootstrap = "none"       # large-sample sandwich standard errors
+)
+```
+
+::: {.fragment}
+
+```{r, echo = TRUE}
+summary(sel1)
+```
+
+:::
+
+
+## Now with bootstrapping! {.scrollable}
+
+```{r, echo = TRUE, cache = TRUE}
+# turn on parallel processing
+library(future)
+plan(multisession, workers = 8)
+
+set.seed(20250613) # for reproducibility
+
+sel1_boot <- selection_model(
+  yi = yi,                    # effect size est.
+  sei = sei,                  # standard error
+  cluster = study,            # identifier for independent clusters
+  data = dat.lehmann2018,     # dataset
+  selection_type = "step",    # type of selection model
+  steps = .025,               # single threshold for step-function
+  estimator = "CML",          # estimation method
+  bootstrap = "two-stage",    # recommended type of bootstrapping
+  R = 1999,                   # number of bootstrap re-samples
+  CI_type = c("large-sample", # keep the large-sample sandwich CI
+              "percentile")   # recommended type of bootstrap CI
+)
+```
+
+::: {.fragment}
+
+```{r, echo = TRUE}
+summary(sel1_boot)
+```
+
+:::
+
+## Selective reporting of non-significant results
+
+:::: {.r-stack}
+
+::: {.fragment}
+
+
+```{r, echo = TRUE}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-retina: 2
+#| out-width: 75%
+
+selection_plot(sel1) + 
+  ggplot2::coord_cartesian(ylim = c(0,2))
+```
+
+:::
+
+::: {.fragment}
+
+```{r, echo = TRUE}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-retina: 2
+#| out-width: 75%
+
+selection_plot(sel1_boot) + 
+  ggplot2::coord_cartesian(ylim = c(0,2))
+```
+
+:::
+::::
+
+
+## Add a moderator {.scrollable}
+
+```{r, echo = TRUE, cache = TRUE}
+# turn on parallel processing
+library(future)
+plan(multisession, workers = 8)
+
+set.seed(20250613) # for reproducibility
+
+sel1_mod <- selection_model(
+  yi = yi,                    # effect size est.
+  sei = sei,                  # standard error
+  cluster = study,            # identifier for independent clusters
+  mean_mods = ~ 0 + Design,   # design type moderator
+  data = dat.lehmann2018,     # dataset
+  selection_type = "step",    # type of selection model
+  steps = .025,               # single threshold for step-function
+  estimator = "CML",          # estimation method
+  bootstrap = "two-stage",    # recommended type of bootstrapping
+  R = 1999,                   # number of bootstrap re-samples
+  CI_type = c("large-sample", # keep the large-sample sandwich CI
+              "percentile")   # recommended type of bootstrap CI
+)
+```
+
+::: {.fragment}
+
+```{r, echo = TRUE}
+summary(sel1_mod)
+```
+
+:::
+
+## Discussion
+
+- Other supported models:
+
+    - Step-functions with multiple steps (e.g., $\alpha_1 = .025, \alpha_2 = .500$)
+    
+    - beta-function models [@citkowicz2017parsimonious]
+    
+    - Location-scale meta-regression [@viechtbauer2022locationscale]
+    
+    - Predictors of selection [@Coburn2015publication]
+    
+::: {.fragment}
+
+
+- Marginal step-function selection models are worth adding to the toolbox [@pustejovsky2025estimation].
+
+    - Low bias compared to other selective reporting adjustments (including PET-PEESE)
+    
+    - Bias-variance trade-off relative to regular meta-analytic models
+    
+    - Two-stage clustered bootstrap percentile confidence intervals work tolerably well
+    
+:::
+
+
+## R package `metaselection`
+
+- Currently available on Github at <https://github.com/jepusto/metaselection>
+
+- Install using
+
+```{r, echo = TRUE, eval = FALSE}
+remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
+```
+
+- Under active development, suggestions welcome!
+
+## References
+
+::: {#refs}
+:::
