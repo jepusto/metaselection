@@ -22,20 +22,36 @@ bibliography: references.bib
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="20%"}
 Megha Joshi
 
 ![](images/Joshi.jpg)
 :::
 
-::: {.column width="50%"}
-Ryan Williams
 
-Joshua Polanin
-
+::: {.column width="20%"}
 Melissa Rodgers
 
+
+![](images/Rodgers.jpg)
+:::
+
+::: {.column width="20%"}
+Ryan Williams
+
+![](images/Williams.jpg)
+:::
+
+::: {.column width="20%"}
+Joshua Polanin
+
+![](images/Polanin.jpg)
+:::
+
+::: {.column width="20%"}
 David Miller
+
+![](images/Miller.jpg)
 :::
 
 ::::
@@ -470,8 +486,6 @@ tex`
 
 @lehmann2018meta reported a systematic review of studies on __color-priming__, examining whether exposure to the color red influenced attractiveness judgments.
 
-  - Many published studies where selective reporting was suspected.
-  
 ```{r}
 library(tinytable)
 # options(tinytable_html_mathjax = TRUE)
@@ -545,7 +559,7 @@ rbind(rma0, rma1) |>
   style_tt(bootstrap_class = "table table-bordered") |>
   setNames(c("Coef.","Est.","SE","Est.","SE")) |>
   group_tt(
-    i = list("(A) Summary meta-analysis" = 1, "(B) Moderation by study type" = 2),
+    i = list("(A) Summary meta-analysis" = 1, "(B) Moderation by design type" = 2),
     j = list(" " = 1, "Mean ES" = 2:3, "Heterogeneity Variance" = 4:5)
   ) |>
   style_tt(
@@ -686,41 +700,6 @@ summary(sel1_boot)
 
 :::
 
-## Selective reporting of non-significant results
-
-:::: {.r-stack}
-
-::: {.fragment}
-
-
-```{r, echo = TRUE}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-retina: 2
-#| out-width: 75%
-
-selection_plot(sel1) + 
-  ggplot2::coord_cartesian(ylim = c(0,2))
-```
-
-:::
-
-::: {.fragment}
-
-```{r, echo = TRUE}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-retina: 2
-#| out-width: 75%
-
-selection_plot(sel1_boot) + 
-  ggplot2::coord_cartesian(ylim = c(0,2))
-```
-
-:::
-::::
-
-
 ## Add a moderator {.scrollable}
 
 ```{r sel_moderator, echo = TRUE, cache = TRUE}
@@ -787,16 +766,14 @@ summary(sel2_mod)
 #| fig-retina: 2
 #| out-width: 75%
 
-selection_plot(sel2_mod) + 
-  ggplot2::coord_cartesian(ylim = c(0,2))
+selection_plot(sel2_mod, draw_boots = FALSE) + 
+  ggplot2::coord_cartesian(ylim = c(0,1))
 ```
 
 ## Discussion
 
 - Other supported models:
 
-    - Step-functions with multiple steps (e.g., $\alpha_1 = .025, \alpha_2 = .500$)
-    
     - beta-function models [@citkowicz2017parsimonious]
     
     - Location-scale meta-regression [@viechtbauer2022locationscale]
