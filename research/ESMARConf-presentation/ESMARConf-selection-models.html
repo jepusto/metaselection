@@ -556,10 +556,28 @@ James E. Pustejovsky and Martyna Citkowicz
 <div class="column" style="width:50%;">
 <div class="fragment">
 <p><span class="citation" data-cites="vevea1995general">Vevea and Hedges (<a href="#/references" role="doc-biblioref" onclick="">1995</a>)</span> step-function model</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-1-1.png" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="fragment">
 <p><span class="citation" data-cites="citkowicz2017parsimonious">Citkowicz and Vevea (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> beta-function model</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-2-1.png" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -568,90 +586,90 @@ James E. Pustejovsky and Martyna Citkowicz
 <h2>A piece-wise normal distribution</h2>
 <p>Under <span class="citation" data-cites="vevea1995general">Vevea and Hedges (<a href="#/references" role="doc-biblioref" onclick="">1995</a>)</span> step-function model, the distribution of observed effect size estimates is piece-wise normal.</p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="186" data-source-offset="-0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 185;"><span id="cb1-186"><a href=""></a>math <span class="op">=</span> <span class="pp">require</span>(<span class="st">"mathjs"</span>)</span>
-<span id="cb1-187"><a href=""></a>norm <span class="op">=</span> <span class="im">import</span>(<span class="st">'https://unpkg.com/norm-dist@3.1.0/index.js?module'</span>)</span>
-<span id="cb1-188"><a href=""></a></span>
-<span id="cb1-189"><a href=""></a>eta <span class="op">=</span> math<span class="op">.</span><span class="fu">sqrt</span>(tau<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> sigma<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-190"><a href=""></a>H <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb1-191"><a href=""></a>alpha <span class="op">=</span> [alpha1<span class="op">,</span> alpha2]</span>
-<span id="cb1-192"><a href=""></a>lambda <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> lambda1<span class="op">,</span> lambda2_ratio <span class="op">*</span> lambda1]</span>
-<span id="cb1-193"><a href=""></a>lambda_max <span class="op">=</span> math<span class="op">.</span><span class="fu">max</span>(lambda)</span>
-<span id="cb1-194"><a href=""></a></span>
-<span id="cb1-195"><a href=""></a><span class="kw">function</span> <span class="fu">findlambda</span>(p<span class="op">,</span> alp<span class="op">,</span> lam) {</span>
-<span id="cb1-196"><a href=""></a>  <span class="kw">var</span> m <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-197"><a href=""></a>  <span class="cf">while</span> (p <span class="op">&gt;=</span> alp[m]) {</span>
-<span id="cb1-198"><a href=""></a>    m <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb1-199"><a href=""></a>  }</span>
-<span id="cb1-200"><a href=""></a>  <span class="cf">return</span> lam[m]<span class="op">;</span></span>
-<span id="cb1-201"><a href=""></a>}</span>
-<span id="cb1-202"><a href=""></a></span>
-<span id="cb1-203"><a href=""></a><span class="kw">function</span> <span class="fu">findMoments</span>(mu<span class="op">,</span> tau<span class="op">,</span> sigma<span class="op">,</span> alp<span class="op">,</span> lam) {</span>
-<span id="cb1-204"><a href=""></a>  <span class="kw">let</span> H <span class="op">=</span> alp<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
-<span id="cb1-205"><a href=""></a>  <span class="kw">let</span> eta <span class="op">=</span> math<span class="op">.</span><span class="fu">sqrt</span>(tau<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> sigma<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span>
-<span id="cb1-206"><a href=""></a>  </span>
-<span id="cb1-207"><a href=""></a>  <span class="kw">let</span> gamma_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">2</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-208"><a href=""></a>    <span class="cf">if</span> (i<span class="op">==</span><span class="dv">0</span>) {</span>
-<span id="cb1-209"><a href=""></a>      <span class="cf">return</span> <span class="kw">Infinity</span><span class="op">;</span></span>
-<span id="cb1-210"><a href=""></a>    } <span class="cf">else</span> <span class="cf">if</span> (i<span class="op">==</span>H<span class="op">+</span><span class="dv">1</span>) {</span>
-<span id="cb1-211"><a href=""></a>      <span class="cf">return</span> <span class="op">-</span><span class="kw">Infinity</span><span class="op">;</span></span>
-<span id="cb1-212"><a href=""></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-213"><a href=""></a>      <span class="cf">return</span> sigma <span class="op">*</span> norm<span class="op">.</span><span class="fu">icdf</span>(<span class="dv">1</span> <span class="op">-</span> alp[i<span class="op">-</span><span class="dv">1</span>])<span class="op">;</span></span>
-<span id="cb1-214"><a href=""></a>    }</span>
-<span id="cb1-215"><a href=""></a>  })<span class="op">;</span></span>
-<span id="cb1-216"><a href=""></a>  </span>
-<span id="cb1-217"><a href=""></a>  <span class="kw">let</span> c_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">2</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-218"><a href=""></a>    <span class="cf">return</span> (gamma_h[i] <span class="op">-</span> mu) <span class="op">/</span> eta<span class="op">;</span></span>
-<span id="cb1-219"><a href=""></a>  })<span class="op">;</span></span>
-<span id="cb1-220"><a href=""></a></span>
-<span id="cb1-221"><a href=""></a>  <span class="kw">let</span> B_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-222"><a href=""></a>    <span class="cf">return</span> norm<span class="op">.</span><span class="fu">cdf</span>(c_h[i]) <span class="op">-</span> norm<span class="op">.</span><span class="fu">cdf</span>(c_h[i<span class="op">+</span><span class="dv">1</span>])</span>
-<span id="cb1-223"><a href=""></a>  })<span class="op">;</span></span>
-<span id="cb1-224"><a href=""></a></span>
-<span id="cb1-225"><a href=""></a>  <span class="kw">let</span> Ai <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-226"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
-<span id="cb1-227"><a href=""></a>    Ai <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i]<span class="op">;</span></span>
-<span id="cb1-228"><a href=""></a>  }</span>
-<span id="cb1-229"><a href=""></a>  </span>
-<span id="cb1-230"><a href=""></a>  <span class="kw">let</span> psi_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-231"><a href=""></a>    <span class="cf">return</span> (norm<span class="op">.</span><span class="fu">pdf</span>(c_h[i<span class="op">+</span><span class="dv">1</span>]) <span class="op">-</span> norm<span class="op">.</span><span class="fu">pdf</span>(c_h[i])) <span class="op">/</span> B_h[i]</span>
-<span id="cb1-232"><a href=""></a>  })<span class="op">;</span> </span>
-<span id="cb1-233"><a href=""></a></span>
-<span id="cb1-234"><a href=""></a>  <span class="kw">let</span> psi_top <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-235"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
-<span id="cb1-236"><a href=""></a>    psi_top <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i] <span class="op">*</span> psi_h[i]<span class="op">;</span></span>
-<span id="cb1-237"><a href=""></a>  }</span>
-<span id="cb1-238"><a href=""></a>  </span>
-<span id="cb1-239"><a href=""></a>  <span class="kw">let</span> psi_bar <span class="op">=</span> psi_top <span class="op">/</span> Ai<span class="op">;</span></span>
-<span id="cb1-240"><a href=""></a></span>
-<span id="cb1-241"><a href=""></a>  <span class="kw">let</span> ET <span class="op">=</span> mu <span class="op">+</span> eta <span class="op">*</span> psi_bar<span class="op">;</span></span>
-<span id="cb1-242"><a href=""></a></span>
-<span id="cb1-243"><a href=""></a>  <span class="kw">let</span> dc_h <span class="op">=</span> c_h<span class="op">.</span><span class="fu">map</span>((c_val) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-244"><a href=""></a>    <span class="cf">if</span> (math<span class="op">.</span><span class="fu">abs</span>(c_val) <span class="op">==</span> <span class="kw">Infinity</span>) {</span>
-<span id="cb1-245"><a href=""></a>      <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-246"><a href=""></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-247"><a href=""></a>      <span class="cf">return</span> c_val <span class="op">*</span> norm<span class="op">.</span><span class="fu">pdf</span>(c_val)<span class="op">;</span></span>
-<span id="cb1-248"><a href=""></a>    }</span>
-<span id="cb1-249"><a href=""></a>  })<span class="op">;</span></span>
-<span id="cb1-250"><a href=""></a></span>
-<span id="cb1-251"><a href=""></a>  <span class="kw">let</span> kappa_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
-<span id="cb1-252"><a href=""></a>    <span class="cf">return</span> (dc_h[i] <span class="op">-</span> dc_h[i<span class="op">+</span><span class="dv">1</span>]) <span class="op">/</span> B_h[i]<span class="op">;</span></span>
-<span id="cb1-253"><a href=""></a>  })<span class="op">;</span></span>
-<span id="cb1-254"><a href=""></a></span>
-<span id="cb1-255"><a href=""></a>  <span class="kw">let</span> kappa_top <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-256"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
-<span id="cb1-257"><a href=""></a>    kappa_top <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i] <span class="op">*</span> kappa_h[i]<span class="op">;</span></span>
-<span id="cb1-258"><a href=""></a>  }</span>
-<span id="cb1-259"><a href=""></a>  <span class="kw">let</span> kappa_bar <span class="op">=</span> kappa_top <span class="op">/</span> Ai<span class="op">;</span></span>
-<span id="cb1-260"><a href=""></a>  <span class="kw">let</span> SDT <span class="op">=</span> eta <span class="op">*</span> math<span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="op">-</span> kappa_bar <span class="op">-</span> psi_bar<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span>
-<span id="cb1-261"><a href=""></a>  </span>
-<span id="cb1-262"><a href=""></a>  <span class="cf">return</span> ({<span class="dt">Ai</span><span class="op">:</span> Ai<span class="op">,</span> <span class="dt">ET</span><span class="op">:</span> ET<span class="op">,</span> <span class="dt">SDT</span><span class="op">:</span> SDT})<span class="op">;</span></span>
-<span id="cb1-263"><a href=""></a>}</span>
-<span id="cb1-264"><a href=""></a></span>
-<span id="cb1-265"><a href=""></a>moments <span class="op">=</span> <span class="fu">findMoments</span>(mu<span class="op">,</span> tau<span class="op">,</span> sigma<span class="op">,</span> alpha<span class="op">,</span> lambda)</span>
-<span id="cb1-266"><a href=""></a>Ai_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">Ai</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
-<span id="cb1-267"><a href=""></a>ET_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">ET</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
-<span id="cb1-268"><a href=""></a>eta_toprint <span class="op">=</span> eta<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
-<span id="cb1-269"><a href=""></a>SDT_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">SDT</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="244" data-source-offset="-0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 243;"><span id="cb1-244"><a href=""></a>math <span class="op">=</span> <span class="pp">require</span>(<span class="st">"mathjs"</span>)</span>
+<span id="cb1-245"><a href=""></a>norm <span class="op">=</span> <span class="im">import</span>(<span class="st">'https://unpkg.com/norm-dist@3.1.0/index.js?module'</span>)</span>
+<span id="cb1-246"><a href=""></a></span>
+<span id="cb1-247"><a href=""></a>eta <span class="op">=</span> math<span class="op">.</span><span class="fu">sqrt</span>(tau<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> sigma<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-248"><a href=""></a>H <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb1-249"><a href=""></a>alpha <span class="op">=</span> [alpha1<span class="op">,</span> alpha2]</span>
+<span id="cb1-250"><a href=""></a>lambda <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> lambda1<span class="op">,</span> lambda2_ratio <span class="op">*</span> lambda1]</span>
+<span id="cb1-251"><a href=""></a>lambda_max <span class="op">=</span> math<span class="op">.</span><span class="fu">max</span>(lambda)</span>
+<span id="cb1-252"><a href=""></a></span>
+<span id="cb1-253"><a href=""></a><span class="kw">function</span> <span class="fu">findlambda</span>(p<span class="op">,</span> alp<span class="op">,</span> lam) {</span>
+<span id="cb1-254"><a href=""></a>  <span class="kw">var</span> m <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-255"><a href=""></a>  <span class="cf">while</span> (p <span class="op">&gt;=</span> alp[m]) {</span>
+<span id="cb1-256"><a href=""></a>    m <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-257"><a href=""></a>  }</span>
+<span id="cb1-258"><a href=""></a>  <span class="cf">return</span> lam[m]<span class="op">;</span></span>
+<span id="cb1-259"><a href=""></a>}</span>
+<span id="cb1-260"><a href=""></a></span>
+<span id="cb1-261"><a href=""></a><span class="kw">function</span> <span class="fu">findMoments</span>(mu<span class="op">,</span> tau<span class="op">,</span> sigma<span class="op">,</span> alp<span class="op">,</span> lam) {</span>
+<span id="cb1-262"><a href=""></a>  <span class="kw">let</span> H <span class="op">=</span> alp<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb1-263"><a href=""></a>  <span class="kw">let</span> eta <span class="op">=</span> math<span class="op">.</span><span class="fu">sqrt</span>(tau<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> sigma<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb1-264"><a href=""></a>  </span>
+<span id="cb1-265"><a href=""></a>  <span class="kw">let</span> gamma_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">2</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-266"><a href=""></a>    <span class="cf">if</span> (i<span class="op">==</span><span class="dv">0</span>) {</span>
+<span id="cb1-267"><a href=""></a>      <span class="cf">return</span> <span class="kw">Infinity</span><span class="op">;</span></span>
+<span id="cb1-268"><a href=""></a>    } <span class="cf">else</span> <span class="cf">if</span> (i<span class="op">==</span>H<span class="op">+</span><span class="dv">1</span>) {</span>
+<span id="cb1-269"><a href=""></a>      <span class="cf">return</span> <span class="op">-</span><span class="kw">Infinity</span><span class="op">;</span></span>
+<span id="cb1-270"><a href=""></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-271"><a href=""></a>      <span class="cf">return</span> sigma <span class="op">*</span> norm<span class="op">.</span><span class="fu">icdf</span>(<span class="dv">1</span> <span class="op">-</span> alp[i<span class="op">-</span><span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb1-272"><a href=""></a>    }</span>
+<span id="cb1-273"><a href=""></a>  })<span class="op">;</span></span>
+<span id="cb1-274"><a href=""></a>  </span>
+<span id="cb1-275"><a href=""></a>  <span class="kw">let</span> c_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">2</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-276"><a href=""></a>    <span class="cf">return</span> (gamma_h[i] <span class="op">-</span> mu) <span class="op">/</span> eta<span class="op">;</span></span>
+<span id="cb1-277"><a href=""></a>  })<span class="op">;</span></span>
+<span id="cb1-278"><a href=""></a></span>
+<span id="cb1-279"><a href=""></a>  <span class="kw">let</span> B_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-280"><a href=""></a>    <span class="cf">return</span> norm<span class="op">.</span><span class="fu">cdf</span>(c_h[i]) <span class="op">-</span> norm<span class="op">.</span><span class="fu">cdf</span>(c_h[i<span class="op">+</span><span class="dv">1</span>])</span>
+<span id="cb1-281"><a href=""></a>  })<span class="op">;</span></span>
+<span id="cb1-282"><a href=""></a></span>
+<span id="cb1-283"><a href=""></a>  <span class="kw">let</span> Ai <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-284"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1-285"><a href=""></a>    Ai <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i]<span class="op">;</span></span>
+<span id="cb1-286"><a href=""></a>  }</span>
+<span id="cb1-287"><a href=""></a>  </span>
+<span id="cb1-288"><a href=""></a>  <span class="kw">let</span> psi_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-289"><a href=""></a>    <span class="cf">return</span> (norm<span class="op">.</span><span class="fu">pdf</span>(c_h[i<span class="op">+</span><span class="dv">1</span>]) <span class="op">-</span> norm<span class="op">.</span><span class="fu">pdf</span>(c_h[i])) <span class="op">/</span> B_h[i]</span>
+<span id="cb1-290"><a href=""></a>  })<span class="op">;</span> </span>
+<span id="cb1-291"><a href=""></a></span>
+<span id="cb1-292"><a href=""></a>  <span class="kw">let</span> psi_top <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-293"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1-294"><a href=""></a>    psi_top <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i] <span class="op">*</span> psi_h[i]<span class="op">;</span></span>
+<span id="cb1-295"><a href=""></a>  }</span>
+<span id="cb1-296"><a href=""></a>  </span>
+<span id="cb1-297"><a href=""></a>  <span class="kw">let</span> psi_bar <span class="op">=</span> psi_top <span class="op">/</span> Ai<span class="op">;</span></span>
+<span id="cb1-298"><a href=""></a></span>
+<span id="cb1-299"><a href=""></a>  <span class="kw">let</span> ET <span class="op">=</span> mu <span class="op">+</span> eta <span class="op">*</span> psi_bar<span class="op">;</span></span>
+<span id="cb1-300"><a href=""></a></span>
+<span id="cb1-301"><a href=""></a>  <span class="kw">let</span> dc_h <span class="op">=</span> c_h<span class="op">.</span><span class="fu">map</span>((c_val) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-302"><a href=""></a>    <span class="cf">if</span> (math<span class="op">.</span><span class="fu">abs</span>(c_val) <span class="op">==</span> <span class="kw">Infinity</span>) {</span>
+<span id="cb1-303"><a href=""></a>      <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-304"><a href=""></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-305"><a href=""></a>      <span class="cf">return</span> c_val <span class="op">*</span> norm<span class="op">.</span><span class="fu">pdf</span>(c_val)<span class="op">;</span></span>
+<span id="cb1-306"><a href=""></a>    }</span>
+<span id="cb1-307"><a href=""></a>  })<span class="op">;</span></span>
+<span id="cb1-308"><a href=""></a></span>
+<span id="cb1-309"><a href=""></a>  <span class="kw">let</span> kappa_h <span class="op">=</span> <span class="bu">Array</span>(H<span class="op">+</span><span class="dv">1</span>)<span class="op">.</span><span class="fu">fill</span>(<span class="kw">null</span>)<span class="op">.</span><span class="fu">map</span>((x<span class="op">,</span>i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-310"><a href=""></a>    <span class="cf">return</span> (dc_h[i] <span class="op">-</span> dc_h[i<span class="op">+</span><span class="dv">1</span>]) <span class="op">/</span> B_h[i]<span class="op">;</span></span>
+<span id="cb1-311"><a href=""></a>  })<span class="op">;</span></span>
+<span id="cb1-312"><a href=""></a></span>
+<span id="cb1-313"><a href=""></a>  <span class="kw">let</span> kappa_top <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-314"><a href=""></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;=</span> H<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1-315"><a href=""></a>    kappa_top <span class="op">+=</span> lam[i] <span class="op">*</span> B_h[i] <span class="op">*</span> kappa_h[i]<span class="op">;</span></span>
+<span id="cb1-316"><a href=""></a>  }</span>
+<span id="cb1-317"><a href=""></a>  <span class="kw">let</span> kappa_bar <span class="op">=</span> kappa_top <span class="op">/</span> Ai<span class="op">;</span></span>
+<span id="cb1-318"><a href=""></a>  <span class="kw">let</span> SDT <span class="op">=</span> eta <span class="op">*</span> math<span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="op">-</span> kappa_bar <span class="op">-</span> psi_bar<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb1-319"><a href=""></a>  </span>
+<span id="cb1-320"><a href=""></a>  <span class="cf">return</span> ({<span class="dt">Ai</span><span class="op">:</span> Ai<span class="op">,</span> <span class="dt">ET</span><span class="op">:</span> ET<span class="op">,</span> <span class="dt">SDT</span><span class="op">:</span> SDT})<span class="op">;</span></span>
+<span id="cb1-321"><a href=""></a>}</span>
+<span id="cb1-322"><a href=""></a></span>
+<span id="cb1-323"><a href=""></a>moments <span class="op">=</span> <span class="fu">findMoments</span>(mu<span class="op">,</span> tau<span class="op">,</span> sigma<span class="op">,</span> alpha<span class="op">,</span> lambda)</span>
+<span id="cb1-324"><a href=""></a>Ai_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">Ai</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
+<span id="cb1-325"><a href=""></a>ET_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">ET</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
+<span id="cb1-326"><a href=""></a>eta_toprint <span class="op">=</span> eta<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span>
+<span id="cb1-327"><a href=""></a>SDT_toprint <span class="op">=</span> moments<span class="op">.</span><span class="at">SDT</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -752,19 +770,19 @@ James E. Pustejovsky and Martyna Citkowicz
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="274" data-source-offset="-0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 273;"><span id="cb2-274"><a href=""></a>pts <span class="op">=</span> <span class="dv">201</span></span>
-<span id="cb2-275"><a href=""></a></span>
-<span id="cb2-276"><a href=""></a>density_dat <span class="op">=</span> <span class="bu">Array</span>(pts)<span class="op">.</span><span class="fu">fill</span>()<span class="op">.</span><span class="fu">map</span>((element<span class="op">,</span> index) <span class="kw">=&gt;</span> {</span>
-<span id="cb2-277"><a href=""></a>  <span class="kw">let</span> t <span class="op">=</span> mu <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> eta <span class="op">+</span> index <span class="op">*</span> eta <span class="op">*</span> <span class="dv">6</span> <span class="op">/</span> (pts <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb2-278"><a href=""></a>  <span class="kw">let</span> p <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> norm<span class="op">.</span><span class="fu">cdf</span>(t <span class="op">/</span> sigma)<span class="op">;</span></span>
-<span id="cb2-279"><a href=""></a>  <span class="kw">let</span> dt <span class="op">=</span> norm<span class="op">.</span><span class="fu">pdf</span>((t <span class="op">-</span> mu) <span class="op">/</span> eta) <span class="op">/</span> eta<span class="op">;</span></span>
-<span id="cb2-280"><a href=""></a>  <span class="kw">let</span> lambda_val <span class="op">=</span> <span class="fu">findlambda</span>(p<span class="op">,</span> alpha<span class="op">,</span> lambda)<span class="op">;</span></span>
-<span id="cb2-281"><a href=""></a>  <span class="cf">return</span> ({</span>
-<span id="cb2-282"><a href=""></a>    <span class="dt">t</span><span class="op">:</span> t<span class="op">,</span></span>
-<span id="cb2-283"><a href=""></a>    <span class="dt">d_unselected</span><span class="op">:</span> dt<span class="op">,</span></span>
-<span id="cb2-284"><a href=""></a>    <span class="dt">d_selected</span><span class="op">:</span> lambda_val <span class="op">*</span> dt <span class="op">/</span> lambda_max</span>
-<span id="cb2-285"><a href=""></a>  })</span>
-<span id="cb2-286"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="332" data-source-offset="-0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 331;"><span id="cb2-332"><a href=""></a>pts <span class="op">=</span> <span class="dv">201</span></span>
+<span id="cb2-333"><a href=""></a></span>
+<span id="cb2-334"><a href=""></a>density_dat <span class="op">=</span> <span class="bu">Array</span>(pts)<span class="op">.</span><span class="fu">fill</span>()<span class="op">.</span><span class="fu">map</span>((element<span class="op">,</span> index) <span class="kw">=&gt;</span> {</span>
+<span id="cb2-335"><a href=""></a>  <span class="kw">let</span> t <span class="op">=</span> mu <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> eta <span class="op">+</span> index <span class="op">*</span> eta <span class="op">*</span> <span class="dv">6</span> <span class="op">/</span> (pts <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb2-336"><a href=""></a>  <span class="kw">let</span> p <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> norm<span class="op">.</span><span class="fu">cdf</span>(t <span class="op">/</span> sigma)<span class="op">;</span></span>
+<span id="cb2-337"><a href=""></a>  <span class="kw">let</span> dt <span class="op">=</span> norm<span class="op">.</span><span class="fu">pdf</span>((t <span class="op">-</span> mu) <span class="op">/</span> eta) <span class="op">/</span> eta<span class="op">;</span></span>
+<span id="cb2-338"><a href=""></a>  <span class="kw">let</span> lambda_val <span class="op">=</span> <span class="fu">findlambda</span>(p<span class="op">,</span> alpha<span class="op">,</span> lambda)<span class="op">;</span></span>
+<span id="cb2-339"><a href=""></a>  <span class="cf">return</span> ({</span>
+<span id="cb2-340"><a href=""></a>    <span class="dt">t</span><span class="op">:</span> t<span class="op">,</span></span>
+<span id="cb2-341"><a href=""></a>    <span class="dt">d_unselected</span><span class="op">:</span> dt<span class="op">,</span></span>
+<span id="cb2-342"><a href=""></a>    <span class="dt">d_selected</span><span class="op">:</span> lambda_val <span class="op">*</span> dt <span class="op">/</span> lambda_max</span>
+<span id="cb2-343"><a href=""></a>  })</span>
+<span id="cb2-344"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-2-1" data-nodetype="declaration">
@@ -783,40 +801,40 @@ James E. Pustejovsky and Martyna Citkowicz
 <div class="columns">
 <div class="column" style="width:30%;">
 <div class="cell panel-input">
-<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="297" data-source-offset="-1"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 296;"><span id="cb3-297"><a href=""></a>viewof mu <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-298"><a href=""></a>  [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> </span>
-<span id="cb3-299"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\m</span><span class="vs">u`</span>}</span>
-<span id="cb3-300"><a href=""></a>)</span>
-<span id="cb3-301"><a href=""></a></span>
-<span id="cb3-302"><a href=""></a>viewof tau <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-303"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> </span>
-<span id="cb3-304"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.15</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\t</span><span class="vs">au`</span>}</span>
-<span id="cb3-305"><a href=""></a>)</span>
-<span id="cb3-306"><a href=""></a></span>
-<span id="cb3-307"><a href=""></a>viewof sigma <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-308"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> </span>
-<span id="cb3-309"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.25</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\s</span><span class="vs">igma_i`</span>}</span>
-<span id="cb3-310"><a href=""></a>)</span>
-<span id="cb3-311"><a href=""></a></span>
-<span id="cb3-312"><a href=""></a>viewof alpha1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-313"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
-<span id="cb3-314"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.025</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.005</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\a</span><span class="vs">lpha_1`</span>}</span>
-<span id="cb3-315"><a href=""></a>)</span>
-<span id="cb3-316"><a href=""></a></span>
-<span id="cb3-317"><a href=""></a>viewof alpha2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-318"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
-<span id="cb3-319"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.50</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.005</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\a</span><span class="vs">lpha_2`</span>}</span>
-<span id="cb3-320"><a href=""></a>)</span>
-<span id="cb3-321"><a href=""></a></span>
-<span id="cb3-322"><a href=""></a>viewof lambda1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-323"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-324"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\l</span><span class="vs">ambda_1`</span>}</span>
-<span id="cb3-325"><a href=""></a>)</span>
-<span id="cb3-326"><a href=""></a></span>
-<span id="cb3-327"><a href=""></a>viewof lambda2_ratio <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
-<span id="cb3-328"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
-<span id="cb3-329"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\l</span><span class="vs">ambda_2 / </span><span class="sc">\l</span><span class="vs">ambda_1`</span>}</span>
-<span id="cb3-330"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="355" data-source-offset="-1"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 354;"><span id="cb3-355"><a href=""></a>viewof mu <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-356"><a href=""></a>  [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> </span>
+<span id="cb3-357"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\m</span><span class="vs">u`</span>}</span>
+<span id="cb3-358"><a href=""></a>)</span>
+<span id="cb3-359"><a href=""></a></span>
+<span id="cb3-360"><a href=""></a>viewof tau <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-361"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> </span>
+<span id="cb3-362"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.15</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\t</span><span class="vs">au`</span>}</span>
+<span id="cb3-363"><a href=""></a>)</span>
+<span id="cb3-364"><a href=""></a></span>
+<span id="cb3-365"><a href=""></a>viewof sigma <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-366"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> </span>
+<span id="cb3-367"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.25</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\s</span><span class="vs">igma_i`</span>}</span>
+<span id="cb3-368"><a href=""></a>)</span>
+<span id="cb3-369"><a href=""></a></span>
+<span id="cb3-370"><a href=""></a>viewof alpha1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-371"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb3-372"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.025</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.005</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\a</span><span class="vs">lpha_1`</span>}</span>
+<span id="cb3-373"><a href=""></a>)</span>
+<span id="cb3-374"><a href=""></a></span>
+<span id="cb3-375"><a href=""></a>viewof alpha2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-376"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb3-377"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.50</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.005</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\a</span><span class="vs">lpha_2`</span>}</span>
+<span id="cb3-378"><a href=""></a>)</span>
+<span id="cb3-379"><a href=""></a></span>
+<span id="cb3-380"><a href=""></a>viewof lambda1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-381"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-382"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\l</span><span class="vs">ambda_1`</span>}</span>
+<span id="cb3-383"><a href=""></a>)</span>
+<span id="cb3-384"><a href=""></a></span>
+<span id="cb3-385"><a href=""></a>viewof lambda2_ratio <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>(</span>
+<span id="cb3-386"><a href=""></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb3-387"><a href=""></a>  {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`</span><span class="sc">\l</span><span class="vs">ambda_2 / </span><span class="sc">\l</span><span class="vs">ambda_1`</span>}</span>
+<span id="cb3-388"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-3-1" data-nodetype="declaration">
@@ -869,24 +887,24 @@ James E. Pustejovsky and Martyna Citkowicz
 </div>
 </div><div class="column" style="width:70%;">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="337" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 336;"><span id="cb4-337"><a href=""></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb4-338"><a href=""></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">500</span><span class="op">,</span></span>
-<span id="cb4-339"><a href=""></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span></span>
-<span id="cb4-340"><a href=""></a>  <span class="dt">y</span><span class="op">:</span> {</span>
-<span id="cb4-341"><a href=""></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
-<span id="cb4-342"><a href=""></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Density"</span></span>
-<span id="cb4-343"><a href=""></a>  }<span class="op">,</span></span>
-<span id="cb4-344"><a href=""></a>  <span class="dt">x</span><span class="op">:</span> {</span>
-<span id="cb4-345"><a href=""></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Effect size estimate (Ti)"</span></span>
-<span id="cb4-346"><a href=""></a>  }<span class="op">,</span>   </span>
-<span id="cb4-347"><a href=""></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb4-348"><a href=""></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
-<span id="cb4-349"><a href=""></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
-<span id="cb4-350"><a href=""></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_unselected"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.3</span>})<span class="op">,</span></span>
-<span id="cb4-351"><a href=""></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_selected"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"blue"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.5</span>})<span class="op">,</span></span>
-<span id="cb4-352"><a href=""></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_selected"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"blue"</span>})</span>
-<span id="cb4-353"><a href=""></a>  ]</span>
-<span id="cb4-354"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="395" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 394;"><span id="cb4-395"><a href=""></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb4-396"><a href=""></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">500</span><span class="op">,</span></span>
+<span id="cb4-397"><a href=""></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span></span>
+<span id="cb4-398"><a href=""></a>  <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb4-399"><a href=""></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb4-400"><a href=""></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Density"</span></span>
+<span id="cb4-401"><a href=""></a>  }<span class="op">,</span></span>
+<span id="cb4-402"><a href=""></a>  <span class="dt">x</span><span class="op">:</span> {</span>
+<span id="cb4-403"><a href=""></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Effect size estimate (Ti)"</span></span>
+<span id="cb4-404"><a href=""></a>  }<span class="op">,</span>   </span>
+<span id="cb4-405"><a href=""></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb4-406"><a href=""></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb4-407"><a href=""></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb4-408"><a href=""></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_unselected"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.3</span>})<span class="op">,</span></span>
+<span id="cb4-409"><a href=""></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_selected"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"blue"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.5</span>})<span class="op">,</span></span>
+<span id="cb4-410"><a href=""></a>    Plot<span class="op">.</span><span class="fu">lineY</span>(density_dat<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"d_selected"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"blue"</span>})</span>
+<span id="cb4-411"><a href=""></a>  ]</span>
+<span id="cb4-412"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-4" data-nodetype="expression">
 
@@ -895,14 +913,14 @@ James E. Pustejovsky and Martyna Citkowicz
 </div>
 <div class="moments">
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="360" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 359;"><span id="cb5-360"><a href=""></a><span class="fu">tex</span><span class="vs">`</span></span>
-<span id="cb5-361"><a href=""></a><span class="sc">\b</span><span class="vs">egin{aligned}</span></span>
-<span id="cb5-362"><a href=""></a><span class="sc">\m</span><span class="vs">u &amp;= </span><span class="sc">${</span>mu<span class="sc">}</span><span class="vs"> &amp; </span><span class="sc">\q</span><span class="vs">quad </span><span class="sc">\s</span><span class="vs">qrt{</span><span class="sc">\t</span><span class="vs">au^2 + </span><span class="sc">\s</span><span class="vs">igma_{ij}} &amp;= </span><span class="sc">${</span>eta_toprint<span class="sc">}</span><span class="vs"> </span><span class="sc">\\</span></span>
-<span id="cb5-363"><a href=""></a><span class="sc">\m</span><span class="vs">athbb{E}</span><span class="sc">\l</span><span class="vs">eft(T_{ij}</span><span class="sc">\r</span><span class="vs">ight) &amp;= </span><span class="sc">${</span>ET_toprint<span class="sc">}</span></span>
-<span id="cb5-364"><a href=""></a><span class="vs">&amp; </span><span class="sc">\q</span><span class="vs">quad </span><span class="sc">\s</span><span class="vs">qrt{</span><span class="sc">\m</span><span class="vs">athbb{V}</span><span class="sc">\l</span><span class="vs">eft(T_{ij}</span><span class="sc">\r</span><span class="vs">ight)} &amp;= </span><span class="sc">${</span>SDT_toprint<span class="sc">}</span><span class="vs"> </span><span class="sc">\\</span><span class="vs"> </span></span>
-<span id="cb5-365"><a href=""></a><span class="sc">\P</span><span class="vs">r(T_{ij} </span><span class="sc">\t</span><span class="vs">ext{ is observed}) &amp;= </span><span class="sc">${</span>Ai_toprint<span class="sc">}</span></span>
-<span id="cb5-366"><a href=""></a><span class="sc">\e</span><span class="vs">nd{aligned}</span></span>
-<span id="cb5-367"><a href=""></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="418" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 417;"><span id="cb5-418"><a href=""></a><span class="fu">tex</span><span class="vs">`</span></span>
+<span id="cb5-419"><a href=""></a><span class="sc">\b</span><span class="vs">egin{aligned}</span></span>
+<span id="cb5-420"><a href=""></a><span class="sc">\m</span><span class="vs">u &amp;= </span><span class="sc">${</span>mu<span class="sc">}</span><span class="vs"> &amp; </span><span class="sc">\q</span><span class="vs">quad </span><span class="sc">\s</span><span class="vs">qrt{</span><span class="sc">\t</span><span class="vs">au^2 + </span><span class="sc">\s</span><span class="vs">igma_{ij}} &amp;= </span><span class="sc">${</span>eta_toprint<span class="sc">}</span><span class="vs"> </span><span class="sc">\\</span></span>
+<span id="cb5-421"><a href=""></a><span class="sc">\m</span><span class="vs">athbb{E}</span><span class="sc">\l</span><span class="vs">eft(T_{ij}</span><span class="sc">\r</span><span class="vs">ight) &amp;= </span><span class="sc">${</span>ET_toprint<span class="sc">}</span></span>
+<span id="cb5-422"><a href=""></a><span class="vs">&amp; </span><span class="sc">\q</span><span class="vs">quad </span><span class="sc">\s</span><span class="vs">qrt{</span><span class="sc">\m</span><span class="vs">athbb{V}</span><span class="sc">\l</span><span class="vs">eft(T_{ij}</span><span class="sc">\r</span><span class="vs">ight)} &amp;= </span><span class="sc">${</span>SDT_toprint<span class="sc">}</span><span class="vs"> </span><span class="sc">\\</span><span class="vs"> </span></span>
+<span id="cb5-423"><a href=""></a><span class="sc">\P</span><span class="vs">r(T_{ij} </span><span class="sc">\t</span><span class="vs">ext{ is observed}) &amp;= </span><span class="sc">${</span>Ai_toprint<span class="sc">}</span></span>
+<span id="cb5-424"><a href=""></a><span class="sc">\e</span><span class="vs">nd{aligned}</span></span>
+<span id="cb5-425"><a href=""></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="expression">
 
@@ -958,8 +976,8 @@ James E. Pustejovsky and Martyna Citkowicz
 
     <script>
 
-      function styleCell_gskdj2dsv294m8vfd9oz(i, j, css_id) {
-          var table = document.getElementById("tinytable_gskdj2dsv294m8vfd9oz");
+      function styleCell_65abg7f0514qtu0oxbyt(i, j, css_id) {
+          var table = document.getElementById("tinytable_65abg7f0514qtu0oxbyt");
           var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -968,8 +986,8 @@ James E. Pustejovsky and Martyna Citkowicz
               console.warn(`Cell at (${i}, ${j}) not found.`);
           }
       }
-      function insertSpanRow_alqimb7b5l6abhbtxuhv(i, colspan, content) {
-        var table = document.getElementById('tinytable_gskdj2dsv294m8vfd9oz');
+      function insertSpanRow_ic68zs1k3p38w8qoyc65(i, colspan, content) {
+        var table = document.getElementById('tinytable_65abg7f0514qtu0oxbyt');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -977,8 +995,8 @@ James E. Pustejovsky and Martyna Citkowicz
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_gskdj2dsv294m8vfd9oz(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_gskdj2dsv294m8vfd9oz");
+      function spanCell_65abg7f0514qtu0oxbyt(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_65abg7f0514qtu0oxbyt");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -1005,24 +1023,24 @@ James E. Pustejovsky and Martyna Citkowicz
         targetCell.colSpan = colspan;
       }
       // tinytable span after
-window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv(3, 5, '(B) Moderation by study type') });
-window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv(2, 5, '(A) Summary meta-analysis') });
+window.addEventListener('load', function () { insertSpanRow_ic68zs1k3p38w8qoyc65(3, 5, '(B) Moderation by study type') });
+window.addEventListener('load', function () { insertSpanRow_ic68zs1k3p38w8qoyc65(2, 5, '(A) Summary meta-analysis') });
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: 6, j: 1 }, { i: 6, j: 2 }, { i: 6, j: 3 }, { i: 5, j: 1 }, { i: 5, j: 2 }, { i: 5, j: 3 }, { i: 5, j: 4 }, { i: 6, j: 4 },  ], css_id: 'tinytable_css_l8dtr7dbs57s8yenzqg6',}, 
-          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_cdnmwdi9ktjja725f9g4',}, 
-          { positions: [ { i: 5, j: 0 }, { i: 6, j: 0 },  ], css_id: 'tinytable_css_0ba99d9dwly18tcwad6f',}, 
-          { positions: [ { i: 4, j: 0 }, { i: 4, j: 3 }, { i: 4, j: 4 }, { i: 4, j: 1 }, { i: 4, j: 2 },  ], css_id: 'tinytable_css_fiymgyiz1ubm2wc9ppiy',}, 
-          { positions: [ { i: 3, j: 0 },  ], css_id: 'tinytable_css_kid4m7gy6bf53vl55ile',}, 
-          { positions: [ { i: 2, j: 4 }, { i: 2, j: 1 }, { i: 2, j: 0 }, { i: 2, j: 2 }, { i: 2, j: 3 },  ], css_id: 'tinytable_css_k5hqc6ud0me0ls1olhi9',}, 
-          { positions: [ { i: 0, j: 0 }, { i: 0, j: 4 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_32g6ghx7uptkuun9sjwn',}, 
+          { positions: [ { i: 6, j: 1 }, { i: 6, j: 2 }, { i: 6, j: 3 }, { i: 5, j: 1 }, { i: 5, j: 2 }, { i: 5, j: 3 }, { i: 5, j: 4 }, { i: 6, j: 4 },  ], css_id: 'tinytable_css_pbtfh4cfundti827o858',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_ab8nls3befd29jc8sn7q',}, 
+          { positions: [ { i: 5, j: 0 }, { i: 6, j: 0 },  ], css_id: 'tinytable_css_arqq1egsndzi414wt8sn',}, 
+          { positions: [ { i: 4, j: 0 }, { i: 4, j: 3 }, { i: 4, j: 4 }, { i: 4, j: 1 }, { i: 4, j: 2 },  ], css_id: 'tinytable_css_ecxu3ibz5gmo1iskct02',}, 
+          { positions: [ { i: 3, j: 0 },  ], css_id: 'tinytable_css_diqhvnofz64p7hwwc8ef',}, 
+          { positions: [ { i: 2, j: 4 }, { i: 2, j: 1 }, { i: 2, j: 0 }, { i: 2, j: 2 }, { i: 2, j: 3 },  ], css_id: 'tinytable_css_j1jcduoc428i4ju9w38x',}, 
+          { positions: [ { i: 0, j: 0 }, { i: 0, j: 4 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_hooyim7fq65fo0d6wlg6',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_gskdj2dsv294m8vfd9oz(cell.i, cell.j, group.css_id);
+                  styleCell_65abg7f0514qtu0oxbyt(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -1030,16 +1048,16 @@ window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_l8dtr7dbs57s8yenzqg6, .table th.tinytable_css_l8dtr7dbs57s8yenzqg6 { color: white; background-color: white; }
-      .table td.tinytable_css_cdnmwdi9ktjja725f9g4, .table th.tinytable_css_cdnmwdi9ktjja725f9g4 { text-align: center; border-bottom: solid #d3d8dc 0.05em; text-align: center; }
-      .table td.tinytable_css_0ba99d9dwly18tcwad6f, .table th.tinytable_css_0ba99d9dwly18tcwad6f { padding-left: 1em; color: white; background-color: white; }
-      .table td.tinytable_css_fiymgyiz1ubm2wc9ppiy, .table th.tinytable_css_fiymgyiz1ubm2wc9ppiy { font-weight: bold; background-color: lightgray; color: white; background-color: white; }
-      .table td.tinytable_css_kid4m7gy6bf53vl55ile, .table th.tinytable_css_kid4m7gy6bf53vl55ile { padding-left: 1em; }
-      .table td.tinytable_css_k5hqc6ud0me0ls1olhi9, .table th.tinytable_css_k5hqc6ud0me0ls1olhi9 { font-weight: bold; background-color: lightgray; }
-      .table td.tinytable_css_32g6ghx7uptkuun9sjwn, .table th.tinytable_css_32g6ghx7uptkuun9sjwn { text-align: center; text-align: center; }
+      .table td.tinytable_css_pbtfh4cfundti827o858, .table th.tinytable_css_pbtfh4cfundti827o858 { color: white; background-color: white; }
+      .table td.tinytable_css_ab8nls3befd29jc8sn7q, .table th.tinytable_css_ab8nls3befd29jc8sn7q { text-align: center; border-bottom: solid #d3d8dc 0.05em; text-align: center; }
+      .table td.tinytable_css_arqq1egsndzi414wt8sn, .table th.tinytable_css_arqq1egsndzi414wt8sn { padding-left: 1em; color: white; background-color: white; }
+      .table td.tinytable_css_ecxu3ibz5gmo1iskct02, .table th.tinytable_css_ecxu3ibz5gmo1iskct02 { font-weight: bold; background-color: lightgray; color: white; background-color: white; }
+      .table td.tinytable_css_diqhvnofz64p7hwwc8ef, .table th.tinytable_css_diqhvnofz64p7hwwc8ef { padding-left: 1em; }
+      .table td.tinytable_css_j1jcduoc428i4ju9w38x, .table th.tinytable_css_j1jcduoc428i4ju9w38x { font-weight: bold; background-color: lightgray; }
+      .table td.tinytable_css_hooyim7fq65fo0d6wlg6, .table th.tinytable_css_hooyim7fq65fo0d6wlg6 { text-align: center; text-align: center; }
     </style>
     <div class="container">
-      <table class="table" id="tinytable_gskdj2dsv294m8vfd9oz" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table" id="tinytable_65abg7f0514qtu0oxbyt" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
 <tr>
 <th scope="col" align="center" colspan="1"> </th>
@@ -1092,8 +1110,8 @@ window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv
 
     <script>
 
-      function styleCell_vmfczqdw18z2ehp6pvgw(i, j, css_id) {
-          var table = document.getElementById("tinytable_vmfczqdw18z2ehp6pvgw");
+      function styleCell_a05gysxis3iww2vc9qlk(i, j, css_id) {
+          var table = document.getElementById("tinytable_a05gysxis3iww2vc9qlk");
           var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -1102,8 +1120,8 @@ window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv
               console.warn(`Cell at (${i}, ${j}) not found.`);
           }
       }
-      function insertSpanRow_wasm8atse5l0wk5zkuqz(i, colspan, content) {
-        var table = document.getElementById('tinytable_vmfczqdw18z2ehp6pvgw');
+      function insertSpanRow_zpvvco6rhk7ziffw7hmc(i, colspan, content) {
+        var table = document.getElementById('tinytable_a05gysxis3iww2vc9qlk');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -1111,8 +1129,8 @@ window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_vmfczqdw18z2ehp6pvgw(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_vmfczqdw18z2ehp6pvgw");
+      function spanCell_a05gysxis3iww2vc9qlk(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_a05gysxis3iww2vc9qlk");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -1139,21 +1157,21 @@ window.addEventListener('load', function () { insertSpanRow_alqimb7b5l6abhbtxuhv
         targetCell.colSpan = colspan;
       }
       // tinytable span after
-window.addEventListener('load', function () { insertSpanRow_wasm8atse5l0wk5zkuqz(3, 5, '(B) Moderation by design type') });
-window.addEventListener('load', function () { insertSpanRow_wasm8atse5l0wk5zkuqz(2, 5, '(A) Summary meta-analysis') });
+window.addEventListener('load', function () { insertSpanRow_zpvvco6rhk7ziffw7hmc(3, 5, '(B) Moderation by design type') });
+window.addEventListener('load', function () { insertSpanRow_zpvvco6rhk7ziffw7hmc(2, 5, '(A) Summary meta-analysis') });
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_xmcn5c6z79rzrhjmgup3',}, 
-          { positions: [ { i: 3, j: 0 }, { i: 6, j: 0 }, { i: 5, j: 0 },  ], css_id: 'tinytable_css_8f07sfer5t4m5z0864j7',}, 
-          { positions: [ { i: 2, j: 0 }, { i: 2, j: 2 }, { i: 2, j: 3 }, { i: 4, j: 3 }, { i: 4, j: 0 }, { i: 4, j: 1 }, { i: 4, j: 4 }, { i: 2, j: 1 }, { i: 2, j: 4 }, { i: 4, j: 2 },  ], css_id: 'tinytable_css_pcowuzyauik43epwgsvs',}, 
-          { positions: [ { i: 0, j: 0 }, { i: 0, j: 4 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_274qw1nvhxez3hgszjtl',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_exmm3gj6q44iwc49a81q',}, 
+          { positions: [ { i: 3, j: 0 }, { i: 6, j: 0 }, { i: 5, j: 0 },  ], css_id: 'tinytable_css_l9hq645x1ivh69816k3q',}, 
+          { positions: [ { i: 2, j: 0 }, { i: 2, j: 2 }, { i: 2, j: 3 }, { i: 4, j: 3 }, { i: 4, j: 0 }, { i: 4, j: 1 }, { i: 4, j: 4 }, { i: 2, j: 1 }, { i: 2, j: 4 }, { i: 4, j: 2 },  ], css_id: 'tinytable_css_h4sxh8ymjhsb8yqig0an',}, 
+          { positions: [ { i: 0, j: 0 }, { i: 0, j: 4 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_ksb81hwn46our1vj8f6f',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_vmfczqdw18z2ehp6pvgw(cell.i, cell.j, group.css_id);
+                  styleCell_a05gysxis3iww2vc9qlk(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -1161,13 +1179,13 @@ window.addEventListener('load', function () { insertSpanRow_wasm8atse5l0wk5zkuqz
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_xmcn5c6z79rzrhjmgup3, .table th.tinytable_css_xmcn5c6z79rzrhjmgup3 { text-align: center; border-bottom: solid #d3d8dc 0.05em; text-align: center; }
-      .table td.tinytable_css_8f07sfer5t4m5z0864j7, .table th.tinytable_css_8f07sfer5t4m5z0864j7 { padding-left: 1em; }
-      .table td.tinytable_css_pcowuzyauik43epwgsvs, .table th.tinytable_css_pcowuzyauik43epwgsvs { font-weight: bold; background-color: lightgray; }
-      .table td.tinytable_css_274qw1nvhxez3hgszjtl, .table th.tinytable_css_274qw1nvhxez3hgszjtl { text-align: center; text-align: center; }
+      .table td.tinytable_css_exmm3gj6q44iwc49a81q, .table th.tinytable_css_exmm3gj6q44iwc49a81q { text-align: center; border-bottom: solid #d3d8dc 0.05em; text-align: center; }
+      .table td.tinytable_css_l9hq645x1ivh69816k3q, .table th.tinytable_css_l9hq645x1ivh69816k3q { padding-left: 1em; }
+      .table td.tinytable_css_h4sxh8ymjhsb8yqig0an, .table th.tinytable_css_h4sxh8ymjhsb8yqig0an { font-weight: bold; background-color: lightgray; }
+      .table td.tinytable_css_ksb81hwn46our1vj8f6f, .table th.tinytable_css_ksb81hwn46our1vj8f6f { text-align: center; text-align: center; }
     </style>
     <div class="container">
-      <table class="table" id="tinytable_vmfczqdw18z2ehp6pvgw" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table" id="tinytable_a05gysxis3iww2vc9qlk" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
 <tr>
 <th scope="col" align="center" colspan="1"> </th>
@@ -1215,6 +1233,10 @@ window.addEventListener('load', function () { insertSpanRow_wasm8atse5l0wk5zkuqz
 </div>
 </div>
 </section>
+<section id="contour-enhanced-funnel-plot" class="slide level2">
+<h2>Contour-enhanced funnel plot</h2>
+
+<img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-11-1.png" style="width:75.0%" class="r-stretch"></section>
 <section id="color-priming-selection-models" class="slide level2 scrollable">
 <h2>Color-priming selection models</h2>
 <div class="cell">
@@ -1284,32 +1306,39 @@ Selection process estimates:
 </div>
 </div>
 </section>
+<section id="selective-reporting-of-non-significant-results" class="slide level2">
+<h2>Selective reporting of non-significant results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">selection_plot</span>(sel1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:75.0%" class="r-stretch"></section>
 <section id="now-with-bootstrapping" class="slide level2 scrollable">
 <h2>Now with bootstrapping!</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># turn on parallel processing</span></span>
-<span id="cb9-2"><a href=""></a><span class="fu">library</span>(future)</span>
-<span id="cb9-3"><a href=""></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">8</span>)</span>
-<span id="cb9-4"><a href=""></a></span>
-<span id="cb9-5"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">20250613</span>) <span class="co"># for reproducibility</span></span>
-<span id="cb9-6"><a href=""></a></span>
-<span id="cb9-7"><a href=""></a>sel1_boot <span class="ot">&lt;-</span> <span class="fu">selection_model</span>(</span>
-<span id="cb9-8"><a href=""></a>  <span class="at">yi =</span> yi,                    <span class="co"># effect size est.</span></span>
-<span id="cb9-9"><a href=""></a>  <span class="at">sei =</span> sei,                  <span class="co"># standard error</span></span>
-<span id="cb9-10"><a href=""></a>  <span class="at">cluster =</span> study,            <span class="co"># identifier for independent clusters</span></span>
-<span id="cb9-11"><a href=""></a>  <span class="at">data =</span> dat.lehmann2018,     <span class="co"># dataset</span></span>
-<span id="cb9-12"><a href=""></a>  <span class="at">selection_type =</span> <span class="st">"step"</span>,    <span class="co"># type of selection model</span></span>
-<span id="cb9-13"><a href=""></a>  <span class="at">steps =</span> .<span class="dv">025</span>,               <span class="co"># single threshold for step-function</span></span>
-<span id="cb9-14"><a href=""></a>  <span class="at">estimator =</span> <span class="st">"CML"</span>,          <span class="co"># estimation method</span></span>
-<span id="cb9-15"><a href=""></a>  <span class="at">bootstrap =</span> <span class="st">"two-stage"</span>,    <span class="co"># recommended type of bootstrapping</span></span>
-<span id="cb9-16"><a href=""></a>  <span class="at">R =</span> <span class="dv">1999</span>,                   <span class="co"># number of bootstrap re-samples</span></span>
-<span id="cb9-17"><a href=""></a>  <span class="at">CI_type =</span> <span class="fu">c</span>(<span class="st">"large-sample"</span>, <span class="co"># keep the large-sample sandwich CI</span></span>
-<span id="cb9-18"><a href=""></a>              <span class="st">"percentile"</span>)   <span class="co"># recommended type of bootstrap CI</span></span>
-<span id="cb9-19"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># turn on parallel processing</span></span>
+<span id="cb10-2"><a href=""></a><span class="fu">library</span>(future)</span>
+<span id="cb10-3"><a href=""></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">8</span>)</span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">20250613</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb10-6"><a href=""></a></span>
+<span id="cb10-7"><a href=""></a>sel1_boot <span class="ot">&lt;-</span> <span class="fu">selection_model</span>(</span>
+<span id="cb10-8"><a href=""></a>  <span class="at">yi =</span> yi,                    <span class="co"># effect size est.</span></span>
+<span id="cb10-9"><a href=""></a>  <span class="at">sei =</span> sei,                  <span class="co"># standard error</span></span>
+<span id="cb10-10"><a href=""></a>  <span class="at">cluster =</span> study,            <span class="co"># identifier for independent clusters</span></span>
+<span id="cb10-11"><a href=""></a>  <span class="at">data =</span> dat.lehmann2018,     <span class="co"># dataset</span></span>
+<span id="cb10-12"><a href=""></a>  <span class="at">selection_type =</span> <span class="st">"step"</span>,    <span class="co"># type of selection model</span></span>
+<span id="cb10-13"><a href=""></a>  <span class="at">steps =</span> .<span class="dv">025</span>,               <span class="co"># single threshold for step-function</span></span>
+<span id="cb10-14"><a href=""></a>  <span class="at">estimator =</span> <span class="st">"CML"</span>,          <span class="co"># estimation method</span></span>
+<span id="cb10-15"><a href=""></a>  <span class="at">bootstrap =</span> <span class="st">"two-stage"</span>,    <span class="co"># recommended type of bootstrapping</span></span>
+<span id="cb10-16"><a href=""></a>  <span class="at">R =</span> <span class="dv">1999</span>,                   <span class="co"># number of bootstrap re-samples</span></span>
+<span id="cb10-17"><a href=""></a>  <span class="at">CI_type =</span> <span class="fu">c</span>(<span class="st">"large-sample"</span>, <span class="co"># keep the large-sample sandwich CI</span></span>
+<span id="cb10-18"><a href=""></a>              <span class="st">"percentile"</span>)   <span class="co"># recommended type of bootstrap CI</span></span>
+<span id="cb10-19"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">summary</span>(sel1_boot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">summary</span>(sel1_boot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Step Function Model with Cluster Bootstrapping 
  
@@ -1354,17 +1383,17 @@ Selection process estimates:
 </div>
 </div>
 </section>
-<section id="selective-reporting-of-non-significant-results" class="slide level2">
+<section id="selective-reporting-of-non-significant-results-1" class="slide level2">
 <h2>Selective reporting of non-significant results</h2>
 <div class="r-stack">
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">selection_plot</span>(sel1) <span class="sc">+</span> </span>
-<span id="cb12-2"><a href=""></a>  ggplot2<span class="sc">::</span><span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">selection_plot</span>(sel1) <span class="sc">+</span> </span>
+<span id="cb13-2"><a href=""></a>  ggplot2<span class="sc">::</span><span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-13-1.png" style="width:75.0%"></p>
+<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:75.0%"></p>
 </figure>
 </div>
 </div>
@@ -1372,12 +1401,12 @@ Selection process estimates:
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">selection_plot</span>(sel1_boot) <span class="sc">+</span> </span>
-<span id="cb13-2"><a href=""></a>  ggplot2<span class="sc">::</span><span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">selection_plot</span>(sel1_boot) <span class="sc">+</span> </span>
+<span id="cb14-2"><a href=""></a>  ggplot2<span class="sc">::</span><span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:75.0%"></p>
+<p><img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-17-1.png" style="width:75.0%"></p>
 </figure>
 </div>
 </div>
@@ -1388,30 +1417,26 @@ Selection process estimates:
 <section id="add-a-moderator" class="slide level2 scrollable">
 <h2>Add a moderator</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># turn on parallel processing</span></span>
-<span id="cb14-2"><a href=""></a><span class="fu">library</span>(future)</span>
-<span id="cb14-3"><a href=""></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">8</span>)</span>
-<span id="cb14-4"><a href=""></a></span>
-<span id="cb14-5"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">20250613</span>) <span class="co"># for reproducibility</span></span>
-<span id="cb14-6"><a href=""></a></span>
-<span id="cb14-7"><a href=""></a>sel1_mod <span class="ot">&lt;-</span> <span class="fu">selection_model</span>(</span>
-<span id="cb14-8"><a href=""></a>  <span class="at">yi =</span> yi,                    <span class="co"># effect size est.</span></span>
-<span id="cb14-9"><a href=""></a>  <span class="at">sei =</span> sei,                  <span class="co"># standard error</span></span>
-<span id="cb14-10"><a href=""></a>  <span class="at">cluster =</span> study,            <span class="co"># identifier for independent clusters</span></span>
-<span id="cb14-11"><a href=""></a>  <span class="at">mean_mods =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Design,   <span class="co"># design type moderator</span></span>
-<span id="cb14-12"><a href=""></a>  <span class="at">data =</span> dat.lehmann2018,     <span class="co"># dataset</span></span>
-<span id="cb14-13"><a href=""></a>  <span class="at">selection_type =</span> <span class="st">"step"</span>,    <span class="co"># type of selection model</span></span>
-<span id="cb14-14"><a href=""></a>  <span class="at">steps =</span> .<span class="dv">025</span>,               <span class="co"># single threshold for step-function</span></span>
-<span id="cb14-15"><a href=""></a>  <span class="at">estimator =</span> <span class="st">"CML"</span>,          <span class="co"># estimation method</span></span>
-<span id="cb14-16"><a href=""></a>  <span class="at">bootstrap =</span> <span class="st">"two-stage"</span>,    <span class="co"># recommended type of bootstrapping</span></span>
-<span id="cb14-17"><a href=""></a>  <span class="at">R =</span> <span class="dv">1999</span>,                   <span class="co"># number of bootstrap re-samples</span></span>
-<span id="cb14-18"><a href=""></a>  <span class="at">CI_type =</span> <span class="fu">c</span>(<span class="st">"large-sample"</span>, <span class="co"># keep the large-sample sandwich CI</span></span>
-<span id="cb14-19"><a href=""></a>              <span class="st">"percentile"</span>)   <span class="co"># recommended type of bootstrap CI</span></span>
-<span id="cb14-20"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">20250613</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb15-2"><a href=""></a></span>
+<span id="cb15-3"><a href=""></a>sel1_mod <span class="ot">&lt;-</span> <span class="fu">selection_model</span>(</span>
+<span id="cb15-4"><a href=""></a>  <span class="at">yi =</span> yi,                    <span class="co"># effect size est.</span></span>
+<span id="cb15-5"><a href=""></a>  <span class="at">sei =</span> sei,                  <span class="co"># standard error</span></span>
+<span id="cb15-6"><a href=""></a>  <span class="at">cluster =</span> study,            <span class="co"># identifier for independent clusters</span></span>
+<span id="cb15-7"><a href=""></a>  <span class="at">mean_mods =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Design,   <span class="co"># design type moderator</span></span>
+<span id="cb15-8"><a href=""></a>  <span class="at">data =</span> dat.lehmann2018,     <span class="co"># dataset</span></span>
+<span id="cb15-9"><a href=""></a>  <span class="at">selection_type =</span> <span class="st">"step"</span>,    <span class="co"># type of selection model</span></span>
+<span id="cb15-10"><a href=""></a>  <span class="at">steps =</span> .<span class="dv">025</span>,               <span class="co"># single threshold for step-function</span></span>
+<span id="cb15-11"><a href=""></a>  <span class="at">estimator =</span> <span class="st">"CML"</span>,          <span class="co"># estimation method</span></span>
+<span id="cb15-12"><a href=""></a>  <span class="at">bootstrap =</span> <span class="st">"two-stage"</span>,    <span class="co"># recommended type of bootstrapping</span></span>
+<span id="cb15-13"><a href=""></a>  <span class="at">R =</span> <span class="dv">1999</span>,                   <span class="co"># number of bootstrap re-samples</span></span>
+<span id="cb15-14"><a href=""></a>  <span class="at">CI_type =</span> <span class="fu">c</span>(<span class="st">"large-sample"</span>, <span class="co"># keep the large-sample sandwich CI</span></span>
+<span id="cb15-15"><a href=""></a>              <span class="st">"percentile"</span>)   <span class="co"># recommended type of bootstrap CI</span></span>
+<span id="cb15-16"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">summary</span>(sel1_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">summary</span>(sel1_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Step Function Model with Cluster Bootstrapping 
  
@@ -1457,6 +1482,87 @@ Selection process estimates:
 </div>
 </div>
 </section>
+<section id="add-another-step" class="slide level2 scrollable">
+<h2>Add another step</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">20250613</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb18-2"><a href=""></a></span>
+<span id="cb18-3"><a href=""></a>sel2_mod <span class="ot">&lt;-</span> <span class="fu">selection_model</span>(</span>
+<span id="cb18-4"><a href=""></a>  <span class="at">yi =</span> yi,                    <span class="co"># effect size est.</span></span>
+<span id="cb18-5"><a href=""></a>  <span class="at">sei =</span> sei,                  <span class="co"># standard error</span></span>
+<span id="cb18-6"><a href=""></a>  <span class="at">cluster =</span> study,            <span class="co"># identifier for independent clusters</span></span>
+<span id="cb18-7"><a href=""></a>  <span class="at">mean_mods =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Design,   <span class="co"># design type moderator</span></span>
+<span id="cb18-8"><a href=""></a>  <span class="at">data =</span> dat.lehmann2018,     <span class="co"># dataset</span></span>
+<span id="cb18-9"><a href=""></a>  <span class="at">selection_type =</span> <span class="st">"step"</span>,    <span class="co"># type of selection model</span></span>
+<span id="cb18-10"><a href=""></a>  <span class="at">steps =</span> <span class="fu">c</span>(.<span class="dv">025</span>,.<span class="dv">500</span>),       <span class="co"># two thresholds for step-function</span></span>
+<span id="cb18-11"><a href=""></a>  <span class="at">estimator =</span> <span class="st">"CML"</span>,          <span class="co"># estimation method</span></span>
+<span id="cb18-12"><a href=""></a>  <span class="at">bootstrap =</span> <span class="st">"two-stage"</span>,    <span class="co"># recommended type of bootstrapping</span></span>
+<span id="cb18-13"><a href=""></a>  <span class="at">R =</span> <span class="dv">1999</span>,                   <span class="co"># number of bootstrap re-samples</span></span>
+<span id="cb18-14"><a href=""></a>  <span class="at">CI_type =</span> <span class="fu">c</span>(<span class="st">"large-sample"</span>, <span class="co"># keep the large-sample sandwich CI</span></span>
+<span id="cb18-15"><a href=""></a>              <span class="st">"percentile"</span>)   <span class="co"># recommended type of bootstrap CI</span></span>
+<span id="cb18-16"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">summary</span>(sel2_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Step Function Model with Cluster Bootstrapping 
+ 
+Call: 
+selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, 
+    selection_type = "step", steps = c(0.025, 0.5), mean_mods = ~0 + 
+        Design, estimator = "CML", CI_type = c("large-sample", 
+        "percentile"), bootstrap = "two-stage", R = 1999)
+
+Number of clusters = 41; Number of effects = 81
+
+Steps: 0.025, 0.5 
+Estimator: composite marginal likelihood 
+Variance estimator: robust 
+Bootstrap type: two-stage 
+Number of bootstrap replications: 1990 
+
+Log composite likelihood of selection model: -43.51452
+Inverse selection weighted partial log likelihood: 85.42712 
+
+Mean effect estimates:                                                                                  
+                                                 Large Sample Percentile Bootstrap
+              Coef. Estimate Std. Error p-value  Lower  Upper      Lower     Upper
+ beta_DesignBetween   0.0419      0.140   0.765 -0.233  0.317    -0.1706     0.335
+  beta_DesignWithin   0.1462      0.247   0.554 -0.338  0.631    -0.0329     0.989
+
+Heterogeneity estimates:                                                                      
+                                     Large Sample Percentile Bootstrap
+ Coef. Estimate Std. Error p-value   Lower  Upper      Lower     Upper
+  tau2   0.0804     0.0881     --- 0.00937   0.69   1.26e-17     0.207
+
+Selection process estimates:
+ Step: 0 &lt; p &lt;= 0.025; Studies: 16; Effects: 25                                                                      
+                                     Large Sample Percentile Bootstrap
+   Coef. Estimate Std. Error p-value Lower  Upper      Lower     Upper
+ lambda0        1        ---     ---   ---    ---        ---       ---
+
+ Step: 0.025 &lt; p &lt;= 0.5; Studies: 22; Effects: 33                                                                       
+                                      Large Sample Percentile Bootstrap
+   Coef. Estimate Std. Error p-value  Lower  Upper      Lower     Upper
+ lambda1    0.476      0.595   0.552 0.0412    5.5     0.0364      2.68
+
+ Step: 0.5 &lt; p &lt;= 1; Studies: 17; Effects: 23                                                                       
+                                      Large Sample Percentile Bootstrap
+   Coef. Estimate Std. Error p-value  Lower  Upper      Lower     Upper
+ lambda2    0.307      0.466   0.437 0.0156   6.03     0.0122      3.13</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="selective-reporting-of-non-significant-results-2" class="slide level2">
+<h2>Selective reporting of non-significant results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">selection_plot</span>(sel2_mod) <span class="sc">+</span> </span>
+<span id="cb21-2"><a href=""></a>  ggplot2<span class="sc">::</span><span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="ESMARConf-selection-models_files/figure-revealjs/unnamed-chunk-20-1.png" style="width:75.0%" class="r-stretch"></section>
 <section id="discussion" class="slide level2">
 <h2>Discussion</h2>
 <ul>
@@ -1486,7 +1592,7 @@ Selection process estimates:
 <li><p>Install using</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jepusto/metaselection"</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jepusto/metaselection"</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Under active development, suggestions welcome!</li>
@@ -1508,7 +1614,7 @@ Citkowicz, Martyna, and Jack L Vevea. 2017. <span>“<span class="nocase">A pars
 Coburn, Kathleen M, and Jack L Vevea. 2015. <span>“<span class="nocase">Publication bias as a function of study characteristics</span>.”</span> <em>Psychological Methods</em> 20 (3): 310–30. <a href="https://doi.org/10.1037/met0000046">https://doi.org/10.1037/met0000046</a>.
 </div>
 <div id="ref-lehmann2018meta" class="csl-entry" role="listitem">
-Lehmann, Gabrielle K, Andrew J Elliot, and Robert J Calin-Jageman. 2018. <span>“Meta-Analysis of the Effect of Red on Perceived Attractiveness.”</span> <em>Evolutionary Psychology</em> 16 (4): 1474704918802412.
+Lehmann, Gabrielle K, Andrew J Elliot, and Robert J Calin-Jageman. 2018. <span>“Meta-Analysis of the Effect of Red on Perceived Attractiveness.”</span> <em>Evolutionary Psychology</em> 16 (4): 1474704918802412. <a href="https://doi.org/10.1177/1474704918802412">https://doi.org/10.1177/1474704918802412</a>.
 </div>
 <div id="ref-pustejovsky2025estimation" class="csl-entry" role="listitem">
 Pustejovsky, James E., Martyna Citkowicz, and Megha Joshi. 2025. <span>“Estimation and Inference for Step-Function Selection Models in Meta-Analysis with Dependent Effects.”</span> <a href="https://doi.org/10.31222/osf.io/qg5x6_v1">https://doi.org/10.31222/osf.io/qg5x6_v1</a>.

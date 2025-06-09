@@ -113,7 +113,7 @@ bootstrap_reps %>%
 
 
 bootstrap_reps %>%
-  group_by(complete, has_zeros) %>%
+  group_by(model, complete, has_zeros) %>%
   count()
 
 #-------------------------------------------------------------------------------
@@ -128,14 +128,29 @@ bootstrap_files <-
 
 file_list <- 
   bootstrap_files %>%
-  filter(mean_smd == 0.0, tau == 0.45, cor_mu == 0.8, m == 30, omega == 0, delta_1 == 0.2) %>%
+  filter(mean_smd == 0.8, tau == 0.45, cor_mu == 0.8, m == 30, omega > 0, delta_1 == 0.2) %>%
   pull(files)
 
-dat <- 
-  map_dfr(file_list[[1]]$file, .f = readRDS) %>%
-  unnest(res)
+source("research/beta-function-simulations/3_performance_criteria.R")
 
-source("research/step-function-simulations/3_performance_criteria.R")
+repair_bootstraps <- function(bootstraps, B = c(49, 99, 199, 299, 399)) {
+  
+  if (is.null(bootstraps)) return(NULL)
+  
+  missing_boots <- setdiff(B, bootstraps$bootstraps)
+  
+  if (length(missing_boots) == 0L) return(bootstraps)
+  if (length(missing_boots) == length(B)) return(NULL)
+  
+  bootstraps_imputed <- 
+    bootstraps %>% 
+    slice_max(bootstraps, n = 1L, with_ties = FALSE) %>%
+    select(-bootstraps) %>%
+    expand_grid(bootstraps = missing_boots)
+  
+  bind_rows(bootstraps, bootstraps_imputed) %>%
+    filter(bootstraps %in% B)
+}
 
 summarize_bootstraps <- function(file_list) {
   dat <- map_dfr(file_list$file, .f = readRDS)
@@ -153,6 +168,7 @@ summarize_bootstraps <- function(file_list) {
   
   summary_res <- 
     results %>%
+    mutate(boot_CIs = map(boot_CIs, repair_bootstraps)) %>%
     calc_performance(winz = 2.5, B_target = 1999)
   
   summary_res %>%
@@ -186,9 +202,9 @@ bootstrap_res <- readRDS("research/beta-function-simulations/sim-beta-function-b
 
 convergence_rates <- 
   bootstrap_res %>%
-  select(-run_date, -time, -comparison_methods) %>%
+  select(-run_date, -time) %>%
   unnest(res) %>%
-  filter(param == "beta", model == "3PSM") %>%
+  filter(param == "beta", model == "beta") %>%
   mutate(
     cnvrg_rate = K_absolute / iterations
   )
@@ -228,11 +244,11 @@ timings %>%
 bootstrap_point_estimator <- 
   bootstrap_res %>%
   select(-run_date) %>%
-  filter(bootstrap == "multinomial") %>%
+  filter(bootstrap == "two-stage") %>%
   unnest(res) %>%
   select(
     time,  
-    mean_smd:omega, steps, bootstrap_condition = bootstrap,
+    mean_smd:omega, delta_2, bootstrap_condition = bootstrap,
     model, estimator, param, 
     K_absolute:rmse_mcse, 
     est_winsor_pct:var_winsor_pct_mcse
@@ -248,21 +264,99 @@ res_point_estimator <-
   unnest(res) %>%
   select(
     time, 
-    mean_smd:omega, steps, bootstrap_condition = bootstrap,
+    mean_smd:omega, delta_2, bootstrap_condition = bootstrap,
     model, estimator, param, 
     K_absolute:rmse_mcse, 
     est_winsor_pct, est_winsor_pct_mcse
   ) %>%
   bind_rows(bootstrap_point_estimator)
 
+params %>%
+  filter(batch == 1) %>%
+  count(bootstrap)
 res_point_estimator %>%
+  group_by(bootstrap_condition, mean_smd, tau, cor_mu, cor_sd, m, omega, delta_1) %>%
+  summarize(n_res = n(), .groups = "drop") %>%
   count(bootstrap_condition)
+
 res_point_estimator %>%
-  group_by(mean_smd, tau, cor_mu, cor_sd, weights, m, n_multiplier, omega, steps) %>%
+  group_by(mean_smd, tau, cor_mu, cor_sd, m, omega, delta_1) %>%
   summarize(n_res = n(), .groups = "drop") %>%
   count(n_res)
 
+write_rds(res_point_estimator, file = "research/beta-function-simulations/sim-beta-function-point-estimator-results.rds", compress = "gz", compression = 9L)
 
-write_rds(res_point_estimator, file = "research/step-function-simulations/sim-step-function-point-estimator-results.rds", compress = "gz", compression = 9L)
+# variance estimation and confidence interval results
 
-# variance estimation and conf
+nobootstrap_conf_int <- 
+  no_bootstraps_res %>%
+  select(-run_date, -time) %>%
+  unnest(res) %>%
+  select(mean_smd:delta_2, bootstrap_condition = bootstrap, model:param, 
+         K_coverage:width_mcse,
+         K_relvar:rel_rmse_var_mcse, 
+         var_winsor_pct, var_winsor_pct_mcse) %>%
+  mutate(
+    CI_type = "large-sample",
+  ) 
+
+bootstrap_large_sample <- 
+  bootstrap_res %>%
+  select(-run_date, -time) %>%
+  unnest(res) %>%
+  select(mean_smd:omega, delta_2, bootstrap_condition = bootstrap, model:param, 
+         K_coverage:width_mcse, 
+         K_relvar:rel_rmse_var_mcse, 
+         var_winsor_pct, var_winsor_pct_mcse) %>%
+  mutate(
+    CI_type = "large-sample",
+    bootstrap_condition = "bootstrap"
+  )
+
+bootstrap_conf_int <- 
+  bootstrap_res %>%
+  select(-run_date, -time) %>%
+  unnest(res) %>%
+  select(mean_smd:omega, delta_2, bootstrap_condition = bootstrap, bootstrap_type = bootstrap, model:param, 
+         bootstraps, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse) %>%
+  unnest(
+    c(bootstraps, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
+    names_sep = "-"
+  ) %>%
+  pivot_longer(
+    starts_with("boot_"),
+    names_to = c(".value", "CI_type"),
+    names_pattern = "(.+)-(.+)"
+  ) %>%
+  rename_with(~ str_remove(.x, "^boot_")) %>%
+  mutate(
+    bootstrap_condition = "bootstrap"
+  )
+
+
+res_conf_int <- bind_rows(
+  nobootstrap_conf_int,
+  bootstrap_conf_int,
+  bootstrap_large_sample
+)
+
+
+
+res_conf_int %>%
+  count(bootstrap_condition)
+
+params %>%
+  filter(batch == 1) %>%
+  count(bootstrap)
+
+res_conf_int %>%
+  group_by(bootstrap_condition, mean_smd, tau, cor_mu, cor_sd, m, omega, delta_1) %>%
+  summarize(n_res = n(), .groups = "drop") %>%
+  count(bootstrap_condition)
+
+res_conf_int %>%
+  group_by(mean_smd, tau, cor_mu, cor_sd, m, omega, delta_1) %>%
+  summarize(n_res = n(), .groups = "drop") %>%
+  count(n_res)
+
+write_rds(res_conf_int, file = "research/beta-function-simulations/sim-beta-function-confidence-interval-results.rds", compress = "gz", compression = 9L)

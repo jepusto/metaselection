@@ -4,6 +4,7 @@
 # to do this as part of the simulation driver.)
 #------------------------------------------------------
 
+possibly_extrapolate_coverage <- purrr::possibly(simhelpers::extrapolate_coverage, otherwise = tibble::tibble(.rows = 1L))
 
 calc_performance <- function(results, winz = Inf, B_target = 1999) {
   
@@ -51,7 +52,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
         results_NA %>%
         filter(sapply(boot_CIs, is.data.frame)) %>%
         summarize(
-          extrapolate_coverage(CI_subsamples = boot_CIs, true_param = true_param, B_target = B_target, winz = winz, cover_na_val = 0, width_na_val = Inf, nested = TRUE),
+          possibly_extrapolate_coverage(CI_subsamples = boot_CIs, true_param = true_param, B_target = B_target, winz = winz, cover_na_val = 0, width_na_val = Inf, nested = TRUE),
           .groups = "drop"
         )
       

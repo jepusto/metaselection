@@ -159,11 +159,59 @@ The research reported here was supported, in whole or in part, by the Institute 
 
 ::::: {.columns}
 
+```{r step-functions}
+
+library(metaselection)
+library(ggplot2)
+lambda1 <- 0.4
+lambda2 <- 0.2
+pvals <- seq(0,1,.005)
+PSM3 <- step_fun(cut_vals = .025, weights = lambda1)
+PSM4 <- step_fun(cut_vals = c(.025, .500), weights = c(lambda1, lambda2))
+Pbeta <- beta_fun(trunc_1 = .025, trunc_2 = .975, delta_1 = 0.2, delta_2 = 0.9)
+
+dat <- data.frame(p = pvals, PSM3 = PSM3(pvals), PSM4 = PSM4(pvals), Pbeta = Pbeta(pvals))
+
+PSM4 <- 
+  ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, .500), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  annotate(geom = "text", x = .06, y = 1.03, label = ".025") + 
+  annotate(geom = "text", x = .535, y = 1.03, label = ".500") + 
+  geom_area(aes(y = PSM4), fill = "purple", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+Pbeta <- 
+  ggplot(dat, aes(x = pvals)) + 
+  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
+  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
+  geom_vline(xintercept = c(0.025, .975), linetype = "dashed") + 
+  geom_hline(yintercept = 0) + 
+  geom_area(aes(y = Pbeta), fill = "lightblue", alpha = 0.6) +   
+  theme_minimal() + 
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+```
+
 :::: {.column width="50%"}
 
 ::: {.fragment}
 
 @vevea1995general step-function model
+
+```{r}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 3
+#| out.width: 90%
+
+PSM4
+```
+
 :::
 ::::
 
@@ -172,6 +220,16 @@ The research reported here was supported, in whole or in part, by the Institute 
 ::: {.fragment}
 
 @citkowicz2017parsimonious beta-function model
+
+```{r}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 3
+#| out.width: 90%
+
+Pbeta
+```
 
 :::
 ::::
@@ -527,6 +585,29 @@ rbind(rma0,rma1) |>
 
 ::::
 
+## Contour-enhanced funnel plot
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-retina: 2
+#| out-width: 75%
+
+crit <- qnorm(0.975)
+
+ggplot(dat.lehmann2018) + 
+  aes(x = yi, y = sei, color = Design) + 
+  scale_y_continuous(limits = c(0.8,0), expand = expansion(0, 0), transform = "reverse") + 
+  scale_color_brewer(type = "qual", palette = 2) + 
+  geom_vline(xintercept = 0, color = "black") + 
+  geom_abline(slope = 1 / crit, intercept = 0, color = "black") + 
+  geom_abline(slope = -1 / crit, intercept = 0, color = "black") + 
+  geom_point() + 
+  theme_minimal() + 
+  theme(legend.position = c(0.9,0.1)) + 
+  labs(y = "Effect size (standardized mean difference)", x = "Standard error")
+```
+
 ## Color-priming selection models {.scrollable}
 
 ```{r, echo = TRUE}
@@ -561,10 +642,21 @@ summary(sel1)
 
 :::
 
+## Selective reporting of non-significant results
+
+```{r, echo = TRUE}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-retina: 2
+#| out-width: 75%
+
+selection_plot(sel1)
+```
+
 
 ## Now with bootstrapping! {.scrollable}
 
-```{r, echo = TRUE, cache = TRUE}
+```{r sel_boot, echo = TRUE, cache = TRUE}
 # turn on parallel processing
 library(future)
 plan(multisession, workers = 8)
@@ -631,11 +723,7 @@ selection_plot(sel1_boot) +
 
 ## Add a moderator {.scrollable}
 
-```{r, echo = TRUE, cache = TRUE}
-# turn on parallel processing
-library(future)
-plan(multisession, workers = 8)
-
+```{r sel_moderator, echo = TRUE, cache = TRUE}
 set.seed(20250613) # for reproducibility
 
 sel1_mod <- selection_model(
@@ -661,6 +749,47 @@ summary(sel1_mod)
 ```
 
 :::
+
+## Add another step {.scrollable}
+
+```{r sel_twostep, echo = TRUE, cache = TRUE}
+set.seed(20250613) # for reproducibility
+
+sel2_mod <- selection_model(
+  yi = yi,                    # effect size est.
+  sei = sei,                  # standard error
+  cluster = study,            # identifier for independent clusters
+  mean_mods = ~ 0 + Design,   # design type moderator
+  data = dat.lehmann2018,     # dataset
+  selection_type = "step",    # type of selection model
+  steps = c(.025,.500),       # two thresholds for step-function
+  estimator = "CML",          # estimation method
+  bootstrap = "two-stage",    # recommended type of bootstrapping
+  R = 1999,                   # number of bootstrap re-samples
+  CI_type = c("large-sample", # keep the large-sample sandwich CI
+              "percentile")   # recommended type of bootstrap CI
+)
+```
+
+::: {.fragment}
+
+```{r, echo = TRUE}
+summary(sel2_mod)
+```
+
+:::
+
+## Selective reporting of non-significant results
+
+```{r, echo = TRUE}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-retina: 2
+#| out-width: 75%
+
+selection_plot(sel2_mod) + 
+  ggplot2::coord_cartesian(ylim = c(0,2))
+```
 
 ## Discussion
 
