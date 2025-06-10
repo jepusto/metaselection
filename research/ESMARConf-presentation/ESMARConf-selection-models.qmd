@@ -774,6 +774,8 @@ selection_plot(sel2_mod, draw_boots = FALSE) +
 
 - Other supported models:
 
+    - Step-functions with multiple steps (e.g., $\alpha_1 = .025, \alpha_2 = .500$)
+
     - beta-function models [@citkowicz2017parsimonious]
     
     - Location-scale meta-regression [@viechtbauer2022locationscale]
