@@ -60,7 +60,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
@@ -116,7 +116,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
@@ -145,7 +145,7 @@ test_that("selection_plot() works for 3PSM.", {
   
   p_boot_default
   expect_s3_class(p_boot_default, "ggplot")
-  expect_s3_class(p_boot_default$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_boot_default$layers[[3]]$geom, "GeomArea")
 })
 
 test_that("selection_plot() works for 4PSM.", {
@@ -209,7 +209,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
@@ -282,7 +282,7 @@ test_that("selection_plot() works for 4PSM.", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(hybrid_boot, pvals = seq(0,1,length.out = 200))
@@ -364,7 +364,7 @@ test_that("selection_plot() works for beta model", {
   
   p_bootoff
   expect_s3_class(p_bootoff, "ggplot")
-  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomLine")
+  expect_s3_class(p_bootoff$layers[[3]]$geom, "GeomArea")
   expect_identical(wt_noboot, p_bootoff$data)
   
   wt_boot <- selection_wts(ML_boot, pvals = seq(0,1,length.out = 200))
