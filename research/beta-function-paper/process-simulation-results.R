@@ -41,45 +41,51 @@ results <-
 
 results$estimator <- ifelse(results$estimator=="FEC", "CHE-ISCW", paste(results$estimator))
 
+results$estimator <- ifelse(results$estimator=="ML", "CML", paste(results$estimator))
+
 results <- results %>% unite("model_estimator", model:estimator, na.rm = TRUE, remove = FALSE)
 
 mu_graph_res_main <- 
   results %>%
   filter(
     param == "beta",
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_ML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
   )
+
+mu_graph_res_main$method <- ifelse(mu_graph_res_main$estimator=="CML", "Beta", paste(mu_graph_res_main$estimator))
 
 mu_wide_res_main <- 
   mu_graph_res_main %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, model_estimator) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method, selection_strength) %>%
   mutate(
     rmse_trunc = pmin(rmse, 1)
   ) %>%
   pivot_wider(
     values_from = c(bias, var, rmse, rmse_trunc, scrmse), 
-    names_from = model_estimator
+    names_from = method
   )
 
 mu_graph_res_miss <- 
   results %>%
   filter(
     param == "beta",
-    estimator %in% c("ML")
+    estimator %in% c("CML")
   )
+
+mu_graph_res_miss$method <- ifelse(mu_graph_res_miss$model=="beta", "Beta", paste(mu_graph_res_miss$model))
 
 mu_wide_res_miss <- 
   mu_graph_res_miss %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, model_estimator) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method, selection_strength) %>%
   mutate(
     rmse_trunc = pmin(rmse, 1)
   ) %>%
   pivot_wider(
     values_from = c(bias, var, rmse, rmse_trunc, scrmse), 
-    names_from = model_estimator
+    names_from = method
   )
 
-gamma_graph_res <- 
+gamma_graph_res_miss <- # gamma only estimated for the 3 CML methods
   results %>%
   filter(
     param == "gamma"
@@ -88,47 +94,53 @@ gamma_graph_res <-
     scrmse_trunc = pmin(scrmse, 3 / tau + rnorm(n(), sd = 0.01))
   )
 
-gamma_wide_res <- 
-  gamma_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse,scrmse_trunc, model_estimator) %>%
+gamma_graph_res_miss$method <- ifelse(gamma_graph_res_miss$model=="beta", "Beta", paste(gamma_graph_res_miss$model))
+
+gamma_wide_res_miss <- 
+  gamma_graph_res_miss %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse,scrmse_trunc, method) %>%
   pivot_wider(
     values_from = c(bias, var, rmse, scrmse, scrmse_trunc), 
-    names_from = model_estimator
+    names_from = method
   )
 
-zeta1_graph_res <- 
-  results %>%
-  filter(
-    param == "zeta1"
-  )
-
-zeta1_wide_res <- 
-  zeta1_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, model_estimator) %>%
-  pivot_wider(
-    values_from = c(bias, var, rmse, scrmse), 
-    names_from = model_estimator
-  )
-
-zeta2_graph_res <- 
-  results %>%
-  filter(
-    param == "zeta2"
-  )
-
-zeta2_wide_res <- 
-  zeta2_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, model_estimator) %>%
-  pivot_wider(
-    values_from = c(bias, var, rmse, scrmse), 
-    names_from = model_estimator
-  )
+# zeta1_graph_res <- 
+#   results %>%
+#   filter(
+#     param == "zeta1"
+#   )
+# 
+# zeta1_graph_res$method <- ifelse(zeta1_graph_res$model=="beta", "Beta", paste(zeta1_graph_res$model))
+# 
+# zeta1_wide_res <- 
+#   zeta1_graph_res %>%
+#   select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method) %>%
+#   pivot_wider(
+#     values_from = c(bias, var, rmse, scrmse), 
+#     names_from = method
+#   )
+# 
+# zeta2_graph_res <- 
+#   results %>%
+#   filter(
+#     param == "zeta2"
+#   )
+# 
+# zeta2_graph_res$method <- ifelse(zeta2_graph_res$model=="beta", "Beta", paste(zeta2_graph_res$model))
+# 
+# zeta2_wide_res <- 
+#   zeta2_graph_res %>%
+#   select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method) %>%
+#   pivot_wider(
+#     values_from = c(bias, var, rmse, scrmse), 
+#     names_from = method
+#   )
 
 results_ci <- 
   #readRDS("../beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
   readRDS("C:/GitHub/metaselection/research/beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
   mutate(
-    estimator = fct(estimator, levels = c("ML","FEC","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
     J = as.character(m),
@@ -161,6 +173,8 @@ results_ci <-
 
 results_ci$estimator <- ifelse(results_ci$estimator=="FEC", "CHE-ISCW", paste(results_ci$estimator))
 
+results_ci$estimator <- ifelse(results_ci$estimator=="ML", "CML", paste(results_ci$estimator))
+
 results_ci <- results_ci %>% unite("model_estimator", model:estimator, na.rm = TRUE, remove = FALSE)
 
 mu_graph_res_ci_main <- 
@@ -169,8 +183,10 @@ mu_graph_res_ci_main <-
     param == "beta",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_ML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
   )
+
+mu_graph_res_ci_main$method <- ifelse(mu_graph_res_ci_main$estimator=="CML", "Beta", paste(mu_graph_res_ci_main$estimator))
 
 mu_graph_res_ci_miss <- 
   results_ci %>%
@@ -178,8 +194,10 @@ mu_graph_res_ci_miss <-
     param == "beta",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("ML")
+    estimator %in% c("CML")
   )
+
+mu_graph_res_ci_miss$method <- ifelse(mu_graph_res_ci_miss$model=="beta", "Beta", paste(mu_graph_res_ci_miss$model))
 
 gamma_graph_res_ci_main <- 
   results_ci %>%
@@ -187,7 +205,7 @@ gamma_graph_res_ci_main <-
     param == "gamma",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_ML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
   )
 
 gamma_graph_res_ci_miss <- 
@@ -196,7 +214,7 @@ gamma_graph_res_ci_miss <-
     param == "gamma",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("ML")
+    estimator %in% c("CML")
   )
 
 # zeta_graph_res_ci <- 
