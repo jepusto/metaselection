@@ -245,7 +245,7 @@ We construct confidence intervals for model parameters using Wald-type large sam
 Sandwich estimators such as those in Equations \@ref(eq:sandwich-variance) require a large number of independent clusters (i.e., large $J$) to provide accurate assessments of uncertainty. 
 We consider alternative inference techniques based on bootstrapping, which might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
-The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.
+The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.[@boos2003introduction]
 
 Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions [@davison1997bootstrap].
 For data involving dependent observations, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure. 
@@ -258,5 +258,5 @@ The two-stage bootstrap is equivalent to first drawing $a_1^{(b)},...,a_J^{(b)}$
 
 For constructing confidence intervals, bootstrapping entails generating a total of $B$ pseudo-samples, where $B$ is a large number such as 1999, and re-calculating the estimator for each pseudo-sample. 
 There are several methods for constructing confidence intervals from a bootstrap distribution.
-We consider four standard methods [@davison1997bootstrap], including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by @efron1987better. 
+We consider four standard methods [@davison1997bootstrap], including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by Efron[@efron1987better]. 
 `r appendix_prefix` \@ref(bootstrap-details) provides further details about the bootstrap CI calculations.

@@ -19,7 +19,7 @@ min_est <- min(step_mod_res$Est)
 max_est <- max(step_mod_res$Est)
 ```
 
-To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed a subset of data from a meta-analysis on the ego depletion effect [@carter2015series]. 
+To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed a subset of data from a meta-analysis on the ego depletion effect originally conducted by Carter and colleagues[@carter2015series]. 
 Ego depletion refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
 Carter and colleagues [@carter2015series] argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting. 
 Their review included a variety of self-control manipulation tasks as well as a range of outcomes.

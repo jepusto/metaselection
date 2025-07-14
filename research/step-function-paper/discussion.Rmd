@@ -11,7 +11,7 @@ We have described and evaluated several methods for estimating step-function sel
 We focused on the step-function selection model because it offers a number of advantages over other available methods for diagnosing and correcting selective reporting bias. 
 First, step-function models are generative, in that they include parameters describing the selective reporting process under simple yet plausible forms of selective reporting connected to statistical significance.
 In contrast, regression-based estimators such as PET/PEESE [@stanley2014meta] or the endogenous kink meta-regression [@bom2019kinked] are agnostic as to selection mechanisms and thus are only indirectly informative about the strength or form of selection.
-The step-function model also embeds a familiar evidence-generating model that allows for heterogeneity of effects through inclusion of random effects and predictors of average effect size (i.e., meta-regression).@vevea1995general 
+The step-function model also embeds a familiar evidence-generating model that allows for heterogeneity of effects through inclusion of random effects and predictors of average effect size (i.e., meta-regression).[@vevea1995general]
 In contrast, well-known methods such as trim-and-fill [@duval2000nonparametric; @duval2000trim] and more recent proposals such as $p$-curve [@simonsohn2014pcurve] and $p$-uniform [@VanAssen2015meta; @vanaert2016conducting] are not as flexible and have been found to perform poorly when effects are heterogeneous [@carter2019correcting].
 
 We treated the step-function model as a description of the _marginal_ distribution of the effect size estimates, effectively ignoring the dependence structure for purposes of estimating the model but accounting for it using cluster-robust sandwich estimation or clustered bootstrap inference. 
@@ -19,7 +19,7 @@ This strategy is appealing for its feasibility and because it connects to a sele
 We also studied two estimation methods for the marginal step-function model, composite marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
 
 Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at $\alpha_1 = .025$), compared to an estimator that accounts for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE.
-Across an broad range of conditions, we found that both estimators of the marginal step-function model show little bias overall and consistently out-perform PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
+Across a broad range of conditions, we found that both estimators of the marginal step-function model show little bias overall and consistently out-perform PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
 However, all the estimators face bias-variance trade-offs, which arise because the CHE-ISCW estimator (which does not directly adjust for selection) is substantially biased by selective reporting, whereas the CML and ARGL estimators have at most small biases.
 Under conditions where selection is absent or small and where average effect size is larger, the CHE-ISCW estimator has greater precision than the estimators that adjust for selective reporting.
 Because selective reporting does not create much bias under such conditions, the additional variability that comes with estimating a selection model or PET/PEESE adjustment dominates the small reduction in bias that these methods provide.
@@ -47,7 +47,7 @@ The performance of the step-function selection models and alternative selective 
 Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions [@Hedges1996estimating].
 
 Second, the simulations examined the step-function selection model using a selection process that was compatible with the assumed model, in which the probability that an effect size was reported followed a step function in the one-sided _p_-value with a threshold at $\alpha_1 = .025$.
-Other simulation studies have shown that a one-step model can be more accurate than a more complex two-step model, even when the true data-generating process aligns with the latter model.@chen2024adapting 
+Other simulation studies have shown that a one-step model can be more accurate than a more complex two-step model, even when the true data-generating process aligns with the latter model.[@chen2024adapting]
 It may require a large number of primary studies to feasibly estimate models that include multiple steps in the selection function.
 Nonetheless, there may be meta-analytic datasets where a more complex set of steps is more appropriate, such as when the data include a substantial number of negative effect size estimates.
 

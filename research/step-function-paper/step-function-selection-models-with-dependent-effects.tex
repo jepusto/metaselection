@@ -1,10 +1,12 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-%
 \documentclass[
+  american,
   man, donotrepeattitle,floatsintext]{apa7}
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -35,24 +37,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -75,6 +59,21 @@
   \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
   \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
@@ -110,14 +109,16 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \ifLuaTeX
-\usepackage[bidi=basic]{babel}
+\usepackage[bidi=basic,shorthands=off,]{babel}
 \else
-\usepackage[bidi=default]{babel}
+\usepackage[bidi=default,shorthands=off,]{babel}
 \fi
-\babelprovide[main,import]{american}
-% get rid of language-specific shorthands (see #6817):
-\let\LanguageShortHands\languageshorthands
-\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 % Manuscript styling
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -218,9 +219,6 @@
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\bs}{\boldsymbol}
 \newcommand{\trace}{\text{tr}}
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -247,10 +245,10 @@ Correspondence concerning this article should be addressed to James E. Pustejovs
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} University of Wisconsin-Madison\\\textsuperscript{2} American Institutes for Research}
 
-\note{~\newline June 02, 2025}
+\note{~\newline July 14, 2025}
 
 \abstract{%
-Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates. Another is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
+Meta-analysts in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Another is that many primary studies report multiple relevant results, leading to statistical dependence in effect size estimates. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
 }
 
 
@@ -314,61 +312,61 @@ Selection models have several advantages over other available methods for diagno
 First, they are generative models with parameters that directly describe the selective reporting process; they are therefore more interpretable than tests or adjustments for small-study effects, which are agnostic with respect to the specific mechanism of selective reporting.
 Second, selection models can allow for effect heterogeneity with a random effect term.
 Findings from simulations indicate that selection models outperform simpler alternative methods when effect sizes are heterogeneous.\textsuperscript{2,29}
-Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
-In addition to these features, the step-function selection model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting (e.g., p \textless{} 0.01 and p \textless{} 0.05).\textsuperscript{30--33}
+Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.\textsuperscript{30}
+In addition to these features, the step-function selection model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting (e.g., p \textless{} 0.01 and p \textless{} 0.05).\textsuperscript{31--34}
 
 \subsection{Dependent effect sizes}\label{dependent-effect-sizes}
 
 The vast majority of the work on selective reporting has focused on methods appropriate for relatively simple summary meta-analyses in which each included study contributes a single independent effect size estimate.
 This presents a problem for syntheses in education, psychology, and many other areas, where meta-analyses routinely include studies with multiple, dependent effect sizes.
 Effect size dependencies occur when multiple effect sizes are extracted from the same sample, resulting in statistically dependent estimates.
-Dependent effect size estimates commonly occur (1) when multiple outcome measures are collected on the same sample; (2) when the same sample is measured over multiple time points; or (3) when multiple treatment groups are compared to the same control group.\textsuperscript{34}
-Dependence can also arise when effect sizes are extracted from multiple samples involving the same operational features, such as multiple studies conducted by the same research group.\textsuperscript{35}
+Dependent effect size estimates commonly occur (1) when multiple outcome measures are collected on the same sample; (2) when the same sample is measured over multiple time points; or (3) when multiple treatment groups are compared to the same control group.\textsuperscript{35}
+Dependence can also arise when effect sizes are extracted from multiple samples involving the same operational features, such as multiple studies conducted by the same research group.\textsuperscript{36}
 
 Effect size dependencies are very common in social science synthesis, as well as in other research areas.
 For example, for the more than 1,000 educational intervention studies reviewed by the What Works Clearinghouse since 2017, most (73\%) included more than one intervention effect estimate, with a median of four effect sizes per study (WWC, 2020).
-Surveys of systematic reviews on topics in psychology and education\textsuperscript{36}, environmental sciences\textsuperscript{37}, and neurobiology\textsuperscript{38} have also documented a high prevalence of dependent effect sizes.
+Surveys of systematic reviews on topics in psychology and education\textsuperscript{37}, environmental sciences\textsuperscript{38}, and neurobiology\textsuperscript{39} have also documented a high prevalence of dependent effect sizes.
 Thus, multiple effects are the norm, rather than the exception, in many fields that use quantitative synthesis.
 
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses\textsuperscript{39--41}, robust variance estimation\textsuperscript{RVE, 35}, and combinations thereof\textsuperscript{42}.
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses\textsuperscript{40--42}, robust variance estimation\textsuperscript{RVE, 36}, and combinations thereof.\textsuperscript{43}
 Among these, RVE has proven to be an attractive strategy because it provides a means to assess uncertainty in model parameter estimates that does not rely on strong assumptions about the exact dependence structure of the effect size estimates.
 Instead, RVE involves specifying a tentative working model for the dependence, but calculating standard errors, hypothesis tests, and confidence intervals using sandwich estimators that do not require the working model to be correct.
-Although the original form of RVE required a relatively large number of independent studies, subsequent work has provided refinements to standard errors and hypothesis tests based on RVE to provide accurate inferences even when the number of studies is small.\textsuperscript{43,44}
-A closely related strategy is to use bootstrap re-sampling to approximate the distribution of test statistics.\textsuperscript{45}
+Although the original form of RVE required a relatively large number of independent studies, subsequent work has provided refinements to standard errors and hypothesis tests based on RVE to provide accurate inferences even when the number of studies is small.\textsuperscript{44,45}
+A closely related strategy is to use bootstrap re-sampling to approximate the distribution of test statistics.\textsuperscript{46}
 However, extant developments in RVE and bootstrapping methods are limited to summary meta-analysis and meta-regression models.
 Applications to selection models remain to be explored.
 
 \subsection{Investigating selective reporting with dependent effect sizes}\label{investigating-selective-reporting-with-dependent-effect-sizes}
 
 Methodologists have only recently begun to examine selective reporting detection or bias correction methods in meta-analysis involving dependent effect sizes.
-Mathur and VanderWeele proposed a sensitivity analysis based on the simplest possible form of the step-function selection model.\textsuperscript{46}
+Mathur and VanderWeele proposed a sensitivity analysis based on the simplest possible form of the step-function selection model.\textsuperscript{47}
 This sensitivity analysis provides an estimate of the average effect size after correcting for selective reporting based on a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst.
-It handles effect size dependence using RVE.\textsuperscript{35}
+It handles effect size dependence using RVE.\textsuperscript{36}
 However, this approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
 
-Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors, combined with RVE or multilevel meta-analysis to handle dependent effect sizes.\textsuperscript{47,48}
-This method has limited power to detect selective reporting under common meta-analytic scenarios.\textsuperscript{48}
+Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors, combined with RVE or multilevel meta-analysis to handle dependent effect sizes.\textsuperscript{48,49}
+This method has limited power to detect selective reporting under common meta-analytic scenarios.\textsuperscript{49}
 It also has the same limitations as univariate Egger's regression, in that it tests for small-study effects (or asymmetry in the funnel plot distribution), which could have causes other than selective reporting.
 Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting.
 
-Chen and Pustejovsky reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and proposed adaptations of some existing methods to accommodate dependent effect sizes.\textsuperscript{49}
-The proposed adaptations applied to methods that could be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
+Chen and Pustejovsky reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and proposed adaptations of some existing methods to accommodate dependent effect sizes.\textsuperscript{50}
+The proposed adaptations pertain to methods that can be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
 In an extensive simulation study, they examined the performance of proposed adaptations alongside existing methods that ignore effect size dependence.
 Although no single bias-correction method performed best across all conditions examined, simple forms of the step-function selection model emerged as strong candidates.
 Across a wide range of conditions, one-step and two-step selection models yielded average effect size estimates with low bias that were usually more accurate than alternative bias-adjusted estimators, even though the selection models ignore the dependence structure of the data.
 However, because selection models rely on the assumption that all effect sizes are independent, confidence intervals generated from the selection models did not have accurate coverage.
-These findings indicate a clear need to further develop selection models that can account for dependent effect sizes.\textsuperscript{49}
+These findings indicate a clear need to further develop selection models that can account for dependent effect sizes.\textsuperscript{50}
 
 To address this need, we investigate how to estimate selection models and provide valid assessments of uncertainty in parameter estimates for meta-analyses that involve dependent effect sizes.
 In the next section, we describe the step-function selection model and detail two different strategies for estimating model parameters: one using conventional maximum likelihood estimation methods and a novel strategy based on a re-weighted random effects model with inverse probability of selection weights.
-We also describe extensions of RVE and bootstrap re-sampling techniques to assess uncertainty in selection model parameter estimate
+We also describe extensions of RVE and bootstrap re-sampling techniques to assess uncertainty in selection model parameter estimates.
 In the following section, we provide an empirical example that illustrates the methods by re-analyzing data from a previously reported meta-analysis.
 In subsequent sections, we describe the methods and results from a simulation study that evaluates the performance of point estimators and confidence intervals across a wide range of meta-analytic conditions.
 In the final section, we discuss findings, limitations, and initial implications for practice.
 
 \section{Models and Estimation Methods}\label{model-and-estimation}
 
-Step-function selection models involve two components.\textsuperscript{50}
+Step-function selection models involve two components.\textsuperscript{30}
 The first component, which we shall call the evidence-generating process, involves assumptions about the distribution of effect size estimates prior to selective reporting.
 This component is usually a random effects model or meta-regression model.
 The second component, which we shall call the selection process, involves assumptions about how effect size estimates come to be observed and therefore available for inclusion in the meta-analysis.
@@ -456,7 +454,7 @@ and \(c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mathbf{x
 
 \subsection{Estimation Methods}\label{estimation-methods}
 
-Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent\textsuperscript{25--27} or on sensitivity analysis methods that treat the selection model as known\textsuperscript{46,51}. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
+Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent\textsuperscript{25--27} or on sensitivity analysis methods that treat the selection model as known\textsuperscript{47,51}. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.
 Thus, let \(a_{11},...,a_{J k_j}\) be an arbitrary set of prior weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will will be equal to \(a_{ij} = 1\).
 
@@ -510,7 +508,7 @@ where \(V^{CML}_{gg}\) is the \(g^{th}\) diagonal entry of \(\mathbf{V}^{CML}\).
 \subsubsection{Augmented, re-weighted Gaussian likelihood}\label{augmented-re-weighted-gaussian-likelihood}
 
 Composite marginal likelihood is not the only possible basis for deriving estimators of selection model parameters.
-In the framework of a sensitivity analysis for worst-case selection bias, Mathur and VanderWeele\textsuperscript{46} proposed using regular meta-analytic estimators for \(\boldsymbol\beta\), but with weights defined by the inverse probability of selection under a step-function selection model with a single step at \(\alpha_1 = .025\).
+In the framework of a sensitivity analysis for worst-case selection bias, Mathur and VanderWeele\textsuperscript{47} proposed using regular meta-analytic estimators for \(\boldsymbol\beta\), but with weights defined by the inverse probability of selection under a step-function selection model with a single step at \(\alpha_1 = .025\).
 Because they were working in the context of sensitivity analysis, they assumed a maximum plausible degree of selection rather than estimating the parameters of a selection model, so that the weights were fixed and known quantities.
 In contrast, here we will consider a more general model, possibly with multiple steps, using weights derived by estimating the selection model parameters.
 We describe the estimators as augmented, re-weighted Gaussian likelihood (ARGL) estimators because the Gaussian likelihood of the evidence-generating process is re-weighted based on the selection process, with selection process parameters identified by augmenting the likelihood with an additional estimating equation.
@@ -559,11 +557,11 @@ We construct confidence intervals for model parameters using Wald-type large sam
 Sandwich estimators such as those in Equations \eqref{eq:sandwich-variance} require a large number of independent clusters (i.e., large \(J\)) to provide accurate assessments of uncertainty.
 We consider alternative inference techniques based on bootstrapping, which might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
-The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.
+The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.\textsuperscript{55}
 
-Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions\textsuperscript{55}.
+Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions\textsuperscript{56}.
 For data involving dependent observations, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure.
-Techniques that do so include the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{56,57}, and fractional random weight bootstrap\textsuperscript{58}.
+Techniques that do so include the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{57,58}, and fractional random weight bootstrap\textsuperscript{59}.
 Here, we focus on the two-stage bootstrap; details about other bootstrap techniques can be found in Online Appendix \ref{bootstrap-details}.
 
 In the two-stage bootstrap, each pseudo-sample is generated by randomly drawing \(J\) clusters of observations with replacement from the original sample and then randomly re-sampling observations with replacement from each selected cluster.
@@ -572,29 +570,29 @@ The two-stage bootstrap is equivalent to first drawing \(a_1^{(b)},...,a_J^{(b)}
 
 For constructing confidence intervals, bootstrapping entails generating a total of \(B\) pseudo-samples, where \(B\) is a large number such as 1999, and re-calculating the estimator for each pseudo-sample.
 There are several methods for constructing confidence intervals from a bootstrap distribution.
-We consider four standard methods\textsuperscript{55}, including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by\textsuperscript{59}.
+We consider four standard methods\textsuperscript{56}, including the percentile CI, basic CI, studentized CI, and the bias-corrected-and-accelerated CI proposed by Efron\textsuperscript{60}.
 Online Appendix \ref{bootstrap-details} provides further details about the bootstrap CI calculations.
 
 \section{Empirical Example}\label{empirical-example}
 
-To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed a subset of data from a meta-analysis on the ego depletion effect\textsuperscript{60}.
-Ego depletion refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion\textsuperscript{61}.
-Carter and colleagues\textsuperscript{60} argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting.
+To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed a subset of data from a meta-analysis on the ego depletion effect originally conducted by Carter and colleagues\textsuperscript{61}.
+Ego depletion refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion\textsuperscript{62}.
+Carter and colleagues\textsuperscript{61} argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting.
 Their review included a variety of self-control manipulation tasks as well as a range of outcomes.
 Some primary studies reported effects for multiple outcome tasks, leading to dependent effects.
 Effect sizes were measured as standardized mean differences, defined so that positive effects correspond to depletion of self-control, consistent with the theory of ego depletion.
 
-To mitigate possible effects of selective reporting, the original review included many unpublished studies\textsuperscript{60}.
+To mitigate possible effects of selective reporting, the original review included many unpublished studies\textsuperscript{61}.
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
-We conducted the analyses using R Version 4.4.3\textsuperscript{62}.
+We conducted the analyses using R Version 4.4.3\textsuperscript{63}.
 
-If selective reporting were not a concern, a correlated-and-hierarchical effects (CHE) model would be one way to summarize the distribution of ego depletion effects.\textsuperscript{42}
+If selective reporting were not a concern, a correlated-and-hierarchical effects (CHE) model would be one way to summarize the distribution of ego depletion effects.\textsuperscript{43}
 Based on a CHE model, the overall average effect estimate was 0.46, 95\% CI {[}0.34, 0.59{]}.
-Alternately, one could apply a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.\textsuperscript{49}
+Alternately, one could apply a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.\textsuperscript{50}
 Applying CHE-ISCW reduces the overall effect estimate to 0.39, 95\% CI {[}0.24, 0.54{]}.
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment\textsuperscript{20}, clustering the standard errors by study. This yielded an overall average effect of -0.09, 95\% CI {[}-0.76, 0.58{]}. The CHE and CHE-ISCW estimates are both positive, significant, and similar in magnitude. The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects.
 
-We used the \texttt{selection\_model()} function from the \texttt{metaselection} package to fit single-step and two-step selection models\textsuperscript{63}.
+We used the \texttt{selection\_model()} function from the \texttt{metaselection} package to fit single-step and two-step selection models\textsuperscript{64}.
 The single-step model used a threshold at \(\alpha_1 = 0.025\); the two-step model used thresholds at \(\alpha_1 = 0.025\) and \(\alpha_2 = 0.5\).
 For comparison purposes, we estimated model parameters using both CML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
 For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 replicates.
@@ -652,8 +650,8 @@ We compare the performance of these novel estimators to two available alternativ
 We evaluated the estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size prior to selective reporting.
 To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only for a subset of the conditions.
 
-We ran the simulation in R Version 4.4.1\textsuperscript{62} using the high-throughput computing cluster at the University of Wisconsin - Madison\textsuperscript{64}.
-The simulation code made use of several R packages, including \texttt{metafor}\textsuperscript{65}, \texttt{clubSandwich}\textsuperscript{66}, \texttt{simhelpers}\textsuperscript{67}, \texttt{optimx}\textsuperscript{68}, \texttt{nleqslv}\textsuperscript{69}, and \texttt{tidyverse}\textsuperscript{70}.
+We ran the simulation in R Version 4.4.1\textsuperscript{63} using the high-throughput computing cluster at the University of Wisconsin - Madison\textsuperscript{65}.
+The simulation code made use of several R packages, including \texttt{metafor}\textsuperscript{66}, \texttt{clubSandwich}\textsuperscript{67}, \texttt{simhelpers}\textsuperscript{68}, \texttt{optimx}\textsuperscript{69}, \texttt{nleqslv}\textsuperscript{70}, and \texttt{tidyverse}\textsuperscript{71}.
 
 \subsection{Data generation}\label{data-generation}
 
@@ -669,13 +667,13 @@ We assumed constant correlation between pairs of outcomes within a study but all
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
 size per study, \(\delta_j\), from a normal distribution with mean \(\mu\) and variance
-of \(\tau^2\). Given \(\delta_j\), we generated \(k_j^*\) effect size parameters per study, \(\boldsymbol\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'\), from a normal distribution with mean of \(\delta_j\) and
+of \(\tau_B^2\). Given \(\delta_j\), we generated \(k_j^*\) effect size parameters per study, \(\boldsymbol\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'\), from a normal distribution with mean of \(\delta_j\) and
 variance of \(\omega^2\).
 For each of the \(N_j / 2\) participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as \(\mathbf{Y}_{hj}^T \sim N(\boldsymbol\delta_j, \boldsymbol\Psi_j)\) and \(\mathbf{Y}_{hj}^C \sim N(\mathbf{0}, \boldsymbol\Psi_j)\), where \(\mathbf{Y}_{hj}^T\) and \(\mathbf{Y}_{hj}^C\) are
 \(k_j^* \times 1\) vectors of outcomes for participant \(h\) in study \(j\) in the treatment and control group, respectively, and \(\boldsymbol\Psi_j\) is the covariance matrix for outcomes in study \(j\), with diagonal elements equal to 1 and off-diagonal elements equal to \(r_j\).
 From the raw outcome data, we calculated standardized mean
 differences using Hedges's \(g\) bias correction for each of the correlated outcomes, yielding effect size estimates \(y^*_{ij}\) for \(i=1,...,k_j^*\) and \(j = 1,...,J^*\).
-We calculated the sampling variances using conventional formulas\textsuperscript{71} and computed one-sided \(p\)-values based on two-sample \(t\)-tests for the null of \(H_0: \delta_{ij} \leq 0\).
+We calculated the sampling variances using conventional formulas\textsuperscript{72} and computed one-sided \(p\)-values based on two-sample \(t\)-tests for the null of \(H_0: \delta_{ij} \leq 0\).
 
 After simulating results for study \(j\), we applied a step-function selection
 model to the individual effect size estimates, with a one-sided selection
@@ -691,22 +689,22 @@ We estimated CML and ARGL estimators and calculated cluster-robust confidence in
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in Online Appendix \ref{bootstrap-details}.
 To maintain computational feasibility, we used \(B = 399\) bootstrap replications of each estimator.
 
-We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
+We compared the performance of the step-function CML and ARGL estimators to that of two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency.
-Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW)\textsuperscript{49}.
+Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW)\textsuperscript{50}.
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by\textsuperscript{20}, adapted to accommodate dependent effect sizes.
+Second, we implemented a variation of the PET/PEESE estimator originally proposed by Stanley and Doucouliagos\textsuperscript{20}, adapted to accommodate dependent effect sizes.
 Following convention, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an \(\alpha\)-level of 0.10, and otherwise using PET.\textsuperscript{20}
-For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom\textsuperscript{49}.
+For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom\textsuperscript{50}.
 
 \subsection{Experimental design}\label{experimental-design}
 
 Table \ref{tab:sim-design} summarizes the experimental design for this study.
 Manipulated parameters included overall average standardized mean difference
-(\(\mu\)), between-study heterogeneity (\(\tau\)), within-study heterogeneity ratio
-(\(\omega^2 / \tau^2\)), average correlation between outcomes (\(\rho\)),
+(\(\mu\)), between-study heterogeneity (\(\tau_B\)), within-study heterogeneity ratio
+(\(\omega^2 / \tau_B^2\)), average correlation between outcomes (\(\rho\)),
 probability of selection for non-affirmative results (\(\lambda_1\)), number of observed studies (\(J\)), and primary study sample size.
-We examined values for the overall average SMD (\(\mu\)) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions\textsuperscript{72}.
+We examined values for the overall average SMD (\(\mu\)) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions\textsuperscript{73}.
 We used values of \(\tau\) ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity).
 We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of \(\omega^2\) to between-study heterogeneity \(\tau^2\) at either 0 (i.e., no within-study heterogeneity) or 0.5.
 For the average correlation between outcomes from the same study, we examined the values of 0.40 or 0.80. The default value of the average
@@ -723,8 +721,8 @@ We included conditions where \(\rho = 0.4\) to examine performance when the work
 Parameter & Full Simulation & Bootstrap Simulation\\
 \midrule
 Overall average SMD ($\mu$) & 0.0, 0.2, 0.4, 0.8 & 0.0, 0.2, 0.4, 0.8\\
-Between-study heterogeneity ($\tau$) & 0.05, 0.15, 0.30, 0.45 & 0.15, 0.45\\
-Heterogeneity ratio ($\omega^2 / \tau^2$) & 0.0, 0.5 & 0.0, 0.5\\
+Between-study heterogeneity ($\tau_B$) & 0.05, 0.15, 0.30, 0.45 & 0.15, 0.45\\
+Heterogeneity ratio ($\omega^2 / \tau_B^2$) & 0.0, 0.5 & 0.0, 0.5\\
 Average correlation between outcomes ($\rho$) & 0.40, 0.80 & 0.80\\
 Probability of selection for non-affirmative effects ($\lambda_1$) & 0.02, 0.05, 0.10, 0.20, 0.50, 1.0 & 0.05, 0.20, 1.0\\
 \addlinespace
@@ -736,7 +734,7 @@ Primary study sample size & Typical, Small & Typical, Small\\
 
 We examined a wide range of values for the probability of selection for non-affirmative effect sizes, ranging from no selective reporting (\(\lambda_1 = 1\)) to very severe selective reporting \((\lambda_1 = 0.02)\).
 We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of \(J = 15\) to very large databases with \(J = 120\) studies.
-We chose these values to cover the conditions found in real meta-analyses of education and psychology research\textsuperscript{36}.
+We chose these values to cover the conditions found in real meta-analyses of education and psychology research\textsuperscript{37}.
 
 Lastly, we investigated the primary study sample size.
 For the typical primary study sample sizes, we used the empirical distribution of sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
@@ -766,7 +764,7 @@ Estimates falling below the lower fence or above the upper fence were set to the
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter.
 For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications.
 To mitigate computational demand, we used few bootstraps per replication than recommended for analysis of real data.
-To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique\textsuperscript{73}.
+To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique\textsuperscript{74}.
 For each replication, we computed bootstrap confidence intervals not only for \(B = 399\), but also for \(B = 49\), 99, 199, and 299 bootstraps, randomly selected without replacement.
 We computed coverage rates separately for each value of \(B\), fit a linear regression of the coverage rate on \(1 / B\), and then used this regression to predict the coverage rate of confidence intervals based on \(B = 1999\) bootstraps.
 
@@ -839,7 +837,7 @@ The pattern of relative accuracy is very similar for the ARGL estimator (Figure 
 
 Figure \ref{fig:comparison-coverage} shows the coverage rates of 95\% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.\footnote{To provide greater detail, the vertical axis of Figure \ref{fig:comparison-coverage} is limited to the range {[}0.5, 1.0{]}, and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \ref{fig:comparison-coverage-full} depicts the full range of coverage rates.}
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
-The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity,\\
+The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity.
 Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when \(J\) is 90 or greater.
 In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
@@ -850,10 +848,9 @@ Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting,
 
 Bootstrap intervals for the step-function model provide more accurate coverage levels.
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of \(J = 60\).
-Figure \ref{fig:CML-coverage} depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.
+Figure \ref{fig:CML-coverage} depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.\footnote{Coverage levels of the other bootstrap intervals, including studentized, basic, and BCa intervals, were not as accurate as percentile intervals. See Supplementary Figures \ref{fig:CML-coverage-two-stage}-\ref{fig:CML-coverage-exponential} for detailed results.}
 Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
 The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, exceeding 90\% coverage across nearly all data-generating conditions, even with only \(J = 15\) primary studies per meta-analysis.
-Coverage levels of the other bootstrap intervals, including studentized, basic, and BCa intervals, were not as accurate as percentile intervals (see Supplementary Figures \ref{fig:CML-coverage-two-stage}-\ref{fig:CML-coverage-exponential} for detailed results).
 Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures \ref{fig:ARGL-coverage-two-stage}-\ref{fig:ARGL-coverage-exponential}).
 
 \begin{sidewaysfigure}
@@ -866,15 +863,15 @@ We have described and evaluated several methods for estimating step-function sel
 We focused on the step-function selection model because it offers a number of advantages over other available methods for diagnosing and correcting selective reporting bias.
 First, step-function models are generative, in that they include parameters describing the selective reporting process under simple yet plausible forms of selective reporting connected to statistical significance.
 In contrast, regression-based estimators such as PET/PEESE\textsuperscript{20} or the endogenous kink meta-regression\textsuperscript{21} are agnostic as to selection mechanisms and thus are only indirectly informative about the strength or form of selection.
-The step-function model also embeds a familiar evidence-generating model that allows for heterogeneity of effects through inclusion of random effects and predictors of average effect size (i.e., meta-regression).@vevea1995general
-In contrast, well-known methods such as trim-and-fill\textsuperscript{18,19} and more recent proposals such as \(p\)-curve\textsuperscript{74} and \(p\)-uniform\textsuperscript{75,76} are not as flexible and have been found to perform poorly when effects are heterogeneous\textsuperscript{2}.
+The step-function model also embeds a familiar evidence-generating model that allows for heterogeneity of effects through inclusion of random effects and predictors of average effect size (i.e., meta-regression).\textsuperscript{26}
+In contrast, well-known methods such as trim-and-fill\textsuperscript{18,19} and more recent proposals such as \(p\)-curve\textsuperscript{75} and \(p\)-uniform\textsuperscript{76,77} are not as flexible and have been found to perform poorly when effects are heterogeneous\textsuperscript{2}.
 
 We treated the step-function model as a description of the \emph{marginal} distribution of the effect size estimates, effectively ignoring the dependence structure for purposes of estimating the model but accounting for it using cluster-robust sandwich estimation or clustered bootstrap inference.
 This strategy is appealing for its feasibility and because it connects to a selection process in which each individual effect size is selected on the basis of its statistical significance.
 We also studied two estimation methods for the marginal step-function model, composite marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
 
 Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at \(\alpha_1 = .025\)), compared to an estimator that accounts for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE.
-Across an broad range of conditions, we found that both estimators of the marginal step-function model show little bias overall and consistently out-perform PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
+Across a broad range of conditions, we found that both estimators of the marginal step-function model show little bias overall and consistently out-perform PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
 However, all the estimators face bias-variance trade-offs, which arise because the CHE-ISCW estimator (which does not directly adjust for selection) is substantially biased by selective reporting, whereas the CML and ARGL estimators have at most small biases.
 Under conditions where selection is absent or small and where average effect size is larger, the CHE-ISCW estimator has greater precision than the estimators that adjust for selective reporting.
 Because selective reporting does not create much bias under such conditions, the additional variability that comes with estimating a selection model or PET/PEESE adjustment dominates the small reduction in bias that these methods provide.
@@ -886,10 +883,10 @@ CML consistently out-performs ARGL for estimating between-study heterogeneity an
 
 \subsection{Limitations and Future Directions}\label{limitations-and-future-directions}
 
-Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations showing that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias.\textsuperscript{49}
+Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations showing that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias.\textsuperscript{50}
 However, this approach has several conceptual limitations that are important to note.
 First, such models do not reflect the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
-Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes\textsuperscript{40,42}.
+Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes\textsuperscript{41,43}.
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates.
 Better accounting for the dependence structure, such as through the use of analytic weights, might allow for construction of more efficient estimators of the parameters of the evidence-generating process.
 Third, the marginal model provides no way to distinguish between study-level publication bias and effect-level selective outcome reporting.
@@ -899,18 +896,18 @@ In addition to conceptual limitations, our simulation findings also need to be i
 First, although our simulations covered a wide range of plausible conditions, the results remain generalizable only to the data-generating process examined.
 Of particular note, we generated data following a CHE effects model with primary study sample sizes and the number of effect sizes per study drawn from an empirical distribution of educational research studies.
 The performance of the step-function selection models and alternative selective reporting adjustments could change based on features of studies included in the synthesis, such as studies drawn from research areas that use smaller or larger samples or that tend to assess a smaller or larger number of outcomes.
-Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions\textsuperscript{77}.
+Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions\textsuperscript{78}.
 
 Second, the simulations examined the step-function selection model using a selection process that was compatible with the assumed model, in which the probability that an effect size was reported followed a step function in the one-sided \emph{p}-value with a threshold at \(\alpha_1 = .025\).
-Other simulation studies have shown that a one-step model can be more accurate than a more complex two-step model, even when the true data-generating process aligns with the latter model.@chen2024adapting
+Other simulation studies have shown that a one-step model can be more accurate than a more complex two-step model, even when the true data-generating process aligns with the latter model.\textsuperscript{50}
 It may require a large number of primary studies to feasibly estimate models that include multiple steps in the selection function.
 Nonetheless, there may be meta-analytic datasets where a more complex set of steps is more appropriate, such as when the data include a substantial number of negative effect size estimates.
 
 Third and related to the previous point, the simulations were limited to evidence-generating processes that did not involve systematic predictors of the effect size distribution and where the strength of selective reporting was uniform and solely dependent on the p-value of each individual effect size.
 Other factors besides statistical significance of findings might affect a study's publication status.
-For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research\textsuperscript{78}.
+For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research\textsuperscript{79}.
 Further evaluation of the CML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
-In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status\textsuperscript{79}.
+In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status\textsuperscript{80}.
 
 Fourth and finally, the simulation findings we have reported here focused mostly on the performance of the estimators and confidence intervals for the overall average effect size, heterogeneity parameter, and selection parameter.
 We have not directly evaluated how well the estimators work as diagnostic \emph{tests} for the presence of selective reporting of study results, although the below-nominal coverage rates of confidence intervals for the selection parameter suggests that they may not work well diagnostically.
@@ -924,9 +921,9 @@ Detecting and adjusting for this form of bias is notoriously challenging---even 
 These challenges are amplified with more complex data structures where the same study contributes multiple dependent effects.
 Nonetheless, meta-analysts must critically evaluate the evidence summarized in a synthesis, and this includes weighing the potential for bias from selective reporting and selective publication of primary study findings.
 
-Based on the simulation results we have presented, we recommend using step function selection models with clustered bootstrap confidence intervals to assess selective reporting bias in syntheses of dependent effect sizes. As a parametric model built on specific assumptions about the selection process, the marginal step function model provides a useful complement to more agnostic techniques for identifying small-study effects, such as funnel plots and regression adjustment methods, the bias and accuracy of which are quite variable across data-generating processes. Likewise, estimated step function models could inform the use of sensitivity analysis\textsuperscript{46} by using estimates of the strength of selection to guide assumptions about the maximal plausible degree of selection.
+Based on the simulation results we have presented, we recommend using step function selection models with clustered bootstrap confidence intervals to assess selective reporting bias in syntheses of dependent effect sizes. As a parametric model built on specific assumptions about the selection process, the marginal step function model provides a useful complement to more agnostic techniques for identifying small-study effects, such as funnel plots and regression adjustment methods, the bias and accuracy of which are quite variable across data-generating processes. Likewise, estimated step function models could inform the use of sensitivity analysis\textsuperscript{47} by using estimates of the strength of selection to guide assumptions about the maximal plausible degree of selection.
 
-Consistent with recommendations from past work in the context of independent effect sizes\textsuperscript{2,80}, interpretation of any bias-corrected effect estimates needs to give consideration to the conditions under which the estimation method could be expected to perform well.
+Consistent with recommendations from past work in the context of independent effect sizes\textsuperscript{2,81}, interpretation of any bias-corrected effect estimates needs to give consideration to the conditions under which the estimation method could be expected to perform well.
 Interpretation of marginal step-function models should focus mostly on the bias-adjusted average effect size, and selection parameter estimates should be interpreted cautiously in light of the mis-calibrated coverage levels of their cluster bootstrapped confidence intervals.
 More broadly, when applying and interpreting step function models, meta-analysts must consider the context of the evidence included in the synthesis, such as whether the effect size estimates are for focal results or merely incidental findings and whether studies were conducted under conditions where pressures to selectively reporting findings are present.
 As with inferences from any model, one's conclusions should be informed not only by the statistical results but also by knowledge of the research context.
@@ -965,7 +962,7 @@ The authors declare no conflicts of interest.
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
 
-\phantomsection\label{refs}
+\protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}
 \bibitem[\citeproctext]{ref-Rothstein2005publication}
 \CSLLeftMargin{1. }%
@@ -1083,89 +1080,89 @@ The authors declare no conflicts of interest.
 \CSLLeftMargin{29. }%
 \CSLRightInline{Terrin N, Schmid CH, Lau J, Olkin I. Adjusting for publication bias in the presence of heterogeneity. \emph{Statistics in Medicine}. 2003;22(13):2113-2126. doi:\href{https://doi.org/10.1002/sim.1461}{10.1002/sim.1461}}
 
-\bibitem[\citeproctext]{ref-greenwald1975prejudice}
+\bibitem[\citeproctext]{ref-hedges2005selection}
 \CSLLeftMargin{30. }%
+\CSLRightInline{Hedges LV, Vevea J. Selection method approaches. In: Rothstein HR, Sutton AJ, Borenstein M, eds. \emph{Publication Bias in Meta-Analysis}. {John Wiley \& Sons, Ltd}; 2005:145-174. doi:\href{https://doi.org/10.1002/0470870168.ch9}{10.1002/0470870168.ch9}}
+
+\bibitem[\citeproctext]{ref-greenwald1975prejudice}
+\CSLLeftMargin{31. }%
 \CSLRightInline{Greenwald AG. Consequences of prejudice against the null hypothesis. \emph{Psychological Bulletin}. 1975;82(1):1-20. doi:\href{https://doi.org/10.1037/h0076157}{10.1037/h0076157}}
 
 \bibitem[\citeproctext]{ref-Nelson1986significance}
-\CSLLeftMargin{31. }%
+\CSLLeftMargin{32. }%
 \CSLRightInline{Nelson N, Rosenthal R, Rosnow RL. Interpretation of significance levels and effect sizes by psychological researchers. \emph{American Psychologist}. 1986;41(11):1299-1301. doi:\href{https://doi.org/10.1037/0003-066X.41.11.1299}{10.1037/0003-066X.41.11.1299}}
 
 \bibitem[\citeproctext]{ref-Rosenthal1963significance}
-\CSLLeftMargin{32. }%
+\CSLLeftMargin{33. }%
 \CSLRightInline{Rosenthal R, Gaito J. The interpretation of levels of significance by psychological researchers. \emph{The Journal of Psychology: Interdisciplinary and Applied}. 1963;55(1):33-38. doi:\href{https://doi.org/10.1080/00223980.1963.9916596}{10.1080/00223980.1963.9916596}}
 
 \bibitem[\citeproctext]{ref-Rosenthal1964significance}
-\CSLLeftMargin{33. }%
+\CSLLeftMargin{34. }%
 \CSLRightInline{Rosenthal R, Gaito J. Further evidence for the cliff effect in the interpretation of levels of significance. \emph{Psychological Reports}. 1964;15(2):570. doi:\href{https://doi.org/10.2466/pr0.1964.15.2.570}{10.2466/pr0.1964.15.2.570}}
 
 \bibitem[\citeproctext]{ref-Becker2000multivariate}
-\CSLLeftMargin{34. }%
+\CSLLeftMargin{35. }%
 \CSLRightInline{Becker BJ. {Multivariate Meta-analysis}. In: Brown SD, Tinsley HEA, eds. \emph{Handbook of Applied Multivariate Statistics and Mathematical Modeling}. Academic Press; 2000:499-525. doi:\href{https://doi.org/10.1016/B978-012691360-6/50018-5}{10.1016/B978-012691360-6/50018-5}}
 
 \bibitem[\citeproctext]{ref-Hedges2010robust}
-\CSLLeftMargin{35. }%
+\CSLLeftMargin{36. }%
 \CSLRightInline{Hedges LV, Tipton E, Johnson MC. {Robust variance estimation in meta-regression with dependent effect size estimates}. \emph{Research Synthesis Methods}. 2010;1(1):39-65. doi:\href{https://doi.org/10.1002/jrsm.5}{10.1002/jrsm.5}}
 
 \bibitem[\citeproctext]{ref-tipton2019current}
-\CSLLeftMargin{36. }%
+\CSLLeftMargin{37. }%
 \CSLRightInline{Tipton E, Pustejovsky JE, Ahmadi H. Current practices in meta-regression in psychology, education, and medicine. \emph{Research synthesis methods}. 2019;10(2):180-194.}
 
 \bibitem[\citeproctext]{ref-nakagawa2023quantitative}
-\CSLLeftMargin{37. }%
+\CSLLeftMargin{38. }%
 \CSLRightInline{Nakagawa S, Yang Y, Macartney EL, Spake R, Lagisz M. Quantitative evidence synthesis: A practical guide on meta-analysis, meta-regression, and publication bias tests for environmental sciences. \emph{Environ Evid}. 2023;12(1):8. doi:\href{https://doi.org/10.1186/s13750-023-00301-6}{10.1186/s13750-023-00301-6}}
 
 \bibitem[\citeproctext]{ref-yang2023advanced}
-\CSLLeftMargin{38. }%
+\CSLLeftMargin{39. }%
 \CSLRightInline{Yang Y, Macleod M, Pan J, Lagisz M, Nakagawa S. Advanced methods and implementations for the meta-analyses of animal models: {Current} practices and future recommendations. \emph{Neuroscience \& Biobehavioral Reviews}. 2023;146:105016. doi:\href{https://doi.org/10.1016/j.neubiorev.2022.105016}{10.1016/j.neubiorev.2022.105016}}
 
 \bibitem[\citeproctext]{ref-konstantopoulos2011fixed}
-\CSLLeftMargin{39. }%
+\CSLLeftMargin{40. }%
 \CSLRightInline{Konstantopoulos S. Fixed effects and variance components estimation in three-level meta-analysis: {Three}-level meta-analysis. \emph{Research Synthesis Methods}. 2011;2(1):61-76. doi:\href{https://doi.org/10.1002/jrsm.35}{10.1002/jrsm.35}}
 
 \bibitem[\citeproctext]{ref-vandennoortgate2013threelevel}
-\CSLLeftMargin{40. }%
+\CSLLeftMargin{41. }%
 \CSLRightInline{Van den Noortgate W, López-López JA, Marín-Martínez F, Sánchez-Meca J. Three-level meta-analysis of dependent effect sizes. \emph{Behavior Research Methods}. 2013;45(2):576-594. doi:\href{https://doi.org/10.3758/s13428-012-0261-6}{10.3758/s13428-012-0261-6}}
 
 \bibitem[\citeproctext]{ref-vandennoortgate2015metaanalysis}
-\CSLLeftMargin{41. }%
+\CSLLeftMargin{42. }%
 \CSLRightInline{Van den Noortgate W, López-López JA, Marín-Martínez F, Sánchez-Meca J. Meta-analysis of multiple outcomes: A multilevel approach. \emph{Behavior Research Methods}. 2015;47(4):1274-1294. doi:\href{https://doi.org/10.3758/s13428-014-0527-2}{10.3758/s13428-014-0527-2}}
 
 \bibitem[\citeproctext]{ref-pustejovsky2022preventionscience}
-\CSLLeftMargin{42. }%
+\CSLLeftMargin{43. }%
 \CSLRightInline{Pustejovsky JE, Tipton E. Meta-Analysis with Robust Variance Estimation: {Expanding} the Range of Working Models. \emph{Prevention Science}. 2022;23:425-438. doi:\href{https://doi.org/10.1016/j.jsp.2018.02.003}{10.1016/j.jsp.2018.02.003}}
 
 \bibitem[\citeproctext]{ref-tipton2015small}
-\CSLLeftMargin{43. }%
+\CSLLeftMargin{44. }%
 \CSLRightInline{Tipton E. Small sample adjustments for robust variance estimation with meta-regression. \emph{Psychological methods}. 2015;20(3):375.}
 
 \bibitem[\citeproctext]{ref-tiptonpusto2015small}
-\CSLLeftMargin{44. }%
+\CSLLeftMargin{45. }%
 \CSLRightInline{Tipton E, Pustejovsky JE. Small-sample adjustments for tests of moderators and model fit using robust variance estimation in meta-regression. \emph{Journal of Educational and Behavioral Statistics}. 2015;40(6):604-634.}
 
 \bibitem[\citeproctext]{ref-joshi2022cluster}
-\CSLLeftMargin{45. }%
+\CSLLeftMargin{46. }%
 \CSLRightInline{Joshi M, Pustejovsky JE, Beretvas SN. Cluster Wild Bootstrapping to Handle Dependent Effect Sizes in Meta-Analysis with a Small Number of Studies. \emph{Research Synthesis Methods}. 2022;13(4):457-477. doi:\href{https://doi.org/10.1002/jrsm.1554}{10.1002/jrsm.1554}}
 
 \bibitem[\citeproctext]{ref-mathur2020sensitivity}
-\CSLLeftMargin{46. }%
+\CSLLeftMargin{47. }%
 \CSLRightInline{Mathur MB, VanderWeele TJ. Sensitivity analysis for publication bias in meta‐analyses. \emph{J R Stat Soc C}. 2020;69(5):1091-1119. doi:\href{https://doi.org/10.1111/rssc.12440}{10.1111/rssc.12440}}
 
 \bibitem[\citeproctext]{ref-fernandezcastilla2019detecting}
-\CSLLeftMargin{47. }%
+\CSLLeftMargin{48. }%
 \CSLRightInline{Fernández-Castilla B, Declercq L, Jamshidi L, Beretvas SN, Onghena P, Van den Noortgate W. Detecting selection bias in meta-analyses with multiple outcomes: A simulation study. \emph{The Journal of Experimental Education}. Published online April 2019:1-20. doi:\href{https://doi.org/10.1080/00220973.2019.1582470}{10.1080/00220973.2019.1582470}}
 
 \bibitem[\citeproctext]{ref-rodgers2021evaluating}
-\CSLLeftMargin{48. }%
+\CSLLeftMargin{49. }%
 \CSLRightInline{Rodgers MA, Pustejovsky JE. Evaluating meta-analytic methods to detect selective reporting in the presence of dependent effect sizes. \emph{Psychological methods}. 2021;26(2):141.}
 
 \bibitem[\citeproctext]{ref-chen2024adapting}
-\CSLLeftMargin{49. }%
-\CSLRightInline{Chen M, Pustejovsky JE. Adapting methods for correcting selective reporting bias in meta-analysis of dependent effect sizes. Published online October 23, 2024. doi:\href{https://doi.org/10.31222/osf.io/jq52s}{10.31222/osf.io/jq52s}}
-
-\bibitem[\citeproctext]{ref-hedges2005selection}
 \CSLLeftMargin{50. }%
-\CSLRightInline{Hedges LV, Vevea J. Selection method approaches. In: Rothstein HR, Sutton AJ, Borenstein M, eds. \emph{Publication Bias in Meta-Analysis}. {John Wiley \& Sons, Ltd}; 2005:145-174. doi:\href{https://doi.org/10.1002/0470870168.ch9}{10.1002/0470870168.ch9}}
+\CSLRightInline{Chen M, Pustejovsky JE. Adapting methods for correcting selective reporting bias in meta-analysis of dependent effect sizes. Published online October 23, 2024. doi:\href{https://doi.org/10.31222/osf.io/jq52s}{10.31222/osf.io/jq52s}}
 
 \bibitem[\citeproctext]{ref-vevea2005publication}
 \CSLLeftMargin{51. }%
@@ -1183,108 +1180,112 @@ The authors declare no conflicts of interest.
 \CSLLeftMargin{54. }%
 \CSLRightInline{Varin C. On composite marginal likelihoods. \emph{AStA}. 2008;92(1):1-28. doi:\href{https://doi.org/10.1007/s10182-008-0060-7}{10.1007/s10182-008-0060-7}}
 
-\bibitem[\citeproctext]{ref-davison1997bootstrap}
+\bibitem[\citeproctext]{ref-boos2003introduction}
 \CSLLeftMargin{55. }%
+\CSLRightInline{Boos DD. Introduction to the bootstrap world. \emph{Statistical science}. 2003;18(2):168-174.}
+
+\bibitem[\citeproctext]{ref-davison1997bootstrap}
+\CSLLeftMargin{56. }%
 \CSLRightInline{Davison AC, Hinkley DV. \emph{Bootstrap Methods and Their Applications}. Cambridge University Press; 1997.}
 
 \bibitem[\citeproctext]{ref-field2007bootstrapping}
-\CSLLeftMargin{56. }%
+\CSLLeftMargin{57. }%
 \CSLRightInline{Field CA, Welsh AH. Bootstrapping clustered data. \emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}. 2007;69(3):369-390. doi:\href{https://doi.org/10.1111/j.1467-9868.2007.00593.x}{10.1111/j.1467-9868.2007.00593.x}}
 
 \bibitem[\citeproctext]{ref-leeuw2008resampling}
-\CSLLeftMargin{57. }%
+\CSLLeftMargin{58. }%
 \CSLRightInline{Leeden RVD, Meijer E, Busing FMTA. Resampling multilevel models. In: Leeuw JD, Meijer E, eds. \emph{Handbook of {Multilevel} {Analysis}}. Springer New York; 2008:401-433. doi:\href{https://doi.org/10.1007/978-0-387-73186-5_11}{10.1007/978-0-387-73186-5\_11}}
 
 \bibitem[\citeproctext]{ref-xu2020applications}
-\CSLLeftMargin{58. }%
+\CSLLeftMargin{59. }%
 \CSLRightInline{Xu L, Gotwalt C, Hong Y, King CB, Meeker WQ. Applications of the fractional-random-weight bootstrap. \emph{The American Statistician}. 2020;74(4):345-358. doi:\href{https://doi.org/10.1080/00031305.2020.1731599}{10.1080/00031305.2020.1731599}}
 
 \bibitem[\citeproctext]{ref-efron1987better}
-\CSLLeftMargin{59. }%
+\CSLLeftMargin{60. }%
 \CSLRightInline{Efron B. Better bootstrap confidence intervals. \emph{Journal of the American Statistical Association}. 1987;82(397):171-185. doi:\href{https://doi.org/10.1080/01621459.1987.10478410}{10.1080/01621459.1987.10478410}}
 
 \bibitem[\citeproctext]{ref-carter2015series}
-\CSLLeftMargin{60. }%
+\CSLLeftMargin{61. }%
 \CSLRightInline{Carter EC, Kofler LM, Forster DE, McCullough ME. A series of meta-analytic tests of the depletion effect: Self-control does not seem to rely on a limited resource. \emph{Journal of Experimental Psychology: General}. 2015;144(4):796.}
 
 \bibitem[\citeproctext]{ref-hagger2010ego}
-\CSLLeftMargin{61. }%
+\CSLLeftMargin{62. }%
 \CSLRightInline{Hagger MS, Wood C, Stiff C, Chatzisarantis NLD. Ego depletion and the strength model of self-control: {A} meta-analysis. \emph{Psychological Bulletin}. 2010;136(4):495-525. doi:\href{https://doi.org/10.1037/a0019486}{10.1037/a0019486}}
 
 \bibitem[\citeproctext]{ref-rcoreteam}
-\CSLLeftMargin{62. }%
+\CSLLeftMargin{63. }%
 \CSLRightInline{R Core Team. \emph{R: A Language and Environment for Statistical Computing}. R Foundation for Statistical Computing; 2025. \url{https://www.R-project.org/}}
 
 \bibitem[\citeproctext]{ref-metaselection}
-\CSLLeftMargin{63. }%
+\CSLLeftMargin{64. }%
 \CSLRightInline{Pustejovsky JE, Joshi M, Citkowicz M. \emph{Metaselection: Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap Standard Errors for Dependent Effect Size Estimates}.; 2025. \url{https://github.com/jepusto/metaselection}}
 
 \bibitem[\citeproctext]{ref-CHTC}
-\CSLLeftMargin{64. }%
+\CSLLeftMargin{65. }%
 \CSLRightInline{Center for High Throughput Computing. Center for high throughput computing. Published online 2006. doi:\href{https://doi.org/10.21231/GNT1-HW21}{10.21231/GNT1-HW21}}
 
 \bibitem[\citeproctext]{ref-Viechtbauer2010conducting}
-\CSLLeftMargin{65. }%
+\CSLLeftMargin{66. }%
 \CSLRightInline{Viechtbauer W. {Conducting meta-analyses in R with the metafor package}. \emph{Journal of Statistical Software}. 2010;36(3):1-48.}
 
 \bibitem[\citeproctext]{ref-clubSandwich}
-\CSLLeftMargin{66. }%
+\CSLLeftMargin{67. }%
 \CSLRightInline{Pustejovsky JE. \emph{clubSandwich: Cluster-Robust (Sandwich) Variance Estimators with Small-Sample Corrections}.; 2024. \url{https://CRAN.R-project.org/package=clubSandwich}}
 
 \bibitem[\citeproctext]{ref-simhelpers}
-\CSLLeftMargin{67. }%
+\CSLLeftMargin{68. }%
 \CSLRightInline{Joshi M, Pustejovsky JE. \emph{Simhelpers: Helper Functions for Simulation Studies}.; 2024. \url{https://meghapsimatrix.github.io/simhelpers/}}
 
 \bibitem[\citeproctext]{ref-optimx}
-\CSLLeftMargin{68. }%
+\CSLLeftMargin{69. }%
 \CSLRightInline{Nash JC, Varadhan R. Unifying optimization algorithms to aid software system users: {optimx} for {R}. \emph{Journal of Statistical Software}. 2011;43(9):1-14. doi:\href{https://doi.org/10.18637/jss.v043.i09}{10.18637/jss.v043.i09}}
 
 \bibitem[\citeproctext]{ref-nleqslv}
-\CSLLeftMargin{69. }%
+\CSLLeftMargin{70. }%
 \CSLRightInline{Hasselman B. \emph{Nleqslv: Solve Systems of Nonlinear Equations}.; 2023. \url{https://CRAN.R-project.org/package=nleqslv}}
 
 \bibitem[\citeproctext]{ref-tidyverse}
-\CSLLeftMargin{70. }%
+\CSLLeftMargin{71. }%
 \CSLRightInline{Wickham H, Averick M, Bryan J, et al. Welcome to the {tidyverse}. \emph{Journal of Open Source Software}. 2019;4(43):1686. doi:\href{https://doi.org/10.21105/joss.01686}{10.21105/joss.01686}}
 
 \bibitem[\citeproctext]{ref-borenstein2019effect}
-\CSLLeftMargin{71. }%
+\CSLLeftMargin{72. }%
 \CSLRightInline{Borenstein M, Hedges LV. Effect sizes for meta-analysis. \emph{The handbook of research synthesis and meta-analysis}. 2019;3:207-243.}
 
 \bibitem[\citeproctext]{ref-kraft2020interpreting}
-\CSLLeftMargin{72. }%
+\CSLLeftMargin{73. }%
 \CSLRightInline{Kraft MA. Interpreting effect sizes of education interventions. \emph{Educational researcher}. 2020;49(4):241-253.}
 
 \bibitem[\citeproctext]{ref-boos2000montecarlo}
-\CSLLeftMargin{73. }%
+\CSLLeftMargin{74. }%
 \CSLRightInline{Boos DD, Zhang J. Monte carlo evaluation of resampling-based hypothesis tests. \emph{Journal of the American Statistical Association}. 2000;95(450):486-492. doi:\href{https://doi.org/10.1080/01621459.2000.10474226}{10.1080/01621459.2000.10474226}}
 
 \bibitem[\citeproctext]{ref-simonsohn2014pcurve}
-\CSLLeftMargin{74. }%
+\CSLLeftMargin{75. }%
 \CSLRightInline{Simonsohn U, Nelson LD, Simmons JP. P-curve and effect size: Correcting for publication bias using only significant results. \emph{Perspectives on Psychological Science}. 2014;9(6):666-681. doi:\href{https://doi.org/10.1177/1745691614553988}{10.1177/1745691614553988}}
 
 \bibitem[\citeproctext]{ref-VanAssen2015meta}
-\CSLLeftMargin{75. }%
+\CSLLeftMargin{76. }%
 \CSLRightInline{Assen MALM van, Van Aert RCM, Wicherts JM. {Meta-analysis using effect size distributions of only statistically significant studies}. \emph{Psychological Methods}. 2015;20(3):293-309. doi:\url{http://dx.doi.org/10.1037/met0000025}}
 
 \bibitem[\citeproctext]{ref-vanaert2016conducting}
-\CSLLeftMargin{76. }%
+\CSLLeftMargin{77. }%
 \CSLRightInline{Aert RCM van, Wicherts JM, Assen MALM van. Conducting meta-analyses based on \emph{p} values: Reservations and recommendations for applying \emph{p} -uniform and \emph{p} -curve. \emph{Perspectives on Psychological Science}. 2016;11(5):713-729. doi:\href{https://doi.org/10.1177/1745691616650874}{10.1177/1745691616650874}}
 
 \bibitem[\citeproctext]{ref-Hedges1996estimating}
-\CSLLeftMargin{77. }%
+\CSLLeftMargin{78. }%
 \CSLRightInline{Hedges LV, Vevea JL. {Estimating effect size under publication bias: Small sample properties and robustness of a random effects selection model}. \emph{Journal of Educational and Behavioral Statistics}. 1996;21(4):299. doi:\href{https://doi.org/10.3102/10769986021004299}{10.3102/10769986021004299}}
 
 \bibitem[\citeproctext]{ref-vanaert2025metaanalyzing}
-\CSLLeftMargin{78. }%
+\CSLLeftMargin{79. }%
 \CSLRightInline{Van Aert RCM. Meta-analyzing nonpreregistered and preregistered studies. \emph{Psychological Methods}. Published online February 17, 2025. doi:\href{https://doi.org/10.1037/met0000719}{10.1037/met0000719}}
 
 \bibitem[\citeproctext]{ref-Coburn2015publication}
-\CSLLeftMargin{79. }%
+\CSLLeftMargin{80. }%
 \CSLRightInline{Coburn KM, Vevea JL. {Publication bias as a function of study characteristics}. \emph{Psychological Methods}. 2015;20(3):310-330. doi:\href{https://doi.org/10.1037/met0000046}{10.1037/met0000046}}
 
 \bibitem[\citeproctext]{ref-mcshane2016adjusting}
-\CSLLeftMargin{80. }%
+\CSLLeftMargin{81. }%
 \CSLRightInline{McShane BB, Böckenholt U, Hansen KT. Adjusting for publication bias in meta-analysis an evaluation of selection methods and some cautionary notes. \emph{Perspectives on Psychological Science}. 2016;11(5):730-749. Accessed November 1, 2016. \url{http://pps.sagepub.com/content/11/5/730.short}}
 
 \end{CSLReferences}

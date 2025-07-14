@@ -24,7 +24,7 @@ Selection models have several advantages over other available methods for diagno
 First, they are generative models with parameters that directly describe the selective reporting process; they are therefore more interpretable than tests or adjustments for small-study effects, which are agnostic with respect to the specific mechanism of selective reporting. 
 Second, selection models can allow for effect heterogeneity with a random effect term. 
 Findings from simulations indicate that selection models outperform simpler alternative methods when effect sizes are heterogeneous. [@carter2019correcting; @Terrin2003heterogeneity]
-Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
+Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.[@hedges2005selection]
 In addition to these features, the step-function selection model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting (e.g., p < 0.01 and p < 0.05).[@greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance]
 
 ## Dependent effect sizes
@@ -40,7 +40,7 @@ For example, for the more than 1,000 educational intervention studies reviewed b
 Surveys of systematic reviews on topics in psychology and education[@tipton2019current], environmental sciences [@nakagawa2023quantitative], and neurobiology [@yang2023advanced] have also documented a high prevalence of dependent effect sizes.
 Thus, multiple effects are the norm, rather than the exception, in many fields that use quantitative synthesis.
 
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [RVE, @Hedges2010robust], and combinations thereof [@pustejovsky2022preventionscience].
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [RVE, @Hedges2010robust], and combinations thereof.[@pustejovsky2022preventionscience]
 Among these, RVE has proven to be an attractive strategy because it provides a means to assess uncertainty in model parameter estimates that does not rely on strong assumptions about the exact dependence structure of the effect size estimates. 
 Instead, RVE involves specifying a tentative working model for the dependence, but calculating standard errors, hypothesis tests, and confidence intervals using sandwich estimators that do not require the working model to be correct. 
 Although the original form of RVE required a relatively large number of independent studies, subsequent work has provided refinements to standard errors and hypothesis tests based on RVE to provide accurate inferences even when the number of studies is small.[@tipton2015small; @tiptonpusto2015small]
@@ -62,7 +62,7 @@ It also has the same limitations as univariate Egger's regression, in that it te
 Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting.
 
 Chen and Pustejovsky reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and proposed adaptations of some existing methods to accommodate dependent effect sizes.[@chen2024adapting]
-The proposed adaptations applied to methods that could be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
+The proposed adaptations pertain to methods that can be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
 In an extensive simulation study, they examined the performance of proposed adaptations alongside existing methods that ignore effect size dependence. 
 Although no single bias-correction method performed best across all conditions examined, simple forms of the step-function selection model emerged as strong candidates.
 Across a wide range of conditions, one-step and two-step selection models yielded average effect size estimates with low bias that were usually more accurate than alternative bias-adjusted estimators, even though the selection models ignore the dependence structure of the data.
@@ -71,7 +71,7 @@ These findings indicate a clear need to further develop selection models that ca
 
 To address this need, we investigate how to estimate selection models and provide valid assessments of uncertainty in parameter estimates for meta-analyses that involve dependent effect sizes. 
 In the next section, we describe the step-function selection model and detail two different strategies for estimating model parameters: one using conventional maximum likelihood estimation methods and a novel strategy based on a re-weighted random effects model with inverse probability of selection weights. 
-We also describe extensions of RVE and bootstrap re-sampling techniques to assess uncertainty in selection model parameter estimate
+We also describe extensions of RVE and bootstrap re-sampling techniques to assess uncertainty in selection model parameter estimates.
 In the following section, we provide an empirical example that illustrates the methods by re-analyzing data from a previously reported meta-analysis. 
 In subsequent sections, we describe the methods and results from a simulation study that evaluates the performance of point estimators and confidence intervals across a wide range of meta-analytic conditions.
 In the final section, we discuss findings, limitations, and initial implications for practice.

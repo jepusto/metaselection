@@ -48,7 +48,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -141,7 +141,7 @@ mu_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -309,7 +309,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -345,7 +345,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -426,7 +426,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -463,7 +463,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -515,7 +515,7 @@ zeta_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -556,7 +556,7 @@ zeta_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"

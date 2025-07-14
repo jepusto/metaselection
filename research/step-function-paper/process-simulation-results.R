@@ -162,7 +162,7 @@ RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_l
     scale_y_continuous(transform = "log2") + 
     scale_color_brewer(palette = "Dark2", guide = guide_legend(nrow=legend_rows)) +
     facet_grid(tau ~ mean_smd, 
-               labeller = label_bquote(rows = tau == .(tau),
+               labeller = label_bquote(rows = tau[B] == .(tau),
                                        cols = mu == .(mean_smd)),
                scales = "free_y"
     ) +
@@ -186,7 +186,7 @@ coverage_plot <- function(data) {
     facet_grid(
       tau ~ mean_smd, 
       labeller = label_bquote(
-        rows = tau == .(tau),
+        rows = tau[B] == .(tau),
         cols = mu == .(mean_smd)
       ),
       scales = "free_y"

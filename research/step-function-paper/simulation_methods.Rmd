@@ -32,7 +32,7 @@ We assumed constant correlation between pairs of outcomes within a study but all
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
 size per study, $\delta_j$, from a normal distribution with mean $\mu$ and variance
-of $\tau^2$. Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and
+of $\tau_B^2$. Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and
 variance of $\omega^2$.
 For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as $\mat{Y}_{hj}^T \sim N(\bs\delta_j, \boldsymbol\Psi_j)$ and $\mat{Y}_{hj}^C \sim N(\mat{0}, \boldsymbol\Psi_j)$, where $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
 $k_j^* \times 1$ vectors of outcomes for participant $h$ in study $j$ in the treatment and control group, respectively, and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.
@@ -54,11 +54,11 @@ We estimated CML and ARGL estimators and calculated cluster-robust confidence in
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
 To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
 
-We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
+We compared the performance of the step-function CML and ARGL estimators to that of two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) [@chen2024adapting].
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.
+Second, we implemented a variation of the PET/PEESE estimator originally proposed by Stanley and Doucouliagos[@stanley2014meta], adapted to accommodate dependent effect sizes.
 Following convention, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.[@stanley2014meta]
 For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
 
@@ -66,8 +66,8 @@ For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals us
 
 Table \@ref(tab:sim-design) summarizes the experimental design for this study. 
 Manipulated parameters included overall average standardized mean difference
-($\mu$), between-study heterogeneity ($\tau$), within-study heterogeneity ratio
-($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$),
+($\mu$), between-study heterogeneity ($\tau_B$), within-study heterogeneity ratio
+($\omega^2 / \tau_B^2$), average correlation between outcomes ($\rho$),
 probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
 We examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions [@kraft2020interpreting].
 We used values of $\tau$ ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
@@ -84,8 +84,8 @@ library(tidyverse)
 dat <- tibble(
   Parameter = c(
     "Overall average SMD ($\\mu$)",
-    "Between-study heterogeneity ($\\tau$)",
-    "Heterogeneity ratio ($\\omega^2 / \\tau^2$)",
+    "Between-study heterogeneity ($\\tau_B$)",
+    "Heterogeneity ratio ($\\omega^2 / \\tau_B^2$)",
     "Average correlation between outcomes ($\\rho$)",
     "Probability of selection for non-affirmative effects ($\\lambda_1$)",
     "Number of observed studies ($J$)",
