@@ -1,0 +1,8 @@
+beta-function-selection-models-supplementary-materials_cache/
+beta-function-selection-models-supplementary-materials_files/
+beta-function-selection-models-with-dependent-effects_files/
+*.tex
+*.pdf
+*.log
+*.aux
+*.toc

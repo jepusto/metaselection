@@ -1,8 +1,6 @@
 ---
 title: "Modified Beta-Function Selection Model"
-output:
-  html_document:
-    df_print: paged
+output: pdf_document
 bibliography: references.bib
 editor_options:
   markdown:
@@ -67,8 +65,8 @@ w(Y^*_i / \sigma^*_i, \boldsymbol\lambda) =  \begin{cases}
 #| out.width: 49%
 #| fig.cap: "Examples of beta density functions"
 #| fig.subcap:
-#|    - "$Selection: \\lambda_1 = 0.5, \\lambda_2 = 2.0$"
-#|    - "$No selection: \\lambda_1 = 1, \\lambda_2 = 1$"
+#|    - "Selection: $\\lambda_1 = 0.5, \\lambda_2 = 2.0$"
+#|    - "No selection: $\\lambda_1 = 1, \\lambda_2 = 1$"
 #| fig.pos: tb 
 
 library(metaselection)
