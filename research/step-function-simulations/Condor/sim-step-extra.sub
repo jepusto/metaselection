@@ -1,0 +1,33 @@
+# sim-step-function.sub
+# Simulation of 3-parameter selection models with RVE
+#
+universe = docker
+docker_image = jepusto/metaselection:v8
+log = /home/pustejovsky/3PSM-RVE/log/cluster_$(Cluster).log
+error = /home/pustejovsky/3PSM-RVE/err/cluster_$(Cluster)_$(Process).err
+#
+# Specify your executable (single binary or a script that runs several
+#  commands), arguments, and a files for HTCondor to store standard
+#  output (or "screen output").
+#  $(Process) will be a integer number for each job, starting with "0"
+#  and increasing for the relevant number of jobs.
+executable = sim-step-extra.sh
+arguments = $(k)
+output = /home/pustejovsky/3PSM-RVE/log/cluster_$(Cluster)_$(Process).out
+initialdir = /home/pustejovsky/3PSM-RVE
+#
+# Specify that HTCondor should transfer files to and from the
+#  computer where each job runs. The last of these lines *would* be
+#  used if there were any other files needed for the executable to use.
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = research
+#
+# Tell HTCondor what amount of compute resources
+#  each job will need on the computer where it runs.
+request_cpus = 1
+request_memory = 1GB
+request_disk = 1GB
+#
+# Tell HTCondor to run multiple instances of our job:
+queue k from batches-to-run.csv
