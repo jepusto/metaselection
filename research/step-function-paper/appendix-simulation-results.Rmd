@@ -11,7 +11,6 @@ source("process-simulation-results.R")
 ```
 
 # Additional simulation results for estimators of average effect size $(\mu)$ {#mu-simulation-results}
-
 ```{r convergence-rates}
 #| cache: true
 #| fig.width: 9
@@ -56,6 +55,58 @@ ggplot() +
   labs(
     x = "Selection probability", 
     y = "Convergence rate", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r winsorization-rates}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Winsorization rates of CML and ARGL estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median winsorization rates; thin lines correspond to range of winsorization rates; thick lines correspond to inter-decile range."
+
+mu_graph_res %>%
+  filter(estimator %in% c("CML","ARGL")) %>%
+  group_by(mean_smd, tau, weights, estimator) %>%
+  summarize(
+    min = min(winz_convergence),
+    Q10 = quantile(winz_convergence, 0.1),
+    median = median(winz_convergence),
+    Q90 = quantile(winz_convergence, 0.9),
+    max = max(winz_convergence),
+    .groups = "drop"
+  ) %>%
+ggplot() + 
+  aes(x = weights, y = median, ymin = min, max = max, color = estimator, fill = estimator) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) + 
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  expand_limits(y = 0.99) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Winsorization rate", 
     color = "Estimator",
     fill = "Estimator"
   ) + 
