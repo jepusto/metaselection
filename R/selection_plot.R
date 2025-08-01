@@ -278,6 +278,12 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   default of 200 points, evenly spaced between the specified limits.
 #' @param transform Character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.
 #' @param expand Passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.
+#' @param fill character string specifying the fill-color to use when \code{mod}
+#'   does not include bootstrap replications, with a default of \code{"blue"}.
+#'   Passed to \code{ggplot2::geom_area()}.
+#' @param alpha numeric value specifying the opacity of the filled area plot,
+#'   with a default of 0.5. Passed to \code{ggplot2::geom_area()}. Only used
+#'   when \code{mod} does not include bootstrap replications.
 #' @inheritParams selection_wts
 #' @param ... further arguments passed to \code{ggplot2::scale_x_continuous}.
 #'
@@ -331,12 +337,6 @@ selection_plot.default <- function(mod, limits = c(0,1), pts = 200L, ref_pval = 
 }
 
 #' @rdname selection_plot
-#' @param fill character string specifying the fill-color to use when \code{mod}
-#'   does not include bootstrap replications, with a default of \code{"blue"}.
-#'   Passed to \code{ggplot2::geom_area()}.
-#' @param alpha numeric value specifying the opacity of the filled area plot,
-#'   with a default of 0.5. Passed to \code{ggplot2::geom_area()}. Only used
-#'   when \code{mod} does not include bootstrap replications.
 #' @param step_linetype character string specifying the type of line to draw to
 #'   indicate p-value thresholds assumed in \code{mod}.
 #' @export
@@ -419,6 +419,8 @@ selection_plot.boot.selmodel <- function(
     linewidth = 1.2, 
     step_linetype = "dashed",
     draw_boots = TRUE,
+    fill = "blue",
+    alpha = 0.5,
     boot_color = "blue",
     boot_alpha = 0.1,
     ...
@@ -458,14 +460,20 @@ selection_plot.boot.selmodel <- function(
         ggplot2::aes(x = .data$p, y = .data$wt, group = .data$rep), 
         color = boot_color, 
         alpha = 100 * boot_alpha / R
+      ) +
+      ggplot2::geom_line(
+        ggplot2::aes(x = .data$p, y = .data$wt),
+        color = color,
+        linewidth = linewidth
       )
+  } else {
+    p <- p + 
+      ggplot2::geom_area(
+        ggplot2::aes(x = .data$p, y = .data$wt), 
+        fill = fill, 
+        alpha = alpha
+      ) 
   }
   
-  p + 
-    ggplot2::geom_line(
-      ggplot2::aes(x = .data$p, y = .data$wt), 
-      color = color, 
-      linewidth = linewidth
-    )
-    
+  p
 }

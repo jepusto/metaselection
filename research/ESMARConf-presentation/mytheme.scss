@@ -1,0 +1,32 @@
+/*-- scss:defaults --*/
+$presentation-heading-color: #C5050C !default;
+$presentation-font-size-root: 30px;
+
+/* Specific style for the slide with class 'custom-slide' */
+/*.reveal .slide.custom-h2 h2 {
+  font-size: 1em; // Custom font size for h2 on this particular slide
+} */
+
+b, strong {
+   color: #C5050C;
+   }
+   
+/*.center-xy {
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -ms-transform: translateY(-50%), translateX(-50%);
+          transform: translateY(-50%), translateX(-50%);
+        } */
+        
+/*.v-center-container {
+          margin: 0;
+          position: absolute;
+          justify-content: center;
+          align-items: center;
+          left: 50%;
+          height: 25%;
+        } */
+        
+        

@@ -40,6 +40,8 @@ selection_plot(
   linewidth = 1.2,
   step_linetype = "dashed",
   draw_boots = TRUE,
+  fill = "blue",
+  alpha = 0.5,
   boot_color = "blue",
   boot_alpha = 0.1,
   ...
