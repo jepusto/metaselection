@@ -1,0 +1,7 @@
+step-function-selection-models-supplementary-materials_cache/
+step-function-selection-models-supplementary-materials_files/
+step-function-selection-models-with-dependent-effects_files/
+*.tex
+*.log
+*.aux
+*.toc
