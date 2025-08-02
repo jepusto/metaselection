@@ -27,13 +27,6 @@ source("research/step-function-simulations/3_simulation_driver.R")
 load("research/step-function-simulations/wwc_es.RData")
 
 #-------------------------------------------------------------------------------
-# Source packages and functions
-library(readr)
-library(dplyr)
-library(tidyr)
-
-
-#-------------------------------------------------------------------------------
 # Experimental Design
 
 # Express the simulation parameters as vectors/lists
