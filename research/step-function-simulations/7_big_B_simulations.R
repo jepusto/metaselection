@@ -60,6 +60,8 @@ all_params <-
   ) %>%
   select(-het_ratio)
 
+saveRDS(all_params, file = "research/step-function-simulations/big_B_bootstrap_parameters.rds")
+
 #-------------------------------------------------------------------------------
 # run simulations for specified batch
 res <- subset(all_params, row == row_to_run)
