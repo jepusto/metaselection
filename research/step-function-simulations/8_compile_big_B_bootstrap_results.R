@@ -49,7 +49,7 @@ summarize_bootstraps <- function(file_list) {
     results %>%
     group_by(estimator, param) %>%
     summarize(
-      bootstraps = mean(bootstraps),
+      bootstraps = mean(bootstraps, na.rm = TRUE),
       basic = calc_coverage(lower_bound = basic_lower, upper_bound = basic_upper,true_param = true_param, winz = 2.5),
       student = calc_coverage(lower_bound = student_lower, upper_bound = student_upper,true_param = true_param, winz = 2.5),
       percentile = calc_coverage(lower_bound = percentile_lower, upper = percentile_upper,true_param = true_param, winz = 2.5),

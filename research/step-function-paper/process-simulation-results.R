@@ -200,3 +200,65 @@ coverage_plot <- function(data) {
     theme_bw() +
     theme(legend.position = "top")
 }
+
+
+boot_real <- 
+  results_ci %>%
+  filter(
+    mean_smd %in% c(0.2), 
+    m == 15, 
+    bootstrap_condition == "bootstrap", 
+    param == "beta",
+    estimator %in% c("CML","ARGL"),
+    bootstraps < 1999L,
+    bootstrap_type == "two-stage",
+    weights %in% c("0.05","0.20"),
+    N_factor == "Typical",
+    het_ratio == 0.5,
+    CI_type %in% c("percentile","basic","BCa")
+  )
+
+big_B_bootstraps <- 
+  read_rds(file = "../step-function-simulations/sim-step-function-big-B-bootstrap-performance-results.rds") %>%
+  unnest(res) %>%
+  filter(
+    param == "beta",
+    CI_type %in% c("percentile","basic","BCa")
+  ) %>%
+  mutate(
+    bootstraps = if_else(is.na(bootstraps), 1999L, bootstraps),
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    cover_lo = coverage - qnorm(0.975) * coverage_mcse,
+    cover_hi = coverage + qnorm(0.975) * coverage_mcse,
+    weights = as.character(weights),
+    weights = factor(
+      weights, 
+      levels = selection_levels,
+      labels = names(selection_levels)
+    ),
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
+  )
+
+big_B_CML <- filter(big_B_bootstraps, estimator == "CML")
+big_B_ARGL <- filter(big_B_bootstraps, estimator == "ARGL")
+
+
+
+bootstraps <- unique(results_ci$bootstraps)[-1]
+
+boot_real %>%
+  filter(estimator == "CML") %>%
+ggplot() + 
+  aes(bootstraps, coverage, color = CI_type) + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
+  geom_pointrange(
+    data = big_B_CML,
+    aes(ymin = cover_lo, ymax = cover_hi),
+    shape = "square"
+  ) + 
+  facet_grid(tau ~ weights, labeller = "label_both") + 
+  scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
+  theme_minimal() + 
+  labs(x = "B", y = "Coverage rate", color = "")
