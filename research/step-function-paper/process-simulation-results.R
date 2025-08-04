@@ -162,7 +162,7 @@ RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_l
     scale_y_continuous(transform = "log2") + 
     scale_color_brewer(palette = "Dark2", guide = guide_legend(nrow=legend_rows)) +
     facet_grid(tau ~ mean_smd, 
-               labeller = label_bquote(rows = tau[B] == .(tau),
+               labeller = label_bquote(rows = tau == .(tau),
                                        cols = mu == .(mean_smd)),
                scales = "free_y"
     ) +
@@ -186,7 +186,7 @@ coverage_plot <- function(data) {
     facet_grid(
       tau ~ mean_smd, 
       labeller = label_bquote(
-        rows = tau[B] == .(tau),
+        rows = tau == .(tau),
         cols = mu == .(mean_smd)
       ),
       scales = "free_y"
@@ -200,3 +200,76 @@ coverage_plot <- function(data) {
     theme_bw() +
     theme(legend.position = "top")
 }
+
+
+#-------------------------------------------------------------------------------
+# Comparison of extrapolation versus bootstraps with large B
+
+boot_real <- 
+  results_ci %>%
+  filter(
+    mean_smd %in% c(0.2), 
+    m == 15, 
+    bootstrap_condition == "bootstrap", 
+    param == "beta",
+    estimator %in% c("CML","ARGL"),
+    bootstrap_type == "two-stage",
+    weights %in% c("0.05","0.20"),
+    N_factor == "Typical",
+    het_ratio == 0.5,
+  ) %>%
+  mutate(
+    cover_lo = coverage - qnorm(0.975) * coverage_mcse,
+    cover_hi = coverage + qnorm(0.975) * coverage_mcse,
+    tau_lab = paste("tau ==", tau),
+    lambda_lab = paste("lambda ==", weights),
+    CI_lab = paste("CI type:", CI_type)
+  )
+
+big_B_bootstraps <- 
+  read_rds(file = "../step-function-simulations/sim-step-function-big-B-bootstrap-performance-results.rds") %>%
+  unnest(res) %>%
+  filter(
+    param == "beta",
+  ) %>%
+  mutate(
+    bootstraps = 1999L,
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    cover_lo = coverage - qnorm(0.975) * coverage_mcse,
+    cover_hi = coverage + qnorm(0.975) * coverage_mcse,
+    weights = as.character(weights),
+    weights = factor(
+      weights, 
+      levels = selection_levels,
+      labels = names(selection_levels)
+    ),
+    tau_lab = paste("tau ==", tau),
+    lambda_lab = paste("lambda ==", weights),
+    CI_lab = paste("CI type:", CI_type)
+  )
+
+
+boot_compare <- 
+  bind_rows(
+    extrapolated = boot_real,
+    direct = big_B_bootstraps,
+    .id = "coverage_estimator"
+  ) %>%
+  filter(
+    bootstraps == 1999L
+  ) %>%
+  select(tau, weights, estimator, CI_type, coverage_estimator, coverage, coverage_mcse) %>%
+  pivot_wider(
+    names_from = coverage_estimator,
+    values_from = c(coverage, coverage_mcse)
+  ) %>%
+  mutate(
+    diff = 100 * (coverage_extrapolated - coverage_direct),
+    diff_mcse = 100 * sqrt(coverage_mcse_extrapolated^2 + coverage_mcse_direct^2)
+  ) %>%
+  summarize(
+    mean = mean(diff), 
+    min = min(diff),
+    max = max(diff),
+    rmse = sqrt(mean(diff^2))
+  )

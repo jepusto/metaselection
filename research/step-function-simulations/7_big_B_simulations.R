@@ -27,13 +27,6 @@ source("research/step-function-simulations/3_simulation_driver.R")
 load("research/step-function-simulations/wwc_es.RData")
 
 #-------------------------------------------------------------------------------
-# Source packages and functions
-library(readr)
-library(dplyr)
-library(tidyr)
-
-
-#-------------------------------------------------------------------------------
 # Experimental Design
 
 # Express the simulation parameters as vectors/lists
@@ -67,12 +60,13 @@ all_params <-
   ) %>%
   select(-het_ratio)
 
+saveRDS(all_params, file = "research/step-function-simulations/big_B_bootstrap_parameters.rds")
+
 #-------------------------------------------------------------------------------
 # run simulations for specified batch
 res <- subset(all_params, row == row_to_run)
 res$batch <- NULL
 res$row <- NULL
-res$R <- 99L
 
 tic()
 

@@ -52,7 +52,8 @@ We repeated the process of generating studies until the database included a tota
 We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
 We estimated CML and ARGL estimators and calculated cluster-robust confidence intervals as described in Section \@ref(estimation-methods). 
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
-To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
+To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator but extrapolated coverage rates for $B = 1999$ replications [@boos2000montecarlo];
+`r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details.
 
 We compared the performance of the step-function CML and ARGL estimators to that of two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
@@ -156,6 +157,7 @@ Estimates falling below the lower fence or above the upper fence were set to the
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
 For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
 To mitigate computational demand, we used few bootstraps per replication than recommended for analysis of real data. 
-To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique @boos2000montecarlo. 
+To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique.[@boos2000montecarlo]
 For each replication, we computed bootstrap confidence intervals not only for $B = 399$, but also for $B = 49$, 99, 199, and 299 bootstraps, randomly selected without replacement.
 We computed coverage rates separately for each value of $B$, fit a linear regression of the coverage rate on $1 / B$, and then used this regression to predict the coverage rate of confidence intervals based on $B = 1999$ bootstraps.
+`r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details and demonstrates the performance of the extrapolation technique.

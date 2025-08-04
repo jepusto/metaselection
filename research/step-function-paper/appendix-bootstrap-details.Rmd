@@ -9,7 +9,7 @@ editor_options:
 
 # Further details about bootstrapping {#bootstrap-details}
 
-## Other bootstrap sampling methods {-}
+## Other bootstrap sampling methods {#bootstrap-resampling}
 
 The main manuscript described a two-stage cluster bootstrapping technique. We also considered two other bootstrap sampling schemes.
 
@@ -24,7 +24,7 @@ Rather than using a multinomial distribution, the weights follow independent exp
 A crucial difference between these bootstrap techniques is that the fractional random weight bootstrap puts strictly positive weight on every cluster of observations in every pseudo-sample, whereas the clustered bootstrap and two-stage bootstrap can assign zero weight to some clusters [@xu2020applications].
 If the existence of an estimator hinges on the inclusion of one or a small number of clusters, this will create computational problems for the non-parametric bootstrap but not for the fractional random weight bootstrap.
 
-## Bootstrap confidence interval construction {-}
+## Bootstrap confidence interval construction {#bootstrap-CI-construction}
 
 We describe three methods for constructing a $1 - 2\alpha$ confidence interval (CI) from a set of $B$ bootstrap replications.
 Consider a parameter $\theta$ that is a scalar component of $\bs\beta$, $\gamma$, or $\bs\zeta$.
@@ -61,3 +61,140 @@ $$
 $$
 Notably, the basic and studentized confidence intervals depend on the scale of the parameter $\theta$, and the accuracy of their coverage levels therefore depends on the parameterization. In contrast, the percentile and bias-corrected-and-accelerated confidence intervals are invariant to transformation of $\theta$. 
 
+## Extrapolating coverage rates {#bootstrap-extrapolation}
+
+The simulations reported in the main manuscript involved using an extrapolation technique suggested by Boos and Zhang [@boos2000montecarlo] to estimate the coverage levels of bootstrap confidence intervals for $B = 1999$ bootstrap re-samples, when each replication of the simulation involved only $B = 399$ re-samples.
+We used $R = 2000$ replications of the simulation process.
+For each replication, we computed an estimator $\hat\theta$ of parameter $\theta$ and a set of bootstrap re-samples $\hat\theta^*_{b}$ for $b = 1,...,399$.
+With these data, we can construct a confidence interval for $\theta$ by drawing $d \leq B$ of the bootstrap re-samples at random without replacement, then using these replications in the calculations described in Section \@ref(bootstrap-CI-construction). 
+We repeat this process for $d = 49, 99, 199, 299, 399$.
+Let $C^{dr}$ be an indicator for whether the confidence interval constructed from $d$ re-samples covers $\theta$, for $r = 1,...,R$.
+To extrapolate coverage, we fit a linear regression
+$$
+C_{dr} = \alpha + \beta \left(\frac{1}{d} - \frac{1}{1999}\right) + e_{dr}
+$$
+by ordinary least squares, with standard errors clustered by replication $r$ to account for dependence in $C_{dr}$ computed from the same replication of the simulation process. 
+We take the estimate of $\alpha$ as the coverage rate of confidence intervals constructed from $B = 1999$ re-samples.
+
+To validate this extrapolation technique, we ran additional simulations where we generated confidence intervals based on $B = 1999$ re-samples and computed coverage rates directly.
+Due to high computational demand, we conducted this exercise for a small subset of the conditions examined in the full simulation study, which we selected because they varied in the estimate coverage rates of percentile confidence intervals.
+Specifically, we looked conditions with $J = 15$ studies, an average effect size of $\mu = 0.2$, typical primary study sample sizes, a heterogeneity ratio of $\omega^2 / \tau_B^2 = 0.5$, outcome correlation $\rho = 0.8$, between-study heterogeneity of $\tau_B \in \{0.05, 0.45\}$, and probability of selection $\lambda_1 \in \{0.05, 0.20\}$.
+We used the two-stage bootstrap re-sampling process because it showed the best performance in the larger simulation study.
+
+```{r}
+source("process-simulation-results.R")
+```
+
+```{r bootstrap-extrapolation-CML}
+#| cache: true
+#| warn: false
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Actual and extrapolated coverage rates of selected bootstrap confidence intervals based on composite maximum likelihood estimation, using two-stage bootstrap resampling. Circular dots represent actual coverage rates used to extrapolate coverage to $B = 1999$ re-samples, with colored bands indicating point-wise Monte Carlo intervals. Squares represent actual coverage rates using $B = 1999$ re-samples, with whiskers indicating point-wise Monte carlo intervals, based on 4000 replications."
+
+CI_types <- c("percentile","basic","BCa")
+
+boot_real_CML <- 
+  boot_real %>%
+  filter(
+    estimator == "CML",  
+    CI_type %in% CI_types,
+  ) %>%
+  mutate(
+    coverage = if_else(bootstraps == 1999L, NA_real_, coverage)
+  )
+  
+big_B_CML <- big_B_bootstraps %>%
+  filter(
+    estimator == "CML",     
+    CI_type %in% CI_types,
+  )
+
+bootstraps <- c(49, 99, 199, 1999)
+
+ggplot(boot_real_CML) + 
+  aes(bootstraps, coverage, color = CI_type) + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + 
+  geom_ribbon(aes(ymin = cover_lo, ymax = cover_hi, fill = CI_type, color = NULL), alpha = 0.3) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
+  geom_pointrange(
+    data = big_B_CML,
+    aes(ymin = cover_lo, ymax = cover_hi),
+    shape = "square"
+  ) + 
+  facet_grid(
+    CI_lab ~ tau_lab + lambda_lab, 
+    labeller = labeller(tau_lab = label_parsed, lambda_lab = label_parsed), 
+    scales = "free_y"
+  ) + 
+  scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
+  theme_minimal() + 
+  labs(x = "Bootstrap re-samples (B)", y = "Coverage rate") + 
+  theme(legend.position = "none")
+
+```
+
+```{r bootstrap-extrapolation-ARGL}
+#| cache: true
+#| warn: false
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Actual and extrapolated coverage rates of selected bootstrap confidence intervals based on augmented reweighted Gaussian likelihood estimation, using two-stage bootstrap resampling. Circular dots represent actual coverage rates used to extrapolate coverage to $B = 1999$ re-samples, with colored bands indicating point-wise Monte Carlo intervals. Squares represent actual coverage rates using $B = 1999$ re-samples, with whiskers indicating point-wise Monte carlo intervals, based on 4000 replications."
+
+
+boot_real_ARGL <- 
+  boot_real %>%
+  filter(
+    estimator == "ARGL",  
+    CI_type %in% CI_types,
+  ) %>%
+  mutate(
+    coverage = if_else(bootstraps == 1999L, NA_real_, coverage)
+  )
+  
+big_B_ARGL <- big_B_bootstraps %>%
+  filter(
+    estimator == "ARGL",     
+    CI_type %in% CI_types,
+  )
+
+bootstraps <- c(49, 99, 199, 1999)
+
+ggplot(boot_real_ARGL) + 
+  aes(bootstraps, coverage, color = CI_type) + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + 
+  geom_ribbon(aes(ymin = cover_lo, ymax = cover_hi, fill = CI_type, color = NULL), alpha = 0.3) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
+  geom_pointrange(
+    data = big_B_ARGL,
+    aes(ymin = cover_lo, ymax = cover_hi),
+    shape = "square"
+  ) + 
+  facet_grid(
+    CI_lab ~ tau_lab + lambda_lab, 
+    labeller = labeller(tau_lab = label_parsed, lambda_lab = label_parsed), 
+    scales = "free_y"
+  ) + 
+  scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
+  theme_minimal() + 
+  labs(x = "Bootstrap re-samples (B)", y = "Coverage rate") + 
+  theme(legend.position = "none")
+
+```
+
+Figures \@ref(fig:bootstrap-extrapolation-CML) and \@ref(fig:bootstrap-extrapolation-ARGL) illustrate the extrapolation results for the composite maximum likelihood and augmented, reweighted Gaussian likelihood estimators, respectively.
+In each figure, the circular points show the estimated coverage rates of a specific type of bootstrap confidence interval computed from $d = 49, 99, 199, 299$, or $399$ bootstrap re-samples, with bands representing point-wise Monte Carlo intervals; 
+These data are drawn from the larger simulation study and use $R = 2000$ replications. 
+The horizontal axis of each panel is scaled in proportion to $1 / d$, and the straight line in each panel depicts the linear regression fit used for extrapolation.
+On the left edge of each panel, a square point and vertical whiskers indicate the coverage rates computed from the additional simulations with $B = 1999$ re-samples and $R = 4000$ replications of the simulation process.
+Comparing the square points to the linear extrapolations provides a sense of the accuracy of the extrapolation technique. 
+
+It can be seen that nearly all coverage rates from the additional simulations fall within the Monte Carlo intervals of the extrapolation.
+Across conditions, estimators, and confidence interval types, discrepancies between extrapolated coverage and directly estimated coverage ranged from `r formatC(boot_compare$min, digits = 1, format = "f")` to `r formatC(boot_compare$max, digits = 1, format = "f")` percentage points, with an average of `r formatC(boot_compare$mean, digits = 1, format = "f")` and root mean-squared error of `r formatC(boot_compare$rmse, digits = 1, format = "f")` percentage points. 
+Thus, the extrapolations computed in the large simulation study appear to accurately predict the coverage rates computed from the additional simulations with $B = 1999$ re-samples.

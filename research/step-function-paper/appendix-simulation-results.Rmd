@@ -11,6 +11,7 @@ source("process-simulation-results.R")
 ```
 
 # Additional simulation results for estimators of average effect size $(\mu)$ {#mu-simulation-results}
+
 ```{r convergence-rates}
 #| cache: true
 #| fig.width: 9
