@@ -17,8 +17,7 @@ delta_selection_names <- c(
 )
 
 results <- 
-  #readRDS("../beta-function-simulations/sim-beta-function-point-estimator-results.rds") %>%
-  readRDS("C:/GitHub/metaselection/research/beta-function-simulations/sim-beta-function-point-estimator-results.rds") %>%
+  readRDS("../beta-function-simulations/sim-beta-function-point-estimator-results.rds") %>%
   mutate(
     estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -137,8 +136,7 @@ gamma_wide_res_miss <-
 #   )
 
 results_ci <- 
-  #readRDS("../beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
-  readRDS("C:/GitHub/metaselection/research/beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
+  readRDS("../beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
   mutate(
     estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
     het_ratio = omega ^ 2 / tau ^ 2,
