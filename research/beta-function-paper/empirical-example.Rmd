@@ -18,8 +18,7 @@ sci <- sci |>
   rename(esid = es_id, studyid = study_id) |>
   mutate(
     d = yi,
-    Va = vi,
-    Var_d = Va,
+    Var_d = vi,
     sd_d = sqrt(Var_d),
     var_d = Var_d,
     p_onesided = 1 - pnorm(d / sd_d)
@@ -29,9 +28,10 @@ num_studies <- length(unique(sci$studyid))
 num_effects <- length(unique(sci$esid))
 ```
 
-To illustrate the new beta-function selection model in an empirical application, we reanalyzed the data from a meta-analysis conducted by BSCS Science Learning. BSCS Science Learning conducted a meta-analysis of science interventions effects on K–12 student science achievement [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes. We conducted the analyses using R Version 4.4.3 [@rcoreteam].
+To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. We conducted the analyses using R Version 4.4.3 [@rcoreteam].
 
-```{r, echo = F, warning = F, message = F}
+```{r science-learning-models, echo = F, warning = F, message = F}
+
 # Unadjusted model
 sci_unadj_mean <- rma.uni(
   data = sci,
@@ -40,8 +40,11 @@ sci_unadj_mean <- rma.uni(
   method = "ML"
 )
 
-sci_unadj_mean_cil <- sci_unadj_mean$tau2 - 1.96*sci_unadj_mean$se.tau2
-sci_unadj_mean_ciu <- sci_unadj_mean$tau2 + 1.96*sci_unadj_mean$se.tau2
+sci_profile_CI <- confint(sci_unadj_mean, parm = "tau", trace = TRUE)
+sci_unadj_mean_cil <- sci_profile_CI$random["tau","ci.lb"]
+sci_unadj_mean_ciu <- sci_profile_CI$random["tau","ci.ub"]
+
+sci_unadj_mean_RVE <- robust(sci_unadj_mean, cluster = studyid, clubSandwich = TRUE)
 
 # Beta model
 sci_adj_beta_mean <- selection_model(
@@ -54,6 +57,7 @@ sci_adj_beta_mean <- selection_model(
   steps = c(.025,.975),
   make_sandwich = TRUE
 )
+
 
 # Single-step model
 sci_adj_step3_mean <- selection_model(
@@ -74,11 +78,104 @@ sci_adj_step4_mean <- selection_model(
   selection_type = "step",
   steps = c(0.025, .5)
 )
+
 ```
 
-We used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each study [@Viechtbauer2010conducting]. To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the new beta-function selection model along with our recently developed step-function selection model [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using RVE. For the step-function model, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = 0.025$ and $\alpha_2 = 0.5$.
+We first used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each study [@Viechtbauer2010conducting], with standard errors clustered by study. 
+The overall estimate of the average effect using the unadjusted model is `r formatC(sci_unadj_mean_RVE$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean_RVE$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean_RVE$ci.ub, format = "f", digits = 2)`], which is significantly different from zero ($p `r format.pval(sci_unadj_mean_RVE$pval, digits = 3, eps = 1e-3)`$). 
+The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mean_RVE$tau2), format = "f", digits = 2)`$.
 
-The overall estimate of the average effect using the unadjusted model is `r round(as.numeric(sci_unadj_mean$beta), 3)`, 95% CI [`r round(as.numeric(sci_unadj_mean$ci.lb), 3)`, `r round(as.numeric(sci_unadj_mean$ci.ub), 3)`], which is significantly different from zero ($p$ = `r round(sci_unadj_mean$pval, 3)`). The estimates from the selection models are also all positive and significant, but they vary in magnitude and thus their adjustment for selective reporting. Compared to the unadjusted model, the average adjusted effect is 25% small when using the beta-function selection model ($ES$ = `r round(sci_adj_beta_mean$est$Est[sci_adj_beta_mean$est$param=="beta"], 3)`), 32% larger when using the single-step model ($ES$ = `r round(sci_adj_step3_mean$est$Est[sci_adj_step3_mean$est$param=="beta"], 3)`), and 12% larger when using the two-step selection model ($ES$ = `r round(sci_adj_step4_mean$est$Est[sci_adj_step4_mean$est$param=="beta"], 3)`).
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the beta-function selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) along with two step-function selection models [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using robust variance estimation, clustering by study. For the step-function models, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = .025$ and $\alpha_2 = .5$.
+
+```{r science-learning-res, tab.pos = "tb", tab.cap="science learning meta-analysis"}
+
+all_res <- 
+  bind_rows(
+    beta = sci_adj_beta_mean$est,
+    `one-step` = sci_adj_step3_mean$est,
+    `two-step` = sci_adj_step4_mean$est,
+    .id = "Model"
+  ) %>%
+  rownames_to_column() %>%
+  mutate(
+    across(c(Est, CI_lo, CI_hi), ~ case_when(
+      param == "gamma" ~ exp(.x / 2), 
+      param %in% c("zeta1","zeta2") ~ exp(.x),
+      TRUE ~ .x
+    )),
+    param = recode(param, beta = "$\\beta$", gamma = "$\\tau$", zeta1 = "$\\lambda_1$", zeta2 = "$\\lambda_2$"),
+  )
+
+all_res_table <- 
+  all_res %>%
+  mutate(
+    Est_SE = paste0(formatC(Est, format = "f", digits = 2), " (",formatC(SE, format = "f", digits = 2),")"),
+    CI = paste0("[", formatC(CI_lo, format = "f", digits = 2),", ", formatC(CI_hi, format = "f", digits = 2), "]")
+  ) %>%
+  select(Model, param, Est_SE, CI) %>%
+  pivot_wider(names_from = Model, values_from = c(Est_SE, CI), names_vary = "slowest")
+
+library(kableExtra)
+options(knitr.kable.NA = '')
+
+kbl(
+  all_res_table,
+  caption = "Selection model parameter estimates fit to science intervention effects from Taylor et al. (2018)",
+  col.names = c("Parameter", rep(c("Est. (SE)", "95\\% CI"), times = 3)),
+  booktabs = TRUE,
+  longtable = TRUE,
+  escape = FALSE,
+  table.attr = "tb"
+) %>%
+  kable_styling() %>%
+  add_header_above(c(" ", "Beta density" = 2, "One-step" = 2, "Two-step" = 2)) %>%
+  footnote(
+    general = c("Est. = estimate; SE = cluster-robust standard error; CI = cluster-robust confidence interval.")
+  )
+```
+
+
+Table \@ref(tab:science-learning-res) reports parameter estimates from all three models, along with cluster-robust standard errors and 95% confidence intervals.
+Across the three selection models, the estimated average effect sizes are all positive and significant, but they vary in magnitude and interpretation. Compared to the unadjusted model, the average adjusted effect is 25% smaller when using the beta-density selection model ($ES$ = `r round(sci_adj_beta_mean$est$Est[sci_adj_beta_mean$est$param=="beta"], 3)`), versus 32% larger when using the single-step model ($ES$ = `r round(sci_adj_step3_mean$est$Est[sci_adj_step3_mean$est$param=="beta"], 3)`) and 12% larger when using the two-step selection model ($ES$ = `r round(sci_adj_step4_mean$est$Est[sci_adj_step4_mean$est$param=="beta"], 3)`).
+These differences are due to differences in the form of the selection curve estimated from each model specification, as depicted in figure \@ref(fig:science-selection-curves).
+The beta-density model estimates of $\lambda_1$ and $\lambda_2$ imply that positive but non-significant results are slightly more likely to be reported compared to affirmative results, but that negative effects are increasingly less likely to be be reported.
+On balance, this leads to an adjusted average effect size estimate that is smaller than under the unadjusted random effects model.
+In contrast, the step-function models both estimate that non-significant results are more likely to be reported compared to affirmative results, leading to upward adjustment in the average effect size.
+
+
+```{r science-selection-curves}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 5.5
+#| out.width: 75%
+#| fig.cap: "Estimated selection functions based on beta density, one-step, and two-step selection models"
+#| fig.pos: tb 
+
+pvals <- seq(0.001, 0.999, .001)
+selection_curves <- bind_rows(
+  beta = selection_wts(sci_adj_beta_mean, pvals = pvals),
+  `one-step` = selection_wts(sci_adj_step3_mean, pvals = pvals),
+  `two-step` = selection_wts(sci_adj_step4_mean, pvals = pvals),
+  .id = "Model"
+)
+
+ggplot(selection_curves) + 
+  aes(p, wt, color = Model, fill = Model) + 
+  geom_vline(xintercept = c(.025, .975), linetype = "dashed") + 
+  geom_area(alpha = 0.5) + 
+  facet_wrap(~ Model, ncol = 1) + 
+  scale_x_continuous(
+    limits = c(0,1), 
+    expand = expansion(0,0), 
+    transform = "asn",
+    breaks = c(0,.025, .10, .25, .5, .75, .90, .975, 1)
+  ) + 
+  theme_light() + 
+  labs(x = "p-value (one-sided)", y = "Selection weight") + 
+  theme(legend.position = "none", strip.text = element_text(color = "black"))
+```
+
 
 ```{r, echo = F, warning = F, message = F}
 # Unadjusted model - moderator
@@ -131,9 +228,8 @@ sci_adj_step4_mod <- selection_model(
 
 A key advantage of selection models over other methods for diagnosing and adjusting for selective reporting bias is their ability to include both discrete and continuous moderators. This allows meta-analysts to distinguish selective reporting bias from systematic variation in effect sizes that can be explained by primary study characteristics. The BSCS Science Learning meta-analytic data includes a number of potential moderators of effect size. Among these is an indicator for assessment author type, defined as 1 for assessment developer is the author or researcher and 0 otherwise. We reran all four models using assessment author type as a moderator [@taylor2018science].
 
-When the assessment developer is the author or researcher, the unadjusted estimate is `r round(as.numeric(sci_unadj_mod$beta[2]), 3)`, 95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[2]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[2]), 3)`], which is not significantly different from zero ($p$ = `r round(sci_unadj_mod$pval[2], 3)`). The estimates from the selection models are also all nonsignificant and ranged from 
-`r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_outcome_type_author"], 3)` to `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_outcome_type_author"], 3)`. However, when the assessment developer is not the author or researcher, the models lead to different conclusions. The estimate from the unadjusted model is `r round(as.numeric(sci_unadj_mod$beta[1]), 3)` and significant (95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[1]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[1]), 3)`], $p$ = `r round(sci_unadj_mod$pval[1], 3)`). The estimate from the beta-function selection model is `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)` and nonsignificant ($p$ = `r round(sci_adj_beta_mod$est$p_value[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)`).
-The estimates from the step-function selection models are both significant, with estimates of `r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_(Intercept)"], 3)` for the single-step selection model and `r round(sci_adj_step4_mod$est$Est[sci_adj_step4_mod$est$param=="beta_(Intercept)"], 3)` for the two-step selection model.
+When the assessment developer is the author or researcher, the unadjusted estimate is `r round(as.numeric(sci_unadj_mod$beta[2]), 3)`, 95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[2]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[2]), 3)`], which is not significantly different from zero ($p$ = `r round(sci_unadj_mod$pval[2], 3)`). The estimates from the selection models are also all nonsignificant and ranged from `r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_outcome_type_author"], 3)` to `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_outcome_type_author"], 3)`. However, when the assessment developer is not the author or researcher, the models lead to different conclusions. The estimate from the unadjusted model is `r round(as.numeric(sci_unadj_mod$beta[1]), 3)` and significant (95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[1]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[1]), 3)`], $p$ = `r round(sci_unadj_mod$pval[1], 3)`). The estimate from the beta-function selection model is `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)` and nonsignificant ($p$ = `r round(sci_adj_beta_mod$est$p_value[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)`). The estimates from the step-function selection models are both significant, with estimates of `r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_(Intercept)"], 3)` for the single-step selection model and `r round(sci_adj_step4_mod$est$Est[sci_adj_step4_mod$est$param=="beta_(Intercept)"], 3)` for the two-step selection model.
 
 <!-- I'd love to put the estimates in a table, I just don't know how. -->
+
 The model estimates reveal some key differences between estimation methods. In this dataset, the beta-function selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. These differences suggest that the models may behave differently in different conditions. To investigate this, we conducted simulations across a wide range of conditions. The simulations will allow us to draw firmer conclusions about the comparative performance of these methods, including their robustness to misspecification of the selection function.
