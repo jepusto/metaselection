@@ -184,9 +184,6 @@ The authors declare no conflicts of interest.
 # References {-}
 
 \begingroup
-\singlespacing
-\setlength{\parindent}{-0.5in}
-\setlength{\leftskip}{0.5in}
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
 

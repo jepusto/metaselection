@@ -115,12 +115,12 @@ where
 \label{eq:generic-selection-A}
 A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) =  \int_\mathbb{R} w\left(y, \sigma; \boldsymbol\lambda \right) \times  \frac{1}{\sqrt{\tau^2 + \sigma^2}}\phi\left(\frac{y - \mathbf{x}\boldsymbol\beta}{\sqrt{\tau^2 + \sigma^2}}\right) dy.
 \end{equation}
-For the beta-function selection process, the $A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)$ term in the beta-function composite likelihood must be computed using numerical integration. 
+For the beta-density selection process, the $A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)$ term in the beta-density composite likelihood must be computed using numerical integration. 
 If $w(y, \sigma; \boldsymbol\lambda) = 1$, then $A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) = 1$ and there is no selective reporting. The density then reduces to the unweighted density of the evidence-generating process and the $\boldsymbol\beta$ estimates from the adjusted beta function selection model will approximate those of the standard meta-analytic model.
 
 ## Estimation Method {#estimation-method}
 
-We estimate model parameters using maximum composite marginal likelihood (CML), which treats each observed effect size estimate as if it were mutually independent, following established composite likelihood approaches [e.g., @cox2004note; @lindsay1988composite; @varin2008composite]. Estimation proceeds by maximizing a weighted log-likelihood function defined over the marginal contributions of each observation, using reparameterizations of the variance and selection parameters. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper [@pustejovsky2025step], and the exact expressions used for estimating the beta-function selection model are presented in APPENDIX.
+We estimate model parameters using maximum composite marginal likelihood (CML), which treats each observed effect size estimate as if it were mutually independent, following established composite likelihood approaches [e.g., @cox2004note; @lindsay1988composite; @varin2008composite]. Estimation proceeds by maximizing a weighted log-likelihood function defined over the marginal contributions of each observation, using reparameterizations of the variance and selection parameters. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper [@pustejovsky2025step], and the exact expressions used for estimating the beta-density selection model are presented in APPENDIX.
 
 ## Bootstrap inference
 
