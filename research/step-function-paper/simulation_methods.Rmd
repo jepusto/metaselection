@@ -1,4 +1,4 @@
----
+n---
 title: "Simulation Methods"
 output: pdf_document
 bibliography: references.bib
@@ -59,7 +59,7 @@ We compared the performance of the step-function CML and ARGL estimators to that
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) [@chen2024adapting].
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by Stanley and Doucouliagos[@stanley2014meta], adapted to accommodate dependent effect sizes.
+Second, we implemented a variation of the PET/PEESE estimator originally proposed by Stanley and Doucouliagos[@stanley2014meta], adapted to accommodate dependent effect sizes using RVE.
 Following convention, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.[@stanley2014meta]
 For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
 
