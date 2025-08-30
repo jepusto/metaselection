@@ -29,7 +29,8 @@ denote the effective sample size from study $j$.
 To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
-We assumed constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
+This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
+For simplicity in the data-generating process, we assumed a constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
 
 [^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
 
@@ -46,6 +47,7 @@ $$
 Here, $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
 $k_j^* \times 1$ vectors of outcomes for participant $h$ in study $j$ in
 treatment and control group and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with the diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.
+We assumed a compound symmetry structure for the true effect sizes and a sampling variance of 1 for the raw outcomes. These assumptions represent a plausible data structure for meta-analyses with dependent effects, while also simplifying the data-generating process for our simulation. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$, as it does not affect the final effect size estimates.
 From the raw outcome data, we calculated standardized mean
 differences using Hedges's $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
 We calculated the sampling variances using conventional formulas [@borenstein2019effect] and computed one-sided $p$-values based on two-sample $t$-tests for the null of $H_0: \delta_{ij} \leq 0$.
@@ -69,6 +71,7 @@ We compared the performance of the step-function CML and ARGL estimators to two 
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting.[^ISCW] 
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
+This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
 Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
 Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
 For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].

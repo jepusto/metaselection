@@ -83,10 +83,12 @@ Similar to the CML estimator, the ARGL estimator also has negligible or small bi
 In contrast to the estimators based on the marginal selection model, the comparison estimators are systematically biased under many conditions. 
 The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
 When average effect size is large $(\mu = 0.8)$, its bias remains quite small even when selective reporting is very strong.
+This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for the selection mechanism to operate.
 However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger; its bias exceeds 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
 Although the PET/PEESE estimator uses a regression adjustment to account for possible selective reporting, it too becomes severely biased when selective reporting is strong.
 For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced. Its bias grows larger (and closer to that of CHE-ISCW) for smaller values of average effect size and higher levels of heterogeneity.
 For larger values of average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
+The selection model directly corresponds to the step-function data-generating mechanism used in the simulation, which could contribute to its estimators' strong performance relative to the other methods.
 
 ### Scaled RMSE
 
