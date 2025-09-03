@@ -22,11 +22,15 @@ Such models build on summary meta-analysis or meta-regression models by making s
 Other forms involve selection functions based on beta densities [@citkowicz2017parsimonious], power curves, and a variety of other parametric forms [@preston2004adjusting].
 
 Selection models have several advantages over other available methods for diagnosing and adjusting for selective reporting bias.
-First, they are generative models with parameters that directly describe the selective reporting process; they are therefore more interpretable than tests or adjustments for small-study effects, which are agnostic with respect to the specific mechanism of selective reporting. 
-Second, selection models can allow for effect heterogeneity with a random effect term. 
-Findings from simulations indicate that selection models outperform simpler alternative methods when effect sizes are heterogeneous [@carter2019correcting; @Terrin2003heterogeneity].
-Third, selection models can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
-In addition to these features, the @vevea1995general step-function model is particularly useful because it allows one to specify cut points that capture simple but plausible forms of selective reporting [e.g., p < 0.01 and p < 0.05, see, e.g., @greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance].
+First, they are generative models with parameters that directly describe the selective reporting process, making them more interpretable than tests or adjustments for small-study effects, which are agnostic with respect to the specific mechanism of selective reporting.
+Second, they can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
+Third, findings from simulations indicate that selection models outperform simpler alternative methods when effect sizes are heterogeneous as they allow for the inclusion of a random effect term [@carter2019correcting; @Terrin2003heterogeneity]. However, these models also have disadvantages that should be acknowledged. They are often statistically complex, and require a large number of effect sizes to estimate the model parameters, particularly when a complex selection process is assumed.
+
+The @vevea1995general step-function model, which assumes selection occurs at one or more predefined $p$-value thresholds, is a particularly useful selection model. It captures simple but plausible forms of selective reporting, such as steps at $p = 0.05$ or $p = 0.01$ [see, e.g., @greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance], and can be more powerful than other models when the true selection process follows such a pattern.
+However, a limitation is that these thresholds must be specified a priori, which can be challenging and may not correspond to the true selective reporting process.
+Furthermore, as with other selection models, estimating the parameters of a step-function model can be demanding, with more complex patterns requiring a larger number of studies and effect sizes.
+Nonetheless, @carter2019correcting found that even a simple step-function model with a single threshold outperformed other regression- and funnel plot-based alternatives with respect to bias and Type I error calibration.
+Thus, despite these complexities, the step-function model's ability to directly model a plausible selective reporting process, coupled with its demonstrated performance in simulations, makes it a valuable and promising approach for correcting meta-analyses for selective reporting bias.
 
 ## Dependent effect sizes
 
