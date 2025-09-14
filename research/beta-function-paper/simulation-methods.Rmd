@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model. 
+We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model and to investigate whether the form of the selection mechanism matters.
 The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates.
 We compared the new model to three exiting methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting [@chen2024adapting]; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures [@stanley2014meta]; and (3) our recently developed step-function selection model that accounts for both selective reporting and dependent effects [@pustejovsky2025step].
 We evaluated the model estimates based on convergence rates, bias, accuracy, and confidence interval coverage for estimating the average effect size from the unselected distribution. Bootstrap confidence intervals were assessed under a narrower set of conditions to limit computational burden. 
@@ -23,18 +23,19 @@ We repeated this process until the simulated meta-analytic dataset included at t
 
 ## Estimation methods
 
-We estimated the beta-density selection model using the CML approach described in Section \@ref(estimation-methods). We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated confidence intervals based on the two-stage bootstrap.^[In our recent work [@pustejovsky2025step], we also evaluated confidence intervals using the non-parametric clustered bootstrap and the fractional random weight bootstrap. The two-stage bootstrap consistently outperformed the alternatives, so we focus exclusively on this approach in the present paper.] To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
+We estimated the beta-density selection model using the CML approach described in Section \@ref(estimation-methods). We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated confidence intervals based on the two-stage bootstrap. To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
 
 We compared the performance of the beta-density selection model to three other methods. First, we estimated a summary meta-analysis model using the CHE-ISCW approach proposed by @chen2024adapting, which accounts for effect size dependence but does not adjust for selective reporting. This method fits a CHE working model, but it allocates more weight to studies with smaller sampling variances by using generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors only. We assumed a correlation of 0.80, which leads to a degree of misspecification when the average correlation used in the data-generating process differs from 0.80. We computed confidence intervals for the average effect size using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.
 
 Second, we estimated a variation of the PET/PEESE model originally proposed by @stanley2014meta, adapted to handle dependent effect sizes. The PET model regresses effect size estimates on their standard errors, while the PEESE model uses sampling variances instead. Both models assume normally distributed errors with a correlation of 0.80 and were estimated using the same procedure as the CHE-ISCW model, including using CR2 cluster-robust standard errors. Following @stanley2014meta, we used the PET estimate if it was not statistically distinguishable from zero at an $\alpha$-level of 0.10; otherwise, we used the PEESE estimate.
 
 Third, we estimated the step-function selection model using the CML approach described in @pustejovsky2025step. 
-We estimated two step-function selection models: (1) a three-parameter selection model (3PSM) with a single step at $\alpha_1 = 0.025$, and (2) a four-parameter selection model (4PSM) with steps at $\alpha_1 = 0.025$ and $\alpha_2 = 0.500$. 
-Like the beta-density selection model, the 3PSM and 4PSM are $p$-value selection models designed to address selective reporting, they are models for the marginal rather than joint distribution of estimates within studies, and they use cluster-robust variance estimation or bootstrapping to account for dependency. 
-The main distinction between the step-function and beta-density selection models lies in the form of the selection mechanism. By fitting the 3PSM and 4PSM to data simulated under a beta-density selection process, we can assess how robust these models are to misspecification of the selection function and whether the form of selection affects their performance. 
+We estimated two step-function selection models: (1) a one-step selection model with a single step at $\alpha_1 = 0.025$, and (2) a two-step selection model with steps at $\alpha_1 = 0.025$ and $\alpha_2 = 0.500$. 
+Like the beta-density selection model, the one-step and two-step models are $p$-value selection models designed to address selective reporting, they are models for the marginal rather than joint distribution of estimates within studies, and they use cluster-robust variance estimation or bootstrapping to account for dependency.
+The main distinction between the step-function and beta-density selection models lies in the form of the selection mechanism. By fitting the one-step and two-step selection models to data simulated under a beta-density selection process, we can assess how robust these models are to misspecification of the selection function and whether the form of selection affects their performance. 
 <!-- We may want to elevate some of these to earlier sections. -->
 <!-- JEP: Agree. This is a central question in the simulations. -->
+<!-- MC: Done. -->
 
 ## Experimental design
 

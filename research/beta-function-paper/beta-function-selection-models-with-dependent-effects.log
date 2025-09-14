@@ -1,16 +1,16 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.4)  6 AUG 2025 15:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.9.14)  14 SEP 2025 15:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **beta-function-selection-models-with-dependent-effects.tex
 (./beta-function-selection-models-with-dependent-effects.tex
 LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-07-20>
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/apa7.cls
+L3 programming layer <2025-08-13>
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/apa7.cls
 Document Class: apa7 2022/07/25 v2.16 APA formatting (7th edition)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count275
@@ -24,12 +24,12 @@ File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen148
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count283
 )
 Class apa7 Info: No bibliography package was specified; defaulting to (but not loading) Biblatex on input line 218.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
 Package: lmodern 2015/05/01 v1.6.1 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -63,19 +63,19 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 116.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2024/12/12 v1.0g TeX engine tests
 ))
 \Gm@cnth=\count284
@@ -90,24 +90,24 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 \Gm@layouthoffset=\dimen155
 \Gm@layoutvoffset=\dimen156
 \Gm@dimlist=\toks18
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 106.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen157
 \Gin@req@width=\dimen158
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/scalerel/scalerel.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/scalerel/scalerel.sty
 Package: scalerel 2016/12/29 v1.8 Routines for constrained scaling and stretching of objects, relative to a reference object or in absolute terms
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
 \calc@Acount=\count287
 \calc@Bcount=\count288
@@ -127,22 +127,22 @@ LaTeX Info: Redefining \addtolength on input line 87.
 \mnxsrwidth=\skip58
 \LMex=\skip59
 \LMpt=\skip60
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks19
 \pgfutil@tempdima=\dimen161
 \pgfutil@tempdimb=\dimen162
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
 \pgfutil@abb=\box53
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision.tex)
-Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+Package: pgfrcs 2025-08-29 v3.1.11a (3.1.11a)
 ))
-Package: pgf 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
-Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks20
 \pgfkeys@temptoks=\toks21
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
 \pgfkeys@tmptoks=\toks22
 ))
 \pgf@x=\dimen163
@@ -165,27 +165,27 @@ Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
 \t@pgf@tokb=\toks24
 \t@pgf@tokc=\toks25
 \pgf@sys@id@count=\count294
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
-File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2025-08-29 v3.1.11a (3.1.11a)
 )
 Driver file for pgf: pgfsys-pdftex.def
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
-File: pgfsys-pdftex.def 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
-File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
-File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
+))) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfsyssoftpath@smallbuffer@items=\count295
 \pgfsyssoftpath@bigbuffer@items=\count296
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
-File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 274.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
 Package xcolor Info: Model `RGB' extended on input line 1365.
@@ -195,19 +195,19 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
-Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen173
 \pgfmath@count=\count297
 \pgfmath@box=\box54
 \pgfmath@toks=\toks26
 \pgfmath@stack@operand=\toks27
 \pgfmath@stack@operation=\toks28
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count298
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
-File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@picminx=\dimen174
 \pgf@picmaxx=\dimen175
 \pgf@picminy=\dimen176
@@ -222,76 +222,76 @@ File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@yy=\dimen185
 \pgf@zx=\dimen186
 \pgf@zy=\dimen187
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
-File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@path@lastx=\dimen188
 \pgf@path@lasty=\dimen189
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
-File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@shorten@end@additional=\dimen190
 \pgf@shorten@start@additional=\dimen191
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
-File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfpic=\box55
 \pgf@hbox=\box56
 \pgf@layerbox@main=\box57
 \pgf@picture@serial@count=\count299
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
-File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgflinewidth=\dimen192
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
-File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
+File: pgfcoretransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@pt@x=\dimen193
 \pgf@pt@y=\dimen194
 \pgf@pt@temp=\dimen195
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
-File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
-File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
-File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
-File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfarrowsep=\dimen196
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
-File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@max=\dimen197
 \pgf@sys@shading@range@num=\count300
 \pgf@shadingcount=\count301
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
-File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
-File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfexternal@startupbox=\box58
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
-File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
-File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
-File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
-File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
-File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfnodeparttextbox=\box59
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
-File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
-Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@nodesepstart=\dimen198
 \pgf@nodesepend=\dimen199
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
-Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
-Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
 \pgffor@iter=\dimen256
 \pgffor@skip=\dimen257
 \pgffor@stack=\toks29
 \pgffor@toks=\toks30
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
-Package: tikz 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@plot@mark@count=\count302
 \pgfplotmarksize=\dimen258
 )
@@ -311,60 +311,60 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikznumberofchildren=\count304
 \tikznumberofcurrentchild=\count305
 \tikz@fig@count=\count306
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
-File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfmatrixcurrentrow=\count307
 \pgfmatrixcurrentcolumn=\count308
 \pgf@matrix@numberofcolumns=\count309
 )
 \tikz@expandcount=\count310
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count311
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
 \@linkdim=\dimen267
 \Hy@linkcounter=\count312
 \Hy@pagecounter=\count313
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count314
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
@@ -378,15 +378,15 @@ Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
 \c@Hy@tempcnt=\count315
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4801.
 \XeTeXLinkMargin=\dimen268
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
 \Fld@menulength=\count316
@@ -404,24 +404,24 @@ Package hyperref Info: PDF/A mode OFF on input line 6108.
 \c@Hfootnote=\count319
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
 \Fld@listcount=\count320
 \c@bookmark@seq@number=\count321
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 )
 \Hy@SectionHShift=\skip61
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
-File: tikzlibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
-File: pgflibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
-File: pgfmoduleparser.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
+File: tikzlibrarysvg.path.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
+File: pgflibrarysvg.path.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
+File: pgfmoduleparser.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgfparserdef@arg@count=\count322
 )
 \pgf@lib@svg@last@x=\dimen271
@@ -430,7 +430,7 @@ File: pgfmoduleparser.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@lib@svg@last@c@y=\dimen274
 \pgf@lib@svg@count=\count323
 \pgf@lib@svg@max@num=\count324
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen275
 \lightrulewidth=\dimen276
@@ -449,7 +449,7 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count327
 \@lastruleclass=\count328
 \@thisrulewidth=\dimen287
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
 \@tempboxb=\box64
 )
@@ -463,9 +463,9 @@ Package: threeparttable 2003/06/13  v 3.0
 \e@level@four@skip=\skip69
 \b@level@five@skip=\skip70
 \e@level@five@skip=\skip71
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen288
 \captionmargin=\dimen289
@@ -487,7 +487,7 @@ Package caption Info: threeparttable package is loaded.
 \gr@box=\box65
 \gr@boxwidth=\skip73
 \gr@boxheight=\skip74
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty
 Package: bm 2023/12/19 v1.2f Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup4
 \symboldletters=\mathgroup5
@@ -496,7 +496,7 @@ Package bm Info: No bold for \OMX/lmex/m/n, using \pmb.
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
 )
 \c@appendix=\count332
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@headwidth=\skip75
 \f@nch@offset@elh=\skip76
@@ -513,7 +513,7 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthC=\skip87
 \f@nch@widthR=\skip88
 \@temptokenb=\toks31
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/endfloat/endfloat.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/endfloat/endfloat.sty
 Package: endfloat 2019/04/15 v2.7 LaTeX2e package puts figures and tables at end (jdm)
 \c@posttable=\count333
 \efloat@postttt=\write4
@@ -521,28 +521,28 @@ Package: endfloat 2019/04/15 v2.7 LaTeX2e package puts figures and tables at end
 \c@postfigure=\count335
 \efloat@postfff=\write5
 \@ef@fffopen=\count336
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count337
 \float@exts=\toks32
 \float@box=\box66
 \@float@everytoks=\toks33
 \@floatcapt=\box67
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2025/06/16 v2.17y AMS math features
 \@mathmargin=\skip89
 For additional information on amsmath, use the `?' option.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2024/11/17 v2.01 AMS text
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks34
 \ex@=\dimen296
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 LaTeX Info: Redefining \boldsymbol on input line 28.
 \pmbraise@=\dimen297
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count338
@@ -592,59 +592,30 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks38
 LaTeX Info: Redefining \[ on input line 2949.
 LaTeX Info: Redefining \] on input line 2950.
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup7
 \symAMSb=\mathgroup8
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks39
 \inpenc@posthook=\toks40
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.sty
-Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype.sty
-Package: microtype 2025/07/09 v3.2b Micro-typographical refinements (RS)
-\MT@toks=\toks41
-\MT@tempbox=\box70
-\MT@count=\count350
-LaTeX Info: Redefining \noprotrusionifhmode on input line 1087.
-LaTeX Info: Redefining \leftprotrusion on input line 1088.
-\MT@prot@toks=\toks42
-LaTeX Info: Redefining \rightprotrusion on input line 1107.
-LaTeX Info: Redefining \textls on input line 1449.
-\MT@outer@kern=\dimen305
-LaTeX Info: Redefining \microtypecontext on input line 2053.
-LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
-\MT@listname@count=\count351
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype-pdftex.def
-File: microtype-pdftex.def 2025/07/09 v3.2b Definitions specific to pdftex (RS)
-LaTeX Info: Redefining \lsstyle on input line 944.
-LaTeX Info: Redefining \lslig on input line 944.
-\MT@outer@space=\skip92
 )
-Package microtype Info: Loading configuration file microtype.cfg.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtype.cfg
-File: microtype.cfg 2025/07/09 v3.2b microtype main configuration file (RS)
-)
-LaTeX Info: Redefining \microtypesetup on input line 3065.
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/parskip/parskip.sty
-Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
-)
-\pandoc@box=\box71
-\cslhangindent=\skip93
-\csllabelwidth=\skip94
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
+\pandoc@box=\box70
+\cslhangindent=\skip92
+\csllabelwidth=\skip93
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2025/08/03 v25.12 The multilingual framework for LuaLaTeX, pdfLaTeX and XeLaTeX
-\babel@savecnt=\count352
+\babel@savecnt=\count350
 LaTeX Encoding Info:    Redeclaring text command \ij (encoding OT1) on input line 2045.
 LaTeX Encoding Info:    Redeclaring text command \IJ (encoding OT1) on input line 2047.
 LaTeX Encoding Info:    Redeclaring text command \ij (encoding T1) on input line 2049.
@@ -652,137 +623,132 @@ LaTeX Encoding Info:    Redeclaring text command \IJ (encoding T1) on input line
 LaTeX Encoding Info:    Ignoring declaration for text command \ij (encoding ?) on input line 2051.
 LaTeX Encoding Info:    Ignoring declaration for text command \IJ (encoding ?) on input line 2053.
 LaTeX Encoding Info:    Ignoring declaration for text command \SS (encoding ?) on input line 2078.
-\U@D=\dimen306
-\l@unhyphenated=\language6
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/txtbabel.def)
+\U@D=\dimen305
+\l@unhyphenated=\language3
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read3
-\bbl@dirlevel=\count353
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel-english/american.ldf
-Language: american 2017/06/06 v3.3r English support from the babel system
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel-english/english.ldf
-Language: english 2017/06/06 v3.3r English support from the babel system
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/locale/en/babel-american.tex
-Package babel Info: Importing font and identification data for american
-(babel)             from babel-en-US.ini. Reported on input line 12.
-)
-Package babel Info: Hyphen rules for 'canadian' set to \l@english
-(babel)             (\language0). Reported on input line 102.
-Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
-(babel)             (\language3). Reported on input line 105.
-Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
-(babel)             (\language3). Reported on input line 108.
-))) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/was/upgreek.sty
+\bbl@dirlevel=\count351
+Package babel Info: You haven't specified a language as a class or package
+(babel)             option. I'll load 'nil'. Reported on input line 4309.
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
+Language: nil 2025/08/03 v25.12 Nil language
+\l@nil=\language4
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/locale/en/babel-american.tex)
+Package babel Info: Importing data for american
+(babel)             from babel-en-US.ini. Reported on input line 119.
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/was/upgreek.sty
 Package: upgreek 2003/02/12 v2.0 (WaS)
 Package upgreek Info: Using Euler Roman for upright Greek on input line 31.
 \symugrf@m=\mathgroup9
 LaTeX Font Info:    Overwriting symbol font `ugrf@m' in version `bold'
 (Font)                  U/eur/m/n --> U/eur/b/n on input line 38.
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2024-12-18 v4.23 Multi-page Table package (DPC)
-\LTleft=\skip95
-\LTright=\skip96
-\LTpre=\skip97
-\LTpost=\skip98
-\LTchunksize=\count354
-\LTcapwidth=\dimen307
-\LT@head=\box72
-\LT@firsthead=\box73
-\LT@foot=\box74
-\LT@lastfoot=\box75
-\LT@gbox=\box76
-\LT@cols=\count355
-\LT@rows=\count356
-\c@LT@tables=\count357
-\c@LT@chunks=\count358
-\LT@p@ftn=\toks43
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
+\LTleft=\skip94
+\LTright=\skip95
+\LTpre=\skip96
+\LTpost=\skip97
+\LTchunksize=\count352
+\LTcapwidth=\dimen306
+\LT@head=\box71
+\LT@firsthead=\box72
+\LT@foot=\box73
+\LT@lastfoot=\box74
+\LT@gbox=\box75
+\LT@cols=\count353
+\LT@rows=\count354
+\c@LT@tables=\count355
+\c@LT@chunks=\count356
+\LT@p@ftn=\toks41
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
-\multirow@colwidth=\skip99
-\multirow@cntb=\count359
-\multirow@dima=\skip100
-\bigstrutjot=\dimen308
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
+\multirow@colwidth=\skip98
+\multirow@cntb=\count357
+\multirow@dima=\skip99
+\bigstrutjot=\dimen307
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2025/06/08 v2.6j Tabular extension package (FMi)
-\col@sep=\dimen309
-\ar@mcellbox=\box77
-\extrarowheight=\dimen310
-\NC@list=\toks44
-\extratabsurround=\skip101
-\backup@length=\skip102
-\ar@cellbox=\box78
+\col@sep=\dimen308
+\ar@mcellbox=\box76
+\extrarowheight=\dimen309
+\NC@list=\toks42
+\extratabsurround=\skip100
+\backup@length=\skip101
+\ar@cellbox=\box77
 )
-\TX@col@width=\dimen311
-\TX@old@table=\dimen312
-\TX@old@col=\dimen313
-\TX@target=\dimen314
-\TX@delta=\dimen315
-\TX@cols=\count360
-\TX@ftn=\toks45
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
+\TX@col@width=\dimen310
+\TX@old@table=\dimen311
+\TX@old@col=\dimen312
+\TX@target=\dimen313
+\TX@delta=\dimen314
+\TX@cols=\count358
+\TX@ftn=\toks43
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
 Package: threeparttablex 2013/07/23 v0.3 by daleif
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
-\TPTL@width=\skip103
+\TPTL@width=\skip102
 )
-\longtablewidth=\skip104
+\longtablewidth=\skip103
 Failed to patch abstract.
 Failed to patch title.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2025-07-20 L3 programming layer (loader) 
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2025-08-13 L3 programming layer (loader) 
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-06-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count361
+\l__color_backend_stack_int=\count359
 ))
 Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2024-08-16 L3 Experimental document command parser
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2024-04-04 v5.2o context-sensitive quotations (JAW)
-\csq@reset=\count362
-\csq@gtype=\count363
-\csq@glevel=\count364
-\csq@qlevel=\count365
-\csq@maxlvl=\count366
-\csq@tshold=\count367
-\csq@ltx@everypar=\toks46
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.def
+\csq@reset=\count360
+\csq@gtype=\count361
+\csq@glevel=\count362
+\csq@qlevel=\count363
+\csq@maxlvl=\count364
+\csq@tshold=\count365
+\csq@ltx@everypar=\toks44
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2024-04-04 v5.2o csquotes generic definitions (JAW)
 )
 Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.cfg
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.cfg
 File: csquotes.cfg 
-)) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
+)) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2025/05/25 v2.0a multicolumn formatting (FMi)
-\c@tracingmulticols=\count368
-\mult@box=\box79
-\multicol@leftmargin=\dimen316
-\c@unbalance=\count369
-\c@collectmore=\count370
-\doublecol@number=\count371
-\multicoltolerance=\count372
-\multicolpretolerance=\count373
-\full@width=\dimen317
-\page@free=\dimen318
-\premulticols=\dimen319
-\postmulticols=\dimen320
-\multicolsep=\skip105
-\multicolbaselineskip=\skip106
-\partial@page=\box80
-\last@line=\box81
-\mc@boxedresult=\box82
-\maxbalancingoverflow=\dimen321
-\mult@rightbox=\box83
-\mult@grightbox=\box84
-\mult@firstbox=\box85
-\mult@gfirstbox=\box86
+\c@tracingmulticols=\count366
+\mult@box=\box78
+\multicol@leftmargin=\dimen315
+\c@unbalance=\count367
+\c@collectmore=\count368
+\doublecol@number=\count369
+\multicoltolerance=\count370
+\multicolpretolerance=\count371
+\full@width=\dimen316
+\page@free=\dimen317
+\premulticols=\dimen318
+\postmulticols=\dimen319
+\multicolsep=\skip104
+\multicolbaselineskip=\skip105
+\partial@page=\box79
+\last@line=\box80
+\mc@boxedresult=\box81
+\maxbalancingoverflow=\dimen320
+\mult@rightbox=\box82
+\mult@grightbox=\box83
+\mult@firstbox=\box84
+\mult@gfirstbox=\box85
+\@tempa=\box86
 \@tempa=\box87
 \@tempa=\box88
 \@tempa=\box89
@@ -818,70 +784,69 @@ Package: multicol 2025/05/25 v2.0a multicolumn formatting (FMi)
 \@tempa=\box119
 \@tempa=\box120
 \@tempa=\box121
-\@tempa=\box122
-\c@minrows=\count374
-\c@columnbadness=\count375
-\c@finalcolumnbadness=\count376
-\last@try=\dimen322
-\multicolovershoot=\dimen323
-\multicolundershoot=\dimen324
-\mult@nat@firstbox=\box123
-\colbreak@box=\box124
-\mc@col@check@num=\count377
-\g__mc_curr_col_int=\count378
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
+\c@minrows=\count372
+\c@columnbadness=\count373
+\c@finalcolumnbadness=\count374
+\last@try=\dimen321
+\multicolovershoot=\dimen322
+\multicolundershoot=\dimen323
+\mult@nat@firstbox=\box122
+\colbreak@box=\box123
+\mc@col@check@num=\count375
+\g__mc_curr_col_int=\count376
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2020/05/29 v2.20.6
-\thm@style=\toks47
-\thm@bodyfont=\toks48
-\thm@headfont=\toks49
-\thm@notefont=\toks50
-\thm@headpunct=\toks51
-\thm@preskip=\skip107
-\thm@postskip=\skip108
-\thm@headsep=\skip109
-\dth@everypar=\toks52
+\thm@style=\toks45
+\thm@bodyfont=\toks46
+\thm@headfont=\toks47
+\thm@notefont=\toks48
+\thm@headpunct=\toks49
+\thm@preskip=\skip106
+\thm@postskip=\skip107
+\thm@headsep=\skip108
+\dth@everypar=\toks50
 )
-\c@thm=\count379
-\c@lem=\count380
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/subfig/subfig.sty
+\c@thm=\count377
+\c@lem=\count378
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
-\c@KVtest=\count381
-\sf@farskip=\skip110
-\sf@captopadj=\dimen325
-\sf@capskip=\skip111
-\sf@nearskip=\skip112
-\c@subfigure=\count382
-\c@subfigure@save=\count383
-\c@lofdepth=\count384
-\c@subtable=\count385
-\c@subtable@save=\count386
-\c@lotdepth=\count387
-\sf@top=\skip113
-\sf@bottom=\skip114
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/rotating.sty
+\c@KVtest=\count379
+\sf@farskip=\skip109
+\sf@captopadj=\dimen324
+\sf@capskip=\skip110
+\sf@nearskip=\skip111
+\c@subfigure=\count380
+\c@subfigure@save=\count381
+\c@lofdepth=\count382
+\c@subtable=\count383
+\c@subtable@save=\count384
+\c@lotdepth=\count385
+\sf@top=\skip112
+\sf@bottom=\skip113
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/rotating.sty
 Package: rotating 2025/01/14 v2.16e rotated objects in LaTeX
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 )
-\c@r@tfl@t=\count388
-\rotFPtop=\skip115
-\rotFPbot=\skip116
-\rot@float@box=\box125
-\rot@mess@toks=\toks53
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.sty
+\c@r@tfl@t=\count386
+\rotFPtop=\skip114
+\rotFPbot=\skip115
+\rot@float@box=\box124
+\rot@mess@toks=\toks51
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
+) (c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO)
-\BKM@id=\count389
+\BKM@id=\count387
 ))
-\c@NumberOfAuthors=\count390
-\c@NumberOfSuperscripts=\count391
+\c@NumberOfAuthors=\count388
+\c@NumberOfSuperscripts=\count389
 
-Class apa7 Warning: Deprecated: see documentation for \authorsaffiliations on input line 241.
+Class apa7 Warning: Deprecated: see documentation for \authorsaffiliations on input line 245.
 
-\c@NumberOfAffiliations=\count392
+\c@NumberOfAffiliations=\count390
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -889,24 +854,24 @@ Package csquotes Info: Redefining alias 'default' -> 'american'.
 (./beta-function-selection-models-with-dependent-effects.aux)
 \openout1 = `beta-function-selection-models-with-dependent-effects.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 245.
-LaTeX Font Info:    ... okay on input line 245.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 249.
+LaTeX Font Info:    ... okay on input line 249.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -941,311 +906,30 @@ LaTeX Font Info:    ... okay on input line 245.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(c:/Users/mcitkowicz/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 245.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa7/config/APA7american.txt
-File: APA7american.txt 2020/12/02 v1.02 apa7 configuration for American English
-)
-Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: subfig package v1.3 is loaded.
-Package caption Info: float package is loaded.
-Package caption Info: longtable package is loaded.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
-Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
-)
-Package caption Info: rotating package is loaded.
-Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 245.
-Package microtype Info: Applying patch `item' on input line 245.
-Package microtype Info: Applying patch `toc' on input line 245.
-Package microtype Info: Applying patch `eqnum' on input line 245.
+Package hyperref Info: Link coloring OFF on input line 249.
+! I can't write on file `beta-function-selection-models-with-dependent-effects.pdf'.
+(Press Enter to retry, or Control-Z to exit; default file extension is `.pdf')
+Please type another file name for output
+! Emergency stop.
+<to be read again> 
+                   \edef 
+l.249 \begin{document}
+                      
+*** (job aborted, file error in nonstop mode)
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 245.
-
-Package microtype Info: Applying patch `verbatim' on input line 245.
-LaTeX Info: Redefining \microtypesetup on input line 245.
-Package microtype Info: Generating PDF output.
-Package microtype Info: Character protrusion enabled (level 2).
-Package microtype Info: Using protrusion set `basicmath'.
-Package microtype Info: Automatic font expansion enabled (level 2),
-(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
-Package microtype Info: Using default expansion set `alltext-nott'.
-Package microtype Info: Patching command `\showhyphens'.
-Package microtype Info: No adjustment of tracking.
-Package microtype Info: No adjustment of interword spacing.
-Package microtype Info: No adjustment of character kerning.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
-File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
-)
-Couldn't patch \deferred@thm@head!
-
-Class apa7 Warning: Abstract not defined.
-
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
-File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
-File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
-File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
-File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 246.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 246.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 246.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 246.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-eur.cfg
-File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
-)
-
-[1{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
-
-]
-
-[2]
-
-[3{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-
-[4]
-
-[5]
-
-[6{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
-Overfull \hbox (11.16405pt too wide) detected at line 317
-[][][]\OML/lmm/m/it/12 w\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 Y[]=^^[[]; []\OT1/lmr/m/n/12 ) = []
- []
-
-
-
-[7]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf, id=70, 361.35pt x 252.945pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf  used on input line 325.
-(pdftex.def)             Requested size: 230.18253pt x 161.12776pt.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 325.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 325.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 325.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf, id=71, 361.35pt x 252.945pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf  used on input line 325.
-(pdftex.def)             Requested size: 230.18253pt x 161.12776pt.
-
-
-[8 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf> <./beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf>]
-
-[9]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 356.
-(c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (21.17867pt too wide) in paragraph at lines 366--389
- [][] 
- []
-
-
-
-[10]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf, id=116, 361.35pt x 397.485pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf  used on input line 399.
-(pdftex.def)             Requested size: 352.31625pt x 387.54935pt.
-
-
-[11]
-
-[12 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf>]
-
-[13]
-
-[14]
-
-[15]
-
-[16]
-
-[17]
-
-[18]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf, id=175, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf  used on input line 504.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[19]
-
-[20 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf, id=201, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf  used on input line 520.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[21]
-
-[22 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf, id=229, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf  used on input line 535.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[23]
-
-[24 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf, id=255, 650.43pt x 433.62pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf  used on input line 545.
-(pdftex.def)             Requested size: 650.4284pt x 433.61894pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf, id=257, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf  used on input line 560.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[25]
-
-[26 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf>]
-
-[27 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf, id=295, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf  used on input line 568.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-miss-1.pdf, id=297, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-miss-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-miss-1.pdf  used on input line 576.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[28]
-
-[29 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf>]
-
-[30 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-miss-1.pdf>]
-
-[31]
-
-[32]
-
-[33]
-
-[34]
-
-[35]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-main-1.pdf, id=424, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-main-1.pdf  used on input line 731.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf, id=425, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf  used on input line 735.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf, id=426, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf  used on input line 739.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf, id=427, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf  used on input line 743.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-
-
-[36
-
-]
-
-[37 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/convergence-rates-main-1.pdf>]
-
-[38 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf>]
-
-[39 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf>]
-
-[40 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf, id=485, 650.43pt x 469.755pt>
-File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf Graphic file (type pdf)
-<use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf  used on input line 751.
-(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-AED endfloat: Processing end Figures and Tables
-
-[41
-
-]
-
-[42 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf>] (./beta-function-selection-models-with-dependent-effects.aux)
- ***********
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2020/03/25>
- ***********
- ) 
+ 
 Here is how much of TeX's memory you used:
- 29665 strings out of 469721
- 569278 string characters out of 5477288
- 976745 words of memory out of 5000000
- 57197 multiletter control sequences out of 15000+600000
- 714589 words of font info for 192 fonts, out of 8000000 for 9000
- 36 hyphenation exceptions out of 8191
- 99i,13n,105p,1608b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
-
-<c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on beta-function-selection-models-with-dependent-effects.pdf (42 pages, 737745 bytes).
-PDF statistics:
- 747 PDF objects out of 1000 (max. 8388607)
- 625 compressed objects within 7 object streams
- 145 named destinations out of 1000 (max. 500000)
- 43400 words of extra memory for PDF output out of 51595 (max. 10000000)
-
+ 26769 strings out of 469780
+ 501864 string characters out of 5480111
+ 899187 words of memory out of 5000000
+ 54719 multiletter control sequences out of 15000+600000
+ 630122 words of font info for 42 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 99i,0n,105p,1608b,446s stack positions out of 10000i,1000n,20000p,200000b,200000s
+!  ==> Fatal error occurred, no output PDF file produced!
