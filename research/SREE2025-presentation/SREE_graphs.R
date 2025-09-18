@@ -263,7 +263,7 @@ bias_miss_all <- ggplot(mu_graph_res_miss) +
 ggsave("bias_miss_all.png", plot = bias_miss_all, width = 10, height = 6, dpi = 300)
 
 # Bias - mu = 0, .2, .8 and tau = .15, .45
-bias_miss_sub <- ggplot(mu_graph_res_main %>% filter(mean_smd %in% c(0, 0.2, 0.8), tau %in% c(0.15, 0.45))) + 
+bias_miss_sub <- ggplot(mu_graph_res_miss %>% filter(mean_smd %in% c(0, 0.2, 0.8), tau %in% c(0.15, 0.45))) + 
   aes(x = selection_strength, y = bias, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -317,7 +317,7 @@ rmse_miss_all <- ggplot(mu_graph_res_miss) +
 ggsave("rmse_miss_all.png", plot = rmse_miss_all, width = 10, height = 6, dpi = 300)
 
 # Scaled RMSE - mu = 0, .2, .8 and tau = .15, .45
-rmse_miss_sub <- ggplot(mu_graph_res_main %>% filter(mean_smd %in% c(0, 0.2, 0.8), tau %in% c(0.15, 0.45))) + 
+rmse_miss_sub <- ggplot(mu_graph_res_miss %>% filter(mean_smd %in% c(0, 0.2, 0.8), tau %in% c(0.15, 0.45))) + 
   aes(x = selection_strength, y = scrmse, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -398,3 +398,59 @@ coverage_miss_sub <- ggplot(mu_graph_res_ci_miss %>% filter(CI_type %in% c("larg
   theme(legend.position = "top")
 
 ggsave("coverage_miss_sub.png", plot = coverage_miss_sub, width = 10, height = 6, dpi = 300)
+
+# Coverage - bootstrap
+coverage_miss_boot_all <- ggplot(mu_graph_res_ci_miss %>% filter(bootstrap_condition == "bootstrap", estimator %in% c("CML"), CI_boot_method %in% c("percentile (two-stage)"))) +
+  aes(x = J, y = coverage, color = method, fill = method) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  #scale_y_continuous(limits = c(0.55, 1.0), breaks = seq(0.55,1.0,0.05), expand = expansion(0,0)) +
+  scale_y_continuous(limits = c(0.55, 1.0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd,
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "",
+    fill = ""
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+ggsave("coverage_miss_boot_all.png", plot = coverage_miss_boot_all, width = 10, height = 6, dpi = 300)
+
+# Coverage - bootstrap, mu = 0, .2 and tau = .15, .45
+coverage_miss_boot_sub <- ggplot(mu_graph_res_ci_miss %>% filter(bootstrap_condition == "bootstrap", estimator %in% c("CML"), CI_boot_method %in% c("percentile (two-stage)"), mean_smd %in% c(0, 0.2), tau %in% c(0.15, 0.45))) +
+  aes(x = J, y = coverage, color = method, fill = method) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  #scale_y_continuous(limits = c(0.55, 1.0), breaks = seq(0.55,1.0,0.05), expand = expansion(0,0)) +
+  scale_y_continuous(limits = c(0.55, 1.0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd,
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "",
+    fill = ""
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+ggsave("coverage_miss_boot_sub.png", plot = coverage_miss_boot_sub, width = 10, height = 6, dpi = 300)
