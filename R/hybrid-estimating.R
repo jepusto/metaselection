@@ -16,6 +16,7 @@ step_weighted_logpartlik <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
 ) {
@@ -42,7 +43,22 @@ step_weighted_logpartlik <- function(
   # weighted log likelihood (Eq. 51)
   log_lik <- if (is.null(ai)) sum(log_lik_i) else sum(ai * log_lik_i)
   
-  return(log_lik)
+  # priors
+  if (is.null(priors)) {
+    
+    return(log_lik) 
+    
+  } else {
+    
+    log_prior <- priors$log_prior(
+      beta = params$beta, 
+      gamma = params$gamma, 
+      zeta = c(params$zeta0, params$zeta), 
+      include_zeta = FALSE
+    )  
+    return(log_lik + log_prior)
+    
+  }
   
 }
 
@@ -55,13 +71,14 @@ step_selection_constraint <- function(
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
 ) {
@@ -113,7 +130,8 @@ step_hybrid_profile_score <- function(
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL                                   # selection model design matrices for each cut-point
+    Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
   if (is.null(X)) {
@@ -128,9 +146,12 @@ step_hybrid_profile_score <- function(
     theta = theta_na,
     yi = yi, sei = sei, pi = pi, ai = ai,
     steps = steps, 
-    X = X, U = U, Z0 = Z0, Z = Z
+    X = X, U = U, Z0 = Z0, Z = Z,
+    priors = priors
   )  
+  
   scores[-(1:x_dim)]
+
 }
 
 #-------------------------------------------------------------------------------
@@ -144,13 +165,14 @@ step_hybrid_score <- function(
   ai = NULL,                                  # analytic weight
   beta = NULL,                                # mean parameter coefficients
   gamma = NULL,                               # variance component coefficients
-  zeta0 = NULL,                              # selection model coefficients
-  zeta = NULL,                               # selection model coefficients
+  zeta0 = NULL,                               # selection model coefficients
+  zeta = NULL,                                # selection model coefficients
   steps = .025,                               # steps / cut-points
   X = NULL,                                   # mean parameter design matrix
   U = NULL,                                   # variance component design matrix
   Z0 = NULL,                                  # selection model design matrix for highest step
   Z = NULL,                                   # selection model design matrices for each cut-point
+  priors = NULL,                              # selmodel_prior object to specify priors
   contributions = FALSE,                      # whether to return matrix of score contributions,
   negate = FALSE                              # whether to return the negative of the scores
 ) {
@@ -169,6 +191,7 @@ step_hybrid_score <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    priors = priors,
     calc_Ai = TRUE
   )
 
@@ -208,8 +231,34 @@ step_hybrid_score <- function(
     contributions = contributions
   )
   
-  if (negate) return(-score_contributions) else return(score_contributions)
   
+  # handle prior contributions
+  if (!is.null(priors)) {
+    
+    prior_score <- priors$score_prior(beta = params$beta, gamma = params$gamma, zeta = c(params$zeta0, params$zeta))
+    
+    if (contributions) {
+      
+      # prior_wt to allocate total prior score across observations
+      if (is.null(ai)) {
+        prior_wt <- rep(1 / params$k, times = params$k)
+      } else {
+        prior_wt <- ai / sum(ai)
+      }
+      
+      score_contributions <- score_contributions + outer(prior_wt, prior_score)
+      
+      return(score_contributions)
+      
+    } else {
+      
+      score_contributions <- score_contributions + prior_score
+      
+    }
+    
+  }
+  
+  if (negate) return(-score_contributions) else return(score_contributions)
 }
 
 
@@ -227,7 +276,8 @@ step_hybrid_profile_jacobian <- function(
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL                                    # selection model design matrices for each cut-point
+    Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
   if (is.null(X)) {
@@ -242,7 +292,8 @@ step_hybrid_profile_jacobian <- function(
     theta = theta_na,
     yi = yi, sei = sei, pi = pi, ai = ai,
     steps = steps, 
-    X = X, U = U, Z0 = Z0, Z = Z
+    X = X, U = U, Z0 = Z0, Z = Z,
+    priors = priors
   )
   
   jac[-(1:x_dim),-(1:x_dim)]
@@ -257,13 +308,14 @@ step_hybrid_jacobian <- function(
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL                                    # selection model design matrices for each cut-point
+    Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
   params <- parse_step_params(
@@ -386,6 +438,18 @@ step_hybrid_jacobian <- function(
     H_zeta_
   )
   colnames(J_matrix) <- rownames(J_matrix) <- params$H_names
+  
+  # Handle priors
+  
+  if (is.null(priors)) {
+    
+    return(J_matrix)
+    
+  } else {
+    hessian_prior <- priors$hessian_prior(beta = params$beta, gamma = params$gamma, zeta = c(params$zeta0, params$zeta))
+    return(J_matrix + hessian_prior)
+  }
+  
   
   return(J_matrix)
   

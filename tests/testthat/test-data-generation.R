@@ -1,3 +1,4 @@
+
 test_that("beta_wt_fun() is always between 0 and 1.", {
   
   plot <- FALSE

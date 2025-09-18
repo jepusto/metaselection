@@ -18,6 +18,7 @@ selection_model(
   var_mods = NULL,
   sel_mods = NULL,
   sel_zero_mods = NULL,
+  priors = default_priors(),
   subset = NULL,
   estimator = "CML",
   vcov_type = "robust",
@@ -75,6 +76,8 @@ probability of selection. Only relevant for \code{selection_type = "step"}.}
 \item{sel_zero_mods}{optional model formula for moderators related to the
 probability of selection for p-values below the lowest threshold value of
 \code{steps}. Only relevant for \code{selection_type = "step"}.}
+
+\item{priors}{}
 
 \item{subset}{optional logical expression indicating a subset of observations
 to use for estimation.}
