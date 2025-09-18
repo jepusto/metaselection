@@ -29,11 +29,6 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
         K_relvar = 0,
       )
     
-    if (winz < Inf) {
-      res <- 
-        left_join(res, res, by = c("model","estimator","param"), suffix = c("_raw","_winz"))
-    }
-    
   } else {
 
     res <- 

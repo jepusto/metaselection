@@ -19,8 +19,9 @@ run_sim <- function(
     var_mods = NULL,
     sel_mods = NULL,
     sel_zero_mods = NULL,
+    priors = "None",
     conf_level = .95,
-    stepfun_methods = c("step-MLE","step-hybrid"), 
+    stepfun_methods = c("CML","ARGL"), 
     comparison_methods = "All", 
     rho = cor_mu,
     seed = NULL,
@@ -33,12 +34,14 @@ run_sim <- function(
     CI_type = c("large-sample","basic","percentile","student","bias-corrected","BCa"),
     R = c(49,99,199,299),
     retry_bootstrap = 3L,
-    winz = 2.5,
+    winz = Inf,
     B_target = 1999,
     ...
 ) {
   
   require(metaselection)
+  
+  prior_spec <- switch(priors, "None" = NULL, "Default" = default_priors())
   
   if (!is.null(seed)) set.seed(seed)
   
@@ -78,6 +81,7 @@ run_sim <- function(
         var_mods = var_mods,
         sel_mods = sel_mods,
         sel_zero_mods = sel_zero_mods,
+        priors = prior_spec,
         CML_optimizer = CML_optimizer,
         CML_optimizer_control = CML_optimizer_control,
         ARGL_optimizer_control = ARGL_optimizer_control,
@@ -99,6 +103,7 @@ run_sim <- function(
           var_mods = var_mods,
           sel_mods = sel_mods,
           sel_zero_mods = sel_zero_mods,
+          priors = prior_spec,
           CML_optimizer = CML_optimizer,
           CML_optimizer_control = CML_optimizer_control,
           ARGL_optimizer_control = ARGL_optimizer_control,
