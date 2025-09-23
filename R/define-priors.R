@@ -49,14 +49,14 @@ default_priors <- function(
   gamma_lambda <- tau_alpha / tau_mode
   gamma_alpha <- tau_alpha
 
-  zeta_lambda <- lambda_alpha / lambda_mode
+  zeta_lambda <- 2 * log(lambda_mode) / lambda_mode
   zeta_alpha <- lambda_alpha
 
   log_prior <- function(beta, gamma, zeta, include_zeta = TRUE) {
     beta_log_prior <- -0.5 * (beta - beta_mean)^2 / beta_sd^2
     gamma_log_prior <- 0.5 * gamma_alpha * gamma - gamma_lambda * exp(gamma / 2)
     if (include_zeta) {
-      zeta_log_prior <- zeta_alpha * zeta - zeta_lambda * exp(zeta)
+      zeta_log_prior <- -zeta_alpha * zeta^2 + zeta_lambda * exp(zeta)
       sum(beta_log_prior) + sum(gamma_log_prior) + sum(zeta_log_prior)
     } else {
       sum(beta_log_prior) + sum(gamma_log_prior)
@@ -67,14 +67,14 @@ default_priors <- function(
   score_prior <- function(beta, gamma, zeta) {
     score_beta <- -1 * (beta - beta_mean) / beta_sd^2
     score_gamma <- 0.5 * (gamma_alpha - gamma_lambda * exp(gamma / 2))
-    score_zeta <- (zeta_alpha - zeta_lambda * exp(zeta))
+    score_zeta <- - 2 * zeta_alpha * zeta + zeta_lambda * exp(zeta)
     c(score_beta, score_gamma, score_zeta)
   }
   
   hessian_prior <- function(beta, gamma, zeta) {
     beta_hessian <- rep(-1 / beta_sd^2, length.out = length(beta))
     gamma_hessian <- -0.25 * gamma_lambda * exp(gamma / 2)
-    zeta_hessian <- -1 * zeta_lambda * exp(zeta)
+    zeta_hessian <- -2 * zeta_alpha + zeta_lambda * exp(zeta)
     diag(c(beta_hessian, gamma_hessian, zeta_hessian))
   }
   

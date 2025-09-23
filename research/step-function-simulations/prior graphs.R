@@ -60,11 +60,12 @@ tibble(
   mutate(
     lambda = exp(zeta),
     log_prior = p_zeta(zeta),
-    log_prior = log_prior - max(log_prior)
+    log_prior2 = - 0.5 * zeta^2 + exp(zeta) * log(0.8) / 0.8,
+    across(starts_with("log_prior"), ~ .x - max(.x))
   ) %>%
   ggplot() + 
-  aes(lambda, log_prior) + 
-  geom_line() + 
+  geom_line(aes(lambda, log_prior)) + 
+  geom_line(aes(lambda, log_prior2), color = "green") + 
   scale_x_continuous(
     transform = "log", 
     breaks = c(0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1, 1.5, 2, 4),

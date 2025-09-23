@@ -145,10 +145,13 @@ fit_selection_model <- function(
     utils::capture.output(
       if (selection_type == "step") {
         
+        hess <- if (use_jac) step_hessian else NULL
+        
         mle_est <- optimx::optimx(
           par = theta, 
           fn = step_loglik, 
           gr = step_score,
+          hess = hess,
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, Z0 = Z0, Z = Z,
@@ -159,10 +162,13 @@ fit_selection_model <- function(
         
       } else if (selection_type == "beta") {
         
+        hess <- if (use_jac) beta_hessian else NULL
+        
         mle_est <- optimx::optimx(
           par = theta, 
           fn = beta_loglik, 
           gr = beta_score,
+          hess = hess,
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, 
