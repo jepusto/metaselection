@@ -41,7 +41,26 @@ run_sim <- function(
   
   require(metaselection)
   
-  prior_spec <- switch(priors, "None" = NULL, "Default" = default_priors())
+  prior_spec <- switch(
+    priors, 
+    "None" = NULL, 
+    "Default" = default_priors(
+      beta_mean = 0,
+      beta_sd = 1,
+      tau_mode = 0.2,
+      tau_alpha = 1,
+      lambda_mode = 0.8,
+      lambda_alpha = 1
+    ),
+    "Weaker" = default_priors(
+      beta_mean = 0,
+      beta_sd = 2, 
+      tau_mode = 0.2, 
+      tau_alpha = 0.5,
+      lambda_mode = 1,
+      lambda_alpha = 0.5
+    )
+  )
   
   if (!is.null(seed)) set.seed(seed)
   

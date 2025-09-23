@@ -20,7 +20,7 @@ design_factors <- list(
   m = c(120, 90, 60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
   batch = 1:20,
-  priors = c("None","Default")
+  priors = c("None","Default","Weaker")
 )
 
 params <- do.call(expand_grid, design_factors)
@@ -39,7 +39,7 @@ all_params <-
     comparison_methods = "None",
     iterations = case_match(bootstrap, "exponential" ~ 100L, "none" ~ 1000L),
     summarize_performance = bootstrap == "none",
-    row = rep(1:(dplyr::n()/2), each = 2L),
+    row = rep(1:(dplyr::n()/3L), each = 3L),
     seed = 20250918L + row
   ) %>%
   filter(bootstrap == "exponential" | batch == 1L) %>%

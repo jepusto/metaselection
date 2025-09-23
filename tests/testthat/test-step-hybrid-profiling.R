@@ -39,7 +39,7 @@ test_that("parse_step_params works when profiling beta with non-flat priors.", {
   prior_spec <- default_priors(beta_mean = 0.3, beta_sd = 0.3)
   verbose <- FALSE
   
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .02, priors = prior_spec, verbose = verbose, score_tol = 2e-8, jac_tol = 5e-3)
+  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .02, priors = prior_spec, verbose = verbose, score_tol = 1e-7, jac_tol = 5e-3)
   check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.025, .05), priors = prior_spec, verbose = verbose, score_tol = Inf, jac_tol = 5e-3)
   check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.1, .5, .7), priors = prior_spec, tol = 1e-3, score_tol = Inf, jac_tol = 5e-3, verbose = verbose)
   

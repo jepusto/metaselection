@@ -10,13 +10,13 @@
 #'   parameters.
 #' @param beta_sd numeric vector of prior standard deviations for beta (mean
 #'   regression) parameters.
-#' @param tau_mode numeric vector of prior modes for gamma (log-heterogeneity
-#'   regression) parameters.
-#' @param tau_sd numeric vector of prior standard deviations for gamma
-#'   (log-heterogeneity regression) parameters.
-#' @param lambda_mode numeric vector of prior means for zeta (selection)
+#' @param tau_mode numeric vector of prior modes for tau (heterogeneity SD)
+#'   regression parameters.
+#' @param tau_alpha numeric vector of prior precisions for tau (heterogeneity SD)
+#'   regression parameters.
+#' @param lambda_mode numeric vector of prior modes for lambda (selection)
 #'   parameters.
-#' @param lambda_sd numeric vector of prior standard deviations for zeta
+#' @param lambda_alpha numeric vector of prior precisions for lambda
 #'   (selection) parameters.
 #'
 #' @returns An object of class \code{"selmodel_prior"} containing the following
@@ -40,26 +40,23 @@
 default_priors <- function(
     beta_mean = 0,
     beta_sd = 1,
-    tau_mode = 0.15,
-    tau_sd = 0.30,
-    lambda_mode = 1,
-    lambda_sd = 2
+    tau_mode = 0.20,
+    tau_alpha = 1,
+    lambda_mode = 0.8,
+    lambda_alpha = 1
 ) {
   
-  gamma_lambda <- (tau_mode + sqrt(tau_mode^2 + 4 * tau_sd^2)) / (2 * tau_sd^2)
-  gamma_alpha <- gamma_lambda * tau_mode + 1
-  
-  zeta_lambda <- (lambda_mode + sqrt(lambda_mode^2 + 4 * lambda_sd^2)) / (2 * lambda_sd^2)
-  zeta_alpha <- zeta_lambda * lambda_mode + 1
-  
-  # cat("gamma_lambda:", gamma_lambda, "gamma_alpha:", gamma_alpha)
-  # cat("zeta_lambda:", zeta_lambda, "zeta_alpha:", zeta_alpha)
-   
+  gamma_lambda <- tau_alpha / tau_mode
+  gamma_alpha <- tau_alpha
+
+  zeta_lambda <- lambda_alpha / lambda_mode
+  zeta_alpha <- lambda_alpha
+
   log_prior <- function(beta, gamma, zeta, include_zeta = TRUE) {
     beta_log_prior <- -0.5 * (beta - beta_mean)^2 / beta_sd^2
     gamma_log_prior <- 0.5 * gamma_alpha * gamma - gamma_lambda * exp(gamma / 2)
     if (include_zeta) {
-      zeta_log_prior <- 0.5 * zeta_alpha * zeta - zeta_lambda * exp(zeta / 2)
+      zeta_log_prior <- zeta_alpha * zeta - zeta_lambda * exp(zeta)
       sum(beta_log_prior) + sum(gamma_log_prior) + sum(zeta_log_prior)
     } else {
       sum(beta_log_prior) + sum(gamma_log_prior)
@@ -70,14 +67,14 @@ default_priors <- function(
   score_prior <- function(beta, gamma, zeta) {
     score_beta <- -1 * (beta - beta_mean) / beta_sd^2
     score_gamma <- 0.5 * (gamma_alpha - gamma_lambda * exp(gamma / 2))
-    score_zeta <- 0.5 * (zeta_alpha - zeta_lambda * exp(zeta / 2))
+    score_zeta <- (zeta_alpha - zeta_lambda * exp(zeta))
     c(score_beta, score_gamma, score_zeta)
   }
   
   hessian_prior <- function(beta, gamma, zeta) {
     beta_hessian <- rep(-1 / beta_sd^2, length.out = length(beta))
     gamma_hessian <- -0.25 * gamma_lambda * exp(gamma / 2)
-    zeta_hessian <- -0.25 * zeta_lambda * exp(zeta / 2)
+    zeta_hessian <- -1 * zeta_lambda * exp(zeta)
     diag(c(beta_hessian, gamma_hessian, zeta_hessian))
   }
   

@@ -83,11 +83,7 @@ res %>%
 
 write_rds(res, file = "research/step-function-simulations/penalized-results/sim-step-function-penalized-results.rds", compress = "gz", compression = 9L)
 
-
-res %>%
-  filter(param == "beta") %>%
-  arrange(mean_smd, tau, omega, cor_mu, weights, m, n_multiplier, estimator, priors) %>%
-
+res <- read_rds(file = "research/step-function-simulations/penalized-results/sim-step-function-penalized-results.rds")
 
 res_beta <- 
   res %>%
@@ -97,6 +93,48 @@ ggplot(res_beta) +
   aes(factor(weights), bias, color = interaction(priors, estimator), fill = interaction(priors, estimator)) + 
   geom_boxplot() + 
   facet_grid(mean_smd ~ tau) + 
+  theme_light() + 
+  labs(
+    x = "Selection weight", 
+    y = "bias",
+    color = "Estimator",
+    fill = "Estimator"
+  )
+
+res_beta %>%
+  filter(tau == 0.05) %>%
+ggplot() + 
+  aes(factor(weights), bias, color = interaction(priors, estimator), fill = interaction(priors, estimator)) + 
+  geom_boxplot() + 
+  facet_grid(mean_smd ~ m) + 
+  theme_light() + 
+  labs(
+    x = "Selection weight", 
+    y = "bias",
+    color = "Estimator",
+    fill = "Estimator"
+  )
+
+res_beta %>%
+  filter(mean_smd == 0.80) %>%
+  ggplot() + 
+  aes(factor(weights), bias, color = interaction(priors, estimator), fill = interaction(priors, estimator)) + 
+  geom_boxplot() + 
+  facet_grid(tau ~ m) + 
+  theme_light() + 
+  labs(
+    x = "Selection weight", 
+    y = "bias",
+    color = "Estimator",
+    fill = "Estimator"
+  )
+
+res_beta %>%
+  filter(mean_smd == 0.80, tau == 0.05) %>%
+  ggplot() + 
+  aes(factor(weights), bias, color = interaction(priors, estimator), fill = interaction(priors, estimator)) + 
+  geom_boxplot() + 
+  facet_grid(n_multiplier ~ m, scales = "free_y") + 
   theme_light() + 
   labs(
     x = "Selection weight", 
@@ -116,6 +154,21 @@ ggplot(res_beta) +
     color = "Estimator",
     fill = "Estimator"
   )
+
+res_beta %>%
+  filter(mean_smd == 0.80, tau == 0.05) %>%
+  ggplot() + 
+  aes(factor(weights), rmse, color = interaction(priors, estimator), fill = interaction(priors, estimator)) + 
+  geom_boxplot() + 
+  facet_grid(n_multiplier ~ m, scales = "free_y") + 
+  theme_light() + 
+  labs(
+    x = "Selection weight", 
+    y = "RMSE",
+    color = "Estimator",
+    fill = "Estimator"
+  )
+
 
 res_beta_wide <- 
   res_beta %>%

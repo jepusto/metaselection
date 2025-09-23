@@ -23,7 +23,7 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
   
   dat <- r_meta_categories(
     mean_smd = c(0, 0.1, 0.2),
-    tau = 0.2,
+    tau = 0.3,
     omega = 0,
     m = 12,
     cor_mu = 0.6,
@@ -32,7 +32,7 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_sd = 1e6, tau_mode = -1e8, tau_sd = 1e4, lambda_mode = -1e8, lambda_sd = 1e4)
+  prior_spec <- default_priors(beta_sd = 1e6, tau_alpha = 1e-6, lambda_alpha = 1e-6)
   
   cml_flat <- selection_model(
     data = dat,
@@ -54,8 +54,8 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
     estimator = "CML"
   )
   
-  expect_equal(cml_flat$est$Est, cml_prior$est$Est)
-  expect_equal(cml_flat$est$SE, cml_prior$est$SE, tolerance = 1e-6)
+  expect_equal(cml_flat$est$Est, cml_prior$est$Est, tolerance = 1e-5)
+  expect_equal(cml_flat$est$SE, cml_prior$est$SE, tolerance = 1e-5)
   
   argl_flat <- selection_model(
     data = dat,
@@ -77,8 +77,8 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
     estimator = "ARGL"
   )
   
-  expect_equal(argl_flat$est$Est, argl_prior$est$Est)
-  expect_equal(argl_flat$est$SE, argl_prior$est$SE, tolerance = 1e-6)
+  expect_equal(argl_flat$est$Est, argl_prior$est$Est, tolerance = 1e-5)
+  expect_equal(argl_flat$est$SE, argl_prior$est$SE, tolerance = 1e-5)
   
   
   fargl_flat <- selection_model(
@@ -101,8 +101,8 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
     estimator = "ARGL-full"
   )
   
-  expect_equal(fargl_flat$est$Est, fargl_prior$est$Est)
-  expect_equal(fargl_flat$est$SE, fargl_prior$est$SE, tolerance = 1e-6)
+  expect_equal(fargl_flat$est$Est, fargl_prior$est$Est, tolerance = 1e-5)
+  expect_equal(fargl_flat$est$SE, fargl_prior$est$SE, tolerance = 1e-5)
   
   
 

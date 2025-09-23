@@ -7,10 +7,10 @@
 default_priors(
   beta_mean = 0,
   beta_sd = 1,
-  tau_mode = 0.15,
-  tau_sd = 0.3,
-  lambda_mode = 1,
-  lambda_sd = 2
+  tau_mode = 0.2,
+  tau_alpha = 1,
+  lambda_mode = 0.8,
+  lambda_alpha = 1
 )
 }
 \arguments{
@@ -20,16 +20,16 @@ parameters.}
 \item{beta_sd}{numeric vector of prior standard deviations for beta (mean
 regression) parameters.}
 
-\item{tau_mode}{numeric vector of prior modes for gamma (log-heterogeneity
-regression) parameters.}
+\item{tau_mode}{numeric vector of prior modes for tau (heterogeneity SD)
+regression parameters.}
 
-\item{tau_sd}{numeric vector of prior standard deviations for gamma
-(log-heterogeneity regression) parameters.}
+\item{tau_alpha}{numeric vector of prior precisions for tau (heterogeneity SD)
+regression parameters.}
 
-\item{lambda_mode}{numeric vector of prior means for zeta (selection)
+\item{lambda_mode}{numeric vector of prior modes for lambda (selection)
 parameters.}
 
-\item{lambda_sd}{numeric vector of prior standard deviations for zeta
+\item{lambda_alpha}{numeric vector of prior precisions for lambda
 (selection) parameters.}
 }
 \value{
