@@ -1,8 +1,73 @@
 library(tidyverse)
+library(metaselection)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
 
 setwd("C:/GitHub/metaselection/research/SREE2025-presentation")
 
 source("process-simulation-results.R")
+
+## Examples of beta density ##
+trunc_beta <- function(pval, lambda1, lambda2) {
+  pval_trunc <- pmin(pmax(pval, .025), .975)
+  wt <- pval_trunc^(lambda1 - 1) * (1 - pval_trunc)^(lambda2 - 1)
+  scale <- .025^(lambda1 - 1) * (1 - .025)^(lambda2 - 1)
+  wt / scale
+}
+
+pvalue <- seq(0, 1, .01)
+
+# Create the data with a helper column for sorting
+betadat_revised <- data.frame(
+  pvalue = pvalue,
+  weights_1_1 = trunc_beta(pvalue, lambda1 = 1, lambda2 = 1),
+  weights_8_9 = trunc_beta(pvalue, lambda1 = .8, lambda2 = .9),
+  weights_5_9 = trunc_beta(pvalue, lambda1 = .5, lambda2 = .9),
+  weights_2_9 = trunc_beta(pvalue, lambda1 = .2, lambda2 = .9),
+  weights_5_6 = trunc_beta(pvalue, lambda1 = .5, lambda2 = .6)
+) %>%
+  pivot_longer(
+    cols = starts_with("weights"),
+    names_to = "selection_key",
+    values_to = "weights"
+  ) %>%
+  mutate(
+    # Create the display labels as a factor with a defined order,
+    # now using paste() in the strings
+    selection = factor(case_when(
+      selection_key == "weights_1_1" ~ "paste(lambda[1] == 1, lambda[2] == 1)",
+      selection_key == "weights_8_9" ~ "paste(lambda[1] == 0.8, lambda[2] == 0.9)",
+      selection_key == "weights_5_9" ~ "paste(lambda[1] == 0.5, lambda[2] == 0.9)",
+      selection_key == "weights_2_9" ~ "paste(lambda[1] == 0.2, lambda[2] == 0.9)",
+      selection_key == "weights_5_6" ~ "paste(lambda[1] == 0.5, lambda[2] == 0.6)"
+    ),
+    # Define the order you want for the legend
+    levels = c(
+      "paste(lambda[1] == 1, lambda[2] == 1)",
+      "paste(lambda[1] == 0.8, lambda[2] == 0.9)",
+      "paste(lambda[1] == 0.5, lambda[2] == 0.9)",
+      "paste(lambda[1] == 0.2, lambda[2] == 0.9)",
+      "paste(lambda[1] == 0.5, lambda[2] == 0.6)"
+    ))
+  )
+
+beta_example <- ggplot(betadat_revised, aes(x = pvalue, y = weights)) +
+  geom_line(aes(color = selection)) +
+  scale_x_continuous(limits = c(0, 1), expand = expansion(0, 0)) +
+  scale_y_continuous(limits = c(0, 1), expand = expansion(0, 0)) +
+  geom_hline(yintercept = 0) +
+  geom_vline(xintercept = c(.025, .975), linetype = "dashed") +
+  scale_color_discrete(
+    name = "Selection", 
+    labels = parse(text = levels(betadat_revised$selection))
+  ) +
+  scale_linetype_discrete(guide = "none") +
+  theme_minimal() +
+  labs(x = "p-value (one-sided)", y = "Selection probability")
+
+ggsave("beta_example.png", plot = beta_example, width = 7, height = 6, dpi = 300)
+
 
 ## Beta-Density Selection Model Compared to CHE-ISCW and PET/PEESE ##
 
