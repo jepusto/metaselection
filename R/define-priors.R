@@ -16,7 +16,7 @@
 #'   regression parameters.
 #' @param lambda_mode numeric vector of prior modes for lambda (selection)
 #'   parameters.
-#' @param lambda_alpha numeric vector of prior precisions for lambda
+#' @param lambda_precision numeric vector of prior precisions for lambda
 #'   (selection) parameters.
 #'
 #' @returns An object of class \code{"selmodel_prior"} containing the following
@@ -43,20 +43,20 @@ default_priors <- function(
     tau_mode = 0.20,
     tau_alpha = 1,
     lambda_mode = 0.8,
-    lambda_alpha = 1
+    lambda_precision = 1
 ) {
   
   gamma_lambda <- tau_alpha / tau_mode
   gamma_alpha <- tau_alpha
-
-  zeta_lambda <- 2 * log(lambda_mode) / lambda_mode
-  zeta_alpha <- lambda_alpha
+  
+  zeta_mean <- log(lambda_mode)
+  zeta_sd <- 1 / lambda_precision
 
   log_prior <- function(beta, gamma, zeta, include_zeta = TRUE) {
     beta_log_prior <- -0.5 * (beta - beta_mean)^2 / beta_sd^2
     gamma_log_prior <- 0.5 * gamma_alpha * gamma - gamma_lambda * exp(gamma / 2)
     if (include_zeta) {
-      zeta_log_prior <- -zeta_alpha * zeta^2 + zeta_lambda * exp(zeta)
+      zeta_log_prior <- -0.5 * (zeta - zeta_mean)^2 / zeta_sd^2
       sum(beta_log_prior) + sum(gamma_log_prior) + sum(zeta_log_prior)
     } else {
       sum(beta_log_prior) + sum(gamma_log_prior)
@@ -67,14 +67,14 @@ default_priors <- function(
   score_prior <- function(beta, gamma, zeta) {
     score_beta <- -1 * (beta - beta_mean) / beta_sd^2
     score_gamma <- 0.5 * (gamma_alpha - gamma_lambda * exp(gamma / 2))
-    score_zeta <- - 2 * zeta_alpha * zeta + zeta_lambda * exp(zeta)
+    score_zeta <- - 1 * (zeta - zeta_mean) / zeta_sd^2
     c(score_beta, score_gamma, score_zeta)
   }
   
   hessian_prior <- function(beta, gamma, zeta) {
     beta_hessian <- rep(-1 / beta_sd^2, length.out = length(beta))
     gamma_hessian <- -0.25 * gamma_lambda * exp(gamma / 2)
-    zeta_hessian <- -2 * zeta_alpha + zeta_lambda * exp(zeta)
+    zeta_hessian <- rep(-1 / zeta_sd^2, length.out = length(zeta))
     diag(c(beta_hessian, gamma_hessian, zeta_hessian))
   }
   
