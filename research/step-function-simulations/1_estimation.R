@@ -34,7 +34,8 @@ estimate_step_models <- function(
     CML_optimizer_control = list(),
     ARGL_optimizer_control = list(),
     R = 399,
-    retry_bootstrap = 3L
+    retry_bootstrap = 3L,
+    use_jac = FALSE
 ) {
   
 
@@ -49,39 +50,6 @@ estimate_step_models <- function(
   )
   
   res <- list()
-  
-  if ("CML" %in% estimators) {
-    res_MLE <- tryCatch(
-      selection_model(
-        data = dat,
-        yi = d,
-        sei = sd_d,
-        pi = p_onesided,
-        cluster = studyid,
-        selection_type = "step",
-        steps = steps,
-        mean_mods = mean_mods,
-        var_mods = var_mods,
-        sel_mods = sel_mods,
-        sel_zero_mods = sel_zero_mods,
-        priors = priors,
-        estimator = "CML",
-        vcov_type = vcov_type,
-        CI_type = CI_type,
-        conf_level = conf_level,
-        optimizer = CML_optimizer, 
-        optimizer_control = CML_optimizer_control,
-        bootstrap = bootstrap,
-        R = R,
-        retry_bootstrap = retry_bootstrap
-      ), error = function(e) error_res
-    )
-    res_MLE$est$R_conv <- res_MLE$info$convcode
-    res_MLE$est$max_method = res_MLE$method
-    res_MLE$est$estimator <- "CML"
-    
-    res$MLE <- res_MLE$est
-  }
   
   if ("ARGL" %in% estimators) {
     
@@ -114,6 +82,42 @@ estimate_step_models <- function(
     res_hybrid$est$estimator <- "ARGL"
     
     res$hybrid <- res_hybrid$est
+  }
+  
+  if ("CML" %in% estimators) {
+    theta <- if ("ARGL" %in% estimators) res$hybrid$est$Est else NULL
+    res_MLE <- tryCatch(
+      selection_model(
+        data = dat,
+        yi = d,
+        sei = sd_d,
+        pi = p_onesided,
+        cluster = studyid,
+        selection_type = "step",
+        steps = steps,
+        mean_mods = mean_mods,
+        var_mods = var_mods,
+        sel_mods = sel_mods,
+        sel_zero_mods = sel_zero_mods,
+        priors = priors,
+        estimator = "CML",
+        vcov_type = vcov_type,
+        CI_type = CI_type,
+        conf_level = conf_level,
+        optimizer = CML_optimizer, 
+        optimizer_control = CML_optimizer_control,
+        bootstrap = bootstrap,
+        R = R,
+        retry_bootstrap = retry_bootstrap,
+        theta = theta,
+        use_jac = use_jac
+      ), error = function(e) error_res
+    )
+    res_MLE$est$R_conv <- res_MLE$info$convcode
+    res_MLE$est$max_method = res_MLE$method
+    res_MLE$est$estimator <- "CML"
+    
+    res$MLE <- res_MLE$est
   }
   
   bind_rows(res)

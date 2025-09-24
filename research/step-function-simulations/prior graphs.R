@@ -1,19 +1,20 @@
 library(tidyverse)
 
 
-p_beta <- function(x, beta_mean = 0, beta_sd = 1) {
-  -0.5 * (x - beta_mean)^2 / beta_sd^2
+p_beta <- function(x, beta_mean = 0, beta_sd = 1, beta_inf = 4) {
+  -0.25 * ((x - beta_mean)^2 + (x - beta_mean)^4 / (beta_inf - beta_mean)^2) / beta_sd^2
 }
 
-x <- seq(-2, 2, length.out = 500)
+x <- seq(-6, 6, length.out = 500)
 
 tibble(
   beta = x,
-  log_prior = p_beta(x) - max(p_beta(x))
+  log_prior = p_beta(x),
+  log_quad = 2 * p_beta(x, beta_inf = Inf)
 ) %>%
   ggplot() + 
-  aes(beta, log_prior) + 
-  geom_line() + 
+  geom_line(aes(beta, log_prior)) + 
+  geom_line(aes(beta, log_quad), color = "purple") + 
   scale_x_continuous(expand = expansion(0,0)) + 
   scale_y_continuous(expand = expansion(0,0)) + 
   labs(
@@ -49,9 +50,9 @@ tibble(
   )
 
 
-p_zeta <- function(x, lambda_mode = 0.8, zeta_alpha = 1) {
-  zeta_lambda <- zeta_alpha / lambda_mode
-  zeta_alpha * x - zeta_lambda * exp(x)
+p_zeta <- function(x, lambda_mode = 0.8, zeta_sd = 1, zeta_inf = log(40)) {
+  zeta_mean <- log(lambda_mode)
+  -0.25 * ((x - zeta_mean)^2 + (x - zeta_mean)^4 / (zeta_inf - zeta_mean)^2) / zeta_sd^2
 }
 
 tibble(
@@ -60,7 +61,7 @@ tibble(
   mutate(
     lambda = exp(zeta),
     log_prior = p_zeta(zeta),
-    log_prior2 = - 0.5 * zeta^2 + exp(zeta) * log(0.8) / 0.8,
+    log_prior2 = - 0.5 * (zeta - log(0.8))^2,
     across(starts_with("log_prior"), ~ .x - max(.x))
   ) %>%
   ggplot() + 
