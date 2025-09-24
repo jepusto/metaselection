@@ -17,7 +17,8 @@ parse_step_params <- function(
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,
     priors = NULL,                              # selmodel_prior object to specify priors
-    calc_Ai = FALSE
+    calc_Ai = FALSE,
+    min_Bhi = 1e-6
 ) {
   
   # number of observations
@@ -153,6 +154,7 @@ parse_step_params <- function(
     c_mat <- (tcrossprod(sei, -qnorm(steps)) - mu) / sqrt(eta)
     N_mat <- cbind(rep(1,k), pnorm(c_mat), rep(0,k))
     B_mat <- N_mat[,1:H] - N_mat[,2:(H+1L)]
+    B_mat <- apply(B_mat, 2, \(x) pmax(x, min_Bhi))
     params$c_mat <- c_mat
     params$B_mat <- B_mat
     params$Ai <- rowSums(B_mat * lambda_full)

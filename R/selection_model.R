@@ -707,7 +707,7 @@ jackknife_selmodel <- function(
 #' @param sel_zero_mods optional model formula for moderators related to the
 #'   probability of selection for p-values below the lowest threshold value of
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
-#' @param priors    
+#' @param priors
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the composite marginal
@@ -736,15 +736,18 @@ jackknife_selmodel <- function(
 #'   \code{estimator = "ARGL"} or \code{"ARGL-full"}.
 #' @param optimizer_control an optional list of control parameters to be used
 #'   for optimization
-#' @param use_jac logical with \code{TRUE} (the default) indicating to use the
-#'   Jacobian of the estimating equations for optimization.
+#' @param use_jac logical indicating whether to use the Jacobian of the
+#'   estimating equations for optimization. If \code{NULL} (the default), it
+#'   will be reset to \code{FALSE} if \code{estimator = "CML"} or to \code{TRUE}
+#'   if \code{estimator = "ARGL"}
 #' @param bootstrap character string specifying the type of bootstrap to run,
 #'   with possible options \code{"none"} (the default), \code{"exponential"} for
-#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for
-#'   a conventional clustered bootstrap, or , \code{"two-stage"} for
-#'   a two-stage clustered bootstrap.
+#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for a
+#'   conventional clustered bootstrap, or , \code{"two-stage"} for a two-stage
+#'   clustered bootstrap.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
-#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.
+#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the
+#'   event of non-convergence, with a default of \code{0}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
 #' @returns An object of class \code{"selmodel"} containing the following
@@ -824,7 +827,7 @@ selection_model <- function(
     theta = NULL,
     optimizer = NULL,
     optimizer_control = list(),
-    use_jac = TRUE,
+    use_jac = NULL,
     bootstrap = "none",
     R = 1999,
     retry_bootstrap = 0L,
@@ -856,6 +859,10 @@ selection_model <- function(
 
   if (is.null(optimizer)) {
     optimizer <- if (estimator %in% c("ML","CML")) c("Rvmmin","Nelder-Mead","nlminb") else "nleqslv"
+  }
+  
+  if (is.null(use_jac)) {
+    use_jac <- !(estimator %in% c("ML","CML"))
   }
   
   if (missing(steps)) {
