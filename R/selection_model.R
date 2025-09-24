@@ -101,7 +101,7 @@ fit_selection_model <- function(
   selection_type = "step",
   estimator = "CML",
   theta = NULL,
-  optimizer = "BFGS",
+  optimizer = c("Rvmmin","Nelder-Mead","nlminb"),
   optimizer_control = list(),
   use_jac = TRUE
 ) {
@@ -183,10 +183,11 @@ fit_selection_model <- function(
       return(mle_est)
     } 
     
-    max_method <- row.names(mle_est)[which.max(mle_est$value)]
+    mle_est_conv <- subset(mle_est, kkt1 & kkt2)
+    max_method <- row.names(mle_est_conv)[which.max(mle_est_conv$value)]
     theta_names <- 1:length(theta)
-    theta <- as.numeric(mle_est[max_method, theta_names])
-    info <- mle_est[max_method, -theta_names]
+    theta <- as.numeric(mle_est_conv[max_method, theta_names])
+    info <- mle_est_conv[max_method, -theta_names]
     names(theta) <- params$H_names
     
     if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
@@ -854,11 +855,7 @@ selection_model <- function(
   }
 
   if (is.null(optimizer)) {
-    if (selection_type == "step") {
-      optimizer <- if (estimator %in% c("ML","CML")) "Rvmmin" else "nleqslv"
-    } else {
-      optimizer <- "nlminb"
-    }
+    optimizer <- if (estimator %in% c("ML","CML")) c("Rvmmin","Nelder-Mead","nlminb") else "nleqslv"
   }
   
   if (missing(steps)) {

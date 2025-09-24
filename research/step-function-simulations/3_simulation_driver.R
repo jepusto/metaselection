@@ -50,7 +50,7 @@ run_sim <- function(
       tau_mode = 0.2,
       tau_alpha = 1,
       lambda_mode = 0.8,
-      lambda_alpha = 1
+      lambda_precision = 1
     ),
     "Weaker" = default_priors(
       beta_mean = 0,
@@ -58,7 +58,7 @@ run_sim <- function(
       tau_mode = 0.2, 
       tau_alpha = 0.5,
       lambda_mode = 1,
-      lambda_alpha = 0.5
+      lambda_precision = 0.25
     )
   )
   

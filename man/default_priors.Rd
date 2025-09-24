@@ -10,7 +10,7 @@ default_priors(
   tau_mode = 0.2,
   tau_alpha = 1,
   lambda_mode = 0.8,
-  lambda_alpha = 1
+  lambda_precision = 1
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ regression parameters.}
 \item{lambda_mode}{numeric vector of prior modes for lambda (selection)
 parameters.}
 
-\item{lambda_alpha}{numeric vector of prior precisions for lambda
+\item{lambda_precision}{numeric vector of prior precisions for lambda
 (selection) parameters.}
 }
 \value{

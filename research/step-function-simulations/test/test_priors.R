@@ -5,11 +5,6 @@ library(metafor)
 library(metaselection)
 plan(multisession)
 
-res %>% 
-  unnest(res) %>% 
-  filter(param == "beta") %>% 
-  mutate(SD = sqrt(var)) %>% 
-  select(priors, estimator, bias, SD, rmse, coverage)
 
 load("research/step-function-simulations/wwc_es.RData") # do we need to change this?
 source("research/step-function-simulations/1_estimation.R")
@@ -98,9 +93,13 @@ ggplot(CML_wide) +
   geom_point()
 
 CML_wide %>% 
-  filter(beta < 0)
+  filter(beta < 0) %>%
+  mutate(
+    tau = exp(gamma / 2),
+    lambda = exp(zeta1)
+  )
 
-dat <- filter(data_res, rep == 103)$data[[1]]
+dat <- filter(data_res, rep == 626)$data[[1]]
 
 est <- selection_model(
   yi = d,
@@ -110,9 +109,11 @@ est <- selection_model(
   steps = 0.025, 
   priors = default_priors(), 
   bootstrap = "none",
-  use_jac = FALSE
+  use_jac = FALSE,
+  # vcov_type = "raw",
+  optimizer = c("Rvmmin","Nelder-Mead","nlminb")
 )
-
+est
 theta <- est$est$Est
 debugonce(step_loglik)
 step_loglik(theta = theta, yi = dat$d, sei = dat$sd_d, priors = NULL)
@@ -123,6 +124,6 @@ step_loglik(theta = theta, yi = dat$d, sei = dat$sd_d, priors = default_priors()
 step_score(theta = theta, yi = dat$d, sei = dat$sd_d, priors = default_priors())
 
 rma.uni(yi = d, sei = sda, data = dat) %>% 
-  funnel(level=95, shade="gray55", refline=0, legend=TRUE)
+  funnel(level=95, shade="gray55", refline=0, legend=FALSE)
 rma.uni(yi = d, sei = sda, data = dat) %>%
   selmodel(type = "step", steps = .025)
