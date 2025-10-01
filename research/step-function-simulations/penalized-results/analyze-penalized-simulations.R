@@ -1,3 +1,5 @@
+library(tidyverse)
+
 res <- read_rds(file = "research/step-function-simulations/penalized-results/sim-step-function-penalized-results-no-bootstraps.rds")
 
 res_beta_3PSM <- 
@@ -237,4 +239,20 @@ res_beta_3PSM_wide %>%
     x = "CML", 
     y = "ARGL",
     color = "Sample size"
+  )
+
+#-------------------------------------------------------------------------------
+# Coverage
+
+ggplot(res_beta_3PSM) + 
+  aes(factor(weights), coverage, color = interaction(estimator, priors), fill = interaction(estimator, priors)) + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + 
+  geom_boxplot() + 
+  facet_grid(mean_smd ~ tau) + 
+  theme_light() + 
+  labs(
+    x = "Selection weight", 
+    y = "CI Coverage",
+    color = "Estimator",
+    fill = "Estimator"
   )
