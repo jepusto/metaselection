@@ -27,7 +27,8 @@ outstanding_conditions <-
   left_join(rows, by = "row")
 
 nrow(outstanding_conditions)
-
+outstanding_conditions %>%
+  count(bootstrap)
 #-------------------------------------------------------------------------------
 # compile results from individual files
 
@@ -85,5 +86,5 @@ res %>%
   summarize(n_res = n(), .groups = "drop") %>%
   count(n_res)
 
-write_rds(res, file = "research/step-function-simulations/penalized-results/sim-step-function-penalized-results.rds", compress = "gz", compression = 9L)
+write_rds(res, file = "research/step-function-simulations/penalized-results/sim-step-function-penalized-results-no-bootstraps.rds", compress = "gz", compression = 9L)
 

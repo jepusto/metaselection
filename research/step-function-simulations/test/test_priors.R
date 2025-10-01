@@ -95,14 +95,14 @@ ggplot(CML_wide) +
   aes(zeta1, gamma) + 
   geom_point()
 
-dat <- data_res$data[[1]]
+CML_wide %>% 
+  filter(beta < 0) %>%
+  mutate(
+    tau = exp(gamma / 2),
+    lambda = exp(zeta1)
+  )
 
-estimate_step_models(
-  dat = dat, 
-  steps = 0.025, 
-  estimators = "CML",
-  priors = default_priors()
-)
+dat <- filter(data_res, rep == 626)$data[[1]]
 
 est <- selection_model(
   yi = d,
@@ -112,7 +112,7 @@ est <- selection_model(
   steps = 0.025, 
   priors = default_priors(), 
   bootstrap = "none",
-  use_jac = TRUE,
+  use_jac = FALSE,
   # vcov_type = "raw",
   optimizer = c("Rvmmin","Nelder-Mead","nlminb")
 )
