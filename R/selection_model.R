@@ -1000,7 +1000,7 @@ selection_model <- function(
         selection_type = selection_type,
         estimator = estimator, 
         theta = theta,
-        optimizer = optimizer, 
+        optimizer = res$method, 
         optimizer_control = optimizer_control,
         use_jac = use_jac,
         wtype = bootstrap,
@@ -1022,7 +1022,7 @@ selection_model <- function(
         steps = steps,
         selection_type = selection_type,
         estimator = estimator, 
-        optimizer = optimizer, 
+        optimizer = res$method, 
         optimizer_control = optimizer_control,
         use_jac = use_jac
       )
