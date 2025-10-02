@@ -1,0 +1,224 @@
+---
+title: "Prior specification"
+format: html
+editor: source
+code-fold: true
+toc: true
+---
+
+```{r}
+#| include: false
+library(flextable)
+library(tidyverse)
+
+set_theme(theme_minimal())
+```
+
+# Priors for $\beta$
+
+For the average effect parameter $\beta$, we consider $L$-norm priors with density
+$$
+d_\beta(b) \propto \exp\left(- \phi\left| b - \mu \right|^L \right),
+$$
+where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors, both with $\mu = 0$. As a potential default prior, we use $L = 2$ and $\phi = \frac{1}{2}$, which corresponds to a standard normal distribution. As a weaker prior, we use $L = 4$ and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $|\beta| < 0.8$ but becomes much sharper for $|\beta| > 2$. @fig-beta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+
+```{r}
+#| label: fig-beta-priors
+#| fig-cap: "Prior distributions on $\\beta$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+Lp_dist <- function(mu = 0, precision = 1, L = 2, ...) {
+  Const <- gamma(1 / L) * 2 / (L * precision^(1 / L))
+  f <- function(x) exp(-precision * abs(x - mu)^L) / Const
+  g <- function(x) sapply(x, \(y) integrate(f, lower = -Inf, upper = y, ...)$value)
+  
+  return(list(pdf = f, cdf = g))
+}
+
+
+beta_default <- Lp_dist(mu = 0, precision = 1 / 2, L = 2)
+beta_weak <- Lp_dist(mu = 0, precision = 1 / 16, L = 4)
+
+x <- seq(-4, 4, length.out = 500)
+
+tibble(
+  beta = x,
+  default = beta_default$pdf(x),
+  weak = beta_weak$pdf(x)
+) %>%
+  ggplot() + 
+  geom_vline(xintercept = 0, linetype = "dashed") + 
+  geom_area(aes(beta, default), fill = "red", alpha = 0.5) + 
+  geom_area(aes(beta, weak), fill = "purple", alpha = 0.5) + 
+  scale_x_continuous(expand = expansion(0,0)) + 
+  labs(
+    x = expression(beta), 
+    y = expression(p[beta](b))
+  )
+
+```
+
+To further interpret these priors, we can consider 1) the density at benchmark values of $\beta$ relative to the density at the center of the distribution and 2) the total prior probability of $|\beta| < b$ for various values of $b$. @tbl-beta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\beta(b) / d_\beta(0)$; the columns labelled "Prior probability" correspond to $\text{Pr}(|\beta| < b)$.
+
+```{r}
+#| label: tbl-beta
+#| tbl-cap: Relative density and total probability for benchmark values of $\\beta$
+
+x_bench <- c(0.25, 0.5, 0.8, seq(1, 3, 0.5))
+
+
+tibble(
+  beta_b = x_bench,
+  d_Default = beta_default$pdf(x_bench) / beta_default$pdf(0),
+  d_Weaker = beta_weak$pdf(x_bench) / beta_weak$pdf(0),
+  c_Default = 2 * (beta_default$cdf(x_bench) - 0.5),
+  c_Weaker = 2 * (beta_weak$cdf(x_bench) - 0.5),
+) %>%
+  flextable() %>%
+  separate_header() %>%
+  labelizor(labels = c('beta' = "",'d' = "Relative density", 'c' = "Prior probability")) %>%
+  colformat_double(j = 2:5, digits = 3)
+  
+```
+
+# Priors for $\zeta$ (log of the selection parameter)
+
+For the selection parameter $\zeta = \log(\lambda)$, we consider $L$-norm priors with density
+$$
+d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
+$$
+where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors. As a potential default prior, we use $L = 2$, $\mu = \log(0.8)$, and $\phi = \frac{1}{2}$, which implies that $\zeta$ follows a normal distribution with mode of $\mu$ and a standard deviation of 1 (i.e., $\lambda$ follows a log-normal distribution). As a weaker prior, we use $L = 4$, $\mu = \log(0.5)$, and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $0.2 < \lambda < 1$ but becomes much sharper for $\lambda < 0.05$ or $\lambda > 5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+
+```{r}
+#| label: fig-zeta-priors
+#| fig-cap: "Prior distributions on $\\zeta$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+z <- seq(log(0.01), log(16), length.out = 500)
+lambda_bench <- c(0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 0.8, 1, 1.5, 2, 4, 8, 16)
+z_bench <- log(lambda_bench)
+
+zeta_default <- Lp_dist(mu = log(0.8), precision = 1 / 2, L = 2)
+zeta_weak <- Lp_dist(mu = log(0.5), precision = 1 / 16, L = 4)
+
+tibble(
+  zeta = z,
+  lambda = exp(z),
+  default = zeta_default$pdf(z),
+  weak = zeta_weak$pdf(z)
+) %>%
+  ggplot() + 
+  geom_vline(xintercept = 1, linetype = "dashed") + 
+  geom_area(aes(lambda, default), fill = "red", alpha = 0.5) + 
+  geom_area(aes(lambda, weak), fill = "purple", alpha = 0.5) + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = lambda_bench,
+    expand = expansion(0,0)
+  ) + 
+  labs(
+    x = expression(lambda == exp(zeta)), 
+    y = expression(p[zeta](z))
+  )
+
+```
+
+To further interpret these priors, we can consider 1) the density at benchmark values of $\lambda$ relative to the density at $\lambda = 1$ (or $\zeta = 0$) and 2) the cumulative prior probability of $\lambda < l$ for various values of $l$. @tbl-zeta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\zeta(l) / d_\zeta(1)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\lambda < l)$.
+
+```{r}
+#| label: tbl-zeta
+#| tbl-cap: Relative density and total probability for benchmark values of $\\lambda$
+
+tibble(
+  lambda_l = lambda_bench,
+  zeta_z = z_bench,
+  d_Default = zeta_default$pdf(z_bench) / zeta_default$pdf(0),
+  d_Weaker = zeta_weak$pdf(z_bench) / zeta_weak$pdf(0),
+  c_Default = zeta_default$cdf(z_bench),
+  c_Weaker = zeta_weak$cdf(z_bench)
+) %>%
+  flextable() %>%
+  separate_header() %>%
+  labelizor(labels = c('lambda' = "",'zeta' = "",'d' = "Relative density", 'c' = "Cumulative probability")) %>%
+  colformat_double(j = 2:6, digits = 3)
+  
+```
+
+# Priors for $\gamma$ (log of the heterogeneity)
+
+For the average effect parameter $\zeta = \log(\lambda)$, we consider $L$-norm priors with density
+$$
+d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
+$$
+where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors. As a potential default prior, we use $L = 2$, $\mu = \log(0.8)$, and $\phi = \frac{1}{2}$, which implies that $\zeta$ follows a normal distribution with mode of $\mu$ and a standard deviation of 1 (i.e., $\lambda$ follows a log-normal distribution). As a weaker prior, we use $L = 4$, $\mu = \log(0.5)$, and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $0.2 < \lambda < 1$ but becomes much sharper for $\lambda < 0.05$ or $\lambda > 5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+
+```{r}
+#| label: fig-gamma-priors
+#| fig-cap: "Prior distributions on $\\gamma$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+loggamma_dist <- function(mode, alpha, ...) {
+  lambda <- alpha / mode
+  f <- function(x) dgamma(exp(x / 2), shape = alpha + 1, rate = lambda)
+  g <- function(x) pgamma(exp(x / 2), shape = alpha, rate = lambda)
+  return(list(pdf = f, cdf = g))
+}
+
+
+g <- seq(log(0.01^2), log(1^2), length.out = 500)
+tau_bench <- c(0.01, 0.05, seq(0.1, 1, 0.1))
+g_bench <- 2 * log(tau_bench)
+
+gamma_default <- loggamma_dist(mode = 0.2, alpha = 1)
+gamma_weak <- loggamma_dist(mode = 0.2, alpha = 0.5)
+
+
+tibble(
+  gamma = g,
+  tau = exp(g / 2),
+  default = gamma_default$pdf(g),
+  weak = gamma_weak$pdf(g)
+) %>%
+  ggplot() + 
+  geom_area(aes(tau, default), fill = "red", alpha = 0.5) + 
+  geom_area(aes(tau, weak), fill = "purple", alpha = 0.5) + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = tau_bench,
+    expand = expansion(0,0)
+  ) + 
+  labs(
+    x = expression(tau), 
+    y = expression(p(tau))
+  )
+
+
+```
+
+To further interpret these priors, we can consider 1) the density at benchmark values of $\lambda$ relative to the density at $\lambda = 1$ (or $\zeta = 0$) and 2) the cumulative prior probability of $\lambda < l$ for various values of $l$. @tbl-zeta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\zeta(l) / d_\zeta(1)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\lambda < l)$.
+
+```{r}
+#| label: tbl-gamma
+#| tbl-cap: Relative density and total probability for benchmark values of $\\tau$
+
+tibble(
+  tau_t = tau_bench,
+  gamma_g = g_bench,
+  d_Default = gamma_default$pdf(g_bench) / gamma_default$pdf(2 * log(0.2)),
+  d_Weaker = gamma_weak$pdf(g_bench) / gamma_weak$pdf(2 * log(0.2)),
+  c_Default = gamma_default$cdf(g_bench),
+  c_Weaker = gamma_weak$cdf(g_bench)
+) %>%
+  flextable() %>%
+  separate_header() %>%
+  labelizor(labels = c('tau' = "",'gamma' = "",'d' = "Relative density", 'c' = "Cumulative probability")) %>%
+  colformat_double(j = 2:6, digits = 3)
+  
+```
+

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Prior specification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="prior-memo_files/libs/clipboard/clipboard.min.js"></script>
+<script src="prior-memo_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="prior-memo_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="prior-memo_files/libs/quarto-html/popper.min.js"></script>
+<script src="prior-memo_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="prior-memo_files/libs/quarto-html/anchor.min.js"></script>
+<link href="prior-memo_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="prior-memo_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="prior-memo_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="prior-memo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="prior-memo_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="prior-memo_files/libs/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+
+<script src="prior-memo_files/libs/tabwid-1.1.3/tabwid.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#priors-for-beta" id="toc-priors-for-beta" class="nav-link active" data-scroll-target="#priors-for-beta">Priors for <span class="math inline">\(\beta\)</span></a></li>
+  <li><a href="#priors-for-zeta-log-of-the-selection-parameter" id="toc-priors-for-zeta-log-of-the-selection-parameter" class="nav-link" data-scroll-target="#priors-for-zeta-log-of-the-selection-parameter">Priors for <span class="math inline">\(\zeta\)</span> (log of the selection parameter)</a></li>
+  <li><a href="#priors-for-gamma-log-of-the-heterogeneity" id="toc-priors-for-gamma-log-of-the-heterogeneity" class="nav-link" data-scroll-target="#priors-for-gamma-log-of-the-heterogeneity">Priors for <span class="math inline">\(\gamma\)</span> (log of the heterogeneity)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Prior specification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="priors-for-beta" class="level1">
+<h1>Priors for <span class="math inline">\(\beta\)</span></h1>
+<p>For the average effect parameter <span class="math inline">\(\beta\)</span>, we consider <span class="math inline">\(L\)</span>-norm priors with density <span class="math display">\[
+d_\beta(b) \propto \exp\left(- \phi\left| b - \mu \right|^L \right),
+\]</span> where <span class="math inline">\(\mu\)</span> is the mean (and median and mode), <span class="math inline">\(\phi\)</span> is a precision parameter (i.e., inverse of scale), and <span class="math inline">\(L\)</span> is the norm. We consider two version of the priors, both with <span class="math inline">\(\mu = 0\)</span>. As a potential default prior, we use <span class="math inline">\(L = 2\)</span> and <span class="math inline">\(\phi = \frac{1}{2}\)</span>, which corresponds to a standard normal distribution. As a weaker prior, we use <span class="math inline">\(L = 4\)</span> and <span class="math inline">\(\phi = \frac{1}{16}\)</span>, which produces a playtkurtic distribution that is very flat over the range <span class="math inline">\(|\beta| &lt; 0.8\)</span> but becomes much sharper for <span class="math inline">\(|\beta| &gt; 2\)</span>. <a href="#fig-beta-priors" class="quarto-xref">Figure&nbsp;1</a> depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Lp_dist <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">precision =</span> <span class="dv">1</span>, <span class="at">L =</span> <span class="dv">2</span>, ...) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  Const <span class="ot">&lt;-</span> <span class="fu">gamma</span>(<span class="dv">1</span> <span class="sc">/</span> L) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">/</span> (L <span class="sc">*</span> precision<span class="sc">^</span>(<span class="dv">1</span> <span class="sc">/</span> L))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(<span class="sc">-</span>precision <span class="sc">*</span> <span class="fu">abs</span>(x <span class="sc">-</span> mu)<span class="sc">^</span>L) <span class="sc">/</span> Const</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sapply</span>(x, \(y) <span class="fu">integrate</span>(f, <span class="at">lower =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">upper =</span> y, ...)<span class="sc">$</span>value)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">pdf =</span> f, <span class="at">cdf =</span> g))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>beta_default <span class="ot">&lt;-</span> <span class="fu">Lp_dist</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">precision =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">2</span>, <span class="at">L =</span> <span class="dv">2</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>beta_weak <span class="ot">&lt;-</span> <span class="fu">Lp_dist</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">precision =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">16</span>, <span class="at">L =</span> <span class="dv">4</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">500</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta =</span> x,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> beta_default<span class="sc">$</span><span class="fu">pdf</span>(x),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">weak =</span> beta_weak<span class="sc">$</span><span class="fu">pdf</span>(x)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(beta, default), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(beta, weak), <span class="at">fill =</span> <span class="st">"purple"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(beta), </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(p[beta](b))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-beta-priors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beta-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prior-memo_files/figure-html/fig-beta-priors-1.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beta-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Prior distributions on <span class="math inline">\(\beta\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To further interpret these priors, we can consider 1) the density at benchmark values of <span class="math inline">\(\beta\)</span> relative to the density at the center of the distribution and 2) the total prior probability of <span class="math inline">\(|\beta| &lt; b\)</span> for various values of <span class="math inline">\(b\)</span>. <a href="#tbl-beta" class="quarto-xref">Table&nbsp;1</a> reports these quantities for both the default and weaker priors. The columns labelled “Relative density” correspond to <span class="math inline">\(d_\beta(b) / d_\beta(0)\)</span>; the columns labelled “Prior probability” correspond to <span class="math inline">\(\text{Pr}(|\beta| &lt; b)\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x_bench <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.5</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta_b =</span> x_bench,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Default =</span> beta_default<span class="sc">$</span><span class="fu">pdf</span>(x_bench) <span class="sc">/</span> beta_default<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">0</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Weaker =</span> beta_weak<span class="sc">$</span><span class="fu">pdf</span>(x_bench) <span class="sc">/</span> beta_weak<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">0</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Default =</span> <span class="dv">2</span> <span class="sc">*</span> (beta_default<span class="sc">$</span><span class="fu">cdf</span>(x_bench) <span class="sc">-</span> <span class="fl">0.5</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Weaker =</span> <span class="dv">2</span> <span class="sc">*</span> (beta_weak<span class="sc">$</span><span class="fu">cdf</span>(x_bench) <span class="sc">-</span> <span class="fl">0.5</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_header</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labelizor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">'beta'</span> <span class="ot">=</span> <span class="st">""</span>,<span class="st">'d'</span> <span class="ot">=</span> <span class="st">"Relative density"</span>, <span class="st">'c'</span> <span class="ot">=</span> <span class="st">"Prior probability"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colformat_double</span>(<span class="at">j =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-beta" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-beta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Relative density and total probability for benchmark values of <span class="math inline">\(\beta\)</span>
+</figcaption>
+<div aria-describedby="tbl-beta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid"><style>.cl-826500c2{}.cl-825e9ae8{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8260ea3c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8260ea46{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8260fca2{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8260fcac{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8260fcad{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8260fcb6{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8260fcb7{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-826500c2"><thead><tr style="overflow-wrap:break-word;"><th class="cl-8260fca2"><p class="cl-8260ea3c"><span class="cl-825e9ae8"></span></p></th><th colspan="2" class="cl-8260fcac"><p class="cl-8260ea46"><span class="cl-825e9ae8">Relative density</span></p></th><th colspan="2" class="cl-8260fcac"><p class="cl-8260ea46"><span class="cl-825e9ae8">Prior probability</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-8260fcad"><p class="cl-8260ea3c"><span class="cl-825e9ae8">b</span></p></th><th class="cl-8260fcad"><p class="cl-8260ea3c"><span class="cl-825e9ae8">Default</span></p></th><th class="cl-8260fcad"><p class="cl-8260ea3c"><span class="cl-825e9ae8">Weaker</span></p></th><th class="cl-8260fcad"><p class="cl-8260ea3c"><span class="cl-825e9ae8">Default</span></p></th><th class="cl-8260fcad"><p class="cl-8260ea3c"><span class="cl-825e9ae8">Weaker</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.25</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.969</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">1.000</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.197</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.138</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.50</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.882</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.996</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.383</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.276</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.80</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.726</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.975</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.576</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.439</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">1.00</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.607</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.939</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.683</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.545</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">1.50</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.325</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.729</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.866</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.779</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">2.00</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.135</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.368</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.954</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.932</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">2.50</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.044</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.087</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.988</span></p></td><td class="cl-8260fcb6"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.990</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-8260fcb7"><p class="cl-8260ea3c"><span class="cl-825e9ae8">3.00</span></p></td><td class="cl-8260fcb7"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.011</span></p></td><td class="cl-8260fcb7"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.006</span></p></td><td class="cl-8260fcb7"><p class="cl-8260ea3c"><span class="cl-825e9ae8">0.997</span></p></td><td class="cl-8260fcb7"><p class="cl-8260ea3c"><span class="cl-825e9ae8">1.000</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="priors-for-zeta-log-of-the-selection-parameter" class="level1">
+<h1>Priors for <span class="math inline">\(\zeta\)</span> (log of the selection parameter)</h1>
+<p>For the selection parameter <span class="math inline">\(\zeta = \log(\lambda)\)</span>, we consider <span class="math inline">\(L\)</span>-norm priors with density <span class="math display">\[
+d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
+\]</span> where <span class="math inline">\(\mu\)</span> is the mean (and median and mode), <span class="math inline">\(\phi\)</span> is a precision parameter (i.e., inverse of scale), and <span class="math inline">\(L\)</span> is the norm. We consider two version of the priors. As a potential default prior, we use <span class="math inline">\(L = 2\)</span>, <span class="math inline">\(\mu = \log(0.8)\)</span>, and <span class="math inline">\(\phi = \frac{1}{2}\)</span>, which implies that <span class="math inline">\(\zeta\)</span> follows a normal distribution with mode of <span class="math inline">\(\mu\)</span> and a standard deviation of 1 (i.e., <span class="math inline">\(\lambda\)</span> follows a log-normal distribution). As a weaker prior, we use <span class="math inline">\(L = 4\)</span>, <span class="math inline">\(\mu = \log(0.5)\)</span>, and <span class="math inline">\(\phi = \frac{1}{16}\)</span>, which produces a playtkurtic distribution that is very flat over the range <span class="math inline">\(0.2 &lt; \lambda &lt; 1\)</span> but becomes much sharper for <span class="math inline">\(\lambda &lt; 0.05\)</span> or <span class="math inline">\(\lambda &gt; 5\)</span>. <a href="#fig-zeta-priors" class="quarto-xref">Figure&nbsp;2</a> depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">log</span>(<span class="fl">0.01</span>), <span class="fu">log</span>(<span class="dv">16</span>), <span class="at">length.out =</span> <span class="dv">500</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lambda_bench <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.20</span>, <span class="fl">0.50</span>, <span class="fl">0.8</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>z_bench <span class="ot">&lt;-</span> <span class="fu">log</span>(lambda_bench)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>zeta_default <span class="ot">&lt;-</span> <span class="fu">Lp_dist</span>(<span class="at">mu =</span> <span class="fu">log</span>(<span class="fl">0.8</span>), <span class="at">precision =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">2</span>, <span class="at">L =</span> <span class="dv">2</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>zeta_weak <span class="ot">&lt;-</span> <span class="fu">Lp_dist</span>(<span class="at">mu =</span> <span class="fu">log</span>(<span class="fl">0.5</span>), <span class="at">precision =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">16</span>, <span class="at">L =</span> <span class="dv">4</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">zeta =</span> z,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda =</span> <span class="fu">exp</span>(z),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> zeta_default<span class="sc">$</span><span class="fu">pdf</span>(z),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">weak =</span> zeta_weak<span class="sc">$</span><span class="fu">pdf</span>(z)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(lambda, default), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(lambda, weak), <span class="at">fill =</span> <span class="st">"purple"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">transform =</span> <span class="st">"log"</span>, </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> lambda_bench,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(lambda <span class="sc">==</span> <span class="fu">exp</span>(zeta)), </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(p[zeta](z))</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-zeta-priors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-zeta-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prior-memo_files/figure-html/fig-zeta-priors-1.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-zeta-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Prior distributions on <span class="math inline">\(\zeta\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To further interpret these priors, we can consider 1) the density at benchmark values of <span class="math inline">\(\lambda\)</span> relative to the density at <span class="math inline">\(\lambda = 1\)</span> (or <span class="math inline">\(\zeta = 0\)</span>) and 2) the cumulative prior probability of <span class="math inline">\(\lambda &lt; l\)</span> for various values of <span class="math inline">\(l\)</span>. <a href="#tbl-zeta" class="quarto-xref">Table&nbsp;2</a> reports these quantities for both the default and weaker priors. The columns labelled “Relative density” correspond to <span class="math inline">\(d_\zeta(l) / d_\zeta(1)\)</span>; the columns labelled “Cumulative probability” correspond to <span class="math inline">\(\text{Pr}(\lambda &lt; l)\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda_l =</span> lambda_bench,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zeta_z =</span> z_bench,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Default =</span> zeta_default<span class="sc">$</span><span class="fu">pdf</span>(z_bench) <span class="sc">/</span> zeta_default<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">0</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Weaker =</span> zeta_weak<span class="sc">$</span><span class="fu">pdf</span>(z_bench) <span class="sc">/</span> zeta_weak<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">0</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Default =</span> zeta_default<span class="sc">$</span><span class="fu">cdf</span>(z_bench),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Weaker =</span> zeta_weak<span class="sc">$</span><span class="fu">cdf</span>(z_bench)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_header</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labelizor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">'lambda'</span> <span class="ot">=</span> <span class="st">""</span>,<span class="st">'zeta'</span> <span class="ot">=</span> <span class="st">""</span>,<span class="st">'d'</span> <span class="ot">=</span> <span class="st">"Relative density"</span>, <span class="st">'c'</span> <span class="ot">=</span> <span class="st">"Cumulative probability"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colformat_double</span>(<span class="at">j =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-zeta" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-zeta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Relative density and total probability for benchmark values of <span class="math inline">\(\lambda\)</span>
+</figcaption>
+<div aria-describedby="tbl-zeta-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid"><style>.cl-829e4576{}.cl-829747c6{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8299f034{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-8299f03e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-829a0286{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-829a0287{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-829a0290{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-829a0291{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-829a0292{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-829e4576"><thead><tr style="overflow-wrap:break-word;"><th class="cl-829a0286"><p class="cl-8299f034"><span class="cl-829747c6"></span></p></th><th class="cl-829a0286"><p class="cl-8299f034"><span class="cl-829747c6"></span></p></th><th colspan="2" class="cl-829a0287"><p class="cl-8299f03e"><span class="cl-829747c6">Relative density</span></p></th><th colspan="2" class="cl-829a0287"><p class="cl-8299f03e"><span class="cl-829747c6">Cumulative probability</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">l</span></p></th><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">z</span></p></th><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">Default</span></p></th><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">Weaker</span></p></th><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">Default</span></p></th><th class="cl-829a0290"><p class="cl-8299f034"><span class="cl-829747c6">Weaker</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.01</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-4.605</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.02</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-3.912</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.001</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.001</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.05</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-2.996</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.022</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.175</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.003</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.012</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.10</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-2.303</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.118</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.667</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.019</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.089</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.20</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-1.609</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.392</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.971</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.083</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.249</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.50</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-0.693</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.918</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.015</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.319</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.500</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.80</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">-0.223</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.025</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.011</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.500</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.630</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.00</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.000</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.588</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.691</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.50</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.405</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.841</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.926</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.735</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.798</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">2.00</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.693</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.674</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.805</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.820</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.866</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">4.00</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">1.386</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.281</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.315</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.946</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.973</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">8.00</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">2.079</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.072</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.025</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.989</span></p></td><td class="cl-829a0291"><p class="cl-8299f034"><span class="cl-829747c6">0.999</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">16.00</span></p></td><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">2.773</span></p></td><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">0.012</span></p></td><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">0.000</span></p></td><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">0.999</span></p></td><td class="cl-829a0292"><p class="cl-8299f034"><span class="cl-829747c6">1.000</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="priors-for-gamma-log-of-the-heterogeneity" class="level1">
+<h1>Priors for <span class="math inline">\(\gamma\)</span> (log of the heterogeneity)</h1>
+<p>For the average effect parameter <span class="math inline">\(\zeta = \log(\lambda)\)</span>, we consider <span class="math inline">\(L\)</span>-norm priors with density <span class="math display">\[
+d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
+\]</span> where <span class="math inline">\(\mu\)</span> is the mean (and median and mode), <span class="math inline">\(\phi\)</span> is a precision parameter (i.e., inverse of scale), and <span class="math inline">\(L\)</span> is the norm. We consider two version of the priors. As a potential default prior, we use <span class="math inline">\(L = 2\)</span>, <span class="math inline">\(\mu = \log(0.8)\)</span>, and <span class="math inline">\(\phi = \frac{1}{2}\)</span>, which implies that <span class="math inline">\(\zeta\)</span> follows a normal distribution with mode of <span class="math inline">\(\mu\)</span> and a standard deviation of 1 (i.e., <span class="math inline">\(\lambda\)</span> follows a log-normal distribution). As a weaker prior, we use <span class="math inline">\(L = 4\)</span>, <span class="math inline">\(\mu = \log(0.5)\)</span>, and <span class="math inline">\(\phi = \frac{1}{16}\)</span>, which produces a playtkurtic distribution that is very flat over the range <span class="math inline">\(0.2 &lt; \lambda &lt; 1\)</span> but becomes much sharper for <span class="math inline">\(\lambda &lt; 0.05\)</span> or <span class="math inline">\(\lambda &gt; 5\)</span>. <a href="#fig-zeta-priors" class="quarto-xref">Figure&nbsp;2</a> depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>loggamma_dist <span class="ot">&lt;-</span> <span class="cf">function</span>(mode, alpha, ...) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  lambda <span class="ot">&lt;-</span> alpha <span class="sc">/</span> mode</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">dgamma</span>(<span class="fu">exp</span>(x <span class="sc">/</span> <span class="dv">2</span>), <span class="at">shape =</span> alpha <span class="sc">+</span> <span class="dv">1</span>, <span class="at">rate =</span> lambda)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">pgamma</span>(<span class="fu">exp</span>(x <span class="sc">/</span> <span class="dv">2</span>), <span class="at">shape =</span> alpha, <span class="at">rate =</span> lambda)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">pdf =</span> f, <span class="at">cdf =</span> g))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">log</span>(<span class="fl">0.01</span><span class="sc">^</span><span class="dv">2</span>), <span class="fu">log</span>(<span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>), <span class="at">length.out =</span> <span class="dv">500</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>tau_bench <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>g_bench <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(tau_bench)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>gamma_default <span class="ot">&lt;-</span> <span class="fu">loggamma_dist</span>(<span class="at">mode =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>gamma_weak <span class="ot">&lt;-</span> <span class="fu">loggamma_dist</span>(<span class="at">mode =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> g,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau =</span> <span class="fu">exp</span>(g <span class="sc">/</span> <span class="dv">2</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">default =</span> gamma_default<span class="sc">$</span><span class="fu">pdf</span>(g),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">weak =</span> gamma_weak<span class="sc">$</span><span class="fu">pdf</span>(g)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(tau, default), <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(tau, weak), <span class="at">fill =</span> <span class="st">"purple"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">transform =</span> <span class="st">"log"</span>, </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> tau_bench,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(tau), </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">p</span>(tau))</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-gamma-priors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gamma-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prior-memo_files/figure-html/fig-gamma-priors-1.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gamma-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Prior distributions on <span class="math inline">\(\gamma\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To further interpret these priors, we can consider 1) the density at benchmark values of <span class="math inline">\(\lambda\)</span> relative to the density at <span class="math inline">\(\lambda = 1\)</span> (or <span class="math inline">\(\zeta = 0\)</span>) and 2) the cumulative prior probability of <span class="math inline">\(\lambda &lt; l\)</span> for various values of <span class="math inline">\(l\)</span>. <a href="#tbl-zeta" class="quarto-xref">Table&nbsp;2</a> reports these quantities for both the default and weaker priors. The columns labelled “Relative density” correspond to <span class="math inline">\(d_\zeta(l) / d_\zeta(1)\)</span>; the columns labelled “Cumulative probability” correspond to <span class="math inline">\(\text{Pr}(\lambda &lt; l)\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau_t =</span> tau_bench,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_g =</span> g_bench,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Default =</span> gamma_default<span class="sc">$</span><span class="fu">pdf</span>(g_bench) <span class="sc">/</span> gamma_default<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="fl">0.2</span>)),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d_Weaker =</span> gamma_weak<span class="sc">$</span><span class="fu">pdf</span>(g_bench) <span class="sc">/</span> gamma_weak<span class="sc">$</span><span class="fu">pdf</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="fl">0.2</span>)),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Default =</span> gamma_default<span class="sc">$</span><span class="fu">cdf</span>(g_bench),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">c_Weaker =</span> gamma_weak<span class="sc">$</span><span class="fu">cdf</span>(g_bench)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_header</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labelizor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">'tau'</span> <span class="ot">=</span> <span class="st">""</span>,<span class="st">'gamma'</span> <span class="ot">=</span> <span class="st">""</span>,<span class="st">'d'</span> <span class="ot">=</span> <span class="st">"Relative density"</span>, <span class="st">'c'</span> <span class="ot">=</span> <span class="st">"Cumulative probability"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colformat_double</span>(<span class="at">j =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-gamma" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Relative density and total probability for benchmark values of <span class="math inline">\(\tau\)</span>
+</figcaption>
+<div aria-describedby="tbl-gamma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="tabwid"><style>.cl-82cf4bda{}.cl-82c8db74{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-82cb203c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-82cb2046{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-82cb3298{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-82cb3299{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-82cb329a{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-82cb32a2{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-82cb32a3{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-82cf4bda"><thead><tr style="overflow-wrap:break-word;"><th class="cl-82cb3298"><p class="cl-82cb203c"><span class="cl-82c8db74"></span></p></th><th class="cl-82cb3298"><p class="cl-82cb203c"><span class="cl-82c8db74"></span></p></th><th colspan="2" class="cl-82cb3299"><p class="cl-82cb2046"><span class="cl-82c8db74">Relative density</span></p></th><th colspan="2" class="cl-82cb3299"><p class="cl-82cb2046"><span class="cl-82c8db74">Cumulative probability</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">t</span></p></th><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">g</span></p></th><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">Default</span></p></th><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">Weaker</span></p></th><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">Default</span></p></th><th class="cl-82cb329a"><p class="cl-82cb203c"><span class="cl-82c8db74">Weaker</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.01</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-9.210</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.129</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.360</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.049</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.177</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.05</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-5.991</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.529</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.727</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.221</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.383</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.10</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-4.605</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.824</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.908</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.393</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.520</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.20</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-3.219</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">1.000</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">1.000</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.632</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.683</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.30</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-2.408</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.910</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.954</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.777</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.779</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.40</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-1.833</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.736</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.858</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.865</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.843</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.50</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-1.386</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.558</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.747</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.918</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.886</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.60</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-1.022</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.406</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.637</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.950</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.917</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.70</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-0.713</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.287</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.536</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.970</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.939</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.80</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-0.446</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.199</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.446</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.982</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.954</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.90</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">-0.211</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.136</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.369</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.989</span></p></td><td class="cl-82cb32a2"><p class="cl-82cb203c"><span class="cl-82c8db74">0.966</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">1.00</span></p></td><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">0.000</span></p></td><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">0.092</span></p></td><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">0.303</span></p></td><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">0.993</span></p></td><td class="cl-82cb32a3"><p class="cl-82cb203c"><span class="cl-82c8db74">0.975</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
