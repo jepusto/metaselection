@@ -6,19 +6,18 @@
 \usage{
 default_priors(
   beta_mean = 0,
-  beta_sd = 1,
+  beta_precision = 1/2,
+  beta_L = 2,
   tau_mode = 0.2,
   tau_alpha = 1,
   lambda_mode = 0.8,
-  lambda_precision = 1
+  lambda_precision = 1/2,
+  lambda_L = 2
 )
 }
 \arguments{
 \item{beta_mean}{numeric vector of prior means for beta (mean regression)
 parameters.}
-
-\item{beta_sd}{numeric vector of prior standard deviations for beta (mean
-regression) parameters.}
 
 \item{tau_mode}{numeric vector of prior modes for tau (heterogeneity SD)
 regression parameters.}
@@ -31,6 +30,9 @@ parameters.}
 
 \item{lambda_precision}{numeric vector of prior precisions for lambda
 (selection) parameters.}
+
+\item{beta_sd}{numeric vector of prior standard deviations for beta (mean
+regression) parameters.}
 }
 \value{
 An object of class \code{"selmodel_prior"} containing the following

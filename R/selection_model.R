@@ -707,7 +707,10 @@ jackknife_selmodel <- function(
 #' @param sel_zero_mods optional model formula for moderators related to the
 #'   probability of selection for p-values below the lowest threshold value of
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
-#' @param priors
+#' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
+#'   penalty terms) for model parameters, with a default of
+#'   \code{default_priors()}. Set to \code{NULL} to obtain unpenalized
+#'   estimates.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the composite marginal

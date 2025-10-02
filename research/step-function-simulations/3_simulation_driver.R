@@ -46,19 +46,22 @@ run_sim <- function(
     "None" = NULL, 
     "Default" = default_priors(
       beta_mean = 0,
-      beta_sd = 1,
+      beta_precision = 1 / 2,
+      beta_L = 2,
       tau_mode = 0.2,
       tau_alpha = 1,
       lambda_mode = 0.8,
-      lambda_precision = 1
+      lambda_precision = 1 / 2,
+      lambda_L = 2
     ),
     "Weaker" = default_priors(
       beta_mean = 0,
-      beta_sd = 2, 
+      beta_precision = 2, 
       tau_mode = 0.2, 
       tau_alpha = 0.5,
-      lambda_mode = 1,
-      lambda_precision = 0.25
+      lambda_mode = 0.8,
+      lambda_precision = 1 / 27,
+      lambda_L = 4
     )
   )
   

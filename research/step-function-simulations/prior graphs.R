@@ -1,22 +1,25 @@
 library(tidyverse)
 
 
-p_beta <- function(x, beta_mean = 0, beta_sd = 1, beta_inf = 4) {
-  -0.25 * ((x - beta_mean)^2 + (x - beta_mean)^4 / (beta_inf - beta_mean)^2) / beta_sd^2
+p_beta <- function(x, beta_mean = 0, beta_precision = 1 / 2, beta_L = 2) {
+  -beta_precision * abs(x - beta_mean)^beta_L
 }
 
 x <- seq(-6, 6, length.out = 500)
 
 tibble(
   beta = x,
-  log_prior = p_beta(x),
-  log_quad = 2 * p_beta(x, beta_inf = Inf)
+  log_sq = p_beta(x),
+  log_cube = p_beta(x, beta_precision = 1 / 4, beta_L = 3),
+  log_quart = p_beta(x, beta_precision = 1 / 8, beta_L = 4)
 ) %>%
   ggplot() + 
-  geom_line(aes(beta, log_prior)) + 
-  geom_line(aes(beta, log_quad), color = "purple") + 
+  geom_line(aes(beta, log_sq)) + 
+  geom_line(aes(beta, log_cube), color = "red") + 
+  geom_line(aes(beta, log_quart), color = "purple") + 
   scale_x_continuous(expand = expansion(0,0)) + 
   scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(xlim = c(-4, 4), ylim = c(-18,0)) + 
   labs(
     x = expression(beta), 
     y = expression(log-prior(beta))
@@ -50,29 +53,32 @@ tibble(
   )
 
 
-p_zeta <- function(x, lambda_mode = 0.8, zeta_sd = 1, zeta_inf = log(40)) {
+p_zeta <- function(x, lambda_mode = 0.8, zeta_precision = 1 / 2, zeta_L = 2) {
   zeta_mean <- log(lambda_mode)
-  -0.25 * ((x - zeta_mean)^2 + (x - zeta_mean)^4 / (zeta_inf - zeta_mean)^2) / zeta_sd^2
+  -zeta_precision * abs(x - zeta_mean)^zeta_L
 }
 
 tibble(
-  zeta = seq(log(0.01), log(4), length.out = 500),
+  zeta = seq(log(0.01), log(16), length.out = 500),
 ) %>%
   mutate(
     lambda = exp(zeta),
-    log_prior = p_zeta(zeta),
-    log_prior2 = - 0.5 * (zeta - log(0.8))^2,
-    across(starts_with("log_prior"), ~ .x - max(.x))
+    log_sq = p_zeta(zeta),
+    log_cube = p_zeta(zeta, zeta_precision = 1 / 7.377, zeta_L = 3),
+    log_quart = p_zeta(zeta, zeta_precision = 1 / 27, zeta_L = 4),
+    across(starts_with("log_"), ~ .x - max(.x))
   ) %>%
   ggplot() + 
-  geom_line(aes(lambda, log_prior)) + 
-  geom_line(aes(lambda, log_prior2), color = "green") + 
+  geom_line(aes(lambda, log_sq)) + 
+  geom_line(aes(lambda, log_cube), color = "red") + 
+  geom_line(aes(lambda, log_quart), color = "purple") + 
   scale_x_continuous(
     transform = "log", 
-    breaks = c(0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1, 1.5, 2, 4),
+    breaks = c(0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1, 1.5, 2, 4, 8, 16),
     expand = expansion(0,0)
   ) + 
   scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-20,0)) + 
   labs(
     x = expression(lambda), 
     y = expression(log-prior(zeta))

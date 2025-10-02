@@ -14,10 +14,31 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     group_by(model, estimator, param) %>%
     summarize(.groups = "drop")
   
+  if (all(c("ARGL","CML") %in% unique(results$estimator))) {
+    results_fallback <- 
+      results %>%
+      group_by(rep, model, param) %>%
+      filter(estimator %in% c("ARGL","CML")) %>%
+      summarize(
+        across(
+          c(Est, SE, p_value, CI_lo, CI_hi, R_conv, max_method, true_param),
+          \(x) if_else(is.na(x[estimator=="CML"]), x[estimator=="ARGL"], x[estimator=="CML"])
+        ), 
+        .groups = "drop"
+      ) %>%
+      mutate(
+        estimator = "CML-fallback"
+      )
+    
+    results <- bind_rows(results, results_fallback)
+  }
+  
+    
   results_NA <- 
     results %>% 
     mutate(var_est = SE ^ 2) %>%
     group_by(model, estimator, param) 
+  
   
   if (nrow(results) == 0) {
     

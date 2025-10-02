@@ -39,24 +39,25 @@
 
 default_priors <- function(
     beta_mean = 0,
-    beta_sd = 1,
+    beta_precision = 1 / 2,
+    beta_L = 2,
     tau_mode = 0.20,
     tau_alpha = 1,
     lambda_mode = 0.8,
-    lambda_precision = 1
+    lambda_precision = 1 / 2,
+    lambda_L = 2
 ) {
   
   gamma_lambda <- tau_alpha / tau_mode
   gamma_alpha <- tau_alpha
   
   zeta_mean <- log(lambda_mode)
-  zeta_sd <- 1 / lambda_precision
-
+  
   log_prior <- function(beta, gamma, zeta, include_zeta = TRUE) {
-    beta_log_prior <- -0.5 * (beta - beta_mean)^2 / beta_sd^2
+    beta_log_prior <- -beta_precision * abs(beta - beta_mean)^beta_L
     gamma_log_prior <- 0.5 * gamma_alpha * gamma - gamma_lambda * exp(gamma / 2)
     if (include_zeta) {
-      zeta_log_prior <- -0.5 * (zeta - zeta_mean)^2 / zeta_sd^2
+      zeta_log_prior <- -lambda_precision * (zeta - zeta_mean)^lambda_L
       sum(beta_log_prior) + sum(gamma_log_prior) + sum(zeta_log_prior)
     } else {
       sum(beta_log_prior) + sum(gamma_log_prior)
@@ -65,16 +66,16 @@ default_priors <- function(
   }
   
   score_prior <- function(beta, gamma, zeta) {
-    score_beta <- -1 * (beta - beta_mean) / beta_sd^2
+    score_beta <- -1 * beta_precision * beta_L * sign(beta - beta_mean) * abs(beta - beta_mean)^(beta_L - 1)
     score_gamma <- 0.5 * (gamma_alpha - gamma_lambda * exp(gamma / 2))
-    score_zeta <- - 1 * (zeta - zeta_mean) / zeta_sd^2
+    score_zeta <- - 1 * lambda_precision * lambda_L * sign(zeta - zeta_mean) * abs(zeta - zeta_mean)^(lambda_L - 1)
     c(score_beta, score_gamma, score_zeta)
   }
   
   hessian_prior <- function(beta, gamma, zeta) {
-    beta_hessian <- rep(-1 / beta_sd^2, length.out = length(beta))
+    beta_hessian <- -1 * beta_precision * beta_L * (beta_L - 1) * abs(beta - beta_mean)^(beta_L - 2)
     gamma_hessian <- -0.25 * gamma_lambda * exp(gamma / 2)
-    zeta_hessian <- rep(-1 / zeta_sd^2, length.out = length(zeta))
+    zeta_hessian <- -1 * lambda_precision * lambda_L * (lambda_L - 1) * abs(zeta - zeta_mean)^(lambda_L - 2)
     diag(c(beta_hessian, gamma_hessian, zeta_hessian))
   }
   

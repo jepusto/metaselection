@@ -32,7 +32,7 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_sd = 1e6, tau_alpha = 1e-6, lambda_alpha = 1e-6)
+  prior_spec <- default_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
   
   cml_flat <- selection_model(
     data = dat,
@@ -121,7 +121,7 @@ test_that("Score contributions sum to total when accounting for priors.", {
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_mean = 0.1, beta_sd = 0.2)
+  prior_spec <- default_priors(beta_mean = 0.1, beta_precision = 25)
   
   cml_prior <- selection_model(
     data = dat,

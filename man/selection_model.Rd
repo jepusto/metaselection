@@ -27,7 +27,7 @@ selection_model(
   theta = NULL,
   optimizer = NULL,
   optimizer_control = list(),
-  use_jac = TRUE,
+  use_jac = NULL,
   bootstrap = "none",
   R = 1999,
   retry_bootstrap = 0L,
@@ -77,7 +77,10 @@ probability of selection. Only relevant for \code{selection_type = "step"}.}
 probability of selection for p-values below the lowest threshold value of
 \code{steps}. Only relevant for \code{selection_type = "step"}.}
 
-\item{priors}{}
+\item{priors}{a \code{selmodel_prior} object that defines priors (i.e.,
+penalty terms) for model parameters, with a default of
+\code{default_priors()}. Set to \code{NULL} to obtain unpenalized
+estimates.}
 
 \item{subset}{optional logical expression indicating a subset of observations
 to use for estimation.}
@@ -115,18 +118,21 @@ optimization routines.}
 \item{optimizer_control}{an optional list of control parameters to be used
 for optimization}
 
-\item{use_jac}{logical with \code{TRUE} (the default) indicating to use the
-Jacobian of the estimating equations for optimization.}
+\item{use_jac}{logical indicating whether to use the Jacobian of the
+estimating equations for optimization. If \code{NULL} (the default), it
+will be reset to \code{FALSE} if \code{estimator = "CML"} or to \code{TRUE}
+if \code{estimator = "ARGL"}}
 
 \item{bootstrap}{character string specifying the type of bootstrap to run,
 with possible options \code{"none"} (the default), \code{"exponential"} for
-the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for
-a conventional clustered bootstrap, or , \code{"two-stage"} for
-a two-stage clustered bootstrap.}
+the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for a
+conventional clustered bootstrap, or , \code{"two-stage"} for a two-stage
+clustered bootstrap.}
 
 \item{R}{number of bootstrap replications, with a default of \code{1999}.}
 
-\item{retry_bootstrap}{number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.}
+\item{retry_bootstrap}{number of times to re-draw a bootstrap sample in the
+event of non-convergence, with a default of \code{0}.}
 
 \item{...}{further arguments passed to \code{simhelpers::bootstrap_CIs}.}
 }
