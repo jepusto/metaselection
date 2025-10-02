@@ -2,7 +2,7 @@
 # Simulation of 3-parameter selection models with RVE
 #
 universe = docker
-docker_image = jepusto/metaselection:v12
+docker_image = jepusto/metaselection:v13
 log = /home/pustejovsky/3PSM-RVE/log/cluster_$(Cluster).log
 error = /home/pustejovsky/3PSM-RVE/err/cluster_$(Cluster)_$(Process).err
 #
