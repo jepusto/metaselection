@@ -1,9 +1,11 @@
 ---
 title: "Prior specification"
-format: html
+format: 
+  html:
+    embed-resources: true
+    toc: true
 editor: source
 code-fold: true
-toc: true
 ---
 
 ```{r}
@@ -150,11 +152,11 @@ tibble(
 
 # Priors for $\gamma$ (log of the heterogeneity)
 
-For the average effect parameter $\zeta = \log(\lambda)$, we consider $L$-norm priors with density
+For the heterogeneity parameter $\tau$, we consider a $\Gamma$ prior with shape parameter $\alpha$ and rate parameter $\lambda$. This implies that $\gamma = \log(\tau^2)$ follows an exponential-gamma distribution, with density proportional to
 $$
-d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
+d_\gamma(g) \propto \exp\left(\alpha \times \frac{g}{2} - \lambda \times \exp\left(\frac{g}{2}\right) \right).
 $$
-where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors. As a potential default prior, we use $L = 2$, $\mu = \log(0.8)$, and $\phi = \frac{1}{2}$, which implies that $\zeta$ follows a normal distribution with mode of $\mu$ and a standard deviation of 1 (i.e., $\lambda$ follows a log-normal distribution). As a weaker prior, we use $L = 4$, $\mu = \log(0.5)$, and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $0.2 < \lambda < 1$ but becomes much sharper for $\lambda < 0.05$ or $\lambda > 5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+We reparameterize this distribution in terms of its exponentiated mode, which occurs at $\exp(g / 2) = \psi = \alpha / \lambda$. Again, we consider two version of the priors. As a potential default prior, we use $\psi = 0.2$ and $\alpha = 1$, which implies that $\tau$ follows a $\Gamma(1, 5)$ distribution, or equivalently an $\text{Exp}(1/5)$ distribution. As a weaker prior, we use $\psi = 0.2$ and $\alpha = 0.5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
 
 ```{r}
 #| label: fig-gamma-priors
@@ -170,7 +172,6 @@ loggamma_dist <- function(mode, alpha, ...) {
   return(list(pdf = f, cdf = g))
 }
 
-
 g <- seq(log(0.01^2), log(1^2), length.out = 500)
 tau_bench <- c(0.01, 0.05, seq(0.1, 1, 0.1))
 g_bench <- 2 * log(tau_bench)
@@ -183,7 +184,7 @@ tibble(
   gamma = g,
   tau = exp(g / 2),
   default = gamma_default$pdf(g),
-  weak = gamma_weak$pdf(g)
+  weak = gamma_weak$pdf(g),
 ) %>%
   ggplot() + 
   geom_area(aes(tau, default), fill = "red", alpha = 0.5) + 
@@ -198,10 +199,27 @@ tibble(
     y = expression(p(tau))
   )
 
-
+tibble(
+  gamma = g,
+  tau = exp(g / 2),
+  default = log(gamma_default$pdf(g)),
+  weak = log(gamma_weak$pdf(g)),
+) %>%
+  ggplot() + 
+  geom_line(aes(tau, default), color = "red") + 
+  geom_line(aes(tau, weak), color = "purple") + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = tau_bench,
+    expand = expansion(0,0)
+  ) + 
+  labs(
+    x = expression(tau), 
+    y = expression(log(p(tau)))
+  )
 ```
 
-To further interpret these priors, we can consider 1) the density at benchmark values of $\lambda$ relative to the density at $\lambda = 1$ (or $\zeta = 0$) and 2) the cumulative prior probability of $\lambda < l$ for various values of $l$. @tbl-zeta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\zeta(l) / d_\zeta(1)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\lambda < l)$.
+To further interpret these priors, we can consider 1) the density at benchmark values of $\tau$ relative to the density at the mode $\psi$ and 2) the cumulative prior probability of $\tau < t$ for various values of $t$. @tbl-gamma reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\gamma(g) / d_\gamma\left(2\log(\psi)\right)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\gamma < g)$.
 
 ```{r}
 #| label: tbl-gamma
