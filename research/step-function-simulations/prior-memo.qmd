@@ -24,6 +24,10 @@ d_\beta(b) \propto \exp\left(- \phi\left| b - \mu \right|^L \right),
 $$
 where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors, both with $\mu = 0$. As a potential default prior, we use $L = 2$ and $\phi = \frac{1}{2}$, which corresponds to a standard normal distribution. As a weaker prior, we use $L = 4$ and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $|\beta| < 0.8$ but becomes much sharper for $|\beta| > 2$. @fig-beta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
 
+::: {.panel-tabset}
+
+## Density
+
 ```{r}
 #| label: fig-beta-priors
 #| fig-cap: "Prior distributions on $\\beta$"
@@ -45,12 +49,14 @@ beta_weak <- Lp_dist(mu = 0, precision = 1 / 16, L = 4)
 
 x <- seq(-4, 4, length.out = 500)
 
-tibble(
-  beta = x,
-  default = beta_default$pdf(x),
-  weak = beta_weak$pdf(x)
-) %>%
-  ggplot() + 
+beta_density_dat <-
+  tibble(
+    beta = x,
+    default = beta_default$pdf(x),
+    weak = beta_weak$pdf(x)
+  ) 
+
+ggplot(beta_density_dat) + 
   geom_vline(xintercept = 0, linetype = "dashed") + 
   geom_area(aes(beta, default), fill = "red", alpha = 0.5) + 
   geom_area(aes(beta, weak), fill = "purple", alpha = 0.5) + 
@@ -61,6 +67,33 @@ tibble(
   )
 
 ```
+
+## Log-density
+
+```{r}
+#| label: fig-beta-priors-log
+#| fig-cap: "Log of prior densities on $\\beta$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+beta_density_dat %>%
+  mutate(
+    across(c(default, weak), ~ log(.x) - max(log(.x)))
+  ) %>%
+  ggplot() + 
+  geom_line(aes(beta, default), color = "red") + 
+  geom_line(aes(beta, weak), color = "purple") + 
+  scale_x_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-10,0)) + 
+  labs(
+    x = expression(beta), 
+    y = expression(ln(p[beta](b)))
+  )
+
+```
+
+:::
 
 To further interpret these priors, we can consider 1) the density at benchmark values of $\beta$ relative to the density at the center of the distribution and 2) the total prior probability of $|\beta| < b$ for various values of $b$. @tbl-beta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\beta(b) / d_\beta(0)$; the columns labelled "Prior probability" correspond to $\text{Pr}(|\beta| < b)$.
 
@@ -93,6 +126,10 @@ d_\zeta(z) \propto \exp\left(- \phi\left| z - \mu \right|^L \right),
 $$
 where $\mu$ is the mean (and median and mode), $\phi$ is a precision parameter (i.e., inverse of scale), and $L$ is the norm. We consider two version of the priors. As a potential default prior, we use $L = 2$, $\mu = \log(0.8)$, and $\phi = \frac{1}{2}$, which implies that $\zeta$ follows a normal distribution with mode of $\mu$ and a standard deviation of 1 (i.e., $\lambda$ follows a log-normal distribution). As a weaker prior, we use $L = 4$, $\mu = \log(0.5)$, and $\phi = \frac{1}{16}$, which produces a playtkurtic distribution that is very flat over the range $0.2 < \lambda < 1$ but becomes much sharper for $\lambda < 0.05$ or $\lambda > 5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
 
+::: {.panel-tabset}
+
+## Density
+
 ```{r}
 #| label: fig-zeta-priors
 #| fig-cap: "Prior distributions on $\\zeta$"
@@ -107,19 +144,22 @@ z_bench <- log(lambda_bench)
 zeta_default <- Lp_dist(mu = log(0.8), precision = 1 / 2, L = 2)
 zeta_weak <- Lp_dist(mu = log(0.5), precision = 1 / 16, L = 4)
 
-tibble(
-  zeta = z,
-  lambda = exp(z),
-  default = zeta_default$pdf(z),
-  weak = zeta_weak$pdf(z)
-) %>%
-  ggplot() + 
+
+zeta_density_dat <- 
+  tibble(
+    zeta = z,
+    lambda = exp(z),
+    default = zeta_default$pdf(z),
+    weak = zeta_weak$pdf(z)
+  )
+
+ggplot(zeta_density_dat) + 
   geom_vline(xintercept = 1, linetype = "dashed") + 
   geom_area(aes(lambda, default), fill = "red", alpha = 0.5) + 
   geom_area(aes(lambda, weak), fill = "purple", alpha = 0.5) + 
   scale_x_continuous(
     transform = "log", 
-    breaks = lambda_bench,
+    breaks = lambda_bench[c(1:6,8,10:13)],
     expand = expansion(0,0)
   ) + 
   labs(
@@ -128,6 +168,37 @@ tibble(
   )
 
 ```
+
+## Log-density
+
+```{r}
+#| label: fig-zeta-priors-log
+#| fig-cap: "Log of prior densities on $\\zeta$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+zeta_density_dat %>%
+  mutate(
+    across(c(default, weak), ~ log(.x) - max(log(.x)))
+  ) %>%
+  ggplot() + 
+  geom_line(aes(lambda, default), color = "red") + 
+  geom_line(aes(lambda, weak), color = "purple") + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = lambda_bench[c(1:6,8,10:13)],
+    expand = expansion(0,0)
+  ) + 
+  coord_cartesian(ylim = c(-10,0)) + 
+  labs(
+    x = expression(lambda == exp(zeta)), 
+    y = expression(ln(p[zeta](z)))
+  )
+
+```
+
+:::
 
 To further interpret these priors, we can consider 1) the density at benchmark values of $\lambda$ relative to the density at $\lambda = 1$ (or $\zeta = 0$) and 2) the cumulative prior probability of $\lambda < l$ for various values of $l$. @tbl-zeta reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\zeta(l) / d_\zeta(1)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\lambda < l)$.
 
@@ -156,7 +227,11 @@ For the heterogeneity parameter $\tau$, we consider a $\Gamma$ prior with shape 
 $$
 d_\gamma(g) \propto \exp\left(\alpha \times \frac{g}{2} - \lambda \times \exp\left(\frac{g}{2}\right) \right).
 $$
-We reparameterize this distribution in terms of its exponentiated mode, which occurs at $\exp(g / 2) = \psi = \alpha / \lambda$. Again, we consider two version of the priors. As a potential default prior, we use $\psi = 0.2$ and $\alpha = 1$, which implies that $\tau$ follows a $\Gamma(1, 5)$ distribution, or equivalently an $\text{Exp}(1/5)$ distribution. As a weaker prior, we use $\psi = 0.2$ and $\alpha = 0.5$. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+We reparameterize this distribution in terms of its exponentiated mode, which occurs at $\exp(g / 2) = \psi = \alpha / \lambda$. Again, we consider two version of the priors. As a potential default prior, we use $\psi = 0.2$ and $\alpha = 2$, which implies that $\tau$ follows a $\Gamma(2, 5)$ distribution. As a weaker prior, we use $\psi = 0.2$ and $\alpha = 1$, which implies that $\tau$ follows an $\text{Exp}(1/5)$ distribution. @fig-zeta-priors depicts the densities of these prior distributions, with the default in red and the weaker prior in purple.
+
+::: {.panel-tabset}
+
+## Density
 
 ```{r}
 #| label: fig-gamma-priors
@@ -173,20 +248,22 @@ loggamma_dist <- function(mode, alpha, ...) {
 }
 
 g <- seq(log(0.01^2), log(1^2), length.out = 500)
-tau_bench <- c(0.01, 0.05, seq(0.1, 1, 0.1))
+tau_bench <- c(0.01, 0.05, seq(0.1, 0.4, 0.1), seq(0.6, 1, 0.2))
 g_bench <- 2 * log(tau_bench)
 
-gamma_default <- loggamma_dist(mode = 0.2, alpha = 1)
-gamma_weak <- loggamma_dist(mode = 0.2, alpha = 0.5)
+gamma_default <- loggamma_dist(mode = 0.2, alpha = 2)
+gamma_weak <- loggamma_dist(mode = 0.2, alpha = 1)
 
 
-tibble(
+gamma_density_dat <- 
+  tibble(
   gamma = g,
   tau = exp(g / 2),
   default = gamma_default$pdf(g),
   weak = gamma_weak$pdf(g),
-) %>%
-  ggplot() + 
+) 
+
+ggplot(gamma_density_dat) + 
   geom_area(aes(tau, default), fill = "red", alpha = 0.5) + 
   geom_area(aes(tau, weak), fill = "purple", alpha = 0.5) + 
   scale_x_continuous(
@@ -199,12 +276,21 @@ tibble(
     y = expression(p(tau))
   )
 
-tibble(
-  gamma = g,
-  tau = exp(g / 2),
-  default = log(gamma_default$pdf(g)),
-  weak = log(gamma_weak$pdf(g)),
-) %>%
+```
+
+## Log-density
+
+```{r}
+#| label: fig-gamma-priors-log
+#| fig-cap: "Log of prior densities on $\\gamma$"
+#| fig-width: 7
+#| fig-height: 4
+#| out-width: 100%
+
+gamma_density_dat %>%
+  mutate(
+    across(c(default, weak), ~ log(.x) - max(log(.x)))
+  ) %>%
   ggplot() + 
   geom_line(aes(tau, default), color = "red") + 
   geom_line(aes(tau, weak), color = "purple") + 
@@ -213,11 +299,14 @@ tibble(
     breaks = tau_bench,
     expand = expansion(0,0)
   ) + 
+  coord_cartesian(ylim = c(-10,0)) + 
   labs(
     x = expression(tau), 
-    y = expression(log(p(tau)))
+    y = expression(ln(p[tau](t)))
   )
 ```
+
+:::
 
 To further interpret these priors, we can consider 1) the density at benchmark values of $\tau$ relative to the density at the mode $\psi$ and 2) the cumulative prior probability of $\tau < t$ for various values of $t$. @tbl-gamma reports these quantities for both the default and weaker priors. The columns labelled "Relative density" correspond to $d_\gamma(g) / d_\gamma\left(2\log(\psi)\right)$; the columns labelled "Cumulative probability" correspond to $\text{Pr}(\gamma < g)$.
 
