@@ -47,7 +47,7 @@ bootstrap_factors <- list(
   weights = c(0.05, 0.2, 1), # weights
   m = c(60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
-  batch = 1:20L,
+  batch = 1:10L,
   priors = "Weak",
   bootstrap = c("multinomial","two-stage","exponential")
 )
@@ -58,10 +58,10 @@ bootstrap_params <-
     omega = tau * sqrt(het_ratio),
     steps = 0.025,
     comparison_methods = "None",
-    iterations = 100L,
+    iterations = 200L,
     summarize_performance = FALSE,
-    row = 1e5 + rep(1:(dplyr::n()/3L), each = 3L),
-    seed = 20250918L + row
+    row = 1e5 + 1:(dplyr::n()),
+    seed = 20250918L + rep(1:(dplyr::n() / 3L), each = 3L)
   ) %>%
   select(-het_ratio)
 
@@ -74,6 +74,12 @@ saveRDS(all_params, file = "research/step-function-simulations/simulation_parame
 
 all_params %>%
   filter(bootstrap == "none", priors == "Weak") %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "two-stage") %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
