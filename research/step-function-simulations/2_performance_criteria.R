@@ -34,8 +34,15 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
   }
   
     
-  results_NA <- 
+  results_all <- 
     results %>% 
+    filter(param %in% c("gamma", "zeta1")) %>%
+    mutate(
+      across(c(Est, CI_lo, CI_hi, true_param), ~ exp(.x)),
+      SE = SE * Est,
+      param = case_match(param, "gamma" ~ "tau2", "zeta1" ~ "lambda1")
+    ) %>%
+    bind_rows(results) %>%
     mutate(var_est = SE ^ 2) %>%
     group_by(model, estimator, param) 
   
@@ -53,7 +60,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
   } else {
 
     res <- 
-      results_NA %>%
+      results_all %>%
       summarize(
         calc_absolute(estimates = Est, true_param = true_param, criteria = c("bias", "variance", "rmse"), winz = winz),
         calc_relative_var(estimates = Est, var_estimates = var_est, criteria = c("relative bias","relative rmse"), winz = winz),
@@ -64,7 +71,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     if ("boot_CIs" %in% names(results)) {
       
       boot_res <- 
-        results_NA %>%
+        results_all %>%
         filter(sapply(boot_CIs, is.data.frame)) %>%
         summarize(
           extrapolate_coverage(CI_subsamples = boot_CIs, true_param = true_param, B_target = B_target, winz = winz, cover_na_val = 0, width_na_val = Inf, nested = TRUE),

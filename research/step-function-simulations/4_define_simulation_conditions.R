@@ -20,7 +20,7 @@ design_factors <- list(
   m = c(120, 90, 60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
   batch = 1L,
-  priors = c("None","Default","Weaker")
+  priors = c("Flat","Mild","Weak")
 )
 
 params <- 
@@ -29,7 +29,7 @@ params <-
     omega = tau * sqrt(het_ratio),
     steps = 0.025,
     bootstrap = "none",
-    comparison_methods = if_else(priors == "Default", "All", "None"),
+    comparison_methods = if_else(priors == "Weak", "All", "None"),
     iterations = 2000L,
     summarize_performance = TRUE,
     row = rep(1:(dplyr::n()/3L), each = 3L),
@@ -48,7 +48,7 @@ bootstrap_factors <- list(
   m = c(60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
   batch = 1:20L,
-  priors = "Default",
+  priors = "Weak",
   bootstrap = c("multinomial","two-stage","exponential")
 )
 
@@ -73,7 +73,7 @@ all_params %>%
 saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
 
 all_params %>%
-  filter(bootstrap == "none", priors == "None") %>%
+  filter(bootstrap == "none", priors == "Weak") %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)

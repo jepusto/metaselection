@@ -4,16 +4,26 @@ res <- read_rds(file = "research/step-function-simulations/penalized-results/sim
 
 res_beta_3PSM <- 
   res %>%
-  filter(param == "beta", model == "3PSM") %>%
+  filter(param == "beta", model == "3PSM", estimator %in% c("CML-fallback","ARGL")) %>%
   mutate(
     convergence = 100 * K_absolute / iterations,
-    priors = factor(priors, levels = c("None","Weaker","Default"))
+    priors = factor(priors, levels = c("None","Weaker","Default")),
+    estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator)
   )
 
 #-------------------------------------------------------------------------------
 # Convergence
 
-ggplot(res_beta_3PSM) + 
+res_convergence <- 
+  res %>%
+  filter(param == "beta", model == "3PSM") %>%
+  filter(estimator %in% c("ARGL","CML")) %>%
+  mutate(
+    convergence = 100 * K_absolute / iterations,
+    priors = factor(priors, levels = c("None","Weaker","Default"))
+  )
+
+ggplot(res_convergence) + 
   aes(factor(weights), convergence, color = interaction(estimator, priors), fill = interaction(estimator, priors)) + 
   geom_boxplot() + 
   facet_grid(mean_smd ~ tau) + 
@@ -25,7 +35,7 @@ ggplot(res_beta_3PSM) +
     fill = "Estimator"
   )
 
-res_beta_3PSM %>%
+res_convergence %>%
   filter(estimator != "CML" | priors != "None") %>%
 ggplot() +
   aes(factor(weights), convergence, color = interaction(estimator, priors), fill = interaction(estimator, priors)) + 
@@ -39,7 +49,7 @@ ggplot() +
     fill = "Estimator"
   )
 
-res_beta_3PSM %>%
+res_convergence %>%
   filter(estimator == "ARGL") %>%
   ggplot() +
   aes(factor(weights), convergence, color = priors, fill = priors) + 
@@ -194,6 +204,35 @@ res_beta_3PSM_wide %>%
     color = "Sample size"
   )
 
+res_beta_3PSM_wide %>%
+  ggplot() + 
+  aes(rmse_CML_None, rmse_CML_Weaker, color = factor(m)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") + 
+  geom_point() + 
+  facet_grid(mean_smd ~ tau, scales = "free") + 
+  theme_light() + 
+  labs(
+    x = "Flat", 
+    y = "Weaker",
+    color = "Sample size"
+  )
+
+res_beta_3PSM_wide %>%
+  ggplot() + 
+  aes(rmse_CML_Weaker, rmse_CML_Default, color = factor(m)) + 
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) + 
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") + 
+  geom_point() + 
+  facet_grid(mean_smd ~ tau, scales = "free") + 
+  theme_light() + 
+  labs(
+    x = "Weaker", 
+    y = "Default",
+    color = "Sample size"
+  )
 
 res_beta_3PSM_wide %>%
   ggplot() + 

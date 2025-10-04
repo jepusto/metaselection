@@ -31,7 +31,7 @@ true_params <- data.frame(
 
 # Generate datasets
 datasets <- future_map(
-  1:1000, 
+  1:100, 
   ~ r_meta(mean_smd = mean_smd,
            tau = tau,
            omega = omega,
@@ -48,11 +48,12 @@ datasets <- future_map(
 # Fit selection models
 weak_priors <- default_priors(
   beta_mean = 0,
-  beta_precision = 2, 
+  beta_precision = 1 / 16,
+  beta_L = 4,
   tau_mode = 0.2, 
-  tau_alpha = 0.5,
-  lambda_mode = 0.8,
-  lambda_precision = 1 / 27,
+  tau_alpha = 1,
+  lambda_mode = 0.5,
+  lambda_precision = 1 / 16,
   lambda_L = 4
 )
 
@@ -71,30 +72,26 @@ data_res <-
       .progress = TRUE
     ),
     default = future_map(
-      datasets, 
-      estimate_step_models, 
+      datasets,
+      estimate_step_models,
       estimators = c("CML","ARGL"),
-      steps = 0.025, 
-      priors = default_priors(), 
+      steps = 0.025,
+      priors = default_priors(),
       bootstrap = "none",
       use_jac = FALSE,
       .progress = TRUE
     ),
     weak = future_map(
-      datasets, 
-      estimate_step_models, 
+      datasets,
+      estimate_step_models,
       estimators = c("CML","ARGL"),
-      steps = 0.025, 
-      priors = weak_priors, 
+      steps = 0.025,
+      priors = weak_priors,
       bootstrap = "none",
       use_jac = FALSE,
       .progress = TRUE
     ),
   )
-
-data_res %>%
-  select(-data) %>%
-  summarize(flat = calc_performance(unnest(flat)))
 
 res <- 
   data_res %>%
@@ -108,6 +105,7 @@ res <-
 
 res_nested <- nest_by(res, priors)
 
+calc_performance(res_nested$data[[1]])
 res_nested$perf <- map(res_nested$data, calc_performance)
 
 res_perf <- 
