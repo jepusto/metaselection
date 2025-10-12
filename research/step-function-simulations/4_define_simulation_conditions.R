@@ -79,7 +79,7 @@ all_params %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 all_params %>%
-  filter(bootstrap == "multinomial") %>%
+  filter(bootstrap == "exponential") %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
