@@ -26,7 +26,7 @@ affiliation:
 note              : "\\ \\newline `r format(Sys.Date(), '%B %d, %Y')`"
 
 abstract: |
-  Meta-analyses in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is that many primary studies report multiple relevant effect size estimates. Another is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
+  Meta-analysts in social science fields face multiple methodological challenges arising from how primary research studies are designed and reported. One challenge is selective reporting bias, which arises when the availability of study findings is influenced by the statistical significance of results. Another is that many primary studies report multiple relevant results, leading to statistical dependence in effect size estimates. Although many selective reporting diagnostics and bias-correction methods have been proposed, few are suitable for meta-analyses involving dependent effect sizes. Among available methods, step-function selection models are conceptually appealing and have shown promise in previous simulations. We study methods for estimating step-function models from data involving dependent effect sizes, focusing specifically on estimating parameters of the marginal distribution of effect sizes and accounting for dependence using cluster-robust variance estimation or bootstrap resampling. We describe two estimation strategies, demonstrate them by re-analyzing data from a synthesis on ego depletion effects, and evaluate their performance through an extensive simulation study under single-step selection. Simulation findings indicate that selection models provide low-bias estimates of average effect size and that clustered bootstrap confidence intervals provide acceptable coverage levels. However, adjusting for selective reporting bias using step-function models involves a bias-variance trade-off, and unadjusted estimates of average effect sizes may be preferable if the strength of selective reporting is mild.
   
 keywords          : "meta-analysis; dependent effect sizes; selection models; selective reporting; publication bias"
 
@@ -46,7 +46,7 @@ documentclass     : "apa7"
 classoption       : "man, donotrepeattitle"
 output            : 
   papaja::apa6_pdf
-csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
+csl               : american-medical-association.csl
 replace_ampersands: yes
 
 header-includes:
@@ -55,7 +55,7 @@ header-includes:
 - \usepackage{multicol}
 - \usepackage{amsthm}
 - \newtheorem{thm}{Theorem}
-- \newtheorem{lem}{Lemma}
+- \newtheorem{lem}{Lemma} 
 - \usepackage{amsfonts}
 - \usepackage{caption}
 - \usepackage{multirow}
@@ -69,6 +69,11 @@ header-includes:
 - \raggedbottom
 - \usepackage{setspace}
 - \AtBeginEnvironment{tabular}{\singlespacing}
+- \usepackage{perpage}
+- \MakePerPage{footnote}
+- \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+- \usepackage{xr}
+- \externaldocument{step-function-selection-models-supplementary-materials}
 - \newcommand{\Prob}{\text{Pr}}
 - \newcommand{\E}{\text{E}}
 - \newcommand{\Cov}{\text{Cov}}
@@ -93,11 +98,34 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
-appendix_prefix <- "Appendix"
-replication_materials_URL <- "<URL>"
+appendix_prefix <- "Online Appendix"
 ```
 
-# Introduction {#introduction}
+# Highlights {-}
+
+## What is already known {-}
+
+* Selective reporting of primary study results can distort the findings from meta-analyses.
+
+* In many fields of application, meta-analyses include primary studies providing multiple, statistically dependent effect size estimates.
+
+* Step-function selection models are a theoretically appealing tool for correcting bias from selective reporting, but these models were developed for meta-analyses that include only one effect size estimate per study.
+
+## What is new {-}
+
+* We examine strategies for estimating step-function selection models in meta-analyses with dependent effect sizes.
+
+* We report a large simulation study demonstrating that step-function models can be estimated using composite maximum likelihood methods, combined with bootstrapping techniques to account for dependent effect size estimates.
+
+## Potential impact for RSM readers {-}
+
+* The proposed estimation methods can be applied to adjust for selective reporting of study results in meta-analyses that include dependent effect sizes.
+
+* This strategy complements other existing methods for examining selective reporting bias in meta-analyses with dependent effect sizes.
+
+\newpage
+
+# Estimation and inference for step-function selection models in meta-analysis with dependent effects {#introduction}
 
 ```{r child = "introduction.Rmd"}
 ```
@@ -197,20 +225,8 @@ The authors declare no conflicts of interest.
 # References {-}
 
 \begingroup
+\singlespacing
 \setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
-
-# (APPENDIX) Appendix {-}
-
-```{r child = "appendix-CML-derivatives.Rmd"}
-```
-
-```{r child = "appendix-ARGL-derivatives.Rmd"}
-```
-
-```{r child = "appendix-bootstrap-details.Rmd"}
-```
-
-```{r child = "appendix-simulation-results.Rmd"}
-```

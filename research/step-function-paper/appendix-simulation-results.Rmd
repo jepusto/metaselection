@@ -16,6 +16,7 @@ source("process-simulation-results.R")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Convergence rates of CML and ARGL estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
 
@@ -47,7 +48,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -63,10 +64,63 @@ ggplot() +
 
 ```
 
+```{r winsorization-rates}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Winsorization rates of CML and ARGL estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median winsorization rates; thin lines correspond to range of winsorization rates; thick lines correspond to inter-decile range."
+
+mu_graph_res %>%
+  filter(estimator %in% c("CML","ARGL")) %>%
+  group_by(mean_smd, tau, weights, estimator) %>%
+  summarize(
+    min = min(winz_convergence),
+    Q10 = quantile(winz_convergence, 0.1),
+    median = median(winz_convergence),
+    Q90 = quantile(winz_convergence, 0.9),
+    max = max(winz_convergence),
+    .groups = "drop"
+  ) %>%
+ggplot() + 
+  aes(x = weights, y = median, ymin = min, max = max, color = estimator, fill = estimator) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) + 
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  expand_limits(y = 0.99) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Winsorization rate", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
 ```{r rmse-ARGL-CML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -77,6 +131,7 @@ RMSE_comparison_plot(mu_wide_res, "CML","ARGL")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -87,6 +142,7 @@ RMSE_comparison_plot(mu_wide_res, "CML","CHE-ISCW")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -97,6 +153,7 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -108,6 +165,7 @@ RMSE_comparison_plot(mu_wide_res, "CML","PET/PEESE")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -118,6 +176,7 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -134,7 +193,7 @@ mu_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -154,6 +213,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -172,6 +232,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -190,6 +251,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -208,6 +270,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -227,6 +290,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -246,6 +310,7 @@ mu_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -260,12 +325,26 @@ mu_graph_res_ci %>%
 
 ```
 
+\newpage 
 # Additional simulation results for estimators of log-heterogeneity $(\gamma)$ {#gamma-simulation-results}
+
+We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE-ISCW, CML, and ARGL methods are all relevant.
+Figure \@ref(fig:heterogeneity-bias) depicts the bias for the CHE-ISCW, CML, and ARGL estimators of log-heterogeneity $\gamma = \log(\tau^2)$. 
+In most conditions, the estimators are biased in the negative direction.
+Bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau = 0.05$) with bias improving as between-study heterogeneity increases. The CML estimator is less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection. 
+However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low. 
+
+Figure \@ref(fig:heterogeneity-rmse) depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-CHE) and \@ref(fig:heterogeneity-rmse-ARGL-CML) providing greater detail about the relative accuracy of the three methods. 
+Under nearly all conditions, the CML estimator is much more accurate than the ARGL estimator. 
+The RMSE of CML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
+However, just as with the estimators of average effect size, the CHE estimator is more accurate when selection is mild or absent, leading to a bias-variance trade-off.
+
 
 ```{r heterogeneity-bias}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
 
@@ -282,7 +361,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -302,6 +381,7 @@ ggplot() +
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Scaled root mean-squared error for estimators of log-heterogeneity by selection probability, average SMD, and between-study heterogeneity"
 
@@ -317,7 +397,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -337,6 +417,7 @@ ggplot() +
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for CML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -347,6 +428,7 @@ RMSE_comparison_plot(gamma_wide_res, "CHE","CML")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -357,18 +439,29 @@ RMSE_comparison_plot(gamma_wide_res, "CHE","ARGL")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(gamma_wide_res, "CML","ARGL")
 ```
 
+\newpage 
+
 # Additional simulation results for estimators of selection parameter $(\zeta_1)$ {#zeta-simulation-results}
+
+The CML and ARGL methods both estimate the log-selection parameter of the step-function model, a parameter that may be of substantive interest. 
+Figure \@ref(fig:selection-bias) shows that the bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have large negative biases under conditions with strong selection probability and high average SMD, especially with low between-study heterogeneity. 
+Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and CML estimators of the log-selection parameter with Figure \@ref(fig:selection-rmse-ARGL-CML) providing a more detailed view of the relative accuracy of the ARGL versus the CML estimators. 
+The CML estimator of the selection parameter generally outperforms the ARGL estimator, especially under conditions with strong selection. 
+Figures \@ref(fig:CML-zeta-coverage-two-stage) and \@ref(fig:ARGL-zeta-coverage-two-stage) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
+Broadly, none of the methods provide coverage rates that are close to the nominal 95% level across all conditions examined.
 
 ```{r selection-bias}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of log-selection parameter by selection probability, average SMD, and between-study heterogeneity"
 
@@ -385,7 +478,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -405,6 +498,7 @@ ggplot() +
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Scaled root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
 
@@ -421,7 +515,7 @@ ggplot() +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -441,6 +535,7 @@ ggplot() +
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error for ARGL log-selection parameter estimator to root mean-squared error of CML log-selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
@@ -451,6 +546,7 @@ RMSE_comparison_plot(zeta_wide_res, "CML","ARGL")
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the CML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -471,7 +567,7 @@ zeta_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -491,6 +587,7 @@ zeta_graph_res_ci %>%
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
+#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
@@ -511,7 +608,7 @@ zeta_graph_res_ci %>%
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau == .(tau),
+      rows = tau[B] == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"

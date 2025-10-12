@@ -41,6 +41,10 @@ documentclass     : "apa7"
 classoption       : "man, donotrepeattitle"
 output            : 
   papaja::apa6_pdf
+<<<<<<< HEAD
+=======
+csl               : american-medical-association.csl
+>>>>>>> step-function-paper
 replace_ampersands: yes
 
 header-includes:
@@ -63,6 +67,14 @@ header-includes:
 - \raggedbottom
 - \usepackage{setspace}
 - \AtBeginEnvironment{tabular}{\singlespacing}
+<<<<<<< HEAD
+=======
+- \usepackage{perpage}
+- \MakePerPage{footnote}
+- \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+- \usepackage{xr}
+- \externaldocument{step-function-selection-models-supplementary-materials}
+>>>>>>> step-function-paper
 - \newcommand{\Prob}{\text{Pr}}
 - \newcommand{\E}{\text{E}}
 - \newcommand{\Cov}{\text{Cov}}
@@ -87,7 +99,11 @@ options(tinytex.verbose = TRUE)
 opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
+<<<<<<< HEAD
 appendix_prefix <- "Appendix"
+=======
+appendix_prefix <- "Online Appendix"
+>>>>>>> step-function-paper
 ```
 
 # Highlights {-}
@@ -184,6 +200,7 @@ The authors declare no conflicts of interest.
 # References {-}
 
 \begingroup
+<<<<<<< HEAD
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
 
@@ -191,3 +208,10 @@ The authors declare no conflicts of interest.
 
 ```{r child = "appendix-simulation-results.Rmd"}
 ```
+=======
+\singlespacing
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
+>>>>>>> step-function-paper

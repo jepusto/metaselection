@@ -202,6 +202,9 @@ coverage_plot <- function(data) {
 }
 
 
+#-------------------------------------------------------------------------------
+# Comparison of extrapolation versus bootstraps with large B
+
 boot_real <- 
   results_ci %>%
   filter(
@@ -216,6 +219,13 @@ boot_real <-
     N_factor == "Typical",
     het_ratio == 0.5,
     CI_type %in% c("percentile","basic","BCa")
+  ) %>%
+  mutate(
+    cover_lo = coverage - qnorm(0.975) * coverage_mcse,
+    cover_hi = coverage + qnorm(0.975) * coverage_mcse,
+    tau_lab = paste("tau ==", tau),
+    lambda_lab = paste("lambda ==", weights),
+    CI_lab = paste("CI type:", CI_type)
   )
 
 big_B_bootstraps <- 
@@ -227,6 +237,9 @@ big_B_bootstraps <-
   ) %>%
   mutate(
     bootstraps = if_else(is.na(bootstraps), 1999L, bootstraps),
+  ) %>%
+  mutate(
+    bootstraps = 1999L,
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     cover_lo = coverage - qnorm(0.975) * coverage_mcse,
     cover_hi = coverage + qnorm(0.975) * coverage_mcse,
@@ -236,7 +249,6 @@ big_B_bootstraps <-
       levels = selection_levels,
       labels = names(selection_levels)
     ),
-    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
   )
 
 big_B_CML <- filter(big_B_bootstraps, estimator == "CML")
