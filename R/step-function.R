@@ -11,13 +11,14 @@ step_loglik <- function(
     ai = NULL,                                  # analytic weight 
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL                                    # selection model design matrices for each cut-point
+    Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
   params <- parse_step_params(
@@ -42,8 +43,19 @@ step_loglik <- function(
   
   # weighted log likelihood (Eq. 51)
   log_lik <- if (is.null(ai)) sum(log_lik_i) else sum(ai * log_lik_i)
-
-  return(log_lik)
+  
+  # priors
+  if (is.null(priors)) {
+    
+    return(log_lik) 
+    
+  } else {
+    
+    log_prior <- priors$log_prior(beta = params$beta, gamma = params$gamma, zeta = c(params$zeta0, params$zeta))  
+    return(log_lik + log_prior)
+    
+  }
+  
   
 }
 
@@ -58,13 +70,14 @@ step_score <- function(
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix   
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE                       # whether to return matrix of score contributions
 ) {
   
@@ -137,7 +150,37 @@ step_score <- function(
     contributions = contributions
   )
   
-  return(score_contributions)
+  # handle prior contributions
+  if (is.null(priors)) {
+    
+    return(score_contributions)
+    
+  } else {
+    
+    prior_score <- priors$score_prior(beta = params$beta, gamma = params$gamma, zeta = c(params$zeta0, params$zeta))
+    
+    if (contributions) {
+      
+      # prior_wt to allocate total prior score across observations
+      
+      if (is.null(ai)) {
+        prior_wt <- rep(1 / k, times = k)
+      } else {
+        prior_wt <- ai / sum(ai)
+      }
+      
+      score_contributions <- score_contributions + outer(prior_wt, prior_score)
+      
+      return(score_contributions)
+      
+    } else {
+      
+      return(score_contributions + prior_score)
+      
+    }
+    
+  }
+  
   
 }
 
@@ -152,13 +195,14 @@ step_hessian <- function(
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL                                    # selection model design matrices for each cut-point
+    Z = NULL,                                   # selection model design matrices for each cut-point
+    priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
   params <- parse_step_params(
@@ -306,7 +350,17 @@ step_hessian <- function(
   )
   colnames(H_matrix) <- rownames(H_matrix) <- params$H_names
   
-  return(H_matrix)
+  # Handle priors
+  
+  if (is.null(priors)) {
+  
+    return(H_matrix)
+    
+  } else {
+    hessian_prior <- priors$hessian_prior(beta = params$beta, gamma = params$gamma, zeta = c(params$zeta0, params$zeta))
+    return(H_matrix + hessian_prior)
+  }
+  
   
 }
 

@@ -1,0 +1,11 @@
+using the closed-form expression
+\begin{equation}
+\label{eq:beta-function-A}
+A_{ij} = A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) = \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} + E_Y(1 | \lambda_1,\lambda_2) + \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}
+\end{equation}
+where 
+\begin{equation}
+\label{eq:beta-function-Ey}
+E_Y\left[f(Y)| \lambda_1, \lambda_2\right] = \int_{\sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{\sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-Y / \sigma_{ij})\right]^{\lambda_1} \left[\Phi(Y / \sigma_{ij})\right]^{\lambda_2} \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY,
+\end{equation}
+$c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mathbf{x}_{ij}\boldsymbol\beta\right) / \sqrt{\tau^2 + \sigma_{ij}^2}$ for $h = 1,2$, $B_{0ij} = 1 - \Phi(c_{1ij})$, and $B_{2ij} = \Phi(c_{2ij})$ [@citkowicz2017parsimonious].

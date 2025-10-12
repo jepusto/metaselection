@@ -14,10 +14,39 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     group_by(model, estimator, param) %>%
     summarize(.groups = "drop")
   
-  results_NA <- 
+  if (all(c("ARGL","CML") %in% unique(results$estimator))) {
+    results_fallback <- 
+      results %>%
+      group_by(rep, model, param) %>%
+      filter(estimator %in% c("ARGL","CML")) %>%
+      summarize(
+        boot_CIs = if_else(is.na(Est[estimator=="CML"]), boot_CIs[estimator=="ARGL"], boot_CIs[estimator=="CML"]),
+        across(
+          c(Est, SE, p_value, CI_lo, CI_hi, R_conv, max_method, true_param),
+          \(x) if_else(is.na(x[estimator=="CML"]), x[estimator=="ARGL"], x[estimator=="CML"])
+        ), 
+        .groups = "drop"
+      ) %>%
+      mutate(
+        estimator = "CML-fallback"
+      )
+    
+    results <- bind_rows(results, results_fallback)
+  }
+  
+    
+  results_all <- 
     results %>% 
+    filter(param %in% c("gamma", "zeta1")) %>%
+    mutate(
+      across(c(Est, CI_lo, CI_hi, true_param), ~ exp(.x)),
+      SE = SE * Est,
+      param = case_match(param, "gamma" ~ "tau2", "zeta1" ~ "lambda1")
+    ) %>%
+    bind_rows(results) %>%
     mutate(var_est = SE ^ 2) %>%
     group_by(model, estimator, param) 
+  
   
   if (nrow(results) == 0) {
     
@@ -29,15 +58,10 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
         K_relvar = 0,
       )
     
-    if (winz < Inf) {
-      res <- 
-        left_join(res, res, by = c("model","estimator","param"), suffix = c("_raw","_winz"))
-    }
-    
   } else {
 
     res <- 
-      results_NA %>%
+      results_all %>%
       summarize(
         calc_absolute(estimates = Est, true_param = true_param, criteria = c("bias", "variance", "rmse"), winz = winz),
         calc_relative_var(estimates = Est, var_estimates = var_est, criteria = c("relative bias","relative rmse"), winz = winz),
@@ -48,8 +72,10 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     if ("boot_CIs" %in% names(results)) {
       
       boot_res <- 
-        results_NA %>%
+        results_all %>%
         filter(sapply(boot_CIs, is.data.frame)) %>%
+        mutate(max_boots = sapply(boot_CIs, \(x) max(x$bootstraps))) %>%
+        filter(max_boots == max(max_boots)) %>%
         summarize(
           extrapolate_coverage(CI_subsamples = boot_CIs, true_param = true_param, B_target = B_target, winz = winz, cover_na_val = 0, width_na_val = Inf, nested = TRUE),
           .groups = "drop"

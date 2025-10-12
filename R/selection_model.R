@@ -95,12 +95,13 @@ fit_selection_model <- function(
   U = NULL, 
   Z0 = NULL, 
   Z = NULL, 
+  priors = NULL,
   subset = NULL,
   vcov_type = "robust",
   selection_type = "step",
   estimator = "CML",
   theta = NULL,
-  optimizer = "BFGS",
+  optimizer = c("Rvmmin","Nelder-Mead","nlminb"),
   optimizer_control = list(),
   use_jac = TRUE
 ) {
@@ -144,23 +145,30 @@ fit_selection_model <- function(
     utils::capture.output(
       if (selection_type == "step") {
         
+        hess <- if (use_jac) step_hessian else NULL
+        
         mle_est <- optimx::optimx(
           par = theta, 
           fn = step_loglik, 
           gr = step_score,
+          hess = hess,
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, Z0 = Z0, Z = Z,
+          priors = priors,
           method = optimizer,
           control = optimizer_control
         )
         
       } else if (selection_type == "beta") {
         
+        hess <- if (use_jac) beta_hessian else NULL
+        
         mle_est <- optimx::optimx(
           par = theta, 
           fn = beta_loglik, 
           gr = beta_score,
+          hess = hess,
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, 
@@ -175,10 +183,11 @@ fit_selection_model <- function(
       return(mle_est)
     } 
     
-    max_method <- row.names(mle_est)[which.max(mle_est$value)]
+    mle_est_conv <- subset(mle_est, kkt1 & kkt2)
+    max_method <- row.names(mle_est_conv)[which.max(mle_est_conv$value)]
     theta_names <- 1:length(theta)
-    theta <- as.numeric(mle_est[max_method, theta_names])
-    info <- mle_est[max_method, -theta_names]
+    theta <- as.numeric(mle_est_conv[max_method, theta_names])
+    info <- mle_est_conv[max_method, -theta_names]
     names(theta) <- params$H_names
     
     if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
@@ -200,6 +209,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      priors = priors,
       jacobian = TRUE
     )
     
@@ -256,6 +266,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      priors = priors,
       jacobian = TRUE
     )
     if ("method" %in% names(optimizer_control)) {
@@ -290,6 +301,7 @@ fit_selection_model <- function(
       pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z, 
+      priors = priors,
       calc_Ai = FALSE
     )
     
@@ -349,7 +361,9 @@ fit_selection_model <- function(
       scores <- step_score(theta = theta, 
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
-                           X = X, U = U, Z0 = Z0, Z = Z, contributions = TRUE)
+                           X = X, U = U, Z0 = Z0, Z = Z, 
+                           priors = priors,
+                           contributions = TRUE)
       
     } else if (selection_type == "beta") {
       
@@ -366,7 +380,9 @@ fit_selection_model <- function(
     scores <- step_hybrid_score(theta = theta, 
                                 yi = yi, sei = sei, pi = pi, ai = ai,
                                 steps = steps,
-                                X = X, U = U, Z0 = Z0, Z = Z, contributions = TRUE)
+                                X = X, U = U, Z0 = Z0, Z = Z, 
+                                priors = priors,
+                                contributions = TRUE)
     
     
   }
@@ -380,7 +396,8 @@ fit_selection_model <- function(
       hess <- step_hessian(theta = theta, 
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
-                           X = X, U = U, Z0 = Z0, Z = Z)
+                           X = X, U = U, Z0 = Z0, Z = Z,
+                           priors = priors)
       
     } else if (selection_type == "beta") {
       
@@ -397,7 +414,8 @@ fit_selection_model <- function(
     hess <- step_hybrid_jacobian(theta = theta, 
                                  yi = yi, sei = sei, pi = pi, ai = ai,
                                  steps = steps,
-                                 X = X, U = U, Z0 = Z0, Z = Z)
+                                 X = X, U = U, Z0 = Z0, Z = Z,
+                                 priors = priors)
   }
   
   hess_inv <- tryCatch(MASS::ginv(hess), error = function(e) e)
@@ -468,7 +486,8 @@ bootstrap_selmodel <- function(
     X = NULL, 
     U = NULL, 
     Z0 = NULL, 
-    Z = NULL, 
+    Z = NULL,
+    priors = default_priors(),
     vcov_type = "robust",
     selection_type = "step",
     estimator = "CML",
@@ -537,6 +556,7 @@ bootstrap_selmodel <- function(
       cluster = cluster, 
       subset = cl_subset,
       X = X, U = U, Z0 = Z0, Z = Z,
+      priors = priors,
       vcov_type = vcov_type, 
       selection_type = selection_type,
       estimator = estimator, 
@@ -562,6 +582,7 @@ bootstrap_selmodel <- function(
       U = U, 
       Z0 = Z0, 
       Z = Z, 
+      priors = priors,
       vcov_type = vcov_type,
       selection_type = selection_type,
       estimator = estimator,
@@ -605,6 +626,7 @@ jackknife_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
+    priors = priors,
     selection_type = "step",
     estimator = "CML",
     optimizer = "BFGS",
@@ -629,6 +651,7 @@ jackknife_selmodel <- function(
         fit_selection_model(
           yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
           X = X, U = U, Z0 = Z0, Z = Z,
+          priors = priors,
           subset = cluster_jk != i,
           steps = steps,
           vcov_type = "none", 
@@ -684,6 +707,10 @@ jackknife_selmodel <- function(
 #' @param sel_zero_mods optional model formula for moderators related to the
 #'   probability of selection for p-values below the lowest threshold value of
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
+#' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
+#'   penalty terms) for model parameters, with a default of
+#'   \code{default_priors()}. Set to \code{NULL} to obtain unpenalized
+#'   estimates.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the composite marginal
@@ -712,15 +739,18 @@ jackknife_selmodel <- function(
 #'   \code{estimator = "ARGL"} or \code{"ARGL-full"}.
 #' @param optimizer_control an optional list of control parameters to be used
 #'   for optimization
-#' @param use_jac logical with \code{TRUE} (the default) indicating to use the
-#'   Jacobian of the estimating equations for optimization.
+#' @param use_jac logical indicating whether to use the Jacobian of the
+#'   estimating equations for optimization. If \code{NULL} (the default), it
+#'   will be reset to \code{FALSE} if \code{estimator = "CML"} or to \code{TRUE}
+#'   if \code{estimator = "ARGL"}
 #' @param bootstrap character string specifying the type of bootstrap to run,
 #'   with possible options \code{"none"} (the default), \code{"exponential"} for
-#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for
-#'   a conventional clustered bootstrap, or , \code{"two-stage"} for
-#'   a two-stage clustered bootstrap.
+#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for a
+#'   conventional clustered bootstrap, or , \code{"two-stage"} for a two-stage
+#'   clustered bootstrap.
 #' @param R number of bootstrap replications, with a default of \code{1999}.
-#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the event of non-convergence, with a default of \code{0}.
+#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the
+#'   event of non-convergence, with a default of \code{0}.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
 #' @returns An object of class \code{"selmodel"} containing the following
@@ -791,6 +821,7 @@ selection_model <- function(
     var_mods = NULL,
     sel_mods = NULL,
     sel_zero_mods = NULL,
+    priors = default_priors(),
     subset = NULL,
     estimator = "CML",
     vcov_type = "robust",
@@ -799,7 +830,7 @@ selection_model <- function(
     theta = NULL,
     optimizer = NULL,
     optimizer_control = list(),
-    use_jac = TRUE,
+    use_jac = NULL,
     bootstrap = "none",
     R = 1999,
     retry_bootstrap = 0L,
@@ -807,6 +838,11 @@ selection_model <- function(
 ) {
   
   selection_type <- match.arg(selection_type)
+  
+  if (!is.null(priors) && !inherits(priors, "selmodel_prior")) {
+    stop("priors must be NULL or a selmodel_prior object created by define_priors().")
+  }
+  
   estimator <- match.arg(estimator, c("CML","ML","ARGL","ARGL-full","hybrid","hybrid-full"))
   vcov_type <- match.arg(vcov_type, c("model-based","robust","none","raw"))
   bootstrap <- match.arg(bootstrap, c("none","exponential","multinomial","two-stage"))
@@ -825,11 +861,11 @@ selection_model <- function(
   }
 
   if (is.null(optimizer)) {
-    if (selection_type == "step") {
-      optimizer <- if (estimator %in% c("ML","CML")) "Rvmmin" else "nleqslv"
-    } else {
-      optimizer <- "nlminb"
-    }
+    optimizer <- if (estimator %in% c("ML","CML")) c("Rvmmin","Nelder-Mead","nlminb") else "nleqslv"
+  }
+  
+  if (is.null(use_jac)) {
+    use_jac <- !(estimator %in% c("ML","CML"))
   }
   
   if (missing(steps)) {
@@ -894,6 +930,7 @@ selection_model <- function(
     yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
     steps = steps,
+    priors = priors,
     vcov_type = vcov_type, 
     selection_type = selection_type,
     estimator = estimator, 
@@ -960,12 +997,13 @@ selection_model <- function(
       bootstrap_selmodel(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        priors = priors,
         steps = steps,
         vcov_type = boot_sandwich, 
         selection_type = selection_type,
         estimator = estimator, 
         theta = theta,
-        optimizer = optimizer, 
+        optimizer = res$method, 
         optimizer_control = optimizer_control,
         use_jac = use_jac,
         wtype = bootstrap,
@@ -983,10 +1021,11 @@ selection_model <- function(
         est = res$est$Est,
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        priors = priors,
         steps = steps,
         selection_type = selection_type,
         estimator = estimator, 
-        optimizer = optimizer, 
+        optimizer = res$method, 
         optimizer_control = optimizer_control,
         use_jac = use_jac
       )
@@ -1042,6 +1081,7 @@ selection_model <- function(
   res$mf <- mf
   res$selection_type <- selection_type
   res$steps <- steps
+  res$priors <- priors
   res$estimator <- estimator
   res$vcov_type <- vcov_type
   res$conf_level <- conf_level

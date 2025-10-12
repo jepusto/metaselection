@@ -19,12 +19,13 @@ pval_distribution <- function(dat, steps) {
                                         
 estimate_step_models <- function(
     dat,
-    estimators = c("step-MLE", "step-hybrid"),
+    estimators = c("CML","ARGL"),
     steps,
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
     sel_zero_mods = NULL,
+    priors = NULL,
     vcov_type = "robust",
     CI_type = c("large-sample","basic","percentile","student","bias-corrected","BCa"),
     bootstrap = "multinomial",
@@ -33,7 +34,8 @@ estimate_step_models <- function(
     CML_optimizer_control = list(),
     ARGL_optimizer_control = list(),
     R = 399,
-    retry_bootstrap = 3L
+    retry_bootstrap = 3L,
+    use_jac = FALSE
 ) {
   
 
@@ -49,7 +51,7 @@ estimate_step_models <- function(
   
   res <- list()
   
-  if ("step-MLE" %in% estimators) {
+  if ("CML" %in% estimators) {
     res_MLE <- tryCatch(
       selection_model(
         data = dat,
@@ -63,6 +65,7 @@ estimate_step_models <- function(
         var_mods = var_mods,
         sel_mods = sel_mods,
         sel_zero_mods = sel_zero_mods,
+        priors = priors,
         estimator = "CML",
         vcov_type = vcov_type,
         CI_type = CI_type,
@@ -71,7 +74,8 @@ estimate_step_models <- function(
         optimizer_control = CML_optimizer_control,
         bootstrap = bootstrap,
         R = R,
-        retry_bootstrap = retry_bootstrap
+        retry_bootstrap = retry_bootstrap,
+        use_jac = use_jac
       ), error = function(e) error_res
     )
     res_MLE$est$R_conv <- res_MLE$info$convcode
@@ -81,7 +85,7 @@ estimate_step_models <- function(
     res$MLE <- res_MLE$est
   }
   
-  if ("step-hybrid" %in% estimators) {
+  if ("ARGL" %in% estimators) {
     
     res_hybrid <- tryCatch(
       selection_model(
@@ -96,6 +100,7 @@ estimate_step_models <- function(
         var_mods = var_mods,
         sel_mods = sel_mods,
         sel_zero_mods = sel_zero_mods,
+        priors = priors,
         estimator = "ARGL",
         vcov_type = vcov_type,
         CI_type = CI_type,
@@ -112,6 +117,7 @@ estimate_step_models <- function(
     
     res$hybrid <- res_hybrid$est
   }
+  
   
   bind_rows(res)
 }

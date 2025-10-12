@@ -8,13 +8,6 @@ editor_options:
 ---
 ```{r}
 source("process-simulation-results.R")
-
-mu_graph_res_main$method = fct(mu_graph_res_main$method, levels = c("Beta","CHE-ISCW","PET/PEESE"))
-mu_graph_res_ci_main$method = fct(mu_graph_res_ci_main$method, levels = c("Beta","CHE-ISCW","PET/PEESE"))
-
-mu_graph_res_miss$method = fct(mu_graph_res_miss$method, levels = c("Beta","3PSM","4PSM"))
-mu_graph_res_ci_miss$method = fct(mu_graph_res_ci_miss$method, levels = c("Beta","3PSM","4PSM"))
-
 ```
 
 # Beta-Function Selection Model Compared to CHE-ISCW and PET/PEESE
@@ -65,8 +58,8 @@ ggplot() +
   labs(
     x = "Selection probability", 
     y = "Convergence rate", 
-    color = "Method",
-    fill = "Method"
+    color = "",
+    fill = ""
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -121,8 +114,8 @@ mu_graph_res_ci_main %>%
   labs(
     x = "Number of studies (J)", 
     y = "Coverage rate", 
-    color = "Method",
-    fill = "Method"
+    color = "",
+    fill = ""
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -162,8 +155,8 @@ mu_graph_res_ci_miss %>%
   labs(
     x = "Number of studies (J)", 
     y = "Coverage rate", 
-    color = "Method",
-    fill = "Method"
+    color = "",
+    fill = ""
   ) + 
   theme_bw() +
   theme(legend.position = "top")

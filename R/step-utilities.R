@@ -16,7 +16,9 @@ parse_step_params <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,
-    calc_Ai = FALSE
+    priors = NULL,                              # selmodel_prior object to specify priors
+    calc_Ai = FALSE,
+    min_Bhi = 1e-6
 ) {
   
   # number of observations
@@ -92,13 +94,34 @@ parse_step_params <- function(
     # solve for beta if missing
     if (all(is.na(beta))) {
       wt <- if (is.null(ai)) 1 / (eta * weight_vec) else ai / (eta * weight_vec)
+      
+      if (!is.null(priors)) {
+        
+        # add penalties to account for beta priors
+        
+        y_prior <- priors$score_prior(beta = rep(0,x_dim), gamma = gamma, zeta = c(zeta0, zeta))[1:x_dim]
+        wt_prior <- -1 * diag(priors$hessian_prior(beta = rep(0,x_dim), gamma = gamma, zeta = c(zeta0, zeta)))[1:x_dim]
+        
+        y_fit <- c(yi, y_prior / wt_prior)
+        w_fit <- c(wt, wt_prior)
+        X_fit <- rbind(X, diag(1, nrow = x_dim))
+        
+      } else {
+        
+        # otherwise just use data
+        y_fit <- yi
+        w_fit <- wt
+        X_fit <- X
+      }
+
       if (is.null(X)) {
-        beta <- stats::weighted.mean(yi, w = wt)
+        beta <- stats::weighted.mean(y_fit, w = w_fit)
         names(beta) <- "beta"
       } else {
-        beta <- stats::lm.wfit(x = X, y = yi, w = wt)$coefficients
+        beta <- stats::lm.wfit(x = X_fit, y = y_fit, w = w_fit)$coefficients
         names(beta) <- colnames(X)
       }
+      
     }
   } else {
     weight_vec <- NULL
@@ -113,6 +136,9 @@ parse_step_params <- function(
                  z_dim = z_dim,
                  z0_dim = z0_dim,
                  beta = beta,
+                 gamma = gamma,
+                 zeta = zeta,
+                 zeta0 = zeta0,
                  mu = mu, 
                  tausq = tausq,
                  eta = eta,
@@ -128,6 +154,7 @@ parse_step_params <- function(
     c_mat <- (tcrossprod(sei, -qnorm(steps)) - mu) / sqrt(eta)
     N_mat <- cbind(rep(1,k), pnorm(c_mat), rep(0,k))
     B_mat <- N_mat[,1:H] - N_mat[,2:(H+1L)]
+    B_mat <- apply(B_mat, 2, \(x) pmax(x, min_Bhi))
     params$c_mat <- c_mat
     params$B_mat <- B_mat
     params$Ai <- rowSums(B_mat * lambda_full)

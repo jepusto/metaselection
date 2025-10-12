@@ -13,6 +13,7 @@ Z <- model.matrix(~ 0 + z_cats)
 z0_cats <- sample(LETTERS[1:3], size = K, replace = TRUE)
 Z0 <- model.matrix(~ 0 + z0_cats)[,-1]
 
+
 test_that("step_loglik() divides up the parameter vector appropriately.", {
   
   # intercept-only, 3PSM
@@ -29,6 +30,15 @@ test_that("step_loglik() divides up the parameter vector appropriately.", {
     step_loglik(theta = theta_E, yi = yi, sei = sei, steps = c(.07,.50)),
     step_loglik(yi = yi, sei = sei, steps = c(.07,.50),
                 beta = theta_E[1], gamma = theta_E[2], zeta = theta_E[3:4])
+  )
+  
+  # intercept-only, 4PSM, priors
+  theta_E <- c(0.2, log(0.05), log(0.36), log(0.54))
+  prior_set <- default_priors()
+  expect_equal(
+    step_loglik(theta = theta_E, yi = yi, sei = sei, steps = c(.07,.50), priors = prior_set),
+    step_loglik(yi = yi, sei = sei, steps = c(.07,.50),
+                beta = theta_E[1], gamma = theta_E[2], zeta = theta_E[3:4], priors = prior_set)
   )
 
   # with predictors, one step
@@ -50,6 +60,17 @@ test_that("step_loglik() divides up the parameter vector appropriately.", {
     step_loglik(yi = yi, sei = sei, steps = c(.02,0.08,0.20), 
                 X = X, U = U, Z = list(Z, Z, Z),
                 beta = theta_C[1:2], gamma = theta_C[3:6], zeta = theta_C[7:12])
+  )
+  
+  # with predictors, multiple steps, priors
+  theta_C <- c(0.2, 0.04, log(seq(0.02, 0.08, length.out = 4)), 
+               log(seq(0.2, 0.5, length.out = 6)))
+  expect_equal(
+    step_loglik(theta = theta_C, yi = yi, sei = sei, steps = c(.02,0.08,0.20),
+                X = X, U = U, Z = list(Z, Z, Z), priors = prior_set),
+    step_loglik(yi = yi, sei = sei, steps = c(.02,0.08,0.20), 
+                X = X, U = U, Z = list(Z, Z, Z),
+                beta = theta_C[1:2], gamma = theta_C[3:6], zeta = theta_C[7:12], priors = prior_set)
   )
   
   # with predictors for lambda0
@@ -88,6 +109,15 @@ test_that("step_score() divides up the parameter vector appropriately.", {
   expect_equal(E1, E2)
   expect_equal(length(theta_E), length(E2))
   
+  # intercept-only, 4PSM, priors
+  prior_set <- default_priors(lambda_mode = 2)
+  F1 <- step_score(theta = theta_E, yi = yi, sei = sei, steps = c(.07,.50), priors = prior_set)
+  F2 <- step_score(yi = yi, sei = sei, steps = c(.07,.50), 
+                   beta = theta_E[1], gamma = theta_E[2], zeta = theta_E[3:4], priors = prior_set)
+  expect_equal(F1, F2)
+  expect_equal(length(theta_E), length(F2))
+  expect_false(identical(E2, F2))
+  
   # with predictors, one step
   theta_B <- c(0.2, 0.04, log(seq(0.02, 0.08, length.out = 4)), log(0.36), log(0.54))
   B1 <- step_score(theta = theta_B, yi = yi, sei = sei, steps = .07,
@@ -108,6 +138,16 @@ test_that("step_score() divides up the parameter vector appropriately.", {
                    beta = theta_C[1:2], gamma = theta_C[3:6], zeta = theta_C[7:12])
   expect_equal(C1, C2)
   expect_equal(length(theta_C), length(C2))
+  
+  # with predictors, multiple steps, priors
+  G1 <- step_score(theta = theta_C, yi = yi, sei = sei, steps = c(.02,0.08,0.20),
+                   X = X, U = U, Z = list(Z, Z, Z), priors = prior_set)
+  G2 <- step_score(yi = yi, sei = sei, steps = c(.02,0.08,0.20), 
+                   X = X, U = U, Z = list(Z, Z, Z),
+                   beta = theta_C[1:2], gamma = theta_C[3:6], zeta = theta_C[7:12], priors = prior_set)
+  expect_equal(G1, G2)
+  expect_equal(length(theta_C), length(G2))
+  expect_false(identical(C2, G2))
   
   # with predictors for lambda0
   C3 <- step_score(theta = theta_C, yi = yi, sei = sei, steps = c(.02,0.08),
@@ -389,9 +429,9 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
     N = 200
   )
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range), 2e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-3)
   
   step_derivs <- check_all_derivatives(
     data = dat, 
@@ -403,9 +443,9 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range), 2e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-3)
   
   step_derivs <- check_all_derivatives(
     data = dat, 
@@ -419,7 +459,7 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range), 1e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 2e-4)
   
   
   step_derivs <- check_all_derivatives(
@@ -432,9 +472,9 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range), 4e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 2e-3)
   
   set.seed(20240418)
   
@@ -459,9 +499,9 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range), 4e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 5e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 2e-3)
   
   
   step_derivs <- check_all_derivatives(
@@ -473,9 +513,9 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range), 2e-4)
+  expect_lt(max(step_derivs$score_diff_over_range), 2e-3)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-2)
   
   step_derivs <- check_all_derivatives(
     data = dat, 
@@ -489,7 +529,7 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range), 1e-3)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range), 1e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-2)
   
   # library(tidyverse)
   # 

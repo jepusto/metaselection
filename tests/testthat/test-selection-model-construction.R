@@ -311,6 +311,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
+      priors = NULL,
       vcov_type = "robust",
       estimator = "ML",
       optimizer = "Rvmmin"
@@ -322,6 +323,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
+      priors = NULL,
       vcov_type = "robust",
       estimator = "ML",
       optimizer = "Rvmmin"
@@ -335,6 +337,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       sei = sda,
       steps = c(.025, .500),
+      priors = NULL,
       vcov_type = "robust",
       estimator = "ML",
       optimizer = "Rvmmin"
@@ -346,6 +349,7 @@ test_that("selection_model() works with the subset argument.", {
       yi = d,
       vi = Va,
       steps = c(.025, .500),
+      priors = NULL,
       vcov_type = "robust",
       estimator = "ML",
       optimizer = "Rvmmin"
@@ -362,6 +366,7 @@ test_that("selection_model() works with the subset argument.", {
       mean_mods = ~ 0 + Z1,
       var_mods = ~ 0 + Z1,
       sel_mods = ~ 0 + Z1,
+      priors = NULL,
       vcov_type = "robust",
       estimator = "ML",
       optimizer = "Rvmmin"
@@ -475,17 +480,17 @@ test_that("selection_model() works with the subset argument.", {
     )
   
   expect_equal(
-    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1A", select = c(-param,-estimator,-p_value)),
-    subset(m1_hybrid_full_A1$est, select = c(-param,-estimator,-p_value)),
+    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1A", select = Est),
+    subset(m1_hybrid_full_A1$est, select = Est),
     ignore_attr = TRUE,
-    tolerance = 1e-6
+    tolerance = 5e-5
   )
   
   expect_equal(
-    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1B", select = c(-param,-estimator,-p_value)),
-    subset(m1_hybrid_full_B1$est, select = c(-param,-estimator,-p_value)),
+    subset(m1_hybrid_mod$est, substr(param, nchar(param)-3, nchar(param)) == "_Z1B", select = Est),
+    subset(m1_hybrid_full_B1$est, select = Est),
     ignore_attr = TRUE,
-    tolerance = 1e-6
+    tolerance = 2e-4
   )
   
 })

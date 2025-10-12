@@ -213,10 +213,12 @@ boot_real <-
     bootstrap_condition == "bootstrap", 
     param == "beta",
     estimator %in% c("CML","ARGL"),
+    bootstraps < 1999L,
     bootstrap_type == "two-stage",
     weights %in% c("0.05","0.20"),
     N_factor == "Typical",
     het_ratio == 0.5,
+    CI_type %in% c("percentile","basic","BCa")
   ) %>%
   mutate(
     cover_lo = coverage - qnorm(0.975) * coverage_mcse,
@@ -231,6 +233,10 @@ big_B_bootstraps <-
   unnest(res) %>%
   filter(
     param == "beta",
+    CI_type %in% c("percentile","basic","BCa")
+  ) %>%
+  mutate(
+    bootstraps = if_else(is.na(bootstraps), 1999L, bootstraps),
   ) %>%
   mutate(
     bootstraps = 1999L,
@@ -243,33 +249,28 @@ big_B_bootstraps <-
       levels = selection_levels,
       labels = names(selection_levels)
     ),
-    tau_lab = paste("tau ==", tau),
-    lambda_lab = paste("lambda ==", weights),
-    CI_lab = paste("CI type:", CI_type)
   )
 
+big_B_CML <- filter(big_B_bootstraps, estimator == "CML")
+big_B_ARGL <- filter(big_B_bootstraps, estimator == "ARGL")
 
-boot_compare <- 
-  bind_rows(
-    extrapolated = boot_real,
-    direct = big_B_bootstraps,
-    .id = "coverage_estimator"
-  ) %>%
-  filter(
-    bootstraps == 1999L
-  ) %>%
-  select(tau, weights, estimator, CI_type, coverage_estimator, coverage, coverage_mcse) %>%
-  pivot_wider(
-    names_from = coverage_estimator,
-    values_from = c(coverage, coverage_mcse)
-  ) %>%
-  mutate(
-    diff = 100 * (coverage_extrapolated - coverage_direct),
-    diff_mcse = 100 * sqrt(coverage_mcse_extrapolated^2 + coverage_mcse_direct^2)
-  ) %>%
-  summarize(
-    mean = mean(diff), 
-    min = min(diff),
-    max = max(diff),
-    rmse = sqrt(mean(diff^2))
-  )
+
+
+bootstraps <- unique(results_ci$bootstraps)[-1]
+
+boot_real %>%
+  filter(estimator == "CML") %>%
+ggplot() + 
+  aes(bootstraps, coverage, color = CI_type) + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
+  geom_pointrange(
+    data = big_B_CML,
+    aes(ymin = cover_lo, ymax = cover_hi),
+    shape = "square"
+  ) + 
+  facet_grid(tau ~ weights, labeller = "label_both") + 
+  scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
+  theme_minimal() + 
+  labs(x = "B", y = "Coverage rate", color = "")
