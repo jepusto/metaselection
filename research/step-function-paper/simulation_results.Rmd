@@ -15,12 +15,13 @@ CML_bias <-
   )
 
 convergence_min <- 
-  mu_graph_res %>%
+  convergence_results %>%
   filter(model == "3PSM") %>%
   group_by(estimator) %>%
-  filter(
-    convergence == min(convergence)
+  summarize(
+    convergence = min(convergence)
   )
+
 
 ```
 
@@ -32,9 +33,9 @@ We then examine the calibration of cluster-robust and bootstrap confidence inter
 ## Convergence
 
 The CHE-ISCW and PET/PEESE estimators produced results for every replication in every condition. 
-The CML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions, although the CML estimator did exhibit rates of convergence below 99% under conditions with the lowest degree of heterogeneity $\tau = 0.05$, with the lowest convergence rate of `r round(100 * convergence_min %>% filter(estimator == "CML") %>% pull(convergence), 1)`%.
-For the ARGL estimator, convergence was above `r round(100 * convergence_min %>% filter(estimator == "ARGL") %>% pull(convergence), 1)`% across all conditions.
-Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the CML and ARGL estimators.
+The CML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions, although the CML estimator did exhibit rates of convergence below 99% under conditions with the lowest degree of heterogeneity $\tau = 0.05$, with the lowest convergence rate of `r convergence_min %>% filter(estimator=="CML") %>% pull(convergence) %>% round(1)`%.
+For the ARGL estimator, convergence was `r convergence_min %>% filter(estimator=="ARGL") %>% pull(convergence) %>% round(1)`% across all conditions.
+Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the CML estimator.
 We evaluated the performance characteristics of each estimator across the replications where it converged.
 
 ## Bias
@@ -196,20 +197,20 @@ Coverage levels of intervals based on the ARGL estimator followed very similar p
 
 ```{r CML-coverage}
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
-    bootstrap_condition == "bootstrap",
+    bootstrap_condition,
     estimator %in% c("CML"),
     CI_type %in% c("large-sample","percentile")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
-  scale_y_continuous(limits = c(0.75, 1.0), breaks = seq(0.75,0.95,0.05), expand = expansion(0,0)) +
+  scale_y_continuous(limits = c(0.6, 1.0), breaks = seq(0.6,0.95,0.05), expand = expansion(0,0)) +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(

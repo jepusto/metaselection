@@ -163,6 +163,7 @@ big_B_ARGL <- big_B_bootstraps %>%
     CI_type %in% CI_types,
   )
 
+
 bootstraps <- c(49, 99, 199, 1999)
 
 ggplot(boot_real_ARGL) + 
@@ -194,6 +195,40 @@ These data are drawn from the larger simulation study and use $R = 2000$ replica
 The horizontal axis of each panel is scaled in proportion to $1 / d$, and the straight line in each panel depicts the linear regression fit used for extrapolation.
 On the left edge of each panel, a square point and vertical whiskers indicate the coverage rates computed from the additional simulations with $B = 1999$ re-samples and $R = 4000$ replications of the simulation process.
 Comparing the square points to the linear extrapolations provides a sense of the accuracy of the extrapolation technique. 
+
+```{r}
+
+boot_comparison <- 
+  results_ci %>%
+  filter(
+    mean_smd %in% c(0.2), 
+    m == 15, 
+    param == "beta",
+    estimator %in% c("CML","ARGL"),
+    bootstrap_type == "two-stage",
+    weights %in% c("0.05","0.20"),
+    N_factor == "Typical",
+    het_ratio == 0.5,
+    bootstraps == 1999L,
+    CI_type %in% CI_types,
+  ) %>%
+  select(mean_smd:omega, estimator, CI_type, K_projected = K_coverage, coverage_projected = coverage, coverage_projected_mcse = coverage_mcse, width_projected = width, width_projected_mcse = width_mcse) %>%
+  inner_join(big_B_bootstraps, by = join_by(mean_smd, tau, cor_mu, weights, m, omega, estimator, CI_type)) %>%
+  select(mean_smd:omega, estimator, CI_type, ends_with("_projected"), coverage, coverage_mcse, width, width_mcse) %>%
+  mutate(
+    coverage_diff = coverage - coverage_projected
+  )
+  
+boot_compare <-
+  boot_comparison %>%
+  summarize(
+    min = min(coverage_diff),
+    max = max(coverage_diff),
+    mean = mean(coverage_diff),
+    rmse = sqrt(mean(coverage_diff^2))
+  )  
+
+```
 
 It can be seen that nearly all coverage rates from the additional simulations fall within the Monte Carlo intervals of the extrapolation.
 Across conditions, estimators, and confidence interval types, discrepancies between extrapolated coverage and directly estimated coverage ranged from `r formatC(boot_compare$min, digits = 1, format = "f")` to `r formatC(boot_compare$max, digits = 1, format = "f")` percentage points, with an average of `r formatC(boot_compare$mean, digits = 1, format = "f")` and root mean-squared error of `r formatC(boot_compare$rmse, digits = 1, format = "f")` percentage points. 

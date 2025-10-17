@@ -19,7 +19,7 @@ library(broom)
 
 # Parallel processing
 library(future)
-plan(multisession, workers = 4L)
+plan(multisession, workers = 8L)
 
 # timing
 library(tictoc)
@@ -82,7 +82,7 @@ funnel(che_res, refline = 0, level = c(90, 95, 99))
 ## Selection Model - Single Step CML Large Sample and Bootstrap
 
 ```{r}
-set.seed(20250220)
+set.seed(20251017)
 
 tic()
 
@@ -110,7 +110,7 @@ selection_plot(mod_3PSM_boot_CML, transform = "sqrt")
 ## Selection Model - Single Step ARGL Large Sample and Bootstrap
 
 ```{r}
-set.seed(20250220)
+set.seed(20251017)
 
 mod_3PSM_boot_ARGL <- selection_model(
   data = ed_dat_clean, 
@@ -133,7 +133,7 @@ selection_plot(mod_3PSM_boot_ARGL, transform = "sqrt")
 ## Selection Model - Two Step CML Large Sample and Bootstrap
 
 ```{r}
-set.seed(20250220)
+set.seed(20251017)
 
 mod_4PSM_boot_CML <- selection_model(
   data = ed_dat_clean, 
@@ -155,7 +155,7 @@ selection_plot(mod_4PSM_boot_CML, transform = "sqrt")
 ## Selection Model - Two Step ARGL Large Sample and Bootstrap
 
 ```{r}
-set.seed(20250220)
+set.seed(20251017)
 
 mod_4PSM_boot_ARGL <- selection_model(
   data = ed_dat_clean, 
