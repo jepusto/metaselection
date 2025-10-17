@@ -254,3 +254,118 @@ timings %>%
   mutate(
     time_yrs_total = time_hrs_total / 24 / 365.25
   )
+
+#-------------------------------------------------------------------------------
+# Compare convergence rates for different prior specifications
+
+
+selection_levels <- c(
+  "0.02 (Strong)" = 0.02,
+  "0.05" = 0.05,
+  "0.10" = 0.10,
+  "0.20" = 0.20,
+  "0.50" = 0.50,
+  "1.00 (None)" = 1.00
+)
+
+convergence_results <- 
+  readRDS("research/step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  filter(
+    estimator %in% c("ARGL","CML"), 
+    param == "beta"
+  ) %>% 
+  select(-param) %>%
+  mutate(
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
+    weights_num = weights,
+    weights = as.character(weights),
+    het_ratio = omega ^ 2 / tau ^ 2,
+    het_ratio = as.character(het_ratio),
+    scrmse = sqrt(m) * rmse, 
+    J = as.character(m),
+    J = factor(J, levels = c("15", "30", "60", "90", "120")),
+    weights = factor(
+      weights, 
+      levels = selection_levels,
+      labels = names(selection_levels)
+    ),
+    mu_fac = fct(as.character(mean_smd)),
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
+    convergence = 100 * K_absolute / iterations
+  ) %>%
+  group_by(mean_smd, tau, weights, estimator, priors) %>%
+  summarize(
+    min = min(convergence),
+    Q10 = quantile(convergence, 0.1),
+    median = median(convergence),
+    Q90 = quantile(convergence, 0.9),
+    max = max(convergence),
+    .groups = "drop"
+  )
+
+convergence_results %>%
+  filter(estimator %in% c("CML")) %>%
+  ggplot() + 
+  aes(x = weights, y = median, ymin = min, max = max, color = priors, fill = priors) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) + 
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  scale_y_continuous(limits = c(NA, 100), expand = expansion(0,0)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Convergence rate", 
+    color = "Prior",
+    fill = "Prior"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+convergence_results %>%
+  filter(estimator %in% c("ARGL")) %>%
+  ggplot() + 
+  aes(x = weights, y = median, ymin = min, max = max, color = priors, fill = priors) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) + 
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  scale_y_continuous(limits = c(NA, 100), expand = expansion(0,0)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Convergence rate", 
+    color = "Prior",
+    fill = "Prior"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")

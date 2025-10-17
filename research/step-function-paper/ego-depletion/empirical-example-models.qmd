@@ -84,6 +84,17 @@ funnel(che_res, refline = 0, level = c(90, 95, 99))
 ```{r}
 set.seed(20251017)
 
+prior_spec <- default_priors(
+  beta_mean = 0,
+  beta_precision = 1 / 16, 
+  beta_L = 4,
+  tau_mode = 0.2, 
+  tau_alpha = 1,
+  lambda_mode = 0.5,
+  lambda_precision = 1 / 16,
+  lambda_L = 4
+)
+
 tic()
 
 mod_3PSM_boot_CML <- selection_model(
