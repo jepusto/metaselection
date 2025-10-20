@@ -69,7 +69,8 @@ test_that("selection_model() agrees with composites of metafor::selmodel().", {
       steps = c(.025),
       mean_mods = ~ 0 + Gender,
       var_mods = ~ 0 + Gender,
-      sel_mods = ~ 0 + Gender
+      sel_mods = ~ 0 + Gender,
+      priors = NULL
     )
   
   expect_equal(mod_3PSM_fit$est$Est, metafor_3PSM_params, tolerance = 1e-4)
@@ -89,7 +90,8 @@ test_that("selection_model() agrees with composites of metafor::selmodel().", {
       steps = c(.025, .500),
       mean_mods = ~ 0 + Gender + Gender:Preregistered,
       var_mods = ~ 0 + Gender,
-      sel_mods = ~ 0 + Gender
+      sel_mods = ~ 0 + Gender,
+      priors = NULL
     )
   
   expect_equal(mod_4PSM_fit$est$Est, metafor_4PSM_params, tolerance = 1e-4)

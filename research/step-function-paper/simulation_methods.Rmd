@@ -1,4 +1,4 @@
----
+n---
 title: "Simulation Methods"
 output: pdf_document
 bibliography: references.bib
@@ -10,22 +10,18 @@ editor_options:
 We conducted Monte Carlo simulation studies to examine the performance
 of the CML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
 We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment [@stanley2014meta].
-We evaluated the point estimators and robust variance estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size of the unselected distribution.
-To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only in a subset of the conditions. 
+We evaluated the estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size prior to selective reporting.
+To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only for a subset of the conditions. 
 
 We ran the simulation in R Version 4.4.1 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison [@CHTC].
-The simulation code drew on functionality from several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
+The simulation code made use of several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
 
 ## Data generation
 
 We simulated meta-analyses based on a CHE working model, with individual effect size estimates selected
 for inclusion based on the step-function selection model with a single step at $\alpha_1 = .025$. 
 For each replication, we generated a total of $J^*$ studies with a two-group comparison
-design, where study $j$ contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting. Let
-$T_{ij}$ denote effect size estimate $i$ from study $j$ and let $\sigma_{ij}$
-denote its standard error, for $i = 1,...,k_j^*$ and $j = 1,...,J^*$. Let $N_j$
-denote the effective sample size from study $j$.
-
+design, where study $j$ had an effective sample size of $N_j$ and contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting.
 To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
@@ -37,7 +33,7 @@ For simplicity in the data-generating process, we assumed a constant correlation
 We then simulated raw outcomes for each primary study included in the
 meta-analytic dataset. To do so, we first generated an average effect
 size per study, $\delta_j$, from a normal distribution with mean $\mu$ and variance
-of $\tau^2$. Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and
+of $\tau_B^2$. Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and
 variance of $\omega^2$.
 For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as
 $$
@@ -62,14 +58,14 @@ We repeated the process of generating studies until the database included a tota
 ## Estimation methods
 
 We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
-We estimated CML and ARGL estimators as described in Section \@ref(estimation-methods). 
-For both estimators, we calculated cluster-robust standard errors using large-sample sandwich formulas. 
-For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap.
-To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
+We estimated CML and ARGL estimators and calculated cluster-robust confidence intervals as described in Section \@ref(estimation-methods). 
+For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
+To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator but extrapolated coverage rates for $B = 1999$ replications [@boos2000montecarlo];
+`r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details.
 
-We compared the performance of the step-function CML and ARGL estimators to two alternative methods.
+We compared the performance of the step-function CML and ARGL estimators to that of two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
-Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) as proposed by @chen2024adapting.[^ISCW] 
+Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) [@chen2024adapting].
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
 Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
@@ -101,16 +97,16 @@ For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals u
 
 Table \@ref(tab:sim-design) summarizes the experimental design for this study. 
 Manipulated parameters included overall average standardized mean difference
-($\mu$), between-study heterogeneity ($\tau$), within-study heterogeneity ratio
-($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$),
+($\mu$), between-study heterogeneity ($\tau_B$), within-study heterogeneity ratio
+($\omega^2 / \tau_B^2$), average correlation between outcomes ($\rho$),
 probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
-Parameters were fully crossed for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions in the full simulation study. 
-Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with fewer studies per meta-analysis, for which we expected large-sample cluster-robust CIs to be relatively less effective.
-We also reduced the number of parameter values for factors where we did
-not observe much variation in results in the full simulation
-(e.g., excluding $\tau = 0.30$). 
-This resulted in $4 \times 2 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 2 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
-For each condition, we generated 2,000 replications. 
+We examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions [@kraft2020interpreting].
+We used values of $\tau$ ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
+We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of $\omega^2$ to between-study heterogeneity $\tau^2$ at either 0 (i.e., no within-study heterogeneity) or 0.5. 
+For the average correlation between outcomes from the same study, we examined the values of 0.40 or 0.80. The default value of the average
+correlation in software packages that implement RVE is 0.80. 
+Thus, in conditions where $\rho$ is 0.80, the working model is approximately correctly specified. 
+We included conditions where $\rho = 0.4$ to examine performance when the working model is not correctly specified. 
 
 ```{r sim-design, tab.cap="Simulation design parameters"}
 library(kableExtra)
@@ -119,8 +115,8 @@ library(tidyverse)
 dat <- tibble(
   Parameter = c(
     "Overall average SMD ($\\mu$)",
-    "Between-study heterogeneity ($\\tau$)",
-    "Heterogeneity ratio ($\\omega^2 / \\tau^2$)",
+    "Between-study heterogeneity ($\\tau_B$)",
+    "Heterogeneity ratio ($\\omega^2 / \\tau_B^2$)",
     "Average correlation between outcomes ($\\rho$)",
     "Probability of selection for non-affirmative effects ($\\lambda_1$)",
     "Number of observed studies ($J$)",
@@ -137,7 +133,7 @@ dat <- tibble(
   ),
   `Bootstrap Simulation` = c(
     "0.0, 0.2, 0.4, 0.8",
-    "0.15, 0.45",
+    "0.15, 0.30, 0.45",
     "0.0, 0.5",
     "0.80",
     "0.05, 0.20, 1.0",
@@ -150,23 +146,13 @@ kable(
   dat, 
   caption = "Parameter values examined in the simulation study",
   booktabs = TRUE, 
-  escape = FALSE
+  escape = FALSE,
+  position = "tb"
 ) |>
   kable_styling() |>
   column_spec(1, width = "2.5in")
   
 ```
-
-In the full simulation, we examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions by @kraft2020interpreting.
-We used values of $\tau$ ranging from 0.05 (a very small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
-We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of $\omega^2$ to between-study heterogeneity $\tau^2$ at either 0 (i.e., no within-study heterogeneity) or 0.5. 
-
-For the average correlation between outcomes from the same study, we
-examined the values of 0.40 or 0.80. The default value of the average
-correlation in software packages that implement RVE is 0.80. Thus, in
-conditions where $\rho$ is 0.80, the working model is approximately
-correctly specified. We included conditions where $\rho = 0.4$ to examine performance when the
-working model is not correctly specified. 
 
 We examined a wide range of values for the probability of selection for non-affirmative effect sizes, ranging from no selective reporting ($\lambda_1 = 1$) to very severe selective reporting $(\lambda_1 = 0.02)$.
 We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
@@ -181,13 +167,18 @@ To explore the influence of the effective sample size distribution, we also ran 
 sizes from the What Works Clearinghouse database by three to represent primary studies with smaller sample sizes,
 such as those used in psychology laboratory studies.
 
+Parameters were fully crossed for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions in the full simulation study. 
+Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with fewer studies per meta-analysis, for which we expected large-sample cluster-robust CIs to be relatively less effective.
+We also reduced the number of parameter values for factors where we did
+not observe much variation in results in the full simulation
+(e.g., excluding $\tau = 0.30$). 
+This resulted in $4 \times 2 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 2 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
+For each condition, we generated 2,000 replications. 
+
 ## Performance criteria
 
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
-Convergence measures the proportion of replications in which an estimation algorithm provides a valid numerical solution.
-Bias measures whether an estimator generates values that fall systematically above or below the true parameter. 
-RMSE measures the overall accuracy of an estimator, capturing both systematic bias and sampling variance. 
 Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
 Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.
 Specifically, we defined a lower fence of 2.5 times the inter-quartile range below the 25th percentile and an upper fence of 2.5 times the inter-quartile range above the 75th percentile. 
@@ -195,8 +186,8 @@ Estimates falling below the lower fence or above the upper fence were set to the
 
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
 For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
-Due to the computational demands of bootstrapping, we used $B = 399$ bootstraps per replication---fewer than recommended for analysis of real data. 
-To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique similar to one proposed by @boos2000montecarlo. 
-For each replication, we computed bootstrap confidence intervals not only for $B = 399$, but also for $B = 49$, 99, 199, and 299 bootstraps, randomly selected without replacement from the full set of $B = 399$ bootstraps.
-We computed coverage rates separately for each value of $B$ and fit a linear regression of the coverage rate on $1 / B$. 
-We used the intercept from this regression as the predicted coverage rate of confidence intervals based on $B = 1999$ bootstraps.
+To mitigate computational demand, we used few bootstraps per replication than recommended for analysis of real data. 
+To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique.[@boos2000montecarlo]
+For each replication, we computed bootstrap confidence intervals not only for $B = 399$, but also for $B = 49$, 99, 199, and 299 bootstraps, randomly selected without replacement.
+We computed coverage rates separately for each value of $B$, fit a linear regression of the coverage rate on $1 / B$, and then used this regression to predict the coverage rate of confidence intervals based on $B = 1999$ bootstraps.
+`r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details and demonstrates the performance of the extrapolation technique.

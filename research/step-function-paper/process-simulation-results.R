@@ -1,5 +1,6 @@
 library(tidyverse)
 
+
 selection_levels <- c(
   "0.02 (Strong)" = 0.02,
   "0.05" = 0.05,
@@ -9,12 +10,21 @@ selection_levels <- c(
   "1.00 (None)" = 1.00
 )
 
+#-------------------------------------------------------------------------------
+# Compile convergence results including the non-contingent CML estimator
 
-results <- 
-  readRDS("../step-function-simulations/sim-step-function-point-estimator-results.rds") %>%
+convergence_results <- 
+  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  filter(
+    estimator %in% c("ARGL","CML","CHE-ISCW","PET/PEESE"), 
+    priors == "Weak",
+    param == "beta"
+  ) %>% 
+  select(-param, -priors) %>%
   mutate(
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
+    weights_num = weights,
     weights = as.character(weights),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
@@ -28,8 +38,42 @@ results <-
     ),
     mu_fac = fct(as.character(mean_smd)),
     tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
-    convergence = K_absolute / 2000,
-    winz_convergence = (1 - winsor_pct) * K_absolute / 2000
+    convergence = 100 * K_absolute / iterations
+  )
+
+convergence_results %>%
+  filter(model == "3PSM") %>%
+  group_by(estimator) %>%
+  summarize(
+    min_convergence = min(convergence)
+  )
+
+#-------------------------------------------------------------------------------
+# Compile point estimator performance results 
+# Using CML-fallback estimator and ARGL estimator, both with weak priors
+
+results <- 
+  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  filter(estimator != "CML", priors == "Weak") %>%
+  mutate(
+    estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
+    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
+    weights_num = weights,
+    weights = as.character(weights),
+    het_ratio = omega ^ 2 / tau ^ 2,
+    het_ratio = as.character(het_ratio),
+    scrmse = sqrt(m) * rmse, 
+    J = as.character(m),
+    J = factor(J, levels = c("15", "30", "60", "90", "120")),
+    weights = factor(
+      weights, 
+      levels = selection_levels,
+      labels = names(selection_levels)
+    ),
+    mu_fac = fct(as.character(mean_smd)),
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
+    convergence = K_absolute / iterations
   ) %>%
   select(-cor_sd, -n_multiplier)
 
@@ -51,20 +95,27 @@ mu_wide_res <-
     names_from = estimator
   )
 
-gamma_graph_res <- 
+tau2_graph_res <- 
   results %>%
   filter(
-    param == "gamma"
+    param == "tau2"
   ) %>%
   mutate(
-    scrmse_trunc = pmin(scrmse, 3 / tau + rnorm(n(), sd = 0.01))
+    rbias = bias / tau^2,
+    rbias_mcse = bias_mcse / tau^2,
+    rvar = var / tau^4,
+    rvar_mcse = var_mcse / tau^4,
+    rrmse = rmse / tau^2,
+    rrmse_mcse = rmse_mcse / tau^2,
+    scrrmse = scrmse / tau^2
   )
 
-gamma_wide_res <- 
-  gamma_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, bias, var, rmse, scrmse,scrmse_trunc) %>%
+tau2_wide_res <- 
+  tau2_graph_res %>%
+  filter(estimator %in% c("ARGL","CML","CHE")) %>%
+  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse, scrmse) %>%
   pivot_wider(
-    values_from = c(bias, var, rmse, scrmse, scrmse_trunc), 
+    values_from = c(rbias, rvar, rrmse, scrmse), 
     names_from = estimator
   )
 
@@ -82,10 +133,73 @@ zeta_wide_res <-
     names_from = estimator
   )
 
+lambda_graph_res <- 
+  results %>%
+  filter(
+    param == "lambda1"
+  ) %>%
+  mutate(
+    rbias = bias / weights_num,
+    rbias_mcse = bias_mcse / weights_num,
+    rvar = var / weights_num^2,
+    rvar_mcse = var_mcse / weights_num^2,
+    rrmse = rmse / weights_num,
+    rrmse_mcse = rmse_mcse / weights_num,
+    scrrmse = scrmse / weights_num
+  )
+
+lambda_wide_res <- 
+  lambda_graph_res %>%
+  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse, scrrmse) %>%
+  pivot_wider(
+    values_from = c(rbias, rvar, rrmse, scrrmse), 
+    names_from = estimator
+  )
+
+#-------------------------------------------------------------------------------
+# Compile confidence interval performance results 
+# Using CML-fallback estimator and ARGL estimator, both with weak priors
+
+nobootstrap_conf_int <- 
+  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  filter(estimator != "CML", priors == "Weak") %>%
+  select(mean_smd:steps, model:param, 
+         K_coverage:width_mcse) %>%
+  mutate(
+    CI_type = "large-sample"
+  ) 
+
+bootstrap_conf_int <- 
+  readRDS("../step-function-simulations/sim-step-function-bootstrap-performance-results.rds") %>%
+  select(-run_date, -time) %>%
+  unnest(res) %>%
+  filter(estimator != "CML", priors == "Weak") %>%
+  select(mean_smd:steps, bootstrap_type = bootstrap, model:param, 
+         bootstraps, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse) %>%
+  unnest(
+    c(bootstraps, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
+    names_sep = "-"
+  ) %>%
+  pivot_longer(
+    starts_with("boot_"),
+    names_to = c(".value", "CI_type"),
+    names_pattern = "(.+)-(.+)"
+  ) %>%
+  rename_with(~ str_remove(.x, "^boot_"))
+
 
 results_ci <- 
-  readRDS("../step-function-simulations/sim-step-function-confidence-interval-results.rds") %>%
+  bind_rows(
+    nobootstrap_conf_int,
+    bootstrap_conf_int
+  ) %>%
+  group_by(mean_smd, tau, omega, cor_mu, cor_sd, weights, m, n_multiplier, steps, priors) %>%
   mutate(
+    bootstrap_condition = any(!is.na(bootstrap_type))
+  ) %>%
+  ungroup() %>%
+  mutate(
+    estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights = as.character(weights),
@@ -202,12 +316,14 @@ coverage_plot <- function(data) {
 }
 
 
+#-------------------------------------------------------------------------------
+# Comparison of extrapolation versus bootstraps with large B
+
 boot_real <- 
   results_ci %>%
   filter(
     mean_smd %in% c(0.2), 
     m == 15, 
-    bootstrap_condition == "bootstrap", 
     param == "beta",
     estimator %in% c("CML","ARGL"),
     bootstraps < 1999L,
@@ -216,6 +332,13 @@ boot_real <-
     N_factor == "Typical",
     het_ratio == 0.5,
     CI_type %in% c("percentile","basic","BCa")
+  ) %>%
+  mutate(
+    cover_lo = coverage - qnorm(0.975) * coverage_mcse,
+    cover_hi = coverage + qnorm(0.975) * coverage_mcse,
+    tau_lab = paste("tau ==", tau),
+    lambda_lab = paste("lambda ==", weights),
+    CI_lab = paste("CI type:", CI_type)
   )
 
 big_B_bootstraps <- 
@@ -227,6 +350,9 @@ big_B_bootstraps <-
   ) %>%
   mutate(
     bootstraps = if_else(is.na(bootstraps), 1999L, bootstraps),
+  ) %>%
+  mutate(
+    bootstraps = 1999L,
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     cover_lo = coverage - qnorm(0.975) * coverage_mcse,
     cover_hi = coverage + qnorm(0.975) * coverage_mcse,
@@ -236,7 +362,6 @@ big_B_bootstraps <-
       levels = selection_levels,
       labels = names(selection_levels)
     ),
-    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
   )
 
 big_B_CML <- filter(big_B_bootstraps, estimator == "CML")
@@ -246,19 +371,19 @@ big_B_ARGL <- filter(big_B_bootstraps, estimator == "ARGL")
 
 bootstraps <- unique(results_ci$bootstraps)[-1]
 
-boot_real %>%
-  filter(estimator == "CML") %>%
-ggplot() + 
-  aes(bootstraps, coverage, color = CI_type) + 
-  geom_hline(yintercept = 0.95, linetype = "dashed") + 
-  geom_point() + 
-  geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
-  geom_pointrange(
-    data = big_B_CML,
-    aes(ymin = cover_lo, ymax = cover_hi),
-    shape = "square"
-  ) + 
-  facet_grid(tau ~ weights, labeller = "label_both") + 
-  scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
-  theme_minimal() + 
-  labs(x = "B", y = "Coverage rate", color = "")
+# boot_real %>%
+#   filter(estimator == "CML") %>%
+# ggplot() + 
+#   aes(bootstraps, coverage, color = CI_type) + 
+#   geom_hline(yintercept = 0.95, linetype = "dashed") + 
+#   geom_point() + 
+#   geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
+#   geom_pointrange(
+#     data = big_B_CML,
+#     aes(ymin = cover_lo, ymax = cover_hi),
+#     shape = "square"
+#   ) + 
+#   facet_grid(tau ~ weights, labeller = "label_both") + 
+#   scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
+#   theme_minimal() + 
+#   labs(x = "B", y = "Coverage rate", color = "")

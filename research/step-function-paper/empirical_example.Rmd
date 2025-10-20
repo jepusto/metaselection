@@ -29,13 +29,14 @@ Effect sizes were measured as standardized mean differences, defined so that pos
 Based on a sample of 66 studies, @carter2015series estimated an overall average effect of 0.43, with a 95% CI of [0.34, 0.52]. However, more recent, preregistered multilab replication studies present a stark contrast. @Hagger2016ego estimated a much smaller, non-significant average effect of 0.04, 95% CI [-0.07, 0.15], from 23 laboratory studies. Similarly, @Vohs2021ego found a non-significant effect of 0.06, 95% CI [-0.02, 0.14], using 36 laboratory studies. This discrepancy highlights the importance of using modeling strategies that account for selective reporting. Unlike the earlier studies, the replication studies were preregistered and are thus not susceptible to the same selective reporting issues.
 
 To mitigate possible effects of selective reporting, @carter2015series included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
+
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
 About 40% of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes.
 We conducted the analyses using R Version 4.4.3 [@rcoreteam]. 
 
-If selective reporting were not a concern, a correlated-and-hierarchical effects model [CHE, @pustejovsky2022preventionscience] would be one way to summarize the distribution of ego depletion effects.
+If selective reporting were not a concern, a correlated-and-hierarchical effects (CHE) model, a flexible model that accounts for both correlated and hierarchical dependent data structures, would be one way to summarize the distribution of ego depletion effects.[@pustejovsky2022preventionscience]
 Based on a CHE model, the overall average effect estimate was `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "CHE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "CHE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "CHE"]), 2)`]. 
-Alternately, @chen2024adapting proposed estimating average effect sizes using a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.
+Alternately, one could apply a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.[@chen2024adapting]
 Applying CHE-ISCW reduces the overall effect estimate to `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "FEC"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "FEC"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "FEC"]), 2)`]. 
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment [@stanley2014meta], clustering the standard errors by study. This yielded an overall average effect of `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "PET/PEESE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "PET/PEESE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "PET/PEESE"]), 2)`]. The CHE and CHE-ISCW estimates are both positive, significant, and similar in magnitude. The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects. 
 
@@ -43,6 +44,12 @@ We used the `selection_model()` function from the `metaselection` package to fit
 The single-step model used a threshold at $\alpha_1 = 0.025$; the two-step model used thresholds at $\alpha_1 = 0.025$ and $\alpha_2 = 0.5$. 
 For comparison purposes, we estimated model parameters using both CML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
 For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 replicates.
+
+Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
+The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
+The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
+In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero. 
+Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
 
 ```{r empirical, echo=F, message=FALSE, warning=FALSE, tab.cap="Carter et al. (2015) Re-Analysis: Ego-Depletion"}
 format_it <- function(x, trunc = Inf) {
@@ -108,7 +115,8 @@ kbl(
   caption = "Single-step and two-step selection model parameter estimates fit to ego depletion effects data from Carter et al. (2015)",
   col.names = c("Parameter", "Estimate (SE)", "Cluster-Robust CI", "Percentile Bootstrap CI", "Estimate (SE)", "Cluster-Robust CI", "Percentile Bootstrap CI"),
   booktabs = TRUE,
-  escape = FALSE
+  escape = FALSE,
+  position = "tb"
 ) %>%
   kable_styling(latex_options = c("scale_down")) %>%
   add_header_above(c(" ", "CML estimator" = 3, "ARGL estimator" = 3)) %>%
@@ -121,17 +129,9 @@ kbl(
 
 ```
 
-Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
-The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
-The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
-In contrast to the PET/PEESE estimate, the selection model estimates using CML are positive and statistically distinct from zero. 
-Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted model, a step-function model, or the PET/PEESE adjustment. 
-
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
 Generally, the CML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
 For the CML estimator, the bootstrap CIs are similar or slightly wider than the cluster-robust CIs.
-<!-- For the ARGL estimator, the bootstrap CIs were similar to the cluster-robust CIs for the one-step model but quite discrepant for the two-step model.  -->
-<!-- For the two-step model, the cluster-robust CIs were so wide as to be entirely uninformative, whereas the bootstrap CIs were not as extreme. -->
 These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
 To draw firmer conclusion about these methods, we conducted simulations to evaluate their performance characteristics across a range of conditions. 

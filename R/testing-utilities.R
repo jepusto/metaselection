@@ -231,6 +231,7 @@ check_against_metafor_selmodel <- function(
         steps = steps,
         mean_mods = mods,
         selection_type = "step",
+        priors = NULL,
         estimator = "CML",
         vcov_type = "model-based",
         theta = metafor_est
@@ -278,6 +279,7 @@ check_against_metafor_selmodel <- function(
         steps = steps,
         mean_mods = mods,
         selection_type = "beta",
+        priors = NULL,
         estimator = "CML",
         vcov_type = "model-based",
         theta = metafor_est
@@ -857,6 +859,7 @@ check_profiling_equivalence <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
+    priors = NULL,
     subset = NULL,
     vcov_type = "robust",
     optimizer_control = list(),
@@ -876,6 +879,7 @@ check_profiling_equivalence <- function(
     U = U, 
     Z0 = Z0, 
     Z = Z, 
+    priors = priors,
     subset = subset,
     vcov_type = vcov_type,
     selection_type = "step",
@@ -909,7 +913,8 @@ check_profiling_equivalence <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    priors = priors
   )
 
   jac_full <- step_hybrid_jacobian(
@@ -921,7 +926,8 @@ check_profiling_equivalence <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    priors = priors
   )
   
   theta_na <- theta
@@ -936,6 +942,7 @@ check_profiling_equivalence <- function(
     U = U, 
     Z0 = Z0, 
     Z = Z, 
+    priors = priors,
     subset = subset,
     vcov_type = vcov_type,
     selection_type = "step",
@@ -954,6 +961,7 @@ check_profiling_equivalence <- function(
       U = U,
       Z0 = Z0,
       Z = Z,
+      priors = priors,
       calc_Ai = TRUE
     )
   
@@ -966,7 +974,8 @@ check_profiling_equivalence <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    priors = priors
   )
   
   jac_prof <- step_hybrid_profile_jacobian(
@@ -978,7 +987,8 @@ check_profiling_equivalence <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    priors = priors
   )
 
   if (verbose) {

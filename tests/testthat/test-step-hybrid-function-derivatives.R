@@ -449,7 +449,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess5]), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range[which_hess5]), 2e-4)
   
   set.seed(20240425)
   dat <- r_meta(

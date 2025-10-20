@@ -18,7 +18,8 @@ sci <- sci |>
   rename(esid = es_id, studyid = study_id) |>
   mutate(
     d = yi,
-    Var_d = vi,
+    Va = vi,
+    Var_d = Va,
     sd_d = sqrt(Var_d),
     var_d = Var_d,
     p_onesided = 1 - pnorm(d / sd_d)
@@ -28,7 +29,7 @@ num_studies <- length(unique(sci$studyid))
 num_effects <- length(unique(sci$esid))
 ```
 
-To demonstrate the interpretation of the beta-density selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. 
+To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. 
 <!-- JEP: Add a contour-enhanced funnel plot of the effect sizes, perhaps colored by assessment type? -->
 <!-- MC: I think we're OK without it. -->
 
