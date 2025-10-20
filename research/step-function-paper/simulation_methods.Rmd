@@ -25,7 +25,8 @@ design, where study $j$ had an effective sample size of $N_j$ and contributed $k
 To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
-We assumed constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
+This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
+For simplicity in the data-generating process, we assumed a constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
 
 [^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
 
@@ -34,8 +35,15 @@ meta-analytic dataset. To do so, we first generated an average effect
 size per study, $\delta_j$, from a normal distribution with mean $\mu$ and variance
 of $\tau_B^2$. Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and
 variance of $\omega^2$.
-For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as $\mat{Y}_{hj}^T \sim N(\bs\delta_j, \boldsymbol\Psi_j)$ and $\mat{Y}_{hj}^C \sim N(\mat{0}, \boldsymbol\Psi_j)$, where $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
-$k_j^* \times 1$ vectors of outcomes for participant $h$ in study $j$ in the treatment and control group, respectively, and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.
+For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as
+$$
+\mat{Y}_{hj}^T \sim N(\bs\delta_j, \boldsymbol\Psi_j) \qquad \text{and} \qquad
+\mat{Y}_{hj}^C \sim N(\mat{0}, \boldsymbol\Psi_j).
+$$
+Here, $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
+$k_j^* \times 1$ vectors of outcomes for participant $h$ in study $j$ in
+treatment and control group and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with the diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.
+We assumed a compound symmetry structure for the true effect sizes and a sampling variance of 1 for the raw outcomes. These assumptions represent a plausible data structure for meta-analyses with dependent effects, while also simplifying the data-generating process for our simulation. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$, as it does not affect the final effect size estimates.
 From the raw outcome data, we calculated standardized mean
 differences using Hedges's $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
 We calculated the sampling variances using conventional formulas [@borenstein2019effect] and computed one-sided $p$-values based on two-sample $t$-tests for the null of $H_0: \delta_{ij} \leq 0$.
@@ -59,9 +67,31 @@ We compared the performance of the step-function CML and ARGL estimators to that
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) [@chen2024adapting].
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by Stanley and Doucouliagos[@stanley2014meta], adapted to accommodate dependent effect sizes using RVE.
-Following convention, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.[@stanley2014meta]
-For the PET/PEESE and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
+This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
+Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
+Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
+For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
+
+[^ISCW]: CHE-ISCW is based on the working model 
+  \begin{equation}
+  \label{eq:che}
+  y_{ij} = \mu + u_j + v_{ij} + e_{ij},
+  \end{equation}
+  where $u_j \sim N(0, \tau^2)$, $v_{ij} \sim N(0, \omega^2)$, $e_{ij} \sim N(0, \sigma_{ij}^2)$, and $\cor(e_{hj},e_{ij}) = \rho$, with the sampling variances treated as known and assuming a common correlation between sampling errors within the same study. 
+  Rather than estimating $\mu$ using weights based on the full working model, CHE-ISCW instead uses generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors $e_{1j},...,e_{k_j j}$ only. 
+  This has the effect of allocating more weight to studies with smaller sampling variances, providing some robustness to selective reporting of study results.
+
+[^PET-PEESE]: The PET estimator is based on the working model \begin{equation}
+  \label{eq:pet}
+  T_{ij} = \mu + \beta \times \frac{2}{\sqrt{N_j}} + e_{ij}
+  \end{equation} 
+  The PEESE estimator is similar, but uses the sampling variance instead of the sampling standard error: \begin{equation}
+  \label{eq:peese}
+  T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
+  \end{equation} 
+  For both estimating equations, sampling errors are assumed to have fixed variances 
+  $\Var(e_{ij}) = \sigma_{ij}^2$ and constant sampling correlation within studies, $\cor(e_{hj},e_{ij} )=\rho$.
+
 
 ## Experimental design
 

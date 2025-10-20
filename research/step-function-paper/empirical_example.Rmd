@@ -19,15 +19,19 @@ min_est <- min(step_mod_res$Est)
 max_est <- max(step_mod_res$Est)
 ```
 
-To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed a subset of data from a meta-analysis on the ego depletion effect originally conducted by Carter and colleagues[@carter2015series]. 
-Ego depletion refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
-Carter and colleagues [@carter2015series] argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting. 
-Their review included a variety of self-control manipulation tasks as well as a range of outcomes.
-Some primary studies reported effects for multiple outcome tasks, leading to dependent effects. 
-Effect sizes were measured as standardized mean differences, defined so that positive effects correspond to depletion of self-control, consistent with the theory of ego depletion.
+To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed the data from a meta-analysis reported by @carter2015series. 
+The original meta-analysis examined a large corpus of primary studies on the ego depletion effect, which refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
+@carter2015series argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting. 
+Their review included a variety of self-control manipulation tasks as well as a range of outcomes. 
+<!-- Dropped "Some primary studies reported effects for multiple outcome tasks, leading to dependent effects." since it's now noted below. -->
+Effect sizes were measured as standardized mean differences, defined so that positive effects correspond to depletion of self-control (i.e., consistent with the theory of ego depletion).
 
-To mitigate possible effects of selective reporting, the original review included many unpublished studies [@carter2015series]. 
+Based on a sample of 66 studies, @carter2015series estimated an overall average effect of 0.43, with a 95% CI of [0.34, 0.52]. However, more recent, preregistered multilab replication studies present a stark contrast. @Hagger2016ego estimated a much smaller, non-significant average effect of 0.04, 95% CI [-0.07, 0.15], from 23 laboratory studies. Similarly, @Vohs2021ego found a non-significant effect of 0.06, 95% CI [-0.02, 0.14], using 36 laboratory studies. This discrepancy highlights the importance of using modeling strategies that account for selective reporting. Unlike the earlier studies, the replication studies were preregistered and are thus not susceptible to the same selective reporting issues.
+
+To mitigate possible effects of selective reporting, @carter2015series included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
+
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 66 effect size estimates from 45 distinct studies.
+About 40% of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes.
 We conducted the analyses using R Version 4.4.3 [@rcoreteam]. 
 
 If selective reporting were not a concern, a correlated-and-hierarchical effects (CHE) model, a flexible model that accounts for both correlated and hierarchical dependent data structures, would be one way to summarize the distribution of ego depletion effects.[@pustejovsky2022preventionscience]

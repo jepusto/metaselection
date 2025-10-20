@@ -18,12 +18,8 @@ sci <- sci |>
   rename(esid = es_id, studyid = study_id) |>
   mutate(
     d = yi,
-<<<<<<< HEAD
-    Var_d = vi,
-=======
     Va = vi,
     Var_d = Va,
->>>>>>> step-function-paper
     sd_d = sqrt(Var_d),
     var_d = Var_d,
     p_onesided = 1 - pnorm(d / sd_d)
@@ -33,9 +29,9 @@ num_studies <- length(unique(sci$studyid))
 num_effects <- length(unique(sci$esid))
 ```
 
-<<<<<<< HEAD
 To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. 
 <!-- JEP: Add a contour-enhanced funnel plot of the effect sizes, perhaps colored by assessment type? -->
+<!-- MC: I think we're OK without it. -->
 
 ```{r science-learning-models}
 #| echo: false
@@ -43,26 +39,14 @@ To demonstrate the interpretation of the beta-function selection model in practi
 #| message: false
 #| cache: true
 
-=======
-To illustrate the new beta-function selection model in an empirical application, we reanalyzed the data from a meta-analysis conducted by BSCS Science Learning. BSCS Science Learning conducted a meta-analysis of science interventions effects on K–12 student science achievement [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes. We conducted the analyses using R Version 4.4.3 [@rcoreteam].
-
-```{r, echo = F, warning = F, message = F}
->>>>>>> step-function-paper
 # Unadjusted model
 sci_unadj_mean <- rma.uni(
   data = sci,
   yi = d,
   sei = sd_d,
   method = "ML"
-<<<<<<< HEAD
 ) |> 
   robust(cluster = studyid, clubSandwich = TRUE)
-=======
-)
-
-sci_unadj_mean_cil <- sci_unadj_mean$tau2 - 1.96*sci_unadj_mean$se.tau2
-sci_unadj_mean_ciu <- sci_unadj_mean$tau2 + 1.96*sci_unadj_mean$se.tau2
->>>>>>> step-function-paper
 
 # Beta model
 sci_adj_beta_mean <- selection_model(
@@ -76,10 +60,7 @@ sci_adj_beta_mean <- selection_model(
   make_sandwich = TRUE
 )
 
-<<<<<<< HEAD
 
-=======
->>>>>>> step-function-paper
 # Single-step model
 sci_adj_step3_mean <- selection_model(
   dat = sci, 
@@ -99,36 +80,18 @@ sci_adj_step4_mean <- selection_model(
   selection_type = "step",
   steps = c(0.025, .5)
 )
-<<<<<<< HEAD
 
 
 # Unadjusted model - moderator
 
-=======
-```
-
-We used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each study [@Viechtbauer2010conducting]. To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the new beta-function selection model along with our recently developed step-function selection model [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using RVE. For the step-function model, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = 0.025$ and $\alpha_2 = 0.5$.
-
-The overall estimate of the average effect using the unadjusted model is `r round(as.numeric(sci_unadj_mean$beta), 3)`, 95% CI [`r round(as.numeric(sci_unadj_mean$ci.lb), 3)`, `r round(as.numeric(sci_unadj_mean$ci.ub), 3)`], which is significantly different from zero ($p$ = `r round(sci_unadj_mean$pval, 3)`). The estimates from the selection models are also all positive and significant, but they vary in magnitude and thus their adjustment for selective reporting. Compared to the unadjusted model, the average adjusted effect is 25% small when using the beta-function selection model ($ES$ = `r round(sci_adj_beta_mean$est$Est[sci_adj_beta_mean$est$param=="beta"], 3)`), 32% larger when using the single-step model ($ES$ = `r round(sci_adj_step3_mean$est$Est[sci_adj_step3_mean$est$param=="beta"], 3)`), and 12% larger when using the two-step selection model ($ES$ = `r round(sci_adj_step4_mean$est$Est[sci_adj_step4_mean$est$param=="beta"], 3)`).
-
-```{r, echo = F, warning = F, message = F}
-# Unadjusted model - moderator
->>>>>>> step-function-paper
 sci_unadj_mod <- rma.uni(
   data = sci,
   yi = d,
   sei = sd_d,
   method = "ML",
   mods = ~ outcome_type_author
-<<<<<<< HEAD
 ) |>
   robust(cluster = studyid, clubSandwich = TRUE)
-=======
-)
-
-sci_unadj_mod_cil <- sci_unadj_mod$tau2 - 1.96*sci_unadj_mod$se.tau2
-sci_unadj_mod_ciu <- sci_unadj_mod$tau2 + 1.96*sci_unadj_mod$se.tau2
->>>>>>> step-function-paper
 
 # Beta model - moderator
 sci_adj_beta_mod <- selection_model(
@@ -164,7 +127,6 @@ sci_adj_step4_mod <- selection_model(
   steps = c(0.025, .5),
   mean_mods = ~ outcome_type_author
 )
-<<<<<<< HEAD
 
 ```
 
@@ -173,7 +135,7 @@ We first used the `rma.uni()` function from the `metafor` package to fit a stand
 The overall estimate of the average effect using the unadjusted model is `r formatC(sci_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean$ci.ub, format = "f", digits = 2)`], which is significantly different from zero $(p `r format.pval(sci_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
 The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mean$tau2), format = "f", digits = 2)`$.
 
-To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the beta-function selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) along with two step-function selection models [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using robust variance estimation, clustering by study. For the step-function models, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = .025$ and $\alpha_2 = .5$.
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) along with two step-function selection models [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using robust variance estimation, clustering by study. For the step-function models, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = .025$ and $\alpha_2 = .5$.
 
 ```{r science-learning-res, tab.pos = "tb", tab.cap="science learning meta-analysis"}
 
@@ -307,19 +269,8 @@ The estimate from the beta-density model is not statistically distinct from zero
 In contrast, the estimated average effects from the step-function selection models are both statistically significant and larger than the estimate from the unadjusted model.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.
 
-The model estimates reveal some key differences between the selection models. In this dataset, the beta-function selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. 
-These differences suggest that the models may behave differently in different conditions. 
+The model estimates reveal some key differences between the selection models. In this dataset, the beta-density selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. 
+These differences suggest that the models' distinct assumptions about the shape of the selection function may lead to varying results. Specifically, the beta-density selection model, which allows for a smooth, continuous function, appears to be capturing a pattern of selection that differs from the discrete thresholds assumed by the step-function selection model.
 <!-- JEP: This is pretty vague. -->
+<!-- MC: Clarified. -->
 To investigate this, we conducted simulations across a wide range of conditions. The simulations will allow us to draw firmer conclusions about the comparative performance of these methods, including their robustness to misspecification of the selection function.
-=======
-```
-
-A key advantage of selection models over other methods for diagnosing and adjusting for selective reporting bias is their ability to include both discrete and continuous moderators. This allows meta-analysts to distinguish selective reporting bias from systematic variation in effect sizes that can be explained by primary study characteristics. The BSCS Science Learning meta-analytic data includes a number of potential moderators of effect size. Among these is an indicator for assessment author type, defined as 1 for assessment developer is the author or researcher and 0 otherwise. We reran all four models using assessment author type as a moderator [@taylor2018science].
-
-When the assessment developer is the author or researcher, the unadjusted estimate is `r round(as.numeric(sci_unadj_mod$beta[2]), 3)`, 95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[2]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[2]), 3)`], which is not significantly different from zero ($p$ = `r round(sci_unadj_mod$pval[2], 3)`). The estimates from the selection models are also all nonsignificant and ranged from 
-`r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_outcome_type_author"], 3)` to `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_outcome_type_author"], 3)`. However, when the assessment developer is not the author or researcher, the models lead to different conclusions. The estimate from the unadjusted model is `r round(as.numeric(sci_unadj_mod$beta[1]), 3)` and significant (95% CI [`r round(as.numeric(sci_unadj_mod$ci.lb[1]), 3)`, `r round(as.numeric(sci_unadj_mod$ci.ub[1]), 3)`], $p$ = `r round(sci_unadj_mod$pval[1], 3)`). The estimate from the beta-function selection model is `r round(sci_adj_beta_mod$est$Est[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)` and nonsignificant ($p$ = `r round(sci_adj_beta_mod$est$p_value[sci_adj_beta_mod$est$param=="beta_(Intercept)"], 3)`).
-The estimates from the step-function selection models are both significant, with estimates of `r round(sci_adj_step3_mod$est$Est[sci_adj_step3_mod$est$param=="beta_(Intercept)"], 3)` for the single-step selection model and `r round(sci_adj_step4_mod$est$Est[sci_adj_step4_mod$est$param=="beta_(Intercept)"], 3)` for the two-step selection model.
-
-<!-- I'd love to put the estimates in a table, I just don't know how. -->
-The model estimates reveal some key differences between estimation methods. In this dataset, the beta-function selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. These differences suggest that the models may behave differently in different conditions. To investigate this, we conducted simulations across a wide range of conditions. The simulations will allow us to draw firmer conclusions about the comparative performance of these methods, including their robustness to misspecification of the selection function.
->>>>>>> step-function-paper

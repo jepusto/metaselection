@@ -6,7 +6,7 @@ author:
   - name          : "Martyna Citkowicz"
     corresponding : yes    # Define only one corresponding author
     affiliation   : "1"
-    address       : "Address"
+    address       : "1400 Crystal Drive, 10th floor Arlington, VA 22202-3289"
     email         : "mcitkowicz@air.org"
   - name          : "James E. Pustejovsky"
     affiliation   : "2"
