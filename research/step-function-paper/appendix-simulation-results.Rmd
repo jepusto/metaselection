@@ -70,7 +70,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for ARGL estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "CML","ARGL")
 ```
@@ -81,7 +81,7 @@ RMSE_comparison_plot(mu_wide_res, "CML","ARGL")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "CML","CHE-ISCW")
 ```
@@ -92,7 +92,7 @@ RMSE_comparison_plot(mu_wide_res, "CML","CHE-ISCW")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 ```
@@ -103,11 +103,10 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "CML","PET/PEESE")
 ```
-
 
 ```{r rmse-PET-ARGL}
 #| cache: true
@@ -115,9 +114,40 @@ RMSE_comparison_plot(mu_wide_res, "CML","PET/PEESE")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
+```
+
+```{r mu-rmse-nonscaled}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Non-scaled root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
+
+ggplot(mu_graph_res) + 
+  aes(x = weights, y = rmse, color = estimator, fill = estimator) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Root Mean-Squared Error", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
 ```
 
 ```{r comparison-coverage-full}
@@ -142,6 +172,44 @@ mu_graph_res_ci %>%
     tau ~ mean_smd, 
     labeller = label_bquote(
       rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Estimator",
+    fill = "Estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r comparison-coverage-rho}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and average correlation between outcomes. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    CI_type %in% c("large-sample")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  coord_cartesian(ylim = c(0.5, 1.0)) + 
+  scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -332,7 +400,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
 
 tau2_graph_res %>%
   filter(estimator %in% c("CHE","CML","ARGL")) %>%
@@ -368,7 +436,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for CML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, "CHE","CML")
 ```
@@ -379,7 +447,7 @@ RMSE_comparison_plot(tau2_wide_res, "CHE","CML")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, "CHE","ARGL")
 ```
@@ -390,7 +458,7 @@ RMSE_comparison_plot(tau2_wide_res, "CHE","ARGL")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Scaled root of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, "CML","ARGL")
 ```

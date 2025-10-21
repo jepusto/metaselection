@@ -14,6 +14,13 @@ CML_bias <-
     max_abs_bias = max(abs(bias))
   )
 
+ARGL_bias <- 
+  mu_graph_res %>%
+  filter(estimator == "ARGL") %>%
+  summarize(
+    max_abs_bias = max(abs(bias))
+  )
+
 convergence_min <- 
   convergence_results %>%
   filter(model == "3PSM") %>%
@@ -76,12 +83,9 @@ Figure \@ref(fig:mu-bias) depicts the bias (represented on the vertical axis of 
 The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
-The CML estimator has negligible or small bias across all conditions. 
-Its largest bias is `r round(CML_bias$max_abs_bias,2)`, occurring when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
-The small bias of the CML estimator is stable across varying degrees of outcome correlation, within-study heterogeneity, number of observed studies, and primary study sample size.
-Similar to the CML estimator, the ARGL estimator also has negligible or small bias across most conditions, although its bias increases when average effect is zero and selection is very strong.
+Bias is generally lower for the CML and ARGL estimators than the comparison methods across all conditions, particularly when the average effect size is small to moderate $(\mu \leq 0.4)$. While still substantially lower than the comparison methods, the maximum absolute bias reaches `r round(CML_bias$max_abs_bias,2)` for CML and `r round(ARGL_bias$max_abs_bias,2)` for ARGL. This maximum bias occurs for both estimators when selective reporting is very strong, average effect size is zero, and heterogeneity is large. We observe a performance trade-off between the two estimators of the step-function selection model: Bias is lower for the ARGL estimator than the CML estimator when $\mu = 0.0$ but higher when $(\mu \geq 0.2)$. For both estimators, bias  decreases as the average effect increases, as heterogeneity decreases, and as the probability of selection decreases.
 
-In contrast to the estimators based on the marginal selection model, the CHE-iSCW and PET/PEESE estimators are systematically biased under many conditions. 
+In contrast to the estimators based on the marginal selection model, the CHE-ISCW and PET/PEESE estimators are systematically biased under many conditions. 
 The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
 When average effect size is large $(\mu = 0.8)$, its bias remains quite small even when selective reporting is very strong.
 This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for the selection mechanism to operate.
@@ -126,7 +130,7 @@ ggplot(mu_graph_res) +
 
 Scaled RMSE combines both bias and variability into an overall measure of inaccuracy. 
 Figure \@ref(fig:mu-rmse) depicts the scaled RMSE of each estimator of average effect size; it is constructed in the same way as Figure \@ref(fig:mu-bias). 
-Figures \@ref(fig:rmse-ARGL-CML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods. 
+Figures \@ref(fig:rmse-ARGL-CML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of scaled RMSEs for each pair of methods. In addition, Figure \@ref(fig:mu-rmse-nonscaled) depicts the non-scaled version of the RMSE of each estimator of average effect size.
 These figures illustrate several findings.
 
 First, across most data-generating conditions, the ARGL estimator has higher RMSE than the CML estimator. As evident in Figure \@ref(fig:rmse-ARGL-CML), the RMSE ratio comparing ARGL to CML is greater than one across most conditions examined.
@@ -148,8 +152,10 @@ The pattern of relative accuracy is very similar for the ARGL estimator (Figure 
 ## Confidence Interval Coverage
 
 Figure \@ref(fig:comparison-coverage) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, CML, and ARGL estimators.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full) depicts the full range of coverage rates.]
-Coverage rates are below the nominal rate of 0.95 for all methods across most conditions. 
+Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
+The value of the average correlation between outcomes ($\rho$) has virtually no effect on the coverage results across all methods (Supplementary Figure @ref(fig:comparison-coverage-rho)).
 The CML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity.
+Between the two selection model estimators, coverage rates are generally higher for the CML estimator than the ARGL estimator, though neither consistently achieves the nominal rate.
 Intervals based on the CML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J$ is 90 or greater.
 In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
@@ -192,10 +198,10 @@ mu_graph_res_ci %>%
 
 Bootstrap intervals for the step-function model provide more accurate coverage levels.
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of $J = 60$. 
-Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCa intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:CML-coverage-two-stage)-\@ref(fig:CML-coverage-exponential) for detailed results.]
-Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation. 
-The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, exceeding 90% coverage across nearly all data-generating conditions, even with only $J = 15$ primary studies per meta-analysis. 
-Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-two-stage)-\@ref(fig:ARGL-coverage-exponential)).
+Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:CML-coverage-two-stage)-\@ref(fig:CML-coverage-exponential) for detailed results.]
+Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
+The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, achieving or exceeding 90% coverage primarily when between-study heterogeneity is low ($\tau = 0.05$) or when the average effect size is large ($\mu = 0.8$). However, coverage variability increases substantially when heterogeneity is moderate to high ($\tau \geq 0.3$) and the average effect size is small to moderate ($\mu \leq 0.04$). In these conditions, coverage for two-stage clustered bootstrapping generally remained above 80% when $\mu = 0.4$ and stayed above 70% when $\mu \leq 0.02$; coverage for the other methods trailed behind.
+Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures @ref(fig:ARGL-coverage-two-stage)-@ref(fig:ARGL-coverage-exponential)).
 
 ```{r CML-coverage}
 #| fig.width: 9
