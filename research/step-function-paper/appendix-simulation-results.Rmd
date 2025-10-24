@@ -225,6 +225,50 @@ mu_graph_res_ci %>%
 
 ```
 
+```{r CML-coverage-selection}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based on the CML estimator of average effect size by selection probability, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("CML"),
+    CI_type %in% c("large-sample","percentile")
+  ) %>%
+  ggplot(aes(x = weights, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0.6, 1.0), breaks = seq(0.6,0.95,0.05), expand = expansion(0,0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(
+    labels = c(
+      "0.05" = "0.05 (Strong)",
+      "0.2" = "0.2",
+      "1.00" = "1.00 (None)"
+    )
+  ) +
+  facet_grid(
+    tau ~ mean_smd,
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability",
+    y = "Coverage rate",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
 ```{r CML-coverage-two-stage}
 #| cache: true
 #| fig.width: 9
