@@ -200,19 +200,26 @@ Bootstrap intervals for the step-function model provide more accurate coverage l
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of $J = 60$. 
 Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence intervals based on the CML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:CML-coverage-two-stage)-\@ref(fig:CML-coverage-exponential) for detailed results.]
 Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
-The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, achieving or exceeding 90% coverage primarily when between-study heterogeneity is low ($\tau = 0.05$) or when the average effect size is large ($\mu = 0.8$).
-However, coverage variability increases substantially when heterogeneity is moderate to high ($\tau \geq 0.3$) and the average effect size is small to moderate ($\mu \leq 0.04$).
-This large variation in coverage levels is due to selection probability, with the largest variation observed when selection is strong (Supplementary Figure @ref(fig:CML-coverage-selection)).
-In these conditions, coverage for two-stage clustered bootstrapping generally remained above 80% when $\mu = 0.4$ and stayed above 70% when $\mu \leq 0.02$; coverage for the other methods trailed behind.
+The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, achieving or exceeding 90% coverage when selection is weak or non-existent or when the average effect size is large ($\mu = 0.8$), even with only $J = 15$ primary studies per meta-analysis.
+However, coverage variability increases substantially when selection is strong and the average effect size is small to moderate ($\mu \leq 0.04$).
+Coverage variability also increases as between-study heterogeneity increases, particularly when $\tau \geq 0.30$ and $\mu \leq 0.04$ (Supplementary Figure @ref(fig:CML-coverage-tau)).
 Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures @ref(fig:ARGL-coverage-two-stage)-@ref(fig:ARGL-coverage-exponential)).
 
 ```{r CML-coverage}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based on the CML estimator of average effect size by number of studies, average SMD, and selection probability. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
+  mutate(
+    weights_label = case_when(
+      weights == "0.05" ~ "Selection = 0.05 (Strong)",
+      weights == "0.20" ~ "Selection = 0.20",
+      weights == "1.00 (None)" ~ "Selection = 1.00 (None)",
+      TRUE ~ as.character(weights)
+    )
+  ) %>%
   filter(
     bootstrap_condition,
     estimator %in% c("CML"),
@@ -225,11 +232,8 @@ mu_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    tau ~ mean_smd,
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
+    weights_label ~ mean_smd,
+    labeller = label_bquote(cols = mu == .(mean_smd)),
     scales = "free_y"
   ) +
   labs(
