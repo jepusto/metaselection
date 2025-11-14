@@ -6,10 +6,10 @@ n_ES_sim <- n_ES_empirical(wwc_es)
 
 test_that("retry_bootstrap argument works correctly.",{
   
-  set.seed(2L)
+  set.seed(20251115L)
   
   dat <- r_meta(mean_smd = 0.8,
-                tau = 0.05,
+                tau = 0.15,
                 omega = 0,
                 m = 60,
                 cor_mu = 0.8,
@@ -34,10 +34,10 @@ test_that("retry_bootstrap argument works correctly.",{
   
   expect_lt(unique(selmod0$est$bootstraps), 199L)
   
-  set.seed(2L)
+  set.seed(20251115L)
   
   dat <- r_meta(mean_smd = 0.8,
-                tau = 0.05,
+                tau = 0.15,
                 omega = 0,
                 m = 60,
                 cor_mu = 0.8,

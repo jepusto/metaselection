@@ -34,7 +34,7 @@ test_that("step_loglik() divides up the parameter vector appropriately.", {
   
   # intercept-only, 4PSM, priors
   theta_E <- c(0.2, log(0.05), log(0.36), log(0.54))
-  prior_set <- default_priors()
+  prior_set <- define_priors()
   expect_equal(
     step_loglik(theta = theta_E, yi = yi, sei = sei, steps = c(.07,.50), priors = prior_set),
     step_loglik(yi = yi, sei = sei, steps = c(.07,.50),
@@ -110,7 +110,7 @@ test_that("step_score() divides up the parameter vector appropriately.", {
   expect_equal(length(theta_E), length(E2))
   
   # intercept-only, 4PSM, priors
-  prior_set <- default_priors(lambda_mode = 2)
+  prior_set <- define_priors(lambda_mode = 2)
   F1 <- step_score(theta = theta_E, yi = yi, sei = sei, steps = c(.07,.50), priors = prior_set)
   F2 <- step_score(yi = yi, sei = sei, steps = c(.07,.50), 
                    beta = theta_E[1], gamma = theta_E[2], zeta = theta_E[3:4], priors = prior_set)

@@ -36,7 +36,7 @@
 #'   estimator = "ARGL",
 #'   bootstrap = "multinomial",
 #'   CI_type = "percentile",
-#'   R = 8
+#'   R = 6
 #' )
 #' 
 #' p_area(step_boot)

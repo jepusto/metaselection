@@ -13,7 +13,8 @@ beta_loglik <- function(
     zeta = NULL,
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
-    U = NULL                                   # variance component design matrix
+    U = NULL,                                  # variance component design matrix
+    priors = NULL                             # selmodel_prior object to specify priors
 ) {
   
   params <- parse_beta_params(
@@ -37,8 +38,17 @@ beta_loglik <- function(
   # weighted log likelihood (Eq. 51)
   log_lik <- if (is.null(ai)) sum(log_lik_i) else sum(ai * log_lik_i)
     
+  # priors
+  if (is.null(priors)) {
     
-  return(log_lik)
+    return(log_lik) 
+    
+  } else {
+    
+    log_prior <- priors$log_prior(beta = params$beta, gamma = params$gamma, zeta = params$zeta)
+    return(log_lik + log_prior)
+    
+  }
 
 }
 
@@ -53,10 +63,11 @@ beta_score <- function(
     ai = NULL,                                 # analytic weight
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
-    zeta = NULL,                              # selection model coefficients
+    zeta = NULL,                               # selection model coefficients
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
+    priors = NULL,                             # selmodel_prior object to specify priors
     contributions = FALSE                      # whether to return matrix of score contributions
 ) {
 
@@ -88,7 +99,6 @@ beta_score <- function(
   if (!is.null(U)) S_gamma_ij <- U * S_gamma_ij
   
   # score contribution for lambda_1
-  # is this correct ?? 
   S_lambda_ij_1 <- params$g_dot[1] * (params$dw_dlambda1  / params$weight_vec - params$dA_dlambda1 / params$Ai)
   S_lambda_ij_2 <- params$g_dot[2] * (params$dw_dlambda2  / params$weight_vec - params$dA_dlambda2 / params$Ai)
   
@@ -100,7 +110,36 @@ beta_score <- function(
     contributions = contributions
   )
 
-  return(score_contributions)
+  # handle prior contributions
+  if (is.null(priors)) {
+    
+    return(score_contributions)
+    
+  } else {
+    
+    prior_score <- priors$score_prior(beta = params$beta, gamma = params$gamma, zeta = params$zeta)
+    
+    if (contributions) {
+      
+      # prior_wt to allocate total prior score across observations
+      
+      if (is.null(ai)) {
+        prior_wt <- rep(1 / params$k, times = params$k)
+      } else {
+        prior_wt <- ai / sum(ai)
+      }
+      
+      score_contributions <- score_contributions + outer(prior_wt, prior_score)
+      
+      return(score_contributions)
+      
+    } else {
+      
+      return(score_contributions + prior_score)
+      
+    }
+    
+  }
 
 }
 
@@ -115,10 +154,11 @@ beta_hessian <- function(
     ai = NULL,                                 # analytic weight
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
-    zeta = NULL,                              # selection model coefficients
+    zeta = NULL,                               # selection model coefficients
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
-    U = NULL                                   # variance component design matrix
+    U = NULL,                                  # variance component design matrix
+    priors = NULL                              # selmodel_prior object to specify priors
 ) {
   
   params <- parse_beta_params(
@@ -330,7 +370,16 @@ beta_hessian <- function(
   colnames(H_matrix) <- rownames(H_matrix) <- params$H_names
 
   
-  return(H_matrix)
-
+  # Handle priors
+  
+  if (is.null(priors)) {
+    
+    return(H_matrix)
+    
+  } else {
+    hessian_prior <- priors$hessian_prior(beta = params$beta, gamma = params$gamma, zeta = params$zeta)
+    return(H_matrix + hessian_prior)
+  }
+  
 }
 

@@ -18,7 +18,7 @@ selection_model(
   var_mods = NULL,
   sel_mods = NULL,
   sel_zero_mods = NULL,
-  priors = default_priors(),
+  priors = define_priors(),
   subset = NULL,
   estimator = "CML",
   vcov_type = "robust",
@@ -79,7 +79,7 @@ probability of selection for p-values below the lowest threshold value of
 
 \item{priors}{a \code{selmodel_prior} object that defines priors (i.e.,
 penalty terms) for model parameters, with a default of
-\code{default_priors()}. Set to \code{NULL} to obtain unpenalized
+\code{define_priors()}. Set to \code{NULL} to obtain unpenalized
 estimates.}
 
 \item{subset}{optional logical expression indicating a subset of observations
