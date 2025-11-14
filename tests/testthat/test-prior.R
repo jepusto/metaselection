@@ -19,7 +19,7 @@ test_that("default_priors() works for default priors.", {
 })
 
 
-test_that("priors = NULL is equivalent to defining flat priors.", {
+test_that("priors = NULL is equivalent to defining flat priors for step function.", {
   
   dat <- r_meta_categories(
     mean_smd = c(0, 0.1, 0.2),
@@ -103,12 +103,48 @@ test_that("priors = NULL is equivalent to defining flat priors.", {
   
   expect_equal(fargl_flat$est$Est, fargl_prior$est$Est, tolerance = 1e-5)
   expect_equal(fargl_flat$est$SE, fargl_prior$est$SE, tolerance = 1e-5)
-  
-  
+
 
 })
 
-test_that("Score contributions sum to total when accounting for priors.", {
+test_that("priors = NULL is equivalent to defining flat priors for beta function.", {
+  
+  dat <- r_meta(
+    mean_smd = 0.1,
+    tau = 0.3,
+    omega = 0,
+    m = 50,
+    cor_mu = 0.6,
+    cor_sd = 0.01,
+    censor_fun = beta_fun(delta_1 = 0.5, delta_2 = 0.9),
+    n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
+  )
+  
+  prior_spec <- default_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
+  
+  beta_flat <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    selection_type = "beta",
+    steps = c(.025,.975),
+    priors = NULL
+  )
+  
+  beta_prior <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    selection_type = "beta",
+    steps = c(.025,.975),
+    priors = prior_spec
+  )
+  
+  expect_equal(beta_flat$est$Est, beta_prior$est$Est, tolerance = 1e-5)
+  expect_equal(beta_flat$est$SE, beta_prior$est$SE, tolerance = 1e-5)
+})
+
+test_that("Score contributions sum to total when accounting for priors for step function model.", {
   
   dat <- r_meta_categories(
     mean_smd = c(0, 0.1, 0.2),
@@ -251,4 +287,48 @@ test_that("Score contributions sum to total when accounting for priors.", {
   expect_identical(dim(fargl_hyscore_cont), c(nrow(dat), length(fargl_hyscore)))
   expect_lt(max(abs(colSums(fargl_hyscore_cont) - fargl_hyscore)), 1e-14)
   
+  
+})
+
+test_that("Score contributions sum to total when accounting for priors for beta model.", {
+  
+  set.seed(20251114)
+  dat <- r_meta(
+    mean_smd = 0.1,
+    tau = 0.3,
+    omega = 0,
+    m = 50,
+    cor_mu = 0.6,
+    cor_sd = 0.01,
+    censor_fun = beta_fun(delta_1 = 0.5, delta_2 = 0.9),
+    n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
+  )
+  
+  prior_spec <- default_priors(beta_mean = 0.1, beta_precision = 25)
+  
+  beta_prior <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    selection_type = "beta",
+    steps = c(.025,.500),
+    priors = prior_spec
+  )
+  
+  beta_score_total <- beta_score(
+    theta = beta_prior$est$Est, 
+    yi = dat$d, sei = dat$sd_d, steps = c(.025,.500), 
+    priors = prior_spec
+  )
+  
+  beta_score_cont <- beta_score(
+    theta = beta_prior$est$Est, 
+    yi = dat$d, sei = dat$sd_d, steps = c(.025,.500), 
+    priors = prior_spec,
+    contributions = TRUE
+  )
+  
+  expect_identical(dim(beta_score_cont), c(nrow(dat), length(beta_score_total)))
+  expect_lt(max(abs(colSums(beta_score_cont) - beta_score_total)), 1e-14)
+
 })

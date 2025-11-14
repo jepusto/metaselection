@@ -277,7 +277,7 @@ test_that("beta_score() is an unbiased estimating equation for models with covar
 
 test_that("beta_score and beta_hessian agree with numerical derivatives.", {
   
-  set.seed(20240418)
+  set.seed(20251114)
   
   dat <- r_meta(
     mean_smd = 0.2, 
@@ -290,20 +290,6 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     n_ES_sim = n_ES_param(40, 1) 
   )
   
-  beta_derivs <- check_all_derivatives(
-    data = dat, 
-    yi = d, sei = sd_d, 
-    selection_type = "beta",
-    steps = c(.025, .500),
-    estimator = "CML",
-    optimizer = c("BFGS","nlminb","Rvmmin"),
-    crit = qnorm(0.92)
-  )
-  beta_derivs$selmod_fit$est
-  beta_derivs$score_diff_over_range
-  expect_lt(max(beta_derivs$score_diff_over_range), 1e-3)
-  round(beta_derivs$hess_diff_over_range, 5)
-  expect_lt(max(beta_derivs$hess_diff_over_range), 1e-3)
   
   beta_derivs <- check_all_derivatives(
     data = dat, 

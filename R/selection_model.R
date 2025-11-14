@@ -172,6 +172,7 @@ fit_selection_model <- function(
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, 
+          priors = priors,
           method = optimizer,
           control = optimizer_control
         )
@@ -183,7 +184,7 @@ fit_selection_model <- function(
       return(mle_est)
     } 
     
-    mle_est_conv <- subset(mle_est, kkt1 & kkt2)
+    mle_est_conv <- mle_est[(mle_est$kkt1 & mle_est$kkt2),]
     max_method <- row.names(mle_est_conv)[which.max(mle_est_conv$value)]
     theta_names <- 1:length(theta)
     theta <- as.numeric(mle_est_conv[max_method, theta_names])
@@ -370,7 +371,9 @@ fit_selection_model <- function(
       scores <- beta_score(theta = theta, 
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
-                           X = X, U = U, contributions = TRUE)
+                           X = X, U = U, 
+                           priors = priors,
+                           contributions = TRUE)
       
     }
     
@@ -404,7 +407,8 @@ fit_selection_model <- function(
       hess <- beta_hessian(theta = theta, 
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
-                           X = X, U = U)
+                           X = X, U = U,
+                           priors = priors)
       
     }
     
