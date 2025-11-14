@@ -1,7 +1,7 @@
 
-test_that("default_priors() works for default priors.", {
+test_that("define_priors() works for default priors.", {
 
-  res <- default_priors()
+  res <- define_priors()
   expect_s3_class(res, "selmodel_prior")
   expect_identical(names(res), c("log_prior","score_prior","hessian_prior"))
   
@@ -32,7 +32,7 @@ test_that("priors = NULL is equivalent to defining flat priors for step function
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
+  prior_spec <- define_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
   
   cml_flat <- selection_model(
     data = dat,
@@ -120,7 +120,7 @@ test_that("priors = NULL is equivalent to defining flat priors for beta function
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
+  prior_spec <- define_priors(beta_precision = 1e-6, tau_alpha = 1e-6, lambda_precision = 1e-6)
   
   beta_flat <- selection_model(
     data = dat,
@@ -157,7 +157,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_mean = 0.1, beta_precision = 25)
+  prior_spec <- define_priors(beta_mean = 0.1, beta_precision = 25)
   
   cml_prior <- selection_model(
     data = dat,
@@ -304,7 +304,7 @@ test_that("Score contributions sum to total when accounting for priors for beta 
     n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 1)
   )
   
-  prior_spec <- default_priors(beta_mean = 0.1, beta_precision = 25)
+  prior_spec <- define_priors(beta_mean = 0.1, beta_precision = 25)
   
   beta_prior <- selection_model(
     data = dat,

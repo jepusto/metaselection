@@ -491,7 +491,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL,
-    priors = default_priors(),
+    priors = define_priors(),
     vcov_type = "robust",
     selection_type = "step",
     estimator = "CML",
@@ -713,7 +713,7 @@ jackknife_selmodel <- function(
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
 #'   penalty terms) for model parameters, with a default of
-#'   \code{default_priors()}. Set to \code{NULL} to obtain unpenalized
+#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized
 #'   estimates.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
@@ -825,7 +825,7 @@ selection_model <- function(
     var_mods = NULL,
     sel_mods = NULL,
     sel_zero_mods = NULL,
-    priors = default_priors(),
+    priors = define_priors(),
     subset = NULL,
     estimator = "CML",
     vcov_type = "robust",

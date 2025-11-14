@@ -36,7 +36,7 @@ test_that("parse_step_params works when profiling beta.", {
 
 test_that("parse_step_params works when profiling beta with non-flat priors.", {
   
-  prior_spec <- default_priors(beta_mean = 0.3, beta_precision = 0.3^2 / 2)
+  prior_spec <- define_priors(beta_mean = 0.3, beta_precision = 0.3^2 / 2)
   verbose <- FALSE
   
   check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .02, priors = prior_spec, verbose = verbose, score_tol = 1e-7, jac_tol = 5e-3)
