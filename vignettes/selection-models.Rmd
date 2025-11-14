@@ -1,5 +1,5 @@
 ---
-title: "Selection Models for Meta-Analysis with Dependent Effects"
+title: "P-Value Selection Models for Meta-Analysis with Dependent Effects"
 author:
   - James E. Pustejovsky
   - Megha Joshi
@@ -376,7 +376,7 @@ print(mod_4PSM, transf_gamma = TRUE, transf_zeta = TRUE)
 pct_4PSM <- 100 * mod_4PSM$est["beta","Est"] / as.numeric(CHE_mod$beta)
 ```
 
-The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_4PSM$est$CI_lo[mod_4PSM$est$param=="beta"], 3)`, `r round(mod_4PSM$est$CI_hi[mod_4PSM$est$param=="beta"], 3)`], even smaller than the estimated effect from the three-parameter step model (`r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`) and only `r round(pct_reduction_4PSM)`% of the magnitude of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`).
+The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_4PSM$est$CI_lo[mod_4PSM$est$param=="beta"], 3)`, `r round(mod_4PSM$est$CI_hi[mod_4PSM$est$param=="beta"], 3)`], even smaller than the estimated effect from the three-parameter step model (`r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`) and only `r round(pct_4PSM)`% of the magnitude of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`).
 
 We can visualize the estimated selection function with `selection_plot()`:
 ```{r 4PSM-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
