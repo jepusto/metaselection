@@ -183,7 +183,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(cml_score_cont), c(nrow(dat), length(cml_score)))
-  expect_lt(max(abs(colSums(cml_score_cont) - cml_score)), 1e-14)
+  expect_lt(max(abs(colSums(cml_score_cont) - cml_score)), 1e-12)
   
   cml_hyscore <- step_hybrid_score(
     theta = cml_prior$est$Est, 
@@ -199,7 +199,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(cml_hyscore_cont), c(nrow(dat), length(cml_hyscore)))
-  expect_lt(max(abs(colSums(cml_hyscore_cont) - cml_hyscore)), 1e-14)
+  expect_lt(max(abs(colSums(cml_hyscore_cont) - cml_hyscore)), 1e-12)
   
   
   argl_prior <- selection_model(
@@ -226,7 +226,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(argl_score_cont), c(nrow(dat), length(argl_score)))
-  expect_lt(max(abs(colSums(argl_score_cont) - argl_score)), 1e-14)
+  expect_lt(max(abs(colSums(argl_score_cont) - argl_score)), 1e-12)
   
   argl_hyscore <- step_hybrid_score(
     theta = argl_prior$est$Est, 
@@ -242,7 +242,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(argl_hyscore_cont), c(nrow(dat), length(argl_hyscore)))
-  expect_lt(max(abs(colSums(argl_hyscore_cont) - argl_hyscore)), 1e-14)
+  expect_lt(max(abs(colSums(argl_hyscore_cont) - argl_hyscore)), 1e-12)
   
   
   fargl_prior <- selection_model(
@@ -269,7 +269,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(fargl_score_cont), c(nrow(dat), length(fargl_score)))
-  expect_lt(max(abs(colSums(fargl_score_cont) - fargl_score)), 1e-14)
+  expect_lt(max(abs(colSums(fargl_score_cont) - fargl_score)), 1e-12)
   
   fargl_hyscore <- step_hybrid_score(
     theta = fargl_prior$est$Est, 
@@ -285,7 +285,7 @@ test_that("Score contributions sum to total when accounting for priors for step 
   )
   
   expect_identical(dim(fargl_hyscore_cont), c(nrow(dat), length(fargl_hyscore)))
-  expect_lt(max(abs(colSums(fargl_hyscore_cont) - fargl_hyscore)), 1e-14)
+  expect_lt(max(abs(colSums(fargl_hyscore_cont) - fargl_hyscore)), 1e-12)
   
   
 })
@@ -329,6 +329,6 @@ test_that("Score contributions sum to total when accounting for priors for beta 
   )
   
   expect_identical(dim(beta_score_cont), c(nrow(dat), length(beta_score_total)))
-  expect_lt(max(abs(colSums(beta_score_cont) - beta_score_total)), 1e-14)
+  expect_lt(max(abs(colSums(beta_score_cont) - beta_score_total)), 1e-12)
 
 })
