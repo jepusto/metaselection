@@ -57,9 +57,14 @@ assigned independent log-gamma priors.
 }
 \examples{
 # set very informative priors on beta and lambda
-strong_priors <- default_priors(beta_mean = 0.4, beta_precision = 40, lambda_mode = 0.2, lambda_precision = 40)
+strong_priors <- default_priors(
+  beta_mean = 0.4, beta_precision = 40, 
+  lambda_mode = 0.2, lambda_precision = 40
+)
 
 # set very weak priors
-weak_priors <- default_priors(beta_precision = 1/10, tau_alpha = 1/10, lambda_precision = 1/10)
+weak_priors <- default_priors(
+  beta_precision = 1/10, tau_alpha = 1/10, lambda_precision = 1/10
+)
 
 }
