@@ -1,14 +1,16 @@
-#' @title Define default prior functions for selection model parameters
+#' @title Define prior penalty functions for selection model parameters
 #'
 #' @description Creates a set of priors for use in estimating selection models.
-#'   beta parameters are assigned independent normal priors. log(tau) parameters
+#'   beta parameters are assigned L-norm priors. log(tau) parameters
 #'   are assigned independent log-gamma priors. log(lambda) parameters are
-#'   assigned independent log-gamma priors.
+#'   assigned independent L-norm priors.
 #'
 #'
 #' @param beta_mean numeric vector of prior means for beta (mean regression)
 #'   parameters.
-#' @param beta_sd numeric vector of prior standard deviations for beta (mean
+#' @param beta_precision numeric vector of prior precisions for beta (mean
+#'   regression) parameters.
+#' @param beta_L numeric vector of prior norms for beta (mean
 #'   regression) parameters.
 #' @param tau_mode numeric vector of prior modes for tau (heterogeneity SD)
 #'   regression parameters.
@@ -18,6 +20,8 @@
 #'   parameters.
 #' @param lambda_precision numeric vector of prior precisions for lambda
 #'   (selection) parameters.
+#' @param lambda_L numeric vector of prior norms for lambda (mean
+#'   regression) parameters.
 #'
 #' @returns An object of class \code{"selmodel_prior"} containing the following
 #'   components:
@@ -31,13 +35,18 @@
 #'
 #' @examples
 #' # set very informative priors on beta and lambda
-#' strong_priors <- default_priors(beta_mean = 0.4, beta_sd = 0.1, lambda_mode = 0.2, lambda_sd = 0.1)
+#' strong_priors <- define_priors(
+#'   beta_mean = 0.4, beta_precision = 40, 
+#'   lambda_mode = 0.2, lambda_precision = 40
+#' )
 #'
 #' # set very weak priors
-#' weak_priors <- default_priors(beta_sd = 10, tau_sd = 1, lambda_sd = 4)
+#' weak_priors <- define_priors(
+#'   beta_precision = 1/10, tau_alpha = 1/10, lambda_precision = 1/10
+#' )
 #' 
 
-default_priors <- function(
+define_priors <- function(
     beta_mean = 0,
     beta_precision = 1 / 2,
     beta_L = 2,
