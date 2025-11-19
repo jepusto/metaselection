@@ -170,7 +170,7 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
 }
 
 
-#' @title Censor meta-analytic dataset based on the beta-density model model
+#' @title Censor meta-analytic dataset based on the beta-density model
 #'
 #' @description A functional that takes model parameters and returns a function
 #'   that can be used to censor meta-analytic datasets according to the
