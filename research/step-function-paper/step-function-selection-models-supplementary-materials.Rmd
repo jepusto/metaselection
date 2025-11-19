@@ -123,5 +123,5 @@ options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
 \begingroup
 \setlength{\parindent}{-0.5in}
-<div id="refs" custom-style="Bibliography"></div>
+<div id="supprefs" custom-style="Bibliography"></div>
 \endgroup
