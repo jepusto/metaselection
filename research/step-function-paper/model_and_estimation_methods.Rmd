@@ -26,7 +26,7 @@ The evidence-generating process can then be expressed as
 \end{equation}
 where $\bs\beta$ is an $x \times 1$ vector of regression coefficients that relate the predictors to average effect size and $\tau^2$ is the variance of the distribution of effect size parameters. 
 This random-effects meta-regression treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. 
-As a result, the regression coefficients $\boldsymbol\beta$ describe the overall expected effect size (given the predictors) and the variance parameter $\tau^2$ describes the marginal or _total_ heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-study and between-study components. 
+As a result, the regression coefficients $\boldsymbol\beta$ describe the overall expected effect size (given the predictors) and the variance parameter $\tau^2$ describes the heterogeneity of the _marginal_ effect size distribution, rather than decomposing the heterogeneity into within-study and between-study components. 
 
 ## Selection process
 
@@ -42,13 +42,13 @@ Let $\alpha_1,...,\alpha_H$ be a set of thresholds for the one-sided p-values, a
 A step function selection model is then given by 
 \begin{equation}
 \label{eq:step-function-p}
-w(p^*; \bs\lambda) =  \lambda_h \quad \text{if} \quad \alpha_{h} < p^* \leq \alpha_{h+1}, 
+w(p^*; \bs\lambda) =  \sum_{h=0}^H \lambda_h \times I\left(\alpha_{h} < p^* \leq \alpha_{h+1}\right), 
 \end{equation}
-for $h = 0,...,H$ and $\bs\lambda = \left(\lambda_1,...,\lambda_H\right)$. 
+for $\bs\lambda = \left(\lambda_1,...,\lambda_H\right)$. 
 Equation (\ref{eq:step-function-p}) can be written equivalently as 
 \begin{equation}
 \label{eq:step-function-y}
-w(Y^*, \sigma^*; \bs\lambda) =  \lambda_h \quad \text{if} \quad \sigma^* \Phi^{-1}\left(1 - \alpha_{h+1}\right) \leq Y^*  < \sigma^* \Phi^{-1}\left(1 - \alpha_h\right). 
+w(Y^*, \sigma^*; \bs\lambda) =  \sum_{h=0}^H \lambda_h \times \left(\sigma^* \Phi^{-1}\left(1 - \alpha_{h+1}\right) \leq Y^*  < \sigma^* \Phi^{-1}\left(1 - \alpha_h\right)\right). 
 \end{equation}
 Setting $\lambda_0 = 1$ is necessary for identification because the absolute probabilities of selection cannot be estimated. 
 The remaining parameters are therefore interpreted as _relative_ probabilities of selection, compared to the probability of selection for an effect size with $p^* \leq \alpha_1$. 
@@ -109,18 +109,18 @@ PSM4
 
 ## Distribution of observed effect size estimates
 
-Combining the assumptions of the evidence-generating process and the selection process leads to a model for an observed effect size estimate. The distribution of an observed effect size estimate is equivalent to the distribution of $Y^*$ given that $O = 1$. 
-The marginal density of an observed effect size estimate $Y$ with standard error $\sigma$ has the form
+Combining the assumptions of the evidence-generating process and the selection process leads to a model for an observed effect size estimate. 
+The marginal distribution of an observed effect size estimate $Y$ with standard error $\sigma$ is equivalent to the distribution of $Y^*$ given that $O = 1$, with density function
 \begin{equation}
 \label{eq:generic-selection}
-f(Y = y | \sigma, \mat{x}) = \frac{1}{A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)} \times w\left(y, \sigma; \bs\lambda \right) \times \frac{1}{\sqrt{\tau^2 + \sigma^2}} \phi\left(\frac{y - \mat{x} \bs\beta}{\sqrt{\tau^2 + \sigma^2}}\right),
+f(Y = y | \sigma, \mat{x}) = \frac{w\left(y, \sigma; \bs\lambda \right)}{A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)} \times \frac{1}{\sqrt{\tau^2 + \sigma^2}} \phi\left(\frac{y - \mat{x} \bs\beta}{\sqrt{\tau^2 + \sigma^2}}\right),
 \end{equation}
 where 
 \begin{equation}
 \label{eq:generic-selection-A}
 A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda) =  \int_\mathbb{R} w\left(y, \sigma; \bs\lambda \right) \times  \frac{1}{\sqrt{\tau^2 + \sigma^2}}\phi\left(\frac{y - \mat{x}\bs\beta}{\sqrt{\tau^2 + \sigma^2}}\right) dy.
 \end{equation}
-If $w(y, \sigma; \bs\lambda) = 1$, then there is no selective reporting, $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda) = 1$, and the density reduces to the unweighted density of the evidence-generating process (i.e., the density of a random-effects meta-regression).
+If $w(y, \sigma; \bs\lambda) = 1$ for all possible $y$, then there is no selective reporting, $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda) = 1$, and the density reduces to the unweighted density of the evidence-generating process (i.e., the density of a random-effects meta-regression).
 The $A(\mat{x}, \sigma; \bs\beta, \tau^2, \bs\lambda)$ term can be computed using the closed-form expression
 \begin{equation}
 \label{eq:step-function-A}
@@ -136,13 +136,19 @@ and $c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mat{x}_{i
 
 ## Estimation Methods {#estimation-methods}
 
-Past developments of selection models have focused either on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum composite marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
-With both approaches, we allow for incorporation of prior weights, which permits efficient calculation for a variety of bootstrapping techniques.
-Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of prior weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will be equal to $a_{ij} = 1$.
+Past developments of selection models have focused on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious], Bayesian estimation under the assumption of independent effects [@Guan2016bayesian; @Larose1998modeling; @Maier2023robust], or sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum penalized marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
+With both approaches, we incorporate prior penalty terms on all model parameters, which regularize the likelihood and markedly improve the convergence properties of the estimation algorithms.
+We also allow for incorporation of weights, which permits efficient calculation for a variety of bootstrapping techniques.
+Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will be equal to $a_{ij} = 1$.
 
-### Maximum composite marginal likelihood
+### Prior penalties
 
-Composite marginal likelihood techniques involve working with the marginal distribution of each observed effect size estimate as if they were all mutually independent [@cox2004note; @lindsay1988composite; @varin2008composite]. 
+For both estimation methods, we incorporate penalty terms that are equivalent to putting independent priors on each element of $\bs\beta$, $\gamma$, and $\bs\zeta$.
+The 
+
+### Maximum penalized marginal likelihood
+
+Penalized marginal likelihood techniques involve working with the marginal distribution of each observed effect size estimate as if they were all mutually independent [@cox2004note; @lindsay1988composite; @varin2008composite]. 
 Thus, we assume that the observed effect size estimates were generated from Equation \@ref(eq:generic-selection). 
 For purposes of estimation, we write the likelihoods using natural log transformations of the variance parameter and selection parameters, with $\gamma = \log \tau^2$, $\zeta_h = \log \lambda_h$, and $\bs\zeta = \left[\zeta_1,...,\zeta_H\right]'$. 
 The log of the marginal likelihood contribution for effect size estimate $i$ from study $j$ is given by
@@ -151,7 +157,7 @@ l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &= \log f\left(Y = y_{ij} | \si
 &\propto \log w\left(y_{ij}, \sigma_{ij}; \bs\zeta \right) - \frac{1}{2} \frac{\left(y_{ij} - \mat{x}_{ij} \bs\beta\right)^2}{\exp(\gamma) + \sigma_{ij}^2} \nonumber\\
 & \qquad \qquad  - \frac{1}{2}\log\left(\exp(\gamma) + \sigma_{ij}^2\right) - \log A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right). \label{eq:log-like-ij}
 \end{align}
-The weighted composite marginal log-likelihood across all $J$ studies is then
+The weighted, penalized marginal log-likelihood across all $J$ studies is then
 \begin{equation}
 \label{eq:marginal-likelihood}
 l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right).
