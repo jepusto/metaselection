@@ -23,6 +23,7 @@ convergence_results <-
   select(-param, -priors) %>%
   mutate(
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights_num = weights,
     weights = as.character(weights),
@@ -58,6 +59,7 @@ results <-
   mutate(
     estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights_num = weights,
     weights = as.character(weights),
@@ -81,7 +83,7 @@ mu_graph_res <-
   results %>%
   filter(
     param == "beta",
-    estimator %in% c("CHE-ISCW","PET/PEESE","CML","ARGL")
+    estimator %in% c("CHE-ISCW","PET/PEESE","PML","ARGL")
   )
 
 mu_wide_res <- 
@@ -112,7 +114,7 @@ tau2_graph_res <-
 
 tau2_wide_res <- 
   tau2_graph_res %>%
-  filter(estimator %in% c("ARGL","CML","CHE")) %>%
+  filter(estimator %in% c("ARGL","PML","CHE")) %>%
   select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse, scrmse) %>%
   pivot_wider(
     values_from = c(rbias, rvar, rrmse, scrmse), 
@@ -201,6 +203,7 @@ results_ci <-
   mutate(
     estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights = as.character(weights),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -239,7 +242,7 @@ mu_graph_res_ci <-
     param == "beta",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("CHE-ISCW","PET/PEESE","CML","ARGL")
+    estimator %in% c("CHE-ISCW","PET/PEESE","PML","ARGL")
   )
 
 gamma_graph_res_ci <- 
@@ -248,7 +251,7 @@ gamma_graph_res_ci <-
     param == "gamma",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("CHE-ISCW","CML","ARGL")
+    estimator %in% c("CHE-ISCW","PML","ARGL")
   )
 
 zeta_graph_res_ci <- 
@@ -257,15 +260,15 @@ zeta_graph_res_ci <-
     param == "zeta1",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("CML","ARGL")
+    estimator %in% c("PML","ARGL")
   )
 
 
 RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_lab = "Number of studies (J)", legend_rows = 1L) {
   
-  y_lab <- paste0("Scaled RMSE ratio (",y_method, " / ", x_method, ")")
-  x_var <- sym(paste("scrmse", x_method, sep = "_"))
-  y_var <- sym(paste("scrmse", y_method, sep = "_"))
+  y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
+  x_var <- sym(paste("rmse", x_method, sep = "_"))
+  y_var <- sym(paste("rmse", y_method, sep = "_"))
   
   ggplot(data) + 
     aes(x = weights, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
@@ -325,7 +328,7 @@ boot_real <-
     mean_smd %in% c(0.2), 
     m == 15, 
     param == "beta",
-    estimator %in% c("CML","ARGL"),
+    estimator %in% c("PML","ARGL"),
     bootstraps < 1999L,
     bootstrap_type == "two-stage",
     weights %in% c("0.05","0.20"),
@@ -354,6 +357,7 @@ big_B_bootstraps <-
   mutate(
     bootstraps = 1999L,
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML"),
     cover_lo = coverage - qnorm(0.975) * coverage_mcse,
     cover_hi = coverage + qnorm(0.975) * coverage_mcse,
     weights = as.character(weights),
@@ -364,7 +368,7 @@ big_B_bootstraps <-
     ),
   )
 
-big_B_CML <- filter(big_B_bootstraps, estimator == "CML")
+big_B_CML <- filter(big_B_bootstraps, estimator == "PML")
 big_B_ARGL <- filter(big_B_bootstraps, estimator == "ARGL")
 
 

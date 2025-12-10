@@ -9,7 +9,7 @@ source("process-simulation-results.R")
 
 CML_bias <- 
   mu_graph_res %>%
-  filter(estimator == "CML") %>%
+  filter(estimator == "PML") %>%
   summarize(
     max_abs_bias = max(abs(bias))
   )
@@ -44,6 +44,7 @@ The CML and ARGL estimators for the step-function selection model had very high 
 For the ARGL estimator, convergence was `r convergence_min %>% filter(estimator=="ARGL") %>% pull(convergence) %>% round(1)`% across all conditions.
 Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the CML estimator.
 We evaluated the performance characteristics of each estimator across the replications where it converged.
+<!-- Revise this because we now use ARGL as the "fall-back" estimator. -->
 
 ## Bias
 
@@ -83,28 +84,29 @@ Figure \@ref(fig:mu-bias) depicts the bias (represented on the vertical axis of 
 The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
-Bias is generally lower for the CML and ARGL estimators than the comparison methods across all conditions, particularly when the average effect size is small to moderate $(\mu \leq 0.4)$. While still substantially lower than the comparison methods, the maximum absolute bias reaches `r round(CML_bias$max_abs_bias,2)` for CML and `r round(ARGL_bias$max_abs_bias,2)` for ARGL. This maximum bias occurs for both estimators when selective reporting is very strong, average effect size is zero, and heterogeneity is large. We observe a performance trade-off between the two estimators of the step-function selection model: Bias is lower for the ARGL estimator than the CML estimator when $\mu = 0.0$ but higher when $(\mu \geq 0.2)$. For both estimators, bias  decreases as the average effect increases, as heterogeneity decreases, and as the probability of selection decreases.
+Bias is generally lower for the CML and ARGL estimators than the comparison methods across all conditions, particularly when the average effect size is small to moderate $(\mu \leq 0.4)$. While still substantially lower than the comparison methods, the maximum absolute bias reaches `r round(CML_bias$max_abs_bias,2)` for CML and `r round(ARGL_bias$max_abs_bias,2)` for ARGL. This maximum bias occurs for both estimators when selective reporting is very strong, average effect size is zero, and heterogeneity is large. We observe a performance trade-off between the two estimators of the step-function selection model: Bias is lower for the ARGL estimator than the CML estimator when $\mu = 0.0$ but higher when $(\mu \geq 0.2)$. For both estimators, bias  decreases as the average effect increases, as heterogeneity decreases, and as the probability of selection increases towards 1.
 
 In contrast to the estimators based on the marginal selection model, the CHE-ISCW and PET/PEESE estimators are systematically biased under many conditions. 
 The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
 When average effect size is large $(\mu = 0.8)$, its bias remains quite small even when selective reporting is very strong.
-This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for the selection mechanism to operate.
+This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for censoring of non-significant results.
 However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger; its bias exceeds 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
+
 Although the PET/PEESE estimator uses a regression adjustment to account for possible selective reporting, it too becomes severely biased when selective reporting is strong.
 For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced. Its bias grows larger (and closer to that of CHE-ISCW) for smaller values of average effect size and higher levels of heterogeneity.
 For larger values of average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
 The selection model directly corresponds to the step-function data-generating mechanism used in the simulation, which could contribute to its estimators' strong performance relative to the other methods.
 
-## Scaled RMSE
+## Root Mean-Squared Error
 
 ```{r mu-rmse}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
 
 ggplot(mu_graph_res) + 
-  aes(x = weights, y = scrmse, color = estimator, fill = estimator) +
+  aes(x = weights, y = rmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -120,7 +122,7 @@ ggplot(mu_graph_res) +
   ) +
   labs(
     x = "Selection probability", 
-    y = "Scaled Root Mean-Squared Error", 
+    y = "Root Mean-Squared Error", 
     color = "Estimator",
     fill = "Estimator"
   ) + 
@@ -128,9 +130,9 @@ ggplot(mu_graph_res) +
   theme(legend.position = "top")
 ```
 
-Scaled RMSE combines both bias and variability into an overall measure of inaccuracy. 
-Figure \@ref(fig:mu-rmse) depicts the scaled RMSE of each estimator of average effect size; it is constructed in the same way as Figure \@ref(fig:mu-bias). 
-Figures \@ref(fig:rmse-ARGL-CML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of scaled RMSEs for each pair of methods. In addition, Figure \@ref(fig:mu-rmse-nonscaled) depicts the non-scaled version of the RMSE of each estimator of average effect size.
+RMSE combines both bias and variability into an overall measure of inaccuracy. 
+Figure \@ref(fig:mu-rmse) depicts the RMSE of each estimator of average effect size; it is constructed in the same way as Figure \@ref(fig:mu-bias). 
+Figures \@ref(fig:rmse-ARGL-CML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods. 
 These figures illustrate several findings.
 
 First, across most data-generating conditions, the ARGL estimator has higher RMSE than the CML estimator. As evident in Figure \@ref(fig:rmse-ARGL-CML), the RMSE ratio comparing ARGL to CML is greater than one across most conditions examined.
@@ -202,8 +204,8 @@ Figure \@ref(fig:CML-coverage) depicts the coverage levels of confidence interva
 Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
 The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, achieving or exceeding 90% coverage when selection is weak or non-existent or when the average effect size is large ($\mu = 0.8$), even with only $J = 15$ primary studies per meta-analysis.
 However, coverage variability increases substantially when selection is strong and the average effect size is small to moderate ($\mu \leq 0.04$).
-Coverage variability also increases as between-study heterogeneity increases, particularly when $\tau \geq 0.30$ and $\mu \leq 0.04$ (Supplementary Figure @ref(fig:CML-coverage-tau)).
-Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures @ref(fig:ARGL-coverage-two-stage)-@ref(fig:ARGL-coverage-exponential)).
+Coverage variability also increases as between-study heterogeneity increases, particularly when $\tau \geq 0.30$ and $\mu \leq 0.04$ (Supplementary Figure \@ref(fig:CML-coverage-tau)).
+Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the CML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-two-stage)-\@ref(fig:ARGL-coverage-exponential)).
 
 ```{r CML-coverage}
 #| fig.width: 9
@@ -222,7 +224,7 @@ mu_graph_res_ci %>%
   ) %>%
   filter(
     bootstrap_condition,
-    estimator %in% c("CML"),
+    estimator %in% c("PML"),
     CI_type %in% c("large-sample","percentile")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +

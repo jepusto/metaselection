@@ -83,6 +83,39 @@ estimate_step_models <- function(
     res_MLE$est$estimator <- "CML"
     
     res$MLE <- res_MLE$est
+    
+    if ("CML-model" %in% estimators) {
+      res_MLE_model <- tryCatch(
+        selection_model(
+          data = dat,
+          yi = d,
+          sei = sd_d,
+          pi = p_onesided,
+          cluster = studyid,
+          selection_type = "step",
+          steps = steps,
+          mean_mods = mean_mods,
+          var_mods = var_mods,
+          sel_mods = sel_mods,
+          sel_zero_mods = sel_zero_mods,
+          priors = priors,
+          estimator = "CML",
+          vcov_type = "model-based",
+          CI_type = "large-sample",
+          conf_level = conf_level,
+          theta = res_MLE$est$Est,
+          optimizer = CML_optimizer, 
+          optimizer_control = CML_optimizer_control,
+          bootstrap = "none",
+          use_jac = use_jac
+        ), error = function(e) error_res
+      )
+      res_MLE_model$est$R_conv <- res_MLE$info$convcode
+      res_MLE_model$est$max_method = res_MLE$method
+      res_MLE_model$est$estimator <- "CML-model"
+      
+      res$MLE_model <- res_MLE_model$est
+    }
   }
   
   if ("ARGL" %in% estimators) {

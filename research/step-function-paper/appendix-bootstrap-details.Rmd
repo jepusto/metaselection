@@ -99,7 +99,7 @@ CI_types <- c("percentile","basic","BCa")
 boot_real_CML <- 
   boot_real %>%
   filter(
-    estimator == "CML",  
+    estimator == "PML",  
     CI_type %in% CI_types,
   ) %>%
   mutate(
@@ -108,7 +108,7 @@ boot_real_CML <-
   
 big_B_CML <- big_B_bootstraps %>%
   filter(
-    estimator == "CML",     
+    estimator == "PML",     
     CI_type %in% CI_types,
   )
 

@@ -172,14 +172,13 @@ Due to the computational demands of bootstrapping, we focused the bootstrap simu
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
 (e.g., excluding $\tau = 0.30$). 
-This resulted in $4 \times 2 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 2 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
+This resulted in $4 \times 3 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 3 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
 For each condition, we generated 2,000 replications. 
 
 ## Performance criteria
 
 We evaluated the performance of these methods in terms of convergence rates, bias,
-scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
-Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
+root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
 For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
 To mitigate computational demand, we used few bootstraps per replication than recommended for analysis of real data. 
