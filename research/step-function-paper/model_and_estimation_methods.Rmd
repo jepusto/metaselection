@@ -13,7 +13,7 @@ This component is usually a random effects model or meta-regression model.
 The second component, which we shall call the selection process, involves assumptions about how effect size estimates come to be observed and therefore available for inclusion in the meta-analysis. 
 Combining the assumptions of both components leads to a model for the distribution of observed effect size estimates, with interpretable parameters describing both the evidence-generating process and the selection process. 
 
-We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij}$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
+We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij} = 1 - \Phi(y_{ij} /\sigma_{ij})$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
 
 ## Evidence-generating process
 
@@ -31,13 +31,9 @@ As a result, the regression coefficients $\boldsymbol\beta$ describe the overall
 ## Selection process
 
 At a general level, a $p$-value selection process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value. 
-Letting $O$ be an indicator for whether the effect size estimate $Y^*$ is observed, the selection process defines $\text{Pr}(O = 1 \ | \ p^*) = \text{Pr}(O = 1 \ | \ Y^*, \sigma^*)$. 
-In particular, such models assume that 
-$\Pr\left(O = 1 | p^* \right)$ is proportional to a function $w\left(p^*; \bs\lambda \right)$ that maps $p$-values in the interval $[0,1]$ to strictly positive weights and that involves an unknown $h \times 1$ parameter vector $\bs\lambda$. 
+Letting $O$ be an indicator for whether the effect size estimate $Y^*$ is observed, the selection process model involves the assumption that $\text{Pr}(O = 1 \ | \ p^*)$ is proportional to a function $w\left(p^*; \bs\lambda \right)$ that maps $p$-values in the interval $[0,1]$ to strictly positive weights and that involves an unknown $h \times 1$ parameter vector $\bs\lambda$. 
 
-Many different specific selection functions have been proposed in the literature. 
-Building on work on random effects models without predictors[@hedges1992modeling], Vevea and Hedges [@vevea1995general] described a random effects meta-regression model where selection probabilities vary depending on a set of pre-specified thresholds for the one-sided $p$-value. 
-The thresholds are chosen based on conventional, psychologically salient cut-offs for judging statistical significance.
+Vevea and Hedges [@vevea1995general] described a random effects meta-regression model where selection weights vary depending on a set of pre-specified thresholds for the one-sided $p$-value, chosen based on conventional, psychologically salient cut-offs for judging statistical significance.
 Let $\alpha_1,...,\alpha_H$ be a set of thresholds for the one-sided p-values, and set $\alpha_0 = 0$, $\alpha_{H+1} = 1$, and $\lambda_0 = 1$. 
 A step function selection model is then given by 
 \begin{equation}
@@ -136,21 +132,21 @@ and $c_{hij} = \left(\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mat{x}_{i
 
 ## Estimation Methods {#estimation-methods}
 
-Past developments of selection models have focused on maximum likelihood estimation under the assumption that all effect sizes are mutually independent [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious], Bayesian estimation under the assumption of independent effects [@Guan2016bayesian; @Larose1998modeling; @Maier2023robust], or sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum penalized marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
-With both approaches, we incorporate prior penalty terms on all model parameters, which regularize the likelihood and markedly improve the convergence properties of the estimation algorithms.
-We also allow for incorporation of weights, which permits efficient calculation for a variety of bootstrapping techniques.
+Past developments of selection models have focused on maximum likelihood estimation [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or Bayesian estimation  under the assumption that all effect sizes are mutually independent [@Guan2016bayesian; @Larose1998modeling; @Maier2023robust], or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum penalized marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
+For purposes of estimation, we write the likelihoods using natural log transformations of the variance parameter and selection parameters, with $\gamma = \log \tau^2$, $\zeta_h = \log \lambda_h$, and $\bs\zeta = \left[\zeta_1,...,\zeta_H\right]'$. 
+
+With both estimation approaches, we incorporate prior penalty terms on all model parameters, which regularize the likelihood and markedly improve the convergence properties of the estimation algorithms.
+The penalty terms are equivalent to putting independent priors on each element of the parameters.
+Let $p_{\bs\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, and $p_{\bs\zeta}(\bs\zeta)$ denote the log-prior penalties on the corresponding parameters. 
+We describe the specific form of the penalty terms after outlining the estimation methods.
+
+With both estimation approaches, we also allow for incorporation of weights, which permits efficient calculation for a variety of bootstrapping techniques.
 Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will be equal to $a_{ij} = 1$.
-
-### Prior penalties
-
-For both estimation methods, we incorporate penalty terms that are equivalent to putting independent priors on each element of $\bs\beta$, $\gamma$, and $\bs\zeta$.
-The 
 
 ### Maximum penalized marginal likelihood
 
 Penalized marginal likelihood techniques involve working with the marginal distribution of each observed effect size estimate as if they were all mutually independent [@cox2004note; @lindsay1988composite; @varin2008composite]. 
 Thus, we assume that the observed effect size estimates were generated from Equation \@ref(eq:generic-selection). 
-For purposes of estimation, we write the likelihoods using natural log transformations of the variance parameter and selection parameters, with $\gamma = \log \tau^2$, $\zeta_h = \log \lambda_h$, and $\bs\zeta = \left[\zeta_1,...,\zeta_H\right]'$. 
 The log of the marginal likelihood contribution for effect size estimate $i$ from study $j$ is given by
 \begin{align}
 l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &= \log f\left(Y = y_{ij} | \sigma_{ij}, \mat{x}_{ij}\right) \nonumber \\
@@ -160,21 +156,17 @@ l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &= \log f\left(Y = y_{ij} | \si
 The weighted, penalized marginal log-likelihood across all $J$ studies is then
 \begin{equation}
 \label{eq:marginal-likelihood}
-l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right).
+l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right) + p_{\bs\beta}(\bs\beta) + p_{\gamma}(\gamma) + p_{\bs\zeta}(\bs\zeta).
 \end{equation}
-The composite marginal likelihood (CML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the composite likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
+The penalized marginal likelihood (PML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
 If the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
 \begin{equation}
-\sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
+\label{eq:marginal-score-equations}
+\sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) + p'\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
 \end{equation}
-where $\mat{S}_j = \left(\mat{S}_{\bs\beta j}' \  S_{\gamma j} \ \mat{S}_{\bs\zeta j}'\right)'$ denotes the score vector from study $j$, consisting of the derivatives of the likelihood contributions for each study with respect to the component parameters:
-\begin{align}
-\mat{S}_{\bs\beta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\beta} \label{eq:score-M-beta} \\
-S_{\gamma j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \gamma} \label{eq:score-M-gamma} \\
-\mat{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) &= \sum_{i=1}^{k_j} a_{ij} \frac{\partial l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta\right)}{\partial \bs\zeta}. \label{eq:score-M-zeta} 
-\end{align}
-`r appendix_prefix` \@ref(CML-derivatives) provides exact expressions for the score vectors of the step-function selection model.
+where $\mat{S}_j = \left(\mat{S}_{\bs\beta j}' \  S_{\gamma j} \ \mat{S}_{\bs\zeta j}'\right)'$ denotes the score vector for study $j$, consisting of derivatives of the likelihood contributions for study $j$ with respect to the component parameters, and $p'(\bs\beta, \gamma, \bs\zeta)$ denotes the vector of derivatives of the prior penalty terms with respect to the component parameters.
+`r appendix_prefix` \@ref(CML-derivatives) provides exact expressions for the score vectors and derivatives of the prior penalties.
 
 Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in CML estimators. Let $\mat{H}$ denote the Hessian matrix of the composite log-likelihood,
 \begin{equation}
@@ -196,7 +188,7 @@ where $V^{CML}_{gg}$ is the $g^{th}$ diagonal entry of $\mat{V}^{CML}$.
 
 ### Augmented, re-weighted Gaussian likelihood
 
-Composite marginal likelihood is not the only possible basis for deriving estimators of selection model parameters. 
+Penalized marginal likelihood is not the only possible basis for deriving estimators of selection model parameters. 
 In the framework of a sensitivity analysis for worst-case selection bias, Mathur and VanderWeele @mathur2020sensitivity proposed using regular meta-analytic estimators for $\bs\beta$, but with weights defined by the inverse probability of selection under a step-function selection model with a single step at $\alpha_1 = .025$.
 Because they were working in the context of sensitivity analysis, they assumed a maximum plausible degree of selection rather than estimating the parameters of a selection model, so that the weights were fixed and known quantities. 
 In contrast, here we will consider a more general model, possibly with multiple steps, using weights derived by estimating the selection model parameters.
@@ -206,39 +198,144 @@ Given the parameters of the selection process, we can calculate relative probabi
 $$
 l^G_{ij}(\bs\beta, \gamma) \propto - \frac{1}{2}\frac{(y_{ij} - \mat{x}_{ij} \bs\beta)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log(\exp(\gamma) + \sigma_{ij}^2).
 $$
-Allowing for prior weights, the inverse selection-weighted Gaussian log-likelihood is therefore
+Allowing for prior weights, the inverse selection-weighted Gaussian log-likelihood is
 \begin{equation}
+\label{eq:Gaussian-log-lik}
 l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\bs\beta, \gamma).
 \end{equation}
-If the parameters of the selection process were known, we could find estimators for $\bs\beta$ and $\gamma$ by maximizing $l^G(\bs\beta, \gamma, \bs\zeta)$ for a fixed value of $\bs\zeta$. 
-Equivalently, we could find the estimators as the solutions to the weighted score equations 
-\begin{align}
-\sum_{j=1}^J \mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= 0 \label{eq:hybrid-score-beta} \\
-\sum_{j=1}^J \mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= 0, \label{eq:hybrid-score-gamma}
-\end{align}
-where the score contributions for study $j$ are
-\begin{align}
-\mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \mat{x}_{ij}' \frac{y_{ij} - \mat{x}_{ij} \bs\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
-\mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mat{x}_{ij} \bs\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
-\end{align}
-The question remains how to obtain an estimator for $\bs\zeta$.
-To estimate $\bs\zeta$, we augment the Gaussian log-likelihood with the marginal score equation with respect to $\bs\zeta$.
-Specifically, we define the ARGL estimators as the values that simultaneously solve Equations \@ref(eq:hybrid-score-beta) and \@ref(eq:hybrid-score-gamma) together with the estimating equation for $\bs\zeta$ from the composite marginal likelihood approach.
- With $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as given in Equation  \@ref(eq:score-M-zeta), the full set of estimating equations is
+If the parameters of the selection process were known, we could find estimators for $\bs\beta$ and $\gamma$ by maximizing $l^G(\bs\beta, \gamma, \bs\zeta)$ for a fixed value of $\bs\zeta$.
+To estimate the full set of model parameters, we augment the Gaussian likelihood by borrowing the estimating equation for $\bs\zeta$ from the maximum penalized marginal likelihood approach.
+Specifically, we define the ARGL estimator as the values that maximize \@ref(eq:Gaussian-log-lik) subject to the constraint of the estimating equation for $\bs\zeta$. 
+
+The ARGL estimator can also be defined by a set of estimating equations.
+Let $\mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta)$ and $\mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta)$ denote the derivatives of $l_j^G(\bs\beta, \gamma, \bs\zeta)$ with respect to $\bs\beta$ and $\gamma$, respectively, the exact form of which is given in `r appendix_prefix` \@ref(ARGL-derivatives).
+Let $\mathbf{S}_{\bs\zeta j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ denote the derivative with respect to $\bs\zeta$ of the contribution of study $j$ in Equation \@ref(eq:marginal-likelihood) . 
+Stacking these derivatives as
 \begin{equation}
 \label{eq:hybrid-score}
 \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \left[\begin{array}{c} \mat{S}^G_{\bs\beta j}(\bs\beta, \gamma, \bs\zeta) \\ S^G_{\gamma j}(\bs\beta, \gamma, \bs\zeta) \\ \mat{S}_{\bs\zeta j}(\bs\beta, \gamma, \bs\zeta) \end{array}\right],
 \end{equation}
-based on which we define the ARGL estimator as the solution to the estimating equations 
+we define the ARGL parameter estimators $\bs{\tilde\beta}$, $\tilde\gamma$, and $\bs{\tilde\zeta}$ as the solution to the penalized estimating equations 
 \begin{equation}
 \label{eq:hybrid-total-score}
-\sum_{j=1}^J \mat{M}_j(\bs\beta, \gamma, \bs\zeta) = \mat{0}.
+\sum_{j=1}^J \mat{M}_j(\bs{\tilde\beta}, \tilde\gamma, \bs{\tilde\zeta}) + p'\left(\bs{\tilde\beta}, \tilde\gamma, \bs{\tilde\zeta}\right) = \mat{0},
 \end{equation}
-We will denote the ARGL parameter estimators as $\bs{\tilde\beta}$, $\tilde\gamma$, and $\bs{\tilde\zeta}$.
+with $p'\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as defined in Equation \@ref(eq:marginal-score-equations).
 
 We consider conducting inferences for the ARGL estimators using cluster-robust sandwich variance estimators that have the same form as (\ref{eq:sandwich-variance}). 
 `r appendix_prefix` \@ref(ARGL-derivatives) provides further details.
 We construct confidence intervals for model parameters using Wald-type large sample approximations, just as with the CML estimators.
+
+### Prior penalties
+
+For both estimation methods, we aim to specify prior penalties selected to be strong enough to regularize outlying values, but not so strong as to substantially shift the estimator in most datasets.
+To this end, we use $\mathcal{L}_4$-norm prior penalties for the mean parameters $\bs\beta$, given by
+\begin{equation}
+\label{eq:beta-prior}
+p_{\bs\beta}(\bs\beta) = \frac{-1}{16} \sum_{p=1}^x \beta_p^4.
+\end{equation}
+This prior penalty is depicted in Figure \@ref(fig:prior-penalties)a. The penalty is nearly flat when $|\beta_p| < 1$, but becomes sharper and more informative when $|\beta_p| > 2$.
+It is strictly weaker than the penalty corresponding to a $N(0,1)$ prior when $|\beta_p| < 2.5$. 
+For the log of the heterogeneity parameter, we use 
+\begin{equation}
+\label{eq:gammaa-prior}
+p_{\gamma}(\gamma) = \frac{1}{2} \gamma - 5 \exp\left(\frac{\gamma}{2}\right),
+\end{equation}
+as depicted in Figure \@ref(fig:prior-penalties)b.
+This penalty corresponds to putting a $\Gamma(1, \frac{1}{5})$ prior on $\tau$, as used in past work on priors for variance parameters in multilevel models. [@Chung2013nondegenerate]
+The penalty term reaches a maximum at $\gamma = \log(0.2)$ and remains weak for smaller degrees of heterogeneity; because it is asymmetric, it more heavily penalizes large values of $\gamma$.
+For the log-scale selection parameters $\bs\zeta$, we use $\mathcal{L}_4$-norm prior penalties, given by
+\begin{equation}
+\label{eq:zeta-prior}
+p_{\bs\zeta}(\bs\zeta) = \frac{-1}{16} \sum_{q=1}^z \left(\zeta_q - \log\left(\frac{1}{5}\right)\right)^4
+\end{equation}
+and depicted in Figure \@ref(fig:prior-penalties)c.
+This penalty is centered at selection of $\lambda = \frac{1}{5}$ so that it remains very weak over the range of $\lambda = \frac{1}{20}$ (strong selective reporting) to $\lambda = 1$ (no selective reporting), consistent with the range of selective reporting observed in an empirical review of meta-analyses in psychology and clinical medicine.[@mathur2021estimating]
+It more heavily penalizes extremely strong selection levels $(\lambda < \frac{1}{50})$ and selective reporting that systematically _favors_ non-significant findings $(\lambda > 2)$.
+
+
+```{r prior-penalties}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 3
+#| fig.ncol: 2
+#| out.width: 49%
+#| fig.cap: "Prior penalty functions for step function model parameters"
+#| fig.subcap:
+#|    - "Prior penalty for mean parameter $\\bs\\beta$. Dashed line corresponds to a standard normal penalty." 
+#|    - "Prior penalty for heterogeneity parameter $\\gamma$" 
+#|    - "Prior penalty for selection parameter $\\bs\\zeta$" 
+#| fig.pos: tb 
+
+tibble(
+  beta = seq(-3,3, length.out = 200)
+) %>%
+  mutate(
+    p_beta = -beta^4 / 16,
+    z = -beta^2 / 2
+  ) %>%
+ggplot() + 
+  aes(beta) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 0) + 
+  geom_line(aes(y = p_beta), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  geom_line(aes(y = z), linetype = "dashed", alpha = 0.6) +   
+  scale_x_continuous(breaks = -3:3, expand = expansion(0,0)) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  theme_minimal() + 
+  labs(x = expression(beta[p]), y = expression(p[beta](beta[p])))
+
+tau_bench <- c(0.01, 0.05, 0.1, 0.2, 0.4, 0.6, 1)
+
+tibble(
+  gamma = seq(log(0.01^2), log(1), length.out = 200),
+) %>%
+  mutate(
+    tau = exp(gamma / 2),
+    p_gamma = 0.5 * gamma - 5 * exp(gamma / 2),
+    p_gamma = p_gamma - max(p_gamma)
+  ) %>%
+ggplot() + 
+  aes(tau) + 
+  geom_hline(yintercept = 0) + 
+  geom_line(aes(y = p_gamma), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  theme_minimal() + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = tau_bench,
+    expand = expansion(0,0)
+  ) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  labs(x = expression(tau == exp(gamma / 2)), y = expression(p[gamma](gamma)))
+
+
+lambda_bench <- c(0.02, 0.05, 0.10, 0.20, 0.50, 1, 2, 4)
+
+tibble(
+  zeta = seq(log(0.01), log(4), length.out = 500)
+) %>%
+  mutate(
+    lambda = exp(zeta),
+    p_zeta = -(zeta - log(0.2))^4 / 16,
+  ) %>%
+ggplot() + 
+  aes(lambda) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 1) + 
+  geom_line(aes(y = p_zeta), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  theme_minimal() + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = lambda_bench,
+    expand = expansion(0,0)
+  ) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  labs(x = expression(tau == exp(zeta[q])), y = expression(p[zeta](zeta[q])))
+```
+
 
 ## Bootstrap inference
 
@@ -253,7 +350,7 @@ Techniques that do so include the non-parametric clustered bootstrap, two-stage 
 Here, we focus on the two-stage bootstrap; details about other bootstrap techniques can be found in `r appendix_prefix` \@ref(bootstrap-resampling).
 
 In the two-stage bootstrap, each pseudo-sample is generated by randomly drawing $J$ clusters of observations with replacement from the original sample and then randomly re-sampling observations with replacement from each selected cluster. 
-This process amounts to simulating set of weights. Let $a_j^{(b)}$ be a first-stage weight for cluster $j$ and $a_{ij}^{(b)}$ be the weight assigned to observation $i$ in cluster $j$ for pseudo-sample $b$.
+This process amounts to simulating a set of weights. Let $a_j^{(b)}$ be a first-stage weight for cluster $j$ and $a_{ij}^{(b)}$ be the weight assigned to observation $i$ in cluster $j$ for pseudo-sample $b$.
 The two-stage bootstrap is equivalent to first drawing $a_1^{(b)},...,a_J^{(b)}$ from a multinomial distribution with $J$ trials and equal probability on each of $J$ categories, then drawing $a_{1j}^{(b)},...,a_{k_j j}^{(b)}$ from a multinomial distribution with $a_j^{(b)} \times k_j$ trials and equal probability on each of $k_j$ categories, for $j = 1,...,J$.
 
 For constructing confidence intervals, bootstrapping entails generating a total of $B$ pseudo-samples, where $B$ is a large number such as 1999, and re-calculating the estimator for each pseudo-sample. 

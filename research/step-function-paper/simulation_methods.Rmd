@@ -1,4 +1,4 @@
-n---
+---
 title: "Simulation Methods"
 output: pdf_document
 bibliography: references.bib
@@ -8,7 +8,7 @@ editor_options:
 ---
 
 We conducted Monte Carlo simulation studies to examine the performance
-of the CML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
+of the PML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
 We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment [@stanley2014meta].
 We evaluated the estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size prior to selective reporting.
 To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only for a subset of the conditions. 
@@ -26,7 +26,7 @@ To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
 This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
-For simplicity in the data-generating process, we assumed a constant correlation between pairs of outcomes within a study but allowed the correlation to vary from study to study.
+For simplicity in the data-generating process, we assumed a constant correlation between pairs of outcomes within a study but allowed the correlation to vary slightly from study to study.
 
 [^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
 
@@ -42,11 +42,11 @@ $$
 $$
 Here, $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
 $k_j^* \times 1$ vectors of outcomes for participant $h$ in study $j$ in
-treatment and control group and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with the diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.
-We assumed a compound symmetry structure for the true effect sizes and a sampling variance of 1 for the raw outcomes. These assumptions represent a plausible data structure for meta-analyses with dependent effects, while also simplifying the data-generating process for our simulation. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$, as it does not affect the final effect size estimates.
-From the raw outcome data, we calculated standardized mean
-differences using Hedges's $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
+treatment and control group and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with the diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.[^psi-structure]
+From the raw outcome data, we calculated standardized mean differences using Hedges's $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
 We calculated the sampling variances using conventional formulas [@borenstein2019effect] and computed one-sided $p$-values based on two-sample $t$-tests for the null of $H_0: \delta_{ij} \leq 0$.
+
+[^psi-structure]: The structure of $\boldsymbol\Psi_j$ is plausible for meta-analyses with dependent effects and simplifies the data-generating process. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$ because it does not affect the distribution of generated effect size estimates.
 
 After simulating results for study $j$, we applied a step-function selection
 model to the individual effect size estimates, with a one-sided selection
@@ -58,7 +58,7 @@ We repeated the process of generating studies until the database included a tota
 ## Estimation methods
 
 We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
-We estimated CML and ARGL estimators and calculated cluster-robust confidence intervals as described in Section \@ref(estimation-methods). 
+We estimated PML and ARGL estimators and calculated cluster-robust confidence intervals as described in Section \@ref(estimation-methods). 
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
 To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator but extrapolated coverage rates for $B = 1999$ replications [@boos2000montecarlo];
 `r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details.
@@ -68,8 +68,8 @@ First, we estimated a summary meta-analysis model without any correction for sel
 Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW) [@chen2024adapting].
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
-Second, we implemented a variation of the PET/PEESE estimator originally proposed by @stanley2014meta, adapted to accommodate dependent effect sizes.[^PET-PEESE]
-Following @stanley2014meta, we combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.
+Second, we implemented a variation of the PET/PEESE estimator[@stanley2014meta], adapted to accommodate dependent effect sizes.[^PET-PEESE]
+We combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.[@stanley2014meta]
 For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom [@chen2024adapting].
 
 [^ISCW]: CHE-ISCW is based on the working model 
@@ -158,7 +158,7 @@ We examined a wide range of values for the probability of selection for non-affi
 We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
 We chose these values to cover the conditions found in real meta-analyses of education and psychology research [@tipton2019current]. 
 
-Lastly, we investigated the primary study sample size. 
+Lastly, we manipulated the primary study sample size. 
 For the typical primary study sample sizes, we used the empirical distribution of sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
 <!--# did we restrict the data? -->
 The sample sizes in the database ranged from 37 to 2,295 with a median of 211. 
@@ -180,10 +180,6 @@ For each condition, we generated 2,000 replications.
 We evaluated the performance of these methods in terms of convergence rates, bias,
 scaled root mean-squared error (RMSE), and 95% confidence interval coverage for the overall average effect size $\mu$.
 Because we expected that RMSE would decrease proportionally with the square-root of the number of studies, we scaled the RMSE of each estimator by $\sqrt{J}$ to reduce variation across the number of studies included in each meta-analysis. 
-Because the sampling distribution of the CML and ARGL estimators sometimes included extreme outlying values, we calculated bias and scaled RMSE after winsorizing the distribution.
-Specifically, we defined a lower fence of 2.5 times the inter-quartile range below the 25th percentile and an upper fence of 2.5 times the inter-quartile range above the 75th percentile. 
-Estimates falling below the lower fence or above the upper fence were set to the corresponding fence values.
-
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
 For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
 To mitigate computational demand, we used few bootstraps per replication than recommended for analysis of real data. 
