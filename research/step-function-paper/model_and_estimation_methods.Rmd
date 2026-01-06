@@ -232,7 +232,7 @@ For both estimation methods, we aim to specify prior penalties selected to be st
 To this end, we use $\mathcal{L}_4$-norm prior penalties for the mean parameters $\bs\beta$, given by
 \begin{equation}
 \label{eq:beta-prior}
-p_{\bs\beta}(\bs\beta) = \frac{-1}{16} \sum_{p=1}^x \beta_p^4.
+p_{\bs\beta}(\bs\beta) = -\frac{1}{16} \sum_{p=1}^x \beta_p^4.
 \end{equation}
 This prior penalty is depicted in Figure \@ref(fig:prior-penalties)a. The penalty is nearly flat when $|\beta_p| < 1$, but becomes sharper and more informative when $|\beta_p| > 2$.
 It is strictly weaker than the penalty corresponding to a $N(0,1)$ prior when $|\beta_p| < 2.5$. 
@@ -247,7 +247,7 @@ The penalty term reaches a maximum at $\gamma = \log(0.2)$ and remains weak for 
 For the log-scale selection parameters $\bs\zeta$, we use $\mathcal{L}_4$-norm prior penalties, given by
 \begin{equation}
 \label{eq:zeta-prior}
-p_{\bs\zeta}(\bs\zeta) = \frac{-1}{16} \sum_{q=1}^z \left(\zeta_q - \log\left(\frac{1}{5}\right)\right)^4
+p_{\bs\zeta}(\bs\zeta) = -\frac{1}{54} \sum_{q=1}^z \left(\zeta_q - \log\left(\frac{1}{2}\right)\right)^4
 \end{equation}
 and depicted in Figure \@ref(fig:prior-penalties)c.
 This penalty is centered at selection of $\lambda = \frac{1}{5}$ so that it remains very weak over the range of $\lambda = \frac{1}{20}$ (strong selective reporting) to $\lambda = 1$ (no selective reporting), consistent with the range of selective reporting observed in an empirical review of meta-analyses in psychology and clinical medicine.[@mathur2021estimating]
@@ -311,14 +311,14 @@ ggplot() +
   labs(x = expression(tau == exp(gamma / 2)), y = expression(p[gamma](gamma)))
 
 
-lambda_bench <- c(0.02, 0.05, 0.10, 0.20, 0.50, 1, 2, 4)
+lambda_bench <- c(0.02, 0.05, 0.10, 0.20, 0.50, 1, 2, 4, 8)
 
 tibble(
-  zeta = seq(log(0.01), log(4), length.out = 500)
+  zeta = seq(log(0.01), log(8), length.out = 500)
 ) %>%
   mutate(
     lambda = exp(zeta),
-    p_zeta = -(zeta - log(0.2))^4 / 16,
+    p_zeta = -(zeta - log(0.5))^4 / 54,
   ) %>%
 ggplot() + 
   aes(lambda) + 
