@@ -105,11 +105,12 @@ all_params <-
 all_params %>%
   group_by(bootstrap, iterations) %>%
   count()
+count(all_params)
 
 saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
 
 all_params %>%
-  filter(bootstrap == "none", priors == "Weak") %>%
+  filter(bootstrap == "none") %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)

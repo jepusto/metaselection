@@ -91,7 +91,6 @@ estimate_step_models <- function(
           yi = d,
           sei = sd_d,
           pi = p_onesided,
-          cluster = studyid,
           selection_type = "step",
           steps = steps,
           mean_mods = mean_mods,
