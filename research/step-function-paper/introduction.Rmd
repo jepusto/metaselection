@@ -66,28 +66,28 @@ Applications to selection models remain to be explored.
 
 Methodologists have only recently begun to examine selective reporting detection or bias correction methods in meta-analysis involving dependent effect sizes.
 Mathur and VanderWeele proposed a sensitivity analysis based on the simplest possible form of the step-function selection model.[@mathur2020sensitivity]
-This sensitivity analysis provides an estimate of the average effect size after correcting for selective reporting based on a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst. 
+This sensitivity analysis provides an estimate of the average effect size after correcting for selection with a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst. 
 It handles effect size dependence using RVE.[@Hedges2010robust]
-However, this approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
+This approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
 
 Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors, combined with RVE or multilevel meta-analysis to handle dependent effect sizes. [@fernandezcastilla2019detecting; @rodgers2021evaluating]
 This method has limited power to detect selective reporting under common meta-analytic scenarios.[@rodgers2021evaluating]
 It also has the same limitations as univariate Egger's regression, in that it tests for a pattern of small-study effects, which could have causes other than selective reporting.[@Sterne2011recommendations]
-Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting.
+<!-- Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting. -->
 
 Chen and Pustejovsky reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and dependent effect sizes.[@chen2024adapting] 
 They also proposed adaptations of several existing methods that can be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.
 In an extensive simulation study, they examined the performance of proposed adaptations alongside existing methods that ignore effect size dependence, under scenarios where the selective reporting process was consistent with a one-step or two-step selection model.
 Although no single bias-correction method performed best across all conditions examined, simple forms of the step-function selection model emerged as strong candidates.
 Across a wide range of conditions, one-step and two-step selection models yielded average effect size estimates with low bias that were usually more accurate than alternative bias-adjusted estimators.
-The strong performance of step-function models is partially attributable to alignment between the assumptions of the step-function model and the mechanism used to introduce selective reporting in the data-generating process of the simulations.
+The strong performance of step-function models may be explained by the alignment between the assumptions of the step-function model and the mechanism used to introduce selective reporting in the data-generating process of the simulations.
 However, because the step-function models involve the assumption that all effect sizes are independent, confidence intervals generated from the selection models did not have accurate coverage.
 These findings underscore the need to further develop selection models that can account for dependent effect sizes.[@chen2024adapting]
 
 To address this need, we investigate how to estimate selection models and provide valid assessments of uncertainty in parameter estimates for meta-analyses that involve dependent effect sizes. 
-In applying selection models to datasets involving dependent effects, we propose to model the _marginal_ distribution of the effect size estimates rather than the joint distribution of the dependent effects within each study. 
+In applying selection models to datasets involving dependent effects, we propose to model the marginal distribution of the effect size estimates rather than the joint distribution of the dependent effects within each study. 
 This means we model each estimate considered as a single observation, without explicitly accounting for its dependence on other effect sizes from the same study. 
-To account for dependence, we consider cluster-robust variance estimation or clustered bootstrap inference methods that allow for dependent observations even though the dependence is not explicitly modeled. 
+To account for dependence, we consider cluster-robust variance estimation or clustered bootstrap inference methods that allow for dependent observations even though it is not explicitly modeled. 
 This strategy does have the limitation that the model parameter estimates pertain only to the marginal distribution and do not distinguish between selective publication of full studies versus selective reporting of individual outcomes.
 
 We believe that the strategy of modeling the marginal distribution is worth pursuing for at least three reasons.
@@ -103,5 +103,5 @@ The remainder of the paper is organized as follows.
 In the next section, we describe the step-function selection model and detail two different strategies for estimating model parameters: one using penalized maximum likelihood estimation methods and a novel strategy based on a re-weighted random effects model with inverse probability of selection weights. 
 We also describe extensions of RVE and bootstrap re-sampling techniques to assess uncertainty in selection model parameter estimates.
 In the following section, we provide an empirical example that illustrates the methods by re-analyzing data from a previously reported meta-analysis. 
-In subsequent sections, we describe the methods and results from a simulation study that evaluates the performance of point estimators and confidence intervals across a wide range of meta-analytic conditions.
-In the final section, we discuss findings, limitations, and initial implications for practice.
+In subsequent sections, we describe the methods and results from a simulation study that evaluates the performance of point estimators and confidence intervals across a wide range of meta-analytic conditions involving a single-step selection process.
+In the final section, we discuss findings, limitations, and preliminary implications for practice.

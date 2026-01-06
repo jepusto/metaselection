@@ -19,27 +19,26 @@ min_est <- min(step_mod_res$Est)
 max_est <- max(step_mod_res$Est)
 ```
 
-To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed the data from a meta-analysis reported by Carter and colleagues [@carter2015series]. 
-The original meta-analysis examined a large corpus of primary studies on the ego depletion effect, which refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion [@hagger2010ego]. 
+To demonstrate the proposed modeling strategy and examine potential differences between CML and ARGL estimation methods, we re-analyzed the data from a meta-analysis reported by Carter and colleagues.[@carter2015series]
+The original meta-analysis examined a large corpus of primary studies on the ego depletion effect, which refers to the theory that an individual's ability to exercise self-control diminishes with repeated exertion.[@hagger2010ego] 
 Carter and colleagues argued that the apparent strength of ego-depletion effects may be overstated due to selective reporting.
 Their review included a variety of self-control manipulation tasks as well as a range of outcomes. 
 Effect sizes were measured as standardized mean differences, defined so that positive effects correspond to depletion of self-control (i.e., consistent with the theory of ego depletion).
-
-Based on a sample of 66 studies, @carter2015series estimated an overall average effect of 0.43, with a 95% CI of [0.34, 0.52]. However, more recent, pre-registered replication studies present a stark contrast, finding average effects near zero based on samples collected across dozens of laboratories.[@Hagger2016ego; @Vohs2021ego]. This discrepancy highlights the importance of investigating selective reporting bias in meta-analytic datasets.
+Based on a sample of 66 studies, they reported an overall average effect of 0.43, with a 95% CI of [0.34, 0.52].[@carter2015series] However, more recent, pre-registered replication studies present a stark contrast, finding average effects near zero based on samples collected across dozens of laboratories.[@Hagger2016ego; @Vohs2021ego]. This discrepancy highlights the importance of investigating selective reporting bias in meta-analytic datasets.
 
 To mitigate possible effects of selective reporting, Carter and colleagues's review included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 68 effect size estimates from 45 distinct studies.
 About 40% of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes.
-We conducted the analyses using R Version 4.4.3 [@rcoreteam]. 
+We conducted the analyses using R Version 4.4.3.[@rcoreteam] 
 
 If selective reporting were not a concern, a correlated-and-hierarchical effects (CHE) model, a flexible model that accounts for both correlated and hierarchical dependent data structures, would be one way to summarize the distribution of ego depletion effects.[@pustejovsky2022preventionscience]
 Based on a CHE model, the overall average effect estimate was `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "CHE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "CHE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "CHE"]), 2)`]. 
 Alternately, one could apply a CHE model with inverse sampling covariance weighting (CHE-ISCW), which places relatively more weight on larger studies (those with smaller sampling variances) and thus is less biased by selective reporting.[@chen2024adapting]
 Applying CHE-ISCW reduces the overall effect estimate to `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "FEC"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "FEC"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "FEC"]), 2)`]. 
 As a further point of comparison, we estimated the overall average effect using the PET/PEESE regression adjustment [@stanley2014meta], clustering the standard errors by study. This yielded an overall average effect of `r round(as.numeric(pub_studies_res$Est[pub_studies_res$estimator == "PET/PEESE"]), 2)`, 95% CI [`r round(as.numeric(pub_studies_res$CI_lo[pub_studies_res$estimator == "PET/PEESE"]), 2)`, `r round(as.numeric(pub_studies_res$CI_hi[pub_studies_res$estimator == "PET/PEESE"]), 2)`]. The CHE and CHE-ISCW estimates are both positive, statistically significant, and similar in magnitude. 
-The PET-PEESE estimate is negative and much smaller than the CHE and CHE-ISCW estimates, indicating a pattern of small study effects. 
+The PET-PEESE estimate is negative and much smaller, indicating a pattern of small study effects. 
 
-We used the `selection_model()` function from the `metaselection` package to fit single-step and two-step selection models [@metaselection]. 
+We used the `selection_model()` function from the `metaselection` package [@metaselection] to fit single-step and two-step selection models. 
 The single-step model used a threshold at $\alpha_1 = 0.025$; the two-step model used thresholds at $\alpha_1 = 0.025$ and $\alpha_2 = 0.5$. 
 For comparison purposes, we estimated model parameters using both PML and ARGL and computed cluster-robust and percentile bootstrap confidence intervals.
 For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 replicates.
@@ -129,7 +128,7 @@ kbl(
 ```
 
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
-Generally, the PML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the CML estimator are narrower than those for the ARGL estimator.
+Generally, the PML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the PML estimator are narrower than those for the ARGL estimator.
 For the PML estimator, the bootstrap CIs are similar or slightly wider than the cluster-robust CIs.
 These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 

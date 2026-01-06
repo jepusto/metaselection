@@ -64,7 +64,7 @@ ggplot() +
 
 ```
 
-```{r rmse-ARGL-CML}
+```{r rmse-ARGL-PML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
@@ -75,7 +75,7 @@ ggplot() +
 RMSE_comparison_plot(mu_wide_res, "PML","ARGL")
 ```
 
-```{r rmse-CHE-CML}
+```{r rmse-CHE-PML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
@@ -97,7 +97,7 @@ RMSE_comparison_plot(mu_wide_res, "PML","CHE-ISCW")
 RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 ```
 
-```{r rmse-PET-CML}
+```{r rmse-PET-PML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
@@ -194,7 +194,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r CML-coverage-tau}
+```{r PML-coverage-tau}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
@@ -231,7 +231,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r CML-coverage-two-stage}
+```{r PML-coverage-two-stage}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
@@ -250,7 +250,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r CML-coverage-multinomial}
+```{r PML-coverage-multinomial}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
@@ -269,7 +269,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r CML-coverage-exponential}
+```{r PML-coverage-exponential}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
@@ -436,15 +436,15 @@ ggplot() +
 
 ```
   
-```{r heterogeneity-rmse-CML-CHE}
+```{r heterogeneity-rmse-PML-CHE}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root of root mean-squared error for PML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for PML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, "CHE","PML")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","PML")
 ```
 
 ```{r heterogeneity-rmse-ARGL-CHE}
@@ -453,20 +453,20 @@ RMSE_comparison_plot(tau2_wide_res, "CHE","PML")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, "CHE","ARGL")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","ARGL")
 ```
 
-```{r heterogeneity-rmse-ARGL-CML}
+```{r heterogeneity-rmse-ARGL-PML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, "PML","ARGL")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "PML","ARGL")
 ```
 
 \newpage 
@@ -554,7 +554,7 @@ ggplot() +
 
 ```
 
-```{r selection-rmse-ARGL-CML}
+```{r selection-rmse-ARGL-PML}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5

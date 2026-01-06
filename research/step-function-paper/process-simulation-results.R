@@ -264,11 +264,18 @@ zeta_graph_res_ci <-
   )
 
 
-RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_lab = "Number of studies (J)", legend_rows = 1L) {
+RMSE_comparison_plot <- function(
+  data, 
+  x_method, y_method, 
+  measure = "rmse", 
+  col_factor = J, 
+  col_lab = "Number of studies (J)", 
+  legend_rows = 1L
+) {
   
   y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
-  x_var <- sym(paste("rmse", x_method, sep = "_"))
-  y_var <- sym(paste("rmse", y_method, sep = "_"))
+  x_var <- sym(paste(measure, x_method, sep = "_"))
+  y_var <- sym(paste(measure, y_method, sep = "_"))
   
   ggplot(data) + 
     aes(x = weights, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +

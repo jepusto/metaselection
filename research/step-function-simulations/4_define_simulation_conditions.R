@@ -120,3 +120,21 @@ all_params %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "multinomial") %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "two-stage", iterations == 24) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "two-stage", iterations == 240) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
