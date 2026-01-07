@@ -1,5 +1,5 @@
 ---
-title             : "Estimation and inference for step-function selection models in meta-analysis with dependent effects"
+title             : "Estimation and inference for step-function selection models in meta-analyses with dependent effects"
 shorttitle        : "Step-function selection models"
 
 author: 

@@ -26,7 +26,7 @@ To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
 This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
-For simplicity, we assumed a constant correlation between pairs of outcomes within a study but allowed the correlation to vary slightly from study to study.
+For simplicity, we assumed a constant correlation between pairs of outcomes within a primary study but allowed the correlation to vary slightly from study to study.
 
 [^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
 
@@ -60,8 +60,7 @@ We estimated PML and ARGL estimators and calculated cluster-robust confidence in
 For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
 
 We compared the performance of the step-function PML and ARGL estimators to that of two alternative methods.
-First, we estimated a summary meta-analysis model without any correction for selective reporting, using a method that accounts for effect size dependency. 
-Specifically, we used the CHE working model with inverse sampling-covariance weights (CHE-ISCW).[@chen2024adapting]
+First, we estimated a summary meta-analysis model without any correction for selective reporting, using the CHE-ISCW working model to account for effect size dependency.[@chen2024adapting]
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
 This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
 Second, we implemented a variation of the PET/PEESE estimator[@stanley2014meta], adapted to accommodate dependent effect sizes.[^PET-PEESE]

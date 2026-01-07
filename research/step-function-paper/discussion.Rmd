@@ -14,9 +14,9 @@ In contrast, regression-based estimators such as PET/PEESE [@stanley2014meta] or
 The step-function model also embeds a familiar evidence-generating model that allows for heterogeneity of effects through inclusion of random effects and predictors of average effect size (i.e., meta-regression).[@vevea1995general]
 In contrast, well-known methods such as trim-and-fill [@duval2000nonparametric; @duval2000trim] and more recent proposals such as $p$-curve [@simonsohn2014pcurve] and $p$-uniform [@VanAssen2015meta; @vanaert2016conducting] are not as flexible and have been found to perform poorly when effects are heterogeneous.[@carter2019correcting]
 
-We treated the step-function model as a description of the _marginal_ distribution of the effect size estimates, effectively ignoring the dependence structure for purposes of estimating the model but accounting for it using cluster-robust sandwich estimation or clustered bootstrap inference. 
+We treated the step-function model as a description of the _marginal_ distribution of the effect size estimates, ignoring the dependence structure for purposes of estimating the model but accounting for it using cluster-robust sandwich estimation or clustered bootstrap inference. 
 This strategy is appealing for its feasibility and because it connects to a selection process in which each individual effect size is selected on the basis of its statistical significance.
-We also studied two estimation methods for the marginal step-function model, composite marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
+We also studied two estimation methods for the marginal step-function model, penalized marginal likelihood estimation and augmented-and-reweighted Gaussian likelihood estimation, and two inference strategies, based on either cluster-robust sandwich estimators or clustered bootstrap resampling.
 
 Our simulations examined how well these estimators and inference techniques perform for recovering the average effect size under a selection process with a single step (at $\alpha_1 = .025$), compared to an estimator that accounts for dependence but not selection (i.e., the CHE-ISCW model) and to a variant of PET/PEESE that uses RVE.
 Across a broad range of conditions, we found that both estimators of the marginal step-function model show little bias overall and consistently out-perform PET/PEESE and CHE-ISCW under conditions with meaningful selective reporting.
@@ -26,41 +26,45 @@ Because selective reporting does not create much bias under such conditions, the
 As a result, the step-function estimators are less accurate than the CHE-ISCW estimator under conditions where selective reporting is not strong or does not create meaningful bias. 
 
 The simulation results also demonstrated that the marginal step-function model estimators have better confidence interval coverage compared to the other methods, with coverage rates of the two-stage bootstrapped percentile confidence intervals approaching the nominal level of 0.95 for moderate sample sizes.
-Compared to the ARGL estimator, the CML estimator of the marginal mean is usually more accurate  and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
-CML consistently out-performs ARGL for estimating between-study heterogeneity and the strength of selective reporting.
+Compared to the ARGL estimator, the PML estimator of the marginal mean is usually more accurate  and had confidence interval coverage rates closer to nominal levels, although differences are fairly small.
+PML consistently out-performs ARGL for estimating between-study heterogeneity and the strength of selective reporting.
 
 ## Limitations and Future Directions
 
 Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations showing that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias. [@chen2024adapting]
 However, this approach has several conceptual limitations that are important to note.
 First, such models do not reflect the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
-Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes [@pustejovsky2022preventionscience; @vandennoortgate2013threelevel].
+Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes. [@pustejovsky2022preventionscience; @vandennoortgate2013threelevel]
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates. 
 Better accounting for the dependence structure, such as through the use of analytic weights, might allow for construction of more efficient estimators of the parameters of the evidence-generating process.
-Third, the marginal model provides no way to distinguish between study-level publication bias and effect-level selective outcome reporting.
+Third, the marginal model does not distinguish between study-level publication bias and effect-level selective outcome reporting.
 This strategy therefore precludes examination of more nuanced forms of selection, such as one where the probability that a given effect size is reported depends on the significance levels of other effect size estimates drawn from the same sample or on some broader feature of the study's results.
 
 In addition to conceptual limitations, our simulation findings also need to be interpreted cautiously in light of the study's scope limitations.
-First, although our simulations covered a wide range of plausible conditions, the results remain  generalizable only to the data-generating process examined.
+First, although our simulations covered a wide range of plausible conditions, the results remain generalizable only to the data-generating process examined.
 Of particular note, we generated data following a CHE effects model with primary study sample sizes and the number of effect sizes per study drawn from an empirical distribution of educational research studies.
 The performance of the step-function selection models and alternative selective reporting adjustments could change based on features of studies included in the synthesis, such as studies drawn from research areas that use smaller or larger samples or that tend to assess a smaller or larger number of outcomes.
-Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions [@Hedges1996estimating].
+Likewise, there remains a need to investigate the robustness of the models to other evidence-generating processes, such as non-normal random effects distributions. [@Hedges1996estimating]
 
-Second, the simulations examined the step-function selection model using a selection process that was compatible with the assumed model, in which the probability that an effect size was reported followed a step function in the one-sided _p_-value with a threshold at $\alpha_1 = .025$.
+Second, the simulations examined estimators for the step-function selection model using a selection process that was compatible with the assumed model, in which the probability that an effect size was reported followed a step function in the one-sided _p_-value with a threshold at $\alpha_1 = .025$.
 Other simulation studies have shown that a one-step model can be more accurate than a more complex two-step model, even when the true data-generating process aligns with the latter model.[@chen2024adapting]
 It may require a large number of primary studies to feasibly estimate models that include multiple steps in the selection function.
 Nonetheless, there may be meta-analytic datasets where a more complex set of steps is more appropriate, such as when the data include a substantial number of negative effect size estimates.
 
 Third and related to the previous point, the simulations were limited to evidence-generating processes that did not involve systematic predictors of the effect size distribution and where the strength of selective reporting was uniform and solely dependent on the p-value of each individual effect size.
 Other factors besides statistical significance of findings might affect a study's publication status.
-For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research [@vanaert2025metaanalyzing].
-Further evaluation of the CML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
-In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status [@Coburn2015publication].
+For instance, results from pre-registered replication studies might be insulated from selective reporting or subject to different reporting pressures than other forms of primary research.[@vanaert2025metaanalyzing]
+Further evaluation of the PML and ARGL estimators is warranted to assess their performance in models involving moderators and their robustness to other selection mechanisms.
+In further development of step-function selection models, it may prove useful to model variation in the strength of reporting as a function of study characteristics such as pre-registration status.[@Coburn2015publication]
 
 Fourth and finally, the simulation findings we have reported here focused mostly on the performance of the estimators and confidence intervals for the overall average effect size, heterogeneity parameter, and selection parameter.
 We have not directly evaluated how well the estimators work as diagnostic _tests_ for the presence of selective reporting of study results, although the below-nominal coverage rates of confidence intervals for the selection parameter suggests that they may not work well diagnostically. 
-In univariate random effects models, likelihood ratio tests based on step-function selection models have been found to provide much stronger power for detecting selective reporting compared to alternatives such as Egger's regression or non-parametric symmetry tests [@pustejovsky2019testing].
+In univariate random effects models, likelihood ratio tests based on step-function selection models have been found to provide much stronger power for detecting selective reporting compared to alternatives such as Egger's regression or non-parametric symmetry tests.[@pustejovsky2019testing]
 Extension of such tests for meta-analyses of dependent effect sizes requires further development.
+
+In light of these limitations, we view the simulations that we have presented here as consistent with Phase II or early Phase III methodological research based on the schema proposed by Heinze and colleagues.[@Heinze2024phases]
+Further research is needed to evaluate the robustness of the PML and ARGL estimators under a broader range of conditions and research contexts, including under other publication bias and selective outcome reporting mechanisms that are less aligned with the assumptions of the step-function selection process.
+An outstanding challenge in pursuing this further is the need to identify plausible alternative selection mechanisms that can be applied to studies reporting multiple outcomes.
 
 ## Conclusions
 

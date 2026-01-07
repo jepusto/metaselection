@@ -131,8 +131,8 @@ $B_{h} = \Phi\left(c_{h}\right) - \Phi\left(c_{h+1}\right)$ and $c_{h} = \left[\
 Past developments of selection models have focused on maximum likelihood estimation [@hedges1992modeling; @vevea1995general; @citkowicz2017parsimonious] or Bayesian estimation  under the assumption that all effect sizes are mutually independent [@Guan2016bayesian; @Larose1998modeling; @Maier2023robust] or on sensitivity analysis methods that treat the selection model as known [@vevea2005publication; @mathur2020sensitivity]. We consider two estimation and inference strategies that build upon and generalize past approaches, including maximum penalized marginal likelihood and an alternative based on re-weighting the Gaussian likelihood of the evidence-generating process.
 For purposes of estimation, we write the likelihoods using natural log transformations of the variance parameter and selection parameters, with $\gamma = \log \tau^2$, $\zeta_h = \log \lambda_h$, and $\bs\zeta = \left[\zeta_1,...,\zeta_H\right]'$. 
 
-With both estimation approaches, we incorporate prior penalty terms on all model parameters, which regularize the likelihood and markedly improve the convergence properties of the estimation algorithms.
-The penalty terms are equivalent to putting independent priors on each element of the parameters.
+With both estimation approaches, we incorporate prior penalty terms on all model parameters, which regularize the likelihood and markedly improve the convergence properties of the estimation algorithms.[@VanHouwelingen2001shrinkage; @Cole2014maximum]
+The penalty terms are equivalent to putting independent priors on each element of the parameters.[@Chung2013nondegenerate]
 Let $p_{\bs\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, and $p_{\bs\zeta}(\bs\zeta)$ denote the log-prior penalties on the corresponding parameters. 
 We describe the specific form of the penalty terms after outlining the estimation methods.
 

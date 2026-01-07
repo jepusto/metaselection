@@ -58,8 +58,8 @@ results <-
   filter(estimator != "CML", priors == "Weak") %>%
   mutate(
     estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
-    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
-    estimator = fct_recode(estimator, "PML" = "CML"),
+    estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights_num = weights,
     weights = as.character(weights),
@@ -202,8 +202,8 @@ results_ci <-
   ungroup() %>%
   mutate(
     estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
-    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
-    estimator = fct_recode(estimator, "PML" = "CML"),
+    estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
+    estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
     weights = as.character(weights),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -381,20 +381,3 @@ big_B_ARGL <- filter(big_B_bootstraps, estimator == "ARGL")
 
 
 bootstraps <- unique(results_ci$bootstraps)[-1]
-
-# boot_real %>%
-#   filter(estimator == "CML") %>%
-# ggplot() + 
-#   aes(bootstraps, coverage, color = CI_type) + 
-#   geom_hline(yintercept = 0.95, linetype = "dashed") + 
-#   geom_point() + 
-#   geom_smooth(method = "lm", formula = y ~ x, fullrange = TRUE, se = FALSE) + 
-#   geom_pointrange(
-#     data = big_B_CML,
-#     aes(ymin = cover_lo, ymax = cover_hi),
-#     shape = "square"
-#   ) + 
-#   facet_grid(tau ~ weights, labeller = "label_both") + 
-#   scale_x_continuous(transform = "reciprocal", breaks = bootstraps) + 
-#   theme_minimal() + 
-#   labs(x = "B", y = "Coverage rate", color = "")
