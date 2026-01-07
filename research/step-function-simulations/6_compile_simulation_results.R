@@ -4,12 +4,6 @@ library(simhelpers)
 library(future)
 library(furrr)
 
-rows <- 
-  read_csv("research/step-function-simulations/batch-results/batches-to-run.csv", col_names = "row") %>%
-  mutate(
-    i = row_number()
-  )
-
 params <- readRDS("research/step-function-simulations/simulation_parameters.rds")
 
 res_list <- tibble(
@@ -23,8 +17,7 @@ nrow(res_list)
 
 outstanding_conditions <-
   params %>%
-  anti_join(res_list, by = "row") %>%
-  left_join(rows, by = "row")
+  anti_join(res_list, by = "row")
 
 nrow(outstanding_conditions)
 outstanding_conditions %>%
@@ -42,15 +35,6 @@ no_bootstraps_res <-
   filter(bootstrap == "none", !is.na(file)) %>%
   select(-priors, -comparison_methods) %>%
   distinct() %>%
-  pull(file) %>%
-  future_map_dfr(.f = readRDS) %>%
-  select(-seed)
-toc()
-
-tic()
-no_bootstraps_res <- 
-  res_list %>%
-  filter(row < 1e5) %>%
   pull(file) %>%
   future_map_dfr(.f = readRDS) %>%
   select(-seed)
@@ -96,57 +80,8 @@ bootstrap_files <-
   inner_join(res_list, by = "row") %>%
   select(-batch, -row, -seed) %>%
   filter(bootstrap != "none") %>%
-  nest(iterations = iterations, files = file)
-
-
-# count_booties <- function(file_list) {
-#   dat <- map_dfr(file_list$file, .f = readRDS)
-#   
-#   bind_rows(dat$res) %>%
-#     filter(param == "beta", model == "3PSM") %>%
-#     mutate(R = map_int(boot_CIs, \(x) if (is.null(x)) 0L else max(x$bootstraps))) %>%
-#     group_by(estimator) %>%
-#     count(R)
-# }
-# 
-# 
-# file_list <-
-#   bootstrap_files %>%
-#   filter(mean_smd == 0.0, tau == 0.05, cor_mu == 0.8, m == 60, omega == 0, weights == 0.05, n_multiplier == 1/3, bootstrap == "two-stage") %>%
-#   pull(files)
-# count_booties(file_list[[1]])
-# 
-# plan(multisession, workers = 10L)
-# 
-# tic()
-# bootstraps_counts <- 
-#   bootstrap_files %>%
-#   mutate(
-#     iterations = future_map_int(iterations, ~ sum(.x$iterations)),
-#     counts = future_map(files, count_booties, .progress = TRUE)
-#   )
-# toc()
-# 
-# plan(sequential)
-# 
-# bootstrap_reps <- 
-#   bootstraps_counts %>%
-#   select(priors, bootstrap, iterations, counts) %>%
-#   unnest(counts) %>% 
-#   group_by(priors, bootstrap, estimator, R) %>%
-#   summarize(
-#     reps = sum(n),
-#     .groups = "drop"
-#   ) %>%
-#   mutate(
-#     status = case_when(R == 0 ~ "none", R == 299 ~ "all", TRUE ~ "some")
-#   )
-# 
-# bootstrap_reps %>% 
-#   group_by(priors, bootstrap, estimator, status) %>%
-#   summarize(
-#     reps = sum(reps)
-#   ) 
+  nest(iterations = iterations, files = file) %>%
+  mutate(R_max = map_dbl(R, max))
 
 #-------------------------------------------------------------------------------
 # compile results from conditions with bootstraps
@@ -191,20 +126,9 @@ summarize_bootstraps <- function(file_list) {
   return(batch_file_name)
 }
 
-summarize_bootstraps(file_list = bootstrap_files$files[[1]])
-
-# partial_files <- 
-#   bootstraps_counts %>%
-#   select(files, counts) %>%
-#   mutate(
-#     partial = map_lgl(counts, ~ any(.x$R < 299 & .x$R > 0))
-#   ) %>%
-#   filter(partial) %>%
-#   pull(files)
-# 
-# tic()
-# summary_dat <- summarize_bootstraps(file_list = partial_files[[1]])
-# toc()
+# debug(calc_performance)
+# summarize_bootstraps(file_list = bootstrap_files$files[[1]])
+# summarize_bootstraps(file_list = bootstrap_files$files[[1296]])
 
 plan(multisession, workers = 10L)
 
@@ -254,118 +178,3 @@ timings %>%
   mutate(
     time_yrs_total = time_hrs_total / 24 / 365.25
   )
-
-#-------------------------------------------------------------------------------
-# Compare convergence rates for different prior specifications
-
-
-selection_levels <- c(
-  "0.02 (Strong)" = 0.02,
-  "0.05" = 0.05,
-  "0.10" = 0.10,
-  "0.20" = 0.20,
-  "0.50" = 0.50,
-  "1.00 (None)" = 1.00
-)
-
-convergence_results <- 
-  readRDS("research/step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
-  filter(
-    estimator %in% c("ARGL","CML"), 
-    param == "beta"
-  ) %>% 
-  select(-param) %>%
-  mutate(
-    estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
-    N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    weights_num = weights,
-    weights = as.character(weights),
-    het_ratio = omega ^ 2 / tau ^ 2,
-    het_ratio = as.character(het_ratio),
-    scrmse = sqrt(m) * rmse, 
-    J = as.character(m),
-    J = factor(J, levels = c("15", "30", "60", "90", "120")),
-    weights = factor(
-      weights, 
-      levels = selection_levels,
-      labels = names(selection_levels)
-    ),
-    mu_fac = fct(as.character(mean_smd)),
-    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")),
-    convergence = 100 * K_absolute / iterations
-  ) %>%
-  group_by(mean_smd, tau, weights, estimator, priors) %>%
-  summarize(
-    min = min(convergence),
-    Q10 = quantile(convergence, 0.1),
-    median = median(convergence),
-    Q90 = quantile(convergence, 0.9),
-    max = max(convergence),
-    .groups = "drop"
-  )
-
-convergence_results %>%
-  filter(estimator %in% c("CML")) %>%
-  ggplot() + 
-  aes(x = weights, y = median, ymin = min, max = max, color = priors, fill = priors) +
-  geom_pointrange(
-    position = position_dodge(width = 0.5)
-  ) + 
-  geom_linerange(
-    aes(ymin = Q10, ymax = Q90),
-    position = position_dodge(width = 0.5),
-    linewidth = 1.2
-  ) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  scale_y_continuous(limits = c(NA, 100), expand = expansion(0,0)) + 
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Convergence rate", 
-    color = "Prior",
-    fill = "Prior"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
-
-convergence_results %>%
-  filter(estimator %in% c("ARGL")) %>%
-  ggplot() + 
-  aes(x = weights, y = median, ymin = min, max = max, color = priors, fill = priors) +
-  geom_pointrange(
-    position = position_dodge(width = 0.5)
-  ) + 
-  geom_linerange(
-    aes(ymin = Q10, ymax = Q90),
-    position = position_dodge(width = 0.5),
-    linewidth = 1.2
-  ) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  scale_y_continuous(limits = c(NA, 100), expand = expansion(0,0)) + 
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Convergence rate", 
-    color = "Prior",
-    fill = "Prior"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
