@@ -23,8 +23,9 @@ nrow(outstanding_conditions)
 outstanding_conditions %>%
   count(bootstrap)
 
-#-------------------------------------------------------------------------------
-# compile results from conditions with no bootstraps
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Compile results from conditions with no bootstraps ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 plan(multisession, workers = 10)
 
@@ -72,8 +73,9 @@ res %>%
 write_rds(res, file = "research/step-function-simulations/sim-step-function-results-no-bootstraps.rds", compress = "gz", compression = 9L)
 
 
-#-------------------------------------------------------------------------------
-# Count conditions with incomplete bootstraps
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Count conditions with incomplete bootstraps ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 bootstrap_files <-
   params %>%
@@ -83,8 +85,9 @@ bootstrap_files <-
   nest(iterations = iterations, files = file) %>%
   mutate(R_max = map_dbl(R, max))
 
-#-------------------------------------------------------------------------------
-# compile results from conditions with bootstraps
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# compile results from conditions with bootstraps ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 
 source("research/step-function-simulations/2_performance_criteria.R")
@@ -140,24 +143,24 @@ bootstrap_res <-
   )
 toc()
 
-plan(sequential)
-
-
 tic()
 bootstrap_res <- 
   bootstrap_res %>%
   mutate(
-    iterations = map_int(iterations, ~ sum(.x$iterations)),
-    res = map(summary_file, .f = read_rds, .progress = TRUE)
+    iterations = future_map_int(iterations, ~ sum(.x$iterations)),
+    res =  future_map(summary_file, .f = read_rds, .progress = TRUE)
   ) %>%
   select(-files, -summary_file) %>%
   unnest(res)
 toc()
 
+plan(sequential)
+
 write_rds(bootstrap_res, file = "research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
 
-#-------------------------------------------------------------------------------
-# Compile computation time data
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Compile computation time data ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 # timing
 
