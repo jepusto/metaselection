@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-# Score and Hessian of the step-function marginal log likelihood {#CML-derivatives}
+# Score and Hessian of the step-function marginal log likelihood {#PML-derivatives}
 
 ## Score functions 
 
@@ -22,7 +22,7 @@ l^M_{j}\left(\bs\beta, \gamma, \bs\zeta \right) = \sum_{i=1}^{k_j}  a_{ij} l^M_{
 \end{equation}
 The components of the score contribution of study $j$ involve derivatives of $l^M_{j}\left(\bs\beta, \gamma, \bs\zeta \right)$ with respect to all model parameters, as given by
 \begin{equation}
-\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \left(\mat{S}_{\bs\beta j}', S_{\gamma j}, S_{\zeta_1 j}, ..., S_{\zeta_H j}\right)'.
+\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \left(\mat{S}_{\bs\beta j}', S_{\gamma j}, \mat{S}_{\bs\zeta j}'\right)'.
 \end{equation}
 Let $w_{ij} = w\left(y_{ij}, \sigma_{ij}; \bs\lambda \right)$, $\mu_{ij} = \mat{x}_{ij} \bs\beta$, $\eta_{ij} = \exp(\gamma) + \sigma_{ij}^2$, and $A_{ij} = A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right)$ as defined in Equation \@ref(eq:step-function-A).
 The score contribution of study $j$ for the meta-regression coefficients has the general form
@@ -33,7 +33,7 @@ The score for the variance parameter has the general form
 \begin{equation}
 S_{\gamma j} = \sum_{i=1}^{k_j} a_{ij} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right).
 \end{equation}
-The score for the $h^{th}$ selection parameter has the general form
+The score for the selection parameters has the general form $\mat{S}_{\bs\zeta j} = \left(S_{\zeta_1 j},...,S_{\zeta_H j} \right)'$, where
 \begin{equation}
 \label{eq:zeta-score-component}
 S_{\zeta_h j} = \sum_{i=1}^{k_j} a_{ij} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right),

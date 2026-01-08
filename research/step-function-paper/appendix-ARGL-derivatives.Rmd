@@ -21,7 +21,7 @@ The first two components of $\mat{M}_j(\bs\beta, \gamma, \bs\zeta)$ are given by
 \mat{S}^G_{\bs\beta j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \mat{x}_{ij}' \frac{y_{ij} - \mat{x}_{ij} \bs\beta}{w_{ij} \left(\exp(\gamma) + \sigma_{ij}^2\right)} \\
 \mat{S}^G_{\gamma j} (\bs\beta, \gamma, \bs\zeta) &= \sum_{i=1}^{k_j} a_{ij} \times \frac{\exp(\gamma)}{2 w_{ij}} \left(\frac{(y_{ij} -\mat{x}_{ij} \bs\beta)^2}{\left(\exp(\gamma) + \sigma_{ij}^2\right)^2} - \frac{1}{\exp(\gamma) + \sigma_{ij}^2}\right).
 \end{align}
-The third component is the score equation for $\bs\zeta$ based on the marginal likelihood. Its exact form is given in Equation \@ref(eq:zeta-score-component).
+The third component is the score equation for $\bs\zeta$ based on the marginal likelihood, as given in Equation \@ref(eq:zeta-score-component).
 
 ## Sandwich estimator for the augmented, re-weighted Gaussian likelihood estimator
 

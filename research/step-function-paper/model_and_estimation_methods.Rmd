@@ -162,13 +162,13 @@ If the true parameter values are not at the extremes of their ranges, the CML es
 \sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) + p'\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
 \end{equation}
 where $\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ denotes the score vector for study $j$, consisting of derivatives of the likelihood contributions for study $j$ with respect to the component parameters, and $p'(\bs\beta, \gamma, \bs\zeta)$ denotes the vector of derivatives of the prior penalty terms with respect to the component parameters.
-`r appendix_prefix` \@ref(CML-derivatives) provides exact expressions for the score vectors and derivatives of the prior penalties.
+`r appendix_prefix` \@ref(PML-derivatives) provides exact expressions for the score vectors and derivatives of the prior penalties.
 
 Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in CML estimators. Let $\mat{H}$ denote the Hessian matrix of the composite log-likelihood,
 \begin{equation}
 \mat{H}(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \frac{\partial \mat{S}_j(\bs\beta, \gamma, \bs\zeta)}{\partial \left(\bs\beta' \ \gamma \ \bs\zeta'\right)},
 \end{equation}
-exact expressions for which are given in `r appendix_prefix` \@ref(CML-derivatives).
+exact expressions for which are given in `r appendix_prefix` \@ref(PML-derivatives).
 Let $\mat{\hat{S}}_j = \mat{S}_j(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ and $\mat{\hat{H}} = \mat{H}(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ denote the score vectors and Hessian matrix evaluated at the maximum of the composite likelihood.
 A cluster-robust sandwich estimator of the sampling variance of the CML estimator is then
 \begin{equation}

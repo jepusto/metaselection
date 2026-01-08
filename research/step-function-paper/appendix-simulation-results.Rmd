@@ -125,7 +125,7 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -155,6 +155,46 @@ mu_graph_res_ci %>%
   theme(legend.position = "top")
 
 ```
+```{r PML-coverage-robust-vs-model}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations versus model-based variance estimation, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+
+results_ci %>%
+  filter(
+    param == "beta",
+    !is.na(coverage),
+    is.na(bootstraps) | (bootstraps == 1999 & extrapolated),
+    estimator %in% c("PML","PML-model"),
+    CI_type %in% "large-sample"
+  ) %>%
+  ggplot() +
+  aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method) + 
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0.2,1.0,0.2), expand = expansion(0,0)) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Variance estimator",
+    fill = "Variance estimator"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+```
 
 ```{r comparison-coverage-rho}
 #| cache: true
@@ -168,7 +208,7 @@ mu_graph_res_ci %>%
   filter(
     CI_type %in% c("large-sample")
   ) %>%
-  ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
+  ggplot(aes(x = J, y = coverage, color = factor(cor_mu), fill = factor(cor_mu))) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   coord_cartesian(ylim = c(0.5, 1.0)) + 
@@ -176,9 +216,8 @@ mu_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    cor_mu ~ mean_smd, 
+    estimator ~ mean_smd, 
     labeller = label_bquote(
-      rows = rho == .(cor_mu),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -186,19 +225,19 @@ mu_graph_res_ci %>%
   labs(
     x = "Number of studies (J)", 
     y = "Coverage rate", 
-    color = "Estimator",
-    fill = "Estimator"
+    color = "Correlation between outcomes",
+    fill = "Correlation between outcomes"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
 
 ```
 
-```{r PML-coverage-tau}
+```{r PML-coverage-lambda}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -209,13 +248,13 @@ mu_graph_res_ci %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
-  scale_y_continuous(limits = c(0.6, 1.0), breaks = seq(0.6,0.95,0.05), expand = expansion(0,0)) +
+  scale_y_continuous(limits = c(0.65, 1.0), breaks = seq(0.65,0.95,0.05), expand = expansion(0,0)) +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    tau ~ mean_smd,
+    weights_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau[B] == .(tau),
+      rows = lambda[1] == .(weights_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -237,7 +276,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -256,7 +295,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -275,7 +314,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -287,6 +326,42 @@ mu_graph_res_ci %>%
   coverage_plot()
 
 ```
+```{r ARGL-coverage-lambda}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("ARGL"),
+    CI_type %in% c("large-sample","percentile")
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0.4, 1.0), breaks = seq(0.4,0.9,0.1), expand = expansion(0,0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    weights_num ~ mean_smd, 
+    labeller = label_bquote(
+      rows = lambda[1] == .(weights_num),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
 
 ```{r ARGL-coverage-two-stage}
 #| cache: true
@@ -294,7 +369,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -314,7 +389,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -334,7 +409,7 @@ mu_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -349,17 +424,18 @@ mu_graph_res_ci %>%
 
 \newpage 
 
-# Additional simulation results for estimators of heterogeneity $(\tau^2)$ {#gamma-simulation-results}
+# Additional simulation results for estimators of heterogeneity {#gamma-simulation-results}
 
 We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE-ISCW, PML, and ARGL methods are all relevant.
-Figure \@ref(fig:heterogeneity-bias) depicts the bias for the CHE-ISCW, PML, and ARGL estimators of log-heterogeneity $\gamma = \log(\tau^2)$. 
-In most conditions, the estimators are biased in the negative direction.
-Bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau = 0.05$) with bias improving as between-study heterogeneity increases. The PML estimator is less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection. 
-However, the ARGL estimator is badly biased downward, especially under conditions where selection is strong, average SMD is low and between-study heterogeneity is low. 
+Figure \@ref(fig:heterogeneity-bias) depicts the relative bias for the CHE-ISCW, PML, and ARGL estimators of marginal variance $\tau_B^2 + \omega^2$. 
+In most conditions, the PML and ARGL estimators are biased in the negative direction.
+Relative bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau_B = 0.05$) with bias improving as between-study heterogeneity increases. 
+The PML and ARGL estimators are less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection. 
+Neither of the selection model estimators have consistently lower bias than the other estimator. 
 
-Figure \@ref(fig:heterogeneity-rmse) depicts the scaled RMSE for estimators of log-heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-CHE) and \@ref(fig:heterogeneity-rmse-ARGL-CML) providing greater detail about the relative accuracy of the three methods. 
-Under nearly all conditions, the PML estimator is much more accurate than the ARGL estimator. 
-The RMSE of PML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong, average SMD is low, between-study heterogeneity is large, and sample size is large.
+Figure \@ref(fig:heterogeneity-rmse) depicts the relative RMSE for estimators of total heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-PML), \@ref(fig:heterogeneity-rmse-PML-CHE), and \@ref(fig:heterogeneity-rmse-ARGL-CHE) providing greater detail about the relative accuracy of the three methods. 
+Under nearly all conditions, the PML estimator is more accurate than the ARGL estimator. 
+The RMSE of PML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong and average SMD is low or moderate.
 However, just as with the estimators of average effect size, the CHE estimator is more accurate when selection is mild or absent, leading to a bias-variance trade-off.
 
 
@@ -380,7 +456,6 @@ ggplot() +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  coord_cartesian(ylim = c(-1,1)) + 
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -406,12 +481,12 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
 
 tau2_graph_res %>%
   filter(estimator %in% c("CHE","PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = scrrmse, color = estimator, fill = estimator) +
+  aes(x = weights, y = rrmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -427,7 +502,7 @@ ggplot() +
   ) +
   labs(
     x = "Selection probability", 
-    y = "Scaled Relative Root Mean-Squared Error", 
+    y = "Relative Root Mean-Squared Error", 
     color = "Estimator",
     fill = "Estimator"
   ) + 
@@ -435,7 +510,18 @@ ggplot() +
   theme(legend.position = "top")
 
 ```
-  
+
+```{r heterogeneity-rmse-ARGL-PML}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "PML","ARGL")
+```
+
 ```{r heterogeneity-rmse-PML-CHE}
 #| cache: true
 #| fig.width: 9
@@ -458,27 +544,25 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","PML")
 RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","ARGL")
 ```
 
-```{r heterogeneity-rmse-ARGL-PML}
-#| cache: true
-#| fig.width: 9
-#| fig.height: 6.5
-#| fig.pos: !h
-#| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
-
-RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "PML","ARGL")
-```
-
 \newpage 
 
-# Additional simulation results for estimators of selection parameter $(\zeta_1)$ {#zeta-simulation-results}
+# Additional simulation results for estimators of selection parameter $(\lambda_1)$ {#zeta-simulation-results}
 
-The PML and ARGL methods both estimate the log-selection parameter of the step-function model, a parameter that may be of substantive interest. 
-Figure \@ref(fig:selection-bias) shows that the bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have large negative biases under conditions with strong selection probability and high average SMD, especially with low between-study heterogeneity. 
-Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and PML estimators of the log-selection parameter with Figure \@ref(fig:selection-rmse-ARGL-CML) providing a more detailed view of the relative accuracy of the ARGL versus the PML estimators. 
-The PML estimator of the selection parameter generally outperforms the ARGL estimator, especially under conditions with strong selection. 
-Figures \@ref(fig:CML-zeta-coverage-two-stage) and \@ref(fig:ARGL-zeta-coverage-two-stage) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
-Broadly, none of the methods provide coverage rates that are close to the nominal 95% level across all conditions examined.
+The PML and ARGL methods both estimate the selection parameter $\lambda_1$ of the step-function model, a quantity that may be of substantive interest. 
+Figure \@ref(fig:selection-bias) shows that the relative bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have positive biases under conditions with very strong selection probability, especially when average effect size is large or between-study heterogeneity is low.
+This pattern of bias is consistent with the specification of the prior penalties, which induce finite-sample bias when the true selection parameter is in a region with low prior probability (e.g., $\lambda_1 = 0.02$).
+
+Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and PML estimators of the log-selection parameter with Figure \@ref(fig:selection-rmse-ARGL-PML) providing a more detailed view of the relative accuracy of the ARGL versus the PML estimators. 
+The PML estimator of the selection parameter generally outperforms the ARGL estimator, especially when sample size is small. 
+
+Figures \@ref(fig:PML-zeta-coverage-two-stage), \@ref(fig:ARGL-zeta-coverage-two-stage), and \@ref(fig:PML-zeta-coverage-two-stage-percentile) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
+Broadly, percentile intervals perform better than the other methods of constructing bootstrap confidence intervals.
+For the PML estimator (Figure \@ref(fig:PML-zeta-coverage-two-stage)), the percentile intervals have near-nominal coverage for sample sizes of $J = 30$ or larger under most conditions, except when average sample size is large.
+Compared to intervals based on the PML, the coverage levels of bootstrap CIs based on the ARGL estimator are generally inferior (Figure \@ref(fig:ARGL-zeta-coverage-two-stage)).
+
+When average sample size is large, the performance of the PML percentile confidence intervals is strongly affected by the primary study sample size distribution (Figure \@ref(fig:PML-zeta-coverage-two-stage-percentile)).
+When average sample sizes are typical and $\mu = 0.8$, few non-significant effect sizes are generated, making it difficult to estimate the strength of selection.
+In contrast, smaller primary study sample sizes means that more are under-powered, so it is more feasible to estimate the strength of selection and construct confidence intervals with correct coverage.
 
 ```{r selection-bias}
 #| cache: true
@@ -486,18 +570,18 @@ Broadly, none of the methods provide coverage rates that are close to the nomina
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Bias for estimators of log-selection parameter by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative bias for selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
 
-zeta_graph_res %>%
+lambda_graph_res %>%
   filter(estimator %in% c("PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = bias, color = estimator, fill = estimator) +
+  aes(x = weights, y = rbias, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  coord_cartesian(ylim = c(-2,2)) + 
+  coord_cartesian(ylim = c(-1,4)) + 
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -508,7 +592,7 @@ ggplot() +
   ) +
   labs(
     x = "Selection probability", 
-    y = "Bias", 
+    y = "Relative Bias", 
     color = "Estimator",
     fill = "Estimator"
   ) + 
@@ -523,12 +607,12 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Scaled root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
 
-zeta_graph_res %>%
+lambda_graph_res %>%
   filter(estimator %in% c("PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = scrmse, color = estimator, fill = estimator) +
+  aes(x = weights, y = rrmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -545,7 +629,7 @@ ggplot() +
   ) +
   labs(
     x = "Selection probability", 
-    y = "Scaled Root Mean-Squared Error", 
+    y = "Relative Root Mean-Squared Error", 
     color = "Estimator",
     fill = "Estimator"
   ) + 
@@ -560,18 +644,18 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL log-selection parameter estimator to root mean-squared error of PML log-selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL selection parameter estimator to root mean-squared error of PML selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(zeta_wide_res, "PML","ARGL")
+RMSE_comparison_plot(lambda_wide_res,measure = "rrmse", "PML","ARGL")
 ```
 
-```{r CML-zeta-coverage-two-stage}
+```{r PML-zeta-coverage-two-stage}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
@@ -588,9 +672,9 @@ zeta_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    tau ~ mean_smd, 
+    weights_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau[B] == .(tau),
+      rows = lambda[1] == .(weights_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -612,7 +696,7 @@ zeta_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
@@ -629,9 +713,9 @@ zeta_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    tau ~ mean_smd, 
+    weights_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = tau[B] == .(tau),
+      rows = lambda[1] == .(weights_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -641,6 +725,48 @@ zeta_graph_res_ci %>%
     y = "Coverage rate", 
     color = "Method",
     fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+
+```{r PML-zeta-coverage-two-stage-percentile}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of two-stage percentile bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, primary study sample size, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+
+zeta_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("PML"),
+    bootstrap_type == "two-stage",
+    CI_type == "percentile",
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = N_factor, fill = N_factor)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  coord_cartesian(ylim = c(0.4, 1)) + 
+  scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    weights_num ~ mean_smd, 
+    labeller = label_bquote(
+      rows = lambda[1] == .(weights_num),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Coverage rate", 
+    color = "Primary study sample size",
+    fill = "Primary study sample size"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
