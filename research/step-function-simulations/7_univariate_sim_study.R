@@ -1,11 +1,10 @@
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Source packages and functions ----
 
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(ggplot2)
+library(tidyverse)
 library(simhelpers)
+library(future)
+library(metafor)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Load empirical data used in simulation design ----
@@ -79,7 +78,7 @@ univariate_sim(
   mean_smd = 0, 
   tau = 0.05, 
   omega = 0,
-  m = 120L,
+  m = 30L,
   cor_mu = 0.8
 )
   
@@ -91,16 +90,18 @@ all_params <-
 
 no_selection_params <- 
   all_params %>%
-  filter(weights == 1, bootstrap == "none", n_multiplier == 1) %>% 
-  select(iterations, mean_smd, tau, omega, cor_mu, m, seed) %>%
-  mutate(iterations = 100L)
-
+  filter(
+    weights == 1, 
+    bootstrap == "none",
+    mean_smd %in% c(0.0,0.8)
+  ) %>% 
+  select(iterations, mean_smd, tau, omega, cor_mu, n_multiplier, m, seed) %>%
+  mutate(iterations = round(4800 / sqrt(m)))
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Run simulations ----
 
-library(future)
-plan(multisession, workers = 10L)
+plan(multisession, workers = 12L)
 
 univariate_RE_results <- 
   evaluate_by_row(
@@ -117,4 +118,160 @@ saveRDS(univariate_RE_results, file = "research/step-function-simulations/univar
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Create figure showing bias of heterogeneity estimator ----
 
-univariate_RE_results <- readRDS(file = "research/step-function-simulations/univariate-RE-simulation-results.rds")
+univariate_RE_results <- 
+  readRDS(file = "research/step-function-simulations/univariate-RE-simulation-results.rds") %>%
+  mutate(
+    mu_fac = fct(as.character(mean_smd)),
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45")),
+    het_ratio = omega^2 / tau^2,
+    het_ratio = as.character(het_ratio),
+    var_fac = paste(het_ratio, tau_fac),
+    cor_fac = fct(as.character(cor_mu)),
+    N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
+    J = as.character(m),
+    J = factor(J, levels = c("15", "30", "60", "90", "120")),
+    J_inv_sqrt = 1 / sqrt(m),
+    total_var = tau^2 + omega^2,
+    relbias = bias / total_var,
+    relbias_mcse = bias_mcse / total_var
+  )
+
+bias_fit <- 
+  rma.uni(
+    yi = bias,
+    sei = bias_mcse,
+    mods = ~ cor_fac : tau_fac : het_ratio : J_inv_sqrt,
+    data = univariate_RE_results
+  ) 
+bias_blup_est <- blup(bias_fit)
+
+univariate_RE_blups <-
+  univariate_RE_results %>%
+  mutate(
+    bias_blup = bias_blup_est$pred,
+    bias_blup_mcse = bias_blup_est$se,
+    relbias_blup = bias_blup / total_var,
+    relbias_blup_mcse = bias_blup_mcse / total_var
+  )
+
+# MCSE of raw bias
+
+ggplot(univariate_RE_results) +
+  aes(J, bias_mcse, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
+  geom_hline(yintercept = 0) + 
+  geom_point() + geom_line(aes(group = var_fac)) + 
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "MCSE of Bias", 
+    color = expression(tau[B]),
+    shape = "Heterogeneity ratio",
+    linetype = "Heterogeneity ratio"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "right")
+
+
+# raw bias
+
+ggplot(univariate_RE_blups) +
+  aes(J, bias, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
+  geom_hline(yintercept = 0) + 
+  geom_point() + geom_line(aes(group = var_fac)) + 
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Bias", 
+    color = expression(tau[B]),
+    shape = "Heterogeneity ratio",
+    linetype = "Heterogeneity ratio"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "right")
+
+
+# model-adjusted bias
+
+ggplot(univariate_RE_blups) +
+  aes(J, bias_blup, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
+  geom_hline(yintercept = 0) + 
+  geom_point() + geom_line(aes(group = var_fac)) + 
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Bias", 
+    color = expression(tau[B]),
+    shape = "Heterogeneity ratio",
+    linetype = "Heterogeneity ratio"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "right")
+
+# MCSE of raw relative bias
+
+ggplot(univariate_RE_results) +
+  aes(J, relbias_mcse, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
+  geom_hline(yintercept = 0) + 
+  geom_point() + geom_line(aes(group = var_fac)) + 
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "MCSE of Relative Bias", 
+    color = expression(tau[B]),
+    shape = "Heterogeneity ratio",
+    linetype = "Heterogeneity ratio"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "right")
+
+# model-adjusted relative bias
+
+ggplot(univariate_RE_blups) +
+  aes(J, relbias_blup, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
+  geom_hline(yintercept = 0) + 
+  geom_point() + geom_line(aes(group = var_fac)) + 
+  facet_grid(
+    cor_mu ~ mean_smd, 
+    labeller = label_bquote(
+      rows = rho == .(cor_mu),
+      cols = mu == .(mean_smd)
+    ),
+  ) +
+  labs(
+    x = "Number of studies (J)", 
+    y = "Relative Bias", 
+    color = expression(tau[B]),
+    shape = "Heterogeneity ratio",
+    linetype = "Heterogeneity ratio"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "right")
+
