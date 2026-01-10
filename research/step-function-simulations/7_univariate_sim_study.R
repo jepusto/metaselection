@@ -140,7 +140,7 @@ bias_fit <-
   rma.uni(
     yi = bias,
     sei = bias_mcse,
-    mods = ~ cor_fac : tau_fac : het_ratio : J_inv_sqrt,
+    mods = ~ cor_fac : tau_fac : het_ratio : N_factor : J_inv_sqrt,
     data = univariate_RE_results
   ) 
 bias_blup_est <- blup(bias_fit)
@@ -161,7 +161,7 @@ ggplot(univariate_RE_results) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu ~ mean_smd, 
+    cor_mu + N_factor ~ mean_smd, 
     labeller = label_bquote(
       rows = rho == .(cor_mu),
       cols = mu == .(mean_smd)
@@ -186,7 +186,7 @@ ggplot(univariate_RE_blups) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu ~ mean_smd, 
+    cor_mu + N_factor ~ mean_smd, 
     labeller = label_bquote(
       rows = rho == .(cor_mu),
       cols = mu == .(mean_smd)
@@ -211,7 +211,7 @@ ggplot(univariate_RE_blups) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu ~ mean_smd, 
+    cor_mu + N_factor ~ mean_smd, 
     labeller = label_bquote(
       rows = rho == .(cor_mu),
       cols = mu == .(mean_smd)
@@ -227,51 +227,3 @@ ggplot(univariate_RE_blups) +
   ) + 
   theme_bw() +
   theme(legend.position = "right")
-
-# MCSE of raw relative bias
-
-ggplot(univariate_RE_results) +
-  aes(J, relbias_mcse, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
-  geom_hline(yintercept = 0) + 
-  geom_point() + geom_line(aes(group = var_fac)) + 
-  facet_grid(
-    cor_mu ~ mean_smd, 
-    labeller = label_bquote(
-      rows = rho == .(cor_mu),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Number of studies (J)", 
-    y = "MCSE of Relative Bias", 
-    color = expression(tau[B]),
-    shape = "Heterogeneity ratio",
-    linetype = "Heterogeneity ratio"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "right")
-
-# model-adjusted relative bias
-
-ggplot(univariate_RE_blups) +
-  aes(J, relbias_blup, color = tau_fac, linetype = het_ratio, shape = het_ratio) + 
-  geom_hline(yintercept = 0) + 
-  geom_point() + geom_line(aes(group = var_fac)) + 
-  facet_grid(
-    cor_mu ~ mean_smd, 
-    labeller = label_bquote(
-      rows = rho == .(cor_mu),
-      cols = mu == .(mean_smd)
-    ),
-  ) +
-  labs(
-    x = "Number of studies (J)", 
-    y = "Relative Bias", 
-    color = expression(tau[B]),
-    shape = "Heterogeneity ratio",
-    linetype = "Heterogeneity ratio"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "right")
-
