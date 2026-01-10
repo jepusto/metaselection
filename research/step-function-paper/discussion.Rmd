@@ -33,12 +33,20 @@ PML consistently out-performs ARGL for estimating between-study heterogeneity an
 
 Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations showing that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias. [@chen2024adapting]
 However, this approach has several conceptual limitations that are important to note.
+
 First, such models do not reflect the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
 Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes. [@pustejovsky2022preventionscience; @vandennoortgate2013threelevel]
+In further developing this approach, it would be useful to allow for more flexibility by, for instance, letting the heterogeneity parameter vary as a function of covariates as in location-scale models [@viechtbauer2022locationscale] or allowing for the strength of selection to vary based on study characteristics.[@Coburn2015publication]
+
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates. 
 Better accounting for the dependence structure, such as through the use of analytic weights, might allow for construction of more efficient estimators of the parameters of the evidence-generating process.
+
 Third, the marginal model does not distinguish between study-level publication bias and effect-level selective outcome reporting.
 This strategy therefore precludes examination of more nuanced forms of selection, such as one where the probability that a given effect size is reported depends on the significance levels of other effect size estimates drawn from the same sample or on some broader feature of the study's results.
+
+Recent methodological work on publication bias in univariate meta-analysis has used step-function selection models as one component of an ensemble modeling technique, where it is combined with PET/PEESE regression adjustments and summary (unadjusted) meta-analysis models via Bayesian model averaging.[@Bartos2023robust]
+It would be valuable to extend these ensemble techniques to work with dependent effect sizes, but doing so may be hampered by the need of Bayesian methods to work with full likelihoods.
+Whether the marginal modeling strategy that we have explored here could be applied with Bayesian model averaging remains an open question, worth further exploration.
 
 In addition to conceptual limitations, our simulation findings also need to be interpreted cautiously in light of the study's scope limitations.
 First, although our simulations covered a wide range of plausible conditions, the results remain generalizable only to the data-generating process examined.
