@@ -229,7 +229,7 @@ ggplot(univariate_RE_blups) +
   theme(legend.position = "right")
 
 ggsave(
-  "research/step-function-simulations/univariate-RE-simulation.bmp", 
+  "research/step-function-simulations/univariate-RE-simulation.png", 
   width = 8, 
   height = 6,
   dpi = 600
