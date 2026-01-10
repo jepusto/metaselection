@@ -127,7 +127,7 @@ univariate_RE_results <-
     het_ratio = as.character(het_ratio),
     var_fac = paste(het_ratio, tau_fac),
     cor_fac = fct(as.character(cor_mu)),
-    N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
+    N_factor = if_else(n_multiplier < 1, "Small", "Typical"),
     J = as.character(m),
     J = factor(J, levels = c("15", "30", "60", "90", "120")),
     J_inv_sqrt = 1 / sqrt(m),
@@ -161,12 +161,12 @@ ggplot(univariate_RE_results) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu + N_factor ~ mean_smd, 
+    mean_smd + N_factor ~ cor_mu, 
+    scales = "free_y",
     labeller = label_bquote(
-      rows = rho == .(cor_mu),
-      cols = mu == .(mean_smd)
+      cols = rho == .(cor_mu),
+      rows = atop( mu == .(mean_smd), .(N_factor) ~ "sample size")
     ),
-    scales = "free_y"
   ) +
   labs(
     x = "Number of studies (J)", 
@@ -186,12 +186,12 @@ ggplot(univariate_RE_blups) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu + N_factor ~ mean_smd, 
+    mean_smd + N_factor ~ cor_mu, 
+    scales = "free_y",
     labeller = label_bquote(
-      rows = rho == .(cor_mu),
-      cols = mu == .(mean_smd)
+      cols = rho == .(cor_mu),
+      rows = atop( mu == .(mean_smd), .(N_factor) ~ "sample size")
     ),
-    scales = "free_y"
   ) +
   labs(
     x = "Number of studies (J)", 
@@ -211,12 +211,12 @@ ggplot(univariate_RE_blups) +
   geom_hline(yintercept = 0) + 
   geom_point() + geom_line(aes(group = var_fac)) + 
   facet_grid(
-    cor_mu + N_factor ~ mean_smd, 
+    mean_smd + N_factor ~ cor_mu, 
+    scales = "free_y",
     labeller = label_bquote(
-      rows = rho == .(cor_mu),
-      cols = mu == .(mean_smd)
+      cols = rho == .(cor_mu),
+      rows = atop( mu == .(mean_smd), .(N_factor) ~ "sample size")
     ),
-    scales = "free_y"
   ) +
   labs(
     x = "Number of studies (J)", 
@@ -227,3 +227,10 @@ ggplot(univariate_RE_blups) +
   ) + 
   theme_bw() +
   theme(legend.position = "right")
+
+ggsave(
+  "research/step-function-simulations/univariate-RE-simulation.bmp", 
+  width = 8, 
+  height = 6,
+  dpi = 600
+)
