@@ -188,6 +188,7 @@ mod_4PSM_boot_ARGL <- selection_model(
 mod_4PSM_boot_ARGL
 
 selection_plot(mod_4PSM_boot_ARGL, transform = "sqrt")
+
 ```
 
 ## Comparison Methods

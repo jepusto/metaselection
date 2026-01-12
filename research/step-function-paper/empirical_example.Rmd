@@ -130,6 +130,7 @@ kbl(
 The estimates in Table \@ref(tab:empirical) point towards some potential differences between estimation methods.
 Generally, the PML and ARGL parameter estimates are similar in magnitude, but the confidence intervals based on the PML estimator are narrower than those for the ARGL estimator.
 For the PML estimator, the bootstrap CIs are similar or slightly wider than the cluster-robust CIs.
+For the two-step model, the cluster-robust standard errors for the ARGL estimator are much larger than for the PML estimator; this is a consequence of the small number of negative estimates in the dataset, which are very influential observations for the ARGL estimating equations and thus lead to inflated uncertainty.
 These patterns suggest that there could be differences in the performance of the estimators, as well as differences in performance between the step-function estimators and alternative adjustment methods such as PET/PEESE.
 However, these results are based on a single empirical dataset where the true data-generating process is unknown. 
 To draw firmer conclusion about these methods, we conducted simulations to evaluate their performance characteristics across a range of conditions. 

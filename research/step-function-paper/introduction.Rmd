@@ -23,8 +23,8 @@ One common graphical diagnostic is the funnel plot, a simple scatterplot of effe
 
 Another class of methods for assessing and correcting selective reporting are $p$-value selection models.
 Such models build on summary meta-analysis or meta-regression models by making specific, explicit assumptions about the selection function, or how the probability that an effect size estimate is reported relates to the sign and statistical significance level of the effect. 
-Building on earlier proposals [@hedges1984estimation; @iyengar1988selection; @dear1992approach], Vevea and Hedges proposed _step-function_ models where the selection function is piece-wise constant, with steps at fixed significance thresholds.[@hedges1992modeling; @vevea1995general]
-Other forms involve selection functions based on beta densities [@citkowicz2017parsimonious], power curves, and a variety of other parametric forms. [@preston2004adjusting]
+Building on earlier proposals,[@hedges1984estimation; @iyengar1988selection; @dear1992approach] Vevea and Hedges proposed step-function models where the selection function is piece-wise constant, with steps at fixed significance thresholds.[@hedges1992modeling; @vevea1995general]
+Other forms involve selection functions based on beta densities,[@citkowicz2017parsimonious] power curves, and a variety of other parametric forms. [@preston2004adjusting]
 
 Within the class of p-value selection models, much attention has focused on the Vevea-Hedges step-function model [@hedges1992modeling; @vevea1995general] because it captures simple but plausible forms of selective reporting, such as shifts in selection probability at the psychologically salient thresholds of $p = 0.05$ or $p = 0.01$.[@greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance]
 Step-function selection models have several advantages over other available methods for diagnosing and adjusting for selective reporting bias.
@@ -35,8 +35,8 @@ Third, findings from simulations indicate that simple forms of step-function mod
 Step-function models also have drawbacks that should be considered. 
 Notably, they are more complex---and perhaps less intuitive---than regression-based adjustments or trim-and-fill.
 The thresholds in the step function must be specified _a priori_, and so may not correspond to the true selective reporting process.
-Furthermore, step-function models are built on the assumption that the selection process is homogeneous across study features other than statistical significance, such as study size or funding status. 
-Just as with other selection models, they require a larger number of effect sizes for accurate estimation of the model parameters, particularly when a more complex (i.e., multiple-step) selection process is assumed.
+Furthermore, they are built on the assumption that the selection process is homogeneous across study features other than statistical significance, such as study size or funding status. 
+Just as with other selection models, step-function models require a larger number of effect sizes for accurate estimation of the model parameters, particularly when a more complex (i.e., multiple-step) selection process is assumed.
 Notwithstanding these complexities, the plausible selective reporting process expressed by the step-function model, coupled with its demonstrated performance in past simulations [@mcshane2016adjusting; @carter2019correcting], makes it a promising approach for analyzing and correcting the bias arising from selective reporting.
 
 ## Dependent effect sizes
@@ -51,13 +51,17 @@ Dependence can also arise when effect sizes are extracted from multiple samples 
 Effect size dependencies are very common in social science synthesis, as well as in other research areas.[@Wu2025what]
 For example, for the more than 1,000 educational intervention studies reviewed by the What Works Clearinghouse since 2017, 73% included more than one intervention effect estimate, with a median of four effect sizes per study (WWC, 2020).
 Surveys of systematic reviews on topics in psychology [@tipton2019current], education [@Pellegrini2025exploring], environmental sciences [@nakagawa2023quantitative], and neurobiology [@yang2023advanced] have also documented a high prevalence of dependent effect sizes.
-Thus, multiple effects are the norm, rather than the exception, in many fields that use quantitative synthesis.
+Thus, multiple effects are the norm rather than the exception across many fields.
 
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multivariate meta-analysis [@Jackson2011multivariate; @Kalaian1996multivariate; @VanHouwelingen2002advanced], multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation (RVE)[@Hedges2010robust], and combinations thereof.[@pustejovsky2022preventionscience]
-<!-- JEP: Revise this paragraph to discuss multilevel/multivariate models and how these map to different forms of dependence. -->
-Among these, RVE has proven to be an attractive strategy because it provides a means to assess uncertainty in model parameter estimates that does not rely on strong assumptions about the exact dependence structure of the effect size estimates. 
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes.
+For hierarchical effects dependence, analysts can apply multi-level meta-analytic models that provide estimates of effect heterogeneity at multiple levels.[@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis]
+For some specific forms of correlated effects dependence such as studies with multiple treatment groups or factorial treatment structure, multivariate meta-analysis methods are available that treat findings from a given study as a vector with distinct dimensions.[@Jackson2011multivariate; @Kalaian1996multivariate; @VanHouwelingen2002advanced]
+However, many instances of dependent effects include both correlated and hierarchical effects structure; in other instances, the multiple findings reported in some studies do not have a regular dimensional structure; and commonly, the information needed to estimate the correlation structure of effect size estimates is not available in primary study reports.[@Pellegrini2025exploring; @pustejovsky2022preventionscience] 
+
+In circumstances where the exact dependence structure of effects does not fit neatly into multilevel or multivariate models, a technique known as robust variance estimation (RVE)[@Hedges2010robust] has proven to be an attractive strategy. 
+RVE is useful because it provides a means to assess uncertainty in model parameter estimates that does not rely on strong assumptions about the exact dependence structure of the effect size estimates. 
 Instead, RVE involves specifying a tentative working model for  the dependence structure, but calculating standard errors, hypothesis tests, and confidence intervals using sandwich estimators that do not require the working model to be correct. 
-<!-- Although the original form of RVE required a relatively large number of independent studies, subsequent work has provided refinements to standard errors and hypothesis tests based on RVE to provide accurate inferences even when the number of studies is small.[@tipton2015small; @tiptonpusto2015small] -->
+RVE can also be combined with other modeling techniques by specifying working models that capture multiple forms of dependence, as in the correlated-and-hierarchical effects model proposed by Pustejovsky and Tipton, which allows for correlated effect estimates as well as heterogeneity of true effects both within and across studies.[@pustejovsky2022preventionscience]
 A closely related strategy is to use bootstrap re-sampling to approximate the distribution of test statistics.[@joshi2022cluster]
 However, extant developments in RVE and bootstrapping methods are limited to summary meta-analysis and meta-regression models.
 Applications to selection models remain to be explored.
