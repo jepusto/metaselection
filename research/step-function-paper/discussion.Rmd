@@ -33,21 +33,20 @@ PML consistently out-performs ARGL for estimating between-study heterogeneity an
 
 Our approach of modeling the marginal distribution of effect sizes was motivated by the computational tractability of marginal models and by findings from prior simulations showing that univariate selection models perform well relative to alternative regression-based models to adjust for selective reporting bias. [@chen2024adapting]
 However, this approach has several conceptual limitations that are important to note.
-
 First, such models do not reflect the structure of dependence among effect size estimates drawn from the same sample, but instead describe only the overall average and overall degree of heterogeneity of the effect size distribution.
 Because of this, they do not fully align with contemporary approaches for meta-analysis, which emphasize modeling the hierarchical structure of dependent effect sizes. [@pustejovsky2022preventionscience; @vandennoortgate2013threelevel]
 Focusing on marginal models might also be unsatisfying when synthesizing some types of primary studies, such as factorial designs, where the selection process might hinge on the statistical significance of one contrast among the effects (e.g., an interaction effect) rather than the individual effect size estimates.
 In further developing this approach, it would be useful to allow for more flexibility by, for instance, letting the heterogeneity parameter vary as a function of covariates as in location-scale models [@viechtbauer2022locationscale] or allowing for the strength of selection to vary based on study characteristics.[@Coburn2015publication]
 
 Second, focusing on the marginal distribution likely entails some loss of precision in parameter estimates. 
-Better accounting for the dependence structure, such as through the use of analytic weights, might allow for construction of more efficient estimators of the parameters of the evidence-generating process.
+Further adapting the estimation methods to account for dependent effects, such as by refining the analytic weights, might improve the precision of the estimators.
 
 Third, the marginal model does not distinguish between study-level publication bias and effect-level selective outcome reporting.
 This strategy therefore precludes examination of more nuanced forms of selection, such as one where the probability that a given effect size is reported depends on the significance levels of other effect size estimates drawn from the same sample or on some broader feature of the study's results.
 
-Recent methodological work on publication bias in univariate meta-analysis has used step-function selection models as one component of an ensemble modeling technique, where it is combined with PET/PEESE regression adjustments and summary (unadjusted) meta-analysis models via Bayesian model averaging.[@Bartos2023robust]
-It would be valuable to extend these ensemble techniques to work with dependent effect sizes, but doing so may be hampered by the need of Bayesian methods to work with full likelihoods.
-Whether the marginal modeling strategy that we have explored here could be applied with Bayesian model averaging remains an open question, worth further exploration.
+Another direction for further exploration is to consider how the marginal step function model could be incorporated into an ensemble estimator. 
+Recent methodological work on publication bias in univariate meta-analysis has combined step-function selection models together with PET/PEESE regression adjustments and summary (unadjusted) meta-analysis models via Bayesian model averaging.[@Bartos2023robust]
+It would be valuable to extend such ensemble techniques to work with dependent effect sizes, although doing so may be hampered by the need of Bayesian methods to work with full likelihoods.
 
 In addition to conceptual limitations, our simulation findings also need to be interpreted cautiously in light of the study's scope limitations.
 First, although our simulations covered a wide range of plausible conditions, the results remain generalizable only to the data-generating process examined.
@@ -77,12 +76,12 @@ An outstanding challenge in pursuing this further is the need to identify plausi
 
 ## Conclusions
 
-Selective reporting of positive, statistically significant findings in primary studies can potentially distort the results of meta-analyses. 
+Selective reporting of affirmative, statistically significant findings in primary studies can potentially distort the results of meta-analyses. 
 Detecting and adjusting for this form of bias is notoriously challenging---even in the simple setting where each sample contributes no more than a single effect size estimate. 
 These challenges are amplified with more complex data structures where the same study contributes multiple dependent effects. 
 Nonetheless, meta-analysts must critically evaluate the evidence summarized in a synthesis, and this includes weighing the potential for bias from selective reporting and selective publication of primary study findings.
 
-Based on the simulation results we have presented, we recommend using step function selection models with clustered bootstrap confidence intervals as a primary tool to assess selective reporting bias in syntheses of dependent effect sizes. 
+Based on the simulation results we have presented, we recommend using step function selection models with two-stage clustered bootstrap confidence intervals as a primary tool to assess selective reporting bias in syntheses of dependent effect sizes. 
 Our findings suggest that the protection provide against systematic bias provided by step-function models outweighs the potential loss in efficiency compared to unadjusted estimates, particularly because the latter can be severely misleading when selective reporting is present.
 As a parametric model built on specific assumptions about the selection process, the marginal step function model provides a useful and complementary alternative to more agnostic techniques for identifying small-study effects, such as funnel plots and regression adjustment methods, the bias and accuracy of which are quite variable across data-generating processes.
 Likewise, estimated step function models could inform the use of sensitivity analysis[@mathur2020sensitivity] by using estimates of the strength of selection to guide assumptions about the maximal plausible degree of selection.

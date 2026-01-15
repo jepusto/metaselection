@@ -12,7 +12,7 @@ If the findings accessible to meta-analysts are not a representative record of t
 Of particular concern is the possibility that results from primary studies are selectively reported in ways that can distort the evidence available for synthesis, such as by reporting findings that are statistically significant but omitting findings that are null or not consistent with researchers' hypotheses.[@greenwald1975prejudice; @sutton2009publication]
 
 Selective reporting practices can occur at the level of the entire study or at the level of a specific findings within a study. 
-At the study level, publication bias occurs when full study reports are withheld from public availability as a function of some aspect of their findings. [@polanin2016estimating]
+At the study level, publication bias occurs when full study reports are withheld from public availability as a function of some aspect of their findings.[@sutton2009publication; @Dwan2013systematic]
 Reports with statistical conclusions that support research hypotheses may be more likely to be published than those that do not. 
 At the level of the individual finding, a study that clears the hurdle of publication might still include results for only a subset of analyses conducted or outcome measures examined, leading to outcome reporting bias.[@Williamson2005outcome; @Hutton2000bias; @Dwan2013systematic] 
 
