@@ -7,11 +7,10 @@ editor_options:
     wrap: sentence
 ---
 
-We conducted Monte Carlo simulation studies to examine the performance
-of the PML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
-We compare the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment.[@stanley2014meta]
-We evaluated the estimators in terms of convergence rates, bias, accuracy, and confidence interval coverage for recovering the average effect size prior to selective reporting.
-To limit the computational burden, we evaluated the performance of bootstrap confidence intervals only for a subset of the conditions. 
+We conducted a Monte Carlo simulation study to examine the performance of the PML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
+We compared the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment.[@stanley2014meta]
+We evaluated the estimators in terms of convergence rates, bias, accuracy, and CI coverage for recovering the average effect size prior to selective reporting.
+To limit computational burden, we evaluated the performance of bootstrap CIs only for a subset of the conditions. 
 
 We ran the simulation in R Version 4.4.1 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison.[@CHTC]
 The simulation code made use of several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
@@ -22,18 +21,18 @@ We simulated meta-analyses based on a CHE working model, with individual effect 
 for inclusion based on the step-function selection model with a single step at $\alpha_1 = .025$. 
 For each replication, we generated a total of $J^*$ studies with a two-group comparison
 design, where study $j$ had an effective sample size of $N_j$ and contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting.
-To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effect sizes per study from an empirical distribution based on the What Works Clearinghouse database. 
+To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effects per study from an empirical distribution based on the What Works Clearinghouse database. 
 The total effective sample size per study was divided equally into two groups, treatment and control. 
 We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
 This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
 For simplicity, we assumed a constant correlation between pairs of outcomes within a primary study but allowed the correlation to vary slightly from study to study.
 
-[^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the dependence of observations nested within clusters rather than using the raw participant-level sample sizes.
+[^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the nesting of observations within clusters rather than using the raw participant-level sample sizes.
 
 We then simulated raw outcomes for each primary study. 
 To do so, we first generated an average effect size per study, $\delta_j$, from a normal distribution with mean $\mu$ and variance
 of $\tau_B^2$. 
-Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, from a normal distribution with mean of $\delta_j$ and variance of $\omega^2$.
+Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, drawing $\delta_{ij}$ from a normal distribution with mean of $\delta_j$ and variance of $\omega^2$.
 For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as
 $$
 \mat{Y}_{hj}^T \sim N(\bs\delta_j, \boldsymbol\Psi_j) \qquad \text{and} \qquad
@@ -55,19 +54,19 @@ We repeated the process of generating studies until the database included a tota
 
 ## Estimation methods
 
-We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is consistent with the actual selective reporting process used to generate meta-analytic datasets.
-We estimated PML and ARGL estimators and calculated cluster-robust confidence intervals as described in Section \@ref(estimation-methods).[^model-based-SEs] 
-For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap confidence intervals based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
+We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is aligned with the actual selective reporting process.
+We estimated PML and ARGL estimators and calculated cluster-robust CIs as described in Section \@ref(estimation-methods).[^model-based-SEs] 
+For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap CIs based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
 
 [^model-based-SEs]: For comparison purposes, we also computed model-based confidence intervals constructed using the inverse Hessian matrix of the PML estimator, which do not account for the dependence structure of the data; therefore, we expect that they would have coverage levels below the nominal level.
 
-We compared the performance of the step-function PML and ARGL estimators to that of two alternative methods.
+We compared the step-function PML and ARGL estimators to two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using the CHE-ISCW working model to account for effect size dependency.[@chen2024adapting]
 We estimated the variance components using restricted maximum likelihood and assumed a sampling correlation of 0.8 for all pairs of effect size estimates from the same study, which leads to a degree of mis-specification when the average correlation used in the data-generating process differs from 0.80.
-This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], the widely used R package for implementing RVE in meta-analysis.
-Second, we implemented a variation of the PET/PEESE estimator[@stanley2014meta], adapted to accommodate dependent effect sizes.[^PET-PEESE]
+This assumption aligns with the default correlation structure used by `robumeta` [@robumeta], a widely used R package for meta-analysis with RVE.
+Second, we implemented a variation of the PET/PEESE estimator, adapted to accommodate dependent effect sizes.[^PET-PEESE]
 We combined the estimators by using PEESE if the PET estimator is statistically distinct from zero at an $\alpha$-level of 0.10, and otherwise using PET.[@stanley2014meta]
-For the PET/PEESE, and CHE-ISCW estimators, we calculated confidence intervals using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.[@chen2024adapting]
+For the PET/PEESE and CHE-ISCW estimators, we calculated CIs using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.[@chen2024adapting]
 
 [^ISCW]: CHE-ISCW is based on the working model 
   \begin{equation}
@@ -153,12 +152,12 @@ kable(
 
 We examined a wide range of values for the probability of selection for non-affirmative effect sizes, ranging from no selective reporting ($\lambda_1 = 1$) to very severe selective reporting $(\lambda_1 = 0.02)$.
 We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
-We chose these values to cover the conditions found in real meta-analyses of education and psychology research.[@tipton2019current]
+We chose these values to cover the conditions found in real meta-analyses of education and psychology research.[@Pellegrini2025exploring; @Wu2025what]
 
 Lastly, we manipulated the primary study sample size. 
-For the typical primary study sample sizes, we used the empirical distribution of sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
+For the typical primary study sample sizes, we used the empirical distribution of effective sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
 <!--# did we restrict the data? -->
-The sample sizes in the database ranged from 37 to 2,295 with a median of 211. 
+The effective sample sizes in the database ranged from 37 to 2,295 with a median of 211. 
 The number of effect sizes ranged from 1 to 48 with a median of 3.
 To explore the influence of the effective sample size distribution, we also ran conditions in which we divided the sample
 sizes from the What Works Clearinghouse database by three to represent primary studies with smaller sample sizes,
@@ -180,7 +179,7 @@ The PML estimator did not converge for every replication.
 To compute performance measures for this estimator, we substituted results for the ARGL estimator for replications where the PML estimator did not converge, so that performance of all methods was measured across the same set of replications.[@Pawel2025handling]
 
 For confidence intervals based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
-For bootstrap confidence intervals, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
+For bootstrap CIs, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
 To mitigate computational demand, we used $B = 299$ although this is far fewer bootstraps per replication than recommended for analysis of real data. 
 To estimate coverage rates for confidence intervals as would be used in practice, we used an extrapolation technique.[@boos2000montecarlo]
 For each replication, we computed bootstrap confidence intervals not only for $B = 299$, but also for $B = 49$, 99, and 199 bootstraps, randomly selected without replacement.

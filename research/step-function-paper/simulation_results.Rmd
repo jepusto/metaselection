@@ -137,7 +137,7 @@ These figures illustrate several patterns.
 
 First, across most data-generating conditions, the ARGL estimator has higher RMSE than the PML estimator. As evident in Figure \@ref(fig:rmse-ARGL-PML), the RMSE ratio comparing ARGL to PML is greater than one across most conditions examined.
 The ARGL estimator has lower RMSE only under conditions of higher heterogeneity and larger average effect size.
-Thus, the PML estimator will typically be preferable to the ARGL estimator.
+Thus, the PML estimator will generally be preferred to the ARGL estimator.
 
 Second, considering both the selection model estimators and comparison methods, no single method achieves the lowest RMSE uniformly across all conditions examined. 
 Instead, all methods face bias-variance trade-offs. 
@@ -148,22 +148,23 @@ The relative accuracy of the ARGL estimator versus CHE-ISCW follows a similar pa
 Third, the PML estimator also has lower RMSE than PET/PEESE under conditions where selective reporting creates meaningful bias, although it is not uniformly more accurate than PET/PEESE (Figure \@ref(fig:rmse-PET-PML)). 
 Rather, PET/PEESE is more accurate under _some_ conditions involving moderate or large effect size $(\mu \geq 0.4)$ and varying degrees of between-study heterogeneity, 
 which correspond to conditions where the bias of PET/PEESE is small.
-The relative accuracy is difficult to characterize generally because it follows a non-linear pattern involving interactions among the data-generating parameters. 
+The relative accuracy is difficult to characterize because it follows a non-linear pattern involving interactions among the data-generating parameters. 
 The pattern of relative accuracy is very similar for the ARGL estimator (Figure \@ref(fig:rmse-PET-ARGL)).
 
 ## Confidence Interval Coverage
 
 Figure \@ref(fig:comparison-coverage) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, PML, and ARGL estimators.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full) depicts the full range of coverage rates.]
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
-The PML and ARGL estimators based on the step-function selection model have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity.
-Between the two selection model estimators, coverage rates are generally higher for the PML estimator than the ARGL estimator, though neither consistently achieves the nominal rate.[^model-based-coverage]
+The PML and ARGL estimators have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity.
+Between the two selection model estimators, coverage rates are generally higher for the PML estimator than the ARGL estimator, although neither consistently achieves the nominal rate.[^model-based-coverage]
 
 [^model-based-coverage]: As expected, coverage rates of model-based confidence intervals that ignore the dependence structure were generally far below nominal levels and did not improve when the number of studies per meta-analysis was larger (Supplementary Figure \@ref(fig:PML-coverage-robust-vs-model)).
 
 Intervals based on the PML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J$ is 90 or greater.
 In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated.
-Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.
-The value of the average correlation between outcomes ($\rho$) has virtually no effect on the coverage results for any method (Figure \@ref(fig:comparison-coverage-rho)).
+Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.[^rho-influence]
+
+[^rho-influence]: The value of the average correlation between outcomes ($\rho$) has virtually no effect on the coverage results for any method (Figure \@ref(fig:comparison-coverage-rho)).
 
 ```{r comparison-coverage}
 #| fig.width: 9
@@ -244,6 +245,6 @@ Due to the computational demands of bootstrapping, we evaluated the bootstrap co
 Figure \@ref(fig:PML-coverage) depicts the coverage levels of confidence intervals based on the PML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:PML-coverage-two-stage)-\@ref(fig:PML-coverage-exponential) for detailed results.]
 
 Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
-The percentile intervals with two-stage clustered bootstrap re-sampling provided the best coverage levels, achieving or exceeding 90% coverage when selection is moderate $(\lambda \geq 0.2)$, even with only $J = 15$ primary studies per meta-analysis. 
+The percentile intervals with two-stage clustered bootstrap re-sampling provide the best coverage levels, achieving or exceeding 90% coverage when selection is moderate $(\lambda \geq 0.2)$, even with only $J = 15$ primary studies per meta-analysis. 
 When selection is strong $(\lambda = 0.05)$ and sample size is small $(J = 15)$, coverage levels are poor under some conditions, but improve as the number of studies per meta-analysis increases.
-Coverage levels of intervals based on the ARGL estimator followed very similar patterns to those for the PML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-lambda)-\@ref(fig:ARGL-coverage-exponential)).
+Coverage levels of intervals based on the ARGL estimator follow very similar patterns to those for the PML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-lambda)-\@ref(fig:ARGL-coverage-exponential)).
