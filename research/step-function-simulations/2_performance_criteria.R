@@ -15,21 +15,42 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     summarize(.groups = "drop")
   
   if (all(c("ARGL","CML") %in% unique(results$estimator))) {
-    results_fallback <- 
-      results %>%
-      group_by(rep, model, param) %>%
-      filter(estimator %in% c("ARGL","CML")) %>%
-      summarize(
-        boot_CIs = if_else(is.na(Est[estimator=="CML"]), boot_CIs[estimator=="ARGL"], boot_CIs[estimator=="CML"]),
-        across(
-          c(Est, SE, p_value, CI_lo, CI_hi, R_conv, max_method, true_param),
-          \(x) if_else(is.na(x[estimator=="CML"]), x[estimator=="ARGL"], x[estimator=="CML"])
-        ), 
-        .groups = "drop"
-      ) %>%
-      mutate(
-        estimator = "CML-fallback"
-      )
+    if ("boot_CIs" %in% names(results)) {
+      
+      results_fallback <- 
+        results %>%
+        group_by(rep, model, param) %>%
+        filter(estimator %in% c("ARGL","CML")) %>%
+        summarize(
+          boot_CIs = if_else(is.na(Est[estimator=="CML"]), boot_CIs[estimator=="ARGL"], boot_CIs[estimator=="CML"]),
+          across(
+            c(Est, SE, p_value, CI_lo, CI_hi, R_conv, max_method, true_param),
+            \(x) if_else(is.na(x[estimator=="CML"]), x[estimator=="ARGL"], x[estimator=="CML"])
+          ), 
+          .groups = "drop"
+        ) %>%
+        mutate(
+          estimator = "CML-fallback"
+        )
+      
+    } else {
+      
+      results_fallback <- 
+        results %>%
+        group_by(rep, model, param) %>%
+        filter(estimator %in% c("ARGL","CML")) %>%
+        summarize(
+          across(
+            c(Est, SE, p_value, CI_lo, CI_hi, R_conv, max_method, true_param),
+            \(x) if_else(is.na(x[estimator=="CML"]), x[estimator=="ARGL"], x[estimator=="CML"])
+          ), 
+          .groups = "drop"
+        ) %>%
+        mutate(
+          estimator = "CML-fallback"
+        )
+      
+    }
     
     results <- bind_rows(results, results_fallback)
   }

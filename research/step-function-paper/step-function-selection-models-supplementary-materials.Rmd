@@ -43,7 +43,6 @@ classoption       : "man, donotrepeattitle"
 output            : 
   papaja::apa6_pdf
 csl               : american-medical-association.csl
-replace_ampersands: yes
 
 header-includes:
 - \usepackage{booktabs}
@@ -100,7 +99,7 @@ options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
 \newpage
 
-```{r child = "appendix-CML-derivatives.Rmd"}
+```{r child = "appendix-PML-derivatives.Rmd"}
 ```
 
 \newpage
@@ -123,5 +122,5 @@ options(tinytex.clean = FALSE, knitr.kable.NA = '')
 
 \begingroup
 \setlength{\parindent}{-0.5in}
-<div id="refs" custom-style="Bibliography"></div>
+<div id="supprefs" custom-style="Bibliography"></div>
 \endgroup
