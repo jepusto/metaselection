@@ -15,6 +15,52 @@ load("ego-depletion/raw-data/S.Rdata")
 load("ego-depletion/raw-data/ST.Rdata")
 load("ego-depletion/raw-data/WM.Rdata")
 
+FC <- 
+  FC %>% 
+  mutate(Year = as.character(Year))
+
+HG <- 
+  HG %>% 
+  mutate(
+    Exp = factor(Exp),
+    Year = as.character(Year)
+  )
+
+FC <- 
+  FC %>% 
+  mutate(Year = as.character(Year))
+
+IA <- 
+  IA %>% 
+  mutate(Year = as.character(Year))
+
+IP <- 
+  IP %>% 
+  mutate(Year = as.character(Year))
+
+PA <- 
+  PA %>% 
+  mutate(
+    Exp = factor(Exp),
+    Year = as.character(Year)
+  )
+
+S <- 
+  S %>% 
+  mutate(
+    Exp = factor(Exp),
+    Year = as.character(Year)
+  )
+
+ST <- 
+  ST %>% 
+  mutate(Year = as.character(Year))
+
+WM <- 
+  WM %>% 
+  mutate(Year = as.character(Year))
+
+
 ed_dat <- 
   bind_rows(
     `Food consumed` = FC,
@@ -38,8 +84,8 @@ ed_dat <-
   mutate(es_id = row_number()) %>%
   select(
     study, study_id, sample, es_id, 
-    outcome, author, exp, year, id, yi = g, vi = g_v,
-    everything()
+    outcome, author, exp, year, id, yi = g, vi = g_v, sei = g_se, 
+    m_iv, m_dv, dep_n, con_n, pub_type
   )
 
 ed_dat %>%

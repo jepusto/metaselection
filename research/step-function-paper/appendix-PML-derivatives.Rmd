@@ -1,0 +1,94 @@
+---
+title: "Modified Step-Function Selection Model"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Score and Hessian of the step-function marginal log likelihood {#PML-derivatives}
+
+## Score functions 
+
+From Equation \@ref(eq:log-like-ij), the log of the marginal likelihood contribution for effect size estimate $i$ from study $j$ is given by
+\begin{align}
+l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right) &= \log w\left(y_{ij}, \sigma_{ij}; \bs\zeta \right) - \log A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right) \nonumber\\
+& \qquad \qquad   - \frac{1}{2} \frac{\left(y_{ij} - \mat{x}_{ij} \bs\beta\right)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log\left(\exp(\gamma) + \sigma_{ij}^2\right) - \frac{1}{2}\log(2 \pi),
+\end{align}
+and the contribution of the estimates from study $j$ is
+\begin{equation}
+l^M_{j}\left(\bs\beta, \gamma, \bs\zeta \right) = \sum_{i=1}^{k_j}  a_{ij} l^M_{ij}\left(\bs\beta, \gamma, \bs\zeta \right).
+\end{equation}
+The components of the score contribution of study $j$ involve derivatives of $l^M_{j}\left(\bs\beta, \gamma, \bs\zeta \right)$ with respect to all model parameters, as given by
+\begin{equation}
+\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \left(\mat{S}_{\bs\beta j}', S_{\gamma j}, \mat{S}_{\bs\zeta j}'\right)'.
+\end{equation}
+Let $w_{ij} = w\left(y_{ij}, \sigma_{ij}; \bs\lambda \right)$, $\mu_{ij} = \mat{x}_{ij} \bs\beta$, $\eta_{ij} = \exp(\gamma) + \sigma_{ij}^2$, and $A_{ij} = A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right)$ as defined in Equation \@ref(eq:step-function-A).
+The score contribution of study $j$ for the meta-regression coefficients has the general form
+\begin{equation}
+\mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mat{x}_{ij}' \left(\frac{\left(y_{ij} - \mu_{ij} \right)}{\eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial  \mu_{ij}}\right).
+\end{equation}
+The score for the variance parameter has the general form
+\begin{equation}
+S_{\gamma j} = \sum_{i=1}^{k_j} a_{ij} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right).
+\end{equation}
+The score for the selection parameters has the general form $\mat{S}_{\bs\zeta j} = \left(S_{\zeta_1 j},...,S_{\zeta_H j} \right)'$, where
+\begin{equation}
+\label{eq:zeta-score-component}
+S_{\zeta_h j} = \sum_{i=1}^{k_j} a_{ij} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right),
+\end{equation}
+for $h = 1,...,H$. 
+
+
+For the step-function selection model, the derivatives of $w_{ij}$ and $A_{ij}$ are given by 
+\begin{align}
+\frac{\partial w_{ij}}{\partial \lambda_h} &= I\left(\alpha_h < p_{ij} \leq \alpha_{h+1}\right) \\
+\label{eq:step-function-dAdmu}
+\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\eta_{ij}^{1/2}} \sum_{h=0}^H \lambda_h \left[\phi\left(c_{h+1,ij}\right) - \phi\left(c_{hij}\right)\right] \\
+\label{eq:step-function-dAdeta}
+\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \sum_{h=0}^H \lambda_h \left[c_{h+1,ij} \phi\left(c_{h+1,ij}\right) - c_{hij} \phi\left(c_{hij}\right)\right] \\
+\label{eq:step-function-dAdlambda}
+\frac{\partial A_{ij}}{\partial \lambda_h} &= B_{hij},
+\end{align}
+with 
+$c_{hij} = \left[\sigma_{ij} \Phi^{-1}\left(1 - \alpha_h\right) - \mat{x}_{ij}\bs\beta\right] / \sqrt{\tau^2 + \sigma_{ij}^2}$ and 
+$B_{hij} = \Phi\left(c_{hij}\right) - \Phi\left(c_{h+1,ij}\right)$ for $h = 1,...,H$.
+
+## Hessian
+
+The sub-components of the Hessian matrix from study $j$ have the following forms:
+\begin{align}
+\mat{H}_{j}^{\bs\beta \bs\beta'} &= \frac{\partial}{\partial \bs\beta'} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mat{x}_{ij}' \mat{x}_{ij} \left(\frac{1}{A_{ij}^2}\left(\frac{\partial A_{ij}}{\partial \mu_{ij}}\right)^2 - \frac{1}{A_{ij}} \frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} - \frac{1}{\eta_{ij}} \right) \\
+\mat{H}_{j}^{\bs\beta \gamma} &= \frac{\partial}{\partial \gamma} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mat{x}_{ij}' \tau^2 \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} - \frac{y_{ij} - \mu_{ij}}{\eta_{ij}^2} \right) \\
+\label{eq:H-beta-zeta} \mat{H}_{j}^{\bs\beta \zeta_h} &= \frac{\partial}{\partial \zeta_h} \mat{S}_{\bs\beta j} = \sum_{i=1}^{k_j}  a_{ij} \mat{x}_{ij}' \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} \right) \\
+\mat{H}_{j}^{\gamma \gamma} &= \frac{\partial}{\partial \gamma} S_{\gamma j} = \sum_{i=1}^{k_j} a_{ij} \left[ \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \right.  \nonumber \\
+& \qquad \qquad \qquad \qquad  + \left. \tau^4 \left(\frac{1}{A_{ij}^2} \left(\frac{\partial A_{ij}}{\partial \eta_{ij}}\right)^2 - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2}  - \frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^3}\right)\right] \\
+\label{eq:H-gamma-zeta} \mat{H}_{j}^{\gamma \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\gamma j} = \sum_{i=1}^{k_j}  a_{ij} \tau^2 \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \eta_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} \right) \\
+\mat{H}_{j}^{\zeta_f \zeta_h} &= \frac{\partial}{\partial \zeta_h} S_{\zeta_f j} = \sum_{i=1}^{k_j}  a_{ij} \left[ \lambda_f \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \lambda_f}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{w_{ij}^2}\frac{\partial w_{ij}}{\partial \lambda_f}\frac{\partial w_{ij}}{\partial \lambda_h} \right) \right. \nonumber \\
+& \qquad \qquad \qquad \qquad  + \left.I(f = h) \lambda_h\left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h}\right)\right], \label{eq:H-zeta-zeta}
+\end{align}
+where the second partial derivatives of $A_{ij}$ are given by 
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} &= \frac{1}{\eta_{ij}} \sum_{h=0}^H \lambda_h \left[c_{h+1,ij} \phi(c_{h+1,ij}) - c_{hij} \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \sum_{h=0}^H \lambda_h \left[(c_{h+1,ij}^2 - 1) \phi(c_{h+1,ij}) - (c_{hij}^2 - 1) \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} &= \frac{\phi\left(c_{h+1,ij}\right) - \phi\left(c_{hij}\right)}{\eta_{ij}^{1/2}} \\
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2} &= \frac{1}{4 \eta_{ij}^2} \sum_{h=0}^H \lambda_h \left[(c_{h+1,ij}^3 - 3 c_{h+1,ij}) \phi(c_{h+1,ij}) - (c_{hij}^3 - 3 c_{hij}) \phi(c_{hij})\right] \\
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} &= \frac{c_{h+1,ij} \phi\left(c_{h+1,ij}\right) - c_{hij} \phi\left(c_{hij}\right)}{2\eta_{hij}}.
+\end{align}
+
+## Derivatives of the prior penalty functions
+
+Equation \@ref(eq:marginal-score-equations) references the derivatives of the prior penalty terms specified in Equations \@ref(eq:beta-prior), \@ref(eq:gamma-prior), and \@ref(eq:zeta-prior).
+Denote the full derivative vector as
+\begin{equation}
+\label{eq:prior-derivative}
+p'\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \left(\begin{array}{c} p_{\bs\beta}'(\bs\beta) \\ p_{\gamma}'(\gamma) \\ p_{\bs\zeta}'(\bs\zeta)\end{array}\right).
+\end{equation}
+The components of the derivative vector are
+\begin{align}
+p_{\bs\beta}'(\bs\beta) &= -\frac{1}{4} \bs\beta^3 \\ 
+p_{\gamma}'(\gamma) &= \frac{1}{2} - \frac{5}{2} \exp\left(\frac{\gamma}{2}\right) \\ 
+p_{\bs\zeta}'(\bs\zeta) &= - \frac{2}{27} \left(\bs\zeta - \log\left(\frac{1}{2}\right) \bm{1}_H\right)^3,
+\end{align}
+where $\bm{1}_H$ denotes an $H \times 1$ vector with unit entries and powers of vector terms are evaluated element-wise.

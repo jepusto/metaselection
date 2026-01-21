@@ -44,24 +44,14 @@ run_sim <- function(
   prior_spec <- switch(
     priors, 
     "Flat" = NULL, 
-    "Mild" = default_priors(
-      beta_mean = 0,
-      beta_precision = 1 / 2,
-      beta_L = 2,
-      tau_mode = 0.2,
-      tau_alpha = 2,
-      lambda_mode = 0.8,
-      lambda_precision = 1 / 2,
-      lambda_L = 2
-    ),
-    "Weak" = default_priors(
+    "Weak" = define_priors(
       beta_mean = 0,
       beta_precision = 1 / 16, 
       beta_L = 4,
       tau_mode = 0.2, 
       tau_alpha = 1,
       lambda_mode = 0.5,
-      lambda_precision = 1 / 16,
+      lambda_precision = 1 / 54,
       lambda_L = 4
     )
   )
