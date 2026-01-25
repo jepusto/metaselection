@@ -271,6 +271,4 @@ Selection parameter estimates are very similar to the estimates from the corresp
 
 The model estimates reveal some key differences between the selection models. In this dataset, the beta-density selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. 
 These differences suggest that the models' distinct assumptions about the shape of the selection function may lead to varying results. Specifically, the beta-density selection model, which allows for a smooth, continuous function, appears to be capturing a pattern of selection that differs from the discrete thresholds assumed by the step-function selection model.
-<!-- JEP: This is pretty vague. -->
-<!-- MC: Clarified. -->
 To investigate this, we conducted simulations across a wide range of conditions. The simulations will allow us to draw firmer conclusions about the comparative performance of these methods, including their robustness to misspecification of the selection function.
