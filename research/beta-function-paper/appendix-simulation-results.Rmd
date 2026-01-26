@@ -10,8 +10,7 @@ editor_options:
 source("process-simulation-results.R")
 ```
 
-# Beta-Function Selection Model Compared to CHE-ISCW and PET/PEESE
-<!-- Need a better header name -->
+# Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
 
 ## Additional simulation results for methods of estimating the average effect size $(\mu)$ {#mu-simulation-results-main}
 
@@ -122,8 +121,7 @@ mu_graph_res_ci_main %>%
 
 ```
 
-# Beta-Function Selection Model Compared to 3PSM and 4PSM Step-Function Selection Models
-<!-- Need a better header name -->
+# Robustness to Selection Function Misspecification: Beta-Density vs. Step Models
 
 ## Additional simulation results for methods of estimating the average effect size $(\mu)$ {#mu-simulation-results-miss}
 

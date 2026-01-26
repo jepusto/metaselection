@@ -30,8 +30,6 @@ num_effects <- length(unique(sci$esid))
 ```
 
 To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. 
-<!-- JEP: Add a contour-enhanced funnel plot of the effect sizes, perhaps colored by assessment type? -->
-<!-- MC: I think we're OK without it. -->
 
 ```{r science-learning-models}
 #| echo: false
@@ -135,7 +133,8 @@ We first used the `rma.uni()` function from the `metafor` package to fit a stand
 The overall estimate of the average effect using the unadjusted model is `r formatC(sci_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean$ci.ub, format = "f", digits = 2)`], which is significantly different from zero $(p `r format.pval(sci_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
 The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mean$tau2), format = "f", digits = 2)`$.
 
-To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) along with two step-function selection models [@metaselection]. Both selection models are based on an independent effects working model with random effects for each study and account for dependent effects using robust variance estimation, clustering by study. For the step-function models, we estimated both a single-step model with a threshold at $\alpha_1 = 0.025$ and a two-step model with thresholds at $\alpha_1 = .025$ and $\alpha_2 = .5$.
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two step-function selection models---a single-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
+<!-- MC: I revised the wording up here, but not the estimation code below as the weak priors are the default. -->
 
 ```{r science-learning-res, tab.pos = "tb", tab.cap="science learning meta-analysis"}
 
@@ -217,6 +216,7 @@ These differences are due to differences in the form of the selection curve esti
 The beta-density model estimates of $\lambda_1$ and $\lambda_2$ imply that positive but non-significant results are slightly more likely to be reported compared to affirmative results, but that negative effects are increasingly less likely to be be reported.
 On balance, this leads to an adjusted average effect size estimate that is smaller than under the unadjusted random effects model.
 In contrast, the step-function models both estimate that non-significant results are more likely to be reported compared to affirmative results, leading to upward adjustment in the average effect size.
+This divergence illustrates how the continuous functional form of the beta-density model can capture nuanced reporting patterns---such as a smooth decline in the likelihood of reporting for increasingly negative results---that may be obscured by the discrete thresholds of a step-function model.
 
 ```{r science-selection-curves}
 #| echo: false
@@ -253,7 +253,7 @@ ggplot(selection_curves) +
   theme(legend.position = "none", strip.text = element_text(color = "black"))
 ```
 
-A key advantage of selection models over other methods for diagnosing and adjusting for selective reporting bias is that they allow for inclusion of potential moderator variables as predictors of average effect size. This feature allows meta-analysts to distinguish selective reporting bias from systematic variation in effect sizes that could be explained by primary study characteristics. 
+A key advantage of selection models over other methods for diagnosing and adjusting for selective reporting bias is that they allow for inclusion of potential moderator variables as predictors of average effect size. This feature allows meta-analysts to investigate whether selective reporting bias varies across study characteristics or, conversely, whether suspected moderator effects persist after adjusting for selection.
 Past work has demonstrated that evaluations of educational interventions tend to produce larger effects on assessments developed by study authors or developers of the intervention (i.e., non-independent groups) than on assessments developed by groups independent of the evaluation [@Wolf2023making].
 We investigated whether this pattern holds in the BSCS Science Learning meta-analysis data, which includes an indicator for assessment type, equal to one for assessments developed by non-independent groups and equal to zero otherwise.
 
@@ -264,11 +264,10 @@ The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mo
 
 The lower panel of Table \@ref(tab:science-learning-res) reports parameter estimates from the corresponding selection models that include assessment type as a predictor.
 The $\beta_1$ coefficient estimates represent differences in average effects between non-independent and independent assessment developers, which were all non-significant and similar in magnitude to the difference based on the unadjusted model.
+This suggests that the assessment-type effect is not merely an artifact of selective reporting in this dataset.
 However, the selection models lead to different about the average effects on independently developed assessments.
 The estimate from the beta-density model is not statistically distinct from zero and is smaller than the estimate from the unadjusted random effects meta-regression. 
 In contrast, the estimated average effects from the step-function selection models are both statistically significant and larger than the estimate from the unadjusted model.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.
 
-The model estimates reveal some key differences between the selection models. In this dataset, the beta-density selection model adjusts the estimates downward---so much so in the moderator analysis that neither estimate remains statistically significant. The step-function selection model, on the other hand, adjusts the estimates upward, though the adjustment is minimal when using the two-step model. 
-These differences suggest that the models' distinct assumptions about the shape of the selection function may lead to varying results. Specifically, the beta-density selection model, which allows for a smooth, continuous function, appears to be capturing a pattern of selection that differs from the discrete thresholds assumed by the step-function selection model.
-To investigate this, we conducted simulations across a wide range of conditions. The simulations will allow us to draw firmer conclusions about the comparative performance of these methods, including their robustness to misspecification of the selection function.
+The results of this application demonstrate that the choice of selection function---smooth versus discrete---can lead to different conclusions regarding the magnitude and significance of adjusted effects. The beta-density selection model’s ability to capture a continuous range of selection probabilities provides a flexible alternative to the step-wise form of selection assumed by the step-function selection model, particularly when reporting bias does not follow rigid significance thresholds. To investigate the performance of these models more systematically, we conducted simulations across a wide range of conditions, focusing on the comparative performance of the beta-density and step-function specifications and their robustness to misspecification of the selection function.

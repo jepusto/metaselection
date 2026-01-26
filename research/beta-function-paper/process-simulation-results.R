@@ -198,8 +198,8 @@ gamma_graph_res_ci_miss <-
 RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_lab = "Number of studies (J)", legend_rows = 1L) {
   
   y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
-  x_var <- sym(paste("scrmse", x_method, sep = "_"))
-  y_var <- sym(paste("scrmse", y_method, sep = "_"))
+  x_var <- sym(paste("rmse", x_method, sep = "_"))
+  y_var <- sym(paste("rmse", y_method, sep = "_"))
   
   ggplot(data) + 
     aes(x = selection_strength, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
