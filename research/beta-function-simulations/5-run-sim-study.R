@@ -20,9 +20,9 @@ library(metafor)
 library(clubSandwich)
 library(metaselection)
 
-source("research/beta-function-simulations/2_estimation.R")
-source("research/beta-function-simulations/3_performance_criteria.R")
-source("research/beta-function-simulations/4_simulation_driver.R")
+source("research/beta-function-simulations/1-estimation.R")
+source("research/beta-function-simulations/2-performance-criteria.R")
+source("research/beta-function-simulations/3-simulation-driver.R")
 
 #-------------------------------------------------------------------------------
 # Load experimental design parameters

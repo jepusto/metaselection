@@ -21,11 +21,12 @@ estimate_step_models <- function(
     dat,
     selection_type = "beta",
     steps = c(.025, .975),
-    sd_char = "sd_d",
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
     sel_zero_mods = NULL,
+    priors = NULL,
+    vcov_type = "robust",
     conf_level = .95,
     bootstrap = "exp",
     CI_type = c("large-sample","basic","percentile","student","bias-corrected"),
@@ -43,16 +44,13 @@ estimate_step_models <- function(
     info = list(convcode = NA_integer_, termcd = NA_integer_)
   )
   
-  sd <- as.symbol(sd_char)
-  
   res <- list()
   
   res_MLE <- tryCatch(
-    eval(substitute(
-      selection_model(
+    selection_model(
         data = dat,
         yi = d,
-        sei = sd,
+        sei = sd_d,
         pi = p_onesided,
         cluster = studyid,
         selection_type = selection_type,
@@ -61,23 +59,23 @@ estimate_step_models <- function(
         var_mods = var_mods,
         sel_mods = sel_mods,
         sel_zero_mods = sel_zero_mods,
+        priors = priors,
+        vcov_type = vcov_type,
         conf_level = conf_level,
         estimator = "CML",
         bootstrap = bootstrap,
         CI_type = CI_type,
         R = R,
         retry_bootstrap = retry_bootstrap
-      ),
-      list(sd = sd)
-    )), error = function(e) error_res
+    ),
+    error = function(e) error_res
   )
   res_MLE$est$R_conv <- res_MLE$info$convcode
   res_MLE$est$max_method = res_MLE$method
   res_MLE$est$estimator <- "ML"
   res$MLE <- res_MLE$est
   
-  bind_rows(res) %>%
-    mutate(sd = sd_char)
+  bind_rows(res)
 }
 
 

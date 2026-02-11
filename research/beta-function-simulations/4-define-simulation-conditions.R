@@ -15,7 +15,7 @@ design_factors <- list(
   het_ratio = c(0, 0.5),
   cor_mu = c(0.4, 0.8), # average correlation between outcomes         
   cor_sd = c(0.05), # sd correlation between outcomes
-  delta_1 = c(0.01, 0.2, 0.5, 0.8, 1), # selection parameters
+  delta_1 = c(0.02, 0.1, 0.2, 0.5, 1), # selection parameters
   m = c(90, 60, 30, 15),	# number of studies in each meta analysis					
   batch = 1:80
 )
@@ -27,6 +27,7 @@ all_params <-
   mutate(
     omega = tau * sqrt(het_ratio),
     delta_2 = if_else(delta_1 == 1, 1, 0.9),
+    priors = "Weak",
     bootstrap = if_else(
       (m <= 60) & (cor_mu == 0.8) & (tau %in% c(0.05, 0.15, 0.45)) & delta_1 %in% c(0.2, 0.5, 1),
       "two-stage",

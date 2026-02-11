@@ -245,7 +245,7 @@ p <- seq(0,1,0.005)
 sim_settings <- 
   tibble(
     setting = c("extreme", "strong", "moderate","weak", "null"),
-    zeta1 = log(c(.01, 0.20, .50, .80, 1)),
+    zeta1 = log(c(.02, 0.20, .50, .80, 1)),
     zeta2 = log(c(.90, .90, .90, .90, 1))
   ) %>%
   mutate(
