@@ -2,7 +2,7 @@ library(tidyverse)
 
 devtools::load_all()
 load("simulations-bootstrap/test/example_dat.RData")
-source("simulation-beta-function/2_estimation.R")
+source("simulation-beta-function/1-estimation.R")
 
 
 pkg_res <-

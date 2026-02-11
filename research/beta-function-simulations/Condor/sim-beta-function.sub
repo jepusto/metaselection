@@ -2,7 +2,7 @@
 # Simulation of beta function selection models with RVE
 #
 universe = docker
-docker_image = jepusto/metaselection:v8
+docker_image = jepusto/metaselection:v14
 log = /home/pustejovsky/beta-RVE/log/cluster_$(Cluster).log
 error = /home/pustejovsky/beta-RVE/err/cluster_$(Cluster)_$(Process).err
 #
