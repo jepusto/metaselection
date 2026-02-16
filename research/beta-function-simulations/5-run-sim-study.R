@@ -40,11 +40,7 @@ res$row <- NULL
 
 tic()
 
-res$res <- pmap(
-  res, .f = run_sim, 
-  step_models = c("3PSM","4PSM"),
-  comparison_methods = "All"
-)
+res$res <- pmap(res, .f = run_sim)
 
 tm <- toc(quiet = TRUE)
 

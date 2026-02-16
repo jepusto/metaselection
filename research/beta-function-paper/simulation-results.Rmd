@@ -10,7 +10,7 @@ source("process-simulation-results.R")
 # Bias
 beta_bias_main <-
   mu_graph_res_main %>%
-  filter(model_estimator == "beta_CML") %>%
+  filter(model_estimator == "beta_PML") %>%
   summarize(
     max_abs_bias = max(abs(bias)),
     min_abs_bias = min(abs(bias)),

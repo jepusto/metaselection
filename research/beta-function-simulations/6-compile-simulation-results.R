@@ -57,8 +57,7 @@ no_bootstraps_res %>%
   select(
     mean_smd:omega, delta_2, bootstrap_condition = bootstrap,
     model, estimator, param, 
-    K_absolute:rmse_mcse, 
-    est_winsor_pct, est_winsor_pct_mcse
+    K_absolute:rmse_mcse
   )
 
 #-------------------------------------------------------------------------------

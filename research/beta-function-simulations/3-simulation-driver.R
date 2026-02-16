@@ -24,7 +24,7 @@ run_sim <- function(
   vcov_type = "robust",
   conf_level = .95,
   step_models = c("3PSM","4PSM"),
-  comparison_methods = "All", 
+  comparison_methods = "All",
   rho = cor_mu,
   seed = NULL,
   summarize_performance = TRUE,
