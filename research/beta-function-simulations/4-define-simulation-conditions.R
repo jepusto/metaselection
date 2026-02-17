@@ -71,6 +71,6 @@ all_params <-
 saveRDS(all_params, file = "research/beta-function-simulations/simulation_parameters.rds")
 
 all_params %>% 
-  filter(bootstrap == "none") %>%
+  filter(bootstrap == "two-stage", batch >= 21L, batch <= 40) %>%
   select(row) %>%
   write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)

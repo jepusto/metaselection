@@ -1,31 +1,31 @@
 library(tidyverse)
 
 delta_selection_levels <- c(
-  "Strong (d1=0.01, d2=0.90)" = "0.01_0.90",
+  "Extreme (d1=0.02, d2=0.90)" = "0.02_0.90",
+  "d1=0.10, d2=0.90" = "0.10_0.90",
   "d1=0.20, d2=0.90" = "0.20_0.90",
   "d1=0.50, d2=0.90" = "0.50_0.90",
-  "d1=0.80, d2=0.90" = "0.80_0.90",
   "None (d1=1.00, d2=1.00)" = "1.00_1.00"
 )
 
 delta_selection_names <- c(
-  "Very Strong" = "0.01_0.90",
+  "Extreme" = "0.02_0.90",
+  "Very Strong" = "0.10_0.90",
   "Strong" = "0.20_0.90",
-  "Mod" = "0.50_0.90",
-  "Weak" = "0.80_0.90",
+  "Moderate" = "0.50_0.90",
   "None" = "1.00_1.00"
 )
 
+
 results <- 
-  readRDS("../beta-function-simulations/sim-beta-function-point-estimator-results.rds") %>%
+  readRDS(here::here("research","beta-function-simulations","sim-beta-function-point-estimator-results.rds")) %>%
   mutate(
     estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
-    estimator = fct_recode(estimator, "CHE-ISCW" = "FEC", "CML" = "ML"),
+    estimator = fct_recode(estimator, "CHE-ISCW" = "FEC", "PML" = "ML"),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
-    scrmse = sqrt(m) * rmse, 
     J = as.character(m),
-    J = factor(J, levels = c("15", "30", "60", "90", "120")), # there is no 120
+    J = factor(J, levels = c("15", "30", "60", "90")),
     delta_combo_key = paste0(sprintf("%.2f", delta_1), "_", sprintf("%.2f", delta_2)),
     selection_strength = factor(
       delta_combo_key,
@@ -33,9 +33,8 @@ results <-
       labels = names(delta_selection_names)
     ),
     mu_fac = fct(as.character(mean_smd)),
-    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")), # there is no 0.6
-    convergence = K_absolute / 2000,
-    winz_convergence = (1 - winsor_pct) * K_absolute / 2000
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45")),
+    convergence = K_absolute / 2000
   ) %>%
   select(-cor_sd) %>% 
   unite("model_estimator", model:estimator, na.rm = TRUE, remove = FALSE)
@@ -44,21 +43,21 @@ mu_graph_res_main <-
   results %>%
   filter(
     param == "beta",
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_PML")
   ) %>%
   droplevels() %>%
   mutate(
-    method = fct_recode(estimator, "Beta" = "CML")
+    method = fct_recode(estimator, "Beta" = "PML")
   )
 
 mu_wide_res_main <- 
   mu_graph_res_main %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method, selection_strength) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, method, selection_strength) %>%
   mutate(
     rmse_trunc = pmin(rmse, 1)
   ) %>%
   pivot_wider(
-    values_from = c(bias, var, rmse, rmse_trunc, scrmse), 
+    values_from = c(bias, var, rmse, rmse_trunc), 
     names_from = method
   )
 
@@ -66,7 +65,7 @@ mu_graph_res_miss <-
   results %>%
   filter(
     param == "beta",
-    estimator %in% c("CML")
+    estimator %in% c("PML")
   ) %>%
   droplevels() %>%
   rename(method = model) %>%
@@ -76,12 +75,12 @@ mu_graph_res_miss <-
 
 mu_wide_res_miss <- 
   mu_graph_res_miss %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, method, selection_strength) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, method, selection_strength) %>%
   mutate(
     rmse_trunc = pmin(rmse, 1)
   ) %>%
   pivot_wider(
-    values_from = c(bias, var, rmse, rmse_trunc, scrmse), 
+    values_from = c(bias, var, rmse, rmse_trunc), 
     names_from = method
   )
 
@@ -90,9 +89,9 @@ gamma_graph_res_miss <- # gamma only estimated for the 3 CML methods
   filter(
     param == "gamma"
   ) %>%
-  mutate(
-    scrmse_trunc = pmin(scrmse, 3 / tau + rnorm(n(), sd = 0.01))
-  ) %>%
+  # mutate(
+  #   scrmse_trunc = pmin(scrmse, 3 / tau + rnorm(n(), sd = 0.01))
+  # ) %>%
   droplevels()%>%
   rename(method = model) %>%
   mutate(
@@ -101,22 +100,22 @@ gamma_graph_res_miss <- # gamma only estimated for the 3 CML methods
 
 gamma_wide_res_miss <- 
   gamma_graph_res_miss %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, scrmse, scrmse_trunc, method) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, method) %>%
   pivot_wider(
-    values_from = c(bias, var, rmse, scrmse, scrmse_trunc), 
+    values_from = c(bias, var, rmse), 
     names_from = method
   )
 
 
 results_ci <- 
-  readRDS("../beta-function-simulations/sim-beta-function-confidence-interval-results.rds") %>%
+  readRDS(here::here("research","beta-function-simulations", "sim-beta-function-confidence-interval-results.rds")) %>%
   mutate(
     estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
-    estimator = fct_recode(estimator, "CHE-ISCW" = "FEC", "CML" = "ML"),
+    estimator = fct_recode(estimator, "CHE-ISCW" = "FEC", "PML" = "ML"),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
     J = as.character(m),
-    J = factor(J, levels = c("15", "30", "60", "90", "120")), # there is no 120
+    J = factor(J, levels = c("15", "30", "60", "90")),
     delta_combo_key = paste0(sprintf("%.2f", delta_1), "_", sprintf("%.2f", delta_2)),
     selection_strength = factor(
       delta_combo_key,
@@ -124,7 +123,7 @@ results_ci <-
       labels = names(delta_selection_names)
     ),
     mu_fac = fct(as.character(mean_smd)),
-    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45","0.6")), # there is no 0.6
+    tau_fac = fct(as.character(tau), levels = c("0.05","0.15","0.3","0.45")),
     bootstrap_type = recode(bootstrap_type, .missing = "none"),
     CI_boot_method = if_else(
       CI_type == "large-sample",
@@ -149,11 +148,11 @@ mu_graph_res_ci_main <-
     param == "beta",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_PML")
   ) %>%
   droplevels() %>%
   mutate(
-    method = fct_recode(estimator, "Beta" = "CML")
+    method = fct_recode(estimator, "Beta" = "PML")
   )
 
 mu_graph_res_ci_miss <- 
@@ -162,7 +161,7 @@ mu_graph_res_ci_miss <-
     param == "beta",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("CML")
+    estimator %in% c("PML")
   ) %>%
   droplevels() %>%
   rename(method = model) %>%
@@ -176,7 +175,7 @@ gamma_graph_res_ci_main <-
     param == "gamma",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_CML")
+    model_estimator %in% c("Comparison_CHE-ISCW","Comparison_PET/PEESE","beta_PML")
   ) %>%
   droplevels()
 
@@ -186,7 +185,7 @@ gamma_graph_res_ci_miss <-
     param == "gamma",
     !is.na(coverage),
     is.na(bootstraps) | bootstraps == 1999,
-    estimator %in% c("CML")
+    estimator %in% c("PML")
   ) %>%
   droplevels() %>%
   rename(method = model) %>%

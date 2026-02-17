@@ -19,46 +19,62 @@ outstanding_conditions <-
   params %>%
   anti_join(res_list, by = "row")
 
-outstanding_conditions 
-
 outstanding_conditions %>%
-  select(row) %>%
-  write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)
+  filter(bootstrap == "none")
 
-#-------------------------------------------------------------------------------
-# compile results from conditions with no bootstraps
+# outstanding_conditions %>%
+#   select(row) %>%
+#   write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Compile results from conditions with no bootstraps ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+plan(multisession, workers = 10)
 
 tic()
 no_bootstraps_res <- 
-  res_list %>%
-  left_join(params, by = "row") %>%
-  filter(bootstrap == "none") %>%
+  params %>%
+  left_join(res_list, by = "row") %>%
+  filter(bootstrap == "none", !is.na(file)) %>%
+  select(-priors, -comparison_methods) %>%
+  distinct() %>%
   pull(file) %>%
   future_map_dfr(.f = readRDS) %>%
   select(-seed)
 toc()
 
-params %>%
-  count(bootstrap)
+plan(sequential)
+
 nrow(no_bootstraps_res)
 
-no_bootstraps_res %>%
-  mutate(time_hrs = time / 60^2) %>%
-  summarize(
-    across(time_hrs, .fns = c(min = min, median = median, max = max, mean = mean, total = sum))
-  ) %>%
-  mutate(
-    time_yrs_total = time_hrs_total / 24 / 365.25
-  )
+# Arrange point estimation results for further analysis
 
-no_bootstraps_res %>% 
-  select(-run_date, -time) %>%
+res <- 
+  no_bootstraps_res %>%
+  select(-run_date) %>%
   unnest(res) %>%
   select(
-    mean_smd:omega, delta_2, bootstrap_condition = bootstrap,
+    mean_smd:m, omega, delta_2, iterations,
     model, estimator, param, 
-    K_absolute:rmse_mcse
+    K_absolute:rmse_mcse, 
+    K_coverage:width_mcse
   )
+
+res %>%
+  group_by(mean_smd, tau, cor_mu, cor_sd, delta_1, m, omega) %>%
+  summarize(n_res = n(), .groups = "drop") %>%
+  count(n_res)
+
+res %>%
+  filter(
+    mean_smd == 0, tau == 0.05, cor_mu == 0.4, omega == 0, delta_1 == 0.10, m == 60,
+  ) %>%
+  select(iterations, model:width_mcse)
+
+write_rds(res, file = "research/beta-function-simulations/sim-beta-function-point-estimator-results.rds", compress = "gz", compression = 9L)
+
 
 #-------------------------------------------------------------------------------
 # Check bootstrapping completeness
