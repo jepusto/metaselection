@@ -245,7 +245,7 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison}
 
-\note{~\newline February 04, 2026}
+\note{~\newline February 18, 2026}
 
 \begin{document}
 \maketitle
@@ -349,11 +349,11 @@ If \(w(y, \sigma; \boldsymbol\lambda) = 1\), then \(A(\mathbf{x}, \sigma; \bolds
 
 We estimate model parameters using a penalized maximum likelihood (PML) approach based on a composite marginal likelihood. This method treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated in\textsuperscript{13} and consistent with established composite likelihood approaches\textsuperscript{e.g., 18,19,20}. To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the \(p\)-value thresholds---we incorporate weak penalties into the composite likelihood. Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter \(\tau^2\) and independent normal penalties on the log-transformed selection parameters, \(\log(\lambda_1) \sim N(0, 1)\) and \(\log(\lambda_2) \sim N(0, 1)\). These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
 
-Estimation proceeds by maximizing the penalized log-composite-likelihood function. Confidence intervals are constructed using robust (sandwich-type) variance estimators based on study-level score contributions. A detailed explanation of CML methods is provided in our previous paper\textsuperscript{13}, and the exact expressions used for estimating the beta-density selection model are presented in APPENDIX.
+Estimation proceeds by maximizing the penalized log-composite-likelihood function. To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. The sandwich estimator used for the beta-density selection model follows the same structural form as the one developed for the step-function selection model. Because the marginal modeling approach is identical across these two models, the formal expressions for the score functions and the robust variance-covariance matrix can be found in Online Appendix A of\textsuperscript{13}.
 
 \subsection{Bootstrap inference}\label{bootstrap-inference}
 
-To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We considered several bootstrap methods designed to preserve the dependence structure across clusters, including the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{21,22}, and fractional random weight bootstrap\textsuperscript{23,24}. Based on our prior work\textsuperscript{13}, which found that the two-stage bootstrap consistently outperformed the alternatives, we focus exclusively on this approach. Confidence intervals are then computed using standard bootstrap-based methods such as the percentile, basic, studentized, and bias-corrected-and-accelerated intervals\textsuperscript{25,26}. These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly. APPENDIX provides further details about the bootstrap CI calculations.
+To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We considered several bootstrap methods designed to preserve the dependence structure across clusters, including the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{21,22}, and fractional random weight bootstrap\textsuperscript{23,24}. Based on our prior work\textsuperscript{13}, which found that the two-stage bootstrap consistently outperformed the alternatives, we focus exclusively on this approach. Confidence intervals are then computed using standard bootstrap-based methods such as the percentile, basic, studentized, and bias-corrected-and-accelerated intervals\textsuperscript{25,26}. These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly.
 
 \section{Empirical Example}\label{empirical-example}
 
@@ -507,26 +507,26 @@ This extrapolation technique was previously evaluated and implemented in\textsup
 \section{Simulation Results}\label{simulation-results}
 
 \begin{verbatim}
-## # A tibble: 3,840 x 39
-##    mean_smd   tau cor_mu delta_1     m omega delta_2 bootstrap_condition
-##       <dbl> <dbl>  <dbl>   <dbl> <dbl> <dbl>   <dbl> <chr>              
-##  1      0    0.05    0.4    0.01    90 0         0.9 none               
-##  2      0    0.05    0.4    0.01    90 0         0.9 none               
-##  3      0    0.05    0.4    0.01    90 0         0.9 none               
-##  4      0.8  0.45    0.4    0.5     30 0.318     0.9 none               
-##  5      0.8  0.45    0.4    0.5     30 0.318     0.9 none               
-##  6      0.8  0.45    0.4    0.5     30 0.318     0.9 none               
-##  7      0    0.15    0.4    0.2     60 0.106     0.9 none               
-##  8      0    0.15    0.4    0.2     60 0.106     0.9 none               
-##  9      0    0.15    0.4    0.2     60 0.106     0.9 none               
-## 10      0.8  0.45    0.4    0.5     15 0.318     0.9 none               
+## # A tibble: 3,840 x 29
+##    mean_smd   tau cor_mu delta_1     m omega delta_2 model_estimator      model 
+##       <dbl> <dbl>  <dbl>   <dbl> <dbl> <dbl>   <dbl> <chr>                <chr> 
+##  1        0  0.05    0.4    0.02    90     0     0.9 Comparison_CHE-ISCW  Compa~
+##  2        0  0.05    0.4    0.02    90     0     0.9 Comparison_PET/PEESE Compa~
+##  3        0  0.05    0.4    0.02    90     0     0.9 beta_PML             beta  
+##  4        0  0.05    0.4    0.02    60     0     0.9 Comparison_CHE-ISCW  Compa~
+##  5        0  0.05    0.4    0.02    60     0     0.9 Comparison_PET/PEESE Compa~
+##  6        0  0.05    0.4    0.02    60     0     0.9 beta_PML             beta  
+##  7        0  0.05    0.4    0.02    30     0     0.9 Comparison_CHE-ISCW  Compa~
+##  8        0  0.05    0.4    0.02    30     0     0.9 Comparison_PET/PEESE Compa~
+##  9        0  0.05    0.4    0.02    30     0     0.9 beta_PML             beta  
+## 10        0  0.05    0.4    0.02    15     0     0.9 Comparison_CHE-ISCW  Compa~
 ## # i 3,830 more rows
-## # i 31 more variables: model_estimator <chr>, model <chr>, estimator <fct>,
-## #   param <chr>, K_coverage <int>, width_winsor_pct <dbl>,
-## #   width_winsor_pct_mcse <dbl>, coverage <dbl>, coverage_mcse <dbl>,
-## #   width <dbl>, width_mcse <dbl>, K_relvar <int>, est_winsor_pct <dbl>,
-## #   est_winsor_pct_mcse <dbl>, var_winsor_pct <dbl>, var_winsor_pct_mcse <dbl>,
-## #   rel_bias_var <dbl>, rel_bias_var_mcse <dbl>, rel_rmse_var <dbl>, ...
+## # i 20 more variables: estimator <fct>, param <chr>, K_coverage <int>,
+## #   coverage <dbl>, coverage_mcse <dbl>, width <dbl>, width_mcse <dbl>,
+## #   bootstrap_type <chr>, CI_type <chr>, bootstraps <dbl>, extrapolated <lgl>,
+## #   het_ratio <chr>, J <fct>, delta_combo_key <chr>, selection_strength <fct>,
+## #   mu_fac <fct>, tau_fac <fct>, CI_boot_method <fct>,
+## #   bootstrap_condition <chr>, method <fct>
 \end{verbatim}
 
 We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates of 95\% confidence intervals.
@@ -535,7 +535,7 @@ Additional results concerning the bias and RMSE for the marginal variance of the
 
 \subsection{Sensitivity to Selective Reporting: Beta-Density vs.~Standard Approaches}\label{sensitivity-to-selective-reporting-beta-density-vs.-standard-approaches}
 
-The CHE-ISCW and PET/PEESE approaches had perfect convergence rates, producing results for every replication in every condition. The beta-density selection model exhibited very high convergence rates, with an average rate of 99.60\%; the lowest convergence rates occurred under conditions with the lowest degree of heterogeneity \(\tau = 0.05\). Supplementary Figure \ref{fig:convergence-rates-main} depicts the range of convergence rates of the beta-density selection model.
+The CHE-ISCW and PET/PEESE approaches had perfect convergence rates, producing results for every replication in every condition. The beta-density selection model exhibited very high convergence rates, with an average rate of NA\%; the lowest convergence rates occurred under conditions with the lowest degree of heterogeneity \(\tau = 0.05\). Supplementary Figure \ref{fig:convergence-rates-main} depicts the range of convergence rates of the beta-density selection model.
 
 \subsubsection{Bias}\label{bias}
 
@@ -545,9 +545,9 @@ The CHE-ISCW and PET/PEESE approaches had perfect convergence rates, producing r
 
 Figure \ref{fig:mu-bias-main} shows the bias for each method of estimating the average effect size (vertical axis) as a function of selective reporting strength (horizontal axis), average effect size (grid column), and between-study heterogeneity (\(\tau\), grid row). Each box plot summarizes variation in bias across the remaining simulation factors: the heterogeneity ratio, the correlation between effect size estimates, and the number of observed studies. Note that the vertical axis scale differs by grid row, reflecting how some methods' bias is more sensitive to the level of heterogeneity.
 
-The beta-density selection model has negligible to small bias across all conditions, ranging from -0.06 to 0.09. Its bias was essentially zero for all conditions when the average effect size is non-zero or when selective reporting is weak or absent. Bias was largest when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
+The beta-density selection model has negligible to small bias across all conditions, ranging from -0.04 to 0.18. Its bias was essentially zero for all conditions when the average effect size is non-zero or when selective reporting is weak or absent. Bias was largest when selective reporting is very strong, average effect size is zero, and heterogeneity is large.
 
-In contrast, bias for the comparison methods ranged from 0 to 0.41 for CHE-ISCW and -0.38 to 0.37 for PET/PEESE. Both methods are generally biased when selective reporting is present.
+In contrast, bias for the comparison methods ranged from -0.01 to 0.41 for CHE-ISCW and -0.39 to 0.36 for PET/PEESE. Both methods are generally biased when selective reporting is present.
 For CHE-ISCW, which does not directly adjust for selective reporting, bias was closest to zero when average effect size is large \((\mu = 0.8)\) and heterogeneity is low \((\tau \leq 0.15)\).
 This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for the selection mechanism to operate.
 For PET/PEESE, which uses a regression adjustment to account for possible selective reporting, bias was closest to zero when average effect size is moderate \((\mu = 0.4)\) and heterogeneity is low \((\tau = 0.15)\).
@@ -577,7 +577,7 @@ These bias--variance trade-offs stem from the fact that CHE-ISCW, which does not
 
 Figure \ref{fig:comparison-coverage-main} shows the coverage rates of 95\% confidence intervals based on large-sample cluster-robust variance approximations for the three methods.\footnote{Note that the vertical axis of Figure \ref{fig:comparison-coverage-main} is restricted to the range {[}0.5, 1.0{]}, and coverage rates of the intervals based on CHE-ISCW and PET/PEESE are not depicted when they fall below 0.5. Supplementary Figure \ref{fig:comparison-coverage-full-main} depicts the full range of coverage rates.}
 Across most conditions, coverage rates fall well below the nominal rate of 0.95 for all methods.
-Coverage rates range from 0.52 to 0.97 for the beta-density selection model, from 0 to 0.97 for CHE-ISCW, and from 0.02 to 0.97 for PET/PEESE.
+Coverage rates range from 0.58 to 0.98 for the beta-density selection model, from 0 to 0.96 for CHE-ISCW, and from 0.02 to 0.96 for PET/PEESE.
 Coverage rates increase for all methods as the number of studies (\(J\)) increases, the average effect size increases (\(\mu\)), and heterogeneity decreases (\(\tau\)).
 When heterogeneity is small (\(\tau \leq 0.15\)) and the average effect size is moderate to large (\(\mu \geq 0.4\)), CHE-ISCW has the highest coverage rates and the beta-density selection model has the lowest coverage rates.
 
@@ -594,7 +594,7 @@ Among these, the percentile bootstrap intervals performed best, achieving covera
 
 \subsection{Robustness to Selection Function Misspecification: Beta-Density vs.~Step Models}\label{robustness-to-selection-function-misspecification-beta-density-vs.-step-models}
 
-Convergence rates were higher for the step-function selection models than for the beta-density selection model. Both the one-step and two-step models had convergence rates of 99\% and above across all 1,280 conditions, while the beta-density selection model had convergence rates below 99\% for 40 of the 1,280 conditions.
+Convergence rates were higher for the step-function selection models than for the beta-density selection model. Both the one-step and two-step models had convergence rates of 99\% and above across all 1,280 conditions, while the beta-density selection model had convergence rates below 99\% for 0 of the 1,280 conditions.
 
 \subsubsection{Bias}\label{bias-1}
 

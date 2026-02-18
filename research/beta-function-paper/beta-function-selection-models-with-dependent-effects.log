@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.6)  4 FEB 2026 14:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.6)  18 FEB 2026 16:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1078,13 +1078,73 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 49
 (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [19{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 530--530
-[]\T1/lmtt/m/n/12 ## # i 31 more variables: model_estimator <chr>, model <chr>, estimator <fct>,[] 
+Overfull \hbox (36.59523pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##    mean_smd   tau cor_mu delta_1     m omega delta_2 model_estimator      model[] 
  []
 
 
 Overfull \hbox (36.59523pt too wide) in paragraph at lines 530--530
-[]\T1/lmtt/m/n/12 ## #   est_winsor_pct_mcse <dbl>, var_winsor_pct <dbl>, var_winsor_pct_mcse <dbl>,[] 
+[]\T1/lmtt/m/n/12 ##       <dbl> <dbl>  <dbl>   <dbl> <dbl> <dbl>   <dbl> <chr>                <chr>[] 
+ []
+
+
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  1        0  0.05    0.4    0.02    90     0     0.9 Comparison_CHE-ISCW  Compa~[] 
+ []
+
+
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  2        0  0.05    0.4    0.02    90     0     0.9 Comparison_PET/PEESE Compa~[] 
+ []
+
+
+Overfull \hbox (30.40622pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  3        0  0.05    0.4    0.02    90     0     0.9 beta_PML             beta[] 
+ []
+
+
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  4        0  0.05    0.4    0.02    60     0     0.9 Comparison_CHE-ISCW  Compa~[] 
+ []
+
+
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  5        0  0.05    0.4    0.02    60     0     0.9 Comparison_PET/PEESE Compa~[] 
+ []
+
+
+Overfull \hbox (30.39922pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  6        0  0.05    0.4    0.02    60     0     0.9 beta_PML             beta[] 
+ []
+
+
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  7        0  0.05    0.4    0.02    30     0     0.9 Comparison_CHE-ISCW  Compa~[] 
+ []
+
+
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  8        0  0.05    0.4    0.02    30     0     0.9 Comparison_PET/PEESE Compa~[] 
+ []
+
+
+Overfull \hbox (30.40622pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ##  9        0  0.05    0.4    0.02    30     0     0.9 beta_PML             beta[] 
+ []
+
+
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ## 10        0  0.05    0.4    0.02    15     0     0.9 Comparison_CHE-ISCW  Compa~[] 
+ []
+
+
+Overfull \hbox (30.42023pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ## #   bootstrap_type <chr>, CI_type <chr>, bootstraps <dbl>, extrapolated <lgl>,[] 
+ []
+
+
+Overfull \hbox (30.42023pt too wide) in paragraph at lines 530--530
+[]\T1/lmtt/m/n/12 ## #   het_ratio <chr>, J <fct>, delta_combo_key <chr>, selection_strength <fct>,[] 
  []
 
 [20]
@@ -1196,7 +1256,7 @@ L3 programming layer <2020/03/25>
  ) 
 Here is how much of TeX's memory you used:
  29886 strings out of 469458
- 573650 string characters out of 5464924
+ 573652 string characters out of 5464924
  984721 words of memory out of 5000000
  57627 multiletter control sequences out of 15000+600000
  717568 words of font info for 209 fonts, out of 8000000 for 9000
@@ -1209,7 +1269,7 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on beta-function-selection-models-with-dependent-effects.pdf (46 pages, 673598 bytes).
+Output written on beta-function-selection-models-with-dependent-effects.pdf (46 pages, 676466 bytes).
 PDF statistics:
  780 PDF objects out of 1000 (max. 8388607)
  652 compressed objects within 7 object streams

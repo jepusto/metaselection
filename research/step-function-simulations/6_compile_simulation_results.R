@@ -74,8 +74,12 @@ write_rds(res, file = "research/step-function-simulations/sim-step-function-resu
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-# Count conditions with incomplete bootstraps ----
+# compile results from conditions with bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+
+source("research/step-function-simulations/2_performance_criteria.R")
+
 
 bootstrap_files <-
   params %>%
@@ -85,12 +89,6 @@ bootstrap_files <-
   nest(iterations = iterations, files = file) %>%
   mutate(R_max = map_dbl(R, max))
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-# compile results from conditions with bootstraps ----
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-
-
-source("research/step-function-simulations/2_performance_criteria.R")
 
 summarize_bootstraps <- function(file_list) {
   

@@ -221,8 +221,9 @@ It's important to note that the confidence intervals produced by the comparison 
 mu_graph_res_ci_main %>%
   filter(
     bootstrap_condition == "bootstrap",
-    estimator %in% c("CML")
-    #CI_type %in% c("large-sample","percentile")
+    model == "beta",
+    estimator %in% c("PML"),
+    CI_type %in% c("large-sample","percentile")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -343,15 +344,14 @@ Figure \@ref(fig:mu-rmse-miss) presents the RMSE for the three selection models 
 mu_graph_res_ci_miss %>%
   filter(
     bootstrap_condition == "bootstrap",
-    estimator %in% c("CML"),
+    estimator %in% c("PML"),
     CI_boot_method %in% c("percentile (two-stage)")
-    #CI_type %in% c("large-sample","percentile")
   ) %>%
   ggplot(aes(x = J, y = coverage, color = method, fill = method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
-  #scale_y_continuous(limits = c(0.55, 1.0), breaks = seq(0.55,1.0,0.05), expand = expansion(0,0)) +
-  scale_y_continuous(limits = c(0.55, 1.0)) +
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
@@ -381,4 +381,3 @@ The beta-density selection model achieves coverage rates at or near the nominal 
 The step-function selection models generally produce lower coverage rates, particularly when heterogeneity is moderate to large ($\tau \geq 0.15$) or average effect size is small ($\mu \leq 0.2$).
 As with CHE-ISCW and PET/PEESE, the confidence intervals produced by the step-function selection models are often miscalibrated, due in part to underestimated standard errors, which result in overly narrow intervals.
 Among the step-function selection models, coverage is generally higher for the two-step model than for the one-step model.
-<!-- MC: I'm still having issues with getting all the values to show up, even if I unrestrict the y-axis. Ideas?-->

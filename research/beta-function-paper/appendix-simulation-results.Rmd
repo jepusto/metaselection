@@ -22,7 +22,6 @@ source("process-simulation-results.R")
 #| fig.cap: "Convergence rates of the beta-function selection model by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
 
 mu_graph_res_main %>%
-  filter(model_estimator %in% c("beta_CML")) %>%
   group_by(mean_smd, tau, selection_strength, method) %>%
   summarize(
     min = min(convergence),

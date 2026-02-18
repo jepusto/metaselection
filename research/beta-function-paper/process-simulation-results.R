@@ -16,6 +16,9 @@ delta_selection_names <- c(
   "None" = "1.00_1.00"
 )
 
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Compile point estimator performance results ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 results <- 
   readRDS(here::here("research","beta-function-simulations","sim-beta-function-point-estimator-results.rds")) %>%
@@ -107,8 +110,43 @@ gamma_wide_res_miss <-
   )
 
 
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+# Compile confidence interval performance results ----
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
+
+nobootstrap_conf_int <- 
+  readRDS(here::here("research","beta-function-simulations","sim-beta-function-point-estimator-results.rds")) %>%
+  select(mean_smd:delta_2, model:param, K_coverage:width_mcse) %>%
+  mutate(
+    bootstrap_type = "none",
+    CI_type = "large-sample"
+  )
+
+bootstrap_conf_int <- 
+  readRDS(here::here("research","beta-function-simulations","sim-beta-function-bootstrap-performance-results.rds")) %>%
+  select(-run_date, -time, -nfiles, -step_models) %>%
+  unnest(res) %>%
+  select(
+    mean_smd:m, omega, delta_2, bootstrap, bootstrap_type = bootstrap, model:param, 
+    bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse
+  ) %>%
+  unnest(
+    c(bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
+    names_sep = "-"
+  ) %>%
+  pivot_longer(
+    starts_with("boot_"),
+    names_to = c(".value", "CI_type"),
+    names_pattern = "(.+)-(.+)"
+  ) %>%
+  rename_with(~ str_remove(.x, "^boot_"))
+
+
 results_ci <- 
-  readRDS(here::here("research","beta-function-simulations", "sim-beta-function-confidence-interval-results.rds")) %>%
+  bind_rows(
+    nobootstrap_conf_int,
+    bootstrap_conf_int
+  ) %>%
   mutate(
     estimator = fct(estimator, levels = c("ML","FEC","CHE","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "CHE-ISCW" = "FEC", "PML" = "ML"),
@@ -140,7 +178,11 @@ results_ci <-
     )
   ) %>%
   select(-cor_sd) %>% 
-  unite("model_estimator", model:estimator, na.rm = TRUE, remove = FALSE)
+  unite("model_estimator", model:estimator, na.rm = TRUE, remove = FALSE) %>%
+  mutate(
+    bootstrap_condition = if_else(any(bootstrap_type != "none"), "bootstrap", "CRVE"),
+    .by = c(mean_smd, tau, omega, cor_mu, delta_1, delta_2, m)
+  )
 
 mu_graph_res_ci_main <- 
   results_ci %>%
