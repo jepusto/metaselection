@@ -77,7 +77,7 @@ Additional results concerning the bias and RMSE for the marginal variance of the
 
 ## Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
 
-All three approaches---beta-density selection model, CHE-ISCW, and PET/PEESE---had perfect convergence rates, producing results for every replication across all $`r formatC(4 * 4 * 2 * 2 * 5 * 4, big.mark = ",")`$ conditions. <!-- MC: Dropped figure as it's not longer interesting with 100% convergence. -->
+All three approaches---beta-density selection model, CHE-ISCW, and PET/PEESE---had perfect convergence rates, producing results for every replication across all $`r formatC(4 * 4 * 2 * 2 * 5 * 4, big.mark = ",")`$ conditions. <!-- MC: Dropped figure as it's no longer interesting with 100% convergence. -->
 
 ### Bias
 
@@ -105,8 +105,8 @@ ggplot(mu_graph_res_main) +
   labs(
     x = "Selection probability", 
     y = "Bias", 
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -150,8 +150,8 @@ ggplot(mu_graph_res_main) +
   labs(
     x = "Selection probability", 
     y = "Root Mean-Squared Error", 
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -196,8 +196,8 @@ mu_graph_res_ci_main %>%
   labs(
     x = "Number of studies (J)", 
     y = "Coverage rate", 
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -243,8 +243,8 @@ mu_graph_res_ci_main %>%
   labs(
     x = "Number of studies (J)",
     y = "Coverage rate",
-    color = "",
-    fill = ""
+    color = "Variance estimator",
+    fill = "Variance estimator"
   ) +
   theme_bw() +
   theme(legend.position = "top")
@@ -285,8 +285,8 @@ ggplot(mu_graph_res_miss) +
   labs(
     x = "Selection probability", 
     y = "Bias", 
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -321,8 +321,8 @@ ggplot(mu_graph_res_miss) +
   labs(
     x = "Selection probability", 
     y = "Root Mean-Squared Error", 
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -367,8 +367,8 @@ mu_graph_res_ci_miss %>%
   labs(
     x = "Number of studies (J)",
     y = "Coverage rate",
-    color = "",
-    fill = ""
+    color = "Method",
+    fill = "Method"
   ) +
   theme_bw() +
   theme(legend.position = "top")
