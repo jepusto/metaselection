@@ -91,7 +91,7 @@ bootstrap_files <-
   filter(bootstrap != "none") %>%
   select(-batch, -seed, -row) %>%
   nest(iterations = iterations, files = file) %>%
-  mutate(nfiles = map(files, nrow))
+  mutate(nfiles = map_int(files, nrow))
 
 bootstrap_files %>%
   count(nfiles)
@@ -135,9 +135,9 @@ summarize_bootstraps <- function(file_list) {
 }
 
 # debug(summarize_bootstraps)
-tic()
-summarize_bootstraps(file_list = bootstrap_files$files[[1]])
-toc()
+# tic()
+# summarize_bootstraps(file_list = bootstrap_files$files[[1]])
+# toc()
 
 plan(multisession, workers = 10L)
 
