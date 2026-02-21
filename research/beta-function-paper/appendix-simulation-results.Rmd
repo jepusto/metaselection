@@ -21,46 +21,47 @@ source("process-simulation-results.R")
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Convergence rates of the beta-function selection model by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
 
-mu_graph_res_main %>%
-  group_by(mean_smd, tau, selection_strength, method) %>%
-  summarize(
-    min = min(convergence),
-    Q10 = quantile(convergence, 0.1),
-    median = median(convergence),
-    Q90 = quantile(convergence, 0.9),
-    max = max(convergence),
-    .groups = "drop"
-  ) %>%
-ggplot() + 
-  aes(x = selection_strength, y = median, ymin = min, max = max, color = method, fill = method) +
-  geom_pointrange(
-    position = position_dodge(width = 0.5)
-  ) + 
-  geom_linerange(
-    aes(ymin = Q10, ymax = Q90),
-    position = position_dodge(width = 0.5),
-    linewidth = 1.2
-  ) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  expand_limits(y = 0.99) + 
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Convergence rate", 
-    color = "",
-    fill = ""
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+# mu_graph_res_main %>%
+#   filter(model_estimator %in% c("beta_PML")) %>%
+#   group_by(mean_smd, tau, selection_strength, method) %>%
+#   summarize(
+#     min = min(convergence),
+#     Q10 = quantile(convergence, 0.1),
+#     median = median(convergence),
+#     Q90 = quantile(convergence, 0.9),
+#     max = max(convergence),
+#     .groups = "drop"
+#   ) %>%
+# ggplot() + 
+#   aes(x = selection_strength, y = median, ymin = min, max = max, color = method, fill = method) +
+#   geom_pointrange(
+#     position = position_dodge(width = 0.5)
+#   ) + 
+#   geom_linerange(
+#     aes(ymin = Q10, ymax = Q90),
+#     position = position_dodge(width = 0.5),
+#     linewidth = 1.2
+#   ) + 
+#   scale_color_brewer(palette = "Dark2") +
+#   scale_fill_brewer(palette = "Dark2") +
+#   scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+#   expand_limits(y = 0.99) + 
+#   facet_grid(
+#     tau ~ mean_smd, 
+#     labeller = label_bquote(
+#       rows = tau == .(tau),
+#       cols = mu == .(mean_smd)
+#     ),
+#     scales = "free_y"
+#   ) +
+#   labs(
+#     x = "Selection probability", 
+#     y = "Convergence rate", 
+#     color = "",
+#     fill = ""
+#   ) + 
+#   theme_bw() +
+#   theme(legend.position = "top")
 
 ```
 
