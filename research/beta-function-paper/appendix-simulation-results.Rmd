@@ -10,9 +10,9 @@ editor_options:
 source("process-simulation-results.R")
 ```
 
-# Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
+# Additional simulation results for methods of estimating average effect size $(\mu)$ {#mu-simulation-results}
 
-## Additional simulation results for methods of estimating the average effect size $(\mu)$ {#mu-simulation-results-main}
+## Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
 
 ```{r convergence-rates-main}
 #| cache: true
@@ -70,9 +70,9 @@ source("process-simulation-results.R")
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error of the average effect for CHE-ISCW to root mean-squared error of beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(mu_wide_res_main, "Beta","CHE-ISCW")
+RMSE_comparison_plot(mu_wide_res_main, measure = "rmse", "Beta", "CHE-ISCW")
 ```
 
 ```{r rmse-PET-Beta-main}
@@ -80,9 +80,19 @@ RMSE_comparison_plot(mu_wide_res_main, "Beta","CHE-ISCW")
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of CML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error of the average effect for PET/PEESE to root mean-squared error of beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(mu_wide_res_main, "Beta","PET/PEESE")
+RMSE_comparison_plot(mu_wide_res_main, measure = "rmse", "Beta", "PET/PEESE")
+```
+
+```{r rmse-CHE-PET-main}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error of the average effect for CHE-ISCW to root mean-squared error of PET/PEESE by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(mu_wide_res_main, measure = "rmse", "PET/PEESE", "CHE-ISCW")
 ```
 
 ```{r comparison-coverage-full-main}
@@ -121,9 +131,7 @@ mu_graph_res_ci_main %>%
 
 ```
 
-# Robustness to Selection Function Misspecification: Beta-Density vs. Step Models
-
-## Additional simulation results for methods of estimating the average effect size $(\mu)$ {#mu-simulation-results-miss}
+## Robustness to Selection Function Misspecification: Beta-Density vs. Step Models
 
 ```{r comparison-coverage-full-miss}
 #| cache: true
@@ -155,6 +163,275 @@ mu_graph_res_ci_miss %>%
     y = "Coverage rate", 
     color = "",
     fill = ""
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+\newpage 
+
+# Additional simulation results for methods of estimating heterogeneity {#gamma-simulation-results}
+
+We briefly examine the estimation of the marginal heterogeneity of the effect size distribution. Figure \@ref(fig:heterogeneity-bias) shows the relative bias of marginal variance $\tau_B^2 + \omega^2$ for the three selection models: beta-density, one-step, and two-step.
+In most conditions, all three models are biased in the negative direction, with relative bias consistently below zero when between-study heterogeneity is $\tau_B \geq 0.15$. The beta-density selection model generally has relative bias closest to zero, particularly when selective reporting is present (moderate to extreme).
+Among the step-function selection models, the two-step model generally outperforms the one-step model. Except the one-step model generally outperforms both the beta-density and two-step models when average effect size is small $(\mu < 0.2)$ and selective reporting is not present, though the difference is minimal.
+Relative bias is very similar across the three models when average effect size is large $(\mu = 0.8)$ and between-study heterogeneity is small $(\tau_B \leq 0.15)$.
+
+Figure \@ref(fig:heterogeneity-rmse) depicts the relative RMSE of the marginal heterogeneity for the three selection models, with Figures \@ref(fig:heterogeneity-rmse-one-beta) to \@ref(fig:heterogeneity-rmse-two-one) plotting the ratio of RMSEs for each pair of models to compare their relative accuracy.
+The beta-density selection model is the most accurate (i.e., has the lowest RMSE) when selective reporting is present, average effect size is small $(\mu < 0.2)$, and between-study heterogeneity is moderate to large $(\tau_B \geq 0.30)$.
+A bias-variance trade-off takes places when $\mu = 0.4$, with the one-step model outperforming the others when bias is not present and the two-step model outperforming the others when bias is present. The one-step model also outperforms the others when average effect size is large $(\mu = 0.8)$ and between-study heterogeneity is moderate to large $(\tau_B \geq 0.30)$.
+RMSE is very similar across the three models when average effect size is large $(\mu = 0.8)$ and between-study heterogeneity is small $(\tau_B \leq 0.15)$.
+
+```{r heterogeneity-bias}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative bias of heterogeneity by method, selection probability, average SMD, and between-study heterogeneity"
+
+ggplot(tau2_graph_res) + 
+  aes(x = selection_strength, y = rbias, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Bias", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r heterogeneity-rmse}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative root mean-squared error of heterogeneity by method, selection probability, average SMD, and between-study heterogeneity"
+
+ggplot(tau2_graph_res) + 
+  aes(x = selection_strength, y = rrmse, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Root Mean-Squared Error", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r heterogeneity-rmse-one-beta}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error of heterogeneity for one-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","one-step")
+```
+
+```{r heterogeneity-rmse-two-beta}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","two-step")
+```
+
+```{r heterogeneity-rmse-two-one}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for one-step by selection probability, number of studies, average SMD, and between-study heterogeneity"
+
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "one-step","two-step")
+```
+
+# Additional simulation results for methods of estimating selection parameters ($\lambda_1$ & $\lambda_2$) {#zeta-simulation-results}
+
+The beta-density selection model estimates two selection parameters: $\lambda_1$ and $\lambda_2$. Figures \@ref(fig:lambda1-bias) and \@ref(fig:lambda1-rmse) present the relative bias and RMSE results for $\lambda_1$ and Figures \@ref(fig:lambda2-bias) and \@ref(fig:lambda2-rmse) present the relative bias and RMSE results for $\lambda_2$. We do not plot the selection parameters for the step-function selection models because they are based on a different selection function and are, thus, not comparable to the beta-density selection parameters.^[Step-function selection models estimate one parameter per step; thus, the one-step model estimates one selection parameter and the two-step model estimates two selection parameters.]
+
+The figures show that $\lambda_1$ is substantially biased when selective reporting is extreme, but relative bias reduces down to zero when selective reporting is not present. The same pattern is evident for relative RMSE. $\lambda_2$, on the other hand, has relative bias and RMSE close to zero across all conditions.
+
+```{r lambda1-bias}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative bias of the beta-density lambda1 selection parameter by selection probability, average SMD, and between-study heterogeneity"
+
+lambda1_graph_res %>%
+  filter(method %in% c("beta")) %>%
+ggplot() + 
+  aes(x = selection_strength, y = rbias, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(-1,4)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Bias", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r lambda1-rmse}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative root mean-squared error of the beta-density lambda1 selection parameter by selection probability, average SMD, and between-study heterogeneity"
+
+lambda1_graph_res %>%
+  filter(method %in% c("beta")) %>%
+ggplot() + 
+  aes(x = selection_strength, y = rrmse, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(0, 10)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Root Mean-Squared Error", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r lambda2-bias}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative bias of the beta-density lambda2 selection parameter by selection probability, average SMD, and between-study heterogeneity"
+
+lambda2_graph_res %>%
+  filter(method %in% c("beta")) %>%
+ggplot() + 
+  aes(x = selection_strength, y = rbias, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(-1,4)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Bias", 
+    color = "Method",
+    fill = "Method"
+  ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r lambda2-rmse}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative root mean-squared error of the beta-density lambda2 selection parameter by selection probability, average SMD, and between-study heterogeneity"
+
+lambda2_graph_res %>%
+  filter(method %in% c("beta")) %>%
+ggplot() + 
+  aes(x = selection_strength, y = rrmse, color = method, fill = method) +
+  geom_hline(yintercept = 0) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  coord_cartesian(ylim = c(0, 10)) + 
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability", 
+    y = "Relative Root Mean-Squared Error", 
+    color = "Method",
+    fill = "Method"
   ) + 
   theme_bw() +
   theme(legend.position = "top")

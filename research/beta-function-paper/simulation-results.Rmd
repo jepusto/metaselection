@@ -73,7 +73,7 @@ pp_coverage_main <-
 
 We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates of 95% confidence intervals. 
 Second, we compare the performance of the beta-density selection model to the one-step and two-step selection models to assess the robustness of these models to misspecification of the selection function.
-Additional results concerning the bias and RMSE for the marginal variance of the effect size distribution, as well as the performance of the the selection parameters for the selection models, are provided in Appendix X. <!-- MC: Add, if needed. -->
+Additional results concerning the bias and RMSE for the marginal variance of the effect size distribution for the selection models are provided  in Appendix \@ref(gamma-simulation-results) and additional results on the performance of the selection parameters for the beta-density selection model are provided in Appendix \@ref(zeta-simulation-results).
 
 ## Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
 
@@ -157,7 +157,7 @@ ggplot(mu_graph_res_main) +
   theme(legend.position = "top")
 ```
 
-RMSE captures both bias and variability, providing an overall measure of inaccuracy. Figure \@ref(fig:mu-rmse-main), constructed in the same format as Figure \@ref(fig:mu-bias-main), shows the RMSE for each method of estimating the average effect size. Additional detail is provided in Figures \@ref(fig:rmse-CHE-Beta-main) and \@ref(fig:rmse-PET-Beta-main) in Appendix \@ref(mu-simulation-results-main), which plot the ratio of RMSEs for each pair of methods to compare their relative accuracy.
+RMSE captures both bias and variability, providing an overall measure of inaccuracy. Figure \@ref(fig:mu-rmse-main), constructed in the same format as Figure \@ref(fig:mu-bias-main), shows the RMSE for each method of estimating the average effect size. Additional detail is provided in Figures \@ref(fig:rmse-CHE-Beta-main) to \@ref(fig:rmse-CHE-PET-main) in Appendix \@ref(mu-simulation-results), which plot the ratio of RMSEs for each pair of methods to compare their relative accuracy.
 
 Taken together, the figures indicate that no single method achieves the lowest RMSE across all conditions. Instead, each method reflects different bias–variance trade-offs.
 The beta-density selection model generally outperforms the others---achieving lower RMSE---when selective reporting is strong to extreme and $\mu = 0$ or when selective reporting is strong to extreme, $\mu = 0.2$, and heterogeneity is moderate to large $(\tau \geq 0.3)$.
@@ -204,7 +204,7 @@ mu_graph_res_ci_main %>%
 
 ```
 
-Figure \@ref(fig:comparison-coverage-main) shows the coverage rates of 95% confidence intervals based on large-sample cluster-robust variance approximations for the three methods.^[Note that the vertical axis of Figure \@ref(fig:comparison-coverage-main) is restricted to the range [0.5, 1.0], and coverage rates of the intervals based on CHE-ISCW and PET/PEESE are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full-main) depicts the full range of coverage rates.]
+Figure \@ref(fig:comparison-coverage-main) shows the coverage rates of 95% confidence intervals based on large-sample cluster-robust variance approximations for the three methods.^[Note that the vertical axis of Figure \@ref(fig:comparison-coverage-main) is restricted to the range [0.5, 1.0], and coverage rates of the intervals based on CHE-ISCW and PET/PEESE are not depicted when they fall below 0.5. Figure \@ref(fig:comparison-coverage-full-main) in Appendix \@ref(mu-simulation-results) depicts the full range of coverage rates.]
 Across most conditions, coverage rates fall well below the nominal rate of 0.95 for all methods.
 Coverage rates range from `r round(beta_coverage_main$min_coverage,2)` to `r round(beta_coverage_main$max_coverage,2)` for the beta-density selection model, from `r round(che_coverage_main$min_coverage,2)` to `r round(che_coverage_main$max_coverage,2)` for CHE-ISCW, and from `r round(pp_coverage_main$min_coverage,2)` to `r round(pp_coverage_main$max_coverage,2)` for PET/PEESE.
 Coverage rates increase for all methods as the number of studies ($J$) increases, the average effect size ($\mu$) increases, and heterogeneity ($\tau$) decreases.
@@ -377,7 +377,7 @@ mu_graph_res_ci_miss %>%
 
 Figure \@ref(fig:PML-coverage-miss) shows the coverage rates of 95% confidence intervals based on two-stage bootstrap percentile intervals for the three models.
 Based on the results above, we focus on the coverage rates of the two-stage percentile bootstrap confidence intervals, as they consistently yielded coverage rates better than those from the large-sample cluster-robust variance method.
-Supplementary Figure \@ref(fig:comparison-coverage-full-miss) depicts the coverage rates based on cluster-robust variance approximations.
+Figure \@ref(fig:comparison-coverage-full-miss) in Appendix \@ref(mu-simulation-results) depicts the coverage rates based on cluster-robust variance approximations.
 
 The beta-density selection model achieves coverage rates at or near the nominal 0.95 level across all conditions.
 The step-function selection models generally produce lower coverage rates, particularly when heterogeneity is moderate to large ($\tau \geq 0.3$) or average effect size is small ($\mu \leq 0.2$).

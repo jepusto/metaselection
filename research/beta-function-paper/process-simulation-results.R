@@ -87,14 +87,11 @@ mu_wide_res_miss <-
     names_from = method
   )
 
-gamma_graph_res_miss <- # gamma only estimated for the 3 CML methods
+gamma_graph_res_miss <- # gamma only estimated for the 3 PML methods
   results %>%
   filter(
     param == "gamma"
   ) %>%
-  # mutate(
-  #   scrmse_trunc = pmin(scrmse, 3 / tau + rnorm(n(), sd = 0.01))
-  # ) %>%
   droplevels()%>%
   rename(method = model) %>%
   mutate(
@@ -103,12 +100,80 @@ gamma_graph_res_miss <- # gamma only estimated for the 3 CML methods
 
 gamma_wide_res_miss <- 
   gamma_graph_res_miss %>%
-  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, method) %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, bias, var, rmse, method, selection_strength) %>%
   pivot_wider(
     values_from = c(bias, var, rmse), 
     names_from = method
   )
 
+tau2_graph_res <- # tau2 only estimated for the 3 PML methods
+  results %>%
+  filter(
+    param == "tau2"
+  ) %>%
+  rename(method = model) %>%
+  mutate(
+    total_var = tau^2 + omega^2,
+    rbias = bias / total_var,
+    rbias_mcse = bias_mcse / total_var,
+    rvar = var / total_var^2,
+    rvar_mcse = var_mcse / total_var^2,
+    rrmse = rmse / total_var,
+    rrmse_mcse = rmse_mcse / total_var,
+    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+  )
+
+tau2_wide_res <- 
+  tau2_graph_res %>%
+  select(mean_smd:m, mu_fac, tau_fac, het_ratio, J, method, rbias, rvar, rrmse, selection_strength) %>%
+  pivot_wider(
+    values_from = c(rbias, rvar, rrmse), 
+    names_from = method
+  )
+
+zeta1_graph_res <- # zeta1 only estimated for the 3 PML methods
+  results %>%
+  filter(
+    param == "zeta1"
+  )
+
+zeta2_graph_res <- # zeta2 only estimated for the beta and two-step models
+  results %>%
+  filter(
+    param == "zeta2"
+  )
+
+lambda1_graph_res <- # lambda1 only estimated for the 3 PML methods
+  results %>%
+  filter(
+    param == "lambda1"
+  ) %>%
+  rename(method = model) %>%
+  mutate(
+    rbias = bias / delta_1,
+    rbias_mcse = bias_mcse / delta_1,
+    rvar = var / delta_1^2,
+    rvar_mcse = var_mcse / delta_1^2,
+    rrmse = rmse / delta_1,
+    rrmse_mcse = rmse_mcse / delta_1,
+    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+  )
+
+lambda2_graph_res <- # lambda2 only estimated for the beta and two-step models
+  results %>%
+  filter(
+    param == "lambda1"
+  ) %>%
+  rename(method = model) %>%
+  mutate(
+    rbias = bias / delta_2,
+    rbias_mcse = bias_mcse / delta_2,
+    rvar = var / delta_2^2,
+    rvar_mcse = var_mcse / delta_2^2,
+    rrmse = rmse / delta_2,
+    rrmse_mcse = rmse_mcse / delta_2,
+    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+  )
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Compile confidence interval performance results ----
@@ -236,11 +301,11 @@ gamma_graph_res_ci_miss <-
   )
 
 
-RMSE_comparison_plot <- function(data, x_method, y_method, col_factor = J, col_lab = "Number of studies (J)", legend_rows = 1L) {
+RMSE_comparison_plot <- function(data, x_method, y_method, measure, col_factor = J, col_lab = "Number of studies (J)", legend_rows = 1L) {
   
   y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
-  x_var <- sym(paste("rmse", x_method, sep = "_"))
-  y_var <- sym(paste("rmse", y_method, sep = "_"))
+  x_var <- sym(paste(measure, x_method, sep = "_"))
+  y_var <- sym(paste(measure, y_method, sep = "_"))
   
   ggplot(data) + 
     aes(x = selection_strength, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
