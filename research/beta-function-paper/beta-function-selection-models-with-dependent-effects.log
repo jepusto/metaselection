@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.6)  21 FEB 2026 16:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.6)  4 MAR 2026 15:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1037,33 +1037,33 @@ File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 ) [1{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 
 ] [2] [3{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}] [4] [5] [6{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
-Overfull \hbox (11.16405pt too wide) detected at line 322
+Overfull \hbox (11.16405pt too wide) detected at line 335
 [][][]\OML/lmm/m/it/12 w\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 Y[]=^^[[]; []\OT1/lmr/m/n/12 ) = []
  []
 
 [7]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf, id=69, 361.35pt x 252.945pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf, id=68, 361.35pt x 252.945pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf  used on input line 330.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf  used on input line 343.
 (pdftex.def)             Requested size: 230.18253pt x 161.12776pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 330.
+(Font)              <10> on input line 343.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 330.
+(Font)              <7> on input line 343.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 330.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf, id=70, 361.35pt x 252.945pt>
+(Font)              <5> on input line 343.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf, id=69, 361.35pt x 252.945pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf  used on input line 330.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf  used on input line 343.
 (pdftex.def)             Requested size: 230.18253pt x 161.12776pt.
 [8 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-1.pdf> <./beta-function-selection-models-with-dependent-effects_files/figure-latex/beta-functions-2.pdf>] [9]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 366.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 381.
 (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [10]
-Overfull \hbox (21.17867pt too wide) in paragraph at lines 376--399
+Overfull \hbox (21.17867pt too wide) in paragraph at lines 391--414
  [][] 
  []
 
@@ -1071,192 +1071,248 @@ Overfull \hbox (21.17867pt too wide) in paragraph at lines 376--399
 <beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf, id=120, 361.35pt x 397.485pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf  used on input line 410.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf  used on input line 425.
 (pdftex.def)             Requested size: 352.31625pt x 387.54935pt.
 [12] [13 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/science-selection-curves-1.pdf>] [14] [15] [16] [17] [18]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 500.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 515.
 (c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [19{c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-Overfull \hbox (36.59523pt too wide) in paragraph at lines 533--533
+Overfull \hbox (36.59523pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##    mean_smd   tau cor_mu delta_1     m omega delta_2 model_estimator      model[] 
  []
 
 
-Overfull \hbox (36.59523pt too wide) in paragraph at lines 533--533
+Overfull \hbox (36.59523pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##       <dbl> <dbl>  <dbl>   <dbl> <dbl> <dbl>   <dbl> <chr>                <chr>[] 
  []
 
 
-Overfull \hbox (42.75623pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  1        0  0.05    0.4    0.02    90     0     0.9 Comparison_CHE-ISCW  Compa~[] 
  []
 
 
-Overfull \hbox (42.75623pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  2        0  0.05    0.4    0.02    90     0     0.9 Comparison_PET/PEESE Compa~[] 
  []
 
 
-Overfull \hbox (30.40622pt too wide) in paragraph at lines 533--533
+Overfull \hbox (30.40622pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  3        0  0.05    0.4    0.02    90     0     0.9 beta_PML             beta[] 
  []
 
 
-Overfull \hbox (42.75623pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  4        0  0.05    0.4    0.02    60     0     0.9 Comparison_CHE-ISCW  Compa~[] 
  []
 
 
-Overfull \hbox (42.75623pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.75623pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  5        0  0.05    0.4    0.02    60     0     0.9 Comparison_PET/PEESE Compa~[] 
  []
 
 
-Overfull \hbox (30.39922pt too wide) in paragraph at lines 533--533
+Overfull \hbox (30.39922pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  6        0  0.05    0.4    0.02    60     0     0.9 beta_PML             beta[] 
  []
 
 
-Overfull \hbox (42.76323pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  7        0  0.05    0.4    0.02    30     0     0.9 Comparison_CHE-ISCW  Compa~[] 
  []
 
 
-Overfull \hbox (42.76323pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  8        0  0.05    0.4    0.02    30     0     0.9 Comparison_PET/PEESE Compa~[] 
  []
 
 
-Overfull \hbox (30.40622pt too wide) in paragraph at lines 533--533
+Overfull \hbox (30.40622pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ##  9        0  0.05    0.4    0.02    30     0     0.9 beta_PML             beta[] 
  []
 
 
-Overfull \hbox (42.76323pt too wide) in paragraph at lines 533--533
+Overfull \hbox (42.76323pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ## 10        0  0.05    0.4    0.02    15     0     0.9 Comparison_CHE-ISCW  Compa~[] 
  []
 
 
-Overfull \hbox (30.42023pt too wide) in paragraph at lines 533--533
+Overfull \hbox (30.42023pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ## #   bootstrap_type <chr>, CI_type <chr>, bootstraps <dbl>, extrapolated <lgl>,[] 
  []
 
 
-Overfull \hbox (30.42023pt too wide) in paragraph at lines 533--533
+Overfull \hbox (30.42023pt too wide) in paragraph at lines 548--548
 []\T1/lmtt/m/n/12 ## #   het_ratio <chr>, J <fct>, delta_combo_key <chr>, selection_strength <fct>,[] 
  []
 
 [20]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf, id=184, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf, id=186, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf  used on input line 546.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf  used on input line 561.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 [21] [22 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf, id=207, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf, id=211, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf  used on input line 563.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf  used on input line 578.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 [23] [24 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf, id=235, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf, id=239, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf  used on input line 578.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf  used on input line 593.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf, id=240, 650.43pt x 433.62pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf, id=245, 650.43pt x 433.62pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf  used on input line 590.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf  used on input line 605.
 (pdftex.def)             Requested size: 650.4284pt x 433.61894pt.
 [25] [26 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1.pdf>] [27 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf, id=278, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf, id=283, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf  used on input line 604.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf  used on input line 619.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf, id=280, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf, id=285, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf  used on input line 612.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf  used on input line 627.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
 [28] [29 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-miss-1.pdf>] [30 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-miss-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf, id=318, 650.43pt x 433.62pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf, id=323, 650.43pt x 433.62pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf  used on input line 624.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf  used on input line 639.
 (pdftex.def)             Requested size: 650.4284pt x 433.61894pt.
-[31] [32 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf>] [33]
-Underfull \hbox (badness 1210) in paragraph at lines 699--699
+[31] [32 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-miss-1.pdf>] [33] [34] [35] [36] [37]
+Underfull \hbox (badness 1210) in paragraph at lines 742--742
 []|\T1/lmr/m/n/12 (+20) Rothstein HR, Sut-ton AJ, Boren-stein M. Pub-li-ca-tion bias in meta-analysis.
  []
 
-[34] [35]
-Underfull \hbox (badness 10000) in paragraph at lines 747--747
+[38] [39]
+Underfull \hbox (badness 10000) in paragraph at lines 790--790
 []|\T1/lmr/m/n/12 (+20) Varin C. On com-pos-ite marginal like-li-hoods. \T1/lmr/m/it/12 (+20) AStA\T1/lmr/m/n/12 (+20) . 2008;92(1):1-28.
  []
 
 
-Underfull \hbox (badness 2165) in paragraph at lines 759--759
+Underfull \hbox (badness 2165) in paragraph at lines 802--802
 \T1/lmr/m/n/12 (+20) random-weight boot-strap. \T1/lmr/m/it/12 (+20) The Amer-i-can Statis-ti-cian\T1/lmr/m/n/12 (+20) . 2020;74(4):345-358.
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 763--763
+Underfull \hbox (badness 1122) in paragraph at lines 806--806
 []|\T1/lmr/m/n/12 (+20) Rubin DB. The Bayesian boot-strap. \T1/lmr/m/it/12 (+20) The An-nals of Statis-tics\T1/lmr/m/n/12 (+20) . 1981;9(1).
  []
 
-[36] [37]
-Underfull \hbox (badness 1248) in paragraph at lines 815--815
+[40] [41]
+Underfull \hbox (badness 1248) in paragraph at lines 858--858
 \T1/lmr/m/n/12 (+20) tem users: op-timx for R. \T1/lmr/m/it/12 (+20) Jour-nal of Sta-tis-ti-cal Soft-ware\T1/lmr/m/n/12 (+20) . 2011;43(9):1-14.
  []
 
-
-Underfull \hbox (badness 1454) in paragraph at lines 835--835
+[42]
+Underfull \hbox (badness 1454) in paragraph at lines 878--878
 []|\T1/lmr/m/n/12 (+20) Boos DD, Zhang J. Monte carlo eval-u-a-tion of resampling-based hy-poth-e-sis
  []
 
-[38] [39]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf, id=452, 650.43pt x 469.755pt>
+[43]
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf, id=477, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf  used on input line 849.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf  used on input line 892.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf, id=453, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf, id=478, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf  used on input line 853.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf  used on input line 896.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf, id=454, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1.pdf, id=479, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1.pdf  used on input line 900.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf, id=480, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf  used on input line 857.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf  used on input line 904.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-[40
-
-] [41 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf>] [42 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf>] [43 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf>]
-<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf, id=502, 650.43pt x 469.755pt>
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf, id=481, 650.43pt x 469.755pt>
 File: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf Graphic file (type pdf)
 <use beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf>
-Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf  used on input line 865.
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf  used on input line 910.
 (pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
-AED endfloat: Processing end Figures and Tables [44
+[44
 
-] [45 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf>] (./beta-function-selection-models-with-dependent-effects.aux)
+] [45 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1.pdf>] [46 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1.pdf>] [47 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1.pdf>] [48 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1.pdf>] [49 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1.pdf>]
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf, id=563, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf  used on input line 928.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf, id=564, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf  used on input line 932.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1.pdf, id=565, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1.pdf  used on input line 936.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1.pdf, id=566, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1.pdf  used on input line 940.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1.pdf, id=567, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1.pdf  used on input line 944.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+[50
+
+] [51 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1.pdf>] [52 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1.pdf>] [53 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1.pdf>] [54 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1.pdf>] [55 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1.pdf>]
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1.pdf, id=652, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1.pdf  used on input line 954.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1.pdf, id=653, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1.pdf  used on input line 958.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1.pdf, id=654, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1.pdf  used on input line 962.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+<beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1.pdf, id=655, 650.43pt x 469.755pt>
+File: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1.pdf Graphic file (type pdf)
+<use beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1.pdf>
+Package pdftex.def Info: beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1.pdf  used on input line 966.
+(pdftex.def)             Requested size: 650.4284pt x 469.75386pt.
+AED endfloat: Processing end Figures and Tables [56
+
+] [57 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1.pdf>] [58 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1.pdf>] [59 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1.pdf>] [60 <./beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1.pdf>] (./beta-function-selection-models-with-dependent-effects.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 29873 strings out of 469458
- 572611 string characters out of 5464924
- 984403 words of memory out of 5000000
- 57616 multiletter control sequences out of 15000+600000
- 717526 words of font info for 209 fonts, out of 8000000 for 9000
+ 30025 strings out of 469458
+ 582896 string characters out of 5464924
+ 986576 words of memory out of 5000000
+ 57732 multiletter control sequences out of 15000+600000
+ 718009 words of font info for 213 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,13n,118p,1622b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,118p,1608b,620s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist, replaced by a fixed one
+
 
 pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist, replaced by a fixed one
 
@@ -1264,10 +1320,10 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on beta-function-selection-models-with-dependent-effects.pdf (45 pages, 647360 bytes).
+Output written on beta-function-selection-models-with-dependent-effects.pdf (60 pages, 925369 bytes).
 PDF statistics:
- 767 PDF objects out of 1000 (max. 8388607)
- 642 compressed objects within 7 object streams
- 152 named destinations out of 1000 (max. 500000)
- 47483 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 975 PDF objects out of 1000 (max. 8388607)
+ 813 compressed objects within 9 object streams
+ 180 named destinations out of 1000 (max. 500000)
+ 47557 words of extra memory for PDF output out of 51595 (max. 10000000)
 

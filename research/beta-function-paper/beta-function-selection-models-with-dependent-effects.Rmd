@@ -133,6 +133,9 @@ appendix_prefix <- "Online Appendix"
 
 # Discussion {#discussion}
 
+```{r child = "discussion.Rmd"}
+```
+
 # Author Contributions {-}
 
 ```{r CRediT}
