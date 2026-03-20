@@ -50,7 +50,8 @@ mu_graph_res_main <-
   ) %>%
   droplevels() %>%
   mutate(
-    method = fct_recode(estimator, "Beta" = "PML")
+    method = fct_recode(estimator, "Beta" = "PML"),
+    method = fct_expand(method, "One-step","Two-step")
   )
 
 mu_wide_res_main <- 
@@ -73,7 +74,9 @@ mu_graph_res_miss <-
   droplevels() %>%
   rename(method = model) %>%
   mutate(
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 mu_wide_res_miss <- 
@@ -95,7 +98,9 @@ gamma_graph_res_miss <- # gamma only estimated for the 3 PML methods
   droplevels()%>%
   rename(method = model) %>%
   mutate(
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 gamma_wide_res_miss <- 
@@ -120,7 +125,9 @@ tau2_graph_res <- # tau2 only estimated for the 3 PML methods
     rvar_mcse = var_mcse / total_var^2,
     rrmse = rmse / total_var,
     rrmse_mcse = rmse_mcse / total_var,
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 tau2_wide_res <- 
@@ -156,7 +163,9 @@ lambda1_graph_res <- # lambda1 only estimated for the 3 PML methods
     rvar_mcse = var_mcse / delta_1^2,
     rrmse = rmse / delta_1,
     rrmse_mcse = rmse_mcse / delta_1,
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 lambda2_graph_res <- # lambda2 only estimated for the beta and two-step models
@@ -172,7 +181,9 @@ lambda2_graph_res <- # lambda2 only estimated for the beta and two-step models
     rvar_mcse = var_mcse / delta_2^2,
     rrmse = rmse / delta_2,
     rrmse_mcse = rmse_mcse / delta_2,
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -259,7 +270,8 @@ mu_graph_res_ci_main <-
   ) %>%
   droplevels() %>%
   mutate(
-    method = fct_recode(estimator, "Beta" = "PML")
+    method = fct_recode(estimator, "Beta" = "PML"),
+    method = fct_expand(method, "One-step","Two-step")
   )
 
 mu_graph_res_ci_miss <- 
@@ -273,7 +285,9 @@ mu_graph_res_ci_miss <-
   droplevels() %>%
   rename(method = model) %>%
   mutate(
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 gamma_graph_res_ci_main <- 
@@ -297,7 +311,9 @@ gamma_graph_res_ci_miss <-
   droplevels() %>%
   rename(method = model) %>%
   mutate(
-    method = fct(method, levels = c("beta","3PSM","4PSM")) |> fct_recode("one-step" = "3PSM", "two-step" = "4PSM")
+    method = 
+      fct(method, levels = c("beta","CHE-ISCW","PET/PEESE","3PSM","4PSM")) |> 
+      fct_recode("Beta" = "beta","One-step" = "3PSM", "Two-step" = "4PSM")
   )
 
 

@@ -6,6 +6,7 @@ bibliography: references.bib
 
 ```{r sim-results-setup}
 source("process-simulation-results.R")
+method_palette <- colorspace::qualitative_hcl(n = 5, h = c(50, -164), c = 95, l = 60)
 
 # Bias
 beta_bias_main <-
@@ -37,10 +38,6 @@ pp_bias_main <-
     max_bias = max(bias),
     min_bias = min(bias)
   )
-
-# Coverage rates
-mu_graph_res_ci_main %>%
-  filter(CI_type %in% c("large-sample"))
 
 beta_coverage_main <-
   mu_graph_res_ci_main %>%
@@ -82,18 +79,20 @@ All three approaches---beta-density selection model, CHE-ISCW, and PET/PEESE---h
 ### Bias
 
 ```{r mu-bias-main}
-#| fig.width: 9
-#| fig.height: 6.5
+#| fig.width: 10
+#| fig.height: 7
+#| out.width: 100%
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias of the average effect size by method, selection probability, average SMD, and between-study heterogeneity"
+
 
 ggplot(mu_graph_res_main) + 
   aes(x = selection_strength, y = bias, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+  scale_color_manual(values = method_palette[c(1,2,3)]) +
+  scale_fill_manual(values = method_palette[c(1,2,3)]) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -113,7 +112,7 @@ ggplot(mu_graph_res_main) +
 
 ```
 
-Figure \@ref(fig:mu-bias-main) shows the bias for each method of estimating the average effect size (vertical axis) as a function of selective reporting strength (horizontal axis), average effect size (grid column), and between-study heterogeneity ($\tau$, grid row). Each box plot summarizes variation in bias across the remaining simulation factors: the heterogeneity ratio, the correlation between effect size estimates, and the number of observed studies. Note that the vertical axis scale differs by grid row, reflecting how some methods’ bias is more sensitive to the level of heterogeneity.
+Figure \@ref(fig:mu-bias-main) shows the bias for each method of estimating the average effect size (vertical axis) as a function of selective reporting strength (horizontal axis), average effect size (grid column), and between-study heterogeneity ($\tau$, grid row). Each box plot summarizes variation in bias across the remaining simulation factors: the heterogeneity ratio, the correlation between effect size estimates, and the number of observed studies. Note that the vertical axis scale differs by grid row, reflecting how some methods’ bias is sensitive to the level of heterogeneity.
 
 The beta-density selection model has negligible to small bias across all conditions, ranging from `r round(beta_bias_main$min_bias,2)` to `r round(beta_bias_main$max_bias,2)`. Its bias is near or at zero for all conditions when the average effect size is non-zero or when selective reporting is moderate or absent. Bias is largest when average effect size is zero, selective reporting is very strong or extreme, and heterogeneity is moderate or large.
 
@@ -127,8 +126,9 @@ Bias is generally less pronounced for PET/PEESE than for CHE-ISCW.
 ### Root Mean-Squared Error
 
 ```{r mu-rmse-main}
-#| fig.width: 9
-#| fig.height: 6.5
+#| fig.width: 10
+#| fig.height: 7
+#| out.width: 100%
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Root mean-squared error of the average effect size by method, selection probability, average SMD, and between-study heterogeneity"
 
@@ -136,9 +136,9 @@ ggplot(mu_graph_res_main) +
   aes(x = selection_strength, y = rmse, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+  scale_color_manual(values = method_palette[c(1,2,3)]) +
+  scale_fill_manual(values = method_palette[c(1,2,3)]) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -164,13 +164,14 @@ The beta-density selection model generally outperforms the others---achieving lo
 CHE-ISCW consistently has the lowest RMSE when selective reporting is absent.
 PET/PEESE performs best when selective reporting is strong to extreme, $\mu = 0.2$, and heterogeneity is low $(\tau \leq 0.15)$.
 
-These bias–variance trade-offs stem from the fact that CHE-ISCW, which does not explicitly adjust for selective reporting, is more prone to bias when selection is present. In contrast, the beta-density selection model tends to produce smaller biases under such conditions. However, when selective reporting is absent, CHE-ISCW is more precise than the methods that adjust for selective reporting (i.e., the beta-density selection model and PET/PEESE). Under those conditions, the added variability introduced by estimating a selection model or PET/PEESE adjustment outweighs the minimal reduction in bias they provide.
+These bias–variance trade-offs stem from the fact that CHE-ISCW is more prone to bias when selection is present because it does not make an explicit adjustment for selective reporting. In contrast, the beta-density selection model tends to produce smaller biases under such conditions. However, when selective reporting is absent, CHE-ISCW is more precise than the methods that adjust for selective reporting (i.e., the beta-density selection model and PET/PEESE). Under those conditions, the added variability introduced by estimating a selection model or PET/PEESE adjustment outweighs the minimal reduction in bias they provide.
 
 ### Confidence Interval Coverage
 
 ```{r comparison-coverage-main}
-#| fig.width: 9
-#| fig.height: 6.5
+#| fig.width: 10
+#| fig.height: 7
+#| out.width: 100%
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5"
 
@@ -183,8 +184,8 @@ mu_graph_res_ci_main %>%
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   coord_cartesian(ylim = c(0.5, 1.0)) + 
   scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_color_manual(values = method_palette[c(1,2,3)]) +
+  scale_fill_manual(values = method_palette[c(1,2,3)]) +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -210,7 +211,7 @@ Coverage rates range from `r round(beta_coverage_main$min_coverage,2)` to `r rou
 Coverage rates increase for all methods as the number of studies ($J$) increases, the average effect size ($\mu$) increases, and heterogeneity ($\tau$) decreases.
 When heterogeneity is small ($\tau \leq 0.15$) and the average effect size is moderate to large ($\mu \geq 0.4$), CHE-ISCW generally has the highest coverage rates and the beta-density selection model has the lowest coverage rates.
 
-It's important to note that the confidence intervals produced by the comparison methods are often severely miscalibrated. When CHE-ISCW and PET/PEESE are biased due to selective reporting, their intervals tend to be centered away from the true parameter. As a result, as the number of studies increases, the standard errors of the average effect size estimate—--and thus the interval widths—--shrink, causing coverage rates to decline sharply, in some cases approaching zero. This occurs more frequently when heterogeneity is moderate to large ($\tau \geq 0.3$) and the average effect size is small ($\mu \leq 0.2$), particularly for CHE-ISCW.
+It is important to note that the confidence intervals produced by the comparison methods are often severely miscalibrated. When CHE-ISCW and PET/PEESE are biased due to selective reporting, their intervals tend to be centered away from the true parameter. As a result, as the number of studies increases, the standard errors of the average effect size estimate—--and thus the interval widths—--shrink, causing coverage rates to decline sharply, in some cases approaching zero. This occurs more frequently when heterogeneity is moderate to large ($\tau \geq 0.3$) and the average effect size is small ($\mu \leq 0.2$), particularly for CHE-ISCW.
 
 ```{r Beta-coverage-main}
 #| fig.width: 9
@@ -271,9 +272,9 @@ ggplot(mu_graph_res_miss) +
   aes(x = selection_strength, y = bias, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -307,9 +308,9 @@ ggplot(mu_graph_res_miss) +
   aes(x = selection_strength, y = rmse, color = method, fill = method) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -354,8 +355,8 @@ mu_graph_res_ci_miss %>%
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   scale_y_continuous(expand = expansion(0,0)) + 
   coord_cartesian(ylim = c(0.5, 1)) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
   facet_grid(
     tau ~ mean_smd,
     labeller = label_bquote(

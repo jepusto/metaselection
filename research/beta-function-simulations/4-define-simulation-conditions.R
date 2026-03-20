@@ -33,6 +33,7 @@ design_conditions <-
     summarize_performance = TRUE
   )
 
+
 bootstrap_factors <- list(
   mean_smd = c(0.0, 0.2, 0.4, 0.8), # average effect size
   tau = c(0.05, 0.30), # between study heterogeneity

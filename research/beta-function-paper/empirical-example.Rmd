@@ -54,8 +54,7 @@ sci_adj_beta_mean <- selection_model(
   pi = p_onesided,
   cluster = studyid,
   selection_type = "beta",
-  steps = c(.025,.975),
-  make_sandwich = TRUE
+  steps = c(.025,.975)
 )
 
 
@@ -98,10 +97,10 @@ sci_adj_beta_mod <- selection_model(
   sei = sd_d,
   pi = p_onesided,
   cluster = studyid,
+  mean_mods = ~ outcome_type_author,
   selection_type = "beta",
-  steps = c(.025,.975),
-  make_sandwich = TRUE,
-  mean_mods = ~ outcome_type_author
+  steps = c(.025,.975)
+  
 )
 
 # Single-step model - moderator
@@ -110,9 +109,9 @@ sci_adj_step3_mod <- selection_model(
   yi = d,
   sei = sd_d,
   cluster = studyid,
+  mean_mods = ~ outcome_type_author,
   selection_type = "step",
-  steps = 0.025,
-  mean_mods = ~ outcome_type_author
+  steps = 0.025
 )
 
 # Two-step model - moderator
@@ -121,20 +120,21 @@ sci_adj_step4_mod <- selection_model(
   yi = d,
   sei = sd_d,
   cluster = studyid,
+  mean_mods = ~ outcome_type_author,
   selection_type = "step",
-  steps = c(0.025, .5),
-  mean_mods = ~ outcome_type_author
+  steps = c(0.025, .5)
 )
 
 ```
 
 We conducted the analyses using R Version 4.4.3 [@rcoreteam].
-We first used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each study [@Viechtbauer2010conducting], with standard errors clustered by study. 
-The overall estimate of the average effect using the unadjusted model is `r formatC(sci_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean$ci.ub, format = "f", digits = 2)`], which is significantly different from zero $(p `r format.pval(sci_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
-The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mean$tau2), format = "f", digits = 2)`$.
+We first used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each effect size [@Viechtbauer2010conducting], with standard errors clustered by study. 
+The overall estimate of the average effect using the unadjusted model was `r formatC(sci_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean$ci.ub, format = "f", digits = 2)`], significantly different from zero $(p `r format.pval(sci_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
+The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(sci_unadj_mean$tau2), format = "f", digits = 2)`$.
 
-To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two step-function selection models---a single-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
-<!-- MC: I revised the wording up here, but not the estimation code below as the weak priors are the default. -->
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two different step-function selection models---a single-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
+<!-- JEP: Should we report bootstrap CIs instead? -->
+<!-- JEP: Also, the beta function model does not fit as well as either of the step function models (the two-step model is best). -->
 
 ```{r science-learning-res, tab.pos = "tb", tab.cap="science learning meta-analysis"}
 
@@ -260,12 +260,12 @@ We investigated whether this pattern holds in the BSCS Science Learning meta-ana
 We reran all four models using assessment type as a moderator [@taylor2018science], with assessments developed by independent groups as the reference category.
 Based on a random effects meta-regression without adjustment for selective reporting, assessments developed by independent groups produced an average effect size of `r formatC(sci_unadj_mod$beta[1], format = "f", digits = 2)`, 95% CI [`r formatC(sci_unadj_mod$ci.lb[1], format = "f", digits = 2)`, `r formatC(sci_unadj_mod$ci.ub[1], format = "f", digits = 2)`].
 The average effect on assessments developed by non-independent groups was larger by `r formatC(sci_unadj_mod$beta[2], format = "f", digits = 2)` SD, 95% CI [`r formatC(sci_unadj_mod$ci.lb[2], format = "f", digits = 2)`, `r formatC(sci_unadj_mod$ci.ub[2], format = "f", digits = 2)`], which was not statistically distinct from zero $(p = `r format.pval(sci_unadj_mod$pval[2], digits = 3, eps = 1e-3)`)$. 
-The unadjusted estimate of heterogeneity is $\tau = `r formatC(sqrt(sci_unadj_mod$tau2), format = "f", digits = 2)`$, just as in the summary meta-analysis.
+The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(sci_unadj_mod$tau2), format = "f", digits = 2)`$, just as in the summary meta-analysis.
 
 The lower panel of Table \@ref(tab:science-learning-res) reports parameter estimates from the corresponding selection models that include assessment type as a predictor.
 The $\beta_1$ coefficient estimates represent differences in average effects between non-independent and independent assessment developers, which were all non-significant and similar in magnitude to the difference based on the unadjusted model.
 This suggests that the assessment-type effect is not merely an artifact of selective reporting in this dataset.
-However, the selection models lead to different about the average effects on independently developed assessments.
+However, the selection models lead to different conclusions about the average effects on independently developed assessments.
 The estimate from the beta-density model is not statistically distinct from zero and is smaller than the estimate from the unadjusted random effects meta-regression. 
 In contrast, the estimated average effects from the step-function selection models are both statistically significant and larger than the estimate from the unadjusted model.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.

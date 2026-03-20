@@ -245,7 +245,7 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison}
 
-\note{~\newline March 04, 2026}
+\note{~\newline March 16, 2026}
 
 \begin{document}
 \maketitle
@@ -266,27 +266,27 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \section{Estimating beta-function selection models in meta-analysis with dependent effects}\label{introduction}
 
-Meta-analysis is a critical tool for synthesizing evidence across studies to draw generalizable conclusions in fields such as education, psychology, and medicine. However, the validity of meta-analytic findings depends on the completeness and representativeness of the available data from primary studies. A persistent threat to validity is selective reporting, where effect size estimates are more likely to be published, and thus included in a meta-analysis, if they are statistically significant or consistent with researchers' hypotheses\textsuperscript{1}. Extensive evidence from diverse domains suggests that such reporting biases are widespread\textsuperscript{e.g., 2,3--7}, resulting in distorted estimates of intervention effects and potentially misleading conclusions.
+Meta-analysis is a critical tool for synthesizing evidence across studies to draw generalizable conclusions in fields such as education, psychology, and medicine. However, the validity of meta-analytic findings depends on the completeness and representativeness of the available data from primary studies. A persistent threat to validity is selective reporting, where effect size estimates are more likely to be published, and thus included in a meta-analysis, if they are statistically significant and consistent with researchers' hypotheses\textsuperscript{1}. Extensive evidence from diverse domains suggests that such reporting biases are widespread\textsuperscript{e.g., 2,3--7}, potentially distorting estimates of intervention effects and leading to unwarranted conclusions.
 
 To address selective reporting bias, a variety of statistical approaches have been developed\textsuperscript{8,9}. Among the most promising are \(p\)-value selection models, which assume that the probability of an effect being reported depends on its statistical significance. These models are appealing because they are based on explicit assumptions about the selection mechanism and can be integrated into conventional meta-analytic frameworks (e.g., meta-regression). The step-function selection model, originally developed by Hedges\textsuperscript{10} and later extended by Vevea and Hedges\textsuperscript{11}, assumes a piece-wise constant selection probability across different \(p\)-value thresholds (e.g., \(\alpha = .05\)). This approach captures plausible patterns of selective reporting and has been shown to outperform simpler diagnostics or regression-based adjustments, particularly when effect sizes are heterogeneous\textsuperscript{1,12}.
 
 Most existing methods for assessing and/or correcting for selective reporting---including \(p\)-value selection models---have been developed under the assumption that each study contributes a single, independent effect size.
 However, this assumption is implausible in many contemporary research syntheses.
 Many meta-analyses now include multiple, dependent effect sizes per study, such as estimates derived from different outcomes, time points, or treatment comparisons.
-Recent work addressed this gap by integrating the step-function selection model with robust variance estimation (RVE) and bootstrap methods to account for dependent effect sizes\textsuperscript{13}.
+Recent work addressed this gap by integrating the step-function selection model with robust variance estimation (RVE) or bootstrapping techniques to account for dependent effect sizes\textsuperscript{13}.
 Following the logic of generalized estimating equations with working independence structures for the analysis of longitudinal data\textsuperscript{14}, this approach focuses on modeling the marginal distribution of the effect size estimates.
-Each effect size estimate is treated as if it were an independent observation for the purposes of estimation, with RVE or bootstrap methods used to account for their dependence and ensure valid inference.
+Each effect size estimate is treated as if it were an independent observation for the purposes of estimation, with RVE or bootstrapping used to account for their dependence.
 Simulation studies demonstrated that this approach reduces bias in the estimate of the overall effect size, but that there is a bias-variance trade-off relative to the unadjusted meta-analytic model.
-Moreover, a two-stage cluster bootstrapping technique can be used to generate confidence intervals with coverage rates that are close to the nominal level of 0.95.
+Moreover, simulations showed that a two-stage cluster bootstrapping technique can be used to generate confidence intervals with coverage rates that are close to the nominal level of 0.95.
 
 While the step-function selection model provides a structured and intuitive way to characterize selective reporting, it relies on the meta-analyst to specify ``psychologically salient'' \(p\)-value thresholds, such as 0.05 or 0.01.
 In practice, the true pattern of selection may not conform neatly to such step-wise forms.
-To address this limitation, we introduce a selection model that allows uses a truncated beta density function to model the selection process, allowing the selection probability to vary smoothly as a function of the \(p\)-value of each effect size estimate.
-This model builds on earlier work by\textsuperscript{15}, extending it to the context of dependent effect sizes by incorporating RVE and bootstrap methods.
-The beta-density selection model offers a more flexible alternative for capturing diverse forms of selection that does not require the meta-analyst to identify specific thresholds a priori.
+To address this limitation, we introduce a selection model with a truncated beta density function to model the selection process, allowing the selection probability to vary smoothly as a function of the \(p\)-value of each effect size estimate.
+This model builds on earlier work by Citkowicz and Vevea\textsuperscript{15}, extending it to the context of dependent effect sizes by incorporating RVE and bootstrap methods.
+The beta-density selection model offers a more flexible alternative for capturing diverse forms of selection without requiring the meta-analyst to identify specific thresholds a priori.
 Furthermore, this approach allows meta-analysts to assess whether the form of selection matters---a critical extension for determining the robustness of findings to different specifications of the selection function.
 
-We begin the paper by describing the beta-density selection model and outlining estimation and inference procedures.
+We begin the paper by sketching the beta-density selection model and describing estimation and inference procedures.
 We then illustrate the model using a previously published meta-analysis, highlighting how it can reveal patterns of selective reporting not captured by the step-function selection model.
 Next, we report findings from an extensive simulation study that evaluates the model's performance under a variety of conditions and that investigates whether the form of selection matters.
 We conclude with summary findings, limitations, directions for future research, and implications for practice.
@@ -297,7 +297,13 @@ Selection models are comprised of two components. The first component, the \emph
 The second component, the \emph{selection process}, identifies how the distribution is changed based on the likelihood of an effect size being reported.
 The combined model includes parameters that define the selection process, along with parameters capturing the mean and heterogeneity of the effect size distribution that are adjusted for selective reporting.
 
-Following the approach outlined in previous work on step-function models\textsuperscript{13}, we model the marginal distribution of effect size estimates rather than the joint distribution within studies (i.e., treat each effect size as independent, ignoring its relationship with other effect sizes from the same study). We adopt this marginal modeling strategy for several reasons. First, it has strong precedents in the statistical analysis, including generalized estimating equations with working independence structures for longitudinal data\textsuperscript{14} and pseudo-likelihood methods for multivariate meta-analysis\textsuperscript{16}. Second, focusing on the marginal distribution eases computational tractability by avoiding the high-dimensional integration required for multivariate selection models. Third, it provides a parsimonious and plausible framework for selection based on the significance of individual effect sizes---often considered a primary driver of selective reporting bias---without requiring unknown assumptions about joint selection probabilities across multiple effects. To account for dependence among effect sizes, we pair this marginal model with cluster-robust variance estimation (RVE) or clustered bootstrapping techniques.
+Following the approach outlined in previous work on step-function models\textsuperscript{13}, we model the marginal distribution of effect size estimates rather than the joint distribution within studies.
+In other words, the model treats each effect size as independent, ignoring its relationship with other effect sizes from the same study.
+We adopt this marginal modeling strategy for several reasons.
+First, it provides a parsimonious and plausible framework for selection based on the significance of individual effect sizes---often considered a primary driver of selective reporting bias---without requiring unknown assumptions about joint selection probabilities across multiple effects.
+Second, focusing on the marginal distribution eases computational tractability by avoiding the high-dimensional integration required for multivariate selection models.
+Third, it has strong precedents in other areas of statistical analysis, including generalized estimating equations with working independence structures for longitudinal data\textsuperscript{14} and pseudo-likelihood methods for multivariate meta-analysis\textsuperscript{16}.
+To account for dependence among effect sizes, we pair this marginal model with cluster-robust variance estimation (RVE) or clustered bootstrapping techniques.
 Although this approach limits interpretation to the marginal distribution and does not distinguish between study-level and outcome-level selection, it remains a practical and plausible framework for modeling selective reporting based on the statistical significance of individual estimates.
 
 We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising \(J\) studies, where study \(j\) reports \(k_j\) effect size estimates. Let \(y_{ij}\) denote the \(i\)th effect size estimate from study \(j\), with associated standard error \(\sigma_{ij}\) and one-sided \(p\)-value \(p_{ij}\). The one-sided \(p\)-value is defined relative to the null hypothesis that the true effect size is less than or equal to zero, with alternative hypothesis that the effect size is positive. Let \(\mathbf{x}_{ij}\) be a \(1 \times x\) row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use \(\Phi()\) to denote the standard normal cumulative distribution function and \(\phi()\) to denote the standard normal density function.
@@ -327,7 +333,7 @@ w(p^*_i, \boldsymbol\lambda) =  \begin{cases}
 Equation (\ref{eq:beta-density-p}) can be written equivalently as
 \begin{equation}
 \label{eq:beta-density-y}
-w(Y^*_i / \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
+w(Y^*_i, \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
 \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_1) \leq Y^*_i \\
 \left[\Phi\left(-Y^*_i / \sigma^*_i\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^*_i / \sigma^*_i\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_2) < Y^*_i < \sigma^*_i \Phi^{-1}(1 - \alpha_1) \\
 \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^*_i \leq \sigma^*_i \Phi^{-1}(1 - \alpha_2).
@@ -355,7 +361,7 @@ where
 \label{eq:generic-selection-A}
 A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) =  \int_\mathbb{R} w\left(y, \sigma_{ij}; \boldsymbol\lambda \right) \times  \frac{1}{\sqrt{\tau^2 + \sigma_{ij}^2}}\phi\left(\frac{y - \mathbf{x}_{ij}\boldsymbol\beta}{\sqrt{\tau^2 + \sigma_{ij}^2}}\right) dy.
 \end{equation}
-For the beta-density selection process, the \(A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)\) term in \eqref{eq:generic-selection} must be computed using numerical integration.
+The \(A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)\) term in \eqref{eq:generic-selection} must be computed using numerical integration.
 If \(w(y, \sigma; \boldsymbol\lambda) = 1\), then \(A(\mathbf{x}, \sigma; \boldsymbol\beta, \tau^2, \boldsymbol\lambda) = 1\) and there is no selective reporting.
 The density then reduces to the unweighted density of the evidence-generating process and the \(\boldsymbol\beta\) estimates from the adjusted beta function selection model will approximate those of a standard random effects model.
 
@@ -364,12 +370,13 @@ The density then reduces to the unweighted density of the evidence-generating pr
 We estimate model parameters using a penalized maximum likelihood (PML) approach based on the composite marginal likelihood.
 This method treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated with step function selection models\textsuperscript{13} and consistent with established composite likelihood approaches\textsuperscript{18--20}. To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the \(p\)-value thresholds---we incorporate weak penalties into the composite likelihood. Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter \(\tau^2\) and independent normal penalties on the log-transformed selection parameters, \(\log(\lambda_1) \sim N(0, 1)\) and \(\log(\lambda_2) \sim N(0, 1)\). These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
 
-Estimation proceeds by maximizing the penalized log-composite-likelihood function. To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. The sandwich estimator used for the beta-density selection model follows the same structural form as the one developed for the step-function selection model. Because the marginal modeling approach is identical across these two models, formal expressions for the score functions and the robust variance-covariance matrix can be found in Online Appendix A of our prior work\textsuperscript{13}.
+Estimation proceeds by maximizing the penalized log-composite-likelihood function. To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. The sandwich estimator used for the beta-density selection model follows the same structural form as the one developed for the step-function selection model. Because the marginal modeling approach is identical across these two models, formal expressions for the score functions and the robust variance-covariance matrix can be found in prior work\textsuperscript{13}.
 
 \subsection{Bootstrap inference}\label{bootstrap-inference}
 
-To improve inference accuracy with a limited number of studies, we also implement bootstrap procedures, which generate pseudo-samples through random resampling or reweighting of the original data. We considered several bootstrap methods designed to preserve the dependence structure across clusters, including the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{21,22}, and fractional random weight bootstrap\textsuperscript{23,24}.
-Based on our prior work\textsuperscript{13}, which found that the two-stage bootstrap consistently outperformed the alternatives, we focus exclusively on this approach.
+To improve inference accuracy with a limited number of studies, we also implement bootstrapping procedures, which generate pseudo-samples through random resampling or reweighting of the original data.
+In prior work\textsuperscript{13}, we considered several bootstrap methods designed to preserve the dependence structure across clusters, including the non-parametric clustered bootstrap, two-stage bootstrap\textsuperscript{21,22}, and fractional random weight bootstrap\textsuperscript{23,24}.
+Finding from this prior work indicated that the two-stage bootstrap consistently outperformed the alternatives, and so here we focus exclusively on two-stage bootstrapping.
 Similarly, after testing several standard bootstrap-based methods for computing confidence intervals, including percentile, basic, studentized, and bias-corrected-and-accelerated\textsuperscript{25,26}, we chose the percentile bootstrap method as it consistently yielded the best coverage rates.
 These resampling-based procedures are particularly useful in small-sample contexts where sandwich estimators may perform poorly.
 
@@ -378,11 +385,11 @@ These resampling-based procedures are particularly useful in small-sample contex
 To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K--12 student science achievement, conducted by BSCS Science Learning\textsuperscript{27}. The meta-analytic sample included findings from 96 studies with 292 effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement.
 
 We conducted the analyses using R Version 4.4.3\textsuperscript{28}.
-We first used the \texttt{rma.uni()} function from the \texttt{metafor} package to fit a standard random-effects model based on an independent effects working model with random effects for each study\textsuperscript{29}, with standard errors clustered by study.
-The overall estimate of the average effect using the unadjusted model is 0.44, cluster-robust 95\% CI {[}0.34, 0.54{]}, which is significantly different from zero \((p <0.001)\).
-The unadjusted estimate of heterogeneity is \(\tau = 0.38\).
+We first used the \texttt{rma.uni()} function from the \texttt{metafor} package to fit a standard random-effects model based on an independent effects working model with random effects for each effect size\textsuperscript{29}, with standard errors clustered by study.
+The overall estimate of the average effect using the unadjusted model was 0.44, cluster-robust 95\% CI {[}0.34, 0.54{]}, significantly different from zero \((p <0.001)\).
+The unadjusted estimate of heterogeneity was \(\tau = 0.38\).
 
-To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package\textsuperscript{30} to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two step-function selection models---a single-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
+To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package\textsuperscript{30} to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two different step-function selection models---a single-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
 
 \begin{table}
 \centering
@@ -432,12 +439,12 @@ We investigated whether this pattern holds in the BSCS Science Learning meta-ana
 We reran all four models using assessment type as a moderator\textsuperscript{27}, with assessments developed by independent groups as the reference category.
 Based on a random effects meta-regression without adjustment for selective reporting, assessments developed by independent groups produced an average effect size of 0.38, 95\% CI {[}0.14, 0.62{]}.
 The average effect on assessments developed by non-independent groups was larger by 0.09 SD, 95\% CI {[}-0.17, 0.35{]}, which was not statistically distinct from zero \((p = 0.495)\).
-The unadjusted estimate of heterogeneity is \(\tau = 0.38\), just as in the summary meta-analysis.
+The unadjusted estimate of heterogeneity was \(\tau = 0.38\), just as in the summary meta-analysis.
 
 The lower panel of Table \ref{tab:science-learning-res} reports parameter estimates from the corresponding selection models that include assessment type as a predictor.
 The \(\beta_1\) coefficient estimates represent differences in average effects between non-independent and independent assessment developers, which were all non-significant and similar in magnitude to the difference based on the unadjusted model.
 This suggests that the assessment-type effect is not merely an artifact of selective reporting in this dataset.
-However, the selection models lead to different about the average effects on independently developed assessments.
+However, the selection models lead to different conclusions about the average effects on independently developed assessments.
 The estimate from the beta-density model is not statistically distinct from zero and is smaller than the estimate from the unadjusted random effects meta-regression.
 In contrast, the estimated average effects from the step-function selection models are both statistically significant and larger than the estimate from the unadjusted model.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.
@@ -446,10 +453,10 @@ The results of this application demonstrate that the choice of selection functio
 
 \section{Simulation Methods}\label{simulation-methods}
 
-We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model and to investigate whether the form of the selection mechanism matters.
+We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model and to investigate whether the form of the assumed selection mechanism matters for estimation of average effect size.
 The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates.
-We compared the new model to three exiting methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting\textsuperscript{32}; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures\textsuperscript{33}; and (3) our recently developed step-function selection model that accounts for both selective reporting and dependent effects\textsuperscript{13}.
-We evaluated the model estimates based on convergence rates, bias, accuracy, and confidence interval coverage for estimating the average effect size from the unselected distribution.
+We compared the beta density model to three existing methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting\textsuperscript{32}; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures\textsuperscript{33}; and (3) a step-function selection model that accounts for both selective reporting and dependent effects\textsuperscript{13}.
+We evaluated the model estimates based on convergence rates, bias, accuracy, and confidence interval coverage for estimating the average effect size of the unselected distribution.
 To ensure numerical stability in smaller samples, all selection models were estimated using the PML approach with the default penalties provided in the \texttt{metaselection} package\textsuperscript{30}.
 Bootstrap confidence intervals were assessed under a narrower set of conditions to limit computational burden.
 Simulations were conducted in R Version 4.4.0\textsuperscript{28} using the high-throughput computing cluster at the University of Wisconsin--Madison\textsuperscript{34}.
@@ -457,7 +464,7 @@ The code relied on several R packages, including metafor\textsuperscript{29}, cl
 
 \subsection{Data generation}\label{data-generation}
 
-We generated simulated data using an approach similar to\textsuperscript{13}, with the key difference that effect size estimates were selected for inclusion based on the beta-density selection model. For each simulated meta-analysis, we generated a pool of primary studies using a CHE model, with effect size estimates selected for inclusion according to probabilities defined by the beta-density selection model. Each study followed a two-group design, with sample sizes and numbers of effect sizes per study drawn from an empirical distribution based on the What Works Clearinghouse database. We generated outcome correlations across studies by sampling from a beta distribution with mean \(\rho\) and standard deviation 0.05, then assumed a constant correlation between pairs of outcomes within a study.
+We generated simulated data using an approach similar to prior work\textsuperscript{13}, with the key difference that effect size estimates were selected for inclusion based on the beta-density selection model. For each simulated meta-analysis, we generated a pool of primary studies using a correlated-and-hierarchical effects model, with effect size estimates selected for inclusion according to probabilities defined by the beta-density selection model. Each study followed a two-group design, with sample sizes and numbers of effect sizes per study drawn from an empirical distribution based on the What Works Clearinghouse database. We generated outcome correlations across studies by sampling from a beta distribution with mean \(\rho\) and standard deviation 0.05, then assumed a constant correlation between pairs of outcomes within a study.
 
 Within each study, we simulated a study-level average effect size \(\delta_j\) from a normal distribution with mean \(\mu\) and variance \(\tau^2_B\), then generated individual effect size parameters from a normal distribution centered at \(\delta_j\) with variance \(\omega^2\). Using these parameters, we drew multivariate normal outcomes for participants equally divided into treatment and control groups and computed standardized mean differences with Hedges's \(g\) small sample bias correction. One-sided \(p\)-values were computed for each effect size, and individual effect sizes were then selected for inclusion in the dataset, with selection probabilities determined by the beta-density selection model with parameters \(\lambda_1,\lambda_2\).
 By generating data under the smooth beta-density selection process, we can evaluate the performance of the beta-density selection model under correct specification while simultaneously testing the robustness of the discrete step-function selection model to this form of misspecification.
@@ -465,28 +472,30 @@ We repeated this process until the simulated meta-analytic dataset included at t
 
 \subsection{Estimation methods}\label{estimation-methods}
 
-We estimated the beta-density selection model using the PML approach described in Section \ref{estimation-methods}.
+We estimated the beta-density selection model using the PML approach described in Section \ref{estimation-method}.
 This estimation utilized the package defaults, including a log-F penalty on the heterogeneity parameter and normal penalties on the selection parameters.
 We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile confidence intervals based on the two-stage bootstrap. To maintain computational feasibility, we used \(B = 399\) bootstrap replications of each estimator.
 
-We compared the performance of the beta-density selection model to three other methods. First, we estimated a summary meta-analysis model using the CHE-ISCW approach proposed by\textsuperscript{32}, which accounts for effect size dependence but does not adjust for selective reporting. This method fits a CHE working model, but it allocates more weight to studies with smaller sampling variances by using generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors only.
+We compared the performance of the beta-density selection model to three other methods.
+First, we estimated a summary meta-analysis model using the CHE-ISCW approach\textsuperscript{32}, which accounts for effect size dependence but does not adjust for selective reporting.
+This method fits a CHE working model, but it allocates more weight to studies with smaller sampling variances by using generalized least squares with weighting matrices that are the inverse of the variance-covariance matrix of the sampling errors only.
 Following common practice in applied meta-analysis, we assumed a constant correlation of 0.80 within the working model, which aligns with the default correlation structure used in the \texttt{robumeta} package\textsuperscript{39}. This leads to a degree of misspecification when the average correlation used in the data-generating process differs from 0.80.
 We computed confidence intervals for the average effect size using cluster-robust variance estimation with the CR2 small-sample correction and Satterthwaite degrees of freedom.
 
-Second, we estimated a variation of the PET/PEESE model originally proposed by\textsuperscript{33}, adapted to handle dependent effect sizes. The PET model regresses effect size estimates on their standard errors, while the PEESE model uses sampling variances instead.
-Both models were estimated using the same working model assumptions as the CHE-ISCW model, including the assumed 0.80 correlation and the use of CR2 cluster-robust standard errors.
-Following\textsuperscript{33}, we used the PET estimate if it was not statistically distinguishable from zero at an \(\alpha\)-level of 0.10; otherwise, we used the PEESE estimate.
+Second, we estimated a variation of the PET/PEESE model originally proposed by Stanley and Doucouliagos\textsuperscript{33}, adapted to handle dependent effect sizes. The PET model regresses effect size estimates on their standard errors, while the PEESE model uses sampling variances instead.
+Both models were estimated using the same working model assumptions as the CHE-ISCW model, including the assumed 0.80 correlation, with CR2 cluster-robust standard errors.
+Following established conventions\textsuperscript{33}, we used the PET estimate if it was not statistically distinguishable from zero at an \(\alpha\)-level of 0.10; otherwise, we used the PEESE estimate.
 
-Third, we estimated the step-function selection model using the PML approach. As with the beta-density selection model, we used the default penalty structures for the step-function selection model as implemented in the \texttt{metaselection} package and validated in\textsuperscript{13}.
+Third, we estimated the step-function selection model using the PML approach. As with the beta-density selection model, we used the default penalty structures for the step-function selection model as implemented in the \texttt{metaselection} package\textsuperscript{13}.
 We estimated two step-function selection models: (1) a one-step selection model with a single step at \(\alpha_1 = 0.025\), and (2) a two-step selection model with steps at \(\alpha_1 = 0.025\) and \(\alpha_2 = 0.500\).
 Like the beta-density selection model, the one-step and two-step models are \(p\)-value selection models designed to address selective reporting, they are models for the marginal rather than joint distribution of estimates within studies, and they use cluster-robust variance estimation or bootstrapping to account for dependency.
 The main distinction between the selection models lies in the assumed functional form of the selection mechanism. Fitting the step-function models to data simulated under a beta-density selection process allows us to assess how robust these models are to misspecification of the selection function and whether the form of selection affects their performance.
 
 \subsection{Experimental design}\label{experimental-design}
 
-We examined performance across a range of simulation conditions, summarized in Table \ref{tab:sim-design}. Manipulated parameters included overall average standardized mean difference (\(\mu\)), between-study heterogeneity (\(\tau_B\)), ratio of within- to between-study heterogeneity (\(\omega^2 / \tau^2\)), average correlation between outcomes (\(\rho\)), probability of selection for non-affirmative results (\(\lambda_1, \lambda_2\)), and number of observed studies (\(J\)). The full simulation crossed all parameter values for a total of \(4 \times 4 \times 2 \times 2 \times 5 \times 4 = 1,280\) conditions. For the more computationally intensive bootstrap simulations, we limited the design to a smaller subset of \(4 \times 3 \times 2 \times 1 \times 3 \times 3 = 216\) conditions, focusing on smaller meta-analyses and reducing values for factors where results were stable (e.g., \(\tau = 0.30\)). For each condition, we generated 2,000 replications.
+We examined performance across a range of simulation conditions, summarized in Table \ref{tab:sim-design}. Manipulated parameters included overall average standardized mean difference (\(\mu\)), between-study heterogeneity (\(\tau_B\)), ratio of within- to between-study heterogeneity (\(\omega^2 / \tau^2\)), average correlation between outcomes (\(\rho\)), probability of selection for non-affirmative results (\(\lambda_1, \lambda_2\)), and number of observed studies (\(J\)). The full simulation crossed all parameter values for a total of \(4 \times 4 \times 2 \times 2 \times 5 \times 4 = 1,280\) conditions. For the more computationally intensive bootstrap simulations, we limited the design to a smaller subset of \(4 \times 2 \times 2 \times 1 \times 3 \times 3 = 144\) conditions, focusing on smaller meta-analyses and reducing values for factors where results were stable (e.g., \(\tau = 0.15\)). For each condition, we generated 2,000 replications.
 
-\begin{table}
+\begin{table}[tb]
 \centering
 \caption{\label{tab:sim-design}Parameter values examined in the simulation study}
 \centering
@@ -495,10 +504,10 @@ We examined performance across a range of simulation conditions, summarized in T
 Parameter & Full Simulation & Bootstrap Simulation\\
 \midrule
 Overall average SMD ($\mu$) & 0.0, 0.2, 0.4, 0.8 & 0.0, 0.2, 0.4, 0.8\\
-Between-study heterogeneity ($\tau$) & 0.05, 0.15, 0.30, 0.45 & 0.05, 0.15, 0.45\\
+Between-study heterogeneity ($\tau$) & 0.05, 0.15, 0.30, 0.45 & 0.05, 0.30\\
 Heterogeneity ratio ($\omega^2 / \tau^2$) & 0.0, 0.5 & 0.0, 0.5\\
 Average correlation between outcomes ($\rho$) & 0.40, 0.80 & 0.80\\
-Probability of selection for non-affirmative effects ($\lambda_1, \lambda_2$) & (0.01, 0.90), (0.20, 0.90), (0.50, 0.90), (0.80, 0.90), (1.00, 1.00) & (0.20, 0.90), (0.50, 0.90), (1.00, 1.00)\\
+Probability of selection for non-affirmative effects ($\lambda_1, \lambda_2$) & (0.02, 0.90), (0.10, 0.90), (0.20, 0.90), (0.50, 0.90), (1.00, 1.00) & (0.20, 0.90), (0.50, 0.90), (1.00, 1.00)\\
 \addlinespace
 Number of observed studies ($J$) & 15, 30, 60, 90 & 15, 30, 60\\
 \bottomrule
@@ -509,43 +518,19 @@ In the full simulation, we varied \(\mu\) from 0.0 to 0.80, reflecting the range
 
 To assess the impact of working model misspecification, we manipulated the average within-study correlation \(\rho\) across two levels: 0.80 (the default used in RVE software and correctly specified when \(\rho = 0.80\)) and 0.40 (inducing misspecification in the CHE-ISCW and PET-PEESE working models).
 
-Selective reporting was modeled as the probability of selecting non-affirmative results based on the parameters of the beta-density. We considered five levels of selective reporting, including no selection (\(\lambda_1 = 1.00, \lambda_2 = 1.00\)), weak selection (\(\lambda_1 = 0.80, \lambda_2 = 0.90\)), moderate selection (\(\lambda_1 = 0.50, \lambda_2 = 0.90\)), strong selection (\(\lambda_1 = 0.20, \lambda_2 = 0.90\)), and very strong selection (\(\lambda_1 = 0.01, \lambda_2 = 0.90\)).
+Selective reporting was modeled as the probability of selecting non-affirmative results based on the parameters of the beta-density. We considered five levels of selective reporting, including no selection (\(\lambda_1 = 1.00, \lambda_2 = 1.00\)), moderate selection (\(\lambda_1 = 0.50, \lambda_2 = 0.90\)), strong selection (\(\lambda_1 = 0.20, \lambda_2 = 0.90\)), very strong selection (\(\lambda_1 = 0.10, \lambda_2 = 0.90\)), and extreme selection (\(\lambda_1 = 0.02, \lambda_2 = 0.90\)).
 
 We varied the number of observed studies (\(J\)) from 15 to 90, covering the typical size of meta-analyses in education and psychology\textsuperscript{41}.
 We simulated primary study sample sizes based on the empirical distribution in the What Works Clearinghouse database. The sample sizes in the database ranged from 37 to 2,295 with a median of 211, and the number of effect sizes ranged from 1 to 48 with a median of 3.\footnote{
-  \textsuperscript{13} included a condition in which the primary study sample sizes were divided by three to represent smaller studies, such as those in psychology lab settings. However, the simulation results for this condition were similar to those from the empirical distribution condition, so we have omitted it from the current simulations.}
+  Prior work\textsuperscript{13} included a condition in which the primary study sample sizes were divided by three to represent smaller studies, such as those in psychology lab settings. However, the simulation results for this condition were similar to those from the empirical distribution condition, so we have omitted it from the current simulations.}
 
 \subsection{Performance criteria}\label{performance-criteria}
 
 We evaluated each method's performance in terms of convergence rates, bias, root mean-squared error (RMSE), and 95\% confidence interval coverage for the overall effect size \(\mu\). Bias reflects systematic deviation from the true parameter value, while RMSE captures both bias and sampling variability.
-
 For confidence intervals based on cluster-robust variance estimation, we defined coverage as the proportion of intervals that contained the true parameter value. For bootstrap intervals, we used \(B = 399\) replicates per simulation due to computational limits---fewer than ideal for applied use. To estimate practical coverage rates, we followed an approach similar to\textsuperscript{42}: we calculated coverage for smaller subsamples (\(B = 49, 99, 199, 299\)) randomly selected without replacement from the full set of \(B = 399\) bootstraps, fit a regression of coverage on \(1/B\), and used the intercept to extrapolate expected coverage for \(B = 1999\).
-This extrapolation technique was previously evaluated and implemented in\textsuperscript{13} (see Online Appendix C.3 for further details and demonstration of its performance).
+This extrapolation technique was previously evaluated and implemented\textsuperscript{13} (see Online Appendix C.3 for further details and demonstration of its performance).
 
 \section{Simulation Results}\label{simulation-results}
-
-\begin{verbatim}
-## # A tibble: 3,840 x 29
-##    mean_smd   tau cor_mu delta_1     m omega delta_2 model_estimator      model 
-##       <dbl> <dbl>  <dbl>   <dbl> <dbl> <dbl>   <dbl> <chr>                <chr> 
-##  1        0  0.05    0.4    0.02    90     0     0.9 Comparison_CHE-ISCW  Compa~
-##  2        0  0.05    0.4    0.02    90     0     0.9 Comparison_PET/PEESE Compa~
-##  3        0  0.05    0.4    0.02    90     0     0.9 beta_PML             beta  
-##  4        0  0.05    0.4    0.02    60     0     0.9 Comparison_CHE-ISCW  Compa~
-##  5        0  0.05    0.4    0.02    60     0     0.9 Comparison_PET/PEESE Compa~
-##  6        0  0.05    0.4    0.02    60     0     0.9 beta_PML             beta  
-##  7        0  0.05    0.4    0.02    30     0     0.9 Comparison_CHE-ISCW  Compa~
-##  8        0  0.05    0.4    0.02    30     0     0.9 Comparison_PET/PEESE Compa~
-##  9        0  0.05    0.4    0.02    30     0     0.9 beta_PML             beta  
-## 10        0  0.05    0.4    0.02    15     0     0.9 Comparison_CHE-ISCW  Compa~
-## # i 3,830 more rows
-## # i 20 more variables: estimator <fct>, param <chr>, K_coverage <int>,
-## #   coverage <dbl>, coverage_mcse <dbl>, width <dbl>, width_mcse <dbl>,
-## #   bootstrap_type <chr>, CI_type <chr>, bootstraps <dbl>, extrapolated <lgl>,
-## #   het_ratio <chr>, J <fct>, delta_combo_key <chr>, selection_strength <fct>,
-## #   mu_fac <fct>, tau_fac <fct>, CI_boot_method <fct>,
-## #   bootstrap_condition <chr>, method <fct>
-\end{verbatim}
 
 We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates of 95\% confidence intervals.
 Second, we compare the performance of the beta-density selection model to the one-step and two-step selection models to assess the robustness of these models to misspecification of the selection function.
@@ -558,10 +543,10 @@ All three approaches---beta-density selection model, CHE-ISCW, and PET/PEESE---h
 \subsubsection{Bias}\label{bias}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1} \caption{Bias of the average effect size by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:mu-bias-main}
+\includegraphics[width=1\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-main-1} \caption{Bias of the average effect size by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:mu-bias-main}
 \end{sidewaysfigure}
 
-Figure \ref{fig:mu-bias-main} shows the bias for each method of estimating the average effect size (vertical axis) as a function of selective reporting strength (horizontal axis), average effect size (grid column), and between-study heterogeneity (\(\tau\), grid row). Each box plot summarizes variation in bias across the remaining simulation factors: the heterogeneity ratio, the correlation between effect size estimates, and the number of observed studies. Note that the vertical axis scale differs by grid row, reflecting how some methods' bias is more sensitive to the level of heterogeneity.
+Figure \ref{fig:mu-bias-main} shows the bias for each method of estimating the average effect size (vertical axis) as a function of selective reporting strength (horizontal axis), average effect size (grid column), and between-study heterogeneity (\(\tau\), grid row). Each box plot summarizes variation in bias across the remaining simulation factors: the heterogeneity ratio, the correlation between effect size estimates, and the number of observed studies. Note that the vertical axis scale differs by grid row, reflecting how some methods' bias is sensitive to the level of heterogeneity.
 
 The beta-density selection model has negligible to small bias across all conditions, ranging from -0.04 to 0.18. Its bias is near or at zero for all conditions when the average effect size is non-zero or when selective reporting is moderate or absent. Bias is largest when average effect size is zero, selective reporting is very strong or extreme, and heterogeneity is moderate or large.
 
@@ -575,7 +560,7 @@ Bias is generally less pronounced for PET/PEESE than for CHE-ISCW.
 \subsubsection{Root Mean-Squared Error}\label{root-mean-squared-error}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1} \caption{Root mean-squared error of the average effect size by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:mu-rmse-main}
+\includegraphics[width=1\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-main-1} \caption{Root mean-squared error of the average effect size by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:mu-rmse-main}
 \end{sidewaysfigure}
 
 RMSE captures both bias and variability, providing an overall measure of inaccuracy. Figure \ref{fig:mu-rmse-main}, constructed in the same format as Figure \ref{fig:mu-bias-main}, shows the RMSE for each method of estimating the average effect size. Additional detail is provided in Figures \ref{fig:rmse-CHE-Beta-main} to \ref{fig:rmse-CHE-PET-main} in Appendix \ref{mu-simulation-results}, which plot the ratio of RMSEs for each pair of methods to compare their relative accuracy.
@@ -585,12 +570,12 @@ The beta-density selection model generally outperforms the others---achieving lo
 CHE-ISCW consistently has the lowest RMSE when selective reporting is absent.
 PET/PEESE performs best when selective reporting is strong to extreme, \(\mu = 0.2\), and heterogeneity is low \((\tau \leq 0.15)\).
 
-These bias--variance trade-offs stem from the fact that CHE-ISCW, which does not explicitly adjust for selective reporting, is more prone to bias when selection is present. In contrast, the beta-density selection model tends to produce smaller biases under such conditions. However, when selective reporting is absent, CHE-ISCW is more precise than the methods that adjust for selective reporting (i.e., the beta-density selection model and PET/PEESE). Under those conditions, the added variability introduced by estimating a selection model or PET/PEESE adjustment outweighs the minimal reduction in bias they provide.
+These bias--variance trade-offs stem from the fact that CHE-ISCW is more prone to bias when selection is present because it does not make an explicit adjustment for selective reporting. In contrast, the beta-density selection model tends to produce smaller biases under such conditions. However, when selective reporting is absent, CHE-ISCW is more precise than the methods that adjust for selective reporting (i.e., the beta-density selection model and PET/PEESE). Under those conditions, the added variability introduced by estimating a selection model or PET/PEESE adjustment outweighs the minimal reduction in bias they provide.
 
 \subsubsection{Confidence Interval Coverage}\label{confidence-interval-coverage}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5}\label{fig:comparison-coverage-main}
+\includegraphics[width=1\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-main-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5}\label{fig:comparison-coverage-main}
 \end{sidewaysfigure}
 
 Figure \ref{fig:comparison-coverage-main} shows the coverage rates of 95\% confidence intervals based on large-sample cluster-robust variance approximations for the three methods.\footnote{Note that the vertical axis of Figure \ref{fig:comparison-coverage-main} is restricted to the range {[}0.5, 1.0{]}, and coverage rates of the intervals based on CHE-ISCW and PET/PEESE are not depicted when they fall below 0.5. Figure \ref{fig:comparison-coverage-full-main} in Appendix \ref{mu-simulation-results} depicts the full range of coverage rates.}
@@ -599,7 +584,7 @@ Coverage rates range from 0.58 to 0.98 for the beta-density selection model, fro
 Coverage rates increase for all methods as the number of studies (\(J\)) increases, the average effect size (\(\mu\)) increases, and heterogeneity (\(\tau\)) decreases.
 When heterogeneity is small (\(\tau \leq 0.15\)) and the average effect size is moderate to large (\(\mu \geq 0.4\)), CHE-ISCW generally has the highest coverage rates and the beta-density selection model has the lowest coverage rates.
 
-It's important to note that the confidence intervals produced by the comparison methods are often severely miscalibrated. When CHE-ISCW and PET/PEESE are biased due to selective reporting, their intervals tend to be centered away from the true parameter. As a result, as the number of studies increases, the standard errors of the average effect size estimate-----and thus the interval widths-----shrink, causing coverage rates to decline sharply, in some cases approaching zero. This occurs more frequently when heterogeneity is moderate to large (\(\tau \geq 0.3\)) and the average effect size is small (\(\mu \leq 0.2\)), particularly for CHE-ISCW.
+It is important to note that the confidence intervals produced by the comparison methods are often severely miscalibrated. When CHE-ISCW and PET/PEESE are biased due to selective reporting, their intervals tend to be centered away from the true parameter. As a result, as the number of studies increases, the standard errors of the average effect size estimate-----and thus the interval widths-----shrink, causing coverage rates to decline sharply, in some cases approaching zero. This occurs more frequently when heterogeneity is moderate to large (\(\tau \geq 0.3\)) and the average effect size is small (\(\mu \leq 0.2\)), particularly for CHE-ISCW.
 
 \begin{sidewaysfigure}
 \includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/Beta-coverage-main-1} \caption{Coverage levels of confidence intervals for the average effect size estimated using the beta-density selection model, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:Beta-coverage-main}
@@ -948,22 +933,22 @@ RMSE is very similar across the three models when average effect size is large \
 
 The beta-density selection model estimates two selection parameters: \(\lambda_1\) and \(\lambda_2\). Figures \ref{fig:lambda1-bias} and \ref{fig:lambda1-rmse} present the relative bias and RMSE results for \(\lambda_1\) and Figures \ref{fig:lambda2-bias} and \ref{fig:lambda2-rmse} present the relative bias and RMSE results for \(\lambda_2\). We do not plot the selection parameters for the step-function selection models because they are based on a different selection function and are, thus, not comparable to the beta-density selection parameters.\footnote{Step-function selection models estimate one parameter per step; thus, the one-step model estimates one selection parameter and the two-step model estimates two selection parameters.}
 
-The figures show that \(\lambda_1\) is substantially biased when selective reporting is extreme, but relative bias reduces down to zero when selective reporting is not present. The same pattern is evident for relative RMSE. \(\lambda_2\), on the other hand, has relative bias and RMSE close to zero across all conditions.
+The figures show that \(\lambda_1\) is substantially biased when selective reporting is extreme, but relative bias decreases as the number of studies (\(J\)) increases. Relative bias also decreases as the severity of selective reporting decreases, reducing down to zero when selective reporting is not present. The same pattern is evident for relative RMSE. For \(\lambda_2\), on the other hand, relative bias and RMSE is much closer to zero across all conditions. Relative bias and RMSE both decrease as the number of studies (\(J\)) increases. However, only relative bias decreases as the severity of selective reporting decreases; relative RMSE generally remains the same as the severity of selective reporting decreases when heterogeneity is moderate to large (\(\tau \geq 0.30\)) and increases somewhat when heterogeneity is low (\(\tau \leq 0.15\)).
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1} \caption{Relative bias of the beta-density lambda1 selection parameter by selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-bias}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1} \caption{Relative bias of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-bias}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda1 selection parameter by selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-rmse}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-rmse}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1} \caption{Relative bias of the beta-density lambda2 selection parameter by selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-bias}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1} \caption{Relative bias of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-bias}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda2 selection parameter by selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-rmse}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-rmse}
 \end{sidewaysfigure}
 
 
