@@ -1,0 +1,192 @@
+---
+title: "psymetadata example: stasielowicz2019a"
+author: "Martyna Citkowicz"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r}
+library(metaselection)
+library(metadat)
+library(psymetadata)
+library(metafor)
+library(tidyverse)
+library(here)
+devtools::load_all()
+
+```
+
+# Example Meta-analysis
+```{r}
+dat_ex <- stasielowicz2019a
+
+dat_ex <- dat_ex |>
+  rename(esid = es_id, studyid = study_id) |>
+  mutate(
+    d = yi,
+    Va = vi,
+    Var_d = Va,
+    sd_d = sqrt(Var_d),
+    var_d = Var_d,
+    p_onesided = 1 - pnorm(d / sd_d)
+  )
+```
+
+# Unadjusted estimate: mean only
+```{r}
+ex_unadj_mean <- rma.uni(
+  data = dat_ex,
+  yi = d,
+  sei = sd_d,
+  method = "ML"
+)
+ex_unadj_mean
+
+ex_unadj_mean_cil <- ex_unadj_mean$tau2 - 1.96*ex_unadj_mean$se.tau2
+ex_unadj_mean_ciu <- ex_unadj_mean$tau2 + 1.96*ex_unadj_mean$se.tau2
+ex_unadj_mean_cil; ex_unadj_mean_ciu
+```
+
+# Forest plot
+```{r}
+funnel(ex_unadj_mean, refline = 0, level = c(90, 95, 99))
+```
+
+# Unadjusted estimate: moderator
+```{r}
+ex_unadj_mod <- rma.uni(
+  data = dat_ex,
+  yi = d,
+  sei = sd_d,
+  method = "ML",
+  mods = ~ adapt_method
+)
+ex_unadj_mod
+
+ex_unadj_mod_cil <- ex_unadj_mod$tau2 - 1.96*ex_unadj_mod$se.tau2
+ex_unadj_mod_ciu <- ex_unadj_mod$tau2 + 1.96*ex_unadj_mod$se.tau2
+ex_unadj_mod_cil; ex_unadj_mod_ciu
+```
+
+# Adjusted estimate in metafor: Beta model
+```{r}
+ex_adj_mf <- selmodel(
+  x = ex_unadj_mod,
+  type = "beta",
+  steps = c(0.025, 0.975),
+  control=list(optimizer="nlminb"),
+  #verbose = "TRUE"
+)
+ex_adj_mf
+
+ex_adj_mf_cil <- ex_adj_mf$tau2 - 1.96*ex_adj_mf$se.tau2
+ex_adj_mf_ciu <- ex_adj_mf$tau2 + 1.96*ex_adj_mf$se.tau2
+ex_adj_mf_cil; ex_adj_mf_ciu
+```
+
+# Adjusted estimate in metaselection: Beta model mean only
+```{r}
+ex_adj_ms_mean <- selection_model(
+  dat = dat_ex,
+  yi = d,
+  sei = sd_d,
+  pi = p_onesided,
+  cluster = studyid,
+  selection_type = "beta",
+  steps = c(.025,.975),
+  make_sandwich = TRUE
+)
+ex_adj_ms_mean
+```
+
+# Selection plot: Beta model mean only
+```{r}
+selection_plot(ex_adj_ms_mean)
+```
+
+# Adjusted estimate in metaselection: Beta model moderator
+```{r}
+ex_adj_ms_mod <- selection_model(
+  dat = dat_ex,
+  yi = d,
+  sei = sd_d,
+  pi = p_onesided,
+  cluster = studyid,
+  selection_type = "beta",
+  steps = c(.025,.975),
+  make_sandwich = TRUE,
+  mean_mods = ~ adapt_method
+)
+ex_adj_ms_mod
+```
+
+# Selection plot: Beta model moderator
+```{r}
+selection_plot(ex_adj_ms_mod)
+```
+
+# CHE estimate
+```{r}
+V_mat <- vcalc(
+    vi = vi, 
+    cluster = studyid,
+    obs = esid, 
+    data = dat_ex,
+    rho = 0.5,
+    sparse = TRUE
+  )
+
+ex_che <- rma.mv(yi = yi,
+                  V = V_mat,
+                  random = ~ 1 | studyid / esid, 
+                  data = dat_ex, 
+                  sparse = TRUE, 
+                  digits = 3) |> 
+    robust(cluster = studyid, clubSandwich = TRUE)
+
+ex_che
+```
+
+# Adjusted estimate in metaselection: Step 3PSM model
+```{r}
+ex_adj_ms_step3 <- selection_model(
+  dat = dat_ex, 
+  yi = d,
+  sei = sd_d,
+  cluster = studyid,
+  selection_type = "step",
+  steps = 0.025
+)
+
+ex_adj_ms_step3
+```
+
+# Selection plot: Step 3 PSM model
+```{r}
+selection_plot(ex_adj_ms_step3)
+```
+
+# Adjusted estimate in metaselection: Step 4PSM model
+```{r}
+ex_adj_ms_step4 <- selection_model(
+  dat = dat_ex, 
+  yi = d,
+  sei = sd_d,
+  cluster = studyid,
+  selection_type = "step",
+  steps = c(0.025, .5)
+)
+
+ex_adj_ms_step4
+```
+
+# Selection plot: Step 4PSM model
+```{r}
+selection_plot(ex_adj_ms_step4)
+```
