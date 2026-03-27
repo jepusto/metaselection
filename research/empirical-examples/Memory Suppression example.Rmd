@@ -1,5 +1,5 @@
 ---
-title: "SREE 2024: Science example"
+title: "psymetadata: Memory Suppression example"
 author: "Martyna Citkowicz"
 date: "`r Sys.Date()`"
 output: pdf_document
@@ -22,11 +22,11 @@ devtools::load_all()
 
 ```
 
-# Science Meta-analysis
+# Memory Suppression Meta-analysis
 ```{r}
-sci <- read_csv(here('tests/testdata','ScienceMeta.csv'))
+dat_ex <- stramaccia2021
 
-sci <- sci |>
+dat_ex <- dat_ex |>
   rename(esid = es_id, studyid = study_id) |>
   mutate(
     d = yi,
@@ -37,29 +37,29 @@ sci <- sci |>
     p_onesided = 1 - pnorm(d / sd_d)
   )
 
-length(unique(sci$studyid)); length(unique(sci$esid))
+length(unique(dat_ex$studyid)); length(unique(dat_ex$esid))
 ```
 
 # Mean Only
 
 ## Unadjusted estimate: mean only
 ```{r}
-sci_unadj_mean <- rma.uni(
-  data = sci,
+ex_unadj_mean <- rma.uni(
+  data = dat_ex,
   yi = d,
   sei = sd_d,
   method = "ML"
 )
-sci_unadj_mean
+ex_unadj_mean
 
-sci_unadj_mean_cil <- sci_unadj_mean$tau2 - 1.96*sci_unadj_mean$se.tau2
-sci_unadj_mean_ciu <- sci_unadj_mean$tau2 + 1.96*sci_unadj_mean$se.tau2
-sci_unadj_mean_cil; sci_unadj_mean_ciu
+ex_unadj_mean_cil <- ex_unadj_mean$tau2 - 1.96*ex_unadj_mean$se.tau2
+ex_unadj_mean_ciu <- ex_unadj_mean$tau2 + 1.96*ex_unadj_mean$se.tau2
+ex_unadj_mean_cil; ex_unadj_mean_ciu
 ```
 
 ## Forest plot
 ```{r}
-funnel(sci_unadj_mean, refline = 0, level = c(90, 95, 99))
+funnel(ex_unadj_mean, refline = 0, level = c(90, 95, 99))
 ```
 
 ## CHE estimate: mean only
@@ -68,26 +68,26 @@ V_mat <- vcalc(
     vi = vi, 
     cluster = studyid,
     obs = esid, 
-    data = sci,
+    data = dat_ex,
     rho = 0.5,
     sparse = TRUE
   )
 
-sci_che <- rma.mv(yi = yi,
+ex_che <- rma.mv(yi = yi,
                   V = V_mat,
                   random = ~ 1 | studyid / esid, 
-                  data = sci, 
+                  data = dat_ex, 
                   sparse = TRUE, 
                   digits = 3) |> 
     robust(cluster = studyid, clubSandwich = TRUE)
 
-sci_che
+ex_che
 ```
 
 ## Adjusted estimate in metaselection: Beta model mean only
 ```{r}
-sci_adj_ms_beta_mean <- selection_model(
-  dat = sci,
+ex_adj_ms_beta_mean <- selection_model(
+  dat = dat_ex,
   yi = d,
   sei = sd_d,
   pi = p_onesided,
@@ -96,18 +96,18 @@ sci_adj_ms_beta_mean <- selection_model(
   steps = c(.025,.975),
   make_sandwich = TRUE
 )
-sci_adj_ms_beta_mean
+ex_adj_ms_beta_mean
 ```
 
 ## Selection plot: Beta model mean only
 ```{r}
-selection_plot(sci_adj_ms_beta_mean)
+selection_plot(ex_adj_ms_beta_mean)
 ```
 
 ## Adjusted estimate in metaselection: Step 3PSM model mean only
 ```{r}
-sci_adj_ms_step3_mean <- selection_model(
-  dat = sci, 
+ex_adj_ms_step3_mean <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
@@ -115,18 +115,18 @@ sci_adj_ms_step3_mean <- selection_model(
   steps = 0.025
 )
 
-sci_adj_ms_step3_mean
+ex_adj_ms_step3_mean
 ```
 
 ## Selection plot: Step 3 PSM model mean only
 ```{r}
-selection_plot(sci_adj_ms_step3_mean)
+selection_plot(ex_adj_ms_step3_mean)
 ```
 
 ## Adjusted estimate in metaselection: Step 4PSM model mean only
 ```{r}
-sci_adj_ms_step4_mean <- selection_model(
-  dat = sci, 
+ex_adj_ms_step4_mean <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
@@ -134,36 +134,36 @@ sci_adj_ms_step4_mean <- selection_model(
   steps = c(0.025, .5)
 )
 
-sci_adj_ms_step4_mean
+ex_adj_ms_step4_mean
 ```
 
 ## Selection plot: Step 4PSM model mean only
 ```{r}
-selection_plot(sci_adj_ms_step4_mean)
+selection_plot(ex_adj_ms_step4_mean)
 ```
 
 # Moderator
 
 ## Unadjusted estimate: moderator
 ```{r}
-sci_unadj_mod <- rma.uni(
-  data = sci,
+ex_unadj_mod <- rma.uni(
+  data = dat_ex,
   yi = d,
   sei = sd_d,
   method = "ML",
-  mods = ~ outcome_type_author
+  mods = ~ stimuli
 )
-sci_unadj_mod
+ex_unadj_mod
 
-sci_unadj_mod_cil <- sci_unadj_mod$tau2 - 1.96*sci_unadj_mod$se.tau2
-sci_unadj_mod_ciu <- sci_unadj_mod$tau2 + 1.96*sci_unadj_mod$se.tau2
-sci_unadj_mod_cil; sci_unadj_mod_ciu
+ex_unadj_mod_cil <- ex_unadj_mod$tau2 - 1.96*ex_unadj_mod$se.tau2
+ex_unadj_mod_ciu <- ex_unadj_mod$tau2 + 1.96*ex_unadj_mod$se.tau2
+ex_unadj_mod_cil; ex_unadj_mod_ciu
 ```
 
 ## Adjusted estimate in metaselection: Beta model moderator
 ```{r}
-sci_adj_ms_beta_mod <- selection_model(
-  dat = sci,
+ex_adj_ms_beta_mod <- selection_model(
+  dat = dat_ex,
   yi = d,
   sei = sd_d,
   pi = p_onesided,
@@ -171,52 +171,52 @@ sci_adj_ms_beta_mod <- selection_model(
   selection_type = "beta",
   steps = c(.025,.975),
   make_sandwich = TRUE,
-  mean_mods = ~ outcome_type_author
+  mean_mods = ~ stimuli
 )
-sci_adj_ms_beta_mod
+ex_adj_ms_beta_mod
 ```
 
 ## Selection plot: Beta model moderator
 ```{r}
-selection_plot(sci_adj_ms_beta_mod)
+selection_plot(ex_adj_ms_beta_mod)
 ```
 
 ## Adjusted estimate in metaselection: Step 3PSM model moderator
 ```{r}
-sci_adj_ms_step3_mod <- selection_model(
-  dat = sci, 
+ex_adj_ms_step3_mod <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
   selection_type = "step",
   steps = 0.025,
-  mean_mods = ~ outcome_type_author
+  mean_mods = ~ stimuli
 )
 
-sci_adj_ms_step3_mod
+ex_adj_ms_step3_mod
 ```
 
 ## Selection plot: Step 3 PSM model moderator
 ```{r}
-selection_plot(sci_adj_ms_step3_mod)
+selection_plot(ex_adj_ms_step3_mod)
 ```
 
 ## Adjusted estimate in metaselection: Step 4PSM model moderator
 ```{r}
-sci_adj_ms_step4_mod <- selection_model(
-  dat = sci, 
+ex_adj_ms_step4_mod <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
   selection_type = "step",
   steps = c(0.025, .5),
-  mean_mods = ~ outcome_type_author
+  mean_mods = ~ stimuli
 )
 
-sci_adj_ms_step4_mod
+ex_adj_ms_step4_mod
 ```
 
 ## Selection plot: Step 4PSM model moderator
 ```{r}
-selection_plot(sci_adj_ms_step4_mod)
+selection_plot(ex_adj_ms_step4_mod)
 ```
