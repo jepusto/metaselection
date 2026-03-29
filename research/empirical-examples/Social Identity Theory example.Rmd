@@ -96,7 +96,9 @@ ex_adj_ms_beta_mean <- selection_model(
   steps = c(.025,.975),
   make_sandwich = TRUE
 )
-ex_adj_ms_beta_mean
+
+summary(ex_adj_ms_beta_mean)
+
 ```
 
 ## Selection plot: Beta model mean only
@@ -115,7 +117,7 @@ ex_adj_ms_step3_mean <- selection_model(
   steps = 0.025
 )
 
-ex_adj_ms_step3_mean
+summary(ex_adj_ms_step3_mean)
 ```
 
 ## Selection plot: Step 3 PSM model mean only
@@ -134,7 +136,7 @@ ex_adj_ms_step4_mean <- selection_model(
   steps = c(0.025, .5)
 )
 
-ex_adj_ms_step4_mean
+summary(ex_adj_ms_step4_mean)
 ```
 
 ## Selection plot: Step 4PSM model mean only
@@ -155,9 +157,7 @@ ex_unadj_mod <- rma.uni(
 )
 ex_unadj_mod
 
-ex_unadj_mod_cil <- ex_unadj_mod$tau2 - 1.96*ex_unadj_mod$se.tau2
-ex_unadj_mod_ciu <- ex_unadj_mod$tau2 + 1.96*ex_unadj_mod$se.tau2
-ex_unadj_mod_cil; ex_unadj_mod_ciu
+confint(ex_unadj_mod)
 ```
 
 ## Adjusted estimate in metaselection: Beta model moderator
@@ -173,7 +173,7 @@ ex_adj_ms_beta_mod <- selection_model(
   make_sandwich = TRUE,
   mean_mods = ~ design
 )
-ex_adj_ms_beta_mod
+summary(ex_adj_ms_beta_mod)
 ```
 
 ## Selection plot: Beta model moderator
@@ -193,7 +193,7 @@ ex_adj_ms_step3_mod <- selection_model(
   mean_mods = ~ design
 )
 
-ex_adj_ms_step3_mod
+summary(ex_adj_ms_step3_mod)
 ```
 
 ## Selection plot: Step 3 PSM model moderator
@@ -213,10 +213,11 @@ ex_adj_ms_step4_mod <- selection_model(
   mean_mods = ~ design
 )
 
-ex_adj_ms_step4_mod
+summary(ex_adj_ms_step4_mod)
 ```
 
 ## Selection plot: Step 4PSM model moderator
+
 ```{r}
 selection_plot(ex_adj_ms_step4_mod)
 ```
