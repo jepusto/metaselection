@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r}
-library(metaselection)
 library(metadat)
 library(psymetadata)
 library(metafor)
@@ -50,7 +49,8 @@ ex_unadj_mean <- rma.uni(
   sei = sd_d,
   method = "ML"
 )
-ex_unadj_mean
+robust(ex_unadj_mean, cluster = studyid, clubSandwich = TRUE)
+
 
 ex_unadj_mean_cil <- ex_unadj_mean$tau2 - 1.96*ex_unadj_mean$se.tau2
 ex_unadj_mean_ciu <- ex_unadj_mean$tau2 + 1.96*ex_unadj_mean$se.tau2
@@ -153,9 +153,9 @@ ex_unadj_mod <- rma.uni(
   yi = d,
   sei = sd_d,
   method = "ML",
-  mods = ~ design
+  mods = ~ target.leader
 )
-ex_unadj_mod
+robust(ex_unadj_mod, cluster = studyid, clubSandwich = TRUE)
 
 confint(ex_unadj_mod)
 ```
@@ -171,7 +171,7 @@ ex_adj_ms_beta_mod <- selection_model(
   selection_type = "beta",
   steps = c(.025,.975),
   make_sandwich = TRUE,
-  mean_mods = ~ design
+  mean_mods = ~ target.leader
 )
 summary(ex_adj_ms_beta_mod)
 ```
@@ -190,7 +190,7 @@ ex_adj_ms_step3_mod <- selection_model(
   cluster = studyid,
   selection_type = "step",
   steps = 0.025,
-  mean_mods = ~ design
+  mean_mods = ~ target.leader
 )
 
 summary(ex_adj_ms_step3_mod)
@@ -210,7 +210,7 @@ ex_adj_ms_step4_mod <- selection_model(
   cluster = studyid,
   selection_type = "step",
   steps = c(0.025, .5),
-  mean_mods = ~ design
+  mean_mods = ~ target.leader
 )
 
 summary(ex_adj_ms_step4_mod)
