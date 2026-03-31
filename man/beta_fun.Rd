@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-generation.R
 \name{beta_fun}
 \alias{beta_fun}
-\title{Censor meta-analytic dataset based on the beta-density model model}
+\title{Censor meta-analytic dataset based on the univariate beta-density model}
 \usage{
 beta_fun(
   delta_1 = 1,
@@ -28,10 +28,10 @@ to have a maximum value of 1, with a default value of \code{TRUE}.}
 }
 \value{
 A function that can be used to censor a meta-analytic dataset based
-on the beta-density model.
+on the univariate beta-density model.
 }
 \description{
 A functional that takes model parameters and returns a function
 that can be used to censor meta-analytic datasets according to the
-beta-density model.
+univariate beta-density model.
 }

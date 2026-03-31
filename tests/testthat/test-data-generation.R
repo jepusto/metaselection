@@ -113,6 +113,38 @@ test_that("r_meta generates target number of studies with single parameter value
     m_multiplier = 1.5
   )
   
+  check_target_m(
+    mean_smd = 0.3, 
+    tau = 0.1, 
+    omega = 0.1, 
+    m = 10L, 
+    cor_mu = 0.6, 
+    censor_fun = step_count_fun(), 
+    n_ES_sim = n_ES_param(40, 3), 
+    m_multiplier = 10
+  )
+  
+  check_target_m(
+    mean_smd = 0.3, 
+    tau = 0.1, 
+    omega = 0.1, 
+    m = 10L, 
+    cor_mu = 0.6, 
+    censor_fun = step_count_fun(weight = 0.2), 
+    n_ES_sim = n_ES_param(40, 3), 
+    m_multiplier = 10
+  )
+  
+  check_target_m(
+    mean_smd = 0.1, 
+    tau = 0.1, 
+    omega = 0.0, 
+    m = 15L, 
+    cor_mu = 0.4, 
+    censor_fun = step_count_fun(cut_val = .05, weight = 0.100, psi = 1), 
+    n_ES_sim = n_ES_param(40, 9), 
+    m_multiplier = 12
+  )
 })
 
 
@@ -175,6 +207,17 @@ test_that("r_meta generates target number of studies with multiple parameter val
     ), 
     n_ES_sim = n_ES_param(10, 1, min_N = 6), 
     m_multiplier = 1.5
+  )
+  
+  check_target_m(
+    mean_smd = c(0.1,0.2,0.3), 
+    tau = c(0.1,0.2), 
+    omega = 0.05, 
+    m = c(16L,4L), 
+    cor_mu = 0.8, 
+    censor_fun = step_count_fun(weight = 0.2, psi = 0.5), 
+    n_ES_sim = n_ES_param(20, 1), 
+    m_multiplier = 5
   )
     
 })
@@ -276,4 +319,38 @@ test_that("r_meta_categories generates ES estimates with expected structure", {
   )
   
 })
+
+test_that("step_count_fun() generates correct selection probabilities.", {
+  
+  set.seed(20260331)
+  
+  wt <- 0.1
+  psi <- 0.5
+  step <- 0.025
+  dat <- r_meta(
+    mean_smd = 0.2, # true mean of effect sizes
+    tau = 0.2, # between-study heterogeneity
+    omega = 0.05, # within-study heterogeneity
+    m = 500, # number of studies in each meta analysis
+    cor_mu = 0.5, # average correlation between outcomes
+    cor_sd = 0.05, # sd correlation between outcomes
+    n_ES_sim = n_ES_param(mean_N = 40, mean_ES = 3, min_N = 10), # distribution of sample sizes and number of outcomes
+    censor_fun = step_count_fun(cut_val = step, weight = wt, psi = psi), # censoring function
+    m_multiplier = 2L,
+    id_start = 0L,
+    paste_ids = TRUE,
+    include_sel_prob = TRUE
+  )
+  
+  dat$sig <- dat$p_onesided < step
+  dat$N_sig_j <- with(dat, tapply(sig, studyid, sum)[studyid])
+  
+  expect_all_true(dat$selection_prob[dat$sig] == 1)
+  
+  nonsig_dat <- subset(dat, !sig)
+  expect_all_true(nonsig_dat$selection_prob < 1)
+  expect_equal(nonsig_dat$selection_prob, (1 - (1 - wt)^((nonsig_dat$N_sig_j + 1)^psi)), ignore_attr = TRUE)
+  
+})
+
 
