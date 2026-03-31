@@ -20,4 +20,4 @@ RUN install2.r --error \
     
 RUN R -q -e 'remotes::install_github("meghapsimatrix/simhelpers")'
 RUN R -q -e 'remotes::install_github("wviechtb/metafor")'
-RUN R -q -e 'remotes::install_github("jepusto/metaselection", ref = "penalization")'
+RUN R -q -e 'remotes::install_github("jepusto/metaselection", ref = "step-function-revision")'

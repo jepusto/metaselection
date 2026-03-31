@@ -10,11 +10,10 @@ run_sim <- function(
     m, 
     cor_mu,
     cor_sd, 
-    censor_fun = step_fun,
+    censor_fun = step_count_fun,
     steps,
     n_ES_dat = wwc_es,
     n_multiplier = 1,
-    estimate_4psm = FALSE, 
     mean_mods = NULL,
     var_mods = NULL,
     sel_mods = NULL,
@@ -66,7 +65,7 @@ run_sim <- function(
   
   censor_fun_param <- censor_fun(...)
   total_var <- tau^2 + omega^2
-  true_params$true_param <- c(mean_smd, log(total_var), log(censor_fun_param(steps + 1e-8)))
+  true_params$true_param <- c(mean_smd, log(total_var), log(censor_fun_param(steps + 1e-8, 1:length(steps))))
   
   n_ES_dat$n <- round(n_multiplier * n_ES_dat$n)
   n_ES_sim <- n_ES_empirical(n_ES_dat)
@@ -105,32 +104,6 @@ run_sim <- function(
         retry_bootstrap = retry_bootstrap
       ) %>%
         mutate(model = "3PSM")
-      
-      if (estimate_4psm == TRUE) {
-      
-        res_selection_4psm <- estimate_step_models(
-          dat = dat,
-          estimators = stepfun_methods,
-          steps = c(0.025, .5),
-          mean_mods = mean_mods,
-          var_mods = var_mods,
-          sel_mods = sel_mods,
-          sel_zero_mods = sel_zero_mods,
-          priors = prior_spec,
-          CML_optimizer = CML_optimizer,
-          CML_optimizer_control = CML_optimizer_control,
-          ARGL_optimizer_control = ARGL_optimizer_control,
-          CI_type = CI_type,
-          bootstrap = bootstrap,
-          conf_level = conf_level,
-          R = R,
-          retry_bootstrap = retry_bootstrap
-        ) %>%
-          mutate(model = "4PSM")
-        
-        res_selection <- bind_rows(res_selection, res_selection_4psm)
-      
-      }
       
       res_comp <- estimate_comparison_methods(
         dat = dat, 

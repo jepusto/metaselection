@@ -16,9 +16,10 @@ design_factors <- list(
   het_ratio = c(0, 0.5),
   cor_mu = c(0.4, 0.8), # average correlation between outcomes         
   cor_sd = c(0.05), # sd correlation between outcomes
-  weights = c(0.02, 0.05, 0.1, 0.2, 0.5, 1), # weights
+  weight = c(0.02, 0.05, 0.1, 0.2, 0.5, 1), # weights
   m = c(120, 90, 60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
+  psi = c(0,1),
   batch = 1L,
   stepfun_methods = list(c("CML","CML-model","ARGL")),
   priors = "Weak"
@@ -43,9 +44,10 @@ bootstrap_factors <- list(
   het_ratio = c(0, 0.5),
   cor_mu = 0.8, # average correlation between outcomes         
   cor_sd = 0.05, # sd correlation between outcomes
-  weights = c(0.05, 0.2, 1), # weights
+  weight = c(0.05, 0.2, 1), # weights
   m = c(60, 30, 15),	# number of studies in each meta analysis
   n_multiplier = c(1/3, 1),
+  psi = c(0,1),
   batch = 1:10,
   stepfun_methods = list(c("CML","ARGL")),
   priors = "Weak",
@@ -71,9 +73,10 @@ big_B_factors <- list(
   het_ratio = c(0.5),
   cor_mu = c(0.8), # average correlation between outcomes         
   cor_sd = c(0.05), # sd correlation between outcomes
-  weights = c(0.05, 0.2), # weights
+  weight = c(0.05, 0.2), # weights
   m = c(15),	# number of studies in each meta analysis
   n_multiplier = c(1),
+  psi = 0,
   batch = 1:100,
   stepfun_methods = list(c("CML","ARGL")),
   priors = "Weak",
@@ -94,23 +97,31 @@ big_B_params <-
 
 all_params <- 
   bootstrap_params %>%
-  anti_join(big_B_params, by = c("mean_smd","tau","cor_mu","cor_sd", "weights", "m", "n_multiplier","omega","bootstrap")) %>%
+  anti_join(big_B_params, by = c("mean_smd","tau","cor_mu","cor_sd", "weight", "m", "n_multiplier","psi","omega","bootstrap")) %>%
   bind_rows(big_B_params) %>%
+  filter(psi == 0 | bootstrap == "two-stage") %>%
   bind_rows(params) %>%
+  arrange(psi) %>%
   mutate(
     row = row_number(),
     seed = 20250918L + row
   )
 
 all_params %>%
-  group_by(bootstrap, iterations) %>%
+  group_by(bootstrap, psi, iterations) %>%
   count()
 count(all_params)
 
 saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
 
 all_params %>%
-  filter(bootstrap == "none") %>%
+  filter(bootstrap == "none", psi == 0) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "none", psi == 1) %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
@@ -128,13 +139,19 @@ all_params %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 all_params %>%
-  filter(bootstrap == "two-stage", iterations == 24) %>%
+  filter(bootstrap == "two-stage", psi == 0, iterations == 24) %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 all_params %>%
-  filter(bootstrap == "two-stage", iterations == 240) %>%
+  filter(bootstrap == "two-stage", psi == 0, iterations == 240) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "two-stage", psi == 1) %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
