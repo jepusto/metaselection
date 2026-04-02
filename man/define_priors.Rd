@@ -6,13 +6,13 @@
 \usage{
 define_priors(
   beta_mean = 0,
-  beta_precision = 1/2,
-  beta_L = 2,
+  beta_precision = 1/16,
+  beta_L = 4,
   tau_mode = 0.2,
   tau_alpha = 1,
-  lambda_mode = 0.8,
-  lambda_precision = 1/2,
-  lambda_L = 2
+  lambda_mode = 0.5,
+  lambda_precision = 1/54,
+  lambda_L = 4
 )
 }
 \arguments{
@@ -62,9 +62,9 @@ strong_priors <- define_priors(
   lambda_mode = 0.2, lambda_precision = 40
 )
 
-# set very weak priors
+# set standard normal prior on beta
 weak_priors <- define_priors(
-  beta_precision = 1/10, tau_alpha = 1/10, lambda_precision = 1/10
+  beta_mean = 0, beta_precision = 1/2, beta_L = 2
 )
 
 }

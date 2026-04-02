@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-generation.R
 \name{beta_fun}
 \alias{beta_fun}
-\title{Censor meta-analytic dataset based on the beta-density model model}
+\title{Censor meta-analytic dataset based on the beta-density model}
 \usage{
 beta_fun(
   delta_1 = 1,
