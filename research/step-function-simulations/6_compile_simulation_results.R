@@ -21,7 +21,23 @@ outstanding_conditions <-
 
 nrow(outstanding_conditions)
 outstanding_conditions %>%
-  count(bootstrap)
+  count(bootstrap, psi)
+
+# revise_batch_file <- function(file) {
+#   x <- readRDS(file)
+#   if ("weights" %in% names(x)) {
+#     x <- rename(x, weight = weights)
+#   }
+#   if (!("psi" %in% names(x))) {
+#     x$psi <- 0
+#     x <- relocate(x, psi, .after = n_multiplier)
+#   }
+#   
+#   saveRDS(x, file = file)
+#   return(NULL)
+# }
+# 
+# walk(res_list$file, revise_batch_file)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Compile results from conditions with no bootstraps ----
@@ -52,24 +68,26 @@ res <-
   select(-run_date) %>%
   unnest(res) %>%
   select(
-    mean_smd:omega, steps, iterations,
+    mean_smd:psi, priors, bootstrap, omega, 
+    steps, iterations,
     model, estimator, param, 
     K_absolute:rmse_mcse, 
     K_coverage:width_mcse
   )
 
 res %>%
-  group_by(mean_smd, tau, cor_mu, cor_sd, weights, m, n_multiplier, omega, steps) %>%
+  group_by(mean_smd, tau, cor_mu, cor_sd, weight, psi, m, n_multiplier, omega, steps) %>%
   summarize(n_res = n(), .groups = "drop") %>%
   count(n_res)
 
 res %>%
   filter(
     mean_smd == 0, tau == 0.05, cor_mu == 0.4, omega == 0,
-    weights == 0.10, m == 60, n_multiplier == 1,
+    weight == 0.10, psi == 0, m == 60, n_multiplier == 1,
   ) %>%
   select(priors, iterations, model:width_mcse) %>%
   View()
+
 write_rds(res, file = "research/step-function-simulations/sim-step-function-results-no-bootstraps.rds", compress = "gz", compression = 9L)
 
 
