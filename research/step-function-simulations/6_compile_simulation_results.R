@@ -107,7 +107,6 @@ bootstrap_files <-
 # compile results from conditions with bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-
 source("research/step-function-simulations/2_performance_criteria.R")
 
 summarize_bootstraps <- function(file_list) {
@@ -126,11 +125,12 @@ summarize_bootstraps <- function(file_list) {
   
   true_params <- data.frame(
     param = c("beta", "gamma", "zeta1"),
-    true_param = c(unique(dat$mean_smd), log(unique(dat$tau)^2 + unique(dat$omega)^2), log(unique(dat$weights)))
+    true_param = c(unique(dat$mean_smd), log(unique(dat$tau)^2 + unique(dat$omega)^2), log(unique(dat$weight)))
   )
   
   results <-
-    bind_rows(dat$res) %>%
+    bind_rows(dat$res, .id = "file") %>%
+    mutate(rep = as.character(as.integer(file) * 1000 + as.integer(rep))) %>%
     left_join(true_params, by = "param")
   
   summary_res <-
@@ -147,7 +147,6 @@ summarize_bootstraps <- function(file_list) {
   return(batch_file_name)
 }
 
-# debug(calc_performance)
 # summarize_bootstraps(file_list = bootstrap_files$files[[1]])
 # summarize_bootstraps(file_list = bootstrap_files$files[[1296]])
 
