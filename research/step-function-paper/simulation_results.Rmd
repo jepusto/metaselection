@@ -53,29 +53,9 @@ For purposes of computing further performance measures, we substituted results f
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
 
-ggplot(mu_graph_res) + 
-  aes(x = weights, y = bias, color = estimator, fill = estimator) +
-  geom_hline(yintercept = 0) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Bias", 
-    color = "Estimator",
-    fill = "Estimator"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+mu_graph_res %>%
+  filter(psi_fac == "Independent") %>%
+  performance_plot(measure = bias, label = "Bias")
 
 ```
 
@@ -105,29 +85,9 @@ For large average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negative
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
 
-ggplot(mu_graph_res) + 
-  aes(x = weights, y = rmse, color = estimator, fill = estimator) +
-  geom_hline(yintercept = 0) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Root Mean-Squared Error", 
-    color = "Estimator",
-    fill = "Estimator"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+mu_graph_res %>%
+  filter(psi_fac == "Independent") %>%
+  performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 ```
 
 RMSE combines both bias and variability into an overall measure of inaccuracy. 
@@ -212,7 +172,8 @@ mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("PML"),
-    CI_type %in% c("large-sample","percentile")
+    CI_type %in% c("large-sample","percentile"),
+    psi_fac == "Independent"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -221,9 +182,9 @@ mu_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"

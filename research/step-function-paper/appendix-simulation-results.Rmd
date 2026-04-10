@@ -22,7 +22,7 @@ source("process-simulation-results.R")
 
 convergence_results %>%
   filter(estimator %in% c("PML")) %>%
-  group_by(mean_smd, tau, weights, estimator) %>%
+  group_by(mean_smd, tau, weight, estimator) %>%
   summarize(
     min = min(convergence),
     Q10 = quantile(convergence, 0.1),
@@ -32,7 +32,7 @@ convergence_results %>%
     .groups = "drop"
   ) %>%
 ggplot() + 
-  aes(x = weights, y = median, ymin = min, max = max, color = weights, fill = weights) +
+  aes(x = weight, y = median, ymin = min, max = max, color = weight, fill = weight) +
   geom_pointrange(
     # position = position_dodge(width = 0.5)
   ) + 
@@ -450,7 +450,7 @@ However, just as with the estimators of average effect size, the CHE estimator i
 tau2_graph_res %>%
   filter(estimator %in% c("CHE","PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = rbias, color = estimator, fill = estimator) +
+  aes(x = weight, y = rbias, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +

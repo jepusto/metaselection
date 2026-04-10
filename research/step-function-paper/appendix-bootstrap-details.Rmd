@@ -210,7 +210,7 @@ boot_comparison <-
     bootstraps == 1999L,
     CI_type %in% CI_types,
   ) %>%
-  group_by(mean_smd, tau, cor_mu, weights, m, het_ratio, N_factor, estimator, CI_type) %>%
+  group_by(mean_smd, tau, cor_mu, weight, m, het_ratio, N_factor, estimator, CI_type) %>%
   summarize(
     coverage_diff = diff(100 * coverage),
     width_diff = diff(width),

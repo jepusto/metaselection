@@ -15,7 +15,7 @@ selection_levels <- c(
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 convergence_results <- 
-  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  readRDS(here::here("research","step-function-simulations","sim-step-function-results-no-bootstraps.rds")) %>%
   filter(
     estimator %in% c("ARGL","CML","CHE-ISCW","PET/PEESE"), 
     priors == "Weak",
@@ -26,15 +26,16 @@ convergence_results <-
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    weights_num = weights,
-    weights = as.character(weights),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    weight_num = weight,
+    weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
     scrmse = sqrt(m) * rmse, 
     J = as.character(m),
     J = factor(J, levels = c("15", "30", "60", "90", "120")),
-    weights = factor(
-      weights, 
+    weight = factor(
+      weight, 
       levels = selection_levels,
       labels = names(selection_levels)
     ),
@@ -55,22 +56,23 @@ convergence_results %>%
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 results <- 
-  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  readRDS(here::here("research", "step-function-simulations","sim-step-function-results-no-bootstraps.rds")) %>%
   filter(estimator != "CML", priors == "Weak") %>%
   mutate(
     estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
     estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    weights_num = weights,
-    weights = as.character(weights),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    weight_num = weight,
+    weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
     scrmse = sqrt(m) * rmse, 
     J = as.character(m),
     J = factor(J, levels = c("15", "30", "60", "90", "120")),
-    weights = factor(
-      weights, 
+    weight = factor(
+      weight, 
       levels = selection_levels,
       labels = names(selection_levels)
     ),
@@ -89,7 +91,7 @@ mu_graph_res <-
 
 mu_wide_res <- 
   mu_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, bias, var, rmse, scrmse) %>%
+  select(mean_smd:psi, psi_fac, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, bias, var, rmse, scrmse) %>%
   mutate(
     rmse_trunc = pmin(rmse, 1)
   ) %>%
@@ -116,7 +118,7 @@ tau2_graph_res <-
 tau2_wide_res <- 
   tau2_graph_res %>%
   filter(estimator %in% c("ARGL","PML","CHE")) %>%
-  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse) %>%
+  select(mean_smd:psi, psi_fac, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse) %>%
   pivot_wider(
     values_from = c(rbias, rvar, rrmse), 
     names_from = estimator
@@ -130,7 +132,7 @@ zeta_graph_res <-
 
 zeta_wide_res <- 
   zeta_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, bias, var, rmse) %>%
+  select(mean_smd:psi, psi_fac, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, bias, var, rmse) %>%
   pivot_wider(
     values_from = c(bias, var, rmse), 
     names_from = estimator
@@ -142,17 +144,17 @@ lambda_graph_res <-
     param == "lambda1"
   ) %>%
   mutate(
-    rbias = bias / weights_num,
-    rbias_mcse = bias_mcse / weights_num,
-    rvar = var / weights_num^2,
-    rvar_mcse = var_mcse / weights_num^2,
-    rrmse = rmse / weights_num,
-    rrmse_mcse = rmse_mcse / weights_num
+    rbias = bias / weight_num,
+    rbias_mcse = bias_mcse / weight_num,
+    rvar = var / weight_num^2,
+    rvar_mcse = var_mcse / weight_num^2,
+    rrmse = rmse / weight_num,
+    rrmse_mcse = rmse_mcse / weight_num
   )
 
 lambda_wide_res <- 
   lambda_graph_res %>%
-  select(mean_smd:m, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse) %>%
+  select(mean_smd:psi, psi_fac, mu_fac, tau_fac, N_factor, het_ratio, J, estimator, rbias, rvar, rrmse) %>%
   pivot_wider(
     values_from = c(rbias, rvar, rrmse), 
     names_from = estimator
@@ -163,20 +165,20 @@ lambda_wide_res <-
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 nobootstrap_conf_int <- 
-  readRDS("../step-function-simulations/sim-step-function-results-no-bootstraps.rds") %>%
+  readRDS(here::here("research", "step-function-simulations","sim-step-function-results-no-bootstraps.rds")) %>%
   filter(estimator != "CML") %>%
-  select(mean_smd:n_multiplier, bootstrap, omega, steps, model:param, K_coverage:width_mcse) %>%
+  select(mean_smd:psi, bootstrap, omega, steps, model:param, K_coverage:width_mcse) %>%
   mutate(
     CI_type = "large-sample"
   ) 
 
 bootstrap_conf_int <- 
-  readRDS("../step-function-simulations/sim-step-function-bootstrap-performance-results.rds") %>%
+  readRDS(here::here("research", "step-function-simulations","sim-step-function-bootstrap-performance-results.rds")) %>%
   select(-run_date, -time) %>%
   unnest(res) %>%
   filter(estimator != "CML") %>%
   select(
-    mean_smd:n_multiplier, bootstrap, omega, steps, bootstrap_type = bootstrap, model:param, 
+    mean_smd:psi, bootstrap, omega, steps, bootstrap_type = bootstrap, model:param, 
     bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse
   ) %>%
   unnest(
@@ -196,7 +198,7 @@ results_ci <-
     nobootstrap_conf_int,
     bootstrap_conf_int
   ) %>%
-  group_by(mean_smd, tau, omega, cor_mu, cor_sd, weights, m, n_multiplier, steps) %>%
+  group_by(mean_smd, tau, omega, cor_mu, cor_sd, weight, m, n_multiplier, psi, steps) %>%
   mutate(
     bootstrap_condition = any(!is.na(bootstrap_type))
   ) %>%
@@ -206,14 +208,15 @@ results_ci <-
     estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    weights_num = weights,
-    weights = as.character(weights),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    weight_num = weight,
+    weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,
     het_ratio = as.character(het_ratio),
     J = as.character(m),
     J = factor(J, levels = c("15", "30", "60", "90", "120")),  # 120 and 200 not there 
-    weights = factor(
-      weights, 
+    weight = factor(
+      weight, 
       levels = selection_levels,
       labels = names(selection_levels)
     ),
@@ -267,6 +270,33 @@ zeta_graph_res_ci <-
   )
 
 
+performance_plot <- function(data, measure, label) {
+  ggplot(data) + 
+    aes(x = weight, y = {{measure}}, color = estimator, fill = estimator) +
+    geom_hline(yintercept = 0) +
+    geom_boxplot(alpha = .5, coef = Inf) +
+    scale_color_brewer(palette = "Dark2") +
+    scale_fill_brewer(palette = "Dark2") +
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    facet_grid(
+      tau ~ mean_smd, 
+      labeller = label_bquote(
+        rows = tau[B] == .(tau),
+        cols = mu == .(mean_smd)
+      ),
+      scales = "free_y"
+    ) +
+    labs(
+      x = "Selection probability", 
+      y = label, 
+      color = "Estimator",
+      fill = "Estimator"
+    ) + 
+    theme_bw() +
+    theme(legend.position = "top")
+}
+
+  
 RMSE_comparison_plot <- function(
   data, 
   x_method, y_method, 
@@ -281,7 +311,7 @@ RMSE_comparison_plot <- function(
   y_var <- sym(paste(measure, y_method, sep = "_"))
   
   ggplot(data) + 
-    aes(x = weights, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
+    aes(x = weight, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
     geom_hline(yintercept = 1) + 
     geom_point(alpha = .5, position = position_jitter(width = 0.2)) +
     expand_limits(y = 0.5) + 
@@ -311,9 +341,9 @@ coverage_plot <- function(data) {
     scale_color_brewer(palette = "Dark2") +
     scale_fill_brewer(palette = "Dark2") +
     facet_grid(
-      weights_num ~ mean_smd, 
+      weight_num ~ mean_smd, 
       labeller = label_bquote(
-        rows = lambda[1] == .(weights_num),
+        rows = lambda[1] == .(weight_num),
         cols = mu == .(mean_smd)
       ),
       scales = "free_y"
@@ -341,13 +371,13 @@ big_B_boot_CIs <-
     bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","BCa")
   ) %>%
-  group_by(mean_smd, tau, cor_mu, weights, m, N_factor, het_ratio) %>%
+  group_by(mean_smd, tau, cor_mu, psi, weight, m, N_factor, het_ratio) %>%
   filter(any(bootstraps == 1999 & !extrapolated)) %>%
   mutate(
     cover_lo = coverage - qnorm(0.975) * coverage_mcse,
     cover_hi = coverage + qnorm(0.975) * coverage_mcse,
     tau_lab = paste("tau ==", tau),
-    lambda_lab = paste("lambda ==", weights),
+    lambda_lab = paste("lambda ==", weight),
     CI_lab = paste("CI type:", CI_type)
   )
 
