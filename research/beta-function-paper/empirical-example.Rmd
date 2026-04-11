@@ -7,14 +7,15 @@ bibliography: references.bib
 ```{r, echo = F, warning = F, message = F}
 library(metaselection)
 library(metadat)
+library(psymetadata)
 library(metafor)
 library(tidyverse)
 library(here)
 #devtools::load_all()
 
-sci <- read_csv(here('tests/testdata','ScienceMeta.csv'))
+dat_ex <- steffens2020
 
-sci <- sci |>
+dat_ex <- dat_ex |>
   rename(esid = es_id, studyid = study_id) |>
   mutate(
     d = yi,
@@ -25,21 +26,21 @@ sci <- sci |>
     p_onesided = 1 - pnorm(d / sd_d)
   )
 
-num_studies <- length(unique(sci$studyid))
-num_effects <- length(unique(sci$esid))
+num_studies <- length(unique(dat_ex$studyid))
+num_effects <- length(unique(dat_ex$esid))
 ```
 
-To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of the effects of science interventions on K–12 student science achievement, conducted by BSCS Science Learning [@taylor2018science]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as standardized mean differences representing the effects of the interventions on student achievement outcomes, with positive effects corresponding to improvements in student achievement. 
+To demonstrate the interpretation of the beta-function selection model in practice, we reanalyzed the data from a meta-analysis of leader group prototypicality (the degree to which a leader is perceived to embody a group's shared identity), conducted by Steffens and colleagues [@Steffens2021SIT]. The meta-analytic sample included findings from `r num_studies` studies with `r num_effects` effects. Approximately half of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes. Effect sizes were measured as correlations (converted to Fisher’s $z$-scores for analysis), with positive effects indicating that leaders who are seen as more prototypical of their group tend to be more effective.
 
-```{r science-learning-models}
+```{r social-identity-theory-models}
 #| echo: false
 #| warning: false
 #| message: false
 #| cache: true
 
 # Unadjusted model
-sci_unadj_mean <- rma.uni(
-  data = sci,
+ex_unadj_mean <- rma.uni(
+  data = dat_ex,
   yi = d,
   sei = sd_d,
   method = "ML"
@@ -47,8 +48,8 @@ sci_unadj_mean <- rma.uni(
   robust(cluster = studyid, clubSandwich = TRUE)
 
 # Beta model
-sci_adj_beta_mean <- selection_model(
-  dat = sci,
+ex_adj_beta_mean <- selection_model(
+  dat = dat_ex,
   yi = d,
   sei = sd_d,
   pi = p_onesided,
@@ -58,9 +59,9 @@ sci_adj_beta_mean <- selection_model(
 )
 
 
-# Single-step model
-sci_adj_step3_mean <- selection_model(
-  dat = sci, 
+# One-step model
+ex_adj_step3_mean <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
@@ -69,8 +70,8 @@ sci_adj_step3_mean <- selection_model(
 )
 
 # Two-step model
-sci_adj_step4_mean <- selection_model(
-  dat = sci, 
+ex_adj_step4_mean <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
@@ -81,77 +82,75 @@ sci_adj_step4_mean <- selection_model(
 
 # Unadjusted model - moderator
 
-sci_unadj_mod <- rma.uni(
-  data = sci,
+ex_unadj_mod <- rma.uni(
+  data = dat_ex,
   yi = d,
   sei = sd_d,
   method = "ML",
-  mods = ~ outcome_type_author
+  mods = ~ target.leader
 ) |>
   robust(cluster = studyid, clubSandwich = TRUE)
 
 # Beta model - moderator
-sci_adj_beta_mod <- selection_model(
-  dat = sci,
+ex_adj_beta_mod <- selection_model(
+  dat = dat_ex,
   yi = d,
   sei = sd_d,
   pi = p_onesided,
   cluster = studyid,
-  mean_mods = ~ outcome_type_author,
+  mean_mods = ~ target.leader,
   selection_type = "beta",
   steps = c(.025,.975)
   
 )
 
-# Single-step model - moderator
-sci_adj_step3_mod <- selection_model(
-  dat = sci, 
+# One-step model - moderator
+ex_adj_step3_mod <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
-  mean_mods = ~ outcome_type_author,
+  mean_mods = ~ target.leader,
   selection_type = "step",
   steps = 0.025
 )
 
 # Two-step model - moderator
-sci_adj_step4_mod <- selection_model(
-  dat = sci, 
+ex_adj_step4_mod <- selection_model(
+  dat = dat_ex, 
   yi = d,
   sei = sd_d,
   cluster = studyid,
-  mean_mods = ~ outcome_type_author,
+  mean_mods = ~ target.leader,
   selection_type = "step",
   steps = c(0.025, .5)
 )
 
 ```
 
-We conducted the analyses using R Version 4.4.3 [@rcoreteam].
+We conducted the analyses using R Version 4.5.3 [@rcoreteam].
 We first used the `rma.uni()` function from the `metafor` package to fit a standard random-effects model based on an independent effects working model with random effects for each effect size [@Viechtbauer2010conducting], with standard errors clustered by study. 
-The overall estimate of the average effect using the unadjusted model was `r formatC(sci_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(sci_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(sci_unadj_mean$ci.ub, format = "f", digits = 2)`], significantly different from zero $(p `r format.pval(sci_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
-The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(sci_unadj_mean$tau2), format = "f", digits = 2)`$.
+The overall estimate of the average effect using the unadjusted model was `r formatC(ex_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(ex_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(ex_unadj_mean$ci.ub, format = "f", digits = 2)`], significantly different from zero $(p `r format.pval(ex_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
+The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(ex_unadj_mean$tau2), format = "f", digits = 2)`$.
 
-To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two different step-function selection models---a single-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
-<!-- JEP: Should we report bootstrap CIs instead? -->
-<!-- JEP: Also, the beta function model does not fit as well as either of the step function models (the two-step model is best). -->
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two different step-function selection models---a one-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
 
-```{r science-learning-res, tab.pos = "tb", tab.cap="science learning meta-analysis"}
+```{r social-identity-theory-res, tab.pos = "tb", tab.cap="social identity theory meta-analysis"}
 
 all_res_mean <- 
   bind_rows(
-    beta = sci_adj_beta_mean$est,
-    `one-step` = sci_adj_step3_mean$est,
-    `two-step` = sci_adj_step4_mean$est,
+    beta = ex_adj_beta_mean$est,
+    `one-step` = ex_adj_step3_mean$est,
+    `two-step` = ex_adj_step4_mean$est,
     .id = "Model"
   ) %>%
   rownames_to_column() 
 
 all_res_mod <- 
   bind_rows(
-    beta = sci_adj_beta_mod$est,
-    `one-step` = sci_adj_step3_mod$est,
-    `two-step` = sci_adj_step4_mod$est,
+    beta = ex_adj_beta_mod$est,
+    `one-step` = ex_adj_step3_mod$est,
+    `two-step` = ex_adj_step4_mod$est,
     .id = "Model"
   ) %>%
   rownames_to_column()
@@ -172,7 +171,7 @@ all_res <-
     param = recode(param, 
                    beta = "$\\beta_0$", 
                    `beta_(Intercept)` = "$\\beta_0$",
-                   beta_outcome_type_author = "$\\beta_1$",
+                   beta_target.leader = "$\\beta_1$",
                    gamma = "$\\tau$", 
                    zeta1 = "$\\lambda_1$", 
                    zeta2 = "$\\lambda_2$"),
@@ -210,15 +209,19 @@ all_res_table %>%
 ```
 
 
-The upper panel of Table \@ref(tab:science-learning-res) reports parameter estimates from all three models, along with cluster-robust standard errors and 95% confidence intervals.
-Across the three selection models, the estimated average effect sizes are all positive and significant, but they vary in magnitude and interpretation. Compared to the unadjusted model, the average adjusted effect is 25% smaller when using the beta-density selection model ($ES$ = `r round(sci_adj_beta_mean$est$Est[sci_adj_beta_mean$est$param=="beta"], 3)`), versus 32% larger when using the single-step model ($ES$ = `r round(sci_adj_step3_mean$est$Est[sci_adj_step3_mean$est$param=="beta"], 3)`) and 12% larger when using the two-step selection model ($ES$ = `r round(sci_adj_step4_mean$est$Est[sci_adj_step4_mean$est$param=="beta"], 3)`).
-These differences are due to differences in the form of the selection curve estimated from each model specification, as depicted in figure \@ref(fig:science-selection-curves).
-The beta-density model estimates of $\lambda_1$ and $\lambda_2$ imply that positive but non-significant results are slightly more likely to be reported compared to affirmative results, but that negative effects are increasingly less likely to be be reported.
-On balance, this leads to an adjusted average effect size estimate that is smaller than under the unadjusted random effects model.
-In contrast, the step-function models both estimate that non-significant results are more likely to be reported compared to affirmative results, leading to upward adjustment in the average effect size.
-This divergence illustrates how the continuous functional form of the beta-density model can capture nuanced reporting patterns---such as a smooth decline in the likelihood of reporting for increasingly negative results---that may be obscured by the discrete thresholds of a step-function model.
+The upper panel of Table \@ref(tab:social-identity-theory-res) reports parameter estimates from all three models, along with cluster-robust standard errors and 95% confidence intervals.
+Across the three selection models, the estimated average effect sizes are all positive and significant, but they vary in magnitude and interpretation.
+Compared to the unadjusted model, the average adjusted effect is 33% smaller when using the beta-density selection model ($ES$ = `r round(ex_adj_beta_mean$est$Est[ex_adj_beta_mean$est$param=="beta"], 2)`).
+In contrast, the adjustment is minimal for the one-step selection model, which is 2% larger ($ES$ = `r round(ex_adj_step3_mean$est$Est[ex_adj_step3_mean$est$param=="beta"], 2)`), while the two-step selection model yields an estimate that is 12% smaller ($ES$ = `r round(ex_adj_step4_mean$est$Est[ex_adj_step4_mean$est$param=="beta"], 2)`) than the unadjusted average effect.
 
-```{r science-selection-curves}
+These differences are driven by the specific form of the selection curve estimated from each model, as depicted in Figure @ref(fig:social-identity-theory-selection-curves).
+The beta-density model identifies a substantial downward adjustment, capturing a smooth, continuous decline in the likelihood of reporting as effects move toward non-significance.
+The one-step model, on the other hand, estimates a nearly flat selection process, suggesting that when only one $p$-value threshold is considered, the overall evidence for selective reporting appears negligible.
+The two-step model provides a more granular look: it identifies a slight increase in reporting probability at the $\alpha_1 = .025$ threshold, followed by a substantial decrease at the $\alpha_2 = .05$ threshold.
+Notably, the beta-density model provided the best fit to the data (Log composite likelihood = -49.02), followed by the two-step model (-52.94) and the one-step model (-58.12).
+This divergence illustrates how the continuous functional form of the beta-density model can capture nuanced reporting patterns---such as a smooth decline in the likelihood of reporting for increasingly negative results---that may be obscured or dependent on the pre-defined thresholds of a step-function model.
+
+```{r social-identity-theory-selection-curves}
 #| echo: false
 #| fig.retina: 2
 #| fig.width: 5
@@ -231,9 +234,9 @@ pvals <- seq(0.001, 0.999, .001)
 
 selection_curves <- 
   bind_rows(
-    beta = selection_wts(sci_adj_beta_mean, pvals = pvals),
-    `one-step` = selection_wts(sci_adj_step3_mean, pvals = pvals),
-    `two-step` = selection_wts(sci_adj_step4_mean, pvals = pvals),
+    beta = selection_wts(ex_adj_beta_mean, pvals = pvals),
+    `one-step` = selection_wts(ex_adj_step3_mean, pvals = pvals),
+    `two-step` = selection_wts(ex_adj_step4_mean, pvals = pvals),
     .id = "Model"
   )
 
@@ -254,20 +257,24 @@ ggplot(selection_curves) +
 ```
 
 A key advantage of selection models over other methods for diagnosing and adjusting for selective reporting bias is that they allow for inclusion of potential moderator variables as predictors of average effect size. This feature allows meta-analysts to investigate whether selective reporting bias varies across study characteristics or, conversely, whether suspected moderator effects persist after adjusting for selection.
-Past work has demonstrated that evaluations of educational interventions tend to produce larger effects on assessments developed by study authors or developers of the intervention (i.e., non-independent groups) than on assessments developed by groups independent of the evaluation [@Wolf2023making].
-We investigated whether this pattern holds in the BSCS Science Learning meta-analysis data, which includes an indicator for assessment type, equal to one for assessments developed by non-independent groups and equal to zero otherwise.
+In the original meta-analysis, Steffens and colleagues [@Steffens2021SIT] examined whether the relationship between prototypicality and leadership outcomes was moderated by the target leader's role.
+Specifically, they coded whether the target person occupied a formal leadership role (e.g., a supervisor, political leader, or CEO) or held a nonformal leadership position (e.g., a group member or candidate for a role).
+They found that the leader prototypicality–outcome relationship is significantly stronger for leaders in formal leadership roles than for those occupying nonformal roles.
+We investigated whether this moderating effect remains after adjusting for selective reporting.
 
-We reran all four models using assessment type as a moderator [@taylor2018science], with assessments developed by independent groups as the reference category.
-Based on a random effects meta-regression without adjustment for selective reporting, assessments developed by independent groups produced an average effect size of `r formatC(sci_unadj_mod$beta[1], format = "f", digits = 2)`, 95% CI [`r formatC(sci_unadj_mod$ci.lb[1], format = "f", digits = 2)`, `r formatC(sci_unadj_mod$ci.ub[1], format = "f", digits = 2)`].
-The average effect on assessments developed by non-independent groups was larger by `r formatC(sci_unadj_mod$beta[2], format = "f", digits = 2)` SD, 95% CI [`r formatC(sci_unadj_mod$ci.lb[2], format = "f", digits = 2)`, `r formatC(sci_unadj_mod$ci.ub[2], format = "f", digits = 2)`], which was not statistically distinct from zero $(p = `r format.pval(sci_unadj_mod$pval[2], digits = 3, eps = 1e-3)`)$. 
-The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(sci_unadj_mod$tau2), format = "f", digits = 2)`$, just as in the summary meta-analysis.
+We reran all four models using target leader's role as a moderator [@Steffens2021SIT].
+Based on a random effects meta-regression without adjustment for selective reporting, the relationship for leaders in nonformal roles produced an average effect size of `r formatC(ex_unadj_mod$beta[1], format = "f", digits = 2)`, 95% CI [`r formatC(ex_unadj_mod$ci.lb[1], format = "f", digits = 2)`, `r formatC(ex_unadj_mod$ci.ub[1], format = "f", digits = 2)`].
+The average effect for leaders in formal roles was larger by `r formatC(ex_unadj_mod$beta[2], format = "f", digits = 2)` SD, 95% CI [`r formatC(ex_unadj_mod$ci.lb[2], format = "f", digits = 2)`, `r formatC(ex_unadj_mod$ci.ub[2], format = "f", digits = 2)`], which was statistically significant from zero $(p = `r format.pval(ex_unadj_mod$pval[2], digits = 3, eps = 1e-3)`)$. 
+The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(ex_unadj_mod$tau2), format = "f", digits = 2)`$, similar to the summary meta-analysis.
 
-The lower panel of Table \@ref(tab:science-learning-res) reports parameter estimates from the corresponding selection models that include assessment type as a predictor.
-The $\beta_1$ coefficient estimates represent differences in average effects between non-independent and independent assessment developers, which were all non-significant and similar in magnitude to the difference based on the unadjusted model.
-This suggests that the assessment-type effect is not merely an artifact of selective reporting in this dataset.
-However, the selection models lead to different conclusions about the average effects on independently developed assessments.
-The estimate from the beta-density model is not statistically distinct from zero and is smaller than the estimate from the unadjusted random effects meta-regression. 
-In contrast, the estimated average effects from the step-function selection models are both statistically significant and larger than the estimate from the unadjusted model.
+The lower panel of Table \@ref(tab:social-identity-theory-res) reports parameter estimates from the corresponding selection models that include target leader's role as a predictor.
+The $\beta_1$ coefficient estimates represent differences in average effects between leaders in formal versus nonformal roles, which were all statistically significant.
+Compared to the unadjusted model's estimated difference of `r formatC(ex_unadj_mod$beta[2], format = "f", digits = 2)`, the beta-density model estimated a substantially larger difference of `r round(ex_adj_beta_mod$est$Est[ex_adj_beta_mod$est$param=="beta_target.leader"], 2)`, whereas the two-step model yielded a difference of `r round(ex_adj_step4_mod$est$Est[ex_adj_step4_mod$est$param=="beta_target.leader"], 2)` and the one-step model remained unchanged at `r round(ex_adj_step3_mod$est$Est[ex_adj_step3_mod$est$param=="beta_target.leader"], 2)`.
+This suggests that the moderating effect of leader status is robust to selective reporting; however, the advantage for formal leaders may actually be underestimated when selective reporting bias is ignored.
+Moreover, the selection models lead to different conclusions about the average effects for leaders in nonformal roles ($\beta_0$). The estimate from the beta-density model is not statistically distinct from zero ($ES$ = `r round(ex_adj_beta_mod$est$Est[ex_adj_beta_mod$est$param=="beta_(Intercept)"], 2)`, $p$ = `r round(ex_adj_beta_mod$est$p_value[ex_adj_beta_mod$est$param=="beta_(Intercept)"], 2)`) and is substantially smaller than the estimate from the unadjusted model ($ES$ = `r formatC(ex_unadj_mod$beta[1], format = "f", digits = 2)`).
+In contrast, the estimated average effects for the reference group in the step-function selection models remain statistically significant, though they vary in magnitude.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.
 
-The results of this application demonstrate that the choice of selection function---smooth versus discrete---can lead to different conclusions regarding the magnitude and significance of adjusted effects. The beta-density selection model’s ability to capture a continuous range of selection probabilities provides a flexible alternative to the step-wise form of selection assumed by the step-function selection model, particularly when reporting bias does not follow rigid significance thresholds. To investigate the performance of these models more systematically, we conducted simulations across a wide range of conditions, focusing on the comparative performance of the beta-density and step-function specifications and their robustness to misspecification of the selection function.
+The results of this application demonstrate that the choice of selection function---smooth versus discrete---can lead to different conclusions regarding the magnitude and significance of adjusted effects. The beta-density selection model’s ability to capture a continuous range of selection probabilities provides a flexible alternative to the step-wise form of selection assumed by step-function selection model, particularly when reporting bias does not follow rigid significance thresholds.
+The fact that the beta-density model identified a larger moderator effect and a near-zero baseline effect highlights how a continuous function can reveal nuanced patterns---such as a steeper decline in the reporting of non-significant results for nonformal leaders---that may be obscured by the pre-defined thresholds of discrete models.
+To investigate the performance of these models more systematically, we conducted simulations across a wide range of conditions, focusing on the comparative performance of the beta-density and step-function specifications and their robustness to misspecification of the selection function.
