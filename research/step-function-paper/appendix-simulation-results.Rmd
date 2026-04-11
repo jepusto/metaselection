@@ -70,7 +70,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of PML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL estimator to root mean-squared error of PML estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "PML","ARGL")
 ```
@@ -81,7 +81,7 @@ RMSE_comparison_plot(mu_wide_res, "PML","ARGL")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of PML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of PML estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "PML","CHE-ISCW")
 ```
@@ -92,7 +92,7 @@ RMSE_comparison_plot(mu_wide_res, "PML","CHE-ISCW")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for CHE-ISCW estimator to root mean-squared error of ARGL estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 ```
@@ -103,7 +103,7 @@ RMSE_comparison_plot(mu_wide_res, "ARGL","CHE-ISCW")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of PML estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of PML estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "PML","PET/PEESE")
 ```
@@ -114,7 +114,7 @@ RMSE_comparison_plot(mu_wide_res, "PML","PET/PEESE")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for PET/PEESE estimator to root mean-squared error of ARGL estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
 ```
@@ -517,7 +517,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of PML heterogeneity estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "PML","ARGL")
 ```
@@ -528,7 +528,7 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "PML","ARGL")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for PML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for PML heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","PML")
 ```
@@ -539,7 +539,7 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","PML")
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL heterogeneity estimator to root mean-squared error of CHE heterogeneity estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","ARGL")
 ```
@@ -644,7 +644,7 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL selection parameter estimator to root mean-squared error of PML selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL selection parameter estimator to root mean-squared error of PML selection parameter estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
 
 RMSE_comparison_plot(lambda_wide_res,measure = "rrmse", "PML","ARGL")
 ```

@@ -47,11 +47,11 @@ For purposes of computing further performance measures, we substituted results f
 
 ## Bias
 
-```{r mu-bias}
+```{r mu-bias-indep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with an independent selection process $(\\psi = 0)$"
 
 mu_graph_res %>%
   filter(psi_fac == "Independent") %>%
@@ -59,7 +59,7 @@ mu_graph_res %>%
 
 ```
 
-Figure \@ref(fig:mu-bias) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau_B$, varying by grid row).
+Figure \@ref(fig:mu-biasindep) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau_B$, varying by grid row) across scenarios with an independent selection process ($\psi = 0$).
 The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
 
@@ -77,21 +77,45 @@ Although the PET/PEESE estimator uses a regression adjustment to account for pos
 For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced. Its bias grows larger (and closer to that of CHE-ISCW) for smaller values of average effect size and higher levels of heterogeneity.
 For large average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
 
-## Root Mean-Squared Error
-
-```{r mu-rmse}
+```{r mu-bias-idep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a dependent selection process $(\\psi = 1)$"
+
+mu_graph_res %>%
+  filter(psi_fac == "Dependent") %>%
+  performance_plot(measure = bias, label = "Bias")
+
+```
+
+## Root Mean-Squared Error
+
+```{r mu-rmse-indep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity  across scenarios with an independent selection process $(\\psi = 0)$"
 
 mu_graph_res %>%
   filter(psi_fac == "Independent") %>%
   performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 ```
 
+```{r mu-rmse-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity  across scenarios with a dependent selection process $(\\psi = 1)$"
+
+mu_graph_res %>%
+  filter(psi_fac == "Dependent") %>%
+  performance_plot(measure = rmse, label = "Root Mean-Squared Error")
+```
+
 RMSE combines both bias and variability into an overall measure of inaccuracy. 
-Figure \@ref(fig:mu-rmse) depicts the RMSE of each estimator of average effect size; it is constructed in the same way as Figure \@ref(fig:mu-bias). 
+Figure \@ref(fig:mu-rmse-indep) depicts the RMSE of each estimator of average effect size across scenarios with an independent selection process $(\psi = 0)$; 
+Figure \@ref(fig:mu-rmse-dep) depicts the corresponding RMSE values across scenarios with a dependent selection process $(\psi = 1)$.
 Supplementary Figures \@ref(fig:rmse-ARGL-PML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods. 
 These figures illustrate several patterns.
 

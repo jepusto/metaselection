@@ -30,8 +30,47 @@ mu_graph_res %>%
 
 # PML vs. ARGL
 
+RMSE_comparison_plot <- function(
+    data, 
+    x_method, y_method, 
+    measure = "rmse", 
+    col_factor = psi_fac, 
+    col_lab = "Selection process", 
+    legend_rows = 1L
+) {
+  
+  y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
+  x_var <- sym(paste(measure, x_method, sep = "_"))
+  y_var <- sym(paste(measure, y_method, sep = "_"))
+  
+  ggplot(data) + 
+    aes(x = weight, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}, fill = {{col_factor}}) +
+    geom_hline(yintercept = 1) + 
+    geom_point(alpha = .5, position = position_jitterdodge()) +
+    expand_limits(y = 0.5) + 
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    scale_y_continuous(transform = "log2") + 
+    scale_color_brewer(palette = "Dark2", guide = guide_legend(nrow=legend_rows)) +
+    facet_grid(tau ~ mean_smd, 
+               labeller = label_bquote(rows = tau == .(tau),
+                                       cols = mu == .(mean_smd)),
+               scales = "free_y"
+    ) +
+    labs(
+      x = "Selection probability",
+      y = y_lab,
+      color = col_lab,
+      shape = col_lab,
+      fill = col_lab,
+    ) + 
+    theme_bw() +
+    theme(legend.position = "top")
+}
+
+
 mu_wide_res %>%
   RMSE_comparison_plot("PML","ARGL")
+
 
 mu_wide_res %>%
   filter(psi_fac == "Independent") %>%

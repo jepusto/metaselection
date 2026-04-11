@@ -298,12 +298,12 @@ performance_plot <- function(data, measure, label) {
 
   
 RMSE_comparison_plot <- function(
-  data, 
-  x_method, y_method, 
-  measure = "rmse", 
-  col_factor = J, 
-  col_lab = "Number of studies (J)", 
-  legend_rows = 1L
+    data, 
+    x_method, y_method, 
+    measure = "rmse", 
+    col_factor = psi_fac, 
+    col_lab = "Selection process", 
+    legend_rows = 1L
 ) {
   
   y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
@@ -311,9 +311,9 @@ RMSE_comparison_plot <- function(
   y_var <- sym(paste(measure, y_method, sep = "_"))
   
   ggplot(data) + 
-    aes(x = weight, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}) +
+    aes(x = weight, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}, fill = {{col_factor}}) +
     geom_hline(yintercept = 1) + 
-    geom_point(alpha = .5, position = position_jitter(width = 0.2)) +
+    geom_point(alpha = .5, position = position_jitterdodge()) +
     expand_limits(y = 0.5) + 
     scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
     scale_y_continuous(transform = "log2") + 
@@ -326,7 +326,9 @@ RMSE_comparison_plot <- function(
     labs(
       x = "Selection probability",
       y = y_lab,
-      shape = col_lab, color = col_lab
+      color = col_lab,
+      shape = col_lab,
+      fill = col_lab,
     ) + 
     theme_bw() +
     theme(legend.position = "top")
