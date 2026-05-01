@@ -6,9 +6,11 @@ template:
 
 authors:
   James E. Pustejovsky:
-    href: "https://www.jepusto.com/"
+    href: "https://jepusto.com/"
   Megha Joshi:
     href: "https://meghapsimatrix.com/"
+  Martyna Citkowicz:
+    href: "https://www.air.org/experts/person/martyna-citkowicz"
     
     
 reference:
@@ -21,6 +23,8 @@ reference:
   - selection_wts
   - print.selmodel
   - summary.selmodel
+  - define_priors
+  - p_area
 - title: "Example Datasets"
   desc: "Example datasets from published meta-analyses and one dataset containing a distribution of primary study characteristics"
   contents:
