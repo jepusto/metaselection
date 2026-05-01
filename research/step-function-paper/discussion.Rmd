@@ -44,6 +44,8 @@ This strategy therefore precludes examination of more nuanced forms of selection
 Third, focusing on the marginal distribution likely entails some loss of precision in parameter estimates. 
 Further adapting the estimation methods to account for dependent effects, such as by refining the analytic weights, might improve the precision of the estimators.
 
+Fourth, our marginal modeling approach could be sensitive to informative cluster sizes, which occurs when the number of effect sizes per study is correlated with the magnitude of the underlying effects. Because our strategy treats each effect size as a marginal observation, studies that contribute a large number of effects carry more weight in the estimation of the average effect size than studies with fewer effects. While cluster-robust variance estimation handles the dependency for the purpose of confidence interval coverage, it does not necessarily correct for the potential bias in point estimates if larger clusters are systematically different from smaller ones. Future research should investigate how these weighting dynamics interact with different selective reporting mechanisms.
+
 Another direction for further exploration is to consider how the marginal step function model could be incorporated into an ensemble estimator. 
 Recent methodological work on publication bias in univariate meta-analysis has combined step-function selection models with PET/PEESE regression adjustments and summary (unadjusted) meta-analysis models via Bayesian model averaging.[@Bartos2023robust]
 It would be valuable to extend such ensemble techniques to work with dependent effect sizes, although doing so could be hampered by the need of Bayesian methods to work with full likelihoods.

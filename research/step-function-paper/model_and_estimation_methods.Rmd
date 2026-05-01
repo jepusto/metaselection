@@ -155,6 +155,8 @@ l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij
 \end{equation}
 The penalized marginal likelihood (PML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
+The specific prior penalties used in this study are tailored to be weakly informative for standardized mean differences. Because the impact of regularization depends on the scale of the effect size metric, these penalties may require adjustment when applied to alternative scales (e.g., correlations or raw regression coefficients). The unit-information framework in @Rover2021priors provides one such approach for developing appropriately scaled, weakly informative priors across different effect size metrics.
+
 If the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
 \begin{equation}
 \label{eq:marginal-score-equations}
