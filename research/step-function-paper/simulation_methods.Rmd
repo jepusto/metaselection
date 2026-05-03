@@ -7,8 +7,9 @@ editor_options:
     wrap: sentence
 ---
 
-We conducted a Monte Carlo simulation study to examine the performance of the PML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates. 
-We compared the performance of these novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment.[@stanley2014meta]
+We conducted a Monte Carlo simulation study to examine the performance of the PML and ARGL estimators for a step-function selection model with a single step, under a wide range of conditions where primary studies contribute multiple, statistically dependent effect size estimates.
+We examine two distinct selection processes, including one where the probability of selection depends only on the $p$-value of the individual effect size estimate (i.e., univariate selection) and one in which the probability of selection is influenced by the significance of other outcomes in the same study (a form of multivariate selection).
+We compared the performance of our novel estimators to two available alternatives: a summary meta-analysis that addresses the dependency structure but does not correct for selective reporting and the PET-PEESE adjustment.[@stanley2014meta]
 We evaluated the estimators in terms of convergence rates, bias, accuracy, and CI coverage for recovering the average effect size prior to selective reporting.
 To limit computational burden, we evaluated the performance of bootstrap CIs only for a subset of the conditions. 
 
@@ -18,7 +19,7 @@ The simulation code made use of several R packages, including `metafor` [@Viecht
 ## Data generation
 
 We simulated meta-analyses based on a CHE working model, with individual effect size estimates selected
-for inclusion based on the step-function selection model with a single step at $\alpha_1 = .025$. 
+for inclusion based on a generalization of the selection model that encompasses both univariate and multivariate selection.
 For each replication, we generated a total of $J^*$ studies with a two-group comparison
 design, where study $j$ had an effective sample size of $N_j$ and contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting.
 To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effects per study from an empirical distribution based on the What Works Clearinghouse database. 
@@ -45,20 +46,29 @@ We calculated the sampling variances using conventional formulas [@borenstein201
 
 [^psi-structure]: The structure of $\boldsymbol\Psi_j$ is plausible for meta-analyses with dependent effects and simplifies the data-generating process. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$ because it does not affect the distribution of generated effect size estimates.
 
-After simulating results for study $j$, we applied a step-function selection
-model to the individual effect size estimates, with a one-sided selection
-threshold at $\alpha = 0.025$. Specifically, we let result $(y^*_{ij},
-\sigma_{ij}^*, p_{ij}^*)$ be included in the observed dataset with probability
-1 if $p_{ij}^*$ was less than 0.025 and with probability $0 < \lambda_1 \leq 1$ if $p_{ij}^* \ge 0.025$. 
+After simulating results for study $j$, we applied a generalized step-function selection model to the individual effect size estimates, with a one-sided selection
+threshold at $\alpha = 0.025$. 
+Under the generalized model, the probability that a given effect is reported still depends on whether it is statistically significant and in the expected direction, but it may also depend on the number of statistically significant, affirmative estimates in the same study.
+Let $s_{ij}$ be an indicator equal to 1 if effect $i$ in study $j$ is statistically significant and positive, $s_{ij} = I(p_{ij} < .025)$, and
+denote the number of observed effect size estimates in study $j$ that are statistically significant and positive as $k^A_j = \sum_{i=1}^{k_j} s_{ij}$.
+We assume that effect size estimate $i$ in study $j$ is observed with probability 
+\begin{equation}
+\label{eq:generalized-selection}
+\pi_{ij} = s_{ij} + (1 - s_{ij}) \times \lambda_1^{(k^A_j - 1)^\psi},
+\end{equation}
+for $\psi \geq 0$. 
+When $\psi = 0$, the probability that a non-affirmative result is reported depends only on its own $p$-value, so the selection process is univariate.
+However, for $\psi > 0$, the probability that a non-affirmative result is reported is affected by the number of affirmative results within the same study, with more affirmative results leading to a higher probability that a non-affirmative result will also be reported---a form of multivariate selection.
+Under the multivariate selection process, $\lambda_1$ can be interpreted as the probability that a non-affirmative result is reported when there are no affirmative findings in the study, so $k^A_j = 0$. 
+
 We repeated the process of generating studies until the database included a total of $J$ studies with at least one observed result, where observed study $j$ includes $k_j$ effect size estimates for $1 \leq k_j \leq k_j^*$.
 
 ## Estimation methods
 
-We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is aligned with the actual selective reporting process.
-We estimated PML and ARGL estimators and calculated cluster-robust CIs as described in Section \@ref(estimation-methods).[^model-based-SEs] 
-For a subset of simulation conditions, we also examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap CIs based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
-
-[^model-based-SEs]: For comparison purposes, we also computed model-based confidence intervals constructed using the inverse Hessian matrix of the PML estimator, which do not account for the dependence structure of the data; therefore, we expect that they would have coverage levels below the nominal level.
+We estimated step-function selection models with a single step at $\alpha_1 = 0.025$, so that the assumed marginal selection process is aligned with the actual selective reporting process when $\psi = 0$.
+We estimated PML and ARGL estimators and calculated cluster-robust CIs as described in Section \@ref(estimation-methods).
+For comparison purposes, we also computed model-based confidence intervals constructed using the inverse Hessian matrix of the PML estimator, which do not account for the dependence structure of the data; therefore, we expect that they would have coverage levels below the nominal level.
+For a subset of simulation conditions, we examined percentile, basic, studentized, and bias-corrected-and-accelerated bootstrap CIs based on the non-parametric two-stage bootstrap, clustered bootstrap, and fractional random weight bootstrap as described in `r appendix_prefix` \@ref(bootstrap-details).
 
 We compared the step-function PML and ARGL estimators to two alternative methods.
 First, we estimated a summary meta-analysis model without any correction for selective reporting, using the CHE-ISCW working model to account for effect size dependency.[@chen2024adapting]
@@ -85,9 +95,8 @@ For the PET/PEESE and CHE-ISCW estimators, we calculated CIs using cluster-robus
   \label{eq:peese}
   T_{ij} = \mu + \beta \times \frac{4}{N_j} + e_{ij}
   \end{equation} 
-  Following @stanley2014meta, we use functions of the sample size ($N_j$) as proxies for the standard error and variance. This approach addresses the fact that for many effect size metrics, such as Hedges’ $g$, the sampling variance is functionally related to the effect size estimate itself, which can introduce artificial correlation between the estimates and their standard errors. 
-  For both estimating equations, sampling errors are assumed to have fixed variances 
-  $\Var(e_{ij}) = \sigma_{ij}^2$ and constant sampling correlation within studies, $\cor(e_{hj},e_{ij} )=\rho$.
+  We use functions of the sample size ($N_j$) in place of the standard error or variance. This approach addresses the fact that for many effect size metrics, such as Hedges’ $g$, the sampling variance is functionally related to the effect size estimate itself, which introduces artificial correlation between the estimates and their standard errors.[@pustejovsky2019testing] 
+  For both estimating equations, sampling errors are assumed to have fixed variances $\Var(e_{ij}) = \sigma_{ij}^2$ and constant sampling correlation within studies, $\cor(e_{hj},e_{ij} )=\rho$.[@chen2024adapting]
 
 
 ## Experimental design
@@ -96,6 +105,7 @@ Table \@ref(tab:sim-design) summarizes the experimental design for this study.
 Manipulated parameters included overall average standardized mean difference
 ($\mu$), between-study heterogeneity ($\tau_B$), within-study heterogeneity ratio
 ($\omega^2 / \tau_B^2$), average correlation between outcomes ($\rho$),
+dependence of the selection process ($\psi$),
 probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
 We examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions.[@kraft2020interpreting]
 We used values of $\tau$ ranging from 0.05 (a small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
@@ -115,6 +125,7 @@ dat <- tibble(
     "Between-study heterogeneity ($\\tau_B$)",
     "Heterogeneity ratio ($\\omega^2 / \\tau_B^2$)",
     "Average correlation between outcomes ($\\rho$)",
+    "Dependence of the selection process ($\\psi$)",
     "Probability of selection for non-affirmative effects ($\\lambda_1$)",
     "Number of observed studies ($J$)",
     "Primary study sample size"
@@ -124,6 +135,7 @@ dat <- tibble(
     "0.05, 0.15, 0.30, 0.45",
     "0.0, 0.5",
     "0.40, 0.80",
+    "0, 1",
     "0.02, 0.05, 0.10, 0.20, 0.50, 1.0",
     "15, 30, 60, 90, 120",
     "Typical, Small"
@@ -133,6 +145,7 @@ dat <- tibble(
     "0.15, 0.30, 0.45",
     "0.0, 0.5",
     "0.80",
+    "0, 1",
     "0.05, 0.20, 1.0",
     "15, 30, 60",
     "Typical, Small"

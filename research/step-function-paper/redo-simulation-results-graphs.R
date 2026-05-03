@@ -106,6 +106,19 @@ mu_wide_res %>%
   filter(psi_fac == "Dependent") %>%
   RMSE_comparison_plot("ARGL","CHE-ISCW")
 
+# PML vs. CHE-ISCW
+
+mu_wide_res %>%
+  RMSE_comparison_plot("PML","PET/PEESE")
+
+mu_wide_res %>%
+  filter(psi_fac == "Independent") %>%
+  RMSE_comparison_plot("PML","PET/PEESE")
+
+mu_wide_res %>%
+  filter(psi_fac == "Dependent") %>%
+  RMSE_comparison_plot("PML","PET/PEESE")
+
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Large-sample CI coverage ----
 
