@@ -13,7 +13,9 @@ This component is usually a random effects model or meta-regression model.
 The second component, which we call the selection process, involves assumptions about how effect size estimates come to be observed and therefore available for inclusion in the meta-analysis. 
 Combining these components leads to a model for the distribution of observed effect size estimates. 
 
-We will use the following notation to describe the model and estimation methods. Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij} = 1 - \Phi(y_{ij} /\sigma_{ij})$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
+We will use the following notation to describe the model and estimation methods. 
+Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ denote the standard normal density function.
+Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote observed effect size estimate $i$ from study $j$, defined so that positive values are consistent with theoretical expectations. Each estimate is accompanied by a standard error $\sigma_{ij}$ and corresponding one-sided $p$-value $p_{ij} = 1 - \Phi(y_{ij} /\sigma_{ij})$, where the one-sided $p$-value is defined with respect to the null hypothesis that the effect is less than or equal to zero and the alternative hypothesis that the effect is positive. Let $\mat{x}_{ij}$ be a $1 \times x$ row-vector of predictors that encode characteristics of the effect sizes, samples, or study procedures. 
 
 ## Evidence-generating process
 
@@ -43,7 +45,7 @@ w(p^*; \bs\lambda) =  \sum_{h=0}^H \lambda_h \times I\left(\alpha_{h} < p^* \leq
 or equivalently as 
 \begin{equation}
 \label{eq:step-function-y}
-w(Y^*, \sigma^*; \bs\lambda) =  \sum_{h=0}^H \lambda_h \times \left(\sigma^* \Phi^{-1}\left(1 - \alpha_{h+1}\right) \leq Y^*  < \sigma^* \Phi^{-1}\left(1 - \alpha_h\right)\right). 
+w(Y^*, \sigma^*; \bs\lambda) =  \sum_{h=0}^H \lambda_h \times I\left(\sigma^* \Phi^{-1}\left(1 - \alpha_{h+1}\right) \leq Y^*  < \sigma^* \Phi^{-1}\left(1 - \alpha_h\right)\right). 
 \end{equation}
 Setting $\lambda_0 = 1$ is necessary for identification because the absolute probabilities of selection cannot be estimated. 
 The remaining parameters are therefore interpreted as _relative_ probabilities of selection, compared to the selection probability of a finding with $p^* \leq \alpha_1$. 
@@ -136,7 +138,8 @@ Let $p_{\bs\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, and $p_{\bs\zeta}(\bs\zeta)$
 We describe the specific form of the penalty terms after outlining the estimation methods.
 
 With both estimation approaches, we also allow for incorporation of weights, which permits efficient calculation for a variety of bootstrapping techniques.
-Thus, let $a_{11},...,a_{J k_j}$ be an arbitrary set of weights assigned to each effect size estimate; in a typical, unweighted analysis, all weights will be equal to $a_{ij} = 1$.
+Let $a_{11},...,a_{J k_j}$ be an arbitrary set of weights assigned to each effect size estimate. 
+In a typical, unweighted analysis, all weights will be equal to $a_{ij} = 1$.
 
 ### Maximum penalized marginal likelihood
 
@@ -155,9 +158,7 @@ l^M\left(\bs\beta, \gamma, \bs\zeta\right) = \sum_{j=1}^J \sum_{i=1}^{k_j} a_{ij
 \end{equation}
 The penalized marginal likelihood (PML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:marginal-likelihood}).
 
-The specific prior penalties used in this study are tailored to be weakly informative for standardized mean differences. Because the impact of regularization depends on the scale of the effect size metric, these penalties may require adjustment when applied to alternative scales (e.g., correlations or raw regression coefficients). The unit-information framework in @Rover2021priors provides one such approach for developing appropriately scaled, weakly informative priors across different effect size metrics.
-
-If the true parameter values are not at the extremes of their ranges, the CML estimator can also be defined as the solution of the weighted score equations, 
+If the true parameter values are not at the extremes of their ranges, the PML estimator can also be defined as the solution of the weighted score equations, 
 \begin{equation}
 \label{eq:marginal-score-equations}
 \sum_{j=1}^J \mat{S}_{j}\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) + p'\left(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta}\right) = \mat{0}
@@ -165,7 +166,7 @@ If the true parameter values are not at the extremes of their ranges, the CML es
 where $\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ denotes the score vector for study $j$, consisting of derivatives of the likelihood contributions for study $j$ with respect to the component parameters, and $p'(\bs\beta, \gamma, \bs\zeta)$ denotes the vector of derivatives of the prior penalty terms with respect to the component parameters.
 `r appendix_prefix` \@ref(PML-derivatives) provides exact expressions for the score vectors and derivatives of the prior penalties.
 
-Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in CML estimators. Let $\mat{H}$ denote the Hessian matrix of the composite log-likelihood,
+Robust variance estimators, or sandwich estimators, are a commonly used technique for quantifying the uncertainty in PML estimators. Let $\mat{H}$ denote the Hessian matrix of the composite log-likelihood,
 \begin{equation}
 \mat{H}(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \frac{\partial \mat{S}_j(\bs\beta, \gamma, \bs\zeta)}{\partial \left(\bs\beta' \ \gamma \ \bs\zeta'\right)},
 \end{equation}
@@ -187,23 +188,23 @@ where $V^{CML}_{gg}$ is the $g^{th}$ diagonal entry of $\mat{V}^{CML}$.
 
 Penalized marginal likelihood is not the only possible basis for deriving estimators of selection model parameters. 
 In the framework of a sensitivity analysis for worst-case selection bias, Mathur and VanderWeele @mathur2020sensitivity proposed using regular meta-analytic estimators for $\bs\beta$, but with weights defined by the inverse probability of selection under a step-function selection model with a single step at $\alpha_1 = .025$.
-Because they were working in the context of sensitivity analysis, they assumed a maximum plausible degree of selection rather than estimating the selection parameter, so that the weights are fixed quantities. 
+As a sensitivity analysis, they assumed a maximum plausible degree of selection rather than estimating the selection parameter, so that the weights are fixed quantities. 
 In contrast, here we will consider a more general model, possibly with multiple steps, using weights derived by estimating the selection parameter.
-We describe this approach as the augmented, re-weighted Gaussian likelihood (ARGL) estimator because the Gaussian likelihood of the evidence-generating process is re-weighted based on the selection process, with selection process parameters identified by augmenting the likelihood with an additional estimating equation.
+We term this approach the augmented, re-weighted Gaussian likelihood (ARGL) estimator because the Gaussian likelihood of the evidence-generating process is re-weighted based on the selection process, with selection process parameters identified by augmenting the likelihood with an additional estimating equation.
 We study this additional estimation method because it is computationally less demanding than the PML estimator and because it is based on a different estimation framework. It might therefore have better convergence rates or different robustness properties than the PML estimator.
 
-Given the parameters of the selection process, we can calculate relative probabilities of selection for each effect size estimate, $w_{ij} = w(y_{ij}, \sigma_{ij}; \bs\zeta)$. We use these selection probabilities to form weighted estimating equations for the evidence-generating process. Under the evidence-generation model, the marginal log-likelihood of effect size estimate $i$ from study $j$ is Gaussian, given by
+Given the parameters of the selection process, we can calculate relative probabilities of selection for each effect size estimate, $w_{ij}(\bs\zeta) = w(y_{ij}, \sigma_{ij}; \bs\zeta)$. We use these selection probabilities to form weighted estimating equations for the evidence-generating process. Under the evidence-generation model, the marginal log-likelihood of effect size estimate $i$ from study $j$ is Gaussian, given by
 $$
 l^G_{ij}(\bs\beta, \gamma) = - \frac{1}{2}\frac{(y_{ij} - \mat{x}_{ij} \bs\beta)^2}{\exp(\gamma) + \sigma_{ij}^2} - \frac{1}{2}\log(\exp(\gamma) + \sigma_{ij}^2) - \frac{1}{2} \log(2\pi).
 $$
 Allowing for weights, the re-weighted Gaussian log-likelihood contribution of study $j$ is
 $$
-l_j^G(\bs\beta, \gamma, \bs\zeta) = \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\bs\beta, \gamma)
+l_j^G(\bs\beta, \gamma, \bs\zeta) = \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}(\bs\zeta)} \times l^G_{ij}(\bs\beta, \gamma)
 $$
 and the penalized likelihood of all $J$ studies is given by
 \begin{equation}
 \label{eq:Gaussian-log-lik}
-l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}} \times l^G_{ij}(\bs\beta, \gamma) + p_{\bs\beta}(\bs\beta) + p_{\gamma}(\gamma).
+l^G(\bs\beta, \gamma, \bs\zeta) = \sum_{j=1}^J \sum_{i=1}^{k_j} \frac{a_{ij}} {w_{ij}(\bs\zeta)} \times l^G_{ij}(\bs\beta, \gamma) + p_{\bs\beta}(\bs\beta) + p_{\gamma}(\gamma).
 \end{equation}
 If the selection parameter was known, we could find estimators for $\bs\beta$ and $\gamma$ by maximizing $l^G(\bs\beta, \gamma, \bs\zeta)$ for a fixed value of $\bs\zeta$.
 To estimate the full set of model parameters, we augment the Gaussian likelihood by borrowing the estimating equation for $\bs\zeta$ from the maximum penalized marginal likelihood approach.
@@ -229,7 +230,8 @@ We construct confidence intervals for model parameters using Wald-type large sam
 
 ### Prior penalties
 
-For both estimation methods, we specify weak prior penalties selected to regularize outlying values without substantially shifting the estimator in most datasets.
+For both estimation methods, we propose weak prior penalties for meta-analyses of standardized mean difference effect sizes.
+These priors are selected to regularize outlying values without substantially shifting the estimator in most datasets.
 To this end, we use $\mathcal{L}_4$-norm prior penalties for the mean parameters $\bs\beta$, given by
 \begin{equation}
 \label{eq:beta-prior}
@@ -253,7 +255,6 @@ p_{\bs\zeta}(\bs\zeta) = -\frac{1}{54} \sum_{h=1}^H \left(\zeta_h - \log\left(\f
 and depicted in Figure \@ref(fig:prior-penalties)c.
 This penalty is centered at a selection weight of $\lambda = \frac{1}{2}$ so that it remains very weak over the range of $\lambda = \frac{1}{20}$ (strong selective reporting) to $\lambda = 1$ (no selective reporting), consistent with the range of selective reporting observed in an empirical review of meta-analyses in psychology and clinical medicine.[@mathur2021estimating]
 It more heavily penalizes extremely strong selection levels $(\lambda < \frac{1}{50})$ and selective reporting that strongly _favors_ non-significant findings $(\lambda > 8)$.
-
 
 ```{r prior-penalties}
 #| echo: false
@@ -338,13 +339,14 @@ ggplot() +
   labs(x = expression(tau == exp(zeta[q])), y = expression(p[zeta](zeta[q])))
 ```
 
+It is important to recognize that these proposed priors are scale dependent---especially the prior for $\bs\beta$. Consequently, the proposed penalty terms will require adjustment when applied to other effect metrics such as correlations, raw mean differences, or log-odds ratios. The unit-information framework [@Rover2021priors] provides one approach for developing appropriately scaled, weakly informative priors across different effect size metrics.
 
 ## Bootstrap inference
 
 Sandwich estimators such as those in Equations \@ref(eq:sandwich-variance) require a large number of independent clusters (i.e., large $J$) to produce accurate assessments of uncertainty. 
 We consider alternative inference techniques based on bootstrapping, which might provide more accurate inference with a limited number of clusters.
 Bootstrap techniques involve generating many new pseudo-samples of observations by randomly perturbing the original sample, then re-calculating an estimator using each pseudo-sample.
-The distribution of the estimator across pseudo-samples is used as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.[@boos2003introduction]
+The distribution of the estimator across pseudo-samples serves as a proxy for the actual sampling distribution of the estimator, providing a basis for calculating standard errors and confidence intervals.[@boos2003introduction]
 
 Many different bootstrap sampling schemes have been described that apply to different data structures and require different assumptions.[@davison1997bootstrap]
 In order to fully capture the uncertainty of the parameter estimates, it is crucial that the process used to generate pseudo-samples accounts for the dependence structure of the observations.
