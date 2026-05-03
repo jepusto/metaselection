@@ -48,8 +48,12 @@ For bootstrapping, we used two-stage cluster bootstrap re-sampling with 1999 rep
 Table \@ref(tab:empirical) presents the parameter estimates from the one-step and two-step selection models.
 The estimated selection parameters are similar across the one- and two-step models and across both estimators, all indicating that non-significant or negative effect size estimates were less likely to be reported than statistically significant, affirmative ones. 
 The one-step and two-step selection model estimates of average effect size are positive but substantially smaller than the CHE-ISCW estimates, ranging from `r round(min_est, 2)` to `r round(max_est, 2)` depending on the model specification and estimation method. 
-In contrast to the PET/PEESE estimate, the selection model estimates using PML are positive and statistically distinct from zero. 
-Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted summary model, a step-function model, or the PET/PEESE adjustment. 
+In contrast to the PET/PEESE estimate, the selection model estimates of the average effect size PML are positive and statistically distinct from zero, along with a substantial amount of heterogeneity.
+Thus, an analyst would reach different conclusions about overall average effect size depending on whether they use an unadjusted summary model, a step-function model, or the PET/PEESE adjustment.[^discrepancies] 
+
+[^discrepancies]: The estimates from both step-function models suggest that the distribution of ego depletion effects is positive but heterogeneous, which seems inconsistent with the findings of more recent multi-lab registered replications.[@Hagger2016ego; @Vohs2021ego] 
+  This discrepancy could be because of remaining biases in how the primary studies are reported, such as forms of p-hacking for which our selection model cannot fully correct.[@Kvarven2019comparing]
+  Alternately, it may be because the multi-lab replications focus on a narrow set of ego-depletion inductions and outcome measures than those represented in the meta-analysis. [@Lewis2022puzzling]
 
 ```{r empirical, echo=F, message=FALSE, warning=FALSE, tab.cap="Carter et al. (2015) Re-Analysis: Ego-Depletion"}
 format_it <- function(x, trunc = Inf) {
