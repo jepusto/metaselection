@@ -19,13 +19,10 @@ The simulation code made use of several R packages, including `metafor` [@Viecht
 ## Data generation
 
 We simulated meta-analyses based on a CHE working model, with individual effect size estimates selected
-for inclusion based on a generalization of the selection model that encompasses both univariate and multivariate selection.
-For each replication, we generated a total of $J^*$ studies with a two-group comparison
-design, where study $j$ had an effective sample size of $N_j$ and contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting.
-To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effects per study from an empirical distribution based on the What Works Clearinghouse database. 
-The total effective sample size per study was divided equally into two groups, treatment and control. 
-We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
-This approach assumes a plausible dependency structure in which all within-study correlations are positive, as multiple outcomes often measure the same underlying construct or the same construct at different time points. 
+for inclusion based on a generalization of the step-function selection model that encompasses both univariate and multivariate selection.
+To generate each meta-analytic dataset, we sampled effective sample sizes[^ESS] and numbers of effects per study from an empirical distribution based on the What Works Clearinghouse database, where study $j$ had an effective sample size of $N_j$ and contributed $k_j^* \geq 1$ effect size estimates prior to selective reporting.
+ We then generated $r_j$, an outcome correlation for study $j$, by drawing from a beta distribution with mean $\rho$ and standard deviation 0.05. 
+This approach produces a plausible dependence structure in which all within-study correlations are positive, as when multiple outcomes measure the same underlying construct or the same construct at different time points. 
 For simplicity, we assumed a constant correlation between pairs of outcomes within a primary study but allowed the correlation to vary slightly from study to study.
 
 [^ESS]: For studies that involved cluster-level treatment assignment, we computed effective sample sizes that account for the nesting of observations within clusters rather than using the raw participant-level sample sizes.
@@ -34,7 +31,7 @@ We then simulated raw outcomes for each primary study.
 To do so, we first generated an average effect size per study, $\delta_j$, from a normal distribution with mean $\mu$ and variance
 of $\tau_B^2$. 
 Given $\delta_j$, we generated $k_j^*$ effect size parameters per study, $\bs\delta_j = \left(\delta_{1j},...,\delta_{k_j^* j}\right)'$, drawing $\delta_{ij}$ from a normal distribution with mean of $\delta_j$ and variance of $\omega^2$.
-For each of the $N_j / 2$ participants in the treatment and control groups, we then simulated vectors of multivariate normal outcomes as
+We generated two-arm group comparisons with $N_j / 2$ participants per group groups, with individual outcome vectors simulated from multivariate normal distributions as
 $$
 \mat{Y}_{hj}^T \sim N(\bs\delta_j, \boldsymbol\Psi_j) \qquad \text{and} \qquad
 \mat{Y}_{hj}^C \sim N(\mat{0}, \boldsymbol\Psi_j).
@@ -47,10 +44,10 @@ We calculated the sampling variances using conventional formulas [@borenstein201
 [^psi-structure]: The structure of $\boldsymbol\Psi_j$ is plausible for meta-analyses with dependent effects and simplifies the data-generating process. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$ because it does not affect the distribution of generated effect size estimates.
 
 After simulating results for study $j$, we applied a generalized step-function selection model to the individual effect size estimates, with a one-sided selection
-threshold at $\alpha = 0.025$. 
-Under the generalized model, the probability that a given effect is reported still depends on whether it is statistically significant and in the expected direction, but it may also depend on the number of statistically significant, affirmative estimates in the same study.
-Let $s_{ij}$ be an indicator equal to 1 if effect $i$ in study $j$ is statistically significant and positive, $s_{ij} = I(p_{ij} < .025)$, and
-denote the number of observed effect size estimates in study $j$ that are statistically significant and positive as $k^A_j = \sum_{i=1}^{k_j} s_{ij}$.
+threshold at $\alpha_1 = 0.025$. 
+Under the generalized model, the probability that a given effect is reported still depends on whether it is affirmative (i.e., statistically significant and in the expected direction), but it may also depend on the number of other affirmative results in the same study.
+Let $s_{ij}$ be an indicator equal to 1 if effect $i$ in study $j$ is affirmative, $s_{ij} = I(p_{ij} < .025)$, and
+denote the number of affirmative effect size estimates in study $j$ as $k^A_j = \sum_{i=1}^{k_j} s_{ij}$.
 We assume that effect size estimate $i$ in study $j$ is observed with probability 
 \begin{equation}
 \label{eq:generalized-selection}
@@ -58,8 +55,8 @@ We assume that effect size estimate $i$ in study $j$ is observed with probabilit
 \end{equation}
 for $\psi \geq 0$. 
 When $\psi = 0$, the probability that a non-affirmative result is reported depends only on its own $p$-value, so the selection process is univariate.
-However, for $\psi > 0$, the probability that a non-affirmative result is reported is affected by the number of affirmative results within the same study, with more affirmative results leading to a higher probability that a non-affirmative result will also be reported---a form of multivariate selection.
-Under the multivariate selection process, $\lambda_1$ can be interpreted as the probability that a non-affirmative result is reported when there are no affirmative findings in the study, so $k^A_j = 0$. 
+When $\psi > 0$, the probability that a non-affirmative result is reported is affected by the number of affirmative results within the same study, with more affirmative results leading to a higher probability that a non-affirmative result will also be reported---a form of multivariate selection.
+Under the multivariate process, $\lambda_1$ can be interpreted as the probability that a non-affirmative result is reported when there are no affirmative findings in the study (i.e., when $k^A_j = 0$).
 
 We repeated the process of generating studies until the database included a total of $J$ studies with at least one observed result, where observed study $j$ includes $k_j$ effect size estimates for $1 \leq k_j \leq k_j^*$.
 
@@ -102,11 +99,23 @@ For the PET/PEESE and CHE-ISCW estimators, we calculated CIs using cluster-robus
 ## Experimental design
 
 Table \@ref(tab:sim-design) summarizes the experimental design for this study. 
-Manipulated parameters included overall average standardized mean difference
+Manipulated parameters included the number of observed studies ($J$), primary study sample size distribution, overall average standardized mean difference
 ($\mu$), between-study heterogeneity ($\tau_B$), within-study heterogeneity ratio
 ($\omega^2 / \tau_B^2$), average correlation between outcomes ($\rho$),
-dependence of the selection process ($\psi$),
-probability of selection for non-affirmative results ($\lambda_1$), number of observed studies ($J$), and primary study sample size. 
+dependence of the selection process ($\psi$), and
+probability of selection for non-affirmative results ($\lambda_1$). 
+
+We examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
+We chose these values to cover the conditions found in real meta-analyses of education and psychology research.[@Pellegrini2025exploring; @Wu2025what]
+
+We manipulated the primary study sample size while varying the number of effect sizes per study ($k_j$) based on an empirical distribution. 
+For the typical primary study sample sizes, we used the empirical distribution of effective sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
+These sample sizes ranged from 37 to 2,295 with a median of 211. 
+Within these conditions, we also drew $k_j$ from the same database, where the number of effect sizes per study ranged from 1 to 48 with a median of 3. 
+To explore the influence of the effective sample size distribution, we also ran conditions in which we divided the sample
+sizes from the What Works Clearinghouse database by three to represent primary studies with smaller sample sizes,
+such as those used in psychology laboratory studies.
+
 We examined values for the overall average SMD ($\mu$) ranging from 0.0 to 0.80, which covers the range of effects observed in a review of 747 randomized control trials of education interventions.[@kraft2020interpreting]
 We used values of $\tau$ ranging from 0.05 (a small degree of heterogeneity) to 0.45 (a large degree of heterogeneity). 
 We specified the degree of within-study heterogeneity in relative terms, by setting the ratio of $\omega^2$ to between-study heterogeneity $\tau^2$ at either 0 (i.e., no within-study heterogeneity) or 0.5. 
@@ -119,41 +128,41 @@ We included conditions where $\rho = 0.4$ to examine performance when this worki
 library(kableExtra)
 library(tidyverse)
 
-dat <- tibble(
+design_dat <- tibble(
   Parameter = c(
+    "Number of observed studies ($J$)",
+    "Primary study sample size",
     "Overall average SMD ($\\mu$)",
     "Between-study heterogeneity ($\\tau_B$)",
     "Heterogeneity ratio ($\\omega^2 / \\tau_B^2$)",
     "Average correlation between outcomes ($\\rho$)",
     "Dependence of the selection process ($\\psi$)",
-    "Probability of selection for non-affirmative effects ($\\lambda_1$)",
-    "Number of observed studies ($J$)",
-    "Primary study sample size"
+    "Probability of selection for non-affirmative effects ($\\lambda_1$)"
   ),
   `Full Simulation` = c(
+    "15, 30, 60, 90, 120",
+    "Typical, Small",
     "0.0, 0.2, 0.4, 0.8",
     "0.05, 0.15, 0.30, 0.45",
     "0.0, 0.5",
     "0.40, 0.80",
     "0, 1",
-    "0.02, 0.05, 0.10, 0.20, 0.50, 1.0",
-    "15, 30, 60, 90, 120",
-    "Typical, Small"
+    "0.02, 0.05, 0.10, 0.20, 0.50, 1.0"
   ),
   `Bootstrap Simulation` = c(
+    "15, 30, 60",
+    "Typical, Small",
     "0.0, 0.2, 0.4, 0.8",
     "0.15, 0.30, 0.45",
     "0.0, 0.5",
     "0.80",
     "0, 1",
-    "0.05, 0.20, 1.0",
-    "15, 30, 60",
-    "Typical, Small"
+    "0.05, 0.20, 1.0"
   )
 )
 
 kable(
-  dat, 
+  design_dat, 
   caption = "Parameter values examined in the simulation study",
   booktabs = TRUE, 
   escape = FALSE,
@@ -162,29 +171,28 @@ kable(
   kable_styling() |>
   column_spec(1, width = "2.5in")
   
+design_dat_expanded <- 
+  design_dat %>%
+  mutate(
+    levels_full = map_int(str_split(`Full Simulation`, ", "), length),
+    levels_boot = map_int(str_split(`Bootstrap Simulation`, ", "), length)
+  )
+
+
 ```
 
-We examined a wide range of values for the probability of selection for non-affirmative effect sizes, ranging from no selective reporting ($\lambda_1 = 1$) to very severe selective reporting $(\lambda_1 = 0.02)$.
-We also examined a wide range of conditions for the number of primary studies included in the meta-analysis, ranging from relatively small databases of $J = 15$ to very large databases with $J = 120$ studies. 
-We chose these values to cover the conditions found in real meta-analyses of education and psychology research.[@Pellegrini2025exploring; @Wu2025what]
+We considered two conditions for the selective reporting process. First, we examined conditions with $\psi = 0$ so that the selection process was univariate, depending only on the one-sided $p$-value of each effect.
+Second, we examined conditions with $\psi = 1$, a multivariate selection process where the selection probability for a non-affirmative result depends on the number of affirmative results obtained in the same study.
+For both processes, we examined a wide range of values for the base probability of selection for non-affirmative effect sizes, ranging from no selective reporting ($\lambda_1 = 1$) to very severe selective reporting $(\lambda_1 = 0.02)$.
 
-Lastly, we manipulated the primary study sample size while varying the number of effect sizes per study ($k_j$) based on empirical study designs. 
-For the typical primary study sample sizes, we used the empirical distribution of effective sample sizes in the What Works Clearinghouse database of findings from educational intervention studies.
-These sample sizes ranged from 37 to 2,295 with a median of 211. 
-Within these conditions, we also drew $k_j$ from the same database, where the number of effect sizes per study ranged from 1 to 48 with a median of 3. 
-To explore the influence of the effective sample size distribution, we also ran conditions in which we divided the sample
-sizes from the What Works Clearinghouse database by three to represent primary studies with smaller sample sizes,
-such as those used in psychology laboratory studies.
-
-Parameters were fully crossed for a total of $4 \times 4 \times 2 \times 2 \times 6 \times 5 \times 2 = `r formatC(4 * 4 * 2 * 2 * 6 * 5 * 2, big.mark = ",")`$ conditions in the full simulation study. 
+Parameters were fully crossed for a total of $`r paste(design_dat_expanded$levels_full, collapse = " \\times ")` = `r formatC(prod(design_dat_expanded$levels_full), big.mark = ",")`$ conditions in the full simulation study. 
 Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with fewer studies per meta-analysis, for which we expected large-sample cluster-robust CIs to be relatively less effective.
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
 (e.g., excluding $\tau = 0.30$). 
-This resulted in $4 \times 3 \times 2 \times 1 \times 3 \times 3 \times 2 = `r formatC(4 * 3 * 2 * 1 * 3 * 3 * 2, big.mark = ",")`$ conditions for the bootstrap simulations. 
+This resulted in $`r paste(design_dat_expanded$levels_boot, collapse = " \\times ")` = `r formatC(prod(design_dat_expanded$levels_boot), big.mark = ",")`$ conditions for the bootstrap simulations. 
 For each condition, we generated 2,400 replications. 
-This number of replications was chosen to ensure adequate precision; specifically, with 2,400 replications, the maximum Monte Carlo standard error for a 95% confidence interval coverage rate is approximately 0.004, and even in the most conservative case (coverage of 50%), the standard error remains below 0.01.
-
+This number of replications was chosen to ensure adequate precision; specifically, with 2,400 replications, the expected Monte Carlo standard error for a 95% confidence interval coverage rate is approximately 0.004, and even in the most conservative case (coverage of 50%), the standard error remains below 0.01.
 
 ## Performance criteria
 
