@@ -99,9 +99,18 @@ all_params <-
   bootstrap_params %>%
   anti_join(big_B_params, by = c("mean_smd","tau","cor_mu","cor_sd", "weight", "m", "n_multiplier","psi","omega","bootstrap")) %>%
   bind_rows(big_B_params) %>%
-  filter(psi == 0 | bootstrap == "two-stage") %>%
   bind_rows(params) %>%
-  arrange(psi) %>%
+  arrange(psi)
+
+all_params_psi1 <- 
+  all_params %>%
+  filter(psi == 1) %>%
+  arrange(desc(bootstrap))
+
+all_params <- 
+  all_params %>%
+  filter(psi == 0) %>%
+  bind_rows(all_params_psi1) %>%
   mutate(
     row = row_number(),
     seed = 20250918L + row
@@ -109,7 +118,13 @@ all_params <-
 
 all_params %>%
   group_by(bootstrap, psi, iterations) %>%
-  count()
+  summarize(
+    n = n(),
+    row_start = min(row),
+    row_end = max(row)
+  ) %>%
+  arrange(row_start)
+
 count(all_params)
 
 saveRDS(all_params, file = "research/step-function-simulations/simulation_parameters.rds")
@@ -152,6 +167,18 @@ all_params %>%
 
 all_params %>%
   filter(bootstrap == "two-stage", psi == 1) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "multinomial", psi == 1) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "exponential", psi == 1) %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
