@@ -4,6 +4,8 @@
 .Ruserdata
 .DS_Store
 docs
+research/step-function-paper/*_cache
+research/step-function-paper/*_files
 research/step-function-simulations/big-B-results
 research/step-function-simulations/batch-results
 research/step-function-simulations/batch-results-old
