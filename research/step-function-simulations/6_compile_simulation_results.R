@@ -23,22 +23,6 @@ nrow(outstanding_conditions)
 outstanding_conditions %>%
   count(bootstrap, psi)
 
-# revise_batch_file <- function(file) {
-#   x <- readRDS(file)
-#   if ("weights" %in% names(x)) {
-#     x <- rename(x, weight = weights)
-#   }
-#   if (!("psi" %in% names(x))) {
-#     x$psi <- 0
-#     x <- relocate(x, psi, .after = n_multiplier)
-#   }
-#   
-#   saveRDS(x, file = file)
-#   return(NULL)
-# }
-# 
-# walk(res_list$file, revise_batch_file)
-
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Compile results from conditions with no bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -102,6 +86,21 @@ bootstrap_files <-
   filter(bootstrap != "none") %>%
   nest(iterations = iterations, files = file) %>%
   mutate(R_max = map_dbl(R, max))
+
+bootstrap_files %>%
+  mutate(
+    batch_file_name = map_chr(
+      files, 
+      ~ paste0(
+        "research/step-function-simulations/batch-results/simulation_results_bootstrap_batch",
+        str_match(.x$file[[1]], "_batch(.+).rds")[,2],
+        ".rds"
+      )
+    ),
+    complete = file.exists(batch_file_name)
+  ) %>%
+  filter(!complete) %>%
+  count(bootstrap, psi)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # compile results from conditions with bootstraps ----
