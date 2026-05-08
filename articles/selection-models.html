@@ -1046,7 +1046,7 @@ bootstrap confidence intervals <span class="citation">(<a href="#ref-pustejovsky
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  51.542   0.010  51.559</span></span></code></pre>
+<span><span class="co">##  56.520   0.025  56.551</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod_3PSM_boot</span>, transf_gamma <span class="op">=</span> <span class="cn">TRUE</span>, transf_zeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    param    Est     SE percentile_lower percentile_upper</span></span>
@@ -1082,7 +1082,7 @@ plan with 4 worker nodes, then fits the same model as above:</p>
 <span>  <span class="op">)</span>  </span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   1.187   0.011   7.670</span></span></code></pre>
+<span><span class="co">##   1.457   0.028   9.176</span></span></code></pre>
 <p>Parallel processing substantially reduces the overall computing time.
 If available, using a larger number of workers would further reduce
 computing time.</p>
