@@ -100,7 +100,7 @@ bootstrap_files %>%
     complete = file.exists(batch_file_name)
   ) %>%
   filter(!complete) %>%
-  count(bootstrap, psi)
+  count(bootstrap,)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # compile results from conditions with bootstraps ----
