@@ -146,8 +146,11 @@ summarize_bootstraps <- function(file_list) {
   return(batch_file_name)
 }
 
-# summarize_bootstraps(file_list = bootstrap_files$files[[1]])
-# summarize_bootstraps(file_list = bootstrap_files$files[[1296]])
+boot_2stage <- bootstrap_files %>% filter(psi == 1, bootstrap == "two-stage") %>% head(1) %>% pull(files)
+boot_multi <- bootstrap_files %>% filter(psi == 1, bootstrap == "multinomial") %>% head(1) %>% pull(files)
+
+summarize_bootstraps(boot_2stage[[1]])
+summarize_bootstraps(boot_multi[[1]])
 
 plan(multisession, workers = 10L)
 

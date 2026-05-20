@@ -34,13 +34,13 @@ convergence_min <-
 
 We organize our presentation of simulation results by first considering the properties of point estimators for the average effect size. 
 For this parameter, we compare the bias and accuracy of the PML and ARGL estimators to that of the CHE-ISCW estimator and the PET/PEESE estimator.
-We then examine the calibration of cluster-robust and bootstrap confidence intervals based on the PML and ARGL estimators.
+We then examine the calibration and width of cluster-robust and bootstrap confidence intervals based on the PML and ARGL estimators.
 `r appendix_prefix` \@ref(gamma-simulation-results) includes additional results regarding the bias and accuracy of estimators of the marginal variance of the effect size distribution; `r appendix_prefix` \@ref(zeta-simulation-results) has additional results on the performance of the PML and ARGL estimators for the selection parameter.
 
 ## Convergence
 
 The CHE-ISCW and PET/PEESE estimators produced results for every replication in every condition. 
-The PML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions, although the PML estimator did exhibit rates of convergence below 99% under conditions with the lowest degree of heterogeneity $\tau = 0.05$, with the lowest convergence rate of `r convergence_min %>% filter(estimator=="PML") %>% pull(convergence) %>% round(1)`%.
+The PML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions, although the PML estimator did exhibit rates of convergence below 99% under conditions with the lowest degree of heterogeneity $(\tau = 0.05)$, with the lowest convergence rate of `r convergence_min %>% filter(estimator=="PML") %>% pull(convergence) %>% round(1)`%.
 For the ARGL estimator, convergence was `r convergence_min %>% filter(estimator=="ARGL") %>% pull(convergence) %>% round(1)`% across all conditions.
 Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the PML estimator.
 For purposes of computing further performance measures, we substituted results for the ARGL estimator for replications where the PML estimator did not converge.
@@ -51,43 +51,34 @@ For purposes of computing further performance measures, we substituted results f
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with an independent selection process $(\\psi = 0)$"
+#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
 mu_graph_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   performance_plot(measure = bias, label = "Bias")
 
 ```
 
-Figure \@ref(fig:mu-biasindep) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau_B$, varying by grid row) across scenarios with an independent selection process ($\psi = 0$).
+Figure \@ref(fig:mu-bias-indep) depicts the bias (represented on the vertical axis of each plot) of each estimator of average effect size as a function of the strength of selective reporting (horizontal axis), average effect size parameter (varying by grid column), and  between-study heterogeneity ($\tau_B$, varying by grid row) across scenarios with a univariate selection process ($\psi = 0$).
 The box plot for each estimator depicts variation in bias over the remaining factors in the simulation design, which include the heterogeneity ratio, correlation between effect size estimates, number of observed studies, and primary study sample size distribution.
 Note that the range of the vertical axis differs by grid row because the bias of some estimators is strongly influenced by the degree of heterogeneity.
+Following the same construction, Supplementary Figure \@ref(fig:mu-bias-dep) depicts the bias of the estimators across scenarios with a multivariate selection process $(\psi = 1)$.
 
-Bias is generally lower for the PML and ARGL estimators than the comparison methods across all conditions, particularly when the average effect size is small to moderate $(\mu \leq 0.4)$. While still substantially lower than the comparison methods, the maximum absolute bias reaches `r round(PML_bias$max_abs_bias,2)` for PML and `r round(ARGL_bias$max_abs_bias,2)` for ARGL. This maximum bias occurs for both estimators when selective reporting is very strong (with a selection parameter that has low prior probability), average effect size is zero, and heterogeneity is large. 
+Under the univariate selection process, bias is generally lower for the PML and ARGL estimators than the comparison methods across all conditions, and markedly so when the between-study heterogeneity and strength of selection are not extreme $(\tau \leq 0.3, \lambda_1 \geq 0.05)$. While still substantially lower than the comparison methods, the maximum absolute bias reaches `r round(PML_bias$max_abs_bias,2)` for PML and `r round(ARGL_bias$max_abs_bias,2)` for ARGL. This maximum bias occurs for both estimators when selective reporting is very strong (with a selection parameter that has low prior probability), average effect size is zero, and heterogeneity is very high. 
 We observe a performance trade-off between the two estimators of the step-function selection model: Bias is lower for the ARGL estimator than the PML estimator when $\mu = 0.0$ but higher when $(\mu \geq 0.2)$. For both estimators, bias  decreases as the average effect increases, as heterogeneity decreases, and as the probability of selection increases towards 1.
-Of course, the assumptions of the selection model on which the estimators are based aligns with the selection process used to generate the data, which contributes to their strong performance relative to the comparison methods.
+Of course, the assumptions of the selection model on which the estimators are based aligns with the univariate selection process used to generate the data, which contributes to their strong performance relative to the comparison methods.
+However, a very similar pattern holds under the multivariate selection process (Supplementary Figure \@ref(fig:mu-bias-dep)), where the PML and ARGL estimators still show substantially lower bias than the comparison methods, and consistently low bias except under extreme levels of heterogeneity and selection strength.
 
 In contrast to the estimators based on the marginal selection model, the CHE-ISCW and PET/PEESE estimators are systematically biased under many conditions. 
-The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under conditions with non-null selection.
+The CHE-ISCW estimator, which does not directly adjust for selective reporting, is systematically biased under both the univariate and multivariate selection processes when there is non-null selection.
 When average effect size is large $(\mu = 0.8)$, its bias remains quite small even when selective reporting is very strong.
 This result is not surprising because the large average effect size and low heterogeneity mean that the vast majority of simulated results are statistically significant, leaving little opportunity for censoring of non-significant results.
-However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger; its bias exceeds 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
+However, the bias of CHE-ISCW grows stronger when selection is more extreme, when average effect size is smaller, and when heterogeneity is larger; its bias can exceed 0.50 when $\mu = 0.0$, $\tau = 0.45$, and $\lambda_1 = 0.02$.
 
 Although the PET/PEESE estimator uses a regression adjustment to account for possible selective reporting, it too becomes severely biased when selective reporting is strong.
 For smaller values of average effect size $(\mu \leq 0.2)$, the bias of PET/PEESE tracks the bias of the CHE-ISCW estimator but is somewhat less pronounced. Its bias grows larger (and closer to that of CHE-ISCW) for smaller values of average effect size and higher levels of heterogeneity.
 For large average effect size $(\mu = 0.8)$, the PET/PEESE estimator is negatively biased, systematically under-estimating the average effect size---especially at high levels of heterogeneity.
-
-```{r mu-bias-idep}
-#| fig.width: 9
-#| fig.height: 6.5
-#| fig.env: "sidewaysfigure"
-#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a dependent selection process $(\\psi = 1)$"
-
-mu_graph_res %>%
-  filter(psi_fac == "Dependent") %>%
-  performance_plot(measure = bias, label = "Bias")
-
-```
+These patterns are consistent across the univariate and multivariate selection processes.
 
 ## Root Mean-Squared Error
 
@@ -95,28 +86,17 @@ mu_graph_res %>%
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity  across scenarios with an independent selection process $(\\psi = 0)$"
+#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
 mu_graph_res %>%
-  filter(psi_fac == "Independent") %>%
-  performance_plot(measure = rmse, label = "Root Mean-Squared Error")
-```
-
-```{r mu-rmse-dep}
-#| fig.width: 9
-#| fig.height: 6.5
-#| fig.env: "sidewaysfigure"
-#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity  across scenarios with a dependent selection process $(\\psi = 1)$"
-
-mu_graph_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Univariate") %>%
   performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 ```
 
 RMSE combines both bias and variability into an overall measure of inaccuracy. 
 Figure \@ref(fig:mu-rmse-indep) depicts the RMSE of each estimator of average effect size across scenarios with an independent selection process $(\psi = 0)$; 
-Figure \@ref(fig:mu-rmse-dep) depicts the corresponding RMSE values across scenarios with a dependent selection process $(\psi = 1)$.
-Supplementary Figures \@ref(fig:rmse-ARGL-PML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods. 
+Supplementary Figure \@ref(fig:mu-rmse-dep) depicts the corresponding RMSE values across scenarios with a dependent selection process $(\psi = 1)$.
+Supplementary Figures \@ref(fig:rmse-ARGL-PML) through \@ref(fig:rmse-PET-ARGL) in `r appendix_prefix` \@ref(mu-simulation-results) provide greater detail about the relative accuracy of the four methods by plotting the ratio of RMSEs for each pair of methods while distinguishing between the univariate and multivariate selection processes. 
 These figures illustrate several patterns.
 
 First, across most data-generating conditions, the ARGL estimator has higher RMSE than the PML estimator. As evident in Figure \@ref(fig:rmse-ARGL-PML), the RMSE ratio comparing ARGL to PML is greater than one across most conditions examined.
@@ -130,35 +110,41 @@ The PML estimator has lower RMSE than CHE-ISCW under most conditions where selec
 The relative accuracy of the ARGL estimator versus CHE-ISCW follows a similar pattern  (Figure \@ref(fig:rmse-CHE-ARGL)).
 
 Third, the PML estimator also has lower RMSE than PET/PEESE under conditions where selective reporting creates meaningful bias, although it is not uniformly more accurate than PET/PEESE (Figure \@ref(fig:rmse-PET-PML)). 
-Rather, PET/PEESE is more accurate under _some_ conditions involving moderate or large effect size $(\mu \geq 0.4)$ and varying degrees of between-study heterogeneity, 
-which correspond to conditions where the bias of PET/PEESE is small.
-The relative accuracy is difficult to characterize because it follows a non-linear pattern involving interactions among the data-generating parameters. 
+Rather, PET/PEESE is more accurate under _some_ conditions involving moderate or large effect size $(\mu \geq 0.4)$ and varying degrees of between-study heterogeneity, which correspond to conditions where the bias of PET/PEESE is small.
+The relative accuracy is consistent across the univariate and multivariate selection processes, but it is difficult characterize because it follows a non-linear pattern involving interactions among the remaining data-generating parameters. 
 The pattern of relative accuracy is very similar for the ARGL estimator (Figure \@ref(fig:rmse-PET-ARGL)).
 
 ## Confidence Interval Coverage
 
-Figure \@ref(fig:comparison-coverage) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, PML, and ARGL estimators.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full) depicts the full range of coverage rates.]
+Figure \@ref(fig:comparison-coverage-indep) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, PML, and ARGL estimators under the univariate selection process.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5.]
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
 The PML and ARGL estimators have higher coverage rates than the comparison methods under many conditions, particularly in conditions with higher between-study heterogeneity.
 Between the two selection model estimators, coverage rates are generally higher for the PML estimator than the ARGL estimator, although neither consistently achieves the nominal rate.[^model-based-coverage]
 
 [^model-based-coverage]: As expected, coverage rates of model-based confidence intervals that ignore the dependence structure were generally far below nominal levels and did not improve when the number of studies per meta-analysis was larger (Supplementary Figure \@ref(fig:PML-coverage-robust-vs-model)).
 
-Intervals based on the PML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J$ is 90 or greater.
+Under the univariate selection process, intervals based on the PML and ARGL estimators have coverage levels that improve towards 0.95 as the number of studies increases, but are often still unacceptably low even when $J$ is 90 or greater.
 In contrast, intervals based on CHE-ISCW and PET/PEESE are often wildly mis-calibrated.
 Under conditions where CHE-ISCW and PET/PEESE are biased by selective reporting, their confidence intervals do not center on the true parameter. Consequently, as the number of studies increases, the standard error of the estimators decreases (as does the width of confidence intervals) and their coverage rates degrade towards zero.[^rho-influence]
 
 [^rho-influence]: The value of the average correlation between outcomes ($\rho$) has virtually no effect on the coverage results for any method (Figure \@ref(fig:comparison-coverage-rho)).
 
-```{r comparison-coverage}
+Supplementary Figure \@ref(fig:comparison-coverage-dep) depicts the coverage rates of the same estimators under the multivariate selection process.
+Consistent with the independent selection process, coverage rates of all methods are consistently below nominal across most conditions, and the CHE-ISCW and PET/PEESE intervals follow the same patterns as under the independent selection process.
+However, coverage levels of the PML and ARGL estimators tend to be worse than under the independent selection process.
+Particularly under conditions where average effects are small, their coverage rates are unacceptably low even when the number of studies exceeds $J = 90$.
+
+
+```{r comparison-coverage-indep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5"
+#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5"
 
 mu_graph_res_ci %>%
   filter(
-    CI_type %in% c("large-sample")
+    CI_type %in% c("large-sample"),
+    psi_fac == "Univariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -186,18 +172,18 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage}
+```{r PML-coverage-indep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("PML"),
     CI_type %in% c("large-sample","percentile"),
-    psi_fac == "Independent"
+    psi_fac == "Univariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -227,9 +213,9 @@ mu_graph_res_ci %>%
 
 Bootstrap intervals for the step-function model provide more accurate coverage levels.
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, with a maximum sample size of $J = 60$. 
-Figure \@ref(fig:PML-coverage) depicts the coverage levels of confidence intervals based on the PML estimator, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:PML-coverage-two-stage)-\@ref(fig:PML-coverage-exponential) for detailed results.]
+Figure \@ref(fig:PML-coverage-indep) depicts the coverage levels of confidence intervals based on the PML estimator under a univariate selection process, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:PML-coverage-two-stage)-\@ref(fig:PML-coverage-exponential) for detailed results.]
 
-Although none of the intervals provide exactly nominal coverage, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
+Although none of the intervals provide exactly nominal coverage under univariate selection, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
 The percentile intervals with two-stage clustered bootstrap re-sampling provide the best coverage levels, achieving or exceeding 90% coverage when selection is moderate $(\lambda \geq 0.2)$, even with only $J = 15$ primary studies per meta-analysis. 
-When selection is strong $(\lambda = 0.05)$ and sample size is small $(J = 15)$, coverage levels are poor under some conditions, but improve as the number of studies per meta-analysis increases.
+When selection is strong $(\lambda = 0.05)$ and sample size is small $(J = 15)$, coverage levels are poor under some conditions, but improve as the number of studies per meta-analysis increases to $J = 30$ or above.
 Coverage levels of intervals based on the ARGL estimator follow very similar patterns to those for the PML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-lambda)-\@ref(fig:ARGL-coverage-exponential)).

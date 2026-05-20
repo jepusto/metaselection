@@ -20,13 +20,10 @@ Evidence from medical, educational, and social sciences provides indications of 
 
 Because selective reporting is of such central concern for meta-analysis, a wide range of statistical tools have been developed for detecting its presence and reducing the biases it creates.[@Rothstein2005publication; @marksanglin2020historical]
 One common graphical diagnostic is the funnel plot, a simple scatterplot of effect size estimates versus a measure of their precision. [@Sterne2005funnel] Widely used statistical diagnostics include the rank correlation test [ @begg1994operating]; Egger's regression test [@egger1997bias]; the trim-and-fill adjustment [@duval2000nonparametric]; and various regression adjustment methods including the precision effect test (PET), precision effect estimate with standard error (PEESE), PET-PEESE technique [@stanley2014meta], and endogenous kink meta-regression.[@bom2019kinked]
-
-Another class of methods for assessing and correcting selective reporting are $p$-value selection models.
-Such models build on summary meta-analysis or meta-regression models by making specific, explicit assumptions about the selection function, or how the probability that an effect size estimate is reported relates to the sign and statistical significance level of the effect. 
+Another class of methods for assessing and correcting selective reporting are $p$-value selection models, which build on summary meta-analysis or meta-regression models by making explicit assumptions about how the probability that an effect size estimate is reported relates to the sign and statistical significance level of the effect. 
 Building on earlier proposals,[@hedges1984estimation; @iyengar1988selection; @dear1992approach] Vevea and Hedges proposed step-function models where the selection function is piece-wise constant, with steps at fixed significance thresholds.[@hedges1992modeling; @vevea1995general]
-Other forms involve selection functions based on beta densities,[@citkowicz2017parsimonious] power curves, and a variety of other parametric forms. [@preston2004adjusting]
+The step-function model captures simple but plausible forms of selective reporting, such as shifts in selection probability at the psychologically salient thresholds of $p = 0.05$ or $p = 0.01$.[@greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance]
 
-Much attention has focused on the Vevea-Hedges step-function model [@hedges1992modeling; @vevea1995general] because it captures simple but plausible forms of selective reporting, such as shifts in selection probability at the psychologically salient thresholds of $p = 0.05$ or $p = 0.01$.[@greenwald1975prejudice; @Nelson1986significance; @Rosenthal1963significance; @Rosenthal1964significance]
 Step-function selection models have several advantages over other available methods for diagnosing and adjusting for selective reporting bias.
 First, they are generative models with parameters that directly describe the selective reporting process, making them more interpretable than regression adjustments for small-study effects, which are agnostic with respect to the specific mechanism of selective reporting.
 Second, they can incorporate both discrete and continuous moderators, enabling one to distinguish between selective reporting bias and systematic differences in effect size that can be predicted by primary study characteristics.
@@ -36,7 +33,7 @@ Step-function models also have drawbacks that should be considered.
 Notably, they are more complex---and perhaps less intuitive---than regression adjustments or trim-and-fill.
 The thresholds in the step function must be chosen _a priori_, and so may not correspond to the true selective reporting process.
 Furthermore, the models are built on the assumption that the selection process is homogeneous across study features other than statistical significance, such as study size or funding status. 
-Just as with other selection models, step-function models require a larger number of effect sizes for accurate estimation of the model parameters, particularly when a more complex (i.e., multiple-step) selection process is assumed.
+Step-function models also require a larger number of effect sizes for accurate estimation of the model parameters, particularly when a more complex (i.e., multiple-step) selection process is assumed.
 Despite these complexities, the plausible selective reporting process expressed by the step-function model, coupled with its demonstrated performance in past simulations [@mcshane2016adjusting; @carter2019correcting], makes it a promising approach for analyzing and correcting the bias arising from selective reporting.
 
 ## Dependent effect sizes
@@ -71,8 +68,7 @@ Applications to selection models remain to be explored.
 Methodologists have only recently begun to examine selective reporting detection or bias correction methods in meta-analysis involving dependent effect sizes.
 Mathur and VanderWeele proposed a sensitivity analysis based on the simplest possible form of the step-function selection model, with effect size dependence handled using RVE.[@mathur2020sensitivity]
 This sensitivity analysis provides an estimate of the average effect size after correcting for selection with a single, threshold statistical significance level, where the maximum strength of selection is pre-specified by the analyst. 
-This approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex forms of selection models (such as step functions with multiple thresholds).
-
+This approach is premised on an assumed degree of selective reporting; thus, it does not estimate the strength of selection, nor does it have extensions to more complex step functions with multiple thresholds.
 Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors, combined with RVE or multilevel meta-analysis to handle dependent effect sizes. [@fernandezcastilla2019detecting; @rodgers2021evaluating]
 This method has limited power to detect selective reporting under common meta-analytic scenarios.[@rodgers2021evaluating]
 It also has the same limitations as univariate Egger's regression, in that it tests for a pattern of small-study effects, which could have causes other than selective reporting.[@Sterne2011recommendations]
@@ -90,11 +86,11 @@ These findings underscore the need to further develop selection models that can 
 To address this need, we investigate how to estimate selection models and provide valid assessments of uncertainty in parameter estimates for meta-analyses that involve dependent effect sizes. 
 In applying selection models to datasets involving dependent effects, we propose to model the marginal distribution of the effect size estimates rather than the joint distribution of the dependent effects within each study. 
 This means we model each estimate considered as a single observation, without explicitly accounting for its dependence on other effect sizes from the same study. 
-To account for dependence, we consider cluster-robust variance estimation or clustered bootstrap inference methods that allow for dependent observations even though it is not directly modeled. 
+To account for dependence, we consider cluster-robust variance estimation and clustered bootstrap inference methods that allow for dependent observations even though it is not directly modeled. 
 This strategy does have the limitation that the model parameter estimates pertain only to the marginal distribution and do not distinguish between selective publication of full studies versus selective reporting of individual outcomes.
 
-We believe that the strategy of modeling the marginal distribution is worth pursuing for at least three reasons.
-First, this strategy is captures a plausible form of selection, in which reporting is influenced by the significance level of individual effect size estimates.
+Despite this limitation, we believe that the strategy of modeling the marginal distribution is worth pursuing for at least three reasons.
+First, this strategy captures a plausible form of selection, in which reporting is influenced by the significance level of individual effect size estimates.
 In contrast, developing a multivariate selection model would require specifying assumptions about the probability that each of many possible subsets of effect sizes are reported or censored.
 Little past work on reporting practices has considered reporting of multiple findings within a study, so there is currently little empirical basis to support assumptions about multivariate selection processes.[^exception] 
 Moreover, it seems reasonable to assume that the statistical significance level of individual effect size estimates would still be a major consideration in more nuanced, multivariate selection models.

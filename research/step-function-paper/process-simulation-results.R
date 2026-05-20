@@ -26,7 +26,7 @@ convergence_results <-
     estimator = fct(estimator, levels = c("CML","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Univariate" = "0", "Multivariate" = "1"),
     weight_num = weight,
     weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -59,11 +59,11 @@ results <-
   readRDS(here::here("research", "step-function-simulations","sim-step-function-results-no-bootstraps.rds")) %>%
   filter(estimator != "CML", priors == "Weak") %>%
   mutate(
-    estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
+    estimator = replace_values(estimator, 'CML-fallback' ~ "CML"),
     estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Univariate" = "0", "Multivariate" = "1"),
     weight_num = weight,
     weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,
@@ -204,11 +204,11 @@ results_ci <-
   ) %>%
   ungroup() %>%
   mutate(
-    estimator = case_match(estimator, 'CML-fallback' ~ "CML", .default = estimator),
+    estimator = replace_values(estimator, 'CML-fallback' ~ "CML"),
     estimator = fct(estimator, levels = c("CML","CML-model","ARGL","CHE","CHE-ISCW","PET","PEESE","PET/PEESE")),
     estimator = fct_recode(estimator, "PML" = "CML", "PML-model" = "CML-model"),
     N_factor = fct(if_else(n_multiplier < 1, "Small", "Typical")),
-    psi_fac = as.character(psi) |> fct() |> fct_recode("Independent" = "0", "Dependent" = "1"),
+    psi_fac = as.character(psi) |> fct() |> fct_recode("Univariate" = "0", "Multivariate" = "1"),
     weight_num = weight,
     weight = as.character(weight),
     het_ratio = omega ^ 2 / tau ^ 2,

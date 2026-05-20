@@ -5,12 +5,12 @@ source(here::here("research","step-function-paper","process-simulation-results.R
 # Bias ----
 
 mu_graph_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   performance_plot(measure = bias, label = "Bias")
 
 
 mu_graph_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   performance_plot(measure = bias, label = "Bias")
 
 
@@ -18,11 +18,11 @@ mu_graph_res %>%
 # RMSE ----
 
 mu_graph_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 
 mu_graph_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -73,11 +73,11 @@ mu_wide_res %>%
 
 
 mu_wide_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   RMSE_comparison_plot("PML","ARGL")
 
 mu_wide_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   RMSE_comparison_plot("PML","ARGL")
 
 # PML vs. CHE-ISCW
@@ -86,11 +86,11 @@ mu_wide_res %>%
   RMSE_comparison_plot("PML","CHE-ISCW")
 
 mu_wide_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   RMSE_comparison_plot("PML","CHE-ISCW")
 
 mu_wide_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   RMSE_comparison_plot("PML","CHE-ISCW")
 
 # ARGL vs. CHE-ISCW
@@ -99,11 +99,11 @@ mu_wide_res %>%
   RMSE_comparison_plot("ARGL","CHE-ISCW")
 
 mu_wide_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   RMSE_comparison_plot("ARGL","CHE-ISCW")
 
 mu_wide_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   RMSE_comparison_plot("ARGL","CHE-ISCW")
 
 # PML vs. CHE-ISCW
@@ -112,11 +112,11 @@ mu_wide_res %>%
   RMSE_comparison_plot("PML","PET/PEESE")
 
 mu_wide_res %>%
-  filter(psi_fac == "Independent") %>%
+  filter(psi_fac == "Univariate") %>%
   RMSE_comparison_plot("PML","PET/PEESE")
 
 mu_wide_res %>%
-  filter(psi_fac == "Dependent") %>%
+  filter(psi_fac == "Multivariate") %>%
   RMSE_comparison_plot("PML","PET/PEESE")
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -125,7 +125,7 @@ mu_wide_res %>%
 mu_graph_res_ci %>%
   filter(
     CI_type %in% c("large-sample"), 
-    psi_fac == "Independent"
+    psi_fac == "Univariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -154,7 +154,7 @@ mu_graph_res_ci %>%
 mu_graph_res_ci %>%
   filter(
     CI_type %in% c("large-sample"), 
-    psi_fac == "Dependent"
+    psi_fac == "Multivariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -188,7 +188,7 @@ mu_graph_res_ci %>%
     bootstrap_condition,
     estimator %in% c("PML"),
     CI_type %in% c("large-sample","percentile"),
-    psi_fac == "Independent"
+    psi_fac == "Univariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -219,7 +219,7 @@ mu_graph_res_ci %>%
     bootstrap_condition,
     estimator %in% c("PML"),
     CI_type %in% c("large-sample","percentile"),
-    psi_fac == "Dependent"
+    psi_fac == "Multivariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +

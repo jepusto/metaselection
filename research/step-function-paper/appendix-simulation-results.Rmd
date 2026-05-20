@@ -22,7 +22,7 @@ source("process-simulation-results.R")
 
 convergence_results %>%
   filter(estimator %in% c("PML")) %>%
-  group_by(mean_smd, tau, weight, estimator) %>%
+  group_by(mean_smd, tau, weight, estimator, psi_fac) %>%
   summarize(
     min = min(convergence),
     Q10 = quantile(convergence, 0.1),
@@ -32,19 +32,19 @@ convergence_results %>%
     .groups = "drop"
   ) %>%
 ggplot() + 
-  aes(x = weight, y = median, ymin = min, max = max, color = weight, fill = weight) +
+  aes(x = weight, y = median, ymin = min, max = max, color = psi_fac, fill = psi_fac) +
   geom_pointrange(
-    # position = position_dodge(width = 0.5)
+    position = position_dodge(width = 0.5)
   ) + 
   geom_linerange(
     aes(ymin = Q10, ymax = Q90),
-    # position = position_dodge(width = 0.5),
+    position = position_dodge(width = 0.5),
     linewidth = 1.2
   ) + 
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  scale_y_continuous(limits = c(NA, 100), expand = expansion(0,0)) + 
+  scale_y_continuous(limits = c(92, 100), expand = expansion(0,0)) + 
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -56,12 +56,36 @@ ggplot() +
   labs(
     x = "Selection probability", 
     y = "Convergence rate", 
-    color = "Estimator",
-    fill = "Estimator"
+    color = "Selection process",
+    fill = "Selection process"
   ) + 
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "right")
 
+```
+
+```{r mu-bias-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$"
+
+mu_graph_res %>%
+  filter(psi_fac == "Multivariate") %>%
+  performance_plot(measure = bias, label = "Bias")
+
+```
+
+```{r mu-rmse-dep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$"
+
+mu_graph_res %>%
+  filter(psi_fac == "Multivariate") %>%
+  performance_plot(measure = rmse, label = "Root Mean-Squared Error")
 ```
 
 ```{r rmse-ARGL-PML}
@@ -119,22 +143,22 @@ RMSE_comparison_plot(mu_wide_res, "PML","PET/PEESE")
 RMSE_comparison_plot(mu_wide_res, "ARGL","PET/PEESE")
 ```
 
-```{r comparison-coverage-full}
-#| cache: true
+```{r comparison-coverage-dep}
 #| fig.width: 9
 #| fig.height: 6.5
-#| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5"
 
 mu_graph_res_ci %>%
   filter(
-    CI_type %in% c("large-sample")
+    CI_type %in% c("large-sample"),
+    psi_fac == "Multivariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = estimator, fill = estimator)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0.2,1.0,0.2), expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(0.5, 1.0)) + 
+  scale_y_continuous(expand = expansion(c(0,0),c(0.02,0))) + 
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
@@ -155,24 +179,22 @@ mu_graph_res_ci %>%
   theme(legend.position = "top")
 
 ```
+
 ```{r PML-coverage-robust-vs-model}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations versus model-based variance estimation, by number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals for average effect size based on model-based variance estimation, by number of studies, average SMD, and between-study heterogeneity under a univariate or multivariate selection process. Dashed lines correspond to the nominal confidence level of 0.95."
 
 results_ci %>%
   filter(
     param == "beta",
-    !is.na(coverage),
-    is.na(bootstraps) | (bootstraps == 1999 & extrapolated),
-    estimator %in% c("PML","PML-model"),
-    CI_type %in% "large-sample"
+    estimator == "PML-model"
   ) %>%
   ggplot() +
-  aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method) + 
+  aes(x = J, y = coverage, color = psi_fac, fill = psi_fac) + 
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0.2,1.0,0.2), expand = expansion(0,0)) + 
@@ -189,8 +211,8 @@ results_ci %>%
   labs(
     x = "Number of studies (J)", 
     y = "Coverage rate", 
-    color = "Variance estimator",
-    fill = "Variance estimator"
+    color = "Selection process",
+    fill = "Selection process"
   ) + 
   theme_bw() +
   theme(legend.position = "top")
@@ -252,9 +274,47 @@ mu_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r PML-coverage-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("PML"),
+    CI_type %in% c("large-sample","percentile"),
+    psi_fac == "Multivariate"
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0.65, 1.0), breaks = seq(0.65,0.95,0.05), expand = expansion(0,0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    weight_num ~ mean_smd, 
+    labeller = label_bquote(
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -345,9 +405,9 @@ mu_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -486,7 +546,7 @@ ggplot() +
 tau2_graph_res %>%
   filter(estimator %in% c("CHE","PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = rrmse, color = estimator, fill = estimator) +
+  aes(x = weight, y = rrmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -575,7 +635,7 @@ In contrast, smaller primary study sample sizes means that more are under-powere
 lambda_graph_res %>%
   filter(estimator %in% c("PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = rbias, color = estimator, fill = estimator) +
+  aes(x = weight, y = rbias, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -612,7 +672,7 @@ ggplot() +
 lambda_graph_res %>%
   filter(estimator %in% c("PML","ARGL")) %>%
 ggplot() + 
-  aes(x = weights, y = rrmse, color = estimator, fill = estimator) +
+  aes(x = weight, y = rrmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
   geom_boxplot(alpha = .5, coef = Inf) +
   scale_color_brewer(palette = "Dark2") +
@@ -672,9 +732,9 @@ zeta_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -713,9 +773,9 @@ zeta_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -755,9 +815,9 @@ zeta_graph_res_ci %>%
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2") +
   facet_grid(
-    weights_num ~ mean_smd, 
+    weight_num ~ mean_smd, 
     labeller = label_bquote(
-      rows = lambda[1] == .(weights_num),
+      rows = lambda[1] == .(weight_num),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
