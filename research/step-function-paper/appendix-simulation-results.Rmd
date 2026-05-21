@@ -255,11 +255,11 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage-lambda}
+```{r PML-coverage-lambda-indep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -292,7 +292,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage-dep}
+```{r PML-coverage-lambda-dep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
@@ -330,73 +330,138 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage-two-stage}
+```{r PML-coverage-two-stage-indep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("PML"),
     bootstrap_type == "two-stage",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
   ) %>%
   coverage_plot()
 
 ```
 
-```{r PML-coverage-multinomial}
+```{r PML-coverage-two-stage-dep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("PML"),
+    bootstrap_type == "two-stage",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r PML-coverage-multinomial-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("PML"),
     bootstrap_type == "multinomial",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
   ) %>%
   coverage_plot()
 
 ```
 
-```{r PML-coverage-exponential}
+```{r PML-coverage-multinomial-dep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("PML"),
+    bootstrap_type == "multinomial",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r PML-coverage-exponential-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("PML"),
     bootstrap_type == "exponential",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
   ) %>%
   coverage_plot()
 
 ```
-```{r ARGL-coverage-lambda}
+
+```{r PML-coverage-exponential-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("PML"),
+    bootstrap_type == "exponential",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r ARGL-coverage-lambda-indep}
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("ARGL"),
-    CI_type %in% c("large-sample","percentile")
+    CI_type %in% c("large-sample","percentile"),
+    psi_fac == "Univariate"
   ) %>%
   ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
@@ -423,60 +488,161 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r ARGL-coverage-two-stage}
+```{r ARGL-coverage-lambda-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("ARGL"),
+    CI_type %in% c("large-sample","percentile"),
+    psi_fac == "Multivariate"
+  ) %>%
+  ggplot(aes(x = J, y = coverage, color = CI_boot_method, fill = CI_boot_method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  geom_hline(yintercept = 0.95, linetype = "dashed") +
+  scale_y_continuous(limits = c(0.4, 1.0), breaks = seq(0.4,0.9,0.1), expand = expansion(0,0)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    weight_num ~ mean_smd, 
+    labeller = label_bquote(
+      rows = lambda[1] == .(weight_num),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r ARGL-coverage-two-stage-indep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("ARGL"),
     bootstrap_type == "two-stage",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
   ) %>%
   coverage_plot()
 
 ```
 
-
-```{r ARGL-coverage-multinomial}
+```{r ARGL-coverage-two-stage-dep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("ARGL"),
+    bootstrap_type == "two-stage",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r ARGL-coverage-multinomial-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("ARGL"),
     bootstrap_type == "multinomial",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
   ) %>%
   coverage_plot()
 
 ```
 
 
-```{r ARGL-coverage-exponential}
+```{r ARGL-coverage-multinomial-dep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("ARGL"),
+    bootstrap_type == "multinomial",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+```{r ARGL-coverage-exponential-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
     bootstrap_condition,
     estimator %in% c("ARGL"),
     bootstrap_type == "exponential",
-    CI_type %in% c("percentile","basic","student","BCa")
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Univariate"
+  ) %>%
+  coverage_plot()
+
+```
+
+
+```{r ARGL-coverage-exponential-dep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
+
+mu_graph_res_ci %>%
+  filter(
+    bootstrap_condition,
+    estimator %in% c("ARGL"),
+    bootstrap_type == "exponential",
+    CI_type %in% c("percentile","basic","student","BCa"),
+    psi_fac == "Multivariate"
   ) %>%
   coverage_plot()
 

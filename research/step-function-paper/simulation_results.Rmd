@@ -134,7 +134,6 @@ Consistent with the independent selection process, coverage rates of all methods
 However, coverage levels of the PML and ARGL estimators tend to be worse than under the independent selection process.
 Particularly under conditions where average effects are small, their coverage rates are unacceptably low even when the number of studies exceeds $J = 90$.
 
-
 ```{r comparison-coverage-indep}
 #| fig.width: 9
 #| fig.height: 6.5
@@ -213,9 +212,16 @@ mu_graph_res_ci %>%
 
 Bootstrap intervals for the step-function model provide more accurate coverage levels.
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, with a maximum sample size of $J = 60$. 
-Figure \@ref(fig:PML-coverage-indep) depicts the coverage levels of confidence intervals based on the PML estimator under a univariate selection process, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:PML-coverage-two-stage)-\@ref(fig:PML-coverage-exponential) for detailed results.]
+Figure \@ref(fig:PML-coverage-indep) depicts the coverage levels of confidence intervals based on the PML estimator under the univariate selection process, including intervals based on large-sample cluster-robust variance methods and percentile intervals using either two-stage, multinomial, or exponential (fractional reweighted) bootstrap resampling. 
+Supplementary Figure \@ref(fig:PML-coverage-lambda-dep) shows the coverage levels of the same interval estimators under the multivariate selection process.^[Coverage levels of the other bootstrap intervals, including studentized, basic, and BCA intervals, were not as accurate as percentile intervals. See Supplementary Figures \@ref(fig:PML-coverage-two-stage-indep)-\@ref(fig:PML-coverage-exponential-dep) for detailed results.]
 
 Although none of the intervals provide exactly nominal coverage under univariate selection, all versions of the percentile bootstrap intervals have coverage that is closer to nominal than the intervals based on cluster-robust variance estimation.
 The percentile intervals with two-stage clustered bootstrap re-sampling provide the best coverage levels, achieving or exceeding 90% coverage when selection is moderate $(\lambda \geq 0.2)$, even with only $J = 15$ primary studies per meta-analysis. 
 When selection is strong $(\lambda = 0.05)$ and sample size is small $(J = 15)$, coverage levels are poor under some conditions, but improve as the number of studies per meta-analysis increases to $J = 30$ or above.
-Coverage levels of intervals based on the ARGL estimator follow very similar patterns to those for the PML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-lambda)-\@ref(fig:ARGL-coverage-exponential)).
+Coverage levels of intervals based on the ARGL estimator follow very similar patterns to those for the PML estimator (Supplementary Figures \@ref(fig:ARGL-coverage-lambda-indep)-\@ref(fig:ARGL-coverage-exponential-dep)).
+
+## Confidence Interval Width
+
+Figure \@ref(fig:CI-width-indep) shows the average widths of 95% CIs for selected estimators. 
+For the PML estimator, we report the width of the percentile CIs based on the two-stage bootstrap because these intervals had coverage levels that were generally closest to the nominal level.
+For comparison purposes, we report the widths of CRVE-based intervals for the CHE-ISCW and PET/PEESE estimators, even though these often have coverage levels that were often unacceptably low.
