@@ -138,7 +138,7 @@ design_dat <- tibble(
     "15, 30, 60",
     "Typical, Small",
     "0.0, 0.2, 0.4, 0.8",
-    "0.15, 0.30, 0.45",
+    "0.05, 0.15, 0.45",
     "0.0, 0.5",
     "0.80",
     "0, 1",
@@ -193,7 +193,7 @@ Parameters were fully crossed for a total of $`r paste(design_dat_expanded$level
 Due to the computational demands of bootstrapping, we focused the bootstrap simulations on conditions with fewer studies per meta-analysis, for which we expected large-sample cluster-robust CIs to be relatively less effective.
 We also reduced the number of parameter values for factors where we did
 not observe much variation in results in the full simulation
-(e.g., excluding $\tau = 0.30$). 
+(e.g., excluding $\tau = 0.15$). 
 This resulted in $`r paste(design_dat_expanded$levels_boot, collapse = " \\times ")` = `r formatC(prod(design_dat_expanded$levels_boot), big.mark = ",")`$ conditions for the bootstrap simulations. 
 For each condition, we generated 2,400 replications. 
 This number of replications was chosen to ensure adequate precision; specifically, with 2,400 replications, the expected Monte Carlo standard error for a 95% CI coverage rate is approximately 0.004, and even in the most conservative case (coverage of 50%), the standard error remains below 0.01.

@@ -303,7 +303,9 @@ RMSE_comparison_plot <- function(
     measure = "rmse", 
     col_factor = psi_fac, 
     col_lab = "Selection process", 
-    legend_rows = 1L
+    legend_rows = 1L,
+    alpha = 0.3,
+    dodgewidth = 0.5
 ) {
   
   y_lab <- paste0("RMSE ratio (",y_method, " / ", x_method, ")")
@@ -313,7 +315,7 @@ RMSE_comparison_plot <- function(
   ggplot(data) + 
     aes(x = weight, y = {{y_var}} / {{x_var}}, shape = {{col_factor}}, color = {{col_factor}}, fill = {{col_factor}}) +
     geom_hline(yintercept = 1) + 
-    geom_point(alpha = .5, position = position_jitterdodge()) +
+    geom_point(alpha = alpha, position = position_jitterdodge(dodge.width = dodgewidth)) +
     expand_limits(y = 0.5) + 
     scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
     scale_y_continuous(transform = "log2") + 

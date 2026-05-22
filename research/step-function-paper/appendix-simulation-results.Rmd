@@ -15,7 +15,7 @@ source("process-simulation-results.R")
 ```{r convergence-rates}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 6.5
+#| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Convergence rates of PML estimators by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
@@ -60,7 +60,7 @@ ggplot() +
     fill = "Selection process"
   ) + 
   theme_bw() +
-  theme(legend.position = "right")
+  theme(legend.position = "top")
 
 ```
 
@@ -180,7 +180,7 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage-robust-vs-model}
+```{r PML-coverage-model}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
@@ -333,7 +333,7 @@ mu_graph_res_ci %>%
 ```{r PML-coverage-two-stage-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -353,7 +353,7 @@ mu_graph_res_ci %>%
 ```{r PML-coverage-two-stage-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -373,7 +373,7 @@ mu_graph_res_ci %>%
 ```{r PML-coverage-multinomial-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -393,7 +393,7 @@ mu_graph_res_ci %>%
 ```{r PML-coverage-multinomial-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -413,7 +413,7 @@ mu_graph_res_ci %>%
 ```{r PML-coverage-exponential-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -430,10 +430,10 @@ mu_graph_res_ci %>%
 
 ```
 
-```{r PML-coverage-exponential-indep}
+```{r PML-coverage-exponential-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the PML estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -529,7 +529,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-two-stage-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -549,7 +549,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-two-stage-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -569,7 +569,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-multinomial-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -590,7 +590,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-multinomial-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of multinomial bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -610,7 +610,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-exponential-indep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -631,7 +631,7 @@ mu_graph_res_ci %>%
 ```{r ARGL-coverage-exponential-dep}
 #| cache: true
 #| fig.width: 9
-#| fig.height: 5
+#| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Coverage levels of fractional random weight bootstrap confidence intervals based on the ARGL estimator of average effect size by number of studies, average SMD, and strength of selection across scenarios with a multivariate selection process $(\\psi = 1)$. Dashed lines correspond to the nominal confidence level of 0.95."
@@ -645,6 +645,56 @@ mu_graph_res_ci %>%
     psi_fac == "Multivariate"
   ) %>%
   coverage_plot()
+
+```
+
+```{r CI-width-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Average width of confidence intervals for average effect size based on selected methods, by number of studies, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$. Results are limited to scenarios with $\\rho = 0.8$ and $\\lambda_1 = 0.05, 0.20, 1.0$ to allow comparison between bootstrap CIs and large-sample CIs."
+
+
+mu_graph_res_ci %>%
+  mutate(
+    estimator_CI = paste(estimator, CI_type, sep = "-"),
+  ) %>%
+  filter(
+    # limit to conditions where bootstrap was evaluated
+    weight_num %in% c(0.05, 0.20, 1.00), cor_mu == 0.8,
+    # selected estimators and CI types
+    estimator_CI %in% c("PML-percentile","PML-large-sample", "CHE-ISCW-large-sample","PET/PEESE-large-sample"),
+    bootstrap_type %in% c("none", "two-stage"),
+    # univariate selection process
+    psi_fac == "Multivariate"
+  ) %>%
+  mutate(
+    estimator_CI = factor(
+      estimator_CI, 
+      levels = c("PML-percentile","PML-large-sample", "CHE-ISCW-large-sample","PET/PEESE-large-sample"),
+      labels = c("PML (percentile two-stage bootstrap)","PML (large-sample)", "CHE-ISCW","PET/PEESE")
+    )
+  ) %>%
+  ggplot(aes(x = J, y = width, color = estimator_CI, fill = estimator_CI)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "Coverage rate",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
 
 ```
 
