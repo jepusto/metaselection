@@ -29,7 +29,7 @@ This discrepancy highlights the importance of investigating selective reporting 
 
 To mitigate possible effects of selective reporting, Carter and colleagues's review included many unpublished studies, so that the full meta-analysis included 116 effects from 66 studies. 
 For illustrative purposes, we re-analyzed the findings from the subset of published studies only; we also excluded a single outlying effect size estimate that was greater than 2. This analytic sample includes 68 effect size estimates from 45 distinct studies.
-About 40% of the studies contributed multiple effects per study, due to either multiple samples or multiple outcomes, leading to dependent effect sizes.
+Fourteen of the studies contributed two effects and three studies contributed four effects each, leading to dependent effect sizes.
 We conducted the analyses using R Version 4.4.3.[@rcoreteam] 
 
 If selective reporting were not a concern, an analyst might summarize the distribution of ego depletion effects with a correlated-and-hierarchical effects (CHE) model, a flexible model that accounts for both correlated and hierarchical dependent data structures.[@pustejovsky2022preventionscience]
