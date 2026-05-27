@@ -246,7 +246,7 @@ p_{\gamma}(\gamma) = \frac{1}{2} \gamma - 5 \exp\left(\frac{\gamma}{2}\right),
 \end{equation}
 as depicted in Figure \@ref(fig:prior-penalties)b.
 This penalty corresponds to putting a $\Gamma(1, \frac{1}{5})$ prior on $\tau$, as used in past work on priors for variance parameters in multilevel models. [@Chung2013nondegenerate]
-The penalty term reaches a maximum at $\gamma = \log(0.2)$ and remains weak for smaller degrees of heterogeneity; because of its asymmetric form, it more heavily penalizes large values of $\gamma$.
+The penalty term reaches a maximum at $\gamma = \log(0.2^2)$ and remains weak for smaller degrees of heterogeneity; because of its asymmetric form, it more heavily penalizes large values of $\gamma$.
 For the log-scale selection parameters $\bs\zeta$, we use $\mathcal{L}_4$-norm prior penalties, given by
 \begin{equation}
 \label{eq:zeta-prior}
@@ -336,7 +336,7 @@ ggplot() +
   ) + 
   scale_y_continuous(expand = expansion(0,0)) + 
   coord_cartesian(ylim = c(-4,0)) + 
-  labs(x = expression(tau == exp(zeta[q])), y = expression(p[zeta](zeta[q])))
+  labs(x = expression(lambda[q] == exp(zeta[q])), y = expression(p[zeta](zeta[q])))
 ```
 
 It is important to recognize that these proposed priors are scale dependent---especially the priors for $\bs\beta$ and $\gamma$. Consequently, the proposed penalty terms will require adjustment when applied to other effect metrics such as correlations, raw mean differences, or log-odds ratios. 
