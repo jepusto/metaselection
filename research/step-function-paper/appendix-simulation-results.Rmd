@@ -186,7 +186,7 @@ mu_graph_res_ci %>%
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals for average effect size based on model-based variance estimation, by number of studies, average SMD, and between-study heterogeneity under a univariate or multivariate selection process. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals for average effect size based on model-based variance estimation, by number of studies, average SMD, between-study heterogeneity, and selection process. Dashed lines correspond to the nominal confidence level of 0.95."
 
 results_ci %>%
   filter(
@@ -224,7 +224,7 @@ results_ci %>%
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals based for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and average correlation between outcomes. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and average correlation between outcomes. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci %>%
   filter(
@@ -703,88 +703,89 @@ mu_graph_res_ci %>%
 # Additional simulation results for estimators of heterogeneity {#gamma-simulation-results}
 
 We briefly consider estimation of the marginal heterogeneity of the effect size distribution, for which the CHE-ISCW, PML, and ARGL methods are all relevant.
-Figure \@ref(fig:heterogeneity-bias) depicts the relative bias for the CHE-ISCW, PML, and ARGL estimators of marginal variance $\tau_B^2 + \omega^2$. 
+Figure \@ref(fig:heterogeneity-bias-indep) depicts the relative bias for the CHE-ISCW, PML, and ARGL estimators of marginal variance $\tau_B^2 + \omega^2$ across scenarios with a univariate selection process ($\psi = 0$); Figure \@ref(fig:heterogeneity-bias-indep) depicts the relative bias of the estimators across scenarios with a multivariate selection process ($\psi = 1$).
 In most conditions, the PML and ARGL estimators are biased in the negative direction.
 Relative bias is high for all three estimators in conditions where the between-study heterogeneity is low ($\tau_B = 0.05$) with bias improving as between-study heterogeneity increases. 
 The PML and ARGL estimators are less strongly biased than the CHE-ISCW estimator under conditions where there is strong selection. 
 Neither of the selection model estimators have consistently lower bias than the other estimator. 
 
-Figure \@ref(fig:heterogeneity-rmse) depicts the relative RMSE for estimators of total heterogeneity, with Figures \@ref(fig:heterogeneity-rmse-ARGL-PML), \@ref(fig:heterogeneity-rmse-PML-CHE), and \@ref(fig:heterogeneity-rmse-ARGL-CHE) providing greater detail about the relative accuracy of the three methods. 
-Under nearly all conditions, the PML estimator is more accurate than the ARGL estimator. 
+Figures \@ref(fig:heterogeneity-rmse-indep) and \@ref(fig:heterogeneity-rmse-dep) depict the relative RMSE for estimators of total heterogeneity under scenarios with a univariate and multivariate selection process, respectively. Figures \@ref(fig:heterogeneity-rmse-ARGL-PML), \@ref(fig:heterogeneity-rmse-PML-CHE), and \@ref(fig:heterogeneity-rmse-ARGL-CHE) provide greater detail about the relative accuracy of the three methods. 
+Under nearly all conditions with a univariate selection process, the PML estimator is more accurate than the ARGL estimator.
+The same is true under most conditions with a multivariate selection process, although the advantage of PML over ARGL is not as strong.
 The RMSE of PML is smaller than that of CHE under some but not all conditions; the former performs better under conditions where selection is strong and average SMD is low or moderate.
 However, just as with the estimators of average effect size, the CHE estimator is more accurate when selection is mild or absent, leading to a bias-variance trade-off.
 
 
-```{r heterogeneity-bias}
+```{r heterogeneity-bias-indep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Relative bias of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative bias of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
 tau2_graph_res %>%
-  filter(estimator %in% c("CHE","PML","ARGL")) %>%
-ggplot() + 
-  aes(x = weight, y = rbias, color = estimator, fill = estimator) +
-  geom_hline(yintercept = 0) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Relative Bias", 
-    color = "Estimator",
-    fill = "Estimator"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+  filter(
+    estimator %in% c("CHE","PML","ARGL"),
+    psi_fac == "Univariate"
+  ) %>%
+  performance_plot(measure = rbias, label = "Relative Bias")
 
 ```
 
-```{r heterogeneity-rmse}
+```{r heterogeneity-bias-dep}
 #| cache: true
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative bias of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$"
 
 tau2_graph_res %>%
-  filter(estimator %in% c("CHE","PML","ARGL")) %>%
-ggplot() + 
-  aes(x = weight, y = rrmse, color = estimator, fill = estimator) +
-  geom_hline(yintercept = 0) +
-  geom_boxplot(alpha = .5, coef = Inf) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
-  facet_grid(
-    tau ~ mean_smd, 
-    labeller = label_bquote(
-      rows = tau[B] == .(tau),
-      cols = mu == .(mean_smd)
-    ),
-    scales = "free_y"
-  ) +
-  labs(
-    x = "Selection probability", 
-    y = "Relative Root Mean-Squared Error", 
-    color = "Estimator",
-    fill = "Estimator"
-  ) + 
-  theme_bw() +
-  theme(legend.position = "top")
+  filter(
+    estimator %in% c("CHE","PML","ARGL"),
+    psi_fac == "Multivariate"
+  ) %>%
+  performance_plot(measure = rbias, label = "Relative Bias")
 
+```
+
+```{r heterogeneity-rmse-indep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
+
+tau2_graph_res %>%
+  filter(
+    estimator %in% c("CHE","PML","ARGL"),
+    psi_fac == "Univariate"
+  ) %>%
+  performance_plot(
+    measure = rrmse, 
+    label = "Relative Root Mean-Squared Error"
+  )
+```
+
+```{r heterogeneity-rmse-dep}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.pos: !h
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Relative root mean-squared error of heterogeneity estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a multivariate selection process $(\\psi = 1)$"
+
+tau2_graph_res %>%
+  filter(
+    estimator %in% c("CHE","PML","ARGL"),
+    psi_fac == "Multivariate"
+  ) %>%
+  performance_plot(
+    measure = rrmse, 
+    label = "Relative Root Mean-Squared Error"
+  )
 ```
 
 ```{r heterogeneity-rmse-ARGL-PML}
@@ -824,14 +825,17 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "CHE","ARGL")
 
 # Additional simulation results for estimators of selection parameter $(\lambda_1)$ {#zeta-simulation-results}
 
-The PML and ARGL methods both estimate the selection parameter $\lambda_1$ of the step-function model, a quantity that may be of substantive interest. 
-Figure \@ref(fig:selection-bias) shows that the relative bias of the two estimators is similar: Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have positive biases under conditions with very strong selection probability, especially when average effect size is large or between-study heterogeneity is low.
+Under the univariate selection process, the PML and ARGL methods both estimate the selection parameter $\lambda_1$ of the step-function model, a quantity that may be of substantive interest.[^no-multivariate] 
+Figure \@ref(fig:selection-bias) shows that the relative bias of the two estimators is similar across scenarios with a univariate selection process: 
+Both show bias close to zero under conditions with low average SMD and high between-study heterogeneity but have positive biases under conditions with very strong selection probability, especially when average effect size is large or between-study heterogeneity is low.
 This pattern of bias is consistent with the specification of the prior penalties, which induce finite-sample bias when the true selection parameter is in a region with low prior probability (e.g., $\lambda_1 = 0.02$).
 
-Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and PML estimators of the log-selection parameter with Figure \@ref(fig:selection-rmse-ARGL-PML) providing a more detailed view of the relative accuracy of the ARGL versus the PML estimators. 
+[^no-multivariate]: We do not consider scenarios with a multivariate selection process because the $\lambda_1$ parameter does not correspond to the marginal probability of observing a non-significant result under this process.
+
+Figure \@ref(fig:selection-rmse) depicts the RMSE for the ARGL and PML estimators of the log-selection parameter across scenarios with a univariate selection process, with Figure \@ref(fig:selection-rmse-ARGL-PML) providing a more detailed view of the relative accuracy of the ARGL versus the PML estimators under these scenarios. 
 The PML estimator of the selection parameter generally outperforms the ARGL estimator, especially when sample size is small. 
 
-Figures \@ref(fig:PML-zeta-coverage-two-stage), \@ref(fig:ARGL-zeta-coverage-two-stage), and \@ref(fig:PML-zeta-coverage-two-stage-percentile) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling.
+Figures \@ref(fig:PML-zeta-coverage-two-stage), \@ref(fig:ARGL-zeta-coverage-two-stage), and \@ref(fig:PML-zeta-coverage-two-stage-percentile) depict the confidence interval coverage of the two estimators with various bootstrap confidence interval estimation approaches, using two-stage clustered bootstrap resampling, across scenarios with a univariate selection process.
 Broadly, percentile intervals perform better than the other methods of constructing bootstrap confidence intervals.
 For the PML estimator (Figure \@ref(fig:PML-zeta-coverage-two-stage)), the percentile intervals have near-nominal coverage for sample sizes of $J = 30$ or larger under most conditions, except when average sample size is large.
 Compared to intervals based on the PML, the coverage levels of bootstrap CIs based on the ARGL estimator are generally inferior (Figure \@ref(fig:ARGL-zeta-coverage-two-stage)).
@@ -846,10 +850,13 @@ In contrast, smaller primary study sample sizes means that more are under-powere
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Relative bias for selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative bias for selection parameter estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
 lambda_graph_res %>%
-  filter(estimator %in% c("PML","ARGL")) %>%
+  filter(
+    estimator %in% c("PML","ARGL"),
+    psi_fac == "Univariate"
+  ) %>%
 ggplot() + 
   aes(x = weight, y = rbias, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
@@ -883,10 +890,13 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Relative root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity"
+#| fig.cap: "Relative root mean-squared error for log-selection parameter estimators by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
 lambda_graph_res %>%
-  filter(estimator %in% c("PML","ARGL")) %>%
+  filter(
+    estimator %in% c("PML","ARGL"),
+    psi_fac == "Univariate"
+  ) %>%
 ggplot() + 
   aes(x = weight, y = rrmse, color = estimator, fill = estimator) +
   geom_hline(yintercept = 0) +
@@ -920,9 +930,13 @@ ggplot() +
 #| fig.height: 6.5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Ratio of root mean-squared error for ARGL selection parameter estimator to root mean-squared error of PML selection parameter estimator by selection process, selection probability, number of studies, average SMD, and between-study heterogeneity"
+#| fig.cap: "Ratio of root mean-squared error for ARGL selection parameter estimator to root mean-squared error of PML selection parameter estimator by selection probability, number of studies, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\\psi = 0)$"
 
-RMSE_comparison_plot(lambda_wide_res,measure = "rrmse", "PML","ARGL")
+lambda_wide_res %>%
+  filter(
+    psi_fac == "Univariate"
+  ) %>%
+RMSE_comparison_plot(measure = "rrmse", "PML","ARGL")
 ```
 
 ```{r PML-zeta-coverage-two-stage}
@@ -931,11 +945,12 @@ RMSE_comparison_plot(lambda_wide_res,measure = "rrmse", "PML","ARGL")
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
     bootstrap_condition,
+    psi_fac == "Univariate",
     estimator %in% c("PML"),
     bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
@@ -972,11 +987,12 @@ zeta_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage bootstrap confidence intervals based on the ARGL estimator of log-selection parameter by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
     bootstrap_condition,
+    psi_fac == "Univariate",
     estimator %in% c("ARGL"),
     bootstrap_type == "two-stage",
     CI_type %in% c("percentile","basic","student","BCa")
@@ -1014,11 +1030,12 @@ zeta_graph_res_ci %>%
 #| fig.height: 5
 #| fig.pos: !h
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of two-stage percentile bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, primary study sample size, average SMD, and strength of selection. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of two-stage percentile bootstrap confidence intervals based on the PML estimator of log-selection parameter by number of studies, primary study sample size, average SMD, and strength of selection across scenarios with a univariate selection process $(\\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95."
 
 zeta_graph_res_ci %>%
   filter(
     bootstrap_condition,
+    psi_fac == "Univariate",
     estimator %in% c("PML"),
     bootstrap_type == "two-stage",
     CI_type == "percentile",
