@@ -94,12 +94,15 @@ First, this strategy captures a plausible form of selection, in which reporting 
 In contrast, developing a multivariate selection model would require specifying assumptions about the probability that each of many possible subsets of effect sizes are reported or censored.
 Little past work on reporting practices has considered reporting of multiple findings within a study, so there is currently little empirical basis to support assumptions about multivariate selection processes.[^exception] 
 Moreover, it seems reasonable to assume that the statistical significance level of individual effect size estimates would still be a major consideration in more nuanced, multivariate selection models.
+
+[^exception]: For one exception, recent work developed a multivariate publication bias model in which full studies are published or censored on the basis of whether a set of multiple effects are all statistically significant. [@VanAert2026correcting]
+
 Second, focusing on the marginal distribution allows for computational tractability, whereas fitting even quite basic multivariate models would require computing selection probabilities over high-dimensional spaces of possible outcomes.
+Recent work attempting to implement multivariate selection models in a Bayesian framework noted that such models become computationally intractable when primary studies include more than three dependent effect sizes.[@Bartos2026robust]
+
 Third, the marginal modeling strategy has several precedents within the meta-analytic and broader statistical literature.
 For instance, generalized estimating equations often use a "working independence" structure to estimate parameters in longitudinal data without requiring specification of the joint distribution of the repeated measurements.[@Liang1986glm] Similarly, the unrestricted weighted least squares approach for meta-regression relies on marginal modeling to provide a simpler alternative to complex hierarchical structures, [@Stanley2015neither] and pseudo-likelihood estimators for multivariate meta-analysis simplify the problem by focusing on the marginal likelihoods of individual variates.[@Chen2015alternative]
 Thus, we focus on developing marginal step-function selection models as a practical and feasible tool, which could also serve as a building block for more complex multivariate models.
-
-[^exception]: For one exception, recent work developed a multivariate publication bias model in which full studies are published or censored on the basis of whether a set of multiple effects are all statistically significant. [@VanAert2026correcting]
 
 The remainder of the paper is organized as follows.
 In the next section, we describe the marginal step-function selection model and detail two different strategies for estimating model parameters: one using penalized maximum likelihood estimation methods and a novel strategy based on a re-weighted random effects model with inverse probability of selection weights. 

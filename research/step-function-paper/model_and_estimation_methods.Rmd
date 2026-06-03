@@ -339,8 +339,8 @@ ggplot() +
   labs(x = expression(lambda[q] == exp(zeta[q])), y = expression(p[zeta](zeta[q])))
 ```
 
-It is important to recognize that these proposed priors are scale dependent---especially the priors for $\bs\beta$ and $\gamma$. Consequently, the proposed penalty terms will require adjustment when applied to other effect metrics such as correlations, raw mean differences, or log-odds ratios. 
-A detailed review of methods for deriving priors for random effects model parameters, with special attention to the effect metric and the unit information standard deviation, is available elsewhere [@Rover2021priors].
+It is important to recognize that these proposed priors for $\bs\beta$ and $\gamma$ are scale dependent. Consequently, the proposed penalty terms will require adjustment when applied to other effect metrics such as correlations, raw mean differences, or log-odds ratios. 
+A detailed review of methods for deriving priors for random effects model parameters is available elsewhere, with special attention to the connection between the effect metric and the unit information standard deviation, is available elsewhere.[@Rover2021priors]
 
 ## Bootstrap inference
 
