@@ -1,0 +1,37 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tb]
+\subfloat[One-step selection with $\lambda_1 = 0.4$\label{fig:step-functions-1}]{\includegraphics[width=0.49\linewidth]{step-function-selection-models-with-dependent-effects_files/figure-latex/step-functions-1} }\subfloat[Two-step selection with $\lambda_1 = 0.4, \lambda_2 = 0.2$\label{fig:step-functions-2}]{\includegraphics[width=0.49\linewidth]{step-function-selection-models-with-dependent-effects_files/figure-latex/step-functions-2} }\caption{Examples of step functions}\label{fig:step-functions}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tb]
+\subfloat[Prior penalty for mean parameter $\boldsymbol\beta$. Dashed line corresponds to a standard normal penalty.\label{fig:prior-penalties-1}]{\includegraphics[width=0.49\linewidth]{step-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-1} }\subfloat[Prior penalty for heterogeneity parameter $\gamma$\label{fig:prior-penalties-2}]{\includegraphics[width=0.49\linewidth]{step-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-2} }\newline\subfloat[Prior penalty for selection parameter $\boldsymbol\zeta$\label{fig:prior-penalties-3}]{\includegraphics[width=0.49\linewidth]{step-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-3} }\caption{Prior penalty functions for step function model parameters}\label{fig:prior-penalties}
+\end{figure*}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/mu-bias-indep-1} \caption{Bias for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\psi = 0)$}\label{fig:mu-bias-indep}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/mu-rmse-indep-1} \caption{Root mean-squared error for estimators of average effect size by selection probability, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\psi = 0)$}\label{fig:mu-rmse-indep}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-indep-1} \caption{Coverage levels of confidence intervals for average effect size based on cluster-robust variance approximations, by number of studies, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95. Coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5.}\label{fig:comparison-coverage-indep}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/PML-coverage-indep-1} \caption{Coverage levels of confidence intervals for average effect size based on the PML estimator, by number of studies, average SMD, and strength of selection across scenarios with a univariate selection process $(\psi = 0)$. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:PML-coverage-indep}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{step-function-selection-models-with-dependent-effects_files/figure-latex/CI-width-indep-1} \caption{Average width of confidence intervals for average effect size based on selected methods, by number of studies, average SMD, and between-study heterogeneity across scenarios with a univariate selection process $(\psi = 0)$. Results are limited to scenarios with $\rho = 0.8$ and $\lambda_1 = 0.05, 0.20, 1.0$ to allow comparison between bootstrap CIs and large-sample CIs.}\label{fig:CI-width-indep}
+\end{sidewaysfigure}
