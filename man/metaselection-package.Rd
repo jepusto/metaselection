@@ -20,6 +20,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item James Pustejovsky \email{jepusto@gmail.com} (\href{https://orcid.org/0000-0003-0591-9465}{ORCID})
   \item Megha Joshi \email{megha.j456@gmail.com} (\href{https://orcid.org/0000-0001-7936-076X}{ORCID})
   \item Martyna Citkowicz \email{martyna.citkowicz@gmail.com} (\href{https://orcid.org/0000-0002-2048-0625}{ORCID})
 }
