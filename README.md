@@ -78,8 +78,9 @@ The following example uses data from a meta-analysis by Lehmann et al.
 judgments. The dataset is included in the `metadat` package (White et
 al. 2022) as `dat.lehmann`. In the code below, we fit a step function
 selection model to the Lehmann dataset using the `selection_model()`
-function, with confidence intervals computed using two-stage
+function, with confidence intervals computed using two-stage cluster
 bootstrapping. For further details, please see the vignette.
+<!--# should we mention priors here or is it going to throw people off? -->
 
 ``` r
 library(metaselection)
@@ -123,18 +124,18 @@ summary(mod_3PSM_boot)
     ## Bootstrap type: two-stage 
     ## Number of bootstrap replications: 19 
     ## 
-    ## Log composite likelihood of selection model: -44.4716
-    ## Inverse selection weighted partial log likelihood: 55.18899 
+    ## Log composite likelihood of selection model: -44.46655
+    ## Inverse selection weighted partial log likelihood: 59.53697 
     ## 
     ## Mean effect estimates:                                               
     ##                            Percentile Bootstrap
     ##  Coef. Estimate Std. Error      Lower     Upper
-    ##   beta    0.138      0.116    -0.0296     0.375
+    ##   beta    0.131      0.135    -0.0492     0.412
     ## 
     ## Heterogeneity estimates:                                               
     ##                            Percentile Bootstrap
     ##  Coef. Estimate Std. Error      Lower     Upper
-    ##   tau2   0.0814     0.0763    0.00305     0.213
+    ##   tau2   0.0794     0.0815    0.00298     0.223
     ## 
     ## Selection process estimates:
     ##  Step: 0 < p <= 0.025; Studies: 16; Effects: 25                                                 
@@ -145,14 +146,14 @@ summary(mod_3PSM_boot)
     ##  Step: 0.025 < p <= 1; Studies: 29; Effects: 56                                                 
     ##                              Percentile Bootstrap
     ##    Coef. Estimate Std. Error      Lower     Upper
-    ##  lambda1    0.575      0.521      0.132      3.63
+    ##  lambda1     0.54      0.601     0.0844      4.35
 
-The beta estimate of 0.138, with a 95% confidence interval -0.03, 0.375,
-represents the overall average effect after accounting for both
-selection bias and dependent effects. The tau estimate of 0.081 is the
+The beta estimate of 0.131, with a 95% confidence interval -0.049,
+0.412, represents the overall average effect after accounting for both
+selection bias and dependent effects. The tau estimate of 0.079 is the
 estimated total variance, including both between- and within-study
 heterogeneity. `lambda1` is the selection parameter. The estimate of
-0.575 indicates that effect size estimates with one-sided $p$-values
+0.54 indicates that effect size estimates with one-sided $p$-values
 greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
 estimates with $p < 0.025$).

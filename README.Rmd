@@ -52,8 +52,9 @@ Setting `build_vignettes = FALSE` will lead to faster installation, although it 
 
 The following example uses data from a meta-analysis by @lehmann2018meta which examined the effects of color red on attractiveness judgments.
 The dataset is included in the `metadat` package [@metadat] as `dat.lehmann`.
-In the code below, we fit a step function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage bootstrapping.
+In the code below, we fit a step function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage cluster bootstrapping.
 For further details, please see the vignette.
+<!--# should we mention priors here or is it going to throw people off? -->
 
 ```{r 3PSM_boot, warning = FALSE, message = FALSE}
 library(metaselection)

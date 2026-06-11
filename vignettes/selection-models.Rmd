@@ -40,7 +40,9 @@ However, very few methods for investigating selective reporting can accommodate 
 This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a common feature of meta-analytic data.
 
 Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions.
-Further, dependence can also arise when meta-analyses include multiple primary studies conducted by the same researchers or the same lab [@pustejovsky2022preventionscience]. This dependency violates statistical assumptions of independent errors, leading to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences. Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience].
+Further, dependence can also arise when meta-analyses include multiple primary studies conducted by the same researchers or the same lab [@pustejovsky2022preventionscience].
+This dependency violates statistical assumptions of independent errors, leading to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences.
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience].
 These methods can be combined with a few of the available techniques for investigating selective reporting, but this is currently limited to techniques based on regression adjustment [@fernandezcastilla2019detecting; @rodgers2020evaluating; @chen2024adapting] or sensitivity analyses based on simple forms of selection models, which provide bounds on average effects given an *a priori* level of selective reporting [@mathur2020sensitivity].
 
 The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes.
@@ -313,10 +315,9 @@ In the code below, we fit a step-function selection model to the `dat.lehmann201
 We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`.
 We indicate that we want to estimate a `"step"` selection model and specify a single step at 0.025 by setting `step = 0.025`.
 Further, the function adds weak prior penalties for the three parameters (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
-By default, the function fits the model using maximum penalized composite marginal likelihood estimation and calculates standard errors and confidence intervals using CRVE.[^2]
-
-[^2]: One can interpret these results as a preliminary analysis.
-    For a more refined and reliable analysis, one should use two-statge clustered bootstrap confidence intervals instead of CRVE.
+By default, the function fits the model using maximum penalized composite marginal likelihood estimation and calculates standard errors and confidence intervals using CRVE.
+We are using CRVE here for demonstration only because it is not as computationally intensive.
+**For a more refined and reliable analysis, we highly recommend using two-stage clustered bootstrap confidence intervals (demonstrated below) instead of CRVE based on results from our simulation study.** <!--# i pulled this sentence out of footnote to extra extra highlight people should use bootstrapped; i think a bit more clarification on priors and that they should only be used with smds would be good somewhere -->
 
 ```{r 3PSM}
 library(metaselection)
@@ -377,7 +378,8 @@ In this example, the plot shows that effect sizes with one-sided $p$-values larg
 ## Four-Parameter Step Model with RVE
 
 Rather than using a single threshold at $\alpha_1 = 0.025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates.
-The following code fits such a model, setting `steps = c(0.025, 0.500)`:
+The following code fits such a model, setting `steps = c(0.025, 0.500)`.
+Note that by default the `selection_model()` function uses the weak prior penalties that we described above.
 
 ```{r}
 mod_4PSM <- selection_model(
@@ -405,9 +407,9 @@ selection_plot(mod_4PSM)
 ```
 
 As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided $p$-value \> 0.50) are even less likely to be observed than effects that are positive but not statistically significant.
-However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated.[^3]
+However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated.[^2]
 
-[^3]: Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.
+[^2]: Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.
 
 ## Three-Parameter Step Model with RVE and Moderators
 
