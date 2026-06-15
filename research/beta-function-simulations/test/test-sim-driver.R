@@ -10,11 +10,11 @@ library(clubSandwich)
 library(metaselection)
 progressr::handlers(global = TRUE)
 
-source("research/beta-function-simulations/2_estimation.R")
-source("research/beta-function-simulations/3_performance_criteria.R")
-source("research/beta-function-simulations/4_simulation_driver.R")
+source("research/beta-function-simulations/1-estimation.R")
+source("research/beta-function-simulations/2-performance-criteria.R")
+source("research/beta-function-simulations/3-simulation-driver.R")
 
-# debug(estimate_step_models)
+# debug(run_sim)
 tic()
 
 check <-
@@ -30,9 +30,10 @@ check <-
     delta_2 = 0.9,
     step_models = c("3PSM","4PSM"),
     comparison_methods = "All",
+    priors = "Weak",
     bootstrap = "none",
-    R_beta = c(49,99,199,299),
-    summarize_performance = TRUE,
+    R_beta = c(49,99,199,299,399),
+    summarize_performance = FALSE,
     seed = 20250541L
   )
 
@@ -46,4 +47,4 @@ true_params <- data.frame(
 
 check %>%
   merge(true_params) %>%
-  calc_performance(winz = 2.5)
+  calc_performance()
