@@ -38,6 +38,11 @@ To demonstrate the interpretation of the beta-function selection model in practi
 #| message: false
 #| cache: true
 
+library(future)
+plan(multisession, workers = 10)
+R <- 1999L
+set.seed(20260615)
+
 # Unadjusted model
 ex_unadj_mean <- rma.uni(
   data = dat_ex,
@@ -55,7 +60,10 @@ ex_adj_beta_mean <- selection_model(
   pi = p_onesided,
   cluster = studyid,
   selection_type = "beta",
-  steps = c(.025,.975)
+  steps = c(.025,.975),
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
 
 
@@ -66,7 +74,10 @@ ex_adj_step3_mean <- selection_model(
   sei = sd_d,
   cluster = studyid,
   selection_type = "step",
-  steps = 0.025
+  steps = 0.025,
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
 
 # Two-step model
@@ -76,7 +87,10 @@ ex_adj_step4_mean <- selection_model(
   sei = sd_d,
   cluster = studyid,
   selection_type = "step",
-  steps = c(0.025, .5)
+  steps = c(0.025, .5),
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
 
 
@@ -100,8 +114,10 @@ ex_adj_beta_mod <- selection_model(
   cluster = studyid,
   mean_mods = ~ target.leader,
   selection_type = "beta",
-  steps = c(.025,.975)
-  
+  steps = c(.025,.975),
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
 
 # One-step model - moderator
@@ -112,7 +128,10 @@ ex_adj_step3_mod <- selection_model(
   cluster = studyid,
   mean_mods = ~ target.leader,
   selection_type = "step",
-  steps = 0.025
+  steps = 0.025,
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
 
 # Two-step model - moderator
@@ -123,8 +142,13 @@ ex_adj_step4_mod <- selection_model(
   cluster = studyid,
   mean_mods = ~ target.leader,
   selection_type = "step",
-  steps = c(0.025, .5)
+  steps = c(0.025, .5),
+  CI_type = "percentile",
+  bootstrap = "two-stage",
+  R = R
 )
+
+plan(sequential)
 
 ```
 
@@ -133,7 +157,7 @@ We first used the `rma.uni()` function from the `metafor` package to fit a stand
 The overall estimate of the average effect using the unadjusted model was `r formatC(ex_unadj_mean$beta, format = "f", digits = 2)`, cluster-robust 95% CI [`r formatC(ex_unadj_mean$ci.lb, format = "f", digits = 2)`, `r formatC(ex_unadj_mean$ci.ub, format = "f", digits = 2)`], significantly different from zero $(p `r format.pval(ex_unadj_mean$pval, digits = 3, eps = 1e-3)`)$. 
 The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(ex_unadj_mean$tau2), format = "f", digits = 2)`$.
 
-To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two different step-function selection models---a one-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with cluster-robust variance estimation used to account for dependent effect sizes.
+To adjust for selective reporting, we used the `selection_model()` function from the `metaselection` package [@metaselection] to fit the beta-density selection model (with default truncation thresholds of $\alpha_1 = .025, \alpha_2 = .975$) and two different step-function selection models---a one-step model ($\alpha_1 = 0.025$) and a two-step model ($\alpha_1 = .025, \alpha_2 = .5$). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with two-stage cluster bootstrapping ($B = `r R`$ bootstraps) used to account for dependent effect sizes.
 
 ```{r social-identity-theory-res, tab.pos = "tb", tab.cap="social identity theory meta-analysis"}
 
@@ -161,6 +185,7 @@ all_res <-
     `Moderator analysis` = all_res_mod,
     .id = "Specification"
   ) %>%
+  rename(CI_lo = percentile_lower, CI_hi = percentile_upper) %>%
   mutate(
     Specification = factor(Specification, levels = c("Summary meta-analysis","Moderator analysis")),
     across(c(Est, CI_lo, CI_hi), ~ case_when(
@@ -194,7 +219,7 @@ Specification_group <- table(all_res_table$Specification)
 all_res_table %>%
   select(-Specification) %>%
   kbl(
-    caption = "Selection model parameter estimates fit to science intervention effects from Taylor et al. (2018)",
+    caption = "Selection model parameter estimates fit to meta-analysis of leader group prototypicality from Steffens et al. (2021)",
     col.names = c("Parameter", rep(c("Est. (SE)", "95\\% CI"), times = 3)),
     booktabs = TRUE,
     escape = FALSE,
@@ -204,21 +229,21 @@ all_res_table %>%
   add_header_above(c(" ", "Beta density" = 2, "One-step" = 2, "Two-step" = 2)) %>%
   pack_rows(index = Specification_group) %>%
   footnote(
-    general = c("Est. = estimate; SE = cluster-robust standard error; CI = cluster-robust confidence interval.")
+    general = c("Est. = estimate; SE = bootstrap standard error; CI = percentile boodstrap confidence interval.")
   )
 ```
 
 
-The upper panel of Table \@ref(tab:social-identity-theory-res) reports parameter estimates from all three models, along with cluster-robust standard errors and 95% confidence intervals.
+The upper panel of Table \@ref(tab:social-identity-theory-res) reports parameter estimates from all three models, along with bootstrap standard errors and 95% confidence intervals.
 Across the three selection models, the estimated average effect sizes are all positive and significant, but they vary in magnitude and interpretation.
 Compared to the unadjusted model, the average adjusted effect is 33% smaller when using the beta-density selection model ($ES$ = `r round(ex_adj_beta_mean$est$Est[ex_adj_beta_mean$est$param=="beta"], 2)`).
-In contrast, the adjustment is minimal for the one-step selection model, which is 2% larger ($ES$ = `r round(ex_adj_step3_mean$est$Est[ex_adj_step3_mean$est$param=="beta"], 2)`), while the two-step selection model yields an estimate that is 12% smaller ($ES$ = `r round(ex_adj_step4_mean$est$Est[ex_adj_step4_mean$est$param=="beta"], 2)`) than the unadjusted average effect.
+In contrast, the adjustment is minimal for the one-step selection model, with an average effect estimate that is 2% larger than under the unadjusted model ($ES$ = `r round(ex_adj_step3_mean$est$Est[ex_adj_step3_mean$est$param=="beta"], 2)`); the two-step selection model yields an estimate that is 12% smaller ($ES$ = `r round(ex_adj_step4_mean$est$Est[ex_adj_step4_mean$est$param=="beta"], 2)`) than the unadjusted average effect.
 
-These differences are driven by the specific form of the selection curve estimated from each model, as depicted in Figure @ref(fig:social-identity-theory-selection-curves).
+These differences are driven by the specific form of the selection curve estimated from each model, as depicted in Figure \@ref(fig:social-identity-theory-selection-curves).
 The beta-density model identifies a substantial downward adjustment, capturing a smooth, continuous decline in the likelihood of reporting as effects move toward non-significance.
 The one-step model, on the other hand, estimates a nearly flat selection process, suggesting that when only one $p$-value threshold is considered, the overall evidence for selective reporting appears negligible.
-The two-step model provides a more granular look: it identifies a slight increase in reporting probability at the $\alpha_1 = .025$ threshold, followed by a substantial decrease at the $\alpha_2 = .05$ threshold.
-Notably, the beta-density model provided the best fit to the data (Log composite likelihood = -49.02), followed by the two-step model (-52.94) and the one-step model (-58.12).
+The two-step model identifies a slight increase in reporting probability at the $\alpha_1 = .025$ threshold, followed by a substantial decrease at the $\alpha_2 = .05$ threshold.
+Notably, the beta-density model provided the best fit to the data (Log composite likelihood = `r formatC(ex_adj_beta_mean$ll, format = "f", digits = 2)`), followed by the two-step model (`r formatC(ex_adj_step4_mean$ll, format = "f", digits = 2)`) and the one-step model (`r formatC(ex_adj_step3_mean$ll, format = "f", digits = 2)`).
 This divergence illustrates how the continuous functional form of the beta-density model can capture nuanced reporting patterns---such as a smooth decline in the likelihood of reporting for increasingly negative results---that may be obscured or dependent on the pre-defined thresholds of a step-function model.
 
 ```{r social-identity-theory-selection-curves}
@@ -234,9 +259,9 @@ pvals <- seq(0.001, 0.999, .001)
 
 selection_curves <- 
   bind_rows(
-    beta = selection_wts(ex_adj_beta_mean, pvals = pvals),
-    `one-step` = selection_wts(ex_adj_step3_mean, pvals = pvals),
-    `two-step` = selection_wts(ex_adj_step4_mean, pvals = pvals),
+    beta = selection_wts(ex_adj_beta_mean, pvals = pvals, bootstraps = FALSE),
+    `one-step` = selection_wts(ex_adj_step3_mean, pvals = pvals, bootstraps = FALSE),
+    `two-step` = selection_wts(ex_adj_step4_mean, pvals = pvals, bootstraps = FALSE),
     .id = "Model"
   )
 
@@ -264,17 +289,17 @@ We investigated whether this moderating effect remains after adjusting for selec
 
 We reran all four models using target leader's role as a moderator [@Steffens2021SIT].
 Based on a random effects meta-regression without adjustment for selective reporting, the relationship for leaders in nonformal roles produced an average effect size of `r formatC(ex_unadj_mod$beta[1], format = "f", digits = 2)`, 95% CI [`r formatC(ex_unadj_mod$ci.lb[1], format = "f", digits = 2)`, `r formatC(ex_unadj_mod$ci.ub[1], format = "f", digits = 2)`].
-The average effect for leaders in formal roles was larger by `r formatC(ex_unadj_mod$beta[2], format = "f", digits = 2)` SD, 95% CI [`r formatC(ex_unadj_mod$ci.lb[2], format = "f", digits = 2)`, `r formatC(ex_unadj_mod$ci.ub[2], format = "f", digits = 2)`], which was statistically significant from zero $(p = `r format.pval(ex_unadj_mod$pval[2], digits = 3, eps = 1e-3)`)$. 
+The average effect for leaders in formal roles was larger by `r formatC(ex_unadj_mod$beta[2], format = "f", digits = 2)` SD, 95% CI [`r formatC(ex_unadj_mod$ci.lb[2], format = "f", digits = 2)`, `r formatC(ex_unadj_mod$ci.ub[2], format = "f", digits = 2)`], which was statistically distinct from zero $(p = `r format.pval(ex_unadj_mod$pval[2], digits = 3, eps = 1e-3)`)$. 
 The unadjusted estimate of heterogeneity was $\tau = `r formatC(sqrt(ex_unadj_mod$tau2), format = "f", digits = 2)`$, similar to the summary meta-analysis.
 
 The lower panel of Table \@ref(tab:social-identity-theory-res) reports parameter estimates from the corresponding selection models that include target leader's role as a predictor.
 The $\beta_1$ coefficient estimates represent differences in average effects between leaders in formal versus nonformal roles, which were all statistically significant.
 Compared to the unadjusted model's estimated difference of `r formatC(ex_unadj_mod$beta[2], format = "f", digits = 2)`, the beta-density model estimated a substantially larger difference of `r round(ex_adj_beta_mod$est$Est[ex_adj_beta_mod$est$param=="beta_target.leader"], 2)`, whereas the two-step model yielded a difference of `r round(ex_adj_step4_mod$est$Est[ex_adj_step4_mod$est$param=="beta_target.leader"], 2)` and the one-step model remained unchanged at `r round(ex_adj_step3_mod$est$Est[ex_adj_step3_mod$est$param=="beta_target.leader"], 2)`.
 This suggests that the moderating effect of leader status is robust to selective reporting; however, the advantage for formal leaders may actually be underestimated when selective reporting bias is ignored.
-Moreover, the selection models lead to different conclusions about the average effects for leaders in nonformal roles ($\beta_0$). The estimate from the beta-density model is not statistically distinct from zero ($ES$ = `r round(ex_adj_beta_mod$est$Est[ex_adj_beta_mod$est$param=="beta_(Intercept)"], 2)`, $p$ = `r round(ex_adj_beta_mod$est$p_value[ex_adj_beta_mod$est$param=="beta_(Intercept)"], 2)`) and is substantially smaller than the estimate from the unadjusted model ($ES$ = `r formatC(ex_unadj_mod$beta[1], format = "f", digits = 2)`).
+Moreover, the selection models lead to different conclusions about the average effects for leaders in nonformal roles ($\beta_0$). The estimate from the beta-density model is not statistically distinct from zero and is substantially smaller than the estimate from the unadjusted model.
 In contrast, the estimated average effects for the reference group in the step-function selection models remain statistically significant, though they vary in magnitude.
 Selection parameter estimates are very similar to the estimates from the corresponding summary meta-analysis models.
 
-The results of this application demonstrate that the choice of selection function---smooth versus discrete---can lead to different conclusions regarding the magnitude and significance of adjusted effects. The beta-density selection model’s ability to capture a continuous range of selection probabilities provides a flexible alternative to the step-wise form of selection assumed by step-function selection model, particularly when reporting bias does not follow rigid significance thresholds.
-The fact that the beta-density model identified a larger moderator effect and a near-zero baseline effect highlights how a continuous function can reveal nuanced patterns---such as a steeper decline in the reporting of non-significant results for nonformal leaders---that may be obscured by the pre-defined thresholds of discrete models.
+The results of this application demonstrate that the choice of a smooth versus discrete selection function can lead to different conclusions regarding the magnitude and significance of adjusted effects. The beta-density selection model’s ability to capture a continuous range of selection probabilities provides a flexible alternative to the step-wise form of selection assumed by step-function selection model, particularly when reporting bias does not follow rigid significance thresholds.
+The fact that the beta-density model identified a larger moderator effect and a near-zero baseline effect highlights how a continuous function can reveal nuanced patterns that may be obscured by the pre-defined thresholds of discrete models.
 To investigate the performance of these models more systematically, we conducted simulations across a wide range of conditions, focusing on the comparative performance of the beta-density and step-function specifications and their robustness to misspecification of the selection function.
