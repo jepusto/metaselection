@@ -1,0 +1,172 @@
+---
+title: "CRVE"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Technical details of cluster-robust variance estimation {#CRVE-details}
+
+This appendix provides further details about the penalized maximum likelihood (PML) estimation approach and cluster-robust variance estimation (CRVE) technique for the beta-density selection model. For estimation purposes, we parametrize the model using natural log transformations of the variance parameter and selection parameters, setting $\gamma = \log(\tau^2)$, $\zeta_1 = \log(\lambda_1)$,  $\zeta_2 = \log(\lambda_2)$, and $\bs\zeta = (\zeta_1, \zeta_2)'$. We will denote the full parameter vector as $\bs\theta = \left(\bs\beta', \gamma, \bs\zeta\right)'$.
+Let $w_{ij} = w\left(y_{ij}, \sigma_{ij}; \zeta_1, \zeta_2 \right)$, $\mu_{ij} = \mat{x}_{ij} \bs\beta$, $\eta_{ij} = \exp(\gamma) + \sigma_{ij}^2$, and $A_{ij} = A\left(\mat{x}_{ij}, \sigma_{ij}; \bs\beta, \gamma, \bs\zeta \right)$ as defined in Equation \@ref(eq:generic-selection-A).
+
+Equation \@ref(eq:generic-selection) in the main text gives the marginal density of an observed effect size estimate under the beta-density model. Following from Equation \@ref(eq:generic-selection), the log-likelihood contribution of effect $i$ in study $j$ is then
+\begin{align}
+l_{ij}\left(\bs\theta \right) &= \log f\left(Y = y_{ij} | \sigma_{ij}, \mat{x}_{ij}\right) \nonumber \\
+&= \log w_{ij} - \log A_{ij} - \frac{1}{2} \frac{\left(y_{ij} - \mat{x}_{ij} \bs\beta\right)^2}{\eta_{ij}} - \frac{1}{2}\log\left(\eta_{ij}\right) - \frac{1}{2}\log(2 \pi), \label{eq:log-lik-ij}
+\end{align}
+The contribution of study $j$ to the log-likelihood is then
+\begin{equation}
+l_{j}\left(\bs\theta \right) = \sum_{i=1}^{k_j} l_{ij}\left(\bs\theta \right)
+\end{equation}
+and the penalized marginal log-likelihood across all $J$ studies is
+\begin{equation}
+\label{eq:penalized-marginal-likelihood}
+l\left(\bs\beta, \gamma, \bs\zeta \right) = \sum_{j=1}^{J} l_{j}\left(\bs\beta, \gamma, \bs\zeta \right) + p_{\beta}(\bs\beta) + p_{\gamma}(\gamma) + p_{\bs\zeta}(\bs\zeta),
+\end{equation}
+where $p_{\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, and $p_{\bs\zeta}(\bs\zeta)$ are log-prior penalties for the meta-regression coefficients, log-variance, and log-selection parameters, respectively.
+The penalized marginal likelihood (PML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:penalized-marginal-likelihood}).
+
+CRVE, or sandwich estimation, is a commonly used technique for quantifying the uncertainty with dependent observations where the dependence structure is not explicitly modeled. 
+CRVE is defined in terms of the score contributions and Hessian matrix of the penalized log-likelihood.
+The score contribution of study $j$ is the vector of derivatives of the penalized marginal log-likelihood contribution of study $j$:
+\begin{equation}
+\label{eq:score-contribution}
+\mat{S}_{j}\left(\bs\theta\right) = \frac{\partial l_{j}\left(\bs\theta \right)}{\partial \bs\theta}.
+\end{equation}
+The Hessian is the matrix of second derivatives of the penalized marginal log-likelihood, given by
+\begin{equation}
+\mat{H}(\bs\theta) = \sum_{j=1}^J \frac{\partial \mat{S}_j(\bs\theta)}{\partial \theta'}.
+\end{equation}
+Let $\mat{\hat{S}}_j = \mat{S}_j(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ and $\mat{\hat{H}} = \mat{H}(\bs{\hat\beta}, \hat\gamma, \bs{\hat\zeta})$ denote the score contributions and Hessian matrix evaluated at the maximum of the penalized likelihood.
+A cluster-robust sandwich estimator of the sampling variance of the PML estimator is then
+\begin{equation}
+\label{eq:sandwich-variance}
+\mat{V}^{CR} = \mat{\hat{H}}^{-1}\left(\sum_{j=1}^J \mat{\hat{S}}_j {\mat{\hat{S}}_j}'\right) \mat{\hat{H}}^{-1}.
+\end{equation}
+We construct confidence intervals for model parameters using $\mat{V}^{CR}$ with Wald-type large sample approximations. For instance, the $(1 - 2\alpha)$-level large-sample confidence interval for a meta-regression parameter $\beta_g$ is constructed as
+$$
+\hat\beta_g \ \pm \ \Phi^{-1}(1 - \alpha) \times \sqrt{V^{CR}_{gg}},
+$$
+where $V^{CR}_{gg}$ is the $g^{th}$ diagonal entry of $\mat{V}^{CR}$.
+
+It remains to give the exact form of the score contributions and Hessian matrix. To define these, observe that the beta-density selection function can be written compactly by defining
+\begin{equation}
+\tilde{p}_{ij} = \begin{cases}
+\alpha_1 & \text{if} \quad \Phi^{-1}(1 - \alpha_1) \leq y_{ij} / \sigma_{ij} \\
+\Phi\left(-y_{ij} / \sigma_{ij}\right) & \text{if} \quad \Phi^{-1}(1 - \alpha_2) \leq y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2 & \text{if} \quad y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_2),
+\end{cases}
+\end{equation}
+so that the selection weights of the truncated beta density model are
+\begin{equation}
+w_{ij} = w\left(y_{ij}, \sigma_{ij}; \zeta_1, \zeta_2 \right) = \tilde{p}_{ij}^{\lambda_1 - 1} \left(1 - \tilde{p}_{ij}\right)^{\lambda_2 - 1}.
+\end{equation}
+Also let $c_{hij} = \eta_{ij}^{-1/2}\left(\sigma_{ij} \Phi^{-1}(1 - \alpha_h) - \mu_{ij}\right)$ for $h = 1,2$; $B_{0ij} = 1 - \Phi(c_{1ij})$; and $B_{2ij} = \Phi(c_{2ij})$.
+
+The score and Hessian contributions of the truncated beta density model involve integrals that need to be calculated numerically. 
+To ease notation for these integrals, we will denote the integral of a function $f(Y)$ with respect to the distribution of $Y$ under the truncated beta density as 
+\begin{equation}
+E_Y\left[f(Y)| \sigma_{ij}, \lambda_1, \lambda_2\right] = \int_{\sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{\sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-Y / \sigma_{ij})\right]^{\lambda_1} \left[\Phi(Y / \sigma_{ij})\right]^{\lambda_2} \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY.
+\end{equation}
+It follows that 
+\begin{equation}
+A_{ij} = \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} + E_Y(1 | \sigma_{ij}, \lambda_1,\lambda_2) + \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+\end{equation}
+
+## Score contributions
+
+The components of the score contribution of study $j$ involve derivatives of $l_{j}\left(\bs\beta, \gamma, \bs\zeta \right)$ with respect to all model parameters, as given by
+\begin{equation}
+\mat{S}_{j}\left(\bs{\beta}, \gamma, \bs{\zeta}\right) = \left(\mat{S}_{\bs\beta j}', S_{\gamma j}, \mat{S}_{\bs\zeta j}'\right)'.
+\end{equation}
+The score contributions of study $j$ have the general form
+\begin{align}
+\mat{S}_{\bs\beta j} &= \sum_{i=1}^{k_j}  \mat{x}_{ij}' \left(\frac{\left(y_{ij} - \mu_{ij} \right)}{\eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial  \mu_{ij}}\right) \\
+S_{\gamma j} &= \sum_{i=1}^{k_j} \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \\
+S_{\zeta_h j} &= \sum_{i=1}^{k_j} \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{h}}\right)
+\end{align}
+with derivatives of $w_{ij}$ given by 
+\begin{align}
+\frac{\partial w_{ij}}{\partial \lambda_1} &= w_{ij} \log(\tilde{p}_{ij}) \\
+\frac{\partial w_{ij}}{\partial \lambda_2} &= w_{ij} \log(1 - \tilde{p}_{ij}) 
+\end{align}
+and derivatives of $A_{ij}$ given by
+\begin{align}
+\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[ \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
+& \left. \qquad \qquad \qquad + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \right] \\
+\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \biggl[\alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \left. \qquad \qquad \qquad + E_Y\left(\left. \frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right] \\
+\frac{\partial A_{ij}}{\partial \lambda_1} &= \log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
+\frac{\partial A_{ij}}{\partial \lambda_2} &= \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+\end{align}
+
+## Hessian
+
+The sub-components of the Hessian matrix have the following forms:
+\begin{align}
+\mat{H}^{\bs\beta \bs\beta'} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j}  \mat{x}_{ij}' \mat{x}_{ij} \left(\frac{1}{A_{ij}^2}\left(\frac{\partial A_{ij}}{\partial \mu_{ij}}\right)^2 - \frac{1}{A_{ij}} \frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} - \frac{1}{\eta_{ij}} \right) \\
+\mat{H}^{\bs\beta \gamma} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j}  \mat{x}_{ij}' \tau^2 \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} - \frac{y_{ij} - \mu_{ij}}{\eta_{ij}^2} \right) \\
+\mat{H}^{\bs\beta \zeta_h} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j} \mat{x}_{ij}' \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \mu_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_h} \right) \\
+\mat{H}^{\gamma \gamma} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j} \left[ \tau^2 \left(\frac{\left(y_{ij} - \mu_{ij}\right)^2 - \eta_{ij}}{2\eta_{ij}^2} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \eta_{ij}}\right) \right.  \nonumber \\
+& \qquad \qquad \qquad \qquad  + \left. \tau^4 \left(\frac{1}{A_{ij}^2} \left(\frac{\partial A_{ij}}{\partial \eta_{ij}}\right)^2 - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2}  - \frac{2(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^3}\right)\right] \\
+\mat{H}^{\gamma \zeta_h} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j} \tau^2 \lambda_h \left(\frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \eta_{ij}}\frac{\partial A_{ij}}{\partial \lambda_h} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_h} \right) \\
+\mat{H}^{\zeta_f \zeta_h} &= \sum_{j=1}^{J} \sum_{i=1}^{k_j}  \lambda_f \lambda_h \left(\frac{1}{w_{ij}}\frac{\partial^2 w_{ij}}{\partial \lambda_{f} \partial \lambda_{h}} - \frac{1}{w_{ij}^2}\frac{\partial w_{ij}}{\partial \lambda_{f}}\frac{\partial w_{ij}}{\partial \lambda_{h}} + \frac{1}{A_{ij}^2} \frac{\partial A_{ij}}{\partial \lambda_{f}}\frac{\partial A_{ij}}{\partial \lambda_{h}} - \frac{1}{A_{ij}}\frac{\partial^2 A_{ij}}{\partial \lambda_{f} \partial \lambda_{h}} \right) \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad  + I(f = h) \lambda_f \left(\frac{1}{w_{ij}}\frac{\partial w_{ij}}{\partial \lambda_{f}} - \frac{1}{A_{ij}}\frac{\partial A_{ij}}{\partial \lambda_{f}}\right), \label{eq:H-zeta-zeta}
+\end{align}
+The second derivatives of the weight function with respect to $\lambda_1$ and $\lambda_2$ are
+\begin{align}
+\frac{\partial^2 w_{ij}}{\partial \lambda_1^2} &= w_{ij} \left[\log(\tilde{p}_{ij})\right]^2 \\
+\frac{\partial^2 w_{ij}}{\partial \lambda_2^2} &=  w_{ij} \left[\log(1 - \tilde{p}_{ij})\right]^2 \\
+\frac{\partial^2 w_{ij}}{\partial \lambda_1 \partial \lambda_2} &=  w_{ij} \log(\tilde{p}_{ij})\log(1 - \tilde{p}_{ij}).
+\end{align}
+The second derivatives of $A_{ij}$ are
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij}^2} &= \frac{1}{\eta_{ij}} \biggl[ \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^2 - 1) \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})[(Y - \mu_{ij})^2 - 3 \eta_{ij}]}{\eta_{ij}^{3/2}} \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} (c_{2ij}^2 - 1) \phi(c_{2ij}) \biggr]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_1} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_2} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij},  \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2} &= \frac{1}{4 \eta_{ij}^2} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^3 - 3 c_{1ij}) \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})^4}{\eta_{ij}^2} - 6 \frac{(Y - \mu_{ij})^2}{\eta_{ij}} + 3 \ \right| \sigma_{ij},  \lambda_1, \lambda_2 \right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} (c_{2ij}^3 - 3 c_{2ij}) \phi(c_{2ij}) \biggr]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_1} &= \frac{1}{2\eta_{ij}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr] 
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_2} &= \frac{1}{2\eta_{ij}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr]
+\end{align}
+\begin{align}
+\frac{\partial^2 A_{ij}}{\partial \lambda_1^2} &= \left[\log(\alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(-Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(\alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
+\frac{\partial^2 A_{ij}}{\partial \lambda_2^2} &= \left[\log(1 - \alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(1 - \alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\ 
+\frac{\partial^2 A_{ij}}{\partial \lambda_1 \partial \lambda_2} &= \log(\alpha_1) \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \log(\alpha_2) \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}
+\end{align}

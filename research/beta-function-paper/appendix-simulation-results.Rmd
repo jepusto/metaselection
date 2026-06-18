@@ -12,8 +12,6 @@ source("process-simulation-results.R")
 
 # Additional simulation results for methods of estimating average effect size $(\mu)$ {#mu-simulation-results}
 
-## Sensitivity to Selective Reporting: Beta-Density vs. Standard Approaches
-
 ```{r rmse-CHE-Beta-main}
 #| cache: true
 #| fig.width: 9
@@ -79,8 +77,6 @@ mu_graph_res_ci_main %>%
   theme(legend.position = "top")
 
 ```
-
-## Robustness to Selection Function Misspecification: Beta-Density vs. Step Models
 
 ```{r comparison-coverage-full-miss}
 #| cache: true
