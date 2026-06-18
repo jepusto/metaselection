@@ -1,3 +1,5 @@
 * Nail down the priors
 * Add results for CI width
-* Abstract and Highlights
+* Abstract 
+* Highlights
+* Cite Bartos et al. and van Aert, Jackson, & Riley

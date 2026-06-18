@@ -51,6 +51,44 @@ estimates},
 	year = {2021},
 }
 
+@online{Bartos2025zcurve,
+  title = {Z-{{Curve Plot}}: A Visual Diagnostic for Publication Bias in Meta-Analysis},
+  shorttitle = {Z-{{Curve Plot}}},
+  author = {Bartoš, František and Schimmack, Ulrich},
+  date = {2025-09-08},
+  eprint = {2509.07171},
+  eprinttype = {arXiv},
+  eprintclass = {stat.ME},
+  doi = {10.48550/arXiv.2509.07171},
+  url = {http://arxiv.org/abs/2509.07171},
+  urldate = {2026-06-04},
+  abstract = {Publication bias undermines meta-analytic inference, yet visual diagnostics for detecting model misfit due to publication bias are lacking. We propose the z-curve plot, a publication-bias-focused absolute model fit diagnostic. The z-curve plot overlays the model-implied posterior predictive distribution of \$z\$-statistics on the observed distribution of z-statistics and enables direct comparison across candidate meta-analytic models (e.g., random-effects meta-analysis, selection models, PET-PEESE, and RoBMA). Models that approximate the data well show minimal discrepancy between the observed and predicted distribution of z-statistics, whereas poor-fitting models show pronounced discrepancies. Discontinuities at significance thresholds or at zero provide visual evidence of publication bias; models that account for this bias track these discontinuities in the observed distribution. We further extrapolate the estimated publication-bias-adjusted models to the absence of publication bias to obtain a posterior predictive distribution in the absence of publication bias. From this extrapolation, we derive three summaries: the expected discovery rate (EDR), the false discovery risk (FDR), and the expected number of missing studies (N missing). We demonstrate the visualization and its interpretation using simulated datasets and four meta-analyses spanning different degrees of publication bias. The method is implemented in the RoBMA R package.},
+  pubstate = {prepublished},
+  keywords = {Statistics - Methodology},
+  file = {C:\Users\jamespustejovsky\Zotero\storage\769366Q7\2509.html}
+}
+
+
+@article{Bartos2026robust,
+  title = {Robust {{Bayesian}} Multilevel Meta-Analysis: Adjusting for Publication Bias in the Presence of Dependent Effect Sizes},
+  shorttitle = {Robust {{Bayesian}} Multilevel Meta-Analysis},
+  author = {Bartoš, František and Maier, Maximilian and Wagenmakers, Eric-Jan},
+  date = {2026-05-12},
+  journaltitle = {Behavior Research Methods},
+  shortjournal = {Behav Res},
+  volume = {58},
+  number = {6},
+  pages = {165},
+  issn = {1554-3528},
+  doi = {10.3758/s13428-026-03023-y},
+  url = {https://doi.org/10.3758/s13428-026-03023-y},
+  urldate = {2026-06-03},
+  abstract = {Meta-analyses often include multiple dependent effect sizes, yet current methods typically neglect the resulting within-study dependencies or fail to address model uncertainty and publication bias adequately. We extend robust Bayesian meta-analysis (RoBMA) to a multilevel framework, simultaneously handling within-study dependencies, model uncertainty, heterogeneity, moderators, and publication bias. Specifically, the three-level RoBMA integrates approximate Bayesian selection models with PET-PEESE adjustments within a hierarchical Bayesian setting. We illustrate the methodology through empirical examples and demonstrate its performance via simulations. The approach is implemented in the RoBMA R package and JASP.},
+  langid = {english},
+  keywords = {Bayes factor,Bayesian model averaging,Evidence,Knowledge updating,Meta-analysis}
+}
+
+
 @article{baskerville2012,
 	title = {Systematic review and meta-analysis of practice facilitation within primary care settings},
 	volume = {10},
@@ -326,7 +364,24 @@ estimates},
   volume = {20},
   year = {2015}
 }
-
+  
+@article{coburn2015publication,
+  title = {Publication Bias as a Function of Study Characteristics.},
+  author = {Coburn, Kathleen M. and Vevea, Jack L.},
+  date = {2015},
+  journaltitle = {Psychological Methods},
+  shortjournal = {Psychological Methods},
+  volume = {20},
+  number = {3},
+  pages = {310--330},
+  issn = {1939-1463, 1082-989X},
+  doi = {10.1037/met0000046},
+  url = {http://doi.apa.org/getdoi.cfm?doi=10.1037/met0000046},
+  urldate = {2022-10-11},
+  abstract = {Researchers frequently conceptualize publication bias as a bias against publishing nonsignificant results. However, other factors beyond significance levels can contribute to publication bias. Some of these factors include study characteristics, such as the source of funding for the research project, whether the project was single center or multicenter, and prevailing theories at the time of publication. This article examines the relationship between publication bias and 2 study characteristics by breaking down 2 meta-analytic data sets into levels of the relevant study characteristic and assessing publication bias in each level with funnel plots, trim and fill (Duval \& Tweedie, 2000a, 2000b), Egger’s linear regression (Egger, Smith, Schneider, \& Minder, 1997), cumulative meta-analysis (Borenstein, Hedges, Higgins, \& Rothstein, 2009), and the Vevea and Hedges (1995) weight-function model. Using the Vevea and Hedges model, we conducted likelihood ratio tests to determine whether information was lost if only 1 pattern of selection was estimated. Results indicate that publication bias can differ over levels of study characteristics, and that developing a model to accommodate this relationship could be advantageous.},
+  langid = {english},
+  file = {C:\Users\jamespustejovsky\Zotero\storage\D9HFJ8IS\Coburn and Vevea - 2015 - Publication bias as a function of study characteri.pdf}
+}
 
 @Manual{Coburn2017weightr,
   title = {weightr: Estimating Weight-Function Models for Publication Bias},
@@ -335,7 +390,7 @@ estimates},
   note = {R package version 1.1.2},
   url = {https://CRAN.R-project.org/package=weightr},
 }
-  
+
 
 
 @article{copas1997inference,
@@ -1752,7 +1807,7 @@ Conclusion: The test could be useful to document an excess of significant findin
 	pages = {713--729},
 	number = {5},
 	journaltitle = {Perspectives on Psychological Science},
-	author = {van Aert, Robbie C M and Wicherts, Jelte M and van Assen, Marcel A L M},
+	author = {van Aert, Robbie C. M. and Wicherts, Jelte M. and van Assen, Marcel A. L. M.},
 	urldate = {2019-05-28},
 	date = {2016-09},
 	langid = {english},
@@ -1777,6 +1832,34 @@ Conclusion: The test could be useful to document an excess of significant findin
 	year = {2019},
 	pages = {e0215052},
 	file = {van Aert et al. (2019).pdf:/Users/mjoshi/Zotero/storage/7NURHK2I/van Aert et al. (2019).pdf:application/pdf},
+}
+
+@article{vanaert2025metaanalyzing,
+  title = {Meta-Analyzing Nonpreregistered and Preregistered Studies.},
+  author = {Van Aert, Robbie C. M.},
+  date = {2025-02-17},
+  journaltitle = {Psychological Methods},
+  shortjournal = {Psychological Methods},
+  issn = {1939-1463, 1082-989X},
+  doi = {10.1037/met0000719},
+  url = {https://doi.apa.org/doi/10.1037/met0000719},
+  urldate = {2025-03-21},
+  abstract = {Preregistration is gaining ground in psychology, and a consequence of this is that preregistered studies are more often included in meta-analyses. Preregistered studies likely mitigate the effect of publication bias in a meta-analysis, because preregistered studies can be located in the registries they were registered in even if they do not get published. However, current meta-analysis methods do not take into account that preregistered studies are less susceptible to publication bias. Traditional methods treat all studies as equivalent while meta-analytic conclusions can be improved by taking advantage of preregistered studies. The goal of this article is to introduce the hybrid extended meta-analysis (HYEMA) method that takes into account whether a study is preregistered or not and corrects for publication bias in only the nonpreregistered studies. The proposed method is applied to two meta-analyses on prominent effects in the psychological literature: the red-romance hypothesis and money priming. Applying HYEMA to these meta-analyses shows that the average effect size estimate is substantially closer to zero than the estimate of the random-effects meta-analysis model. Two simulation studies tailored to the two applications are also presented to illustrate the method’s superior performance compared to the random-effects metaanalysis model and precision-effect test and precision-effect estimate with standard error when publication bias is present. Hence, I recommend to apply HYEMA as a sensitivity analysis if a mix of both preregistered and nonpreregistered studies are present in a meta-analysis. R code as well as a web application (https://rcmvanaert .shinyapps.io/HYEMA) have been developed and are described in the article to facilitate application of the method.},
+  langid = {english},
+  file = {C:\Users\jamespustejovsky\Zotero\storage\9RPJZPY3\Van Aert - 2025 - Meta-analyzing nonpreregistered and preregistered .pdf}
+}
+
+
+@online{VanAert2026correcting,
+  title = {Correcting for Publication Bias in Multivariate and Multilevel Meta-Analysis: {{A}} Multivariate Step Function Selection Model Approach},
+  shorttitle = {Correcting for Publication Bias in Multivariate and Multilevel Meta-Analysis},
+  author = {Van Aert, Robbie C. M. and Riley, Richard and Jackson, Dan},
+  date = {2026-04-06},
+  doi = {10.31234/osf.io/rk4mn_v1},
+  url = {https://osf.io/rk4mn_v1},
+  urldate = {2026-04-18},
+  abstract = {Univariate meta-analysis models assume that all effect sizes included in the analysis are independent. This assumption is violated if, for example, two outcomes are reported in a study that are of interest to the meta-analyst or a study reports multiple experiments administered by the same researchers in the same lab. The multivariate and multilevel meta-analysis models allow modelling dependent effect sizes. These two models have recently gained in popularity among meta-analysts in psychology, where one of the largest threats to validity of meta-analysis is publication bias where a selective subset of studies are not published. We extend the univariate step function selection model approach, for modelling publication bias, to multivariate and multilevel meta-analyses. We propose a strict and more relaxed selection model that assigns a different publication probability to studies that have only statistically significant outcomes or at least one significant outcome, respectively. We primarily focus on the method’s implementation as a sensitivity analysis where publication probabilities in the selection model are assumed as known but also show how these can be estimated. The method is applied to the data from multivariate and multilevel meta-analyses. Simulation studies tailored to these applications show that the proposed method as a sensitivity analysis outperforms the multivariate and multilevel meta-analysis models that do not correct for publication bias. The simulations also show that the publication probability is imprecisely estimated. We offer guidance for applying the proposed method in practice and share R code to facilitate the application of our proposed methodology.},
+  pubstate = {prepublished}
 }
 
 @article{VanAssen2015meta,
