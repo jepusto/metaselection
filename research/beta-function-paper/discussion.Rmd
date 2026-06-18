@@ -19,9 +19,6 @@ Our simulations indicate that, across all simulation conditions, the beta-densit
 
 The second part of our simulations focused on the robustness of selection models to functional misspecification, comparing the beta-density model to one-step and two-step selection models. Because the data were generated via a smooth beta-density process, the beta model naturally yielded bias closer to zero than the step-function alternatives, which proved less robust to the misspecification of a continuous selection mechanism. The step-function models—--particularly the one-step variant—--frequently produced biased estimates and miscalibrated, overly narrow confidence intervals. However, a notable bias–variance trade-off was observed: in certain conditions where the true average effect was moderate or large and selection was not extreme, the simpler one-step model occasionally yielded a lower RMSE than the beta-density model. This suggests that while the beta model is more flexible and recovers the functional form more accurately, the extreme parsimony of a misspecified step model can provide greater numerical stability in specific, low-information contexts.
 
-#Nevertheless, the beta-density model remained the most robust choice for maintaining 95% interval coverage when paired with the two-stage bootstrap, reinforcing its utility as a flexible alternative that does not require the a priori specification of $p$-value thresholds.
-
-
 
 ## Limitations and Future Directions
 

@@ -328,7 +328,7 @@ RMSE_comparison_plot <- function(data, x_method, y_method, measure, col_factor =
     geom_hline(yintercept = 1) + 
     geom_point(alpha = .5, position = position_jitter(width = 0.2)) +
     expand_limits(y = 0.5) + 
-    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
     scale_y_continuous(transform = "log2") + 
     scale_color_brewer(palette = "Dark2", guide = guide_legend(nrow=legend_rows)) +
     facet_grid(tau ~ mean_smd, 

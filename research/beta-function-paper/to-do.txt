@@ -1,0 +1,3 @@
+* Nail down the priors
+* Add results for CI width
+* Abstract and Highlights

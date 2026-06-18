@@ -39,19 +39,19 @@ A $p$-value selection process is defined by a selection function that specifies 
 Citkowicz and Vevea @citkowicz2017parsimonious proposed a selection function based on a truncated beta density with two parameters, providing flexibility to capture diverse selection patterns more parsimoniously than with a step function model. Because the beta density can be unbounded near 0 and 1, they proposed truncating it to make the model computationally tractable, assuming constant selection probabilities for $p$-values in the range $[0, \alpha_1]$ and $[\alpha_2, 1]$. Given these pre-specified thresholds $\alpha_1$ and $\alpha_2$ and selection parameters $\boldsymbol\lambda = (\lambda_1, \lambda_2)$, the beta density selection function is expressed by
 \begin{equation}
 \label{eq:beta-density-p}
-w(p^*_i, \boldsymbol\lambda) =  \begin{cases} 
-\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad p^*_i \leq \alpha_1 \\
-\left(p^*_i\right)^{\lambda_1 - 1} (1 - p^*_i)^{\lambda_2 - 1} & \text{if} \quad \alpha_1 < p^*_i < \alpha_2 \\
-\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad \alpha_2 \leq p^*_i.
+w(p^*, \boldsymbol\lambda) =  \begin{cases} 
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad p^* \leq \alpha_1 \\
+\left(p^*\right)^{\lambda_1 - 1} (1 - p^*)^{\lambda_2 - 1} & \text{if} \quad \alpha_1 < p^* < \alpha_2 \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad \alpha_2 \leq p^*.
 \end{cases}
 \end{equation}
 Equation (\ref{eq:beta-density-p}) can be written equivalently as 
 \begin{equation}
 \label{eq:beta-density-y}
 w(Y^*_i, \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
-\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_1) \leq Y^*_i \\
-\left[\Phi\left(-Y^*_i / \sigma^*_i\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^*_i / \sigma^*_i\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^*_i \Phi^{-1}(1 - \alpha_2) < Y^*_i < \sigma^*_i \Phi^{-1}(1 - \alpha_1) \\
-\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^*_i \leq \sigma^*_i \Phi^{-1}(1 - \alpha_2).
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_1) \leq Y^* \\
+\left[\Phi\left(-Y^* / \sigma^*\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^* / \sigma^*\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_2) < Y^* < \sigma^* \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^* \leq \sigma^* \Phi^{-1}(1 - \alpha_2).
 \end{cases}
 \end{equation}
 When $\lambda_1 = \lambda_2 = 1$, the selection function is flat and selective reporting is absent.
@@ -110,7 +110,7 @@ beta_rev_plot
 The combined model for the marginal density of an observed effect size estimate $y_{ij}$ with standard error $\sigma_{ij}$ has the form
 \begin{equation}
 \label{eq:generic-selection}
-f(Y = y_{ij} | \sigma_{ij}, \mathbf{x}_{ij}) = \frac{1}{A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)} \times w\left(y_{ij}, \sigma_{ij}; \boldsymbol\lambda \right) \times \frac{1}{\sqrt{\tau^2 + \sigma_{ij}^2}} \phi\left(\frac{y_{ij} - \mathbf{x}_{ij} \boldsymbol\beta}{\sqrt{\tau^2 + \sigma_{ij}^2}}\right),
+f(Y = y_{ij} | \sigma_{ij}, \mathbf{x}_{ij}) = \frac{w\left(y_{ij}, \sigma_{ij}; \boldsymbol\lambda \right)}{A(\mathbf{x}_{ij}, \sigma_{ij}; \boldsymbol\beta, \tau^2, \boldsymbol\lambda)} \times \frac{1}{\sqrt{\tau^2 + \sigma_{ij}^2}} \phi\left(\frac{y_{ij} - \mathbf{x}_{ij} \boldsymbol\beta}{\sqrt{\tau^2 + \sigma_{ij}^2}}\right),
 \end{equation}
 where 
 \begin{equation}
@@ -123,11 +123,16 @@ The density then reduces to the unweighted density of the evidence-generating pr
 
 ## Estimation Method {#estimation-method}
 
-We estimate model parameters using a penalized maximum likelihood (PML) approach based on the composite marginal likelihood. 
-This method treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated with step function selection models [@pustejovsky2025step] and consistent with established composite likelihood approaches [@cox2004note; @lindsay1988composite; @varin2008composite]. To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the $p$-value thresholds---we incorporate weak penalties into the composite likelihood. Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter $\tau^2$ and independent normal penalties on the log-transformed selection parameters, $\log(\lambda_1) \sim N(0, 1)$ and $\log(\lambda_2) \sim N(0, 1)$. These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
+We estimate model parameters using the composite marginal likelihood, with an additional penalty term for regularization that functions similarly to a prior in Bayesian inference; thus, we call this approach penalized maximum likelihood (PML).
+The PML estimator treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated with step function selection models [@pustejovsky2025step] and consistent with established composite likelihood approaches [@cox2004note; @lindsay1988composite; @varin2008composite]. 
+To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the $p$-value thresholds---we incorporate weak penalties into the composite likelihood. 
+Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter $\tau^2$ and independent normal penalties on the log-transformed selection parameters, $\log(\lambda_1) \sim N(0, 1)$ and $\log(\lambda_2) \sim N(0, 1)$. 
+These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
 <!-- MC: Note that this is some placeholder language. Need to revise once we determine the actual penalties. -->
 
-Estimation proceeds by maximizing the penalized log-composite-likelihood function. To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. The sandwich estimator used for the beta-density selection model follows the same structural form as the one developed for the step-function selection model. Because the marginal modeling approach is identical across these two models, formal expressions for the score functions and the robust variance-covariance matrix can be found in prior work @pustejovsky2025step.
+Estimation proceeds by maximizing the penalized log-composite-likelihood function. 
+To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. 
+The sandwich estimator used for the beta-density selection model follows the same structural form as the one developed for the step-function selection model. `r appendix_prefix` \@ref(CRVE-details) provides additional technical details about computing the PML estimator and sandwich estimator.
 
 ## Bootstrap inference
 

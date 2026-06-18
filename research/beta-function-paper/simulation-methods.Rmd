@@ -9,10 +9,12 @@ editor_options:
 
 We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model and to investigate whether the form of the assumed selection mechanism matters for estimation of average effect size.
 The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates.
-We compared the beta density model to three existing methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting [@chen2024adapting]; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures [@stanley2014meta]; and (3) a step-function selection model that accounts for both selective reporting and dependent effects [@pustejovsky2025step].
-We evaluated the model estimates based on convergence rates, bias, accuracy, and confidence interval coverage for estimating the average effect size of the unselected distribution.
+We compared estimates based on the beta density model to estimates generated from three existing methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting [@chen2024adapting]; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures [@stanley2014meta]; and (3) a step-function selection model that accounts for both selective reporting and dependent effects [@pustejovsky2025step].
+We evaluated the model estimates based on convergence rates, bias, accuracy, confidence interval coverage, and confidence interval width for estimating the average effect size of the unselected distribution.
+<!-- JEP: Need to add results for CI width. -->
 To ensure numerical stability in smaller samples, all selection models were estimated using the PML approach with the default penalties provided in the `metaselection` package [@metaselection].
-Bootstrap confidence intervals were assessed under a narrower set of conditions to limit computational burden. 
+We evaluated bootstrap confidence interval performance under a narrower set of conditions to limit computational burden. 
+
 Simulations were conducted in R Version 4.4.0 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin–Madison [@CHTC]. 
 The code relied on several R packages, including metafor [@Viechtbauer2010conducting], clubSandwich [@clubSandwich], simhelpers [@simhelpers], optimx [@optimx], and tidyverse [@tidyverse].
 <!-- MC: Any other revisions here, such as the R version? -->
@@ -22,12 +24,13 @@ The code relied on several R packages, including metafor [@Viechtbauer2010conduc
 We generated simulated data using an approach similar to prior work [@pustejovsky2025step], with the key difference that effect size estimates were selected for inclusion based on the beta-density selection model. For each simulated meta-analysis, we generated a pool of primary studies using a correlated-and-hierarchical effects model, with effect size estimates selected for inclusion according to probabilities defined by the beta-density selection model. Each study followed a two-group design, with sample sizes and numbers of effect sizes per study drawn from an empirical distribution based on the What Works Clearinghouse database. We generated outcome correlations across studies by sampling from a beta distribution with mean $\rho$ and standard deviation 0.05, then assumed a constant correlation between pairs of outcomes within a study.
 
 Within each study, we simulated a study-level average effect size $\delta_j$ from a normal distribution with mean $\mu$ and variance $\tau^2_B$, then generated individual effect size parameters from a normal distribution centered at $\delta_j$ with variance $\omega^2$. Using these parameters, we drew multivariate normal outcomes for participants equally divided into treatment and control groups and computed standardized mean differences with Hedges’s $g$ small sample bias correction. One-sided $p$-values were computed for each effect size, and individual effect sizes were then selected for inclusion in the dataset, with selection probabilities determined by the beta-density selection model with parameters $\lambda_1,\lambda_2$.
-By generating data under the smooth beta-density selection process, we can evaluate the performance of the beta-density selection model under correct specification while simultaneously testing the robustness of the discrete step-function selection model to this form of misspecification.
+<!-- JEP: Cut since it's redundant with comments in the next subsection. -->
+<!-- By generating data under the smooth beta-density selection process, we can evaluate the performance of the beta-density selection model under correct specification while simultaneously examining the robustness of the discrete step-function selection model when it is mis-specified. -->
 We repeated this process until the simulated meta-analytic dataset included at total of $J$ studies with at least one observed result.
 
 ## Estimation methods
 
-We estimated the beta-density selection model using the PML approach described in Section \@ref(estimation-method). 
+We estimated the beta-density selection model using the proposed PML approach. 
 This estimation utilized the package defaults, including a log-F penalty on the heterogeneity parameter and normal penalties on the selection parameters.
 <!-- MC: Revise, once we determine the default priors. -->
 We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile confidence intervals based on the two-stage bootstrap. To maintain computational feasibility, we used $B = 399$ bootstrap replications of each estimator.
@@ -108,8 +111,6 @@ Prior work [@pustejovsky2025step] included a condition in which the primary stud
 
 ## Performance criteria
 
-We evaluated each method’s performance in terms of convergence rates, bias, root mean-squared error (RMSE), and 95% confidence interval coverage for the overall effect size $\mu$. Bias reflects systematic deviation from the true parameter value, while RMSE captures both bias and sampling variability.
+We evaluated each method’s performance in terms of convergence rates, bias, root mean-squared error (RMSE), 95% confidence interval coverage, and confidence interval width for the overall effect size $\mu$. Bias reflects systematic deviation from the true parameter value, while RMSE captures both bias and sampling variability.
 For confidence intervals based on cluster-robust variance estimation, we defined coverage as the proportion of intervals that contained the true parameter value. For bootstrap intervals, we used $B = 399$ replicates per simulation due to computational limits---fewer than ideal for applied use. To estimate practical coverage rates, we followed an approach similar to @boos2000montecarlo: we calculated coverage for smaller subsamples ($B = 49, 99, 199, 299$) randomly selected without replacement from the full set of $B = 399$ bootstraps, fit a regression of coverage on $1/B$, and used the intercept to extrapolate expected coverage for $B = 1999$.
-This extrapolation technique was previously evaluated and implemented [@pustejovsky2025step] (see Online Appendix C.3 for further details and demonstration of its performance).
-<!-- MC: Is the number of bootstraps correct? -->
-<!-- JEP: Yes, correct. -->
+This extrapolation technique was previously evaluated and implemented [@pustejovsky2025step, see Online Appendix C.3 for further details and demonstration of its performance].
