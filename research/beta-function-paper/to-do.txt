@@ -2,4 +2,3 @@
 * Add results for CI width
 * Abstract 
 * Highlights
-* Cite Bartos et al. and van Aert, Jackson, & Riley
