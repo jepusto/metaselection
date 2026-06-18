@@ -34,14 +34,13 @@ tablelist         : no
 footnotelist      : no
 lineno            : no
 mask              : no
-numbersections    : yes
+numbersections    : no
 keep_tex          : yes
 lang              : "en-US"
 documentclass     : "apa7"
 classoption       : "man, donotrepeattitle"
 output            : 
   papaja::apa6_pdf
-csl               : american-medical-association.csl
 replace_ampersands: yes
 
 header-includes:
@@ -64,11 +63,7 @@ header-includes:
 - \raggedbottom
 - \usepackage{setspace}
 - \AtBeginEnvironment{tabular}{\singlespacing}
-- \usepackage{perpage}
-- \MakePerPage{footnote}
-- \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 - \usepackage{xr}
-- \externaldocument{step-function-selection-models-supplementary-materials}
 - \newcommand{\Prob}{\text{Pr}}
 - \newcommand{\E}{\text{E}}
 - \newcommand{\Cov}{\text{Cov}}
@@ -198,6 +193,9 @@ The authors declare no conflicts of interest.
 \endgroup
 
 # (APPENDIX) Appendix {-}
+
+```{r child = "appendix-CRVE.Rmd"}
+```
 
 ```{r child = "appendix-simulation-results.Rmd"}
 ```
