@@ -68,7 +68,7 @@ pp_coverage_main <-
 
 ```
 
-We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates of 95% confidence intervals. 
+We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates and width of 95% confidence intervals. 
 Second, we compare the performance of the beta-density selection model to the one-step and two-step selection models to assess the robustness of these models to misspecification of the selection function.
 Additional results concerning the bias and RMSE for the marginal variance of the effect size distribution for the selection models are provided  in `r appendix_prefix` \@ref(gamma-simulation-results) and additional results on the performance of the selection parameters for the beta-density selection model are provided in `r appendix_prefix` \@ref(zeta-simulation-results).
 
@@ -256,6 +256,94 @@ Figure \@ref(fig:Beta-coverage-main) depicts the coverage rates of 95% confidenc
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of $J = 60$.
 Although neither method achieves exact nominal coverage across all conditions, the two-stage percentile bootstrap intervals consistently yield better coverage rates than those based on the large-sample cluster-robust variance method.
 
+### Confidence Interval Width
+
+```{r comparison-CI-width-main}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Average width of confidence intervals for average effect size based on selected methods, by number of studies, average SMD, and between-study heterogeneity. Results are limited to scenarios with $\\rho = 0.8$, $J = 15, 30, 60$, $\\tau_B = 0.05, 0.30$ and $selection probability = Strong, Moderate, None$ to allow comparison between bootstrap CIs and large-sample CIs."
+
+mu_graph_res_widths_main <- 
+  mu_graph_res_ci_main %>%
+  mutate(
+    estimator_CI = paste(estimator, CI_type, sep = "-"),
+  ) %>%
+  filter(
+    # limit to conditions where bootstrap was evaluated
+    selection_strength %in% c("Strong", "Moderate", "None"), tau %in% c(0.05, 0.30), J %in% c(15, 30, 60), cor_mu == 0.8,
+    # selected estimators and CI types
+    estimator_CI %in% c("PML-percentile","PML-large-sample", "CHE-ISCW-large-sample","PET/PEESE-large-sample"),
+    bootstrap_type %in% c("none", "two-stage"),
+  ) %>%
+  mutate(
+    estimator_CI = factor(
+      estimator_CI, 
+      levels = c("PML-large-sample", "PML-percentile","CHE-ISCW-large-sample","PET/PEESE-large-sample"),
+      labels = c("Beta (cluster−robust)", "Beta (percentile two-stage)","CHE-ISCW","PET/PEESE")
+    )
+  )
+
+mu_graph_res_widths_main_comparison <- 
+  mu_graph_res_widths_main %>%
+  filter(bootstrap_condition=="bootstrap") %>%
+  mutate(
+    ratio = width[estimator_CI=="Beta (percentile two-stage)"] / width,
+    .by = c(mean_smd, tau, cor_mu, selection_strength, m, omega)
+  ) %>%
+  filter(estimator_CI != "Beta (percentile two-stage)") %>%
+  summarize(
+    min = min(ratio),
+    median = median(ratio),
+    max = max(ratio),
+    mean = mean(ratio),
+    .by = c(estimator_CI)
+  )
+
+CHEISCW_width_comparison <- 
+  mu_graph_res_widths_main_comparison %>% 
+  filter(estimator_CI == "CHE-ISCW") %>% 
+  pull(mean)
+
+PETPEESE_width_comparison <- 
+  mu_graph_res_widths_main_comparison %>% 
+  filter(estimator_CI == "PET/PEESE") %>% 
+  pull(mean)
+
+ggplot(mu_graph_res_widths_main) + 
+  aes(x = J, y = width, color = estimator_CI, fill = estimator_CI) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1") +
+  facet_grid(
+    tau ~ mean_smd, 
+    labeller = label_bquote(
+      rows = tau[B] == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "CI width",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+
+Figure \@ref(fig:comparison-CI-width-main) shows the average widths of 95% confidence intervals for selected methods.
+For the beta-density selection model, we depict the width of the intervals based on both the large-sample cluster-robust variance and the two-stage percentile bootstrap methods. We also include the widths of CRVE-based intervals for CHE-ISCW and PET/PEESE for comparison purposes, even though these have coverage levels that are often unacceptably low.
+
+The average width of the intervals is strongly affected by the degree of heterogeneity and number of studies, with confidence interval width narrowing as heterogeneity ($\tau$) decreases and as the number of studies ($J$) increases across all methods.
+CHE-ISCW generally produces the narrowest confidence intervals followed by the beta-density selection model with confidence intervals based on the large-sample cluster-robust variance method.
+PET/PEESE and the beta-density selection model using the two-stage percentile bootstrap method produce the widest confidence intervals, with PET/PEESE usually producing wider confidence intervals when $\tau = 0.30$ and when $\tau = 0.05$ and $\mu \geq 0.40$ and the beta-density selection model producing wider confidence intervals when $\tau = 0.05$ and $\mu \leq 0.20$.
+Additionally, there is a crossover at $J = 60$ where PET/PEESE produces narrower confidence intervals than the beta-density selection model using the large-sample cluster-robust variance method when $J = 60$ and $\mu \leq 0.40$.
+
+
 ## Robustness to Selection Function Misspecification: Beta-Density vs. Step Models
 
 Across all `r formatC(4 * 4 * 2 * 2 * 5 * 4, big.mark = ",")` conditions, convergence rates were 100% for the beta-density selection model and over 99% for the one-step and two-step selection models.
@@ -393,5 +481,49 @@ However, the confidence intervals produced by both step-function selection model
 
 ### Confidence Interval Width
 
-<!-- MC to add. -->
+```{r PML-CI-width-miss}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Average width of confidence intervals for average effect size based on two-stage bootstrap percentile intervals, by number of studies, average SMD, and strength of selective reporting."
 
+mu_graph_res_ci_miss %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("PML"),
+    CI_boot_method %in% c("percentile (two-stage)")
+  ) %>%
+  mutate(
+    selection_strength = 
+      selection_strength |> 
+      fct_recode("No" = "None") |>
+      fct_relabel(\(x) paste(x, "selection")) |> 
+      fct_rev()
+  ) %>%
+  ggplot(aes(x = J, y = width, color = method, fill = method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
+  facet_grid(
+    selection_strength ~ mean_smd,
+    labeller = label_bquote(
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "CI width",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+Figure \@ref(fig:PML-CI-width-miss) shows the average widths of 95% confidence intervals based on two-stage bootstrap percentile intervals for the three models.
+We again focus on confidence intervals based on the two-stage percentile bootstrap method, as it consistently yielded coverage rates better than those from the large-sample cluster-robust variance method.
+Figure \@ref(fig:comparison-coverage-full-miss) in `r appendix_prefix` \@ref(mu-simulation-results) depicts the coverage rates based on cluster-robust variance approximations.
+
+The beta-density selection model generally produces wider confidence intervals than the two step-function models, and the two-step model produces wider confidence intervals than the one-step model. The average width of the intervals decreases as average effect size ($\mu$) and number of studies ($J$) each increase across all methods; however, the reduction in width is greatest for the beta-density selection model.

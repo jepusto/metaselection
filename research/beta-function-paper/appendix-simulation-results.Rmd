@@ -57,8 +57,8 @@ mu_graph_res_ci_main %>%
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   scale_y_continuous(limits = c(NA, 1), expand = expansion(0,0)) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_color_manual(values = method_palette[c(1,2,3)]) +
+  scale_fill_manual(values = method_palette[c(1,2,3)]) +
   facet_grid(
     tau ~ mean_smd, 
     labeller = label_bquote(
@@ -83,22 +83,28 @@ mu_graph_res_ci_main %>%
 #| fig.width: 9
 #| fig.height: 6.5
 #| fig.env: "sidewaysfigure"
-#| fig.cap: "Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95."
+#| fig.cap: "Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting. Dashed lines correspond to the nominal confidence level of 0.95."
 
 mu_graph_res_ci_miss %>%
   filter(
     CI_type %in% c("large-sample")
   ) %>%
+  mutate(
+    selection_strength = 
+      selection_strength |> 
+      fct_recode("No" = "None") |>
+      fct_relabel(\(x) paste(x, "selection")) |> 
+      fct_rev()
+  ) %>%
   ggplot(aes(x = J, y = coverage, color = method, fill = method)) +
   geom_boxplot(alpha = .5, coef = Inf) +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   scale_y_continuous(limits = c(NA, 1), expand = expansion(0,0)) + 
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
   facet_grid(
-    tau ~ mean_smd, 
+    selection_strength ~ mean_smd,
     labeller = label_bquote(
-      rows = tau == .(tau),
       cols = mu == .(mean_smd)
     ),
     scales = "free_y"
@@ -109,6 +115,46 @@ mu_graph_res_ci_miss %>%
     color = "",
     fill = ""
   ) + 
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+```{r comparison-CI-width-full-miss}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Average width of confidence intervals for average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting."
+
+mu_graph_res_ci_miss %>%
+  filter(
+    CI_type %in% c("large-sample")
+  ) %>%
+  mutate(
+    selection_strength = 
+      selection_strength |> 
+      fct_recode("No" = "None") |>
+      fct_relabel(\(x) paste(x, "selection")) |> 
+      fct_rev()
+  ) %>%
+  ggplot(aes(x = J, y = width, color = method, fill = method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
+  facet_grid(
+    selection_strength ~ mean_smd,
+    labeller = label_bquote(
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "CI width",
+    color = "Method",
+    fill = "Method"
+  ) +
   theme_bw() +
   theme(legend.position = "top")
 
@@ -228,6 +274,8 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","two-step")
 
 RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "one-step","two-step")
 ```
+
+\newpage 
 
 # Additional simulation results for methods of estimating selection parameters ($\lambda_1$ & $\lambda_2$) {#zeta-simulation-results}
 
