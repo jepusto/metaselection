@@ -12,11 +12,17 @@ author:
     affiliation   : "2"
     address       : "1082C Educational Sciences, 1025 W Johnson St. Madison, WI 53706-1706"
     email         : "pustejovsky@wisc.edu"
+  - name          : "Megha Joshi"
+    affiliation   : "2"
+    address       : "Address"
+    email         : "megha.j456@gmail.com"
 affiliation:
   - id            : "1"
     institution   : "American Institutes for Research"
   - id            : "2"
     institution   : "University of Wisconsin-Madison"
+  - id            : "3"
+    institution   : "Progressive Insurance"
 
 note              : "\\ \\newline `r format(Sys.Date(), '%B %d, %Y')`"
 
