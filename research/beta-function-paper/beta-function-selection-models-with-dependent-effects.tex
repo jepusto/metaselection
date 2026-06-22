@@ -241,24 +241,10 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison}
 
-\note{~\newline June 18, 2026}
+\note{~\newline June 22, 2026}
 
 \begin{document}
 \maketitle
-
-\section*{Highlights}\label{highlights}
-\addcontentsline{toc}{section}{Highlights}
-
-\subsection*{What is already known}\label{what-is-already-known}
-\addcontentsline{toc}{subsection}{What is already known}
-
-\subsection*{What is new}\label{what-is-new}
-\addcontentsline{toc}{subsection}{What is new}
-
-\subsection*{Potential impact for RSM readers}\label{potential-impact-for-rsm-readers}
-\addcontentsline{toc}{subsection}{Potential impact for RSM readers}
-
-\newpage
 
 \section{Estimating beta-function selection models in meta-analysis with dependent effects}\label{introduction}
 
@@ -366,8 +352,11 @@ The density then reduces to the unweighted density of the evidence-generating pr
 We estimate model parameters using the composite marginal likelihood, with an additional penalty term for regularization that functions similarly to a prior in Bayesian inference; thus, we call this approach penalized maximum likelihood (PML).
 The PML estimator treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated with step function selection models (Pustejovsky, Citkowicz, et al., 2025) and consistent with established composite likelihood approaches (Cox \& Reid, 2004; Lindsay, 1988; Varin, 2008).
 To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the \(p\)-value thresholds---we incorporate weak penalties into the composite likelihood.
-Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter \(\tau^2\) and independent normal penalties on the log-transformed selection parameters, \(\log(\lambda_1) \sim N(0, 1)\) and \(\log(\lambda_2) \sim N(0, 1)\).
+
+For meta-analyses of effect sizes defined as standardized mean differences, we apply a weak \(\mathcal{L}_4(0,2)\) norm penalty to the meta-regression parameters, a weak \(\Gamma(1, \frac{1}{5})\) penalty on the heterogeneity parameter \(\tau^2\), a weak \(\mathcal{L}_4\left(
+\log\left(\frac{1}{2}\right), 2.711\right)\) norm penalty on the log-selection parameter \(\zeta_1\), and a \(N\left(0,\frac{1}{4}\right)\) penalty on the log-selection parameter \(\zeta_2\).
 These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
+Appendix \ref{prior-specification} provides more details about the mathematical form of the penalty terms.\footnote{It is important to note that these proposed prior penaltiess for \(\boldsymbol\beta\) and \(\tau^2\) are scale dependent and so will require adaptation when applied to meta-analyses in which the effect sizes are defined on other metrics (e.g., correlation coefficients, raw mean differences, or log-odds ratios). The accompanying \texttt{metaselection} R package allows users to specify prior penalties appropriate for other metrics by changing the scale of the penalty terms accordingly.}
 
 Estimation proceeds by maximizing the penalized log-composite-likelihood function.
 To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions.
@@ -466,7 +455,6 @@ We conducted Monte Carlo simulation studies to assess the performance of the mar
 The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates.
 We compared estimates based on the beta density model to estimates generated from three existing methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting (M. Chen \& Pustejovsky, 2025); (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures (Stanley \& Doucouliagos, 2014); and (3) a step-function selection model that accounts for both selective reporting and dependent effects (Pustejovsky, Citkowicz, et al., 2025).
 We evaluated the model estimates based on convergence rates, bias, accuracy, confidence interval coverage, and confidence interval width for estimating the average effect size of the unselected distribution.
-To ensure numerical stability in smaller samples, all selection models were estimated using the PML approach with the default penalties provided in the \texttt{metaselection} package (Pustejovsky, Joshi, et al., 2025).
 We evaluated bootstrap confidence interval performance under a narrower set of conditions to limit computational burden.
 
 Simulations were conducted in R Version 4.4.0 (R Core Team, 2023) using the high-throughput computing cluster at the University of Wisconsin--Madison (Center for High Throughput Computing, 2006).
@@ -481,8 +469,7 @@ We repeated this process until the simulated meta-analytic dataset included at t
 
 \subsection{Estimation methods}\label{estimation-methods}
 
-We estimated the beta-density selection model using the proposed PML approach.
-This estimation utilized the package defaults, including a log-F penalty on the heterogeneity parameter and normal penalties on the selection parameters.
+We estimated the beta-density selection model using the proposed PML approach with the prior penalties described in Appendix \ref{prior-specification}.
 We calculated cluster-robust standard errors using large-sample sandwich formulas. For a subset of simulation conditions, we also examined percentile confidence intervals based on the two-stage bootstrap. To maintain computational feasibility, we used \(B = 399\) bootstrap replications of each estimator.
 
 We compared the performance of the beta-density selection model to three other methods.
@@ -495,7 +482,7 @@ Second, we estimated a variation of the PET/PEESE model originally proposed by S
 Both models were estimated using the same working model assumptions as the CHE-ISCW model, including the assumed 0.80 correlation, with CR2 cluster-robust standard errors.
 Following established conventions (Stanley \& Doucouliagos, 2014), we used the PET estimate if it was not statistically distinguishable from zero at an \(\alpha\)-level of 0.10; otherwise, we used the PEESE estimate.
 
-Third, we estimated the step-function selection model using the PML approach. As with the beta-density selection model, we used the default penalty structures for the step-function selection model as implemented in the \texttt{metaselection} package (Pustejovsky, Citkowicz, et al., 2025).
+Third, we estimated the step-function selection model using the PML approach. For estimating the step-function models, we used the same prior penalty terms as in prior simulation studies (Pustejovsky, Citkowicz, et al., 2025); the prior penalties for \(\boldsymbol\beta\) and \(\tau^2\) are identical to those used for the beta-density model.
 We estimated two step-function selection models: (1) a one-step selection model with a single step at \(\alpha_1 = 0.025\), and (2) a two-step selection model with steps at \(\alpha_1 = 0.025\) and \(\alpha_2 = 0.500\).
 Like the beta-density selection model, the one-step and two-step models are \(p\)-value selection models designed to address selective reporting, they are models for the marginal rather than joint distribution of estimates within studies, and they use cluster-robust variance estimation or bootstrapping to account for dependency.
 The main distinction between the selection models lies in the assumed functional form of the selection mechanism. Fitting the step-function models to data simulated under a beta-density selection process allows us to assess how robust these models are to misspecification of the selection function and whether the form of selection affects their performance.
@@ -541,7 +528,7 @@ This extrapolation technique was previously evaluated and implemented (Pustejovs
 
 \section{Simulation Results}\label{simulation-results}
 
-We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates of 95\% confidence intervals.
+We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates and width of 95\% confidence intervals.
 Second, we compare the performance of the beta-density selection model to the one-step and two-step selection models to assess the robustness of these models to misspecification of the selection function.
 Additional results concerning the bias and RMSE for the marginal variance of the effect size distribution for the selection models are provided in Appendix \ref{gamma-simulation-results} and additional results on the performance of the selection parameters for the beta-density selection model are provided in Appendix \ref{zeta-simulation-results}.
 
@@ -603,6 +590,20 @@ Figure \ref{fig:Beta-coverage-main} depicts the coverage rates of 95\% confidenc
 Due to the computational demands of bootstrapping, we evaluated the bootstrap confidence intervals under a more limited range of data-generating conditions, including a maximum sample size of \(J = 60\).
 Although neither method achieves exact nominal coverage across all conditions, the two-stage percentile bootstrap intervals consistently yield better coverage rates than those based on the large-sample cluster-robust variance method.
 
+\subsubsection{Confidence Interval Width}\label{confidence-interval-width}
+
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-CI-width-main-1} \caption{Average width of confidence intervals for average effect size based on selected methods, by number of studies, average SMD, and between-study heterogeneity. Results are limited to scenarios with $\rho = 0.8$, $J = 15, 30, 60$, $\tau_B = 0.05, 0.30$ and $selection probability = Strong, Moderate, None$ to allow comparison between bootstrap CIs and large-sample CIs.}\label{fig:comparison-CI-width-main}
+\end{sidewaysfigure}
+
+Figure \ref{fig:comparison-CI-width-main} shows the average widths of 95\% confidence intervals for selected methods.
+For the beta-density selection model, we depict the width of the intervals based on both the large-sample CRVE and the two-stage percentile bootstrap methods. We also include the widths of CRVE-based intervals for CHE-ISCW and PET/PEESE for comparison purposes, even though these have coverage levels that are often unacceptably low.
+
+The average width of the intervals is strongly affected by the degree of heterogeneity and number of studies, with confidence interval width narrowing as heterogeneity (\(\tau\)) decreases and as the number of studies (\(J\)) increases across all methods.
+CHE-ISCW generally produces the narrowest confidence intervals, followed by the beta-density selection model with CRVE confidence intervals.
+However, neither of these confidence intervals have acceptable coverage levels.
+PET/PEESE and the beta-density selection model using the two-stage percentile bootstrap method produce wider confidence intervals, but only the latter intervals hade acceptable coverage levels across a broad range of conditions. Generally, the bootstrap intervals for the beta-density model are wider than those produced by PET/PEESE when there is only small heterogeneity \((\tau = .05)\) but more similar in width (and sometimes smaller than the PET/PEESE intervals) when heterogeneity is higher \(\tau = 0.30\).
+
 \subsection{Robustness to Selection Function Misspecification: Beta-Density vs.~Step Models}\label{robustness-to-selection-function-misspecification-beta-density-vs.-step-models}
 
 Across all 1,280 conditions, convergence rates were 100\% for the beta-density selection model and over 99\% for the one-step and two-step selection models.
@@ -642,7 +643,11 @@ The step-function selection models have lower coverage rates, particularly for s
 Of the two step-function selection models, coverage is generally better for the two-step model because of its greater flexibility to approximate the true selection process.
 However, the confidence intervals produced by both step-function selection models are sometimes very poorly calibrated and do not necessarily improve with larger sample sizes---especially under conditions of strong selection and small effect size where selective reporting leads to stronger bias.
 
-\subsubsection{Confidence Interval Width}\label{confidence-interval-width}
+\subsubsection{Confidence Interval Width}\label{confidence-interval-width-1}
+
+Appendix Figure \ref{fig:PML-CI-width-miss} shows the average widths of 95\% confidence intervals based on two-stage bootstrap percentile intervals for the three models.
+We again focus on confidence intervals based on the two-stage percentile bootstrap method, as it consistently yielded coverage rates better than those from the large-sample cluster-robust variance method.
+The beta-density selection model generally produces wider confidence intervals than the two step-function models, and the two-step model produces wider confidence intervals than the one-step model. The average width of the intervals decreases as average effect size (\(\mu\)) and number of studies (\(J\)) each increase across all methods; however, the reduction in width is greatest for the beta-density selection model.
 
 \section{Discussion}\label{discussion}
 
@@ -767,6 +772,9 @@ Chen, M., \& Pustejovsky, J. E. (2025). Adapting methods for correcting selectiv
 \bibitem[\citeproctext]{ref-Chen2015alternative}
 Chen, Y., Hong, C., \& Riley, R. D. (2015). An alternative pseudolikelihood method for multivariate random-effects meta-analysis: {An} alternative pseudolikelihood method for multivariate random-effects meta-analysis. \emph{Statistics in Medicine}, \emph{34}(3), 361--380. \url{https://doi.org/10.1002/sim.6350}
 
+\bibitem[\citeproctext]{ref-Chung2013nondegenerate}
+Chung, Y., Rabe-Hesketh, S., Dorie, V., Gelman, A., \& Liu, J. (2013). A nondegenerate penalized likelihood estimator for variance parameters in multilevel models. \emph{Psychometrika}, \emph{78}(4, 4), 685--709. \url{https://doi.org/10.1007/s11336-013-9328-2}
+
 \bibitem[\citeproctext]{ref-citkowicz2017parsimonious}
 Citkowicz, M., \& Vevea, J. L. (2017). {A parsimonious weight function for modeling publication bias}. \emph{Psychological Methods}, \emph{22}(1), 28--41. \url{https://doi.org/10.1037/met0000119}
 
@@ -820,6 +828,9 @@ Lindsay, B. G. (1988). Composite likelihood methods. In N. U. Prabhu (Ed.), \emp
 
 \bibitem[\citeproctext]{ref-marksanglin2020historical}
 Marks‐Anglin, A., \& Chen, Y. (2020). A historical review of publication bias. \emph{Research Synthesis Methods}, \emph{11}(6), 725--742. \url{https://doi.org/10.1002/jrsm.1452}
+
+\bibitem[\citeproctext]{ref-mathur2021estimating}
+Mathur, M. B., \& VanderWeele, T. J. (2021). Estimating publication bias in meta‐analyses of peer‐reviewed studies: {A} meta‐meta‐analysis across disciplines and journal tiers. \emph{Research Synthesis Methods}, \emph{12}(2), 176--191. \url{https://doi.org/10.1002/jrsm.1464}
 
 \bibitem[\citeproctext]{ref-optimx}
 Nash, J. C., \& Varadhan, R. (2011). Unifying optimization algorithms to aid software system users: {optimx} for {R}. \emph{Journal of Statistical Software}, \emph{43}(9), 1--14. \url{https://doi.org/10.18637/jss.v043.i09}
@@ -891,6 +902,39 @@ Xu, L., Gotwalt, C., Hong, Y., King, C. B., \& Meeker, W. Q. (2020). Application
 \appendix
 
 
+\section{Prior specification}\label{prior-specification}
+
+This appendix provides further details about the prior penalty terms used for penalized maximum likelihood estimation.
+We use weak prior penalties selected to regularize outlying estimates without substantially shifting the estimator in most datasets.
+Following prior work on the step-function model (Pustejovsky, Citkowicz, et al., 2025), we use \(\mathcal{L}_4\)-norm prior penalties for the mean parameters \(\boldsymbol\beta\), given by
+\begin{equation}
+\label{eq:beta-prior}
+p_{\boldsymbol\beta}(\boldsymbol\beta) = -\frac{1}{16} \sum_{p=1}^x \beta_p^4.
+\end{equation}
+This prior penalty is depicted in Figure \ref{fig:prior-penalties}a. The penalty is nearly flat when \(|\beta_p| < 1\), but becomes sharper and more informative when \(|\beta_p| > 2\).
+
+Following work on priors for variance parameters in multi-level models (Chung, Rabe-Hesketh, Dorie, Gelman, \& Liu, 2013), we use a penalty term for the log-heterogeneity parameter that is equivalent to putting a \(\Gamma(1, \frac{1}{5})\) prior on \(\tau\). The penalty for the log-heterogeneity parameter \(\gamma\) is given by
+\begin{equation}
+\label{eq:gamma-prior}
+p_{\gamma}(\gamma) = \frac{1}{2} \gamma - 5 \exp\left(\frac{\gamma}{2}\right),
+\end{equation}
+as depicted in Figure \ref{fig:prior-penalties}b.
+The penalty term reaches a maximum at \(\gamma = \log(0.2)\) and remains weak for smaller degrees of heterogeneity.
+
+We use different penalties for the two log-scale selection parameters \(\zeta_1\) and \(\zeta_2\) in order to prioritize beta density functions that correspond to more plausible forms of selective reporting, under which non-significant findings are less likely to be reported than statistically significant ones. In particular, we use penalty terms based on \(\mathcal{L}_4\)-norm and \(\mathcal{L}_2\)-norm distributions, given by
+\begin{equation}
+\label{eq:zeta-priors}
+p_{\zeta_1}(\zeta_1) = -\frac{1}{54} \left(\zeta_1 - \log\left(\frac{1}{2}\right)\right)^4 \qquad \text{and} \qquad p_{\zeta_2}(\zeta_2) = -2 \left(\zeta_2\right)^2,
+\end{equation}
+As depicted in Figure \ref{fig:prior-penalties}c,
+the penalty on \(\zeta_1\) is centered at \(\lambda_1 = \frac{1}{2}\) and remains very weak over the range of \(\lambda_1 = \frac{1}{20}\) (strong selective reporting) to \(\lambda_1 = 1\) (no selective reporting). This produces beta density curves consistent with the range of selective reporting observed in an empirical review of meta-analyses in psychology and clinical medicine (Mathur \& VanderWeele, 2021).
+The prior on \(\zeta_1\) more heavily penalizes extremely strong selection levels \((\lambda_1 < \frac{1}{50})\) and selective reporting that strongly \emph{favors} non-significant findings \((\lambda_1 > 8)\).
+As depicted in Figure \ref{fig:prior-penalties}d, the penalty on \(\zeta_2\) is centered on \(\lambda_2 = 1\) and is much more constrained, which tends to prioritize beta density functions that do not change drastically for findings that are in the opposite of the theoretically expected direction.
+
+\begin{figure}[tb]
+\subfloat[Prior penalty for mean parameter $\boldsymbol\beta$. Dashed line corresponds to a standard normal penalty.\label{fig:prior-penalties-1}]{\includegraphics[width=0.49\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-1} }\subfloat[Prior penalty for heterogeneity parameter $\gamma$\label{fig:prior-penalties-2}]{\includegraphics[width=0.49\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-2} }\newline\subfloat[Prior penalty for selection parameter $\boldsymbol\zeta_1$\label{fig:prior-penalties-3}]{\includegraphics[width=0.49\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-3} }\subfloat[Prior penalty for selection parameter $\boldsymbol\zeta_2$\label{fig:prior-penalties-4}]{\includegraphics[width=0.49\linewidth]{beta-function-selection-models-with-dependent-effects_files/figure-latex/prior-penalties-4} }\newline\caption{Prior penalty functions for beta density model parameters}\label{fig:prior-penalties}
+\end{figure}
+
 \section{Technical details of cluster-robust variance estimation}\label{CRVE-details}
 
 This appendix provides further details about the penalized maximum likelihood (PML) estimation approach and cluster-robust variance estimation (CRVE) technique for the beta-density selection model. For estimation purposes, we parametrize the model using natural log transformations of the variance parameter and selection parameters, setting \(\gamma = \log(\tau^2)\), \(\zeta_1 = \log(\lambda_1)\), \(\zeta_2 = \log(\lambda_2)\), and \(\boldsymbol\zeta = (\zeta_1, \zeta_2)'\). We will denote the full parameter vector as \(\boldsymbol\theta = \left(\boldsymbol\beta', \gamma, \boldsymbol\zeta\right)'\).
@@ -908,9 +952,9 @@ l_{j}\left(\boldsymbol\theta \right) = \sum_{i=1}^{k_j} l_{ij}\left(\boldsymbol\
 and the penalized marginal log-likelihood across all \(J\) studies is
 \begin{equation}
 \label{eq:penalized-marginal-likelihood}
-l\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta \right) = \sum_{j=1}^{J} l_{j}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta \right) + p_{\beta}(\boldsymbol\beta) + p_{\gamma}(\gamma) + p_{\boldsymbol\zeta}(\boldsymbol\zeta),
+l\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta \right) = \sum_{j=1}^{J} l_{j}\left(\boldsymbol\beta, \gamma, \boldsymbol\zeta \right) + p_{\beta}(\boldsymbol\beta) + p_{\gamma}(\gamma) + p_{\zeta_1}(\zeta_1) + p_{\zeta_2}(\zeta_2),
 \end{equation}
-where \(p_{\beta}(\boldsymbol\beta)\), \(p_{\gamma}(\gamma)\), and \(p_{\boldsymbol\zeta}(\boldsymbol\zeta)\) are log-prior penalties for the meta-regression coefficients, log-variance, and log-selection parameters, respectively.
+where \(p_{\beta}(\boldsymbol\beta)\), \(p_{\gamma}(\gamma)\), \(p_{\zeta_1}(\zeta_1)\), and \(p_{\zeta_2}(\zeta_2)\) are log-prior penalties for the meta-regression coefficients, log-variance, and log-selection parameters, respectively, as given in Equations \eqref{eq:beta-prior}, \eqref{eq:gamma-prior}, and \eqref{eq:zeta-priors}.
 The penalized marginal likelihood (PML) estimators, denoted as \(\boldsymbol{\hat\beta}\), \(\hat\gamma\), and \(\boldsymbol{\hat\zeta}\), are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:penalized-marginal-likelihood}).
 
 CRVE, or sandwich estimation, is a commonly used technique for quantifying the uncertainty with dependent observations where the dependence structure is not explicitly modeled.
@@ -1074,7 +1118,15 @@ The second derivatives of \(A_{ij}\) are
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:comparison-coverage-full-miss}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:comparison-coverage-full-miss}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-CI-width-full-miss-1} \caption{Average width of confidence intervals for average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting.}\label{fig:comparison-CI-width-full-miss}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-CI-width-miss-1} \caption{Average width of confidence intervals for average effect size based on two-stage bootstrap percentile intervals, by number of studies, average SMD, and strength of selective reporting.}\label{fig:PML-CI-width-miss}
 \end{sidewaysfigure}
 
 \newpage
@@ -1110,6 +1162,8 @@ RMSE is very similar across the three models when average effect size is large \
 \begin{sidewaysfigure}
 \includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1} \caption{Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for one-step by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse-two-one}
 \end{sidewaysfigure}
+
+\newpage
 
 \section{\texorpdfstring{Additional simulation results for methods of estimating selection parameters (\(\lambda_1\) \& \(\lambda_2\))}{Additional simulation results for methods of estimating selection parameters (\textbackslash lambda\_1 \& \textbackslash lambda\_2)}}\label{zeta-simulation-results}
 

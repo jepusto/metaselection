@@ -125,10 +125,14 @@ The density then reduces to the unweighted density of the evidence-generating pr
 
 We estimate model parameters using the composite marginal likelihood, with an additional penalty term for regularization that functions similarly to a prior in Bayesian inference; thus, we call this approach penalized maximum likelihood (PML).
 The PML estimator treats each observed effect size estimate as if it were mutually independent for the purposes of estimation, following the strategy validated with step function selection models [@pustejovsky2025step] and consistent with established composite likelihood approaches [@cox2004note; @lindsay1988composite; @varin2008composite]. 
-To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the $p$-value thresholds---we incorporate weak penalties into the composite likelihood. 
-Specifically, we apply a log-F(2, 2) penalty to the heterogeneity parameter $\tau^2$ and independent normal penalties on the log-transformed selection parameters, $\log(\lambda_1) \sim N(0, 1)$ and $\log(\lambda_2) \sim N(0, 1)$. 
+To address potential numerical instability and ensure the plausibility of results---particularly in meta-analyses with a small number of studies or sparse data near the $p$-value thresholds---we incorporate weak penalties into the composite likelihood.
+
+For meta-analyses of effect sizes defined as standardized mean differences, we apply a weak $\mathcal{L}_4(0,2)$ norm penalty to the meta-regression parameters, a weak $\Gamma(1, \frac{1}{5})$ penalty on the heterogeneity parameter $\tau^2$, a weak $\mathcal{L}_4\left(
+\log\left(\frac{1}{2}\right), 2.711\right)$ norm penalty on the log-selection parameter $\zeta_1$, and a $N\left(0,\frac{1}{4}\right)$ penalty on the log-selection parameter $\zeta_2$. 
 These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
-<!-- MC: Note that this is some placeholder language. Need to revise once we determine the actual penalties. -->
+`r appendix_prefix` \@ref(prior-specification) provides more details about the mathematical form of the penalty terms.[^prior-scale]
+
+[^prior-scale]: It is important to note that these proposed prior penaltiess for $\bs\beta$ and $\tau^2$ are scale dependent and so will require adaptation when applied to meta-analyses in which the effect sizes are defined on other metrics (e.g.,  correlation coefficients, raw mean differences, or log-odds ratios). The accompanying `metaselection` R package allows users to specify prior penalties appropriate for other metrics by changing the scale of the penalty terms accordingly.
 
 Estimation proceeds by maximizing the penalized log-composite-likelihood function. 
 To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. 

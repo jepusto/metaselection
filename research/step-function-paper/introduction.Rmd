@@ -76,7 +76,6 @@ This approach is premised on an assumed degree of selective reporting; thus, it 
 Another alternative is to use a regression test for small-study effects, or association between effect sizes and standard errors, combined with RVE or multilevel meta-analysis to handle dependent effect sizes. [@fernandezcastilla2019detecting; @rodgers2021evaluating]
 This method has limited power to detect selective reporting under common meta-analytic scenarios.[@rodgers2021evaluating]
 It also has the same limitations as univariate Egger's regression, in that it tests for a pattern of small-study effects, which could have causes other than selective reporting.[@Sterne2011recommendations]
-<!-- Further, Egger's regression is not based on a generative model and is therefore not directly informative about the degree or pattern of selective reporting. -->
 
 Chen and Pustejovsky reviewed a range of existing techniques for estimating average effect sizes in the presence of selective reporting and dependent effect sizes.[@chen2024adapting] 
 They also proposed adaptations of several existing methods that can be formulated as meta-regressions, such as PET/PEESE and the endogenous kink method, with dependence addressed using a particular working model combined with RVE.

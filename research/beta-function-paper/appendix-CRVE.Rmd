@@ -24,9 +24,9 @@ l_{j}\left(\bs\theta \right) = \sum_{i=1}^{k_j} l_{ij}\left(\bs\theta \right)
 and the penalized marginal log-likelihood across all $J$ studies is
 \begin{equation}
 \label{eq:penalized-marginal-likelihood}
-l\left(\bs\beta, \gamma, \bs\zeta \right) = \sum_{j=1}^{J} l_{j}\left(\bs\beta, \gamma, \bs\zeta \right) + p_{\beta}(\bs\beta) + p_{\gamma}(\gamma) + p_{\bs\zeta}(\bs\zeta),
+l\left(\bs\beta, \gamma, \bs\zeta \right) = \sum_{j=1}^{J} l_{j}\left(\bs\beta, \gamma, \bs\zeta \right) + p_{\beta}(\bs\beta) + p_{\gamma}(\gamma) + p_{\zeta_1}(\zeta_1) + p_{\zeta_2}(\zeta_2),
 \end{equation}
-where $p_{\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, and $p_{\bs\zeta}(\bs\zeta)$ are log-prior penalties for the meta-regression coefficients, log-variance, and log-selection parameters, respectively.
+where $p_{\beta}(\bs\beta)$, $p_{\gamma}(\gamma)$, $p_{\zeta_1}(\zeta_1)$, and $p_{\zeta_2}(\zeta_2)$ are log-prior penalties for the meta-regression coefficients, log-variance, and log-selection parameters, respectively, as given in Equations \@ref(eq:beta-prior), \@ref(eq:gamma-prior), and \@ref(eq:zeta-priors).
 The penalized marginal likelihood (PML) estimators, denoted as $\bs{\hat\beta}$, $\hat\gamma$, and $\bs{\hat\zeta}$, are obtained as the set of parameter values that maximize the penalized marginal log-likelihood for the observed data, as given in Equation (\ref{eq:penalized-marginal-likelihood}).
 
 CRVE, or sandwich estimation, is a commonly used technique for quantifying the uncertainty with dependent observations where the dependence structure is not explicitly modeled. 

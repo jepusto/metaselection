@@ -91,16 +91,6 @@ options(tinytex.clean = FALSE, knitr.kable.NA = '')
 appendix_prefix <- "Appendix"
 ```
 
-# Highlights {-}
-
-## What is already known {-}
-
-## What is new {-}
-
-## Potential impact for RSM readers {-}
-
-\newpage
-
 # Estimating beta-function selection models in meta-analysis with dependent effects {#introduction}
 
 ```{r child = "introduction.Rmd"}
@@ -193,6 +183,9 @@ The authors declare no conflicts of interest.
 \endgroup
 
 # (APPENDIX) Appendix {-}
+
+```{r child = "appendix-priors.Rmd"}
+```
 
 ```{r child = "appendix-CRVE.Rmd"}
 ```

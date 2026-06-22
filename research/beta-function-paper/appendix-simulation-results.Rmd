@@ -160,6 +160,48 @@ mu_graph_res_ci_miss %>%
 
 ```
 
+```{r PML-CI-width-miss}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Average width of confidence intervals for average effect size based on two-stage bootstrap percentile intervals, by number of studies, average SMD, and strength of selective reporting."
+
+mu_graph_res_ci_miss %>%
+  filter(
+    bootstrap_condition == "bootstrap",
+    estimator %in% c("PML"),
+    CI_boot_method %in% c("percentile (two-stage)")
+  ) %>%
+  mutate(
+    selection_strength = 
+      selection_strength |> 
+      fct_recode("No" = "None") |>
+      fct_relabel(\(x) paste(x, "selection")) |> 
+      fct_rev()
+  ) %>%
+  ggplot(aes(x = J, y = width, color = method, fill = method)) +
+  geom_boxplot(alpha = .5, coef = Inf) +
+  scale_color_manual(values = method_palette[c(1,4,5)]) +
+  scale_fill_manual(values = method_palette[c(1,4,5)]) +
+  facet_grid(
+    selection_strength ~ mean_smd,
+    labeller = label_bquote(
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Number of studies (J)",
+    y = "CI width",
+    color = "Method",
+    fill = "Method"
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
+
 \newpage 
 
 # Additional simulation results for methods of estimating heterogeneity {#gamma-simulation-results}
