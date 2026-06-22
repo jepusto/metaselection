@@ -40,7 +40,7 @@ Marginal modeling strategies may also be misaligned for syntheses of some types 
 In further developing marginal step function models, it would be useful to allow for more flexibility by, for instance, letting the heterogeneity parameter vary as a function of covariates as in location-scale models [@viechtbauer2022locationscale] or allowing for the strength of selection to vary based on study characteristics.[@Coburn2015publication]
 
 Second, the marginal model does not distinguish between study-level publication bias and effect-level selective outcome reporting.
-This strategy therefore precludes examination of some more nuanced forms of selection, such as the multivariate selection process we examined in the simulations or other selection processes in which the probability that a result is reported depends on some other feature of the study's results.[^VanAert2026correcting]
+This strategy therefore precludes examination of some more nuanced forms of selection, such as the multivariate selection process we examined in the simulations or other selection processes in which the probability that a result is reported depends on some other feature of the study's results.[@VanAert2026correcting]
 
 Third, focusing on the marginal distribution likely entails some loss of precision in parameter estimates. 
 Further adapting the estimation methods to account for dependent effects, such as by refining the analytic weights, might improve the precision of the estimators.

@@ -164,7 +164,7 @@ The pattern of relative accuracy is very similar for the ARGL estimator (Figure 
 
 ## Confidence Interval Coverage
 
-Figure \@ref(fig:comparison-coverage-indep) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators for the CHE-ISCW, PET/PEESE, PML, and ARGL estimators under the univariate selection process.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage-indep) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5.]
+Figure \@ref(fig:comparison-coverage-indep) shows the coverage rates of 95% CIs based on large-sample cluster-robust variance estimators (CRVE) for the CHE-ISCW, PET/PEESE, PML, and ARGL estimators under the univariate selection process.^[To provide greater detail, the vertical axis of Figure \@ref(fig:comparison-coverage-indep) is limited to the range [0.5, 1.0], and coverage rates of the CHE-ISCW and PET/PEESE intervals are not depicted when they fall below 0.5.]
 Supplementary Figure \@ref(fig:comparison-coverage-dep) depicts the coverage rates of the same estimators under the multivariate selection process.
 Coverage rates are below the nominal rate of 0.95 for all methods across most conditions.
 The PML and ARGL estimators have higher coverage rates than the comparison methods under many conditions---particularly those with higher between-study heterogeneity.
