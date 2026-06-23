@@ -775,7 +775,7 @@ mu_graph_res_ci %>%
   ) +
   labs(
     x = "Number of studies (J)",
-    y = "Coverage rate",
+    y = "Average width",
     color = "Method",
     fill = "Method"
   ) +

@@ -348,7 +348,7 @@ ggplot(mu_graph_res_widths) +
   ) +
   labs(
     x = "Number of studies (J)",
-    y = "Coverage rate",
+    y = "Average width",
     color = "Method",
     fill = "Method"
   ) +
