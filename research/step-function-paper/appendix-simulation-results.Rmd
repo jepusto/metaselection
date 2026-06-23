@@ -76,6 +76,92 @@ mu_graph_res %>%
 
 ```
 
+
+```{r mu-high-bias-indep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Bias for PML and ARGL estimators of average effect size by number of studies (J), average SMD, between-study heterogeneity, selection probability, across scenarios with a univariate selection process $(\\psi = 0)$, high between-study heterogeneity $(\\tau_B = .30, .45)$, and low probability of selection $(\\lambda_1 = .02, .05)$"
+
+mu_graph_res %>%
+  filter(
+    psi_fac == "Univariate",
+    model == "3PSM", 
+    tau %in% c(.30, .45),
+    weight_num %in% c(.02, .05)
+  ) %>%
+  mutate(
+    mu_fac = paste("mu ==", mean_smd),
+    tau_fac = paste("tau[b] ==", tau),
+    weight_fac = paste("lambda[1] ==", weight_num),
+    weight_fac = fct(weight_fac) |> fct_rev()
+  ) %>%
+  ggplot() + 
+    aes(x = as.factor(m), y = bias, color = estimator, fill = estimator) +
+    geom_hline(yintercept = 0) +
+    geom_boxplot(alpha = .5, coef = Inf) +
+    scale_color_brewer(palette = "Dark2") +
+    scale_fill_brewer(palette = "Dark2") +
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    facet_grid(
+      tau_fac + weight_fac ~ mu_fac,
+      labeller = label_parsed,
+      scales = "free_y"
+    ) +
+    labs(
+      x = "J", 
+      y = "Bias", 
+      color = "Estimator",
+      fill = "Estimator"
+    ) + 
+    theme_bw() +
+    theme(legend.position = "top")
+
+```
+
+
+```{r mu-high-bias-dep}
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Bias for PML and ARGL estimators of average effect size by number of studies (J), average SMD, between-study heterogeneity, selection probability, across scenarios with a multivariate selection process $(\\psi = 1)$, high between-study heterogeneity $(\\tau_B = .30, .45)$, and low probability of selection $(\\lambda_1 = .02, .05)$"
+
+mu_graph_res %>%
+  filter(
+    psi_fac == "Multivariate",
+    model == "3PSM", 
+    tau %in% c(.30, .45),
+    weight_num %in% c(.02, .05)
+  ) %>%
+  mutate(
+    mu_fac = paste("mu ==", mean_smd),
+    tau_fac = paste("tau[b] ==", tau),
+    weight_fac = paste("lambda[1] ==", weight_num),
+    weight_fac = fct(weight_fac) |> fct_rev()
+  ) %>%
+  ggplot() + 
+    aes(x = as.factor(m), y = bias, color = estimator, fill = estimator) +
+    geom_hline(yintercept = 0) +
+    geom_boxplot(alpha = .5, coef = Inf) +
+    scale_color_brewer(palette = "Dark2") +
+    scale_fill_brewer(palette = "Dark2") +
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    facet_grid(
+      tau_fac + weight_fac ~ mu_fac,
+      labeller = label_parsed,
+      scales = "free_y"
+    ) +
+    labs(
+      x = "J", 
+      y = "Bias", 
+      color = "Estimator",
+      fill = "Estimator"
+    ) + 
+    theme_bw() +
+    theme(legend.position = "top")
+
+```
+
 ```{r mu-rmse-dep}
 #| cache: true
 #| fig.width: 9
