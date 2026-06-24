@@ -26,8 +26,21 @@ affiliation:
 
 note              : "\\ \\newline `r format(Sys.Date(), '%B %d, %Y')`"
 
+authornote: |
+  Martyna Citkowicz, American Institutes for Research. 
+  James E. Pustejovsky, Department of Educational Psychology, University of Wisconsin-Madison. 
+  Megha Joshi, American Institutes for Research. 
+  
+  This work was presented at the 2025 conference of the Society for Research on Educational Effectiveness in Chicago, IL.
+  
+  R code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46.
+  
+  Funding: This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research. The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
+
+  Conflicts of Interest: The author(s) declared that there were no conflicts of interest with respect to the authorship or the publication of this article.
+
 abstract: |
-  Meta-analyses across psychology, education, and medicine face significant methodological challenges due to dependent data structures---arising when primary studies report multiple outcomes---and selective reporting bias, which distorts findings when statistically significant results are preferentially published. The step-function selection model provides a structured framework for characterizing selective reporting but requires pre-specifying $p$-value thresholds. To address this, we introduce a selection model utilizing a flexible, truncated beta density function to model selection as a smooth function of $p$-values without a priori thresholds. We extend this model to dependent effect sizes using cluster robust variance estimation and bootstrapping to model the marginal distribution of effect sizes. We demonstrate the model by re-analyzing a published meta-analysis, showing it uncovers reporting patterns that the step-function model fails to capture. Through an extensive simulation study, we evaluate its performance relative to standard meta-analytic methods, and compare it to one-step and two-step step-function models to assess robustness to selection function misspecification. Results show the beta-density model yields negligible bias across diverse reporting conditions, outperforming standard alternatives under selective reporting. However, a distinct bias–variance trade-off emerges: simpler models can be more precise under mild selection, indicating that the beta-density model is most advantageous in larger meta-analyses facing strong selective reporting. For inference, the clustered bootstrap approach provides superior confidence interval coverage compared to large-sample approximations. While conventional methods remain more precise without selective reporting bias, the beta-density selection model serves as a useful tool for sensitivity analysis and estimation in large, dependent datasets vulnerable to strong selection.
+  Meta-analysts seek to draw generalizable inferences by pooling findings across available studies. Such efforts are hampered by selective reporting of study findings, which distorts meta-analytic inferences when statistically significant results are reported preferentially. Many techniques are available for investigating selective reporting in meta-analyses of independent effects, but psychological meta-analyses routinely involve dependent data structures, as arise when primary studies report results for multiple outcomes. Recent methodological developments that can accommodate dependent effects have focused on step-function selection models, in which the probability of reporting depends on whether a finding's p-value falls above or below pre-specified thresholds. We propose an alternative model in which the reporting probability follows a flexible, truncated beta function, avoiding the need to specify a priori  thresholds. Estimation of the model accommodates dependent effect sizes using cluster-robust variance estimation or clustered bootstrapping. We demonstrate the proposed approach by re-analyzing a published meta-analysis. Through an extensive simulation study, we evaluate the performance of the truncated beta model versus standard meta-analytic methods and versus step-function models to assess robustness to selection function misspecification. Results show that the beta-density model yields negligible bias across diverse conditions and outperforms standard alternatives when selective reporting is present, although simpler step-function models can be more precise under mild selection. Clustered bootstrap confidence intervals provide superior coverage compared to cluster-robust variance estimation. Although conventional methods remain more precise when selection is absent, the truncated beta selection model serves as a useful tool for sensitivity analysis and estimation in larger dataset that include dependent effects.
   
 keywords          : "meta-analysis; dependent effect sizes; selection models; selective reporting; publication bias"
 
@@ -35,7 +48,7 @@ bibliography      : references.bib
 
 figsintext        : yes
 figurelist        : no
-floatsintext      : yes 
+floatsintext      : yes
 tablelist         : no
 footnotelist      : no
 lineno            : no
@@ -126,58 +139,6 @@ appendix_prefix <- "Appendix"
 
 ```{r child = "discussion.Rmd"}
 ```
-
-# Author Contributions {-}
-
-```{r CRediT}
-#| results: asis
-
-MC_credit <- 
-  template_create(authors = "MC") %>%
-  mutate(
-    Conceptualization = 1,
-    Methodology = 1,
-    `Formal Analysis` = 1,
-    Investigation = 1,
-    `Writing - original draft` = 1,
-    `Writing - review & editing` = 1,
-    `Project administration` = 1,
-    `Funding acquisition` = 1
-  )
-
-JEP_credit <- 
-  template_create(authors = "JEP") %>%
-  mutate(
-    Conceptualization = 1,
-    Methodology = 1,
-    Software = 1,
-    Validation = 1,
-    `Formal Analysis` = 1,
-    Investigation = 1,
-    Resources = 1,
-    `Writing - original draft` = 1,
-    `Writing - review & editing` = 1,
-  )
-
-bind_rows(MC_credit, JEP_credit) %>%
-  cras_write() %>%
-  cat()
-```
-
-# Funding {-}
-
-This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research.
-The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
-
-# Acknowledgements {-}
-
-# Data and Replication Materials {-}
-
-Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46.
-
-# Conflict of Interest Statement {-}
-
-The authors declare no conflicts of interest.
 
 # References {-}
 

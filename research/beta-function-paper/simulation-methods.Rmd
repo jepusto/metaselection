@@ -110,3 +110,9 @@ Prior work [@pustejovsky2025step] included a condition in which the primary stud
 We evaluated each method’s performance in terms of convergence rates, bias, root mean-squared error (RMSE), 95% confidence interval coverage, and confidence interval width for the overall effect size $\mu$. Bias reflects systematic deviation from the true parameter value, while RMSE captures both bias and sampling variability.
 For confidence intervals based on cluster-robust variance estimation, we defined coverage as the proportion of intervals that contained the true parameter value. For bootstrap intervals, we used $B = 399$ replicates per simulation due to computational limits---fewer than ideal for applied use. To estimate practical coverage rates, we followed an approach similar to @boos2000montecarlo: we calculated coverage for smaller subsamples ($B = 49, 99, 199, 299$) randomly selected without replacement from the full set of $B = 399$ bootstraps, fit a regression of coverage on $1/B$, and used the intercept to extrapolate expected coverage for $B = 1999$.
 This extrapolation technique was previously evaluated and implemented [@pustejovsky2025step, see Online Appendix C.3 for further details and demonstration of its performance].
+
+## Open Practices
+
+R code and data for replicating the Monte Carlo simulation study are available on the Open Science Framework at https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46. 
+The simulation study was not pre-registered.
+We did not make use of generative AI for any part of the study.

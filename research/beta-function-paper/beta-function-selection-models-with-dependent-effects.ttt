@@ -1,0 +1,52 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\caption{\label{tab:social-identity-theory-res}Selection model parameter estimates fit to meta-analysis of leader group prototypicality from Steffens et al. (2021)}
+\centering
+\begin{tabular}[t]{lllllll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Beta density} & \multicolumn{2}{c}{One-step} & \multicolumn{2}{c}{Two-step} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+Parameter & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Summary meta-analysis}}\\
+\hspace{1em}$\beta_0$ & 0.28 (0.08) & {}[0.07, 0.43] & 0.42 (0.03) & {}[0.34, 0.49] & 0.37 (0.05) & {}[0.25, 0.46]\\
+\hspace{1em}$\tau$ & 0.38 (0.18) & {}[0.30, 0.46] & 0.29 (0.12) & {}[0.25, 0.33] & 0.33 (0.13) & {}[0.28, 0.38]\\
+\hspace{1em}$\lambda_1$ & 0.99 (0.14) & {}[0.69, 1.32] & 1.08 (0.30) & {}[0.53, 2.13] & 1.09 (0.25) & {}[0.60, 1.93]\\
+\hspace{1em}$\lambda_2$ & 1.73 (0.14) & {}[1.25, 2.52] &  &  & 0.36 (0.51) & {}[0.11, 1.06]\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Moderator analysis}}\\
+\hspace{1em}$\beta_0$ & 0.01 (0.12) & {}[-0.31, 0.24] & 0.26 (0.05) & {}[0.16, 0.37] & 0.16 (0.07) & {}[0.01, 0.30]\\
+\hspace{1em}$\beta_1$ & 0.33 (0.10) & {}[0.14, 0.58] & 0.19 (0.05) & {}[0.08, 0.29] & 0.25 (0.07) & {}[0.10, 0.39]\\
+\hspace{1em}$\tau$ & 0.36 (0.17) & {}[0.29, 0.44] & 0.28 (0.12) & {}[0.24, 0.32] & 0.32 (0.14) & {}[0.27, 0.36]\\
+\hspace{1em}$\lambda_1$ & 0.97 (0.14) & {}[0.67, 1.30] & 1.04 (0.30) & {}[0.51, 2.05] & 1.06 (0.25) & {}[0.60, 1.86]\\
+\hspace{1em}$\lambda_2$ & 1.74 (0.15) & {}[1.24, 2.56] &  &  & 0.34 (0.51) & {}[0.11, 0.96]\\
+\bottomrule
+\multicolumn{7}{l}{\rule{0pt}{1em}\textit{Note: }}\\
+\multicolumn{7}{l}{\rule{0pt}{1em}Est. = estimate; SE = bootstrap standard error; CI = percentile boodstrap confidence interval.}\\
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tb]
+\centering
+\caption{\label{tab:sim-design}Parameter values examined in the simulation study}
+\centering
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{2.5in}>{\raggedright\arraybackslash}p{1.75in}>{\raggedright\arraybackslash}p{1.75in}}
+\toprule
+Parameter & Full Simulation & Bootstrap Simulation\\
+\midrule
+Overall average SMD ($\mu$) & 0.0, 0.2, 0.4, 0.8 & 0.0, 0.2, 0.4, 0.8\\
+Between-study heterogeneity ($\tau$) & 0.05, 0.15, 0.30, 0.45 & 0.05, 0.30\\
+Heterogeneity ratio ($\omega^2 / \tau^2$) & 0.0, 0.5 & 0.0, 0.5\\
+Average correlation between outcomes ($\rho$) & 0.40, 0.80 & 0.80\\
+Probability of selection for non-affirmative effects ($\lambda_1, \lambda_2$) & (0.02, 0.90), (0.10, 0.90), (0.20, 0.90), (0.50, 0.90), (1.00, 1.00) & (0.20, 0.90), (0.50, 0.90), (1.00, 1.00)\\
+\addlinespace
+Number of observed studies ($J$) & 15, 30, 60, 90 & 15, 30, 60\\
+\bottomrule
+\end{tabular}
+\end{table*}

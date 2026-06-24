@@ -235,6 +235,18 @@
 
 \authornote{
 
+Martyna Citkowicz, American Institutes for Research.
+James E. Pustejovsky, Department of Educational Psychology, University of Wisconsin-Madison.
+Megha Joshi, American Institutes for Research.
+
+This work was presented at the 2025 conference of the Society for Research on Educational Effectiveness in Chicago, IL.
+
+R code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at \url{https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46}.
+
+Funding: This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research. The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
+
+Conflicts of Interest: The author(s) declared that there were no conflicts of interest with respect to the authorship or the publication of this article.
+
 Correspondence concerning this article should be addressed to Martyna Citkowicz, 1400 Crystal Drive, 10th floor Arlington, VA 22202-3289. E-mail: \href{mailto:mcitkowicz@air.org}{\nolinkurl{mcitkowicz@air.org}}
 
 }
@@ -242,6 +254,12 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison\\\textsuperscript{3} Progressive Insurance}
 
 \note{~\newline June 24, 2026}
+
+\abstract{%
+Meta-analysts seek to draw generalizable inferences by pooling findings across available studies. Such efforts are hampered by selective reporting of study findings, which distorts meta-analytic inferences when statistically significant results are reported preferentially. Many techniques are available for investigating selective reporting in meta-analyses of independent effects, but psychological meta-analyses routinely involve dependent data structures, as arise when primary studies report results for multiple outcomes. Recent methodological developments that can accommodate dependent effects have focused on step-function selection models, in which the probability of reporting depends on whether a finding's p-value falls above or below pre-specified thresholds. We propose an alternative model in which the reporting probability follows a flexible, truncated beta function, avoiding the need to specify a priori thresholds. Estimation of the model accommodates dependent effect sizes using cluster-robust variance estimation or clustered bootstrapping. We demonstrate the proposed approach by re-analyzing a published meta-analysis. Through an extensive simulation study, we evaluate the performance of the truncated beta model versus standard meta-analytic methods and versus step-function models to assess robustness to selection function misspecification. Results show that the beta-density model yields negligible bias across diverse conditions and outperforms standard alternatives when selective reporting is present, although simpler step-function models can be more precise under mild selection. Clustered bootstrap confidence intervals provide superior coverage compared to cluster-robust variance estimation. Although conventional methods remain more precise when selection is absent, the truncated beta selection model serves as a useful tool for sensitivity analysis and estimation in larger dataset that include dependent effects.
+}
+
+
 
 \begin{document}
 \maketitle
@@ -526,6 +544,12 @@ We evaluated each method's performance in terms of convergence rates, bias, root
 For confidence intervals based on cluster-robust variance estimation, we defined coverage as the proportion of intervals that contained the true parameter value. For bootstrap intervals, we used \(B = 399\) replicates per simulation due to computational limits---fewer than ideal for applied use. To estimate practical coverage rates, we followed an approach similar to Boos and Zhang (2000): we calculated coverage for smaller subsamples (\(B = 49, 99, 199, 299\)) randomly selected without replacement from the full set of \(B = 399\) bootstraps, fit a regression of coverage on \(1/B\), and used the intercept to extrapolate expected coverage for \(B = 1999\).
 This extrapolation technique was previously evaluated and implemented (Pustejovsky, Citkowicz, et al., 2025, see Online Appendix C.3 for further details and demonstration of its performance).
 
+\subsection{Open Practices}\label{open-practices}
+
+R code and data for replicating the Monte Carlo simulation study are available on the Open Science Framework at \url{https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46}.
+The simulation study was not pre-registered.
+We did not make use of generative AI for any part of the study.
+
 \section{Simulation Results}\label{simulation-results}
 
 We organize our simulation results into two parts. First, we compare the performance of the beta-density selection model to the CHE-ISCW and PET/PEESE approaches. Specifically, we compare the bias and RMSE of the average effect size and the coverage rates and width of 95\% confidence intervals.
@@ -716,30 +740,6 @@ Given its performance in reducing bias, the beta-density selection model is a pr
 However, because the true selection process is unknown in practice and potentially varies across research fields and contexts, any choice of model requires assumptions about the reporting process.
 We understand the beta-density selection model not as representing the ``true'' mechanism, but rather as a flexible functional form that can approximate a wide range of smoothly varying selection patterns.
 Pending further research into its performance under threshold-based selection, study-level publication selection, and meta-regression contexts, we recommend adding the beta-density selection model to the expanding toolkit of complementary models for examining selective reporting.
-
-\section*{Author Contributions}\label{author-contributions}
-\addcontentsline{toc}{section}{Author Contributions}
-
-\textbf{MC:} Conceptualization, Methodology, Investigation, Writing - original draft, Writing - review \& editing, Project administration, Funding acquisition, Formal Analysis. \textbf{JEP:} Conceptualization, Methodology, Software, Validation, Investigation, Resources, Writing - original draft, Writing - review \& editing, Formal Analysis.
-
-\section*{Funding}\label{funding}
-\addcontentsline{toc}{section}{Funding}
-
-This work was supported, in part, by the Institute of Educational Sciences, U.S. Department of Education through grant R305D220026 to the American Institutes of Research.
-The opinions expressed are those of the authors and do not represent the views of the Institute of the U.S. Department of Education.
-
-\section*{Acknowledgements}\label{acknowledgements}
-\addcontentsline{toc}{section}{Acknowledgements}
-
-\section*{Data and Replication Materials}\label{data-and-replication-materials}
-\addcontentsline{toc}{section}{Data and Replication Materials}
-
-Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at \url{https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46}.
-
-\section*{Conflict of Interest Statement}\label{conflict-of-interest-statement}
-\addcontentsline{toc}{section}{Conflict of Interest Statement}
-
-The authors declare no conflicts of interest.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}

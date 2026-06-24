@@ -1,0 +1,80 @@
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-Beta-main-1} \caption{Ratio of root mean-squared error of the average effect for CHE-ISCW to root mean-squared error of beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:rmse-CHE-Beta-main}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-PET-Beta-main-1} \caption{Ratio of root mean-squared error of the average effect for PET/PEESE to root mean-squared error of beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:rmse-PET-Beta-main}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/rmse-CHE-PET-main-1} \caption{Ratio of root mean-squared error of the average effect for CHE-ISCW to root mean-squared error of PET/PEESE by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:rmse-CHE-PET-main}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-main-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and between-study heterogeneity. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:comparison-coverage-full-main}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-coverage-full-miss-1} \caption{Coverage levels of confidence intervals for the average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting. Dashed lines correspond to the nominal confidence level of 0.95.}\label{fig:comparison-coverage-full-miss}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/comparison-CI-width-full-miss-1} \caption{Average width of confidence intervals for average effect size based on cluster-robust variance approximations, by method, number of studies, average SMD, and strength of selective reporting.}\label{fig:comparison-CI-width-full-miss}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/PML-CI-width-miss-1} \caption{Average width of confidence intervals for average effect size based on two-stage bootstrap percentile intervals, by number of studies, average SMD, and strength of selective reporting.}\label{fig:PML-CI-width-miss}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-bias-1} \caption{Relative bias of heterogeneity by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-bias}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-1} \caption{Relative root mean-squared error of heterogeneity by method, selection probability, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-one-beta-1} \caption{Ratio of root mean-squared error of heterogeneity for one-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse-one-beta}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-beta-1} \caption{Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse-two-beta}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/heterogeneity-rmse-two-one-1} \caption{Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for one-step by selection probability, number of studies, average SMD, and between-study heterogeneity}\label{fig:heterogeneity-rmse-two-one}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-bias-1} \caption{Relative bias of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-bias}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda1-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda1-rmse}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-bias-1} \caption{Relative bias of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-bias}
+\end{sidewaysfigure}
+\efloatseparator
+ 
+\begin{sidewaysfigure}
+\includegraphics{beta-function-selection-models-with-dependent-effects_files/figure-latex/lambda2-rmse-1} \caption{Relative root mean-squared error of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity}\label{fig:lambda2-rmse}
+\end{sidewaysfigure}
