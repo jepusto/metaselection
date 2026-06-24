@@ -173,9 +173,7 @@ The opinions expressed are those of the authors and do not represent the views o
 
 # Data and Replication Materials {-}
 
-Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at <url>.
-
-<!-- Add URL for replication package. -->
+Code and data for replicating the empirical example and the Monte Carlo simulation study are available on the Open Science Framework at https://osf.io/xehgq/overview?view_only=f5d031326aeb40daa7b16b3b9cee5a46.
 
 # Conflict of Interest Statement {-}
 
