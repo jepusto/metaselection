@@ -5,19 +5,19 @@ library(furrr)
 library(metaselection)
 
 load("simulation-step-paper/wwc_es.RData") # do we need to change this?
-source("simulation-step-paper/2_estimation.R")
+source("research/step-function-simulations/1_estimation.R")
 
-mean_smd <- 0.8
+mean_smd <- 0.2
 tau <- 0.05
 omega <- 0.00
 m <- 60
 cor_mu <- .8
 cor_sd <- 0.05
-censor_fun <- step_fun
+censor_fun <- step_count_fun
 wwc_es$n <- round(wwc_es$n / 3)
 n_ES_sim <- n_ES_empirical(wwc_es)
 
-censor_fun_param <- censor_fun(cut_vals = .025, weights = .05)
+censor_fun_param <- censor_fun(cut_val = .025, weight = .05, psi = 1)
 
 set.seed(20309299)
 

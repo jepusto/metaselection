@@ -24,7 +24,8 @@ Description: Fits a flexible class of p-value selection models for meta-analysis
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+Depends: 
+    R (>= 4.1.0)
 Imports:
     Formula,
     stats,
@@ -54,7 +55,6 @@ Suggests:
 RdMacros: Rdpack
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-Depends: 
-    R (>= 2.10)
 LazyData: true
 URL: https://github.com/jepusto/metaselection
+Config/roxygen2/version: 8.0.0

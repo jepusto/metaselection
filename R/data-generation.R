@@ -130,30 +130,74 @@ r_study <- function(delta_j, #
 
 # censoring functions ---------------------------------------------
 
-#' @title Censor meta-analytic dataset based on a step-function model
+#' @title Censor meta-analytic dataset based on a multivariate step-function
+#'   model
+#'
+#' @description A functional that takes in a single step value, a weight
+#'   representing the selection probability for the upper interval of p-values,
+#'   and a dependence parameter,  and returns a function that can be used to
+#'   censor meta-analytic datasets according to a multivariate step-function
+#'   model.
+#'
+#' @param cut_val numeric value specifying the specifying the thresholds (or
+#'   steps) where the selection probability changes.
+#' @param weight numeric value specifying the selection probability for the
+#'   upper interval of p-values, i.e., for p-values larger than `cut_val` for an
+#'   effect reported in a study with no p-values smaller than `cut_val`.
+#' @param psi numeric value controlling the degree of dependence in selection probabilities.
+#' @param renormalize logical indicating whether to normalize the step function
+#'   to have a maximum value of 1, with a default value of \code{TRUE}.
+#'
+#' @returns A function that can be used to censor a meta-analytic dataset based
+#'   on a multivariate step-function model.
+#'
+#' @export
+
+step_count_fun <- function(cut_val = .025, weight = 1, psi = 0, renormalize = TRUE) {
+  
+  if (length(cut_val) > 1L || cut_val <= 0 || cut_val >= 1) stop("`cut_val` must be a single numeric value between 0 and 1.")
+  if (length(weight) > 1L || weight < 0) stop("`weight` must be a single numeric value greater than or equal to zero.")
+  if (length(psi) > 1L) stop("`power` must be a single numeric value.")
+  
+  wt_vec <- c(1, weight)
+  
+  if (renormalize) wt_vec <- wt_vec / max(wt_vec)
+  
+  cut_vals_full <- c(0, cut_val, 1)
+  
+  function(pvals, studyid) {
+    
+    N_sig_j <- tapply(pvals, studyid, \(x) sum(x < cut_val))
+    pow <- (N_sig_j[studyid] + 1)^psi
+    pval_buckets <- cut(pvals, cut_vals_full, labels = FALSE, include.lowest = TRUE)
+    1 - (1 - wt_vec[pval_buckets])^pow
+  }
+}
+
+#' @title Censor meta-analytic dataset based on a univariate step-function model
 #' 
 #' @description A functional that takes in cut values and weights representing 
 #'    selection probabilities for different intervals of p-values and returns a 
 #'    function that can be used to censor meta-analytic datasets according to 
-#'    the step-function model. 
+#'    the univariate step-function model. 
 #' 
 #' @param cut_vals numeric vector of one or more values specifying the 
-#'    specifying the thresholds (or steps) where the selection probability 
+#'    threshold (or step) where the selection probability 
 #'    changes.
-#' @param weights numeric vector of one or more values specifying the 
+#' @param weight numeric vector of one or more values specifying the 
 #'    selection probabilities for different intervals of p-values; the intervals 
 #'    are determined by the `cut_vals`.
 #' @param renormalize logical indicating whether to normalize the step function
 #'   to have a maximum value of 1, with a default value of \code{TRUE}.
 #' 
 #' @returns A function that can be used to censor a meta-analytic dataset 
-#'    based on the step-function model. 
+#'    based on the univariate step-function model. 
 #' 
 #' @export
 
 step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
   
-  if (length(cut_vals) != length(weights)) stop("cut_vals and weights must be the same length, doofus!")
+  if (length(cut_vals) != length(weights)) stop("`cut_vals` and `weights` must be the same length.")
   
   wt_vec <- c(1, weights)
   
@@ -161,7 +205,7 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
   
   cut_vals_full <- c(0, cut_vals, 1)
   
-  function(pvals) {
+  function(pvals, ...) {
     
     pval_buckets <- cut(pvals, cut_vals_full, labels = FALSE, include.lowest = TRUE)
     wt_vec[pval_buckets]
@@ -170,11 +214,11 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
 }
 
 
-#' @title Censor meta-analytic dataset based on the beta-density model
+#' @title Censor meta-analytic dataset based on the univariate beta-density model
 #'
 #' @description A functional that takes model parameters and returns a function
 #'   that can be used to censor meta-analytic datasets according to the
-#'   beta-density model.
+#'   univariate beta-density model.
 #'
 #' @param delta_1 numeric value for the first parameter of the beta function
 #' @param delta_2 numeric value for the second parameter of the beta function
@@ -186,7 +230,7 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
 #'   to have a maximum value of 1, with a default value of \code{TRUE}.
 #'
 #' @returns A function that can be used to censor a meta-analytic dataset based
-#'   on the beta-density model.
+#'   on the univariate beta-density model.
 #'
 #' @export
 
@@ -208,7 +252,7 @@ beta_fun <- function(delta_1 = 1, delta_2 = 1,
   
   max_val <- max_p^(delta_1 - 1) * (1 - max_p)^(delta_2 - 1)
   
-  function(pvals) {
+  function(pvals, ...) {
     
     # truncating 
     pvals <- ifelse(pvals < trunc_1, trunc_1, pvals)
@@ -244,20 +288,20 @@ beta_fun <- function(delta_1 = 1, delta_2 = 1,
 #'   outcomes
 #' @param cor_sd numeric value indicating standard deviation of correlation
 #'   between outcomes
-#' @param censor_fun a function used to censor effects; this package provides
-#'   functionals `step_fun()` and `beta_fun()` to censor effects based on
-#'   step-function or beta-function models respectively.
 #' @param n_ES_sim a function used to simulate the distribution of primary study
 #'   sample sizes and the number of effect sizes per study
+#' @param censor_fun a function used to censor effects; this package provides
+#'   functionals `step_fun()` and `beta_fun()` to censor effects based on
+#'   step-function or beta-function models respectively. If `NULL` (the default)
 #' @param m_multiplier numeric value indicating a multiplier for buffer for the
 #'   number of studies
 #' @param id_start integer indicating the starting value for study id
-#' @param paste_ids logical with \code{TRUE} (the default) indicating that the
+#' @param paste_ids logical with `TRUE` (the default) indicating that the
 #'   study id and effect size id should be pasted together
-#' @param include_sel_prob logical with \code{TRUE} indicating that the returned
-#'   dataset should include a variable \code{selection_prob} reporting the true
+#' @param include_sel_prob logical with `TRUE` indicating that the returned
+#'   dataset should include a variable `selection_prob` reporting the true
 #'   probability of selection given the observed p-value. Default of
-#'   \code{FALSE} indicates that the \code{selection_prob} variable should be
+#'   \code{FALSE} indicates that the `selection_prob` variable should be
 #'   omitted.
 #'
 #' @returns A \code{data.frame} containing the simulated meta-analytic dataset.
@@ -285,9 +329,9 @@ r_meta <- function(
     m, # number of studies in each meta analysis
     cor_mu, # average correlation between outcomes
     cor_sd, # sd correlation between outcomes
-    censor_fun, # censoring function
     n_ES_sim, # distribution of sample sizes and number of outcomes
-    m_multiplier = 2,
+    censor_fun = NULL, # censoring function
+    m_multiplier = 1,
     id_start = 0L,
     paste_ids = TRUE,
     include_sel_prob = FALSE
@@ -314,44 +358,48 @@ r_meta <- function(
   
   # generate the studies
   studies <- purrr::pmap_dfr(study_parms, .f = r_study, .id = "studyid")
-  studies$studyid <- id_start + as.integer(studies$studyid)
+  studies$studyid <- factor(id_start + as.integer(studies$studyid))
 
   # apply censoring process
-  K_star <- nrow(studies)
-  p_sel <- censor_fun(studies$p_onesided)
-  if (include_sel_prob) studies$selection_prob <- p_sel
-  observed <- as.logical(stats::rbinom(K_star, size = 1L, prob = p_sel))
-  studies <- studies[observed,,drop=FALSE]
+  if (!is.null(censor_fun)) {
+    K_star <- nrow(studies)
+    p_sel <- censor_fun(studies$p_onesided, studies$studyid)
+    if (include_sel_prob) studies$selection_prob <- p_sel
+    observed <- as.logical(stats::rbinom(K_star, size = 1L, prob = p_sel))
+    studies <- droplevels(studies[observed,,drop=FALSE])
   
-  # Count how many unique studies are kept
-  n_studies <- length(unique(studies$studyid))
-  
-  # recurse to get desired number of studies per meta-analytic dataset
-  if (n_studies < m) {
+    # Count how many unique studies are kept
+    n_studies <- length(unique(studies$studyid))
     
-    more_studies <- r_meta(
-      mean_smd = mean_smd, 
-      tau = tau, omega = omega, 
-      m = m - n_studies, 
-      cor_mu = cor_mu, cor_sd = cor_sd, 
-      censor_fun = censor_fun, 
-      n_ES_sim = n_ES_sim, 
-      m_multiplier = m_multiplier,
-      id_start = id_start + m_star,
-      paste_ids = FALSE
-    )
-    
-    if (nrow(studies) > 0L) {
-      studies <- rbind(studies, more_studies)
-    } else {
-      studies <- more_studies
+    # recurse to get desired number of studies per meta-analytic dataset
+    if (n_studies < m) {
+      
+      more_studies <- r_meta(
+        mean_smd = mean_smd, 
+        tau = tau, omega = omega, 
+        m = m - n_studies, 
+        cor_mu = cor_mu, cor_sd = cor_sd, 
+        censor_fun = censor_fun, 
+        n_ES_sim = n_ES_sim, 
+        m_multiplier = m_multiplier,
+        id_start = id_start + m_star,
+        paste_ids = FALSE,
+        include_sel_prob = include_sel_prob
+      )
+      
+      if (nrow(studies) > 0L) {
+        studies <- rbind(studies, more_studies)
+      } else {
+        studies <- more_studies
+      }
     }
-  }
+    
+    # keep only desired number of studies
+    studies <- droplevels(studies[studies$studyid %in% (levels(studies$studyid)[1:m]),])
+    
+  } 
   
-  # keep only desired number of studies
   if (paste_ids) studies$esid <- paste(studies$studyid, studies$esid, sep = "-")
-  studies$studyid <- factor(studies$studyid)
-  studies <- droplevels(studies[studies$studyid %in% (levels(studies$studyid)[1:m]),])
   
   return(studies)
   

@@ -11,9 +11,9 @@ r_meta(
   m,
   cor_mu,
   cor_sd,
-  censor_fun,
   n_ES_sim,
-  m_multiplier = 2,
+  censor_fun = NULL,
+  m_multiplier = 1,
   id_start = 0L,
   paste_ids = TRUE,
   include_sel_prob = FALSE
@@ -36,12 +36,12 @@ outcomes}
 \item{cor_sd}{numeric value indicating standard deviation of correlation
 between outcomes}
 
-\item{censor_fun}{a function used to censor effects; this package provides
-functionals \code{step_fun()} and \code{beta_fun()} to censor effects based on
-step-function or beta-function models respectively.}
-
 \item{n_ES_sim}{a function used to simulate the distribution of primary study
 sample sizes and the number of effect sizes per study}
+
+\item{censor_fun}{a function used to censor effects; this package provides
+functionals \code{step_fun()} and \code{beta_fun()} to censor effects based on
+step-function or beta-function models respectively. If \code{NULL} (the default)}
 
 \item{m_multiplier}{numeric value indicating a multiplier for buffer for the
 number of studies}
