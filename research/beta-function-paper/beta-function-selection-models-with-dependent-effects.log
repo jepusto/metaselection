@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.24)  24 JUN 2026 17:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.24)  24 JUN 2026 18:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1377,7 +1377,7 @@ L3 programming layer <2020/03/25>
 Here is how much of TeX's memory you used:
  30139 strings out of 469097
  591699 string characters out of 5455309
- 1014437 words of memory out of 5000000
+ 1014410 words of memory out of 5000000
  58165 multiletter control sequences out of 15000+600000
  717871 words of font info for 207 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -1395,7 +1395,7 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
 <c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb><c:/Users/jamespustejovsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on beta-function-selection-models-with-dependent-effects.pdf (77 pages, 1119322 bytes).
+Output written on beta-function-selection-models-with-dependent-effects.pdf (77 pages, 1119290 bytes).
 PDF statistics:
  1196 PDF objects out of 1200 (max. 8388607)
  998 compressed objects within 10 object streams
