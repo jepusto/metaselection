@@ -7,7 +7,7 @@ editor_options:
     wrap: sentence
 ---
 
-We conducted Monte Carlo simulation studies to assess the performance of the marginal beta-density selection model and to investigate whether the form of the assumed selection mechanism matters for estimation of average effect size.
+We conducted a Monte Carlo simulation study to assess the performance of the marginal beta-density selection model and to investigate whether the form of the assumed selection mechanism matters for estimation of average effect size.
 The simulations covered a wide range of conditions in which primary studies contributed multiple, statistically dependent effect size estimates.
 We compared estimates based on the beta density model to estimates generated from three existing methods: (1) a new version of the correlated hierarchical effects model with inverse sampling-covariance weights (CHE-ISCW), which accounts for dependency but not selective reporting [@chen2024adapting]; (2) the PET-PEESE method, which addresses selective reporting and has been adapted to handle dependent data structures [@stanley2014meta]; and (3) a step-function selection model that accounts for both selective reporting and dependent effects [@pustejovsky2025step].
 We evaluated the model estimates based on convergence rates, bias, accuracy, confidence interval coverage, and confidence interval width for estimating the average effect size of the unselected distribution.
@@ -57,7 +57,7 @@ library(tidyverse)
 dat <- tibble(
   Parameter = c(
     "Overall average SMD ($\\mu$)",
-    "Between-study heterogeneity ($\\tau$)",
+    "Between-study heterogeneity ($\\tau_B$)",
     "Heterogeneity ratio ($\\omega^2 / \\tau^2$)",
     "Average correlation between outcomes ($\\rho$)",
     "Probability of selection for non-affirmative effects ($\\lambda_1, \\lambda_2$)",
@@ -95,7 +95,7 @@ kable(
   
 ```
 
-In the full simulation, we varied $\mu$ from 0.0 to 0.80, reflecting the range of effects observed in a large-scale review of education randomized controlled trials [@kraft2020interpreting], and $\tau$ from 0.05 (minimal heterogeneity) to 0.45 (substantial heterogeneity). Within-study heterogeneity was specified relative to between-study heterogeneity using a ratio of $\omega^2 / \tau^2$ equal to 0 (no within-study heterogeneity) or 0.5.
+In the full simulation, we varied $\mu$ from 0.0 to 0.80, reflecting the range of effects observed in a large-scale review of education randomized controlled trials [@kraft2020interpreting], and $\tau$ from 0.05 (minimal heterogeneity) to 0.45 (substantial heterogeneity). Within-study heterogeneity was specified relative to between-study heterogeneity using a ratio of $\omega^2 / \tau_B^2$ equal to 0 (no within-study heterogeneity) or 0.5.
 
 To assess the impact of working model misspecification, we manipulated the average within-study correlation $\rho$ across two levels: 0.80 (the default used in RVE software and correctly specified when $\rho = 0.80$) and 0.40 (inducing misspecification in the CHE-ISCW and PET-PEESE working models).
 

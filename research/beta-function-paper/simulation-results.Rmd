@@ -341,7 +341,7 @@ For the beta-density selection model, we depict the width of the intervals based
 The average width of the intervals is strongly affected by the degree of heterogeneity and number of studies, with confidence interval width narrowing as heterogeneity ($\tau$) decreases and as the number of studies ($J$) increases across all methods.
 CHE-ISCW generally produces the narrowest confidence intervals, followed by the beta-density selection model with CRVE confidence intervals.
 However, neither of these confidence intervals have acceptable coverage levels.
-PET/PEESE and the beta-density selection model using the two-stage percentile bootstrap method produce wider confidence intervals, but only the latter intervals hade acceptable coverage levels across a broad range of conditions. Generally, the bootstrap intervals for the beta-density model are wider than those produced by PET/PEESE when there is only small heterogeneity $(\tau = .05)$ but more similar in width (and sometimes smaller than the PET/PEESE intervals) when heterogeneity is higher $\tau = 0.30$.
+PET/PEESE and the beta-density selection model using the two-stage percentile bootstrap method produce wider confidence intervals, but only the latter intervals have acceptable coverage levels across a broad range of conditions. Generally, the bootstrap intervals for the beta-density model are wider than those produced by PET/PEESE when there is only small heterogeneity $(\tau = .05)$ but more similar in width (and sometimes smaller than the PET/PEESE intervals) when heterogeneity is higher $\tau = 0.30$.
 
 
 ## Robustness to Selection Function Misspecification: Beta-Density vs. Step Models

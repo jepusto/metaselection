@@ -14,7 +14,7 @@ In this work, we developed and evaluated a marginal beta-density selection model
 
 Modeling the _marginal_ distribution of effect sizes amounts to treating all effects as if they were independent observations for purposes of parameter estimation. This strategy is pragmatic because it avoids the need for complex assumptions about the joint selection process of a set of effects generated in a given study and sidesteps the high-dimensional integration that would be required for multivariate selection models. Pairing this "working independence" assumption with cluster-robust variance estimation or clustered bootstrapping provides a feasible strategy that accounts for the dependence structure of the data during the inference stage. Under this framework, the marginal model provides the point estimates but deliberately ignores the dependence structure, while CRVE or bootstrapping provides approximate assessments of uncertainty that adjust for within-study dependence.
 
-Our earlier work demonstrated that this framework works well with marginal step-function selection models [@pustejovsky2025step].  
+Our earlier work demonstrated that this framework works well with marginal step-function selection models [@pustejovsky2025step].
 By incorporating the beta-density selection function [@citkowicz2017parsimonious] into the marginal modeling framework, we provide a distinct and complementary representation of the selection process. 
 The step-function selection model assumes that selection probabilities are piecewise-constant, only shifting at specific, pre-specified threshold $p$-values. 
 The beta-density selection model offers a flexible alternative for capturing smoothly varying selection probabilities, without requiring meta-analysts to identify specific $p$-value thresholds a priori. 
@@ -35,7 +35,7 @@ Because the data were generated via the smooth beta density process, the beta mo
 The one-step model produced biased estimates and miscalibrated, overly narrow confidence intervals under many conditions.
 The two-step model was less biased, suggesting that its more flexible specification allowed for a closer approximation to the true selection process, but still did not provide adequately calibrated confidence intervals. 
 However, the estimates of average effect from the mis-specfied step-function models were sometimes more accurate (with lower RMSE) than estimates from the beta density model, particularly under conditions with milder selective reporting.
-in conditions where the true average effect was moderate or large and selection was not extreme, even the simpler one-step model had lower RMSE than the beta-density model. 
+In conditions where the true average effect was moderate or large and selection was not extreme, even the simpler one-step model had lower RMSE than the beta-density model. 
 Even though the beta density model has the same number of parameters as the two-step model, its parameters appear to be more difficult to estimate except under strong or extreme levels of selection.
 This suggests that the beta density model may be most useful for larger meta-analyses, with more information available for estimating the functional form of the selection process.
 
