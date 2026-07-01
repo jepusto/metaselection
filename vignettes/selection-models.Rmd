@@ -14,8 +14,11 @@ link-citations: yes
 csl: apa.csl
 vignette: >
   %\VignetteIndexEntry{P-Value Selection Models for Meta-Analysis with Dependent Effects}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r setup, include=FALSE}
@@ -24,99 +27,95 @@ library(metaselection)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-A systematic review and meta-analysis project aims to provide a comprehensive synthesis of available evidence on a topic of interest. 
-One major challenge to this aim is selective reporting of evidence from primary studies. 
-Selective reporting occurs when the direction or statistical significance level of a finding influences whether it is reported and therefore whether the finding is available for inclusion in a systematic review. 
+A systematic review and meta-analysis project aims to provide a comprehensive synthesis of available evidence on a topic of interest.
+One major challenge to this aim is selective reporting of evidence from primary studies.
+Selective reporting occurs when the direction or statistical significance level of a finding influences whether it is reported and therefore whether the finding is available for inclusion in a systematic review.
 Selective reporting can arise from biases in the publication process, on the part of journals, editors, and reviewers, as well as through strategic decisions on part of the authors [@Rothstein2005publication; @sutton2009publication].
-If results that are positive and statistically significant are more likely to be reported than results that are null or negative, the evidence base available for meta-analysis will be distorted, leading to inflated effect size estimates from meta-analysis [@carter2019correcting; @mcshane2016adjusting] and biased estimates of heterogeneity [@augusteijn2019effect]. 
+If results that are positive and statistically significant are more likely to be reported than results that are null or negative, the evidence base available for meta-analysis will be distorted, leading to inflated effect size estimates from meta-analysis [@carter2019correcting; @mcshane2016adjusting] and biased estimates of heterogeneity [@augusteijn2019effect].
 
-Because selective reporting can make it difficult to draw accurate inferences from a meta-analysis, many tools have been developed that try to detect selective reporting problems and correct for the biases they create in meta-analytic summaries. 
-Widely used methods include graphical diagnostics like funnel plots [@sterne2001funnel; @Sterne2011recommendations]; tests and adjustments for funnel plot asymmetry such as trim-and-fill [@duval2000nonparametric], Egger's regression [@egger1997bias], and PET/PEESE [@stanley2008meta; @stanley2014meta]; and $p$-value diagnostics such as p-curve and p-uniform [@simonsohn2014pcurve; @VanAssen2015meta; @vanaert2016conducting]. 
-Selection models are another class of methods that both test and correct for selective reporting by directly modeling the section process [@Citkowicz2017parsimonious; @hedges1992modeling; @vevea1995general; @Hedges1996estimating]. 
+Because selective reporting can make it difficult to draw accurate inferences from a meta-analysis, many tools have been developed that try to detect selective reporting problems and correct for the biases they create in meta-analytic summaries.
+Widely used methods include graphical diagnostics like funnel plots [@sterne2001funnel; @Sterne2011recommendations]; tests and adjustments for funnel plot asymmetry such as trim-and-fill [@duval2000nonparametric], Egger's regression [@egger1997bias], and PET/PEESE [@stanley2008meta; @stanley2014meta]; and $p$-value diagnostics such as p-curve and p-uniform [@simonsohn2014pcurve; @VanAssen2015meta; @vanaert2016conducting].
+Selection models are another class of methods that both test and correct for selective reporting by directly modeling the section process [@Citkowicz2017parsimonious; @hedges1992modeling; @vevea1995general; @Hedges1996estimating].
 However, very few methods for investigating selective reporting can accommodate dependent effect sizes.
 This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a common feature of meta-analytic data.
 
-Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions. 
+Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions.
+Further, dependence can also arise when meta-analyses include multiple primary studies conducted by the same researchers or the same lab [@pustejovsky2022preventionscience].
 This dependency violates statistical assumptions of independent errors, leading to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences.
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience]. These methods can be combined with a few of the available techniques for investigating selective reporting, but this is currently limited to techniques based on regression adjustment [@fernandezcastilla2019detecting; @rodgers2020evaluating; @chen2024adapting] or sensitivity analyses based on simple forms of selection models, which provide bounds on average effects given an _a priori_ level of selective reporting [@mathur2020sensitivity]. 
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience].
+These methods can be combined with a few of the available techniques for investigating selective reporting, but this is currently limited to techniques based on regression adjustment [@fernandezcastilla2019detecting; @rodgers2020evaluating; @chen2024adapting] or sensitivity analyses based on simple forms of selection models, which provide bounds on average effects given an *a priori* level of selective reporting [@mathur2020sensitivity].
 
-The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes. In particular, the package provides methods for investigating and accounting for selective reporting based on selection models, where prior developments were limited to data with independent effect sizes.
-The available models describe the _marginal_ distribution of effect size estimates and so do not attempt to directly capture the dependence structure among effect size estimates. 
-However, the package implements methods that account for dependent effect sizes after fitting the model, using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping techniques. 
-Simulation results show that applying selection models to dependent effect size estimates reduces bias in the estimate of the overall effect size [@pustejovsky2025estimation]. 
-Combining the selection models with cluster-bootstrapping leads to confidence intervals with close-to-nominal coverage rates [@pustejovsky2025estimation]. 
+The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes.
+In particular, the package provides methods for investigating and accounting for selective reporting based on selection models, where prior developments were limited to data with independent effect sizes.
+The available models describe the *marginal* distribution of effect size estimates and so do not attempt to directly capture the dependence structure among effect size estimates.
+However, the package implements methods that account for dependent effect sizes after fitting the model, using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping techniques.
+Simulation results show that applying selection models to dependent effect size estimates reduces bias in the estimate of the overall effect size [@pustejovsky2025estimation].
+Combining the selection models with cluster-bootstrapping, particularly the two-stage clustered bootstrapping, leads to confidence intervals with close-to-nominal coverage rates [@pustejovsky2025estimation].
 
-Several existing packages provide implementations of selection models, but none can accommodate dependent effect size estimates.
+Several existing packages provide implementations of selection models, but none can accommodate dependent effect size estimates while accounting for selective reporting.
 For example, the `metafor` package [@Viechtbauer2010conducting] includes the `selmodel()` function, which allows users to fit many different types of selection models.
 The `weightr` package [@weightr] includes functions to estimate a class of $p$-value selection models described in @vevea1995general.
 However, the functions available in these packages can only be applied to meta-analytic data assuming that the effect sizes are independent.
 In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
-However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model and do not allow modeling of more complex forms of selection.
+However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data.
+The sensitivity analyses are also based on a specific and simple form of selection model and do not allow modeling of more complex forms of selection.
+Moreover, `RoBMA` package [@RoBMA] implements Bayesian multilevel analysis that accounts for publication bias as described in @bartovs2026robust.
 
 # Selection Models
 
-Selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication]. 
+Selection models are a tool for investigating selective reporting by making explicit assumptions about the process by which the effect size estimates are reported [@Rothstein2005publication].
 Such models have two components: a set of assumptions describing the evidence-generation process and a set of assumptions describing the selection process.
-The `metaselection` package implements a flexible class of selection models, in which the evidence-generating process follows a random effects location-scale meta-regression model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided $p$-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious]. 
-The step function model involves specifying psychologically salient but functionally arbitrary thresholds (or steps), such as $p < 0.05$, which categorize the $p$-values into intervals that have different probabilities of selection [@vevea1995general]. 
-The beta-density model uses a different selection function, based on a beta distribution, to capture distinctive, more smoothly varying patterns of selection [@Citkowicz2017parsimonious]. 
+The `metaselection` package implements a flexible class of selection models, in which the evidence-generating process follows a random effects location-scale meta-regression model [@viechtbauer2022locationscale] and where the selection process is a function of one-sided $p$-values, either in the form of a step function [@vevea1995general] or a beta-density function [@Citkowicz2017parsimonious].
+The step function model involves specifying psychologically salient but functionally arbitrary thresholds (or steps), such as $p < 0.05$, which categorize the $p$-values into intervals that have different probabilities of selection [@vevea1995general].
+The beta-density model uses a different selection function, based on a beta distribution, to capture distinctive, more smoothly varying patterns of selection [@Citkowicz2017parsimonious].
 
-Consider a meta-analytic dataset with a total of $J$ samples, where study $j$ includes $k_j$ effect size estimates. 
-Let $Y_{ij}$ denote an effect size estimate produced by a sample, prior to selective reporting. 
+Consider a meta-analytic dataset with a total of $J$ samples, where study $j$ includes $k_j$ effect size estimates.
+Let $Y_{ij}$ denote an effect size estimate produced by a sample, prior to selective reporting.
 The effect size estimate has standard error $\sigma_{ij}$, which is treated as a fixed quantity.
-Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors that encode characteristics of the effect sizes or the samples and may be related to average effect size magnitude. 
-Let $\mathbf{u}_{ij}$ be a $1 \times u$ row vector of predictors that may be related to effect size heterogeneity. 
-Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ the standard normal density. 
+Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors that encode characteristics of the effect sizes or the samples and may be related to average effect size magnitude.
+Let $\mathbf{u}_{ij}$ be a $1 \times u$ row vector of predictors that may be related to effect size heterogeneity.
+Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ the standard normal density.
 Finally, let $p_{ij}$ be the one-sided $p$-value corresponding to the effect size estimate, which is a function of the effect size estimate and its standard error: $p_{ij} = 1 - \Phi\left(Y_{ij} / \sigma_{ij}\right) = \Phi\left(-Y_{ij} / \sigma_{ij}\right)$.
 
 ## The evidence-generating process
 
-The model for the evidence-generating process is a random effects location-scale meta-regression model, in which
-$$
-Y_{ij} = \mathbf{x}_{ij} \boldsymbol\beta + v_{ij} + e_{ij},
-$$
-where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_{ij}$ is a normally distributed sampling error with mean zero and known variance $\sigma^{2}_{ij}$. 
-The variance of the random effects is modeled as
-$$
-\log\left(\tau_{ij}^{2}\right) = \mathbf{u}_{ij} \boldsymbol\gamma,
-$$
-where $\boldsymbol\gamma$ is a $u \times 1$ vector of coefficients that relate the predictors to the degree of marginal variation in the random effects.
+The model for the evidence-generating process is a random effects location-scale meta-regression model, in which $$Y_{ij} = \mathbf{x}_{ij} \boldsymbol\beta + v_{ij} + e_{ij},$$ where $\boldsymbol\beta$ is a $1 \times x$ vector of regression coefficients that relate the predictors to average effect size magnitude, $v_i$ is a normally distributed random effect with mean zero and variance $\tau^2_{ij}$, and $e_{ij}$ is a normally distributed sampling error with mean zero and known variance $\sigma^{2}_{ij}$.
+The variance of the random effects is modeled as $$\log\left(\tau_{ij}^{2}\right) = \mathbf{u}_{ij} \boldsymbol\gamma,$$ where $\boldsymbol\gamma$ is a $u \times 1$ vector of coefficients that relate the predictors to the degree of marginal variation in the random effects.
 If the model does not include predictors of heterogeneity, then $\mathbf{u}_{ij} = 1$ and the model reduces to a conventional random effects meta-regression in which $\gamma = \log(\tau^2)$.
 
-Note that this random-effects location scale model treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. Thus, it is a model for the _marginal_ distribution of effect size estimates, which does not attempt to capture the dependence structure among effect size estimates drawn from the same sample. As a result, the regression coefficients $\boldsymbol\beta$ describe the overall average effects (given the predictors) and variance parameters $\boldsymbol\gamma$ describe the marginal or _total_ heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-sample and between-sample components. 
+Note that this random-effects location scale model treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample.
+Thus, it is a model for the *marginal* distribution of effect size estimates, which does not attempt to capture the dependence structure among effect size estimates drawn from the same sample.
+As a result, the regression coefficients $\boldsymbol\beta$ describe the overall average effects (given the predictors) and variance parameters $\boldsymbol\gamma$ describe the marginal or *total* heterogeneity of the effect size distribution, rather than decomposing the heterogeneity into within-sample and between-sample components.
 
 ## Selective reporting processes
 
-The selective reporting process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value. 
-Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observed. 
-Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$. 
-The package includes two different forms of selection functions: step functions and beta-density functions. 
+The selective reporting process is defined by a selection function, which specifies the probability that an effect size estimate is reported given its $p$-value.
+Let $O_{ij}$ be an indicator for whether effect size $i$ in study $j$ is observed.
+Then the selection model defines $\text{Pr}(O_{ij} = 1 \ | \ p_{ij}) = \text{Pr}(O_{ij} = 1 \ | \ Y_{ij}, \sigma_{ij})$.
+The package includes two different forms of selection functions: step functions and beta-density functions.
 
-Although it is possible in principle to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, the models implemented in the package are based on selection functions for one-tailed $p$-values. 
-In primary studies, researchers typically report $p$-values from two-tailed hypothesis tests. 
-However, prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect. 
+Although it is possible in principle to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, the models implemented in the package are based on selection functions for one-tailed $p$-values.
+In primary studies, researchers typically report $p$-values from two-tailed hypothesis tests.
+However, prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect.
 Thus, our formulation and discussion of these functions uses one-tailed $p$-values based on the null hypothesis of $H_0: \theta \leq 0$ versus the alternative $H_A: \theta > 0$.
 
 ### Step functions
 
-@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values. In the general formulation, suppose that there are $H$ steps, $\alpha_1,...,\alpha_H$, and that 
-$$
-\text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
+@hedges1992modeling and @vevea1995general proposed to model the selective reporting process using a step-function, with thresholds chosen to correspond to "psychologically salient" $p$-values.
+In the general formulation, suppose that there are $H$ steps, $\alpha_1,...,\alpha_H$, and that $$\text{Pr}(O_{ij} = 1 | p_{ij}) = \begin{cases}
 1 & \text{if} & p_{ij} < \alpha_1 \\ 
 \lambda_1 & \text{if} & \alpha_1 \leq p_{ij} < \alpha_2 \\ \lambda_2 & \text{if} & \alpha_2 \leq p_{ij} < \alpha_3 \\
 \vdots \\
 \lambda_H & \text{if} & \alpha_H \leq p_{ij}.
-\end{cases}
-$$
-The selection parameters $\lambda_1,...,\lambda_H$ control the probabilities of selection given a $p$-value, with parameter $\lambda_h$ defined as the relative probability that an effect size estimate is observed, given that its $p$-value is in the range $[\alpha_h, \alpha_{h+1})$, compared to the probability that an effect size estimate is observed, given that its $p$-value is in the range $[0, \alpha_1)$. 
-The model is estimated in terms of log-transformed relative probabilities so that the parameter space is unrestricted, with $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,...,H$. 
+\end{cases}$$ The selection parameters $\lambda_1,...,\lambda_H$ control the probabilities of selection given a $p$-value, with parameter $\lambda_h$ defined as the relative probability that an effect size estimate is observed, given that its $p$-value is in the range $[\alpha_h, \alpha_{h+1})$, compared to the probability that an effect size estimate is observed, given that its $p$-value is in the range $[0, \alpha_1)$.
+The model is estimated in terms of log-transformed relative probabilities so that the parameter space is unrestricted, with $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,...,H$.
 With this parameterization, $\zeta_1 = \cdots = \zeta_H = 0$ describes a process where effect sizes are reported with uniform probability regardless of their signs or statistical significance levels.
 
+In practice, meta-analysts will often use only a small number of steps in the selection model.
+One common choice is the three-parameter selection model, which has a single step at $\alpha_1 = 0.025$ (the default in the package), as depicted in the first figure below.
+With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < 0.05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
 
-In practice, meta-analysts will often use only a small number of steps in the selection model. 
-One common choice is the three-parameter selection model, which has a single step at $\alpha_1 = 0.025$ (the default in the package), as depicted in the first figure below. With this choice of threshold, positive effects that are statistically significant at the two-sided level of $p < 0.05$ have a different probability of selection than effects that are not statistically significant or not in the anticipated direction.
-
-```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = "One-step selection model with $\\lambda_1 = 0.4$"}
+```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = "Figure 1. One-step selection model with $\\lambda_1 = 0.4$"}
 lambda1 <- 0.4
 lambda2 <- 0.2
 pvals <- seq(0,1,0.005)
@@ -135,10 +134,10 @@ ggplot(dat, aes(x = pvals)) +
   labs(x = "p-value (one-sided)", y = "Selection probability")
 ```
 
-Another possibility is to use two steps at $\alpha_1 = 0.025$ and $\alpha_2 = 0.500$, which allows for different probabilities of selection for effects that are positive but not statistically significant and effects that are negative (i.e., in the opposite the intended direction). 
+Another possibility is to use two steps at $\alpha_1 = 0.025$ and $\alpha_2 = 0.500$, which allows for different probabilities of selection for effects that are positive but not statistically significant and effects that are negative (i.e., in the opposite the intended direction).
 We call the latter model a four-parameter selection model; it is depicted in the figure below.
 
-```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = "Two-step selection model with $\\lambda_1 = 0.4, \\lambda_2 = 0.2$"}
+```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = "Figure 2. Two-step selection model with $\\lambda_1 = 0.4, \\lambda_2 = 0.2$"}
 ggplot(dat, aes(x = pvals)) + 
   scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
   scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
@@ -149,16 +148,15 @@ ggplot(dat, aes(x = pvals)) +
   labs(x = "p-value (one-sided)", y = "Selection probability")
 ```
 
-
 ### Beta-density functions
 
-@Citkowicz2017parsimonious proposed a selection model based on an alternative form of selection function, where the probability of reporting follows a beta density. Compared to a step function, the beta density selection function can capture a very different set of shapes, with selection probabilities that vary smoothly over the range of possible one-sided $p$-values.
-The `metaselection` package implements a modification of the beta-density function as originally proposed in @Citkowicz2017parsimonious. The modification involves truncating the selection probabilities at user-specified steps $\alpha_1$ and $\alpha_2$, so that the selection function is given by
-$$
-\text{Pr}(O_{ij} = 1 | p_{ij}) = \tilde{p}_{ij}^{(\lambda_1 - 1)} \left(1 - \tilde{p}_{ij}\right)^{(\lambda_2 - 1)},
-$$
-where $\tilde{p}_{ij} = \min\{\max\{p_{ij}, \alpha_1\}, \alpha_2\}$.
-Using this modification, one might set truncation points at $\alpha_1 = 0.025$ and $\alpha_2 = 0.975$ (the default values in the package) so that all statistically significant positive effect size estimates have the same selection probability and, likewise, all statistically significant, negative effect size estimates have the same selection probability, with the selection probabilities of non-significant effect sizes varying according to a beta density. The first figure below depicts this truncated beta density using the default truncation points and with $\lambda_1 = 0.1, \lambda_2 = 0.9$, which represents very strong selection. The second figure depicts a truncated beta density with more moderate values of $\lambda_1 = 0.7, \lambda_2 = 1$ and where the second truncation point is set at $\alpha_2 = 0.5$, so that all negative effect size estimates have equal selection probability.
+@Citkowicz2017parsimonious proposed a selection model based on an alternative form of selection function, where the probability of reporting follows a beta density.
+Compared to a step function, the beta density selection function can capture a very different set of shapes, with selection probabilities that vary smoothly over the range of possible one-sided $p$-values.
+The `metaselection` package implements a modification of the beta-density function as originally proposed in @Citkowicz2017parsimonious.
+The modification involves truncating the selection probabilities at user-specified steps $\alpha_1$ and $\alpha_2$, so that the selection function is given by $$\text{Pr}(O_{ij} = 1 | p_{ij}) = \tilde{p}_{ij}^{(\lambda_1 - 1)} \left(1 - \tilde{p}_{ij}\right)^{(\lambda_2 - 1)},$$ where $\tilde{p}_{ij} = \min\{\max\{p_{ij}, \alpha_1\}, \alpha_2\}$.
+Using this modification, one might set truncation points at $\alpha_1 = 0.025$ and $\alpha_2 = 0.975$ (the default values in the package) so that all statistically significant positive effect size estimates have the same selection probability and, likewise, all statistically significant, negative effect size estimates have the same selection probability, with the selection probabilities of non-significant effect sizes varying according to a beta density.
+The first figure below depicts this truncated beta density using the default truncation points and with $\lambda_1 = 0.1, \lambda_2 = 0.9$, which represents very strong selection.
+The second figure depicts a truncated beta density with more moderate values of $\lambda_1 = 0.7, \lambda_2 = 1$ and where the second truncation point is set at $\alpha_2 = 0.5$, so that all negative effect size estimates have equal selection probability.
 
 ```{r, echo = FALSE, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%", fig.cap = c("Beta-density selection model with $\\lambda_1 = 0.1, \\lambda_2 = 0.9$, using truncation points $\\alpha_1 = 0.025, \\alpha_2 = 0.975$", "Beta-density selection model with $\\lambda_1 = 0.7, \\lambda_2 = 1$,  using truncation points $\\alpha_1 = 0.025, \\alpha_2 = 0.500$")}
 
@@ -187,62 +185,70 @@ ggplot(dat, aes(x = pvals)) +
   labs(x = "p-value (one-sided)", y = "Selection probability")
 ```
 
-In the package, the beta-density function is parameterized in terms of $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,2$. 
+In the package, the beta-density function is parameterized in terms of $\zeta_h = \log(\lambda_h)$, where $-\infty < \zeta_h < +\infty$, for $h=1,2$.
 With this parameterization, $\zeta_1 = \zeta_2 = 0$ describes a process where effect sizes are reported with uniform probability regardless of their statistical significance levels.
 
 ## Estimation
 
-The combination of assumptions about the evidence-generating process and assumptions about the selection process implies a marginal distribution for the observed effect sizes. 
+The combination of assumptions about the evidence-generating process and assumptions about the selection process implies a marginal distribution for the observed effect sizes.
 The evidence-generating process describes the effect size distribution $\text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ and the selection process specifies $\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$.
-The distribution of observed effect size estimates then corresponds to $\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, which depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$. 
+The distribution of observed effect size estimates then corresponds to $\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, which depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$.
 
-The `metaselection` package implements two different estimation strategies: composite marginal likelihood and augmented and reweighted Gaussian likelihood. In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent. 
-An alternative estimation strategy, augmented and reweighted Gaussian likelihood, defines the parameter estimator as the solution to a set of mean-zero estimating equations. The selection parameters are estimated using their score equations, just as in the composite marginal likelihood estimator. Unlike the composite marginal likelihood strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the Gaussian evidence-generating process, with weights equal to the inverse probability of selection. This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori. The implementation in the `metaselection` package uses the strategy to jointly estimate the meta-regression, scale regression, and selection parameters. 
+The `metaselection` package implements two different estimation strategies: composite marginal likelihood and augmented and reweighted Gaussian likelihood.
+In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent.
+An alternative estimation strategy, augmented and reweighted Gaussian likelihood, defines the parameter estimator as the solution to a set of mean-zero estimating equations.
+The selection parameters are estimated using their score equations, just as in the composite marginal likelihood estimator.
+Unlike the composite marginal likelihood strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the Gaussian evidence-generating process, with weights equal to the inverse probability of selection.
+This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori.
+The implementation in the `metaselection` package uses the strategy to jointly estimate the meta-regression, scale regression, and selection parameters.
 
 ## Cluster-robust variance estimation
 
-If each sample included in a meta-analysis provides just a single effect size estimate (i.e., if $k_j = 1$ for $j = 1,...,J$), then standard errors and confidence intervals for the selection model parameters can be constructed using standard techniques based on the inverse of the Fisher information under the model. 
-Such an approach is used in other implementations of selection models, including the `selmodel()` function in the `metafor` package [@Viechtbauer2010conducting] and the `weightfunct()` function in the `weightr` package [@weightr].[^model-based]
-However, this approach is predicated on the assumption that the effect size estimates are mutually independent. Thus, it is inappropriate if the data include samples that provide multiple, statistically dependent effect size estimates.
+If each sample included in a meta-analysis provides just a single effect size estimate (i.e., if $k_j = 1$ for $j = 1,...,J$), then standard errors and confidence intervals for the selection model parameters can be constructed using standard techniques based on the inverse of the Fisher information under the model.
+Such an approach is used in other implementations of selection models, including the `selmodel()` function in the `metafor` package [@Viechtbauer2010conducting] and the `weightfunct()` function in the `weightr` package [@weightr].[^1]
+However, this approach is predicated on the assumption that the effect size estimates are mutually independent.
+Thus, it is inappropriate if the data include samples that provide multiple, statistically dependent effect size estimates.
 
-[^model-based]: The `metaselection` package also provides standard errors based on the inverse of the observed Fisher information matrix, which are valid when effect size estimates are mutually independent. These can be obtained by setting `vcov_type = 'model-based'` in  the call to `selection_model()`.
+[^1]: The `metaselection` package also provides standard errors based on the inverse of the observed Fisher information matrix, which are valid when effect size estimates are mutually independent.
+    These can be obtained by setting `vcov_type = 'model-based'` in the call to `selection_model()`.
 
-For meta-regression models that do not account for selective reporting, @Hedges2010robust proposed CRVE methods (also known as sandwich estimators) that accommodate dependent effect sizes, even if the exact dependence structure is not known or is not correctly specified. The form of CRVE originally described in @Hedges2010robust is based on large-sample approximations and requires a relatively large number of independent samples (each of which might have multiple effect size estimates) to function well. 
+For meta-regression models that do not account for selective reporting, @Hedges2010robust proposed CRVE methods (also known as sandwich estimators) that accommodate dependent effect sizes, even if the exact dependence structure is not known or is not correctly specified.
+The form of CRVE originally described in @Hedges2010robust is based on large-sample approximations and requires a relatively large number of independent samples (each of which might have multiple effect size estimates) to function well.
 Subsequent work developed small-sample refinements to CRVE, including adjustments to hypothesis tests and confidence intervals based on CRVE, which are accurately calibrated even for datasets that include a small number of independent clusters [@tipton2015small; @tiptonpusto2015small].
 
 CRVE methods can also be applied to selection models to quantify uncertainty in parameter estimates obtained by composite maximum likelihood or augmented and reweighted Gaussian likelihood.
-The `metaselection` package provides standard errors and confidence intervals based on CRVE methods by default. 
-The implementation is similar to the original, large-sample CRVE methods described by @Hedges2010robust; the subsequently developed small-sample refinements are not currently available for selection models. 
+The `metaselection` package provides standard errors and confidence intervals based on CRVE methods by default.
+The implementation is similar to the original, large-sample CRVE methods described by @Hedges2010robust; the subsequently developed small-sample refinements are not currently available for selection models.
 It is important to bear in mind that CRVE methods are the default only because they are computationally convenient and quicker to compute compared to bootstrap-based methods---not because they are the best available method.
 With CRVE, confidence intervals for model parameters can be constructed using large-sample normal approximations, but these intervals require a large number of independent samples to provide well-calibrated coverage levels.
 
 ## Bootstrapped confidence intervals
 
-An alternative to CRVE is to use bootstrap re-sampling methods to quantify uncertainty in parameter estimates. 
-Bootstrapping involves re-sampling many times from the original data to create an empirical distribution that can be used as a proxy for the actual sampling distribution of parameter estimates [@boos2003introduction]. 
-With dependent data structures, entire clusters of observations are re-sampled so that each bootstrapped dataset includes dependent observations, emulating the structure of the original dataset. 
-In the implementation in the `metaselection` package, this approach is called the multinomial bootstrap. 
-The package also implements two other variations of bootstrapping. 
-One variation, called the two-stage approach, re-samples clusters of observations and then re-samples effect size estimates within each cluster. 
-Another variation, known as the fractional random weight bootstrap [@xu2020applications] or Bayesian bootstrap [@rubin1981bayesian; @newton1994approximate], involves assigning a random weight to each cluster of dependent observations, where the weights are simulated from an exponential distribution with mean 1. 
+An alternative to CRVE is to use bootstrap re-sampling methods to quantify uncertainty in parameter estimates.
+Bootstrapping involves re-sampling many times from the original data to create an empirical distribution that can be used as a proxy for the actual sampling distribution of parameter estimates [@boos2003introduction].
+With dependent data structures, entire clusters of observations are re-sampled so that each bootstrapped dataset includes dependent observations, emulating the structure of the original dataset.
+In the implementation in the `metaselection` package, this approach is called the multinomial bootstrap.
+The package also implements two other variations of bootstrapping.
+One variation, called the two-stage approach, re-samples clusters of observations and then re-samples effect size estimates within each cluster.
+Another variation, known as the fractional random weight bootstrap [@xu2020applications] or Bayesian bootstrap [@rubin1981bayesian; @newton1994approximate], involves assigning a random weight to each cluster of dependent observations, where the weights are simulated from an exponential distribution with mean 1.
 
 Several different methods can be used to construct confidence intervals from a bootstrap distribution [@davison1997bootstrap], which use various approximations and therefore vary in the accuracy of their coverage levels.
 The `metaselection` package implements five different techniques, following the same methods and terminology as in the `boot` package [@boot]:
 
-* The percentile  confidence interval (`CI_method = "percentile"`) is based on quantiles of the bootstrap distribution. 
-* The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate. 
-* The bias-corrected and accelerated confidence interval (`CI_method = "BCa"`) adjusts the percentile confidence interval based on the bias of the sampling distribution and an "acceleration" adjustment for the relationship between the parameter and the variance of the estimator's sampling distribution.
-* The standard normal confidence interval (`CI_method = "normal"`) uses the bootstrap standard error with a standard normal critical value. 
-* The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the cluster-robust $t$ statistic rather than the point estimator of a parameter. 
+- The percentile confidence interval (`CI_method = "percentile"`) is based on quantiles of the bootstrap distribution.
+- The "basic" confidence interval (`CI_method = "basic"`) pivots the bootstrap distribution around the point estimate.
+- The bias-corrected and accelerated confidence interval (`CI_method = "BCa"`) adjusts the percentile confidence interval based on the bias of the sampling distribution and an "acceleration" adjustment for the relationship between the parameter and the variance of the estimator's sampling distribution.
+- The standard normal confidence interval (`CI_method = "normal"`) uses the bootstrap standard error with a standard normal critical value.
+- The studentized confidence interval (`CI_method = "student"`) is based on the bootstrap distribution of the cluster-robust $t$ statistic rather than the point estimator of a parameter.
 
-Our simulation results indicate that bootstrap confidence intervals, particularly using two-stage bootstrap resampling with percentile confidence intervals, leads to coverage rates that are close to the nominal level of 0.95 whereas the coverage rates provided by the CRVE method are below nominal. 
-Therefore, we recommend using the two-stage or multinomial bootstrap with the percentile confidence intervals [@pustejovsky2025estimation]. 
+Our simulation results indicate that bootstrap confidence intervals, particularly using two-stage bootstrap resampling with percentile confidence intervals, leads to coverage rates that are close to the nominal level of 0.95 whereas the coverage rates provided by the CRVE method are below nominal.
+Therefore, we recommend using the two-stage or multinomial bootstrap with the percentile confidence intervals [@pustejovsky2025estimation].
 
 Bootstrap confidence intervals require re-estimating the selection model and re-calculating parameter estimates on each re-sampled dataset, which is a computationally demanding process.
-Furthermore, obtaining accurate confidence intervals requires using a relatively large number of bootstrap replications [@davidson2000bootstrap]; using an insufficient number will produce confidence intervals that are too narrow and have below-nominal coverage. 
-We recommend using 1999 replications, and this is the default used in the `selection_model()` function when the `bootstrap` argument is set to `"two-stage"`, `"multinomial"`, or `"exponential"`. 
+Furthermore, obtaining accurate confidence intervals requires using a relatively large number of bootstrap replications [@davidson2000bootstrap]; using an insufficient number will produce confidence intervals that are too narrow and have below-nominal coverage.
+We recommend using 1999 replications, and this is the default used in the `selection_model()` function when the `bootstrap` argument is set to `"two-stage"`, `"multinomial"`, or `"exponential"`.
 The computational demands of bootstrapping can be mitigated by using parallel processing, as we demonstrate below.
- 
+
 # Using the `metaselection` package
 
 ```{r, echo = FALSE}
@@ -253,8 +259,9 @@ n_studies <- length(table(dat.lehmann2018$Full_Citation))
 
 We now demonstrate the key functions from the `metaselection` package.
 As a running example, we use data from a meta-analysis by @lehmann2018meta, who examined the effects of exposure to the color red on judgements of attractiveness.
-The dataset is available in the `metadat` package [@metadat] as `dat.lehmann2018`. 
-It consists of `r n_ES` effect sizes from `r n_studies` studies. The following code loads the dataset and creates variables that will be needed for the subsequent analysis.
+The dataset is available in the `metadat` package [@metadat] as `dat.lehmann2018`.
+It consists of `r n_ES` effect sizes from `r n_studies` studies.
+The following code loads the dataset and creates variables that will be needed for the subsequent analysis.
 
 ```{r lehmann}
 data("dat.lehmann2018", package = "metadat")
@@ -263,10 +270,11 @@ dat.lehmann2018$sei <- sqrt(dat.lehmann2018$vi)
 dat.lehmann2018$esid <- 1:nrow(dat.lehmann2018) 
 ```
 
-## Preliminary Analysis 
+## Preliminary Analysis
 
-As a point of comparison, we first run an analysis that ignores the possibility of selective reporting bias but accounts for the dependence structure of the effect sizes using a correlated-and-hierarchical effects (CHE) working model and CRVE [@pustejovsky2022preventionscience]. 
-The following code first creates a sampling variance-covariance matrix assuming that effect size estimates from the same study have sampling errors that are correlated at 0.8. It then fits a CHE working model and applies robust variance estimation, clustering by study.
+As a point of comparison, we first run an analysis that ignores the possibility of selective reporting bias but accounts for the dependence structure of the effect sizes using a correlated-and-hierarchical effects (CHE) working model and CRVE [@pustejovsky2022preventionscience].
+The following code first creates a sampling variance-covariance matrix assuming that effect size estimates from the same study have sampling errors that are correlated at 0.8.
+It then fits a CHE working model and applies robust variance estimation, clustering by study.
 
 ```{r CHE}
 library(metafor)
@@ -296,19 +304,20 @@ CHE_mod <- rma.mv(
 CHE_mod
 ```
 
-The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta), 3)`, 95% CI [`r round(as.numeric(CHE_mod$ci.lb), 3)`, `r round(as.numeric(CHE_mod$ci.ub), 3)`], which is significantly different from zero ($p$ = `r round(CHE_mod$pval, 3)`). 
+The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta), 3)`, 95% CI [`r round(as.numeric(CHE_mod$ci.lb), 3)`, `r round(as.numeric(CHE_mod$ci.ub), 3)`], which is significantly different from zero ($p$ = `r round(CHE_mod$pval, 3)`).
 The estimated total variance (including both between- and within-study heterogeneity) is `r round(sum(CHE_mod$sigma2), 3)`, corresponding to a total standard deviation of `r round(sqrt(sum(CHE_mod$sigma2)), 3)`.
 Next, we examine how this average effect size estimate differs from the estimates based on step-function or beta-function selection models, as fitted using the `metaselection` package.
 
 ## Three-Parameter Step Function with RVE
 
-The primary function for fitting $p$-value selection models is `selection_model()`. 
-In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function. 
-We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`. 
-We indicate that we want to estimate a `"step"` selection model and specify a single step at 0.025 by setting  `step = 0.025`. 
-By default, the function fits the model using composite maximum likelihood estimation and calculates standard errors and confidence intervals using CRVE.[^bootstrap-in-practice]
-
-[^bootstrap-in-practice]: One can interpret these results as a preliminary analysis. For a more refined and reliable analysis, one should use clustered bootstrap confidence intervals instead of CRVE.
+The primary function for fitting $p$-value selection models is `selection_model()`.
+In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function.
+We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`.
+We indicate that we want to estimate a `"step"` selection model and specify a single step at 0.025 by setting `step = 0.025`.
+Further, the function adds weak prior penalties for the three parameters (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+By default, the function fits the model using maximum penalized composite marginal likelihood estimation and calculates standard errors and confidence intervals using CRVE.
+We are using CRVE here for demonstration only because it is not as computationally intensive.
+**For a more refined and reliable analysis, we highly recommend using two-stage clustered bootstrap confidence intervals (demonstrated below) instead of CRVE based on results from our simulation study.** <!--# i pulled this sentence out of footnote to extra extra highlight people should use bootstrapped; i think a bit more clarification on priors and that they should only be used with smds would be good somewhere -->
 
 ```{r 3PSM}
 library(metaselection)
@@ -319,33 +328,42 @@ mod_3PSM <- selection_model(
   sei = sei,
   cluster = study,
   selection_type = "step",
-  steps = 0.025
+  steps = 0.025, 
+  priors = define_priors()
 )
 
 mod_3PSM
 ```
+
 ```{r, echo = FALSE}
 pct_reduction_3PSM <- 100 * (1 - mod_3PSM$est["beta","Est"] / as.numeric(CHE_mod$beta))
 ```
 
-The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`],  which is `r round(pct_reduction_3PSM)`% smaller than the estimate that does not account for selection bias (`r round(as.numeric(CHE_mod$beta), 3)`). This estimate is also no longer statistically distinct from zero ($p$ = `r round(mod_3PSM$est$p_value[mod_3PSM$est$param=="beta"], 3)`).
+The estimate of the overall average effect is now `r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="beta"], 3)`, `r round(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="beta"], 3)`], which is `r round(pct_reduction_3PSM)`% smaller than the estimate that does not account for selection bias (`r round(as.numeric(CHE_mod$beta), 3)`).
+This estimate is also no longer statistically distinct from zero ($p$ = `r round(mod_3PSM$est$p_value[mod_3PSM$est$param=="beta"], 3)`).
 Note that although the `metaselection` package calculates $p$-values, we recommend focusing on the interpretation of the parameter estimates and confidence intervals of the model results, which convey information about the magnitude of the parameters rather than only about whether the parameters differ from a null value.
 
-The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated. 
+The estimated total heterogeneity of `r round( exp(mod_3PSM$est$Est[mod_3PSM$est$param=="gamma"]), 3)` is somewhat smaller than the total heterogeneity estimate from the CHE model, but is also very imprecisely estimated.
 We omit the $p$-value for $\tau^2$ because the $p$-value pertains to an arbitrary and uninteresting null hypothesis, namely that $\gamma = log(\tau^2) = 0$ (i.e., that $\tau^2 = 1$).
 
-The selection parameter is called `lambda1`. The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$). 
+The selection parameter is called `lambda1`.
+The estimate of `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$).
 The selection parameter estimate is quite imprecise, with a 95% confidence interval of `r round(exp(mod_3PSM$est$CI_lo[mod_3PSM$est$param=="zeta1"]), 3)` to `r round(exp(mod_3PSM$est$CI_hi[mod_3PSM$est$param=="zeta1"]), 3)`, which includes the value $\lambda_1 = 1$ corresponding to no selective reporting.
 
-The heterogeneity parameter and the selection parameter are actually estimated on log scales but are exponentiated (along with the confidence interval end-points) by default in `print()`. We can obtain an estimate on the original scale of the log-variance by setting the argument `transf_gamma` to `FALSE` in the `print()` method. Similarly, we  can transform the selection parameter estimates to the log-probability scale by setting `transf_zeta = FALSE`:
+The heterogeneity parameter and the selection parameter are actually estimated on log scales but are exponentiated (along with the confidence interval end-points) by default in `print()`.
+We can obtain an estimate on the original scale of the log-variance by setting the argument `transf_gamma` to `FALSE` in the `print()` method.
+Similarly, we can transform the selection parameter estimates to the log-probability scale by setting `transf_zeta = FALSE`:
+
 ```{r}
 print(mod_3PSM, transf_gamma = FALSE, transf_zeta = FALSE)
 ```
 
 For more detailed information about the results, the `metaselection` package also provides a `summary()` function:
+
 ```{r}
 summary(mod_3PSM)
 ```
+
 The `summary()` function also includes the `transf_gamma` and `transf_zeta` arguments, set to `TRUE` by default.
 
 Furthermore, the `metaselection` package provides a function `selection_plot()` to visualize the estimated selection weights:
@@ -354,11 +372,15 @@ Furthermore, the `metaselection` package provides a function `selection_plot()` 
 selection_plot(mod_3PSM)
 ```
 
-The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate. In this example, the plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
+The plot illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate.
+In this example, the plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
 
 ## Four-Parameter Step Model with RVE
 
-Rather than using a single threshold at $\alpha_1 = 0.025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates. The following code fits such a model, setting `steps = c(0.025, 0.500)`:
+Rather than using a single threshold at $\alpha_1 = 0.025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates.
+The following code fits such a model, setting `steps = c(0.025, 0.500)`.
+Note that by default the `selection_model()` function uses the weak prior penalties that we described above.
+
 ```{r}
 mod_4PSM <- selection_model(
   data = dat.lehmann2018, 
@@ -379,18 +401,22 @@ pct_4PSM <- 100 * mod_4PSM$est["beta","Est"] / as.numeric(CHE_mod$beta)
 The estimate of the overall average effect is `r round(mod_4PSM$est$Est[mod_4PSM$est$param=="beta"], 3)`, 95% CI [`r round(mod_4PSM$est$CI_lo[mod_4PSM$est$param=="beta"], 3)`, `r round(mod_4PSM$est$CI_hi[mod_4PSM$est$param=="beta"], 3)`], even smaller than the estimated effect from the three-parameter step model (`r round(mod_3PSM$est$Est[mod_3PSM$est$param=="beta"], 3)`) and only `r round(pct_4PSM)`% of the magnitude of the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`).
 
 We can visualize the estimated selection function with `selection_plot()`:
+
 ```{r 4PSM-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
 selection_plot(mod_4PSM)
 ```
 
-As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided $p$-value > 0.50) are even less likely to be observed than effects that are positive but not statistically significant.
-However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated.[^bootstrap-in-practice-again]
+As is apparent from the plot, this estimated model indicates that negatively signed effects (i.e., those with a one-sided $p$-value \> 0.50) are even less likely to be observed than effects that are positive but not statistically significant.
+However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated.[^2]
 
-[^bootstrap-in-practice-again]: Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.
+[^2]: Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.
 
 ## Three-Parameter Step Model with RVE and Moderators
 
-The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias. The function allows for both discrete and continuous moderators. We will use a discrete moderator in this example, specifically  whether the study used a within-subjects design compared to a between-subjects design. We specify the moderator by setting  `mean_mods = ~ Design`.
+The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias.
+The function allows for both discrete and continuous moderators.
+We will use a discrete moderator in this example, specifically whether the study used a within-subjects design compared to a between-subjects design.
+We specify the moderator by setting `mean_mods = ~ Design`.
 
 ```{r 3PSM-mod}
 mod_3PSM_mod <- selection_model(
@@ -406,7 +432,8 @@ mod_3PSM_mod <- selection_model(
 mod_3PSM_mod
 ```
 
-The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_DesignWithin Subjects"], 3)`, indicating that studies using within-subjects designs have an average effect that is `r round(mod_3PSM_mod$est["beta_DesignWithin Subjects","Est"], 3)` larger than studies using between-subjects designs. The moderator accounts for very little of the between-study variability, as shown by the `tau2` estimate, which goes down only slightly from `r round(exp(mod_3PSM$est["gamma","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["gamma","Est"]), 3)` when comparing the three-parameter step function model without and with the moderator.
+The estimate of the moderator is `r round(mod_3PSM_mod$est$Est[mod_3PSM_mod$est$param=="beta_DesignWithin Subjects"], 3)`, indicating that studies using within-subjects designs have an average effect that is `r round(mod_3PSM_mod$est["beta_DesignWithin Subjects","Est"], 3)` larger than studies using between-subjects designs.
+The moderator accounts for very little of the between-study variability, as shown by the `tau2` estimate, which goes down only slightly from `r round(exp(mod_3PSM$est["gamma","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["gamma","Est"]), 3)` when comparing the three-parameter step function model without and with the moderator.
 Similarly, the selection parameter `lambda_1` remains virtually unchanged (from `r round(exp(mod_3PSM$est["zeta1","Est"]), 3)` to `r round(exp(mod_3PSM_mod$est["zeta1","Est"]), 3)`), which can be seen in the plot below.
 
 ```{r 3PSMmod-plot, fig.retina = 2, fig.width = 5, fig.height = 3, out.width = "75%"}
@@ -417,7 +444,8 @@ The plot shows that effect sizes with one-sided $p$-values larger than 0.025 are
 
 ## Beta Function with RVE
 
-The `selection_model()` function also allows fitting models based on beta density selection functions by specifying `selection_type = "beta"`. The default estimator for the beta function model is composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not yet available.
+The `selection_model()` function also allows fitting models based on beta density selection functions by specifying `selection_type = "beta"`.
+The default estimator for the beta function model is composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not yet available.
 
 ```{r beta}
 mod_beta <- selection_model(
@@ -432,7 +460,8 @@ mod_beta <- selection_model(
 print(mod_beta)
 ```
 
-The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, 95% CI [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`], which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models. The average effect estimate based on the beta function is not statistically distinct from zero ($p$ = `r round(mod_beta$est$p_value[mod_beta$est$param=="beta"], 3)`).
+The estimate of the overall average effect is `r round(mod_beta$est$Est[mod_beta$est$param=="beta"], 3)`, 95% CI [`r round(mod_beta$est$CI_lo[mod_beta$est$param=="beta"], 3)`, `r round(mod_beta$est$CI_hi[mod_beta$est$param=="beta"], 3)`], which is smaller than both the estimate that does not account for selection bias (`r round(CHE_mod$beta, 3)`) and the estimates from the three- and four-parameter step function models.
+The average effect estimate based on the beta function is not statistically distinct from zero ($p$ = `r round(mod_beta$est$p_value[mod_beta$est$param=="beta"], 3)`).
 
 To see how the probability of selection differs across studies with different $p$-values, we can again visualize the selection function:
 
@@ -440,11 +469,18 @@ To see how the probability of selection differs across studies with different $p
 selection_plot(mod_beta)
 ```
 
-The plot shows that effect sizes with smaller $p$-values are more likely to be published than effects with larger $p$-values. For example, an effect size estimate of zero (with a one-sided $p$-value of $p = 0.500$) is about half as likely to be published as an effect with a statistically significant, positive effect.
+The plot shows that effect sizes with smaller $p$-values are more likely to be published than effects with larger $p$-values.
+For example, an effect size estimate of zero (with a one-sided $p$-value of $p = 0.500$) is about half as likely to be published as an effect with a statistically significant, positive effect.
 
 ## Bootstrap Confidence Intervals
 
-Rather than relying on robust variance estimation to construct standard errors and confidence intervals for the parameter estimates, it is advisable to instead use confidence intervals based on clustered bootstrap re-sampling. The code below re-fits the three-parameter step function model to obtain cluster-bootstrap confidence intervals. We specify `bootstrap = "two-stage"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals as the recommended approach. We specify that number of bootstraps by setting R to `199`. We set the value to 199 here solely to limit the amount of computation. In practice, we recommend using a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates [@davidson2000bootstrap]. We highly recommend running the selection models with cluster bootstrapping, particularly the two-stage bootstrap with percentile confidence intervals, as this has been shown to improve confidence interval coverage rates relative to using other forms of bootstrap confidence intervals [@pustejovsky2025estimation].
+Rather than relying on robust variance estimation to construct standard errors and confidence intervals for the parameter estimates, it is advisable to instead use confidence intervals based on clustered bootstrap re-sampling.
+The code below re-fits the three-parameter step function model to obtain cluster-bootstrap confidence intervals.
+We specify `bootstrap = "two-stage"` to run cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals as the recommended approach.
+We specify that number of bootstraps by setting R to `199`.
+We set the value to 199 here solely to limit the amount of computation.
+In practice, we recommend using a much higher number of bootstrap replications, such as 1999, to obtain confidence intervals with more accurate coverage rates [@davidson2000bootstrap].
+We highly recommend running the selection models with cluster bootstrapping, particularly the two-stage bootstrap with percentile confidence intervals, as this has been shown to improve confidence interval coverage rates relative to using other forms of bootstrap confidence intervals [@pustejovsky2025estimation].
 
 ```{r 3PSM-bootstrap}
 set.seed(20240916)
@@ -466,11 +502,14 @@ system.time(
 print(mod_3PSM_boot, transf_gamma = TRUE, transf_zeta = TRUE)
 ```
 
-The overall estimate of the average effect does not change when bootstrapping is applied (`r round(mod_3PSM_boot$est$Est[mod_3PSM_boot$est$param=="beta"], 3)`). However, the confidence internal is narrower, [`r round(mod_3PSM_boot$est$percentile_lower[mod_3PSM_boot$est$param=="beta"], 3)`, `r round(mod_3PSM_boot$est$percentile_upper[mod_3PSM_boot$est$param=="beta"], 3)`] (due partially to the use of a smaller-than-desirable number of bootstrap replications).
+The overall estimate of the average effect does not change when bootstrapping is applied (`r round(mod_3PSM_boot$est$Est[mod_3PSM_boot$est$param=="beta"], 3)`).
+However, the confidence internal is narrower, [`r round(mod_3PSM_boot$est$percentile_lower[mod_3PSM_boot$est$param=="beta"], 3)`, `r round(mod_3PSM_boot$est$percentile_upper[mod_3PSM_boot$est$param=="beta"], 3)`] (due partially to the use of a smaller-than-desirable number of bootstrap replications).
 
 ### Parallel processing
 
-The bootstrapping routine is implemented to work with the `future` package for parallel processing. For example, the following code specifies a `multisession` future processing plan with 4 worker nodes, then fits the same model as above:
+The bootstrapping routine is implemented to work with the `future` package for parallel processing.
+For example, the following code specifies a `multisession` future processing plan with 4 worker nodes, then fits the same model as above:
+
 ```{r parallel-boot}
 library(future)
 plan(multisession, workers = 4L)
@@ -490,17 +529,21 @@ system.time(
 )
 
 ```
-Parallel processing substantially reduces the overall computing time. If available, using a larger number of workers would further reduce computing time.
+
+Parallel processing substantially reduces the overall computing time.
+If available, using a larger number of workers would further reduce computing time.
 
 Setting a `sequential` plan will discontinue use of parallel processing:
+
 ```{r sequential-boot}
 plan(sequential)
 ```
 
 ### Progress bars
 
-The package is also designed to work with the `progressr` package, which provides customizable progress bars for long-running calculations. 
+The package is also designed to work with the `progressr` package, which provides customizable progress bars for long-running calculations.
 To use a progress bar for only one instance of bootstrapping, wrap the `selection_model()` call in `progressr::with_progress()`:
+
 ```{r, eval = FALSE}
 library(progressr)
 
@@ -519,11 +562,13 @@ with_progress(
 )
 
 ```
+
 To turn on progress bars for all bootstrap calculations, use
+
 ```{r, eval = FALSE}
 progressr::handlers(global = TRUE)
 ```
+
 See `vignette("progressr-intro")` for further details.
 
 # References
-
