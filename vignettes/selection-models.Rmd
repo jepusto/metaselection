@@ -194,8 +194,9 @@ The combination of assumptions about the evidence-generating process and assumpt
 The evidence-generating process describes the effect size distribution $\text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ and the selection process specifies $\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$.
 The distribution of observed effect size estimates then corresponds to $\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, which depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$.
 
-The `metaselection` package implements two different estimation strategies: composite marginal likelihood and augmented and reweighted Gaussian likelihood.
-In the first, model parameter estimates are obtained by taking the values that maximize the log-likelihood of the observations, treating each effect size estimate as if it were independent.
+The `metaselection` package implements two different estimation strategies: penalized composite marginal likelihood and augmented and reweighted Gaussian likelihood. To stabilize estimation---particularly in smaller meta-analytic datasets or under severe selection conditions where certain regions of the $p$-value distribution may have sparse data---the estimation functions incorporate optional prior penalties on the parameters. The specific penalties applied depend on the choice of selection function (step or beta) and the metric of the data (e.g., standardized mean differences, correlations, raw mean differences, log-odds ratios).
+
+In the first strategy, model parameter estimates are obtained by finding the values that maximize the penalized log-composite-likelihood of the observations, treating each effect size estimate as if it were independent.
 An alternative estimation strategy, augmented and reweighted Gaussian likelihood, defines the parameter estimator as the solution to a set of mean-zero estimating equations.
 The selection parameters are estimated using their score equations, just as in the composite marginal likelihood estimator.
 Unlike the composite marginal likelihood strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the Gaussian evidence-generating process, with weights equal to the inverse probability of selection.
@@ -216,7 +217,7 @@ For meta-regression models that do not account for selective reporting, @Hedges2
 The form of CRVE originally described in @Hedges2010robust is based on large-sample approximations and requires a relatively large number of independent samples (each of which might have multiple effect size estimates) to function well.
 Subsequent work developed small-sample refinements to CRVE, including adjustments to hypothesis tests and confidence intervals based on CRVE, which are accurately calibrated even for datasets that include a small number of independent clusters [@tipton2015small; @tiptonpusto2015small].
 
-CRVE methods can also be applied to selection models to quantify uncertainty in parameter estimates obtained by composite maximum likelihood or augmented and reweighted Gaussian likelihood.
+CRVE methods can also be applied to selection models to quantify uncertainty in parameter estimates obtained by penalized composite maximum likelihood or augmented and reweighted Gaussian likelihood.
 The `metaselection` package provides standard errors and confidence intervals based on CRVE methods by default.
 The implementation is similar to the original, large-sample CRVE methods described by @Hedges2010robust; the subsequently developed small-sample refinements are not currently available for selection models.
 It is important to bear in mind that CRVE methods are the default only because they are computationally convenient and quicker to compute compared to bootstrap-based methods---not because they are the best available method.
@@ -314,8 +315,8 @@ The primary function for fitting $p$-value selection models is `selection_model(
 In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function.
 We specify which variable is the effect size, `yi`, and which is the standard error for the effect size, `sei`.
 We indicate that we want to estimate a `"step"` selection model and specify a single step at 0.025 by setting `step = 0.025`.
-Further, the function adds weak prior penalties for the three parameters (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
-By default, the function fits the model using maximum penalized composite marginal likelihood estimation and calculates standard errors and confidence intervals using CRVE.
+We also add weak prior penalties for the three parameters (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+By default, the function fits the model using penalized composite maximum likelihood estimation and calculates standard errors and confidence intervals using CRVE.
 We are using CRVE here for demonstration only because it is not as computationally intensive.
 **For a more refined and reliable analysis, we highly recommend using two-stage clustered bootstrap confidence intervals (demonstrated below) instead of CRVE based on results from our simulation study.** <!--# i pulled this sentence out of footnote to extra extra highlight people should use bootstrapped; i think a bit more clarification on priors and that they should only be used with smds would be good somewhere -->
 
@@ -329,7 +330,16 @@ mod_3PSM <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = 0.025, 
-  priors = define_priors()
+  priors = define_priors(
+    beta_mean = 0, 
+    beta_precision = 0.5, 
+    beta_L = 2, 
+    tau_mode = 0.2, 
+    tau_alpha = 1, 
+    lambda_mode = 0.8, 
+    lambda_precision = 0.5, 
+    lambda_L = 2
+  )
 )
 
 mod_3PSM
@@ -379,7 +389,7 @@ In this example, the plot shows that effect sizes with one-sided $p$-values larg
 
 Rather than using a single threshold at $\alpha_1 = 0.025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates.
 The following code fits such a model, setting `steps = c(0.025, 0.500)`.
-Note that by default the `selection_model()` function uses the weak prior penalties that we described above.
+We defined the same set of weak priors as above.
 
 ```{r}
 mod_4PSM <- selection_model(
@@ -388,7 +398,17 @@ mod_4PSM <- selection_model(
   sei = sei,
   cluster = study,
   selection_type = "step",
-  steps = c(0.025, 0.500)
+  steps = c(0.025, 0.500),
+  priors = define_priors(
+    beta_mean = 0, 
+    beta_precision = 0.5, 
+    beta_L = 2, 
+    tau_mode = 0.2, 
+    tau_alpha = 1, 
+    lambda_mode = 0.8, 
+    lambda_precision = 0.5, 
+    lambda_L = 2
+  )
 )
 
 print(mod_4PSM, transf_gamma = TRUE, transf_zeta = TRUE)
@@ -426,7 +446,17 @@ mod_3PSM_mod <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = 0.025,
-  mean_mods = ~ Design
+  mean_mods = ~ Design,
+  priors = define_priors(
+    beta_mean = 0, 
+    beta_precision = 0.5, 
+    beta_L = 2, 
+    tau_mode = 0.2, 
+    tau_alpha = 1, 
+    lambda_mode = 0.8, 
+    lambda_precision = 0.5, 
+    lambda_L = 2
+  )
 )
 
 mod_3PSM_mod
@@ -444,8 +474,9 @@ The plot shows that effect sizes with one-sided $p$-values larger than 0.025 are
 
 ## Beta Function with RVE
 
-The `selection_model()` function also allows fitting models based on beta density selection functions by specifying `selection_type = "beta"`.
-The default estimator for the beta function model is composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not yet available.
+The `selection_model()` function also allows fitting models based on beta-density selection function by specifying `selection_type = "beta"`.
+The default estimator for the beta-density selection model is penalized composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not yet available for this selection model.
+In this example, we fit an unpenalized model by explicitly setting `priors = NULL`.
 
 ```{r beta}
 mod_beta <- selection_model(
@@ -454,7 +485,8 @@ mod_beta <- selection_model(
   sei = sei,
   cluster = study,
   selection_type = "beta",
-  steps = c(0.025, 0.975)
+  steps = c(0.025, 0.975),
+  priors = NULL
 )
 
 print(mod_beta)
