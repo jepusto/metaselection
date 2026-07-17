@@ -184,7 +184,7 @@ step_count_fun <- function(cut_val = .025, weight = 1, psi = 0, renormalize = TR
 #' @param cut_vals numeric vector of one or more values specifying the 
 #'    threshold (or step) where the selection probability 
 #'    changes.
-#' @param weight numeric vector of one or more values specifying the 
+#' @param weights numeric vector of one or more values specifying the 
 #'    selection probabilities for different intervals of p-values; the intervals 
 #'    are determined by the `cut_vals`.
 #' @param renormalize logical indicating whether to normalize the step function
