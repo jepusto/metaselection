@@ -13,7 +13,6 @@ output:
     toc_depth: 2
     fig_width: 7
     fig_height: 4
-    dev: "svg"
     out_width: "100%"
 date: "`r Sys.Date()`"
 bibliography: references.bib
