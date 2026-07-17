@@ -51,6 +51,7 @@ Suggests:
     DescTools,
     knitr,
     rmarkdown,
+    bookdown,
     dplyr
 RdMacros: Rdpack
 Config/testthat/edition: 3
