@@ -208,15 +208,15 @@ The combination of assumptions about the evidence-generating process and assumpt
 The evidence-generating process describes the effect size distribution $\text{Pr}(Y_{ij} = y_{ij} \ | \ \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$ and the selection process specifies $\text{Pr}(O_{ij} = 1 \ | \ Y_{ij} = y, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$.
 The distribution of observed effect size estimates then corresponds to $\text{Pr}(Y_{ij} = y_{ij} \ | \ O_{ij} = 1, \sigma_{ij}, \mathbf{x}_{ij}, \mathbf{u}_{ij})$, which depends on the meta-regression coefficients $\boldsymbol\beta$, the scale regression coefficients $\boldsymbol\gamma$, and the selection parameters $\boldsymbol\zeta$.
 
-The `metaselection` package implements two different estimation strategies: penalized composite marginal likelihood (PML) and augmented and reweighted Gaussian likelihood (ARGL). 
+The `metaselection` package implements two different estimation strategies: penalized composite marginal likelihood (CML) and augmented and reweighted Gaussian likelihood (ARGL). 
 In smaller meta-analytic datasets or under conditions with severe selection where certain regions of the $p$-value distribution may have very sparse data, conventional maximum likelihood estimates of the selection parameter can be unstable or non-convergent.
 To stabilize estimation under such conditions, both estimation functions allow specification of optional prior penalties on the parameters. 
 The specific penalties applied depend on the choice of selection function (step or beta) and the metric of the data (e.g., standardized mean differences, correlations, raw mean differences, log-odds ratios).
 
-With PML estimation, model parameter estimates are obtained by finding the values that maximize the penalized log-composite-likelihood of the observations, treating each effect size estimate as if it were independent.
+With CML estimation, model parameter estimates are obtained by finding the values that maximize the penalized log-composite-likelihood of the observations, treating each effect size estimate as if it were independent.
 An alternative estimation strategy, augmented and reweighted Gaussian likelihood, defines the parameter estimator as the solution to a set of mean-zero estimating equations.
-The selection parameters are estimated using their score equations, just as in the PML approach.
-Unlike the PML strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the Gaussian evidence-generating process, with weights equal to the inverse probability of selection.
+The selection parameters are estimated using their score equations, just as in the CML approach.
+Unlike the CML strategy, the meta-regression coefficients and scale regression coefficients are estimated using the re-weighted log likelihood of the Gaussian evidence-generating process, with weights equal to the inverse probability of selection.
 This strategy was initially suggested by @mathur2020sensitivity, who focused on using inverse probability of selection weighting for purposes of sensitivity analysis with selection parameters specified a priori.
 The implementation in the `metaselection` package uses the strategy to jointly estimate the meta-regression, scale regression, and selection parameters. 
 @pustejovsky2025estimation
