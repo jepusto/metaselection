@@ -111,8 +111,8 @@ selection_model(
 
   a `selmodel_prior` object that defines priors (i.e., penalty terms)
   for model parameters, with a default of
-  [`define_priors()`](define_priors.md). Set to `NULL` to obtain
-  unpenalized estimates.
+  [`define_priors()`](http://jepusto.github.io/metaselection/reference/define_priors.md).
+  Set to `NULL` to obtain unpenalized estimates.
 
 - subset:
 
@@ -314,9 +314,9 @@ res_hybrid <- selection_model(
 
 res_hybrid
 #>    param    Est     SE percentile_lower percentile_upper
-#>     beta 0.2194 0.0483          0.07355            0.281
-#>     tau2 0.0393 0.0296          0.00351            0.155
-#>  lambda1 1.0332 0.1502          0.19581            2.674
+#>     beta 0.2194 0.0483           0.1555            0.302
+#>     tau2 0.0393 0.0296           0.0199            0.130
+#>  lambda1 1.0332 0.1502           0.4508            3.146
 summary(res_hybrid)
 #> Step Function Model with Cluster Bootstrapping 
 #>  
@@ -339,12 +339,12 @@ summary(res_hybrid)
 #> Mean effect estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   beta    0.219     0.0483     0.0735     0.281
+#>   beta    0.219     0.0483      0.156     0.302
 #> 
 #> Heterogeneity estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   tau2   0.0393     0.0296    0.00351     0.155
+#>   tau2   0.0393     0.0296     0.0199      0.13
 #> 
 #> Selection process estimates:
 #>  Step: 0 < p <= 0.025; Studies: 18; Effects: 32                                                 
@@ -355,5 +355,5 @@ summary(res_hybrid)
 #>  Step: 0.025 < p <= 1; Studies: 24; Effects: 126                                                 
 #>                              Percentile Bootstrap
 #>    Coef. Estimate Std. Error      Lower     Upper
-#>  lambda1     1.03       0.15      0.196      2.67
+#>  lambda1     1.03       0.15      0.451      3.15
 ```

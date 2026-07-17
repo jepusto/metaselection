@@ -1,8 +1,8 @@
-# Censor meta-analytic dataset based on the beta-density model
+# Censor meta-analytic dataset based on the univariate beta-density model
 
 A functional that takes model parameters and returns a function that can
-be used to censor meta-analytic datasets according to the beta-density
-model.
+be used to censor meta-analytic datasets according to the univariate
+beta-density model.
 
 ## Usage
 
@@ -42,4 +42,4 @@ beta_fun(
 ## Value
 
 A function that can be used to censor a meta-analytic dataset based on
-the beta-density model.
+the univariate beta-density model.

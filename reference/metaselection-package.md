@@ -26,6 +26,9 @@ Useful links:
 
 Authors:
 
+- James Pustejovsky <jepusto@gmail.com>
+  ([ORCID](https://orcid.org/0000-0003-0591-9465))
+
 - Megha Joshi <megha.j456@gmail.com>
   ([ORCID](https://orcid.org/0000-0001-7936-076X))
 

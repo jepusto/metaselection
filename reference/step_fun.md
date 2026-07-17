@@ -1,9 +1,9 @@
-# Censor meta-analytic dataset based on a step-function model
+# Censor meta-analytic dataset based on a univariate step-function model
 
 A functional that takes in cut values and weights representing selection
 probabilities for different intervals of p-values and returns a function
 that can be used to censor meta-analytic datasets according to the
-step-function model.
+univariate step-function model.
 
 ## Usage
 
@@ -15,8 +15,8 @@ step_fun(cut_vals = 0.025, weights = 1, renormalize = TRUE)
 
 - cut_vals:
 
-  numeric vector of one or more values specifying the specifying the
-  thresholds (or steps) where the selection probability changes.
+  numeric vector of one or more values specifying the threshold (or
+  step) where the selection probability changes.
 
 - weights:
 
@@ -32,4 +32,4 @@ step_fun(cut_vals = 0.025, weights = 1, renormalize = TRUE)
 ## Value
 
 A function that can be used to censor a meta-analytic dataset based on
-the step-function model.
+the univariate step-function model.

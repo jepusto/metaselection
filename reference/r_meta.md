@@ -13,9 +13,9 @@ r_meta(
   m,
   cor_mu,
   cor_sd,
-  censor_fun,
   n_ES_sim,
-  m_multiplier = 2,
+  censor_fun = NULL,
+  m_multiplier = 1,
   id_start = 0L,
   paste_ids = TRUE,
   include_sel_prob = FALSE
@@ -49,16 +49,19 @@ r_meta(
   numeric value indicating standard deviation of correlation between
   outcomes
 
-- censor_fun:
-
-  a function used to censor effects; this package provides functionals
-  [`step_fun()`](step_fun.md) and [`beta_fun()`](beta_fun.md) to censor
-  effects based on step-function or beta-function models respectively.
-
 - n_ES_sim:
 
   a function used to simulate the distribution of primary study sample
   sizes and the number of effect sizes per study
+
+- censor_fun:
+
+  a function used to censor effects; this package provides functionals
+  [`step_fun()`](http://jepusto.github.io/metaselection/reference/step_fun.md)
+  and
+  [`beta_fun()`](http://jepusto.github.io/metaselection/reference/beta_fun.md)
+  to censor effects based on step-function or beta-function models
+  respectively. If `NULL` (the default)
 
 - m_multiplier:
 
