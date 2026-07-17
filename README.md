@@ -17,15 +17,15 @@ Selective reporting occurs when statistically significant, affirmative
 results are more likely to be reported (and therefore more likely to be
 available for meta-analysis) compared to null, non-affirmative results.
 Selective reporting is a major concern for research syntheses because it
-distorts the evidence base available for a meta-analysis, skewing
-meta-analytic averages toward favorable findings and misrepresenting the
-true population of effects. Failure to account for selective reporting
-can lead to inflated effect size estimates from meta-analysis and biased
-estimates of heterogeneity, making it difficult to draw accurate
-conclusions from a synthesis.
+distorts the evidence base available for a meta-analysis, biasing
+meta-analytic averages toward more favorable findings and
+misrepresenting the true population of effects. Failure to account for
+selective reporting can lead to inflated effect size estimates from
+meta-analysis and biased estimates of heterogeneity, making it difficult
+to draw accurate conclusions from a synthesis.
 
 There are many tools available already to investigate and correct for
-selective reporting. Widely used methods include: graphical diagnostics
+selective reporting. Widely used methods include graphical diagnostics
 like funnel plots, tests and adjustments for funnel plot asymmetry like
 trim-and-fill, Egger’s regression, PET/PEESE, selection models, and
 $p$-value diagnostics. However, very few methods for investigating
@@ -40,13 +40,13 @@ an outcome across multiple time-points, or involve comparisons between
 multiple intervention conditions. Ignoring the dependency of effect size
 estimates included in a meta-analysis leads to overly narrow confidence
 intervals, hypothesis tests with inflated type one error rates, and
-incorrect inferences. Pustejovsky et al. (2025) developed and examined
-methods for investigating and accounting for selective reporting in
-meta-analytic models that also account for dependent effect sizes. Their
-simulation results show that combining selection models with robust
-variance estimation to account for dependent effects reduces bias in the
-estimate of the overall effect size. Combining the selection models with
-cluster bootstrapping leads to confidence intervals with
+incorrect inferences. Pustejovsky et al. (2025) and Citkowicz et al.
+(2026) developed methods for investigating and accounting for selective
+reporting in meta-analytic models that also account for dependent effect
+sizes. Their simulation results show that combining selection models
+with robust variance estimation to account for dependent effects reduces
+bias in the estimate of the overall effect size. Combining the selection
+models with cluster bootstrapping leads to confidence intervals with
 close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several
@@ -158,20 +158,21 @@ greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
 estimates with $p < 0.025$).
 
-The package is designed to work with the `progressr` package. To turn on
-progress bars for all bootstrap calculations, use
+The package is designed to work with the `progressr` package (Bengtsson
+2026). To turn on progress bars for all bootstrap calculations, use
 
 ``` r
 progressr::handlers(global = TRUE)
 ```
 
 See
-[`vignette("progressr-intro")`](https://cran.r-project.org/web/packages/progressr/vignettes/progressr-01-intro.html)
+[`vignette("progressr-intro")`](https://progressr.futureverse.org/articles/progressr-01-intro.html)
 for further details.
 
 The package is also designed to work with the `future` package for
-parallel computing. To enable parallel computation of bootstrap
-calculations, simply set an appropriate parallelization plan such as
+parallel computing (Bengtsson 2021). To enable parallel computation of
+bootstrap calculations, simply set an appropriate parallelization plan
+such as
 
 ``` r
 library(future)
@@ -185,29 +186,38 @@ demonstration.
 
 Several existing meta-analysis packages provide implementations of
 selection models, but are limited by the assumption of independent
-effects. The `metafor` package (Viechtbauer 2010) includes the
-`selmodel()` function, which allows users to fit many different types of
-selection models. The `weightr` package (Coburn and Vevea 2019) includes
-functions to estimate a class of $p$-value selection models described in
-Vevea and Hedges (1995). However, because these packages assume effect
-sizes to be independent, the results they produce will have incorrect
-standard errors and misleadingly narrow confidence intervals for
-datasets containing multiple effects drawn from the same study. In
-addition, the `PublicationBias` package (Braginsky et al. 2023)
-implements sensitivity analyses for selective reporting bias that
-incorporate cluster-robust variance estimation methods for handling
-dependent effect sizes. However, the sensitivity analyses implemented in
-the package are based on a pre-specified degree of selective reporting,
-rather than allowing the degree of selection to be estimated from the
-data. The sensitivity analyses are also based on a specific and simple
-form of selection model, and do not allow consideration of more complex
-forms of selection functions. The `metaselection` package goes beyond
-these other tools both by considering more complex forms of selective
-reporting and by correcting for selective reporting bias while
-accommodating meta-analytic datasets that include dependent effect
-sizes. Moreover, `RoBMA` package (Bartoš and Maier 2020) implements
-Bayesian multilevel analysis that accounts for publication bias as
-described in Bartoš et al. (2026).
+effects:
+
+- The `metafor` package (Viechtbauer 2010) includes the `selmodel()`
+  function, which allows users to fit many different types of selection
+  models.
+- The `weightr` package (Coburn and Vevea 2019) includes functions to
+  estimate a class of $p$-value selection models described in Vevea and
+  Hedges (1995). However, because these packages assume effect sizes to
+  be independent, the results they produce will have incorrect standard
+  errors and misleadingly narrow confidence intervals for datasets
+  containing multiple effects drawn from the same study.
+- The `RoBMA` package (Bartoš and Maier 2020) implements Bayesian
+  ensemble models that include step-function selection models as one
+  component of the ensemble. `RoBMA` includes an implementation of a
+  multilevel extension to the step-function selection model, as
+  described in Bartoš et al. (2026), a different approach for handling
+  dependence that is an alternative to the marginal selection models
+  implemented in `metaselection`.
+- The `PublicationBias` package (Braginsky et al. 2023) implements
+  sensitivity analyses for selective reporting bias that incorporate
+  cluster-robust variance estimation methods for handling dependent
+  effect sizes. However, the sensitivity analyses implemented in the
+  package are based on a pre-specified degree of selective reporting,
+  rather than allowing the degree of selection to be estimated from the
+  data. The sensitivity analyses are also based on a specific and simple
+  form of selection model, and do not allow consideration of more
+  complex forms of selection functions.
+
+The `metaselection` package goes beyond these other tools both by
+considering more complex forms of selective reporting and by correcting
+for selective reporting bias while accommodating meta-analytic datasets
+that include dependent effect sizes.
 
 ## Acknowledgements
 
@@ -240,11 +250,34 @@ Methods* 58 (6): 165.
 
 </div>
 
+<div id="ref-future" class="csl-entry">
+
+Bengtsson, Henrik. 2021. “A Unifying Framework for Parallel and
+Distributed Processing in r Using Futures.” *The R Journal* 13 (2):
+208–27. <https://doi.org/10.32614/RJ-2021-048>.
+
+</div>
+
+<div id="ref-progressr" class="csl-entry">
+
+Bengtsson, Henrik. 2026. *Progressr: An Inclusive, Unifying API for
+Progress Updates*. <https://doi.org/10.32614/CRAN.package.progressr>.
+
+</div>
+
 <div id="ref-PublicationBias" class="csl-entry">
 
 Braginsky, Mika, Maya Mathur, and Tyler J. VanderWeele. 2023.
 *PublicationBias: Sensitivity Analysis for Publication Bias in
 Meta-Analyses*. <https://CRAN.R-project.org/package=PublicationBias>.
+
+</div>
+
+<div id="ref-citkowicz2026estimating" class="csl-entry">
+
+Citkowicz, Martyna, James E. Pustejovsky, and Megha Joshi. 2026.
+*Estimating Beta-Function Selection Models in Meta-Analysis with
+Dependent Effects*. <https://doi.org/10.31222/osf.io/wjpxk_v1>.
 
 </div>
 
