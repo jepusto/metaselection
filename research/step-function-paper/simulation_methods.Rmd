@@ -42,15 +42,15 @@ $$
 $$
 Here, $\mat{Y}_{hj}^T$ and $\mat{Y}_{hj}^C$ are
 $k_j^* \times 1$ vectors of outcomes for participant $h$ in the treatment or control group of study $j$ and $\boldsymbol\Psi_j$ is the covariance matrix for outcomes in study $j$, with the diagonal elements equal to 1 and off-diagonal elements equal to $r_j$.[^psi-structure]
-From the raw outcome data, we calculated standardized mean differences using Hedges's $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
+From the raw outcome data, we calculated standardized mean differences using Hedges' $g$ bias correction for each of the correlated outcomes, yielding effect size estimates $y^*_{ij}$ for $i=1,...,k_j^*$ and $j = 1,...,J^*$.
 We calculated the sampling variances using conventional formulas [@borenstein2019effect] and computed one-sided $p$-values based on two-sample $t$-tests for the null of $H_0: \delta_{ij} \leq 0$.
 
-[^psi-structure]: The structure of $\boldsymbol\Psi_j$ is plausible for meta-analyses with dependent effects and simplifies the data-generating process. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges's $g$ because it does not affect the distribution of generated effect size estimates.
+[^psi-structure]: The structure of $\boldsymbol\Psi_j$ is plausible for meta-analyses with dependent effects and simplifies the data-generating process. The assumption of a unit sampling variance is a standard practice when simulating data for standardized effect sizes like Hedges' $g$ because it does not affect the distribution of generated effect size estimates.
 
 After simulating results for study $j$, we applied a generalized step-function selection model to the individual effect size estimates, with a one-sided selection
 threshold at $\alpha_1 = 0.025$. 
 Under the generalized model, the probability that a given effect is reported depends both on whether it is affirmative (i.e., statistically significant and in the expected direction) and potentially on the number of other affirmative results in the same study.
-Let $s_{ij}$ be an indicator equal to 1 if effect $i$ in study $j$ is affirmative, $s_{ij} = I(p_{ij} < .025)$, and
+Let $s_{ij}$ be an indicator equal to 1 if effect $i$ in study $j$ is affirmative, $s_{ij} = I(p_{ij} \leq .025)$, and
 let $k^A_j = \sum_{i=1}^{k_j} s_{ij}$ denote the number of affirmative effect size estimates in study $j$.
 We assume that effect size estimate $i$ in study $j$ is observed with probability $\pi_{ij}$, where
 \begin{equation}

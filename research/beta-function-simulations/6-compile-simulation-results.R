@@ -4,24 +4,31 @@ library(simhelpers)
 library(future)
 library(furrr)
 
-params <- readRDS("research/step-function-simulations/simulation_parameters.rds")
+
+params <- readRDS("research/beta-function-simulations/simulation_parameters.rds")
 
 res_list <- tibble(
-  file = list.files("research/step-function-simulations/batch-results", pattern = "simulation_results_batch", full.names = TRUE)
+  file = list.files("research/beta-function-simulations/batch-results", pattern = "simulation_results_batch", full.names = TRUE)
 ) %>%
   mutate(
     row = str_extract(file, "batch[0-9]+.rds") |> str_sub(6,-5) |> as.integer()
   )
 nrow(res_list)
 
-
 outstanding_conditions <-
   params %>%
   anti_join(res_list, by = "row")
 
-nrow(outstanding_conditions)
-outstanding_conditions %>%
-  count(bootstrap, psi)
+outstanding_conditions %>% 
+  mutate(
+    batch = floor((batch - 1)/ 20) + 1
+  ) %>%
+  count(batch)
+
+# outstanding_conditions %>%
+#   select(row) %>%
+#   write_csv(file = "research/beta-function-simulations/batches-to-run.csv", col_names = FALSE)
+
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Compile results from conditions with no bootstraps ----
@@ -52,70 +59,48 @@ res <-
   select(-run_date) %>%
   unnest(res) %>%
   select(
-    mean_smd:psi, priors, bootstrap, omega, 
-    steps, iterations,
+    mean_smd:m, omega, delta_2, iterations,
     model, estimator, param, 
     K_absolute:rmse_mcse, 
     K_coverage:width_mcse
   )
 
 res %>%
-  group_by(mean_smd, tau, cor_mu, cor_sd, weight, psi, m, n_multiplier, omega, steps) %>%
+  group_by(mean_smd, tau, cor_mu, cor_sd, delta_1, m, omega) %>%
   summarize(n_res = n(), .groups = "drop") %>%
   count(n_res)
 
 res %>%
   filter(
-    mean_smd == 0, tau == 0.05, cor_mu == 0.4, omega == 0,
-    weight == 0.10, psi == 0, m == 60, n_multiplier == 1,
+    mean_smd == 0, tau == 0.05, cor_mu == 0.4, omega == 0, delta_1 == 0.10, m == 60,
   ) %>%
-  select(priors, iterations, model:width_mcse) %>%
-  View()
+  select(iterations, model:width_mcse)
 
-write_rds(res, file = "research/step-function-simulations/sim-step-function-results-no-bootstraps.rds", compress = "gz", compression = 9L)
+write_rds(res, file = "research/beta-function-simulations/sim-beta-function-point-estimator-results.rds", compress = "gz", compression = 9L)
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # compile results from conditions with bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
+source("research/beta-function-simulations/2-performance-criteria.R")
 
-source("research/step-function-simulations/2_performance_criteria.R")
-
-
-bootstrap_files <-
-  params %>%
-  inner_join(res_list, by = "row") %>%
-  select(-batch, -row, -seed) %>%
+bootstrap_files <- 
+  res_list %>%
+  left_join(params, by = "row") %>%
   filter(bootstrap != "none") %>%
+  select(-batch, -seed, -row) %>%
   nest(iterations = iterations, files = file) %>%
-  mutate(R_max = map_dbl(R, max))
+  mutate(nfiles = map_int(files, nrow))
 
 bootstrap_files %>%
-  mutate(
-    batch_file_name = map_chr(
-      files, 
-      ~ paste0(
-        "research/step-function-simulations/batch-results/simulation_results_bootstrap_batch",
-        str_match(.x$file[[1]], "_batch(.+).rds")[,2],
-        ".rds"
-      )
-    ),
-    complete = file.exists(batch_file_name)
-  ) %>%
-  filter(!complete) %>%
-  count(bootstrap)
+  count(nfiles)
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-# compile results from conditions with bootstraps ----
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-
-source("research/step-function-simulations/2_performance_criteria.R")
 
 summarize_bootstraps <- function(file_list) {
   
   batch_file_name <- paste0(
-    "research/step-function-simulations/batch-results/simulation_results_bootstrap_batch",
+    "research/beta-function-simulations/batch-results/simulation_results_bootstrap_batch",
     str_match(file_list$file[[1]], "_batch(.+).rds")[,2],
     ".rds"
   )
@@ -127,13 +112,12 @@ summarize_bootstraps <- function(file_list) {
   run_date <- min(dat$run_date)
   
   true_params <- data.frame(
-    param = c("beta", "gamma", "zeta1"),
-    true_param = c(unique(dat$mean_smd), log(unique(dat$tau)^2 + unique(dat$omega)^2), log(unique(dat$weight)))
+    param = c("beta", "gamma", "zeta1", "zeta2"),
+    true_param = c(unique(dat$mean_smd), log(unique(dat$tau)^2 + unique(dat$omega)^2), log(unique(dat$delta_1)), log(unique(dat$delta_2)))
   )
   
   results <-
-    bind_rows(dat$res, .id = "file") %>%
-    mutate(rep = as.character(as.integer(file) * 1000 + as.integer(rep))) %>%
+    bind_rows(dat$res) %>%
     left_join(true_params, by = "param")
   
   summary_res <-
@@ -150,6 +134,10 @@ summarize_bootstraps <- function(file_list) {
   return(batch_file_name)
 }
 
+# debug(summarize_bootstraps)
+# tic()
+# summarize_bootstraps(file_list = bootstrap_files$files[[1]])
+# toc()
 
 plan(multisession, workers = 10L)
 
@@ -174,7 +162,7 @@ toc()
 
 plan(sequential)
 
-write_rds(bootstrap_res, file = "research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
+write_rds(bootstrap_res, file = "research/beta-function-simulations/sim-beta-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # Compile computation time data ----
@@ -187,7 +175,7 @@ timings <-
   select(-res, -summarize_performance) %>%
   mutate(time_hrs = time / 60^2)
 
-write_rds(timings, file = "research/step-function-simulations/sim-step-function-timings.rds", compress = "gz", compression = 9L)
+write_rds(timings, file = "research/beta-function-simulations/sim-beta-function-timings.rds", compress = "gz", compression = 9L)
 
 timings %>%
   mutate(bootstrap = "All") %>%

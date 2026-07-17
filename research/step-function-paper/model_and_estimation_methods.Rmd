@@ -20,7 +20,7 @@ Consider a meta-analytic sample consisting of $J$ studies, in which study $j$ re
 ## Evidence-generating process
 
 We consider an evidence-generating process based on a conventional meta-regression model. 
-Let $Y^*$ denote an effect size estimate that has been generated from primary study data but might or might not be reported; let $\sigma^*$, $p^*$, and $\mat{x}^*$ denote the corresponding standard error, one-sided $p$-value, and predictor vector.
+Let $Y^*$ denote an effect size estimate that has been generated from primary study data but might or might not be reported; let $\sigma^*$, $p^*$, and $\mat{x}^*$ denote the corresponding standard error, one-sided $p$-value, and predictor vector.[^asterix]
 The evidence-generating process can then be expressed as
 \begin{equation}
 \label{eq:meta-mean-regression}
@@ -29,6 +29,8 @@ The evidence-generating process can then be expressed as
 where $\bs\beta$ is an $x \times 1$ vector of regression coefficients that relate the predictors to average effect size and $\tau^2$ is the variance of the distribution of effect size parameters. 
 This random-effects meta-regression treats each observed effect size as if it were independent, even though the data may include multiple, statistically dependent effect size estimates generated from the same sample. 
 As a result, the regression coefficients $\boldsymbol\beta$ describe the overall expected effect size (given the predictors) and the variance parameter $\tau^2$ describes the heterogeneity of the marginal effect size distribution, rather than decomposing the heterogeneity into within-study and between-study components. 
+
+[^asterix]: We use $^*$ to signify variables in the evidence-generating process that might or might not be observed. Variables without $^*$ are the corresponding observed quantities.
 
 ## Selection process
 
@@ -224,7 +226,7 @@ we define the ARGL parameter estimators $\bs{\tilde\beta}$, $\tilde\gamma$, and 
 \end{equation}
 with $p'\left(\bs{\beta}, \gamma, \bs{\zeta}\right)$ as defined in Equation \@ref(eq:marginal-score-equations).
 
-For inference with the ARGL approach, we use cluster-robust sandwich variance estimators that have the same form as (\ref{eq:sandwich-variance}). 
+For inference with the ARGL approach, we use cluster-robust variance estimators that have the same form as (\ref{eq:sandwich-variance}). 
 `r appendix_prefix` \@ref(ARGL-derivatives) provides further details.
 We construct CIs for model parameters using Wald-type large sample approximations, just as with the PML estimators.
 

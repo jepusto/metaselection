@@ -51,3 +51,56 @@ mu_graph_res_ci_miss %>%
 Figure \@ref(fig:comparison-coverage-miss) shows the coverage rates of 95% confidence intervals based on large-sample cluster-robust variance approximations for the three models^[Once again, the vertical axis of Figure \@ref(fig:comparison-coverage-miss) is restricted to the range [0.5, 1.0], and coverage rates of the intervals based on 3PSM and 4PSM are not depicted when they fall below 0.5. Supplementary Figure \@ref(fig:comparison-coverage-full-miss) depicts the full range of coverage rates.]
 Coverage rates fall below the nominal 0.95 level for all three selection models across most conditions. However, the beta-function selection model generally achieves higher coverage than the step-function selection models, particularly when heterogeneity is moderate to large ($\tau \geq 0.3$), or when heterogeneity is low ($\tau \leq 0.15$), average effect size is small ($\mu \leq 0.2$), and number of studies ($J$) is 60 or more. As with CHE-ISCW and PET/PEESE, the confidence intervals produced by the step-function selection models are often miscalibrated, due in part to underestimated standard errors, which result in overly narrow intervals. Among the step-function selection models, coverage is generally higher for 4PSM than for 3PSM.
 
+
+
+```{r convergence-rates-main}
+#| cache: true
+#| fig.width: 9
+#| fig.height: 6.5
+#| fig.env: "sidewaysfigure"
+#| fig.cap: "Convergence rates of the beta-function selection model by selection probability, average SMD, and between-study heterogeneity. Points correspond to median convergence rates; thin lines correspond to range of convergence rates; thick lines correspond to inter-decile range."
+
+mu_graph_res_main %>%
+  filter(model_estimator %in% c("beta_PML")) %>%
+  group_by(mean_smd, tau, selection_strength, method) %>%
+  summarize(
+    min = min(convergence),
+    Q10 = quantile(convergence, 0.1),
+    median = median(convergence),
+    Q90 = quantile(convergence, 0.9),
+    max = max(convergence),
+    .groups = "drop"
+  ) %>%
+ggplot() +
+  aes(x = selection_strength, y = median, ymin = min, max = max, color = method, fill = method) +
+  geom_pointrange(
+    position = position_dodge(width = 0.5)
+  ) +
+  geom_linerange(
+    aes(ymin = Q10, ymax = Q90),
+    position = position_dodge(width = 0.5),
+    linewidth = 1.2
+  ) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3)) +
+  expand_limits(y = 0.99) +
+  facet_grid(
+    tau ~ mean_smd,
+    labeller = label_bquote(
+      rows = tau == .(tau),
+      cols = mu == .(mean_smd)
+    ),
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Selection probability",
+    y = "Convergence rate",
+    color = "",
+    fill = ""
+  ) +
+  theme_bw() +
+  theme(legend.position = "top")
+
+```
+
