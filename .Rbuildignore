@@ -11,3 +11,5 @@
 ^docs$
 ^pkgdown$
 ^research$
+^\.positai$
+^\.claude$

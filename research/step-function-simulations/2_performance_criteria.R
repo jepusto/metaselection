@@ -62,7 +62,7 @@ calc_performance <- function(results, winz = Inf, B_target = 1999) {
     mutate(
       across(c(Est, CI_lo, CI_hi, true_param), ~ exp(.x)),
       SE = SE * Est,
-      param = case_match(param, "gamma" ~ "tau2", "zeta1" ~ "lambda1")
+      param = recode_values(param, "gamma" ~ "tau2", "zeta1" ~ "lambda1")
     ) %>%
     bind_rows(results) %>%
     mutate(var_est = SE ^ 2) %>%

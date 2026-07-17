@@ -2,13 +2,13 @@
 % Please edit documentation in R/data-generation.R
 \name{step_fun}
 \alias{step_fun}
-\title{Censor meta-analytic dataset based on a step-function model}
+\title{Censor meta-analytic dataset based on a univariate step-function model}
 \usage{
 step_fun(cut_vals = 0.025, weights = 1, renormalize = TRUE)
 }
 \arguments{
 \item{cut_vals}{numeric vector of one or more values specifying the
-specifying the thresholds (or steps) where the selection probability
+threshold (or step) where the selection probability
 changes.}
 
 \item{weights}{numeric vector of one or more values specifying the
@@ -20,11 +20,11 @@ to have a maximum value of 1, with a default value of \code{TRUE}.}
 }
 \value{
 A function that can be used to censor a meta-analytic dataset
-based on the step-function model.
+based on the univariate step-function model.
 }
 \description{
 A functional that takes in cut values and weights representing
 selection probabilities for different intervals of p-values and returns a
 function that can be used to censor meta-analytic datasets according to
-the step-function model.
+the univariate step-function model.
 }
