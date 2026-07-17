@@ -21,12 +21,12 @@ Useful links:
 
 ## Author
 
-**Maintainer**: James Pustejovsky <jepusto@gmail.com>
+**Maintainer**: James E. Pustejovsky <jepusto@gmail.com>
 ([ORCID](https://orcid.org/0000-0003-0591-9465))
 
 Authors:
 
-- James Pustejovsky <jepusto@gmail.com>
+- James E. Pustejovsky <jepusto@gmail.com>
   ([ORCID](https://orcid.org/0000-0003-0591-9465))
 
 - Megha Joshi <megha.j456@gmail.com>

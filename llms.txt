@@ -15,7 +15,7 @@ There are many tools available already to investigate and correct for
 selective reporting. Widely used methods include graphical diagnostics
 like funnel plots, tests and adjustments for funnel plot asymmetry like
 trim-and-fill, Egger’s regression, PET/PEESE, selection models, and
-$`p`$-value diagnostics. However, very few methods for investigating
+\\p\\-value diagnostics. However, very few methods for investigating
 selective reporting can accommodate dependent effect sizes. This
 limitation poses a problem for meta-analyses in education, psychology
 and other social sciences, where dependent effects are a common feature
@@ -145,10 +145,10 @@ The beta estimate of 0.131, with a 95% confidence interval -0.049,
 selection bias and dependent effects. The tau estimate of 0.079 is the
 estimated total variance, including both between- and within-study
 heterogeneity. `lambda1` is the selection parameter. The estimate of
-0.54 indicates that effect size estimates with one-sided $`p`$-values
+0.54 indicates that effect size estimates with one-sided \\p\\-values
 greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
-estimates with $`p < 0.025`$).
+estimates with \\p \< 0.025\\).
 
 The package is designed to work with the `progressr` package (Bengtsson
 2026). To turn on progress bars for all bootstrap calculations, use
@@ -186,7 +186,7 @@ effects:
   function, which allows users to fit many different types of selection
   models.
 - The `weightr` package (Coburn and Vevea 2019) includes functions to
-  estimate a class of $`p`$-value selection models described in Vevea
+  estimate a class of \\p\\-value selection models described in Vevea
   and Hedges (1995). However, because these packages assume effect sizes
   to be independent, the results they produce will have incorrect
   standard errors and misleadingly narrow confidence intervals for
