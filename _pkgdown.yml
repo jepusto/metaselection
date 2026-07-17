@@ -1,4 +1,4 @@
-url: ~
+url: http://jepusto.github.io/metaselection/
 template:
   bootstrap: 5
   light-switch: true
@@ -38,6 +38,7 @@ reference:
   - r_meta
   - step_fun
   - beta_fun
+  - step_count_fun
   - n_ES_empirical
   - n_ES_param
     
