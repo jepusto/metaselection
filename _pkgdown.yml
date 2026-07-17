@@ -2,8 +2,8 @@ url: http://jepusto.github.io/metaselection/
 template:
   bootstrap: 5
   light-switch: true
-
-
+  math-rendering: mathjax
+  
 authors:
   James E. Pustejovsky:
     href: "https://jepusto.com/"
