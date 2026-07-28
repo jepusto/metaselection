@@ -128,11 +128,7 @@ fit_selection_model <- function(
       selection_type = selection_type, steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z
     )
-  } else {
-    if (sgn < 0L) {
-      theta[x_index] <- sgn * theta[x_index]  
-    }
-  }
+  } 
   
   params <- parse_step_params(
     theta = theta,
@@ -200,11 +196,6 @@ fit_selection_model <- function(
     info <- mle_est_conv[max_method, -theta_names]
     names(theta) <- params$H_names
     
-    # apply sign transformation
-    if (sgn < 0L) {
-      theta[x_index] <- sgn * theta[x_index]
-    }
-    
     if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
     
     if (vcov_type == "none") {
@@ -254,11 +245,6 @@ fit_selection_model <- function(
     theta <- nleqslv_res$x
     
     names(theta) <- params$H_names
-    
-    # apply sign transformation
-    if (sgn < 0L) {
-      theta[x_index] <- sgn * theta[x_index]
-    }
     
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
@@ -327,12 +313,7 @@ fit_selection_model <- function(
     theta[x_index] <- params$beta
 
     names(theta) <- params$H_names
-    
-    # apply sign transformation
-    if (sgn < 0L) {
-      theta[x_index] <- sgn * theta[x_index]
-    }
-    
+
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
@@ -935,8 +916,7 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
-  yi_sgn <- sgn * yi
-  
+
   vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
   sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
   
@@ -971,7 +951,7 @@ selection_model <- function(
   }
   
   res <- fit_selection_model(
-    yi = yi_sgn, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+    yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
     sgn = sgn,
     steps = steps,
