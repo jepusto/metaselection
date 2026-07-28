@@ -15,7 +15,8 @@ parse_step_params <- function(
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL,
+    Z = NULL,                                   # selection model design matrix (or list of matrices) for remaining step(s)
+    sgn = c(1L,-1L),                            # sign transformation depending on alternative hypothesis
     priors = NULL,                              # selmodel_prior object to specify priors
     calc_Ai = FALSE,
     min_Bhi = 1e-6

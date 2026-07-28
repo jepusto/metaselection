@@ -95,6 +95,7 @@ fit_selection_model <- function(
   U = NULL, 
   Z0 = NULL, 
   Z = NULL, 
+  sgn = c(1L,-1L),
   priors = NULL,
   subset = NULL,
   vcov_type = "robust",
@@ -118,6 +119,8 @@ fit_selection_model <- function(
     if (!is.null(Z)) Z <- lapply(Z, \(z) z[subset,,drop=FALSE])
   }
   
+  x_index <- if (is.null(X)) 1L else 1:ncol(X)
+  
   if (is.null(theta)) {
     # Compute starting values for parameters if not provided
     theta <- find_starting_values(
@@ -125,6 +128,10 @@ fit_selection_model <- function(
       selection_type = selection_type, steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z
     )
+  } else {
+    if (sgn < 0L) {
+      theta[x_index] <- sgn * theta[x_index]  
+    }
   }
   
   params <- parse_step_params(
@@ -135,6 +142,8 @@ fit_selection_model <- function(
     X = X, U = U, Z0 = Z0, Z = Z, 
     calc_Ai = FALSE
   )
+  
+  
   
   if (estimator %in% c("ML","CML")) {
     
@@ -191,6 +200,11 @@ fit_selection_model <- function(
     info <- mle_est_conv[max_method, -theta_names]
     names(theta) <- params$H_names
     
+    # apply sign transformation
+    if (sgn < 0L) {
+      theta[x_index] <- sgn * theta[x_index]
+    }
+    
     if (any(is.na(theta))) stop("Could not obtain parameter estimates. Perhaps try a different optimizer?")
     
     if (vcov_type == "none") {
@@ -241,6 +255,11 @@ fit_selection_model <- function(
     
     names(theta) <- params$H_names
     
+    # apply sign transformation
+    if (sgn < 0L) {
+      theta[x_index] <- sgn * theta[x_index]
+    }
+    
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
@@ -255,7 +274,6 @@ fit_selection_model <- function(
     
     info <- list()
     
-    x_index <- if (is.null(X)) 1L else 1:ncol(X)
     theta <- theta[-x_index]
      
     jac <- if (use_jac) step_hybrid_profile_jacobian else NULL
@@ -309,6 +327,11 @@ fit_selection_model <- function(
     theta[x_index] <- params$beta
 
     names(theta) <- params$H_names
+    
+    # apply sign transformation
+    if (sgn < 0L) {
+      theta[x_index] <- sgn * theta[x_index]
+    }
     
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
@@ -491,6 +514,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL,
+    sgn = c(1L,-1L),
     priors = define_priors(),
     vcov_type = "robust",
     selection_type = "step",
@@ -560,6 +584,7 @@ bootstrap_selmodel <- function(
       cluster = cluster, 
       subset = cl_subset,
       X = X, U = U, Z0 = Z0, Z = Z,
+      sgn = sgn,
       priors = priors,
       vcov_type = vcov_type, 
       selection_type = selection_type,
@@ -586,6 +611,7 @@ bootstrap_selmodel <- function(
       U = U, 
       Z0 = Z0, 
       Z = Z, 
+      sgn = sgn,
       priors = priors,
       vcov_type = vcov_type,
       selection_type = selection_type,
@@ -630,6 +656,7 @@ jackknife_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
+    sgn = c(1L,-1L),
     priors = priors,
     selection_type = "step",
     estimator = "CML",
@@ -655,6 +682,7 @@ jackknife_selmodel <- function(
         fit_selection_model(
           yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
           X = X, U = U, Z0 = Z0, Z = Z,
+          sgn = sgn,
           priors = priors,
           subset = cluster_jk != i,
           steps = steps,
@@ -696,6 +724,10 @@ jackknife_selmodel <- function(
 #'   cluster.
 #' @param selection_type character string specifying the type selection model to
 #'   estimate, with possible options \code{"step"} or \code{"beta"}.
+#' @param alternative character string specifying the direction of the
+#'   alternative hypothesis used in computing p-values for the observed effect
+#'   sizes, with possible options \code{"greater"} (the default) or
+#'   \code{"less"}.
 #' @param steps If \code{selection_type = "step"}, a numeric vector of one or
 #'   more values specifying the thresholds (or steps) where the selection
 #'   probability changes, with a default of \code{steps = .025}. If
@@ -713,8 +745,7 @@ jackknife_selmodel <- function(
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
 #'   penalty terms) for model parameters, with a default of
-#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized
-#'   estimates.
+#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized estimates.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the composite marginal
@@ -820,6 +851,7 @@ selection_model <- function(
     ai,
     cluster,
     selection_type = c("step","beta"),
+    alternative = "greater",
     steps = NULL,
     mean_mods = NULL,
     var_mods = NULL,
@@ -842,6 +874,8 @@ selection_model <- function(
 ) {
   
   selection_type <- match.arg(selection_type)
+  alternative <- match.arg(alternative, c("greater","less"))
+  sgn <- if (alternative=="greater") 1L else -1L
   
   if (!is.null(priors) && !inherits(priors, "selmodel_prior")) {
     stop("priors must be NULL or a selmodel_prior object created by define_priors().")
@@ -877,12 +911,17 @@ selection_model <- function(
   }
   
   if (!inherits(steps, "numeric") || min(steps) <= 0 || max(steps) >= 1) stop("steps must be a numeric vector with all entries in the interval (0,1).")
+  
+  # ensure steps are sorted from smallest to largest
+  steps <- sort(steps)
+  
   if (selection_type == "beta") {
     if (length(steps) != 2L) stop("steps must be a numeric vector of length 2 when selection_type = 'beta'.")
     if (!is.null(sel_mods)) stop("sel_mods must be NULL when selection_type = 'beta'.")
     if (!is.null(sel_zero_mods)) stop("sel_zero_mods must be NULL when selection_type = 'beta'.")
     if (!(estimator %in% c("ML","CML"))) stop("estimator must be equal to 'CML' when selection_type = 'beta'.")
   }
+  
   
   # Create common model frame
   
@@ -896,6 +935,7 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
+  yi_sgn <- sgn * yi
   
   vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
   sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
@@ -931,8 +971,9 @@ selection_model <- function(
   }
   
   res <- fit_selection_model(
-    yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+    yi = yi_sgn, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
+    sgn = sgn,
     steps = steps,
     priors = priors,
     vcov_type = vcov_type, 
@@ -999,8 +1040,9 @@ selection_model <- function(
     booties_df <- future.apply::future_replicate(reps, {
       p()
       bootstrap_selmodel(
-        yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+        yi = yi_sgn, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        sgn = sgn,
         priors = priors,
         steps = steps,
         vcov_type = boot_sandwich, 
@@ -1023,8 +1065,9 @@ selection_model <- function(
     if ("BCa" %in% CI_type) {
       res$jack_vals <- jackknife_selmodel(
         est = res$est$Est,
-        yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
+        yi = yi_sgn, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        sgn = sgn,
         priors = priors,
         steps = steps,
         selection_type = selection_type,
@@ -1084,6 +1127,7 @@ selection_model <- function(
   res$cl <- cl
   res$mf <- mf
   res$selection_type <- selection_type
+  res$alternative <- alternative
   res$steps <- steps
   res$priors <- priors
   res$estimator <- estimator

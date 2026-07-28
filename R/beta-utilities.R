@@ -11,6 +11,7 @@ parse_beta_params <- function(
     alpha = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
+    sgn = c(1L,-1L),                            # sign transformation depending on alternative hypothesis
     calc_Ai = FALSE,                           # whether to calculate Ai 
     calc_Ai_deriv = FALSE                      # whether to calculate first derivatives of Ai
 ) {
