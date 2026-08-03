@@ -1,0 +1,144 @@
+---
+title: "CRVE"
+output: pdf_document
+bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Prior specification {#prior-specification}
+
+This appendix provides further details about the prior penalty terms used for penalized maximum likelihood estimation. 
+We use weak prior penalties selected to regularize outlying estimates without substantially shifting the estimator in most datasets.
+Following prior work on the step-function model [@pustejovsky2025step], we use $\mathcal{L}_4$-norm prior penalties for the mean parameters $\bs\beta$, given by
+\begin{equation}
+\label{eq:beta-prior}
+p_{\bs\beta}(\bs\beta) = -\frac{1}{16} \sum_{p=1}^x \beta_p^4.
+\end{equation}
+This prior penalty is depicted in Figure \@ref(fig:prior-penalties)a. The penalty is nearly flat when $|\beta_p| < 1$, but becomes sharper and more informative when $|\beta_p| > 2$.
+
+Following work on priors for variance parameters in multi-level models [@Chung2013nondegenerate], we use a penalty term for the log-heterogeneity parameter that is equivalent to putting a $\Gamma(1, \frac{1}{5})$ prior on $\tau$. The penalty for the log-heterogeneity parameter $\gamma$ is given by
+\begin{equation}
+\label{eq:gamma-prior}
+p_{\gamma}(\gamma) = \frac{1}{2} \gamma - 5 \exp\left(\frac{\gamma}{2}\right),
+\end{equation}
+as depicted in Figure \@ref(fig:prior-penalties)b.
+The penalty term reaches a maximum at $\gamma = \log(0.2)$ and remains weak for smaller degrees of heterogeneity.
+
+We use different penalties for the two log-scale selection parameters $\zeta_1$ and $\zeta_2$ in order to prioritize beta density functions that correspond to more plausible forms of selective reporting, under which non-significant findings are less likely to be reported than statistically significant ones. In particular, we use penalty terms based on $\mathcal{L}_4$-norm and $\mathcal{L}_2$-norm distributions, given by
+\begin{equation}
+\label{eq:zeta-priors}
+p_{\zeta_1}(\zeta_1) = -\frac{1}{54} \left(\zeta_1 - \log\left(\frac{1}{2}\right)\right)^4 \qquad \text{and} \qquad p_{\zeta_2}(\zeta_2) = -2 \left(\zeta_2\right)^2,
+\end{equation}
+As depicted in Figure \@ref(fig:prior-penalties)c,
+the penalty on $\zeta_1$ is centered at $\lambda_1 = \frac{1}{2}$ and remains very weak over the range of $\lambda_1 = \frac{1}{20}$ (strong selective reporting) to $\lambda_1 = 1$ (no selective reporting). This produces beta density curves consistent with the range of selective reporting observed in an empirical review of meta-analyses in psychology and clinical medicine [@mathur2021estimating].
+The prior on $\zeta_1$ more heavily penalizes extremely strong selection levels $(\lambda_1 < \frac{1}{50})$ and selective reporting that strongly _favors_ non-significant findings $(\lambda_1 > 8)$.
+As depicted in Figure \@ref(fig:prior-penalties)d, the penalty on $\zeta_2$ is centered on $\lambda_2 = 1$ and is much more constrained, which tends to prioritize beta density functions that do not change drastically for findings that are in the opposite of the theoretically expected direction. 
+
+```{r prior-penalties}
+#| echo: false
+#| fig.retina: 2
+#| fig.width: 5
+#| fig.height: 3
+#| fig.ncol: 2
+#| out.width: 49%
+#| fig.cap: "Prior penalty functions for beta density model parameters"
+#| fig.subcap:
+#|    - "Prior penalty for mean parameter $\\bs\\beta$. Dashed line corresponds to a standard normal penalty." 
+#|    - "Prior penalty for heterogeneity parameter $\\gamma$" 
+#|    - "Prior penalty for selection parameter $\\bs\\zeta_1$" 
+#|    - "Prior penalty for selection parameter $\\bs\\zeta_2$" 
+#| fig.pos: tb 
+
+tibble(
+  beta = seq(-3,3, length.out = 200)
+) %>%
+  mutate(
+    p_beta = -beta^4 / 16,
+    z = -beta^2 / 2
+  ) %>%
+ggplot() + 
+  aes(beta) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 0) + 
+  geom_line(aes(y = p_beta), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  geom_line(aes(y = z), linetype = "dashed", alpha = 0.6) +   
+  scale_x_continuous(breaks = -3:3, expand = expansion(0,0)) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  theme_minimal() + 
+  labs(x = expression(beta[p]), y = expression(p[beta](beta[p])))
+
+tau_bench <- c(0.01, 0.05, 0.1, 0.2, 0.4, 0.6, 1)
+
+tibble(
+  gamma = seq(log(0.01^2), log(1), length.out = 200),
+) %>%
+  mutate(
+    tau = exp(gamma / 2),
+    p_gamma = 0.5 * gamma - 5 * exp(gamma / 2),
+    p_gamma = p_gamma - max(p_gamma)
+  ) %>%
+ggplot() + 
+  aes(tau) + 
+  geom_hline(yintercept = 0) + 
+  geom_line(aes(y = p_gamma), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  theme_minimal() + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = tau_bench,
+    expand = expansion(0,0)
+  ) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  labs(x = expression(tau == exp(gamma / 2)), y = expression(p[gamma](gamma)))
+
+
+lambda_bench <- c(0.02, 0.06, 0.12, 0.25, 0.50, 1, 2, 4, 8)
+
+tibble(
+  zeta1 = seq(log(0.01), log(8), length.out = 500)
+) %>%
+  mutate(
+    lambda = exp(zeta1),
+    p_zeta1 = -(zeta1 - log(0.5))^4 / 54,
+  ) %>%
+ggplot() + 
+  aes(lambda) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 1) + 
+  geom_line(aes(y = p_zeta1), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  theme_minimal() + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = lambda_bench,
+    expand = expansion(0,0)
+  ) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  labs(x = expression(tau == exp(zeta[1])), y = expression(p[zeta[1]](zeta[1])))
+
+tibble(
+  zeta2 = seq(log(0.25), log(4), length.out = 500)
+) %>%
+  mutate(
+    lambda = exp(zeta2),
+    p_zeta2 = -2 * (zeta2)^2,
+  ) %>%
+ggplot() + 
+  aes(lambda) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 1) + 
+  geom_line(aes(y = p_zeta2), color = "darkgreen", alpha = 0.6, linewidth = 1) +   
+  theme_minimal() + 
+  scale_x_continuous(
+    transform = "log", 
+    breaks = lambda_bench,
+    expand = expansion(0,0)
+  ) + 
+  scale_y_continuous(expand = expansion(0,0)) + 
+  coord_cartesian(ylim = c(-4,0)) + 
+  labs(x = expression(tau == exp(zeta[2])), y = expression(p[zeta[2]](zeta[2])))
+```
+
