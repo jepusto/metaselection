@@ -91,7 +91,7 @@ all_params <-
 no_selection_params <- 
   all_params %>%
   filter(
-    weights == 1, 
+    weight == 1, 
     bootstrap == "none",
     mean_smd %in% c(0.0,0.8)
   ) %>% 
