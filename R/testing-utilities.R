@@ -333,6 +333,157 @@ check_dims <- function(mf, rows, cols) {
 }
 
 
+check_valence_equivalence <- function(
+    yi, yi_neg, ..., steps = .025, 
+    tol = 1e-6,
+    seed = as.integer(Sys.Date())
+) {
+  
+  # base model
+  
+  cl_pos_gt <- match.call()
+  cl_pos_gt$alternative <- "greater"
+  cl_pos_gt$yi_neg <- NULL
+  cl_pos_gt[[1L]] <- quote(selection_model)
+  
+  set.seed(seed)
+  pos_gt <- eval(cl_pos_gt, parent.frame())
+  p_b <- pos_gt$param_dim[1]
+  p_g <- pos_gt$param_dim[2]
+  p_bg <- p_b + p_g
+  p_z <- sum(pos_gt$param_dim[3])
+  
+  
+  # switch valence, reverse steps
+  
+  steps_rev <- rev(1 - steps)
+  cl_pos_ls <- cl_pos_gt
+  cl_pos_ls$alternative <- "less"
+  cl_pos_ls$steps <- steps_rev
+  
+  set.seed(seed)
+  if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
+    pos_ls <- eval(cl_pos_ls, parent.frame())  
+  } else {
+    expect_warning(
+      pos_ls <- eval(cl_pos_ls, parent.frame()),
+      regexp = "Most of the effect size estimates are"
+    )
+  }
+
+  # check beta and gamma are equal
+  expect_equal(pos_gt$est[1:p_bg,], pos_ls$est[1:p_bg,], tolerance = tol)
+  
+  # check zetas are equivalent after translation
+  if (p_z > 1L) {
+    expect_equal(
+      pos_gt$est$Est[p_bg + 1:p_z], 
+      c(pos_ls$est$Est[p_bg + (p_z - 1):1], 0) - pos_ls$est$Est[p_bg + p_z],
+      tolerance = tol
+    )
+  } else {
+    expect_equal(
+      pos_gt$est$Est[p_bg + p_z], 
+      - pos_ls$est$Est[p_bg + p_z],
+      tolerance = tol
+    )
+  }
+  
+  
+  # switch sign of outcome, reverse steps
+  
+  cl_neg_gt <- match.call()
+  cl_neg_gt$alternative <- "greater"
+  cl_neg_gt$yi <- cl_neg_gt$yi_neg
+  cl_neg_gt$yi_neg <- NULL
+  cl_neg_gt$steps <- steps_rev
+  cl_neg_gt[[1L]] <- quote(selection_model)
+
+  set.seed(seed)
+  if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
+    neg_gt <- eval(cl_neg_gt, parent.frame())  
+  } else {
+    expect_warning(
+      neg_gt <- eval(cl_neg_gt, parent.frame()),
+      regexp = "Most of the effect size estimates are"
+    )
+  }
+
+  # check beta equal magnitude but opposite sign
+  
+  to_flip <- !(names(neg_gt$est) %in% c("estimator","param","SE","p_value","bootstraps"))
+  expect_equal(
+    apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    apply(-1 * neg_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    tolerance = tol
+  )
+  expect_equal(
+    pos_gt$est[1:p_b,!to_flip], 
+    neg_gt$est[1:p_b,!to_flip], 
+    tolerance = tol
+  )
+  
+  # check gamma are equal
+  expect_equal(
+    pos_gt$est[p_b + 1:p_g,], 
+    neg_gt$est[p_b + 1:p_g,], 
+    tolerance = tol
+  )
+  
+  # check zetas are equivalent after translation
+  if (p_z > 1L) {
+    expect_equal(
+      pos_gt$est$Est[p_bg + 1:p_z], 
+      c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
+      tolerance = 1e-6
+    )
+  } else {
+    expect_equal(
+      pos_gt$est$Est[p_bg + p_z], 
+      - neg_gt$est$Est[p_bg + p_z],
+      tolerance = 1e-6
+    )
+  }
+  
+  
+  # switch sign of outcome, reverse steps
+  
+  cl_neg_ls <- cl_neg_gt
+  cl_neg_ls$alternative <- "less"
+  cl_neg_ls$steps <- cl_pos_gt$steps
+  
+  set.seed(seed)
+  neg_ls <- eval(cl_neg_ls, parent.frame())
+  
+
+  # check beta equal magnitude but opposite sign
+  expect_equal(
+    apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    apply(-1 * neg_ls$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    tolerance = tol
+  )
+  expect_equal(
+    pos_gt$est[1:p_b,!to_flip], 
+    neg_ls$est[1:p_b,!to_flip], 
+    tolerance = tol
+  )
+  
+  # check gamma are equal
+  expect_equal(
+    pos_gt$est[p_b + 1:p_g,], 
+    neg_ls$est[p_b + 1:p_g,], 
+    tolerance = tol
+  )
+  
+  # check zetas are equal
+  expect_equal(
+    pos_gt$est[p_bg + 1:p_z,], 
+    neg_ls$est[p_bg + 1:p_z,], 
+    tolerance = 1e-6
+  )
+  
+}
+
 #-------------------------------------------------------------------------------
 # Functions for checking r_meta()
 

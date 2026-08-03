@@ -6,7 +6,7 @@ beta_loglik <- function(
     theta,                                     # full parameter vector
     yi,                                        # outcome vector
     sei,                                       # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),  # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),  # one-sided p-values
     ai = NULL,                                 # analytic weight
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
@@ -14,7 +14,8 @@ beta_loglik <- function(
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
-    priors = NULL                             # selmodel_prior object to specify priors
+    Hsgn = 1L,                          # valence of alternative hypothesis used to compute p-values
+    priors = NULL                              # selmodel_prior object to specify priors
 ) {
   
   params <- parse_beta_params(
@@ -28,6 +29,7 @@ beta_loglik <- function(
     alpha = steps,
     X = X,
     U = U,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
 
@@ -59,7 +61,7 @@ beta_score <- function(
     theta,                                     # full parameter vector
     yi,                                        # outcome vector
     sei,                                       # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),  # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),  # one-sided p-values
     ai = NULL,                                 # analytic weight
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
@@ -67,6 +69,7 @@ beta_score <- function(
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
+    Hsgn = 1L,                                 # valence of alternative hypothesis used to compute p-values
     priors = NULL,                             # selmodel_prior object to specify priors
     contributions = FALSE                      # whether to return matrix of score contributions
 ) {
@@ -82,6 +85,7 @@ beta_score <- function(
     alpha = steps,
     X = X,
     U = U,
+    Hsgn = Hsgn,
     calc_Ai = TRUE,
     calc_Ai_deriv = TRUE
   )
@@ -150,7 +154,7 @@ beta_hessian <- function(
     theta,                                     # full parameter vector
     yi,                                        # outcome vector
     sei,                                       # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),  # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),  # one-sided p-values
     ai = NULL,                                 # analytic weight
     beta = NULL,                               # mean parameter coefficients
     gamma = NULL,                              # variance component coefficients
@@ -158,6 +162,7 @@ beta_hessian <- function(
     steps = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
+    Hsgn = 1L,                                 # valence of alternative hypothesis used to compute p-values
     priors = NULL                              # selmodel_prior object to specify priors
 ) {
   
@@ -172,6 +177,7 @@ beta_hessian <- function(
     alpha = steps,
     X = X,
     U = U,
+    Hsgn = Hsgn,
     calc_Ai = TRUE,
     calc_Ai_deriv = TRUE
   )

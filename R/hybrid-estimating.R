@@ -16,6 +16,7 @@ step_weighted_logpartlik <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = c(1L,-1L),                           # valence of alternative hypothesis used to compute p-values
     priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
@@ -34,7 +35,8 @@ step_weighted_logpartlik <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    Hsgn = Hsgn
   )
   
   # likelihood contributions
@@ -78,6 +80,7 @@ step_selection_constraint <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = c(1L,-1L),                           # valence of alternative hypothesis used to compute p-values
     priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
@@ -97,6 +100,7 @@ step_selection_constraint <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
 

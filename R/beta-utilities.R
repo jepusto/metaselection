@@ -11,7 +11,7 @@ parse_beta_params <- function(
     alpha = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
-    sgn = c(1L,-1L),                            # sign transformation depending on alternative hypothesis
+    Hsgn = 1L,                                 # sign transformation depending on alternative hypothesis
     calc_Ai = FALSE,                           # whether to calculate Ai 
     calc_Ai_deriv = FALSE                      # whether to calculate first derivatives of Ai
 ) {
@@ -55,7 +55,7 @@ parse_beta_params <- function(
 
   # calculate weights 
   if (!missing(yi)) {
-    if (is.null(pi)) pi <- pnorm(yi / sei, lower.tail = FALSE)
+    if (is.null(pi)) pi <- pnorm(Hsgn * yi / sei, lower.tail = FALSE)
     pi_tilde <- pmin(alpha[2], pmax(alpha[1], pi))
     weight_vec <- (pi_tilde ^ lambda[1]) * ((1 - pi_tilde) ^ lambda[2])
   } else {
@@ -81,7 +81,7 @@ parse_beta_params <- function(
   
   if (calc_Ai) {
     
-    c_mat <- (tcrossprod(sei, -qnorm(alpha)) - mu) / sqrt(eta)
+    c_mat <- (tcrossprod(sei, -qnorm(alpha)) - Hsgn * mu) / sqrt(eta)
     B_0ij <- pnorm(c_mat[,1], lower.tail = FALSE)
     B_2ij <- pnorm(c_mat[,2])
     
@@ -94,7 +94,8 @@ parse_beta_params <- function(
     E_Y_1 <- E_Y_f_vec(
       f_exp = "1", 
       sei = sei, mu = mu, eta = eta, 
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha, 
+      Hsgn = Hsgn
     )
     
     params$Ai <- alpha_lambda[1] * B_0ij + E_Y_1 + alpha_lambda[2] * B_2ij
@@ -161,14 +162,10 @@ parse_beta_params <- function(
 
 # integration ------------------------------------------------------------------
 
-E_Y_f <- function(f_exp, 
-                  sei, 
-                  mu, 
-                  eta, 
-                  lambda, 
-                  alpha) {
+E_Y_f <- function(f_exp, sei, mu, eta, 
+                  lambda, alpha, Hsgn) {
   
-  weightfun <- "(pnorm(-Y/sei)^lambda[1]) * (pnorm(Y/sei)^lambda[2])"
+  weightfun <- "(pnorm(-Hsgn * Y / sei)^lambda[1]) * (pnorm(Hsgn * Y / sei)^lambda[2])"
   normdens <- "dnorm((Y - mu) / sqrt(eta)) / sqrt(eta)"
   integrand_exp <- paste(f_exp, weightfun, normdens, sep = " * ")
   integrand <- function(Y) Y
@@ -182,13 +179,15 @@ E_Y_f <- function(f_exp,
   
 }
 
-E_Y_f_vec <- function(f_exp, sei, mu, eta, lambda, alpha) {
+E_Y_f_vec <- function(f_exp, sei, mu, eta, lambda, alpha, Hsgn) {
   mapply(
     E_Y_f, 
     sei = sei, mu = mu, eta = eta,
     MoreArgs = list(
       f_exp = f_exp, 
-      lambda = lambda, alpha = alpha
+      lambda = lambda, 
+      alpha = alpha,
+      Hsgn = Hsgn
     )
   )
 }
