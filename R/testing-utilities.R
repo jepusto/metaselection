@@ -375,20 +375,27 @@ check_valence_equivalence <- function(
   expect_equal(pos_gt$est[1:p_bg,], pos_ls$est[1:p_bg,], tolerance = tol)
   
   # check zetas are equivalent after translation
-  if (p_z > 1L) {
+  if (inherits(pos_gt, "step.selmodel")) {
+    if (p_z > 1L) {
+      expect_equal(
+        pos_gt$est$Est[p_bg + 1:p_z], 
+        c(pos_ls$est$Est[p_bg + (p_z - 1):1], 0) - pos_ls$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    } else {
+      expect_equal(
+        pos_gt$est$Est[p_bg + p_z], 
+        - pos_ls$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    }
+  } else if (inherits(pos_gt, "beta.selmodel")) {
     expect_equal(
-      pos_gt$est$Est[p_bg + 1:p_z], 
-      c(pos_ls$est$Est[p_bg + (p_z - 1):1], 0) - pos_ls$est$Est[p_bg + p_z],
-      tolerance = tol
-    )
-  } else {
-    expect_equal(
-      pos_gt$est$Est[p_bg + p_z], 
-      - pos_ls$est$Est[p_bg + p_z],
-      tolerance = tol
+      pos_gt$est[p_bg + 1:p_z,-2],
+      pos_ls$est[p_bg + p_z:1,-2],
+      ignore_attr = TRUE
     )
   }
-  
   
   # switch sign of outcome, reverse steps
   
@@ -431,17 +438,26 @@ check_valence_equivalence <- function(
   )
   
   # check zetas are equivalent after translation
-  if (p_z > 1L) {
+
+  if (inherits(pos_gt, "step.selmodel")) {
+    if (p_z > 1L) {
+      expect_equal(
+        pos_gt$est$Est[p_bg + 1:p_z], 
+        c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
+        tolerance = 1e-6
+      )
+    } else {
+      expect_equal(
+        pos_gt$est$Est[p_bg + p_z], 
+        - neg_gt$est$Est[p_bg + p_z],
+        tolerance = 1e-6
+      )
+    }
+  } else if (inherits(pos_gt, "beta.selmodel")) {
     expect_equal(
-      pos_gt$est$Est[p_bg + 1:p_z], 
-      c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
-      tolerance = 1e-6
-    )
-  } else {
-    expect_equal(
-      pos_gt$est$Est[p_bg + p_z], 
-      - neg_gt$est$Est[p_bg + p_z],
-      tolerance = 1e-6
+      pos_gt$est[p_bg + 1:p_z,-2],
+      neg_gt$est[p_bg + p_z:1,-2],
+      ignore_attr = TRUE
     )
   }
   

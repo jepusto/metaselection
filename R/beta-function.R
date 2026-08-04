@@ -35,7 +35,7 @@ beta_loglik <- function(
 
   # calculate log likelihood (Eq. 9-10)
   # likelihood contributions
-  log_lik_i <- log(params$weight_vec) - (yi - params$mu)^2 / (2 * params$eta) - log(params$eta) / 2 - log(params$Ai)
+  log_lik_i <- log(params$weight_vec) - log(params$Ai) - (yi - params$mu)^2 / (2 * params$eta) - log(params$eta) / 2
   
   # weighted log likelihood (Eq. 51)
   log_lik <- if (is.null(ai)) sum(log_lik_i) else sum(ai * log_lik_i)
@@ -197,7 +197,8 @@ beta_hessian <- function(
   EY_A_mu_mu <-  E_Y_f_vec(
     f_exp = "((Y - mu) ^ 2 / eta - 1)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
 
   d_1ij <- dnorm(params$c_1ij)
@@ -210,17 +211,19 @@ beta_hessian <- function(
   EY_A_mu_eta <- E_Y_f_vec(
     f_exp = " ((Y - mu) * ((Y - mu)^2 - 3 * eta) / eta^(3/2))", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
   
-  dA_dmu_deta <- (params$alpha_lambda[1] * (params$c_1ij^2 - 1) * d_1ij
+  dA_dmu_deta <- (params$alpha_lambda[1] * (params$c_1ij^2 - 1) * Hsgn * d_1ij
                   + EY_A_mu_eta
-                  - params$alpha_lambda[2] * (params$c_2ij^2 - 1) * d_2ij) / (2 * params$eta^1.5)
+                  - params$alpha_lambda[2] * (params$c_2ij^2 - 1) * Hsgn * d_2ij) / (2 * params$eta^1.5)
   
   EY_A_mu_lambda1 <- E_Y_f_vec(
-    f_exp = "((Y - mu) / sqrt(eta)) * pnorm(-Y/sei, log.p = TRUE)", 
+    f_exp = "((Y - mu) / sqrt(eta)) * pnorm(-Hsgn * Y/sei, log.p = TRUE)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
   
   log_alpha_1 <- log(params$alpha[1])
@@ -228,24 +231,26 @@ beta_hessian <- function(
   log_c_alpha_1 <- log(1 - params$alpha[1])
   log_c_alpha_2 <- log(1 - params$alpha[2])
   
-  dA_dmu_dlambda1 <- (log_alpha_1 * params$alpha_lambda[1] * d_1ij
+  dA_dmu_dlambda1 <- (log_alpha_1 * params$alpha_lambda[1] * Hsgn * d_1ij
                       + EY_A_mu_lambda1
-                      - log_alpha_2 * params$alpha_lambda[2] * d_2ij) / sqrt(params$eta)
+                      - log_alpha_2 * params$alpha_lambda[2] * Hsgn * d_2ij) / sqrt(params$eta)
   
   EY_A_mu_lambda2 <- E_Y_f_vec(
-    f_exp = "((Y - mu) / sqrt(eta)) * pnorm(Y/sei, log.p = TRUE)", 
+    f_exp = "((Y - mu) / sqrt(eta)) * pnorm(Hsgn * Y/sei, log.p = TRUE)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
 
-  dA_dmu_dlambda2 <- (log_c_alpha_1 * params$alpha_lambda[1] * d_1ij
+  dA_dmu_dlambda2 <- (log_c_alpha_1 * params$alpha_lambda[1] * Hsgn * d_1ij
                       + EY_A_mu_lambda2
-                      - log_c_alpha_2 * params$alpha_lambda[2] * d_2ij) / sqrt(params$eta)
+                      - log_c_alpha_2 * params$alpha_lambda[2] * Hsgn * d_2ij) / sqrt(params$eta)
   
   EY_A_eta_eta <- E_Y_f_vec(
     f_exp = "( (Y - mu)^4 / eta^2 - 6 * (Y - mu)^2 / eta + 3)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
  
   dA_deta_deta <- (params$alpha_lambda[1] * (params$c_1ij^3 - 3 * params$c_1ij) * d_1ij
@@ -254,9 +259,10 @@ beta_hessian <- function(
   
   EY_A_eta_lambda1 <- 
     E_Y_f_vec(
-      f_exp = "pnorm(-Y / sei, log.p = TRUE) * ((Y - mu)^2 / eta - 1)", 
+      f_exp = "pnorm(-Hsgn * Y / sei, log.p = TRUE) * ((Y - mu)^2 / eta - 1)", 
       sei = sei, mu = params$mu, eta = params$eta,
-      lambda = params$lambda, alpha = params$alpha
+      lambda = params$lambda, alpha = params$alpha,
+      Hsgn = Hsgn
     )
 
   dA_deta_dlambda1 <- (log_alpha_1 * params$alpha_lambda[1] * params$c_1ij * d_1ij
@@ -264,9 +270,10 @@ beta_hessian <- function(
                        - log_alpha_2 * params$alpha_lambda[2] * params$c_2ij * d_2ij) / (2 * params$eta)
   
   EY_A_eta_lambda2 <- E_Y_f_vec(
-    f_exp = "pnorm(Y / sei, log.p = TRUE) * ((Y - mu)^2 / eta - 1)", 
+    f_exp = "pnorm(Hsgn * Y / sei, log.p = TRUE) * ((Y - mu)^2 / eta - 1)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
 
   dA_deta_dlambda2 <- (log_c_alpha_1 * params$alpha_lambda[1] * params$c_1ij * d_1ij
@@ -274,9 +281,10 @@ beta_hessian <- function(
                        - log_c_alpha_2 * params$alpha_lambda[2] * params$c_2ij * d_2ij) / (2 * params$eta)
   
   EY_A_lambda1_lambda1 <- E_Y_f_vec(
-    f_exp = "pnorm(-Y / sei, log.p = TRUE)^2", 
+    f_exp = "pnorm(-Hsgn * Y / sei, log.p = TRUE)^2", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
   
   dA_dlambda1_dlambda1 <- 
@@ -285,9 +293,10 @@ beta_hessian <- function(
     log_alpha_2^2 * params$alpha_lambda[2] * params$B_2ij
   
   EY_A_lambda2_lambda2 <- E_Y_f_vec(
-    f_exp = "pnorm(Y / sei, log.p = TRUE)^2", 
+    f_exp = "pnorm(Hsgn * Y / sei, log.p = TRUE)^2", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
   
   dA_dlambda2_dlambda2 <- 
@@ -296,9 +305,10 @@ beta_hessian <- function(
     log_c_alpha_2^2 * params$alpha_lambda[2] * params$B_2ij
   
   EY_A_lambda1_lambda2 <- E_Y_f_vec(
-    f_exp = "pnorm(-Y / sei, log.p = TRUE) * pnorm(Y / sei, log.p = TRUE)", 
+    f_exp = "pnorm(-Hsgn * Y / sei, log.p = TRUE) * pnorm(Hsgn * Y / sei, log.p = TRUE)", 
     sei = sei, mu = params$mu, eta = params$eta,
-    lambda = params$lambda, alpha = params$alpha
+    lambda = params$lambda, alpha = params$alpha,
+    Hsgn = Hsgn
   )
 
   dA_dlambda1_dlambda2 <- 

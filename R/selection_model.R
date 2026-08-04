@@ -95,7 +95,7 @@ fit_selection_model <- function(
   U = NULL, 
   Z0 = NULL, 
   Z = NULL, 
-  Hsgn = c(1L,-1L),
+  Hsgn = 1L,
   priors = NULL,
   subset = NULL,
   vcov_type = "robust",
@@ -130,17 +130,6 @@ fit_selection_model <- function(
     )
   } 
   
-  params <- parse_step_params(
-    theta = theta,
-    yi = yi, sei = sei,
-    pi = pi, ai = ai,
-    steps = steps,
-    X = X, U = U, Z0 = Z0, Z = Z, 
-    Hsgn = Hsgn,
-    calc_Ai = FALSE
-  )
-  
-  
   
   if (estimator %in% c("ML","CML")) {
     
@@ -167,6 +156,16 @@ fit_selection_model <- function(
           control = optimizer_control
         )
         
+        params <- parse_step_params(
+          theta = theta,
+          yi = yi, sei = sei,
+          pi = pi, ai = ai,
+          steps = steps,
+          X = X, U = U, Z0 = Z0, Z = Z, 
+          Hsgn = Hsgn,
+          calc_Ai = FALSE
+        )
+        
       } else if (selection_type == "beta") {
         
         hess <- if (use_jac) beta_hessian else NULL
@@ -183,6 +182,16 @@ fit_selection_model <- function(
           priors = priors,
           method = optimizer,
           control = optimizer_control
+        )
+        
+        params <- parse_beta_params(
+          theta = theta,
+          yi = yi, sei = sei,
+          pi = pi, 
+          alpha = steps,
+          X = X, U = U, 
+          Hsgn = Hsgn,
+          calc_Ai = FALSE
         )
         
       }
@@ -509,7 +518,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL,
-    Hsgn = c(1L,-1L),
+    Hsgn = 1L,
     priors = define_priors(),
     vcov_type = "robust",
     selection_type = "step",
@@ -651,7 +660,7 @@ jackknife_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
-    Hsgn = c(1L,-1L),
+    Hsgn = 1L,
     priors = priors,
     selection_type = "step",
     estimator = "CML",
