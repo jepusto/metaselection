@@ -253,7 +253,7 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison}
 
-\note{~\newline June 26, 2026}
+\note{~\newline August 04, 2026}
 
 \abstract{%
 Meta-analysts seek to draw generalizable inferences by pooling findings across available studies. Such efforts are hampered by selective reporting of study findings, which distorts meta-analytic inferences when statistically significant results are reported preferentially. Many techniques are available for investigating selective reporting in meta-analyses of independent effects, but psychological meta-analyses routinely involve dependent data structures, as arise when primary studies report results for multiple outcomes. Recent methodological developments that can accommodate dependent effects have focused on step-function selection models, in which the probability of reporting depends on whether a finding's p-value falls above or below pre-specified thresholds. We propose an alternative model in which the reporting probability follows a flexible, truncated beta function, avoiding the need to specify a priori thresholds. Estimation of the model accommodates dependent effect sizes using cluster-robust variance estimation or clustered bootstrapping. We demonstrate the proposed approach by re-analyzing a published meta-analysis. Through an extensive simulation study, we evaluate the performance of the truncated beta model versus standard meta-analytic methods and versus step-function models to assess robustness to selection function misspecification. Results show that the beta-density model yields negligible bias across diverse conditions and outperforms standard alternatives when selective reporting is present, although simpler step-function models can be more precise under mild selection. Clustered bootstrap confidence intervals provide superior coverage compared to cluster-robust variance estimation. Although conventional methods remain more precise when selection is absent, the truncated beta selection model serves as a useful tool for sensitivity analysis and estimation in larger dataset that include dependent effects.
@@ -306,7 +306,12 @@ Third, it has strong precedents in other areas of statistical analysis, includin
 To account for dependence among effect sizes, we pair this marginal model with cluster-robust variance estimation (RVE) or clustered bootstrapping techniques.
 Although this approach limits interpretation to the marginal distribution and does not distinguish between study-level and outcome-level selection, it remains a practical and plausible framework for modeling selective reporting based on the statistical significance of individual estimates.
 
-We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising \(J\) studies, where study \(j\) reports \(k_j\) effect size estimates. Let \(y_{ij}\) denote the \(i\)th effect size estimate from study \(j\), with associated standard error \(\sigma_{ij}\) and one-sided \(p\)-value \(p_{ij}\). The one-sided \(p\)-value is defined relative to the null hypothesis that the true effect size is less than or equal to zero, with alternative hypothesis that the effect size is positive. Let \(\mathbf{x}_{ij}\) be a \(1 \times x\) row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use \(\Phi()\) to denote the standard normal cumulative distribution function and \(\phi()\) to denote the standard normal density function.
+We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising \(J\) studies, where study \(j\) reports \(k_j\) effect size estimates. Let \(y_{ij}\) denote the \(i\)th effect size estimate from study \(j\), with associated standard error \(\sigma_{ij}\). Let \(\mathbf{x}_{ij}\) be a \(1 \times x\) row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use \(\Phi()\) to denote the standard normal cumulative distribution function and \(\phi()\) to denote the standard normal density function.
+
+The one-sided \(p\)-value associated with \(y_{ij}\) is defined with respect to a certain null hypothesis about the true effect size, which depends on the valence of the effect that would be expected based on theory.
+To distinguish different possibilities,
+let \(s = 1\) if the null hypothesis is that the true effect is less than or equal to zero, with alternative hypothesis that the effect size is positive, and let \(s = -1\) if the null hypothesis is that the true effect size is greater than or equal to zero, with alternative hypothesis that the effect size is negative.
+The one-sided p-value for effect size \(i\) in study \(j\) is then \(p_{ij} = 1 - \Phi\left(s y_{ij} / \sigma_{ij}\right)\).
 
 \subsection{Evidence-generating process}\label{evidence-generating-process}
 
@@ -334,9 +339,9 @@ Equation (\ref{eq:beta-density-p}) can be written equivalently as
 \begin{equation}
 \label{eq:beta-density-y}
 w(Y^*_i, \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
-\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_1) \leq Y^* \\
-\left[\Phi\left(-Y^* / \sigma^*\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^* / \sigma^*\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_2) < Y^* < \sigma^* \Phi^{-1}(1 - \alpha_1) \\
-\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^* \leq \sigma^* \Phi^{-1}(1 - \alpha_2).
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_1) \leq s Y^* \\
+\left[\Phi\left(- s Y^* / \sigma^*\right)\right]^{\lambda_1 - 1} \left[\Phi\left( s Y^* / \sigma^*\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_2) < sY^* < \sigma^* \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  s Y^* \leq \sigma^* \Phi^{-1}(1 - \alpha_2).
 \end{cases}
 \end{equation}
 When \(\lambda_1 = \lambda_2 = 1\), the selection function is flat and selective reporting is absent.
@@ -397,7 +402,7 @@ We first used the \texttt{rma.uni()} function from the \texttt{metafor} package 
 The overall estimate of the average effect using the unadjusted model was 0.42, cluster-robust 95\% CI {[}0.36, 0.47{]}, significantly different from zero \((p <0.001)\).
 The unadjusted estimate of heterogeneity was \(\tau = 0.29\).
 
-To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package (Pustejovsky, Joshi, \& Citkowicz, 2025) to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two different step-function selection models---a one-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with two-stage cluster bootstrapping (\(B = 1999\) bootstraps) used to account for dependent effect sizes.
+To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package (Pustejovsky, Joshi, \& Citkowicz, 2025) to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two different step-function selection models---a one-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with two-stage cluster bootstrapping (\(B = 9\) bootstraps) used to account for dependent effect sizes.
 
 \begin{table}
 \centering
@@ -411,17 +416,17 @@ Parameter & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI\\
 \midrule
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{Summary meta-analysis}}\\
-\hspace{1em}$\beta_0$ & 0.28 (0.08) & {}[0.07, 0.43] & 0.42 (0.03) & {}[0.34, 0.49] & 0.37 (0.05) & {}[0.25, 0.46]\\
-\hspace{1em}$\tau$ & 0.38 (0.18) & {}[0.30, 0.46] & 0.29 (0.12) & {}[0.25, 0.33] & 0.33 (0.13) & {}[0.28, 0.38]\\
-\hspace{1em}$\lambda_1$ & 0.99 (0.14) & {}[0.69, 1.32] & 1.08 (0.30) & {}[0.53, 2.13] & 1.09 (0.25) & {}[0.60, 1.93]\\
-\hspace{1em}$\lambda_2$ & 1.73 (0.14) & {}[1.25, 2.52] &  &  & 0.36 (0.51) & {}[0.11, 1.06]\\
+\hspace{1em}$\beta_0$ & 0.28 (0.08) & {}[0.21, 0.35] & 0.42 (0.04) & {}[0.37, 0.50] & 0.36 (0.06) & {}[0.18, 0.43]\\
+\hspace{1em}$\tau$ & 0.38 (0.18) & {}[0.34, 0.40] & 0.29 (0.12) & {}[0.26, 0.29] & 0.33 (0.15) & {}[0.30, 0.36]\\
+\hspace{1em}$\lambda_1$ & 1.00 (0.14) & {}[0.67, 1.18] & 1.10 (0.32) & {}[0.82, 2.06] & 1.06 (0.28) & {}[0.49, 1.42]\\
+\hspace{1em}$\lambda_2$ & 1.74 (0.15) & {}[1.27, 2.06] &  &  & 0.31 (0.65) & {}[0.10, 0.53]\\
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{Moderator analysis}}\\
-\hspace{1em}$\beta_0$ & 0.01 (0.12) & {}[-0.31, 0.24] & 0.26 (0.05) & {}[0.16, 0.37] & 0.16 (0.07) & {}[0.01, 0.30]\\
-\hspace{1em}$\beta_1$ & 0.33 (0.10) & {}[0.14, 0.58] & 0.19 (0.05) & {}[0.08, 0.29] & 0.25 (0.07) & {}[0.10, 0.39]\\
-\hspace{1em}$\tau$ & 0.36 (0.17) & {}[0.29, 0.44] & 0.28 (0.12) & {}[0.24, 0.32] & 0.32 (0.14) & {}[0.27, 0.36]\\
-\hspace{1em}$\lambda_1$ & 0.97 (0.14) & {}[0.67, 1.30] & 1.04 (0.30) & {}[0.51, 2.05] & 1.06 (0.25) & {}[0.60, 1.86]\\
-\hspace{1em}$\lambda_2$ & 1.74 (0.15) & {}[1.24, 2.56] &  &  & 0.34 (0.51) & {}[0.11, 0.96]\\
+\hspace{1em}$\beta_0$ & 0.00 (0.13) & {}[-0.23, 0.20] & 0.26 (0.05) & {}[0.17, 0.34] & 0.14 (0.08) & {}[-0.03, 0.25]\\
+\hspace{1em}$\beta_1$ & 0.34 (0.11) & {}[0.13, 0.62] & 0.19 (0.05) & {}[0.10, 0.25] & 0.26 (0.07) & {}[0.14, 0.38]\\
+\hspace{1em}$\tau$ & 0.36 (0.18) & {}[0.31, 0.43] & 0.28 (0.12) & {}[0.26, 0.30] & 0.32 (0.15) & {}[0.27, 0.39]\\
+\hspace{1em}$\lambda_1$ & 0.98 (0.14) & {}[0.83, 1.19] & 1.06 (0.31) & {}[0.57, 1.62] & 1.02 (0.28) & {}[0.67, 1.86]\\
+\hspace{1em}$\lambda_2$ & 1.76 (0.15) & {}[1.29, 2.41] &  &  & 0.28 (0.66) & {}[0.07, 0.50]\\
 \bottomrule
 \multicolumn{7}{l}{\rule{0pt}{1em}\textit{Note: }}\\
 \multicolumn{7}{l}{\rule{0pt}{1em}Est. = estimate; SE = bootstrap standard error; CI = percentile boodstrap confidence interval.}\\
@@ -431,13 +436,13 @@ Parameter & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI\\
 The upper panel of Table \ref{tab:social-identity-theory-res} reports parameter estimates from all three models, along with bootstrap standard errors and 95\% confidence intervals.
 Across the three selection models, the estimated average effect sizes are all positive and significant, but they vary in magnitude and interpretation.
 Compared to the unadjusted model, the average adjusted effect is 33\% smaller when using the beta-density selection model (\(ES\) = 0.28).
-In contrast, the adjustment is minimal for the one-step selection model, with an average effect estimate that is 2\% larger than under the unadjusted model (\(ES\) = 0.42); the two-step selection model yields an estimate that is 12\% smaller (\(ES\) = 0.37) than the unadjusted average effect.
+In contrast, the adjustment is minimal for the one-step selection model, with an average effect estimate that is 2\% larger than under the unadjusted model (\(ES\) = 0.42); the two-step selection model yields an estimate that is 12\% smaller (\(ES\) = 0.36) than the unadjusted average effect.
 
 These differences are driven by the specific form of the selection curve estimated from each model, as depicted in Figure \ref{fig:social-identity-theory-selection-curves}.
 The beta-density model identifies a substantial downward adjustment, capturing a smooth, continuous decline in the likelihood of reporting as effects move toward non-significance.
 The one-step model, on the other hand, estimates a nearly flat selection process, suggesting that when only one \(p\)-value threshold is considered, the overall evidence for selective reporting appears negligible.
 The two-step model identifies a slight increase in reporting probability at the \(\alpha_1 = .025\) threshold, followed by a substantial decrease at the \(\alpha_2 = .05\) threshold.
-Notably, the beta-density model provided the best fit to the data (Log composite likelihood = -49.02), followed by the two-step model (-52.94) and the one-step model (-58.12).
+Notably, the beta-density model provided the best fit to the data (Log composite likelihood = -49.02), followed by the two-step model (-52.87) and the one-step model (-58.12).
 This divergence illustrates how the continuous functional form of the beta-density model can capture nuanced reporting patterns---such as a smooth decline in the likelihood of reporting for increasingly negative results---that may be obscured or dependent on the pre-defined thresholds of a step-function model.
 
 \begin{figure}[tb]
@@ -457,7 +462,7 @@ The unadjusted estimate of heterogeneity was \(\tau = 0.28\), similar to the sum
 
 The lower panel of Table \ref{tab:social-identity-theory-res} reports parameter estimates from the corresponding selection models that include target leader's role as a predictor.
 The \(\beta_1\) coefficient estimates represent differences in average effects between leaders in formal versus nonformal roles, which were all statistically significant.
-Compared to the unadjusted model's estimated difference of 0.19, the beta-density model estimated a substantially larger difference of 0.33, whereas the two-step model yielded a difference of 0.25 and the one-step model remained unchanged at 0.19.
+Compared to the unadjusted model's estimated difference of 0.19, the beta-density model estimated a substantially larger difference of 0.34, whereas the two-step model yielded a difference of 0.26 and the one-step model remained unchanged at 0.19.
 This suggests that the moderating effect of leader status is robust to selective reporting; however, the advantage for formal leaders may actually be underestimated when selective reporting bias is ignored.
 Moreover, the selection models lead to different conclusions about the average effects for leaders in nonformal roles (\(\beta_0\)). The estimate from the beta-density model is not statistically distinct from zero and is substantially smaller than the estimate from the unadjusted model.
 In contrast, the estimated average effects for the reference group in the step-function selection models remain statistically significant, though they vary in magnitude.
@@ -983,25 +988,26 @@ where \(V^{CR}_{gg}\) is the \(g^{th}\) diagonal entry of \(\mathbf{V}^{CR}\).
 It remains to give the exact form of the score contributions and Hessian matrix. To define these, observe that the beta-density selection function can be written compactly by defining
 \begin{equation}
 \tilde{p}_{ij} = \begin{cases}
-\alpha_1 & \text{if} \quad \Phi^{-1}(1 - \alpha_1) \leq y_{ij} / \sigma_{ij} \\
-\Phi\left(-y_{ij} / \sigma_{ij}\right) & \text{if} \quad \Phi^{-1}(1 - \alpha_2) \leq y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_1) \\
-\alpha_2 & \text{if} \quad y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_2),
+\alpha_1 & \text{if} \quad \Phi^{-1}(1 - \alpha_1) \leq s y_{ij} / \sigma_{ij} \\
+\Phi\left(-s y_{ij} / \sigma_{ij}\right) & \text{if} \quad \Phi^{-1}(1 - \alpha_2) \leq s y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2 & \text{if} \quad s y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_2),
 \end{cases}
 \end{equation}
 so that the selection weights of the truncated beta density model are
 \begin{equation}
 w_{ij} = w\left(y_{ij}, \sigma_{ij}; \zeta_1, \zeta_2 \right) = \tilde{p}_{ij}^{\lambda_1 - 1} \left(1 - \tilde{p}_{ij}\right)^{\lambda_2 - 1}.
 \end{equation}
-Also let \(c_{hij} = \eta_{ij}^{-1/2}\left(\sigma_{ij} \Phi^{-1}(1 - \alpha_h) - \mu_{ij}\right)\) for \(h = 1,2\); \(B_{0ij} = 1 - \Phi(c_{1ij})\); and \(B_{2ij} = \Phi(c_{2ij})\).
+Also let \(c_{hij} = \eta_{ij}^{-1/2}\left(\sigma_{ij} \Phi^{-1}(1 - \alpha_h) - s \mu_{ij}\right)\) for \(h = 1,2\); \(B_{0ij} = 1 - \Phi(c_{1ij})\); and \(B_{2ij} = \Phi(c_{2ij})\).
 
 The score and Hessian contributions of the truncated beta density model involve integrals that need to be calculated numerically.
 To ease notation for these integrals, we will denote the integral of a function \(f(Y)\) with respect to the distribution of \(Y\) under the truncated beta density as
-\begin{equation}
-E_Y\left[f(Y)| \sigma_{ij}, \lambda_1, \lambda_2\right] = \int_{\sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{\sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-Y / \sigma_{ij})\right]^{\lambda_1} \left[\Phi(Y / \sigma_{ij})\right]^{\lambda_2} \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY.
-\end{equation}
+\begin{align}
+E_Y\left[f(Y)| \sigma_{ij}, \lambda_1, \lambda_2\right] &= s \int_{s \sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{s \sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-s Y / \sigma_{ij})\right]^{\lambda_1 - 1} \left[\Phi(s Y / \sigma_{ij})\right]^{\lambda_2 - 1} \nonumber \\
+& \qquad \qquad \qquad \qquad \times \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY.
+\end{align}
 It follows that
 \begin{equation}
-A_{ij} = \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} + E_Y(1 | \sigma_{ij}, \lambda_1,\lambda_2) + \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+A_{ij} = \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} + E_Y(1 | \sigma_{ij}, \lambda_1,\lambda_2) + \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij}.
 \end{equation}
 
 \subsection{Score contributions}\label{score-contributions}
@@ -1023,14 +1029,18 @@ with derivatives of \(w_{ij}\) given by
 \end{align}
 and derivatives of \(A_{ij}\) given by
 \begin{align}
-\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[ \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \right] \\
-\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \biggl[\alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad + E_Y\left(\left. \frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right] \\
-\frac{\partial A_{ij}}{\partial \lambda_1} &= \log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
-\frac{\partial A_{ij}}{\partial \lambda_2} &= \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[ \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right)  \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} s \phi(c_{2ij}) \biggr] \\
+\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \biggl[\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad + E_Y\left(\left. \frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right)  \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} c_{2ij} \phi(c_{2ij}) \biggr] \\
+\frac{\partial A_{ij}}{\partial \lambda_1} &= \log(\alpha_1) \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(-s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \log(\alpha_2) \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij} \\
+\frac{\partial A_{ij}}{\partial \lambda_2} &= \log(1 - \alpha_1) \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(sY / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \log(1 - \alpha_2) \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij}.
 \end{align}
 
 \subsection{Hessian}\label{hessian}
@@ -1058,19 +1068,19 @@ The second derivatives of \(A_{ij}\) are
 & \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^2 - 1) \phi(c_{1ij}) \biggr. \nonumber \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} s(c_{1ij}^2 - 1) \phi(c_{1ij}) \biggr. \nonumber \\
 & \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})[(Y - \mu_{ij})^2 - 3 \eta_{ij}]}{\eta_{ij}^{3/2}} \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} (c_{2ij}^2 - 1) \phi(c_{2ij}) \biggr]
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s(c_{2ij}^2 - 1) \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_1} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_1} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(-s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_2} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij},  \lambda_1,\lambda_2\right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_2} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(s Y / \sigma_{ij}) \ \right| \sigma_{ij},  \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2} &= \frac{1}{4 \eta_{ij}^2} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^3 - 3 c_{1ij}) \phi(c_{1ij}) \biggr. \nonumber \\
@@ -1079,23 +1089,23 @@ The second derivatives of \(A_{ij}\) are
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_1} &= \frac{1}{2\eta_{ij}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-s Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
 & \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr] 
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_2} &= \frac{1}{2\eta_{ij}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(s Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
 & \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \lambda_1^2} &= \left[\log(\alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(-Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(-s Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(\alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
 \frac{\partial^2 A_{ij}}{\partial \lambda_2^2} &= \left[\log(1 - \alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(s Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(1 - \alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\ 
 \frac{\partial^2 A_{ij}}{\partial \lambda_1 \partial \lambda_2} &= \log(\alpha_1) \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-s Y / \sigma_{ij}) \log \Phi(s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \log(\alpha_2) \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}
 \end{align}
 

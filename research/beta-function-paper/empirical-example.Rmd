@@ -38,8 +38,8 @@ To demonstrate the interpretation of the beta-function selection model in practi
 #| cache: true
 
 library(future)
-plan(multisession, workers = 10)
-R <- 1999L
+plan(multisession, workers = 10L)
+R <- 9L
 set.seed(20260615)
 
 # Unadjusted model

@@ -1,5 +1,7 @@
 library(tidyverse)
 
+method_palette <- colorspace::qualitative_hcl(n = 5, h = c(50, -164), c = 95, l = 60)
+
 delta_selection_levels <- c(
   "Extreme (d1=0.02, d2=0.90)" = "0.02_0.90",
   "d1=0.10, d2=0.90" = "0.10_0.90",
