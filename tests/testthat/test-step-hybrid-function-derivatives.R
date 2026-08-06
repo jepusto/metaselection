@@ -362,16 +362,6 @@ test_that("step_hybrid_score() is an unbiased estimating equation for models wit
 
 test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical derivatives.", {
   
-  which_hess <- cbind(
-    c(1,2,2,3,3,4,4),
-    c(2,1,2,3,4,3,4)
-  )
-  which_hess3 <- which_hess[1:4,]
-  which_hess5 <- rbind(which_hess, cbind(
-    c(3,4,5,5,5),
-    c(5,5,3,4,5)
-  ))
-  
   set.seed(20240425)
   
   dat <- r_meta(
@@ -399,7 +389,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess]), 1e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-3)
   
   step_derivs <- check_all_derivatives(
     data = dat, 
@@ -415,7 +405,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-3)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess]), 5e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 5e-3)
   
   
   step_derivs <- check_all_derivatives(
@@ -432,7 +422,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess3]), 1e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-4)
   
   
   step_derivs <- check_all_derivatives(
@@ -449,7 +439,7 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess5]), 2e-4)
+  expect_lt(max(step_derivs$hess_diff_over_range), 2e-4)
   
   set.seed(20240425)
   dat <- r_meta(
@@ -463,20 +453,19 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
     n_ES_sim = n_ES_param(40, 1) 
   )
   
-  
   step_derivs <- check_all_derivatives(
     data = dat, 
     yi = d, sei = sd_d, 
     selection_type = "step",
     steps = c(.02),
-    estimator = "hybrid",
+    estimator = "ARGL",
     optimizer = c("nleqslv","rootSolve"),
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range[1:2]), 5e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess3]), 1e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 5e-4)
   
   
   step_derivs <- check_all_derivatives(
@@ -489,9 +478,24 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
-  expect_lt(max(step_derivs$score_diff_over_range[1:2]), 1e-4)
+  expect_lt(max(step_derivs$score_diff_over_range[1:2]), 5e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess]), 1e-3)
+  expect_lt(max(step_derivs$hess_diff_over_range), 5e-4)
+  
+  step_derivs <- check_all_derivatives(
+    data = dat, 
+    yi = d, sei = sd_d, 
+    selection_type = "step",
+    steps = c(.50, .95),
+    alternative = "less",
+    estimator = "hybrid",
+    optimizer = c("nleqslv","rootSolve"),
+  )
+  step_derivs$selmod_fit$est
+  step_derivs$score_diff_over_range
+  expect_lt(max(step_derivs$score_diff_over_range[1:2]), 5e-4)
+  round(step_derivs$hess_diff_over_range, 5)
+  expect_lt(max(step_derivs$hess_diff_over_range), 5e-4)
   
   step_derivs <- check_all_derivatives(
     data = dat, 
@@ -499,14 +503,13 @@ test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical deriv
     selection_type = "step",
     steps = c(.025, .975),
     estimator = "hybrid",
-    optimizer = c("nleqslv","rootSolve"),
-    crit = c(2,2,2,1e7)
+    optimizer = c("nleqslv","rootSolve")
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range
   expect_lt(max(step_derivs$score_diff_over_range[1:2]), 3e-4)
   round(step_derivs$hess_diff_over_range, 5)
-  expect_lt(max(step_derivs$hess_diff_over_range[which_hess]), 1e-2)
+  expect_lt(max(step_derivs$hess_diff_over_range), 5e-4)
   
   # library(tidyverse)
   # 

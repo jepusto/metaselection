@@ -10,33 +10,34 @@ formals(quick_boot_selection_model) <- quick_boot_selection_args
 #-------------------------------------------------------------------------------
 # Functions for comparing scores to numerical derivatives
 
-diffentiate_loglik <- function(
+differentiate_loglik <- function(
     param,
     f_ll, f_score, f_hess,
     steps,
     theta,
     from, to, N,
     yi,
-    sei
+    sei,
+    Hsgn
 ) {
   
   param_seq <- seq(from, to, length.out = N + 2)
   
   f_ll_ <- function(x) {
     theta[param] <- x
-    f_ll(theta = theta, yi = yi, sei = sei, steps = steps)
+    f_ll(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)
   }
   ll_seq <- sapply(param_seq, f_ll_)
   
   f_score_ <- function(x) {
     theta[param] <- x
-    f_score(theta = theta, yi = yi, sei = sei, steps = steps)
+    f_score(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)
   }
   score_seq <- sapply(param_seq, f_score_)
 
   f_hess_ <- function(x) {
     theta[param] <- x
-    f_hess(theta = theta, yi = yi, sei = sei, steps = steps)[param,]
+    f_hess(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)[,param]
   }
   hess_seq <- sapply(param_seq, f_hess_)
   delta <- param_seq[3:(N + 2)] - param_seq[1:N]
@@ -86,6 +87,7 @@ check_all_derivatives <- function(
   
   from <- selmod_fit$est$Est - crit * selmod_fit$est$SE
   to <- selmod_fit$est$Est + crit * selmod_fit$est$SE
+  Hsgn <- if (selmod_fit$alternative == "greater") 1L else -1L
   
   if (selection_type == "step") {
     if (estimator %in% c("ML","CML")) {
@@ -104,7 +106,7 @@ check_all_derivatives <- function(
   }
   
   derivs <- mapply(
-    diffentiate_loglik, 
+    differentiate_loglik, 
     param = params, from = from[params], to = to[params],
     MoreArgs = list(
       f_ll = f_ll,
@@ -114,6 +116,7 @@ check_all_derivatives <- function(
       theta = theta, 
       yi = yi,
       sei = sei,
+      Hsgn = Hsgn,
       N = N
     ),
     SIMPLIFY = FALSE

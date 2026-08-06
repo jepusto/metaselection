@@ -521,6 +521,20 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
     data = dat, 
     yi = d, sei = sd_d, 
     selection_type = "step",
+    steps = c(.50, .95),
+    estimator = "ML",
+    alternative = "less"
+  )
+  step_derivs$selmod_fit$est
+  step_derivs$score_diff_over_range
+  expect_lt(max(step_derivs$score_diff_over_range), 2e-3)
+  round(step_derivs$hess_diff_over_range, 5)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-2)
+  
+  step_derivs <- check_all_derivatives(
+    data = dat, 
+    yi = d, sei = sd_d, 
+    selection_type = "step",
     steps = c(.025, .975),
     estimator = "ML",
     crit = c(2,1,2,2)

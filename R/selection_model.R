@@ -130,6 +130,28 @@ fit_selection_model <- function(
     )
   } 
   
+  if (selection_type == "step") {
+    params <- parse_step_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  } else if (selection_type == "beta") {
+    params <- parse_beta_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, 
+      alpha = steps,
+      X = X, U = U, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  }   
+  
   
   if (estimator %in% c("ML","CML")) {
     
@@ -156,16 +178,6 @@ fit_selection_model <- function(
           control = optimizer_control
         )
         
-        params <- parse_step_params(
-          theta = theta,
-          yi = yi, sei = sei,
-          pi = pi, ai = ai,
-          steps = steps,
-          X = X, U = U, Z0 = Z0, Z = Z, 
-          Hsgn = Hsgn,
-          calc_Ai = FALSE
-        )
-        
       } else if (selection_type == "beta") {
         
         hess <- if (use_jac) beta_hessian else NULL
@@ -182,16 +194,6 @@ fit_selection_model <- function(
           priors = priors,
           method = optimizer,
           control = optimizer_control
-        )
-        
-        params <- parse_beta_params(
-          theta = theta,
-          yi = yi, sei = sei,
-          pi = pi, 
-          alpha = steps,
-          X = X, U = U, 
-          Hsgn = Hsgn,
-          calc_Ai = FALSE
         )
         
       }
