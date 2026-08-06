@@ -287,7 +287,7 @@ calculate_S_zeta_ij <- function(
 #-------------------------------------------------------------------------------
 # Calculate H_zeta
 
-dB_dmu_eta <- function(k,H,c_mat, Hsgn) {
+dB_dmu_eta <- function(k, H, c_mat, Hsgn) {
   d1_mat <- cbind(rep(0,k), dnorm(c_mat), rep(0,k))
   d2_mat <- cbind(rep(0,k), c_mat * d1_mat[,2:H,drop=FALSE], rep(0,k))
   
@@ -311,13 +311,14 @@ calculate_H_zeta <- function(
   U,
   Z0,
   Z,
+  Hsgn,
   ai,
   z0_dim,
   z_dim,
   lambda0,
   lambda,
   lambda_full,
-  dB = dB_dmu_eta(k, H, c_mat)
+  dB = dB_dmu_eta(k = k, H = H, c_mat = c_mat, Hsgn = Hsgn)
 ){
   
   eta_sqrt <- sqrt(eta)

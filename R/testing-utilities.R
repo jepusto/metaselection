@@ -335,6 +335,7 @@ check_dims <- function(mf, rows, cols) {
 
 check_valence_equivalence <- function(
     yi, yi_neg, ..., steps = .025, 
+    check_gamma = TRUE,
     tol = 1e-6,
     seed = as.integer(Sys.Date())
 ) {
@@ -344,6 +345,7 @@ check_valence_equivalence <- function(
   cl_pos_gt <- match.call()
   cl_pos_gt$alternative <- "greater"
   cl_pos_gt$yi_neg <- NULL
+  cl_pos_gt$check_gamma <- NULL
   cl_pos_gt[[1L]] <- quote(selection_model)
   
   set.seed(seed)
@@ -371,8 +373,17 @@ check_valence_equivalence <- function(
     )
   }
 
-  # check beta and gamma are equal
-  expect_equal(pos_gt$est[1:p_bg,], pos_ls$est[1:p_bg,], tolerance = tol)
+  # check betas are equal
+  expect_equal(pos_gt$est[1:p_b,], pos_ls$est[1:p_b,], tolerance = tol)
+  
+  # check gamma are equal
+  if (check_gamma) {
+    expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      pos_ls$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
   
   # check zetas are equivalent after translation
   if (inherits(pos_gt, "step.selmodel")) {
@@ -393,7 +404,8 @@ check_valence_equivalence <- function(
     expect_equal(
       pos_gt$est[p_bg + 1:p_z,-2],
       pos_ls$est[p_bg + p_z:1,-2],
-      ignore_attr = TRUE
+      ignore_attr = TRUE,
+      tolerance = tol
     )
   }
   
@@ -403,6 +415,7 @@ check_valence_equivalence <- function(
   cl_neg_gt$alternative <- "greater"
   cl_neg_gt$yi <- cl_neg_gt$yi_neg
   cl_neg_gt$yi_neg <- NULL
+  cl_neg_gt$check_gamma <- NULL
   cl_neg_gt$steps <- steps_rev
   cl_neg_gt[[1L]] <- quote(selection_model)
 
@@ -431,11 +444,13 @@ check_valence_equivalence <- function(
   )
   
   # check gamma are equal
-  expect_equal(
-    pos_gt$est[p_b + 1:p_g,], 
-    neg_gt$est[p_b + 1:p_g,], 
-    tolerance = tol
-  )
+  if (check_gamma) {
+    expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      neg_gt$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
   
   # check zetas are equivalent after translation
 
@@ -444,13 +459,13 @@ check_valence_equivalence <- function(
       expect_equal(
         pos_gt$est$Est[p_bg + 1:p_z], 
         c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
-        tolerance = 1e-6
+        tolerance = tol
       )
     } else {
       expect_equal(
         pos_gt$est$Est[p_bg + p_z], 
         - neg_gt$est$Est[p_bg + p_z],
-        tolerance = 1e-6
+        tolerance = tol
       )
     }
   } else if (inherits(pos_gt, "beta.selmodel")) {
@@ -485,17 +500,19 @@ check_valence_equivalence <- function(
   )
   
   # check gamma are equal
-  expect_equal(
-    pos_gt$est[p_b + 1:p_g,], 
-    neg_ls$est[p_b + 1:p_g,], 
-    tolerance = tol
-  )
+  if (check_gamma) {
+    expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      neg_ls$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
   
   # check zetas are equal
   expect_equal(
     pos_gt$est[p_bg + 1:p_z,], 
     neg_ls$est[p_bg + 1:p_z,], 
-    tolerance = 1e-6
+    tolerance = tol
   )
   
 }

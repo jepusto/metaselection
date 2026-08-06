@@ -59,7 +59,7 @@ $$
 \mat{J}_j^{\gamma \zeta_h} &= - \sum_{i=1}^{k_j} a_{ij} \frac{\tau^2 \lambda_h}{w_{ij}^2}  \left(\frac{(y_{ij} - \mu_{ij})^2 - \eta_{ij}}{2\eta_{ij}^2}\right)\\  
 \mat{J}_j^{\zeta_h \bs\beta'} &= \left(\mat{H}_{j}^{\bs\beta \zeta_h}\right)' \\
 \mat{J}_j^{\zeta_h \gamma} &= \mat{H}_{j}^{\gamma \zeta_h} \\
-\mat{J}_j^{\zeta_f \zeta_h} &= \mat{H}_{j}^{\zeta_f \zeta_h'},
+\mat{J}_j^{\zeta_f \zeta_h} &= \mat{H}_{j}^{\zeta_f \zeta_h},
 \end{aligned}
 $$
 with $\mat{H}_{j}^{\bs\beta \zeta_h}$, $\mat{H}_{j}^{\gamma \zeta_h}$, and $\mat{H}_{j}^{\zeta_f \zeta_h}$ as given in Equations \@ref(eq:H-beta-zeta), \@ref(eq:H-gamma-zeta), and \@ref(eq:H-zeta-zeta).
