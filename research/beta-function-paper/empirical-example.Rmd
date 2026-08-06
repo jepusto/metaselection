@@ -39,7 +39,7 @@ To demonstrate the interpretation of the beta-function selection model in practi
 
 library(future)
 plan(multisession, workers = 10L)
-R <- 9L
+R <- 1999L
 set.seed(20260615)
 
 # Unadjusted model

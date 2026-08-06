@@ -253,7 +253,7 @@ Correspondence concerning this article should be addressed to Martyna Citkowicz,
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} American Institutes for Research\\\textsuperscript{2} University of Wisconsin-Madison}
 
-\note{~\newline August 04, 2026}
+\note{~\newline August 05, 2026}
 
 \abstract{%
 Meta-analysts seek to draw generalizable inferences by pooling findings across available studies. Such efforts are hampered by selective reporting of study findings, which distorts meta-analytic inferences when statistically significant results are reported preferentially. Many techniques are available for investigating selective reporting in meta-analyses of independent effects, but psychological meta-analyses routinely involve dependent data structures, as arise when primary studies report results for multiple outcomes. Recent methodological developments that can accommodate dependent effects have focused on step-function selection models, in which the probability of reporting depends on whether a finding's p-value falls above or below pre-specified thresholds. We propose an alternative model in which the reporting probability follows a flexible, truncated beta function, avoiding the need to specify a priori thresholds. Estimation of the model accommodates dependent effect sizes using cluster-robust variance estimation or clustered bootstrapping. We demonstrate the proposed approach by re-analyzing a published meta-analysis. Through an extensive simulation study, we evaluate the performance of the truncated beta model versus standard meta-analytic methods and versus step-function models to assess robustness to selection function misspecification. Results show that the beta-density model yields negligible bias across diverse conditions and outperforms standard alternatives when selective reporting is present, although simpler step-function models can be more precise under mild selection. Clustered bootstrap confidence intervals provide superior coverage compared to cluster-robust variance estimation. Although conventional methods remain more precise when selection is absent, the truncated beta selection model serves as a useful tool for sensitivity analysis and estimation in larger dataset that include dependent effects.
@@ -402,7 +402,7 @@ We first used the \texttt{rma.uni()} function from the \texttt{metafor} package 
 The overall estimate of the average effect using the unadjusted model was 0.42, cluster-robust 95\% CI {[}0.36, 0.47{]}, significantly different from zero \((p <0.001)\).
 The unadjusted estimate of heterogeneity was \(\tau = 0.29\).
 
-To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package (Pustejovsky, Joshi, \& Citkowicz, 2025) to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two different step-function selection models---a one-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with two-stage cluster bootstrapping (\(B = 9\) bootstraps) used to account for dependent effect sizes.
+To adjust for selective reporting, we used the \texttt{selection\_model()} function from the \texttt{metaselection} package (Pustejovsky, Joshi, \& Citkowicz, 2025) to fit the beta-density selection model (with default truncation thresholds of \(\alpha_1 = .025, \alpha_2 = .975\)) and two different step-function selection models---a one-step model (\(\alpha_1 = 0.025\)) and a two-step model (\(\alpha_1 = .025, \alpha_2 = .5\)). Consistent with the methods described above, all three selection models were estimated using the PML approach and an independent-effects working model, with two-stage cluster bootstrapping (\(B = 1999\) bootstraps) used to account for dependent effect sizes.
 
 \begin{table}
 \centering
@@ -416,17 +416,17 @@ Parameter & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI & Est. (SE) & 95\% CI\\
 \midrule
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{Summary meta-analysis}}\\
-\hspace{1em}$\beta_0$ & 0.28 (0.08) & {}[0.21, 0.35] & 0.42 (0.04) & {}[0.37, 0.50] & 0.36 (0.06) & {}[0.18, 0.43]\\
-\hspace{1em}$\tau$ & 0.38 (0.18) & {}[0.34, 0.40] & 0.29 (0.12) & {}[0.26, 0.29] & 0.33 (0.15) & {}[0.30, 0.36]\\
-\hspace{1em}$\lambda_1$ & 1.00 (0.14) & {}[0.67, 1.18] & 1.10 (0.32) & {}[0.82, 2.06] & 1.06 (0.28) & {}[0.49, 1.42]\\
-\hspace{1em}$\lambda_2$ & 1.74 (0.15) & {}[1.27, 2.06] &  &  & 0.31 (0.65) & {}[0.10, 0.53]\\
+\hspace{1em}$\beta_0$ & 0.28 (0.08) & {}[0.06, 0.43] & 0.42 (0.04) & {}[0.34, 0.50] & 0.36 (0.06) & {}[0.22, 0.46]\\
+\hspace{1em}$\tau$ & 0.38 (0.18) & {}[0.30, 0.46] & 0.29 (0.12) & {}[0.25, 0.33] & 0.33 (0.15) & {}[0.28, 0.39]\\
+\hspace{1em}$\lambda_1$ & 1.00 (0.14) & {}[0.70, 1.33] & 1.10 (0.32) & {}[0.52, 2.25] & 1.06 (0.28) & {}[0.55, 1.95]\\
+\hspace{1em}$\lambda_2$ & 1.74 (0.15) & {}[1.26, 2.58] &  &  & 0.31 (0.65) & {}[0.07, 1.16]\\
 \addlinespace[0.3em]
 \multicolumn{7}{l}{\textbf{Moderator analysis}}\\
-\hspace{1em}$\beta_0$ & 0.00 (0.13) & {}[-0.23, 0.20] & 0.26 (0.05) & {}[0.17, 0.34] & 0.14 (0.08) & {}[-0.03, 0.25]\\
-\hspace{1em}$\beta_1$ & 0.34 (0.11) & {}[0.13, 0.62] & 0.19 (0.05) & {}[0.10, 0.25] & 0.26 (0.07) & {}[0.14, 0.38]\\
-\hspace{1em}$\tau$ & 0.36 (0.18) & {}[0.31, 0.43] & 0.28 (0.12) & {}[0.26, 0.30] & 0.32 (0.15) & {}[0.27, 0.39]\\
-\hspace{1em}$\lambda_1$ & 0.98 (0.14) & {}[0.83, 1.19] & 1.06 (0.31) & {}[0.57, 1.62] & 1.02 (0.28) & {}[0.67, 1.86]\\
-\hspace{1em}$\lambda_2$ & 1.76 (0.15) & {}[1.29, 2.41] &  &  & 0.28 (0.66) & {}[0.07, 0.50]\\
+\hspace{1em}$\beta_0$ & 0.00 (0.13) & {}[-0.35, 0.24] & 0.26 (0.05) & {}[0.16, 0.38] & 0.14 (0.08) & {}[-0.05, 0.30]\\
+\hspace{1em}$\beta_1$ & 0.34 (0.11) & {}[0.14, 0.60] & 0.19 (0.05) & {}[0.08, 0.29] & 0.26 (0.07) & {}[0.10, 0.42]\\
+\hspace{1em}$\tau$ & 0.36 (0.18) & {}[0.29, 0.44] & 0.28 (0.12) & {}[0.24, 0.32] & 0.32 (0.15) & {}[0.27, 0.38]\\
+\hspace{1em}$\lambda_1$ & 0.98 (0.14) & {}[0.67, 1.31] & 1.06 (0.31) & {}[0.50, 2.15] & 1.02 (0.28) & {}[0.54, 1.89]\\
+\hspace{1em}$\lambda_2$ & 1.76 (0.15) & {}[1.25, 2.62] &  &  & 0.28 (0.66) & {}[0.07, 1.02]\\
 \bottomrule
 \multicolumn{7}{l}{\rule{0pt}{1em}\textit{Note: }}\\
 \multicolumn{7}{l}{\rule{0pt}{1em}Est. = estimate; SE = bootstrap standard error; CI = percentile boodstrap confidence interval.}\\
