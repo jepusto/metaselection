@@ -9,10 +9,10 @@ selection_model(
   yi,
   vi,
   sei,
-  pi,
   ai,
   cluster,
   selection_type = c("step", "beta"),
+  alternative = "greater",
   steps = NULL,
   mean_mods = NULL,
   var_mods = NULL,
@@ -31,6 +31,7 @@ selection_model(
   bootstrap = "none",
   R = 1999,
   retry_bootstrap = 0L,
+  valence_check = TRUE,
   ...
 )
 }
@@ -46,9 +47,6 @@ data}
 \item{sei}{vector of sampling standard errors. If \code{sei} is specified,
 then the \code{vi} argument must be omitted.}
 
-\item{pi}{optional vector of one-sided p-values. If not specified, p-values
-will be computed from \code{yi} and \code{sei}.}
-
 \item{ai}{optional vector of analytic weights.}
 
 \item{cluster}{vector indicating which observations belong to the same
@@ -56,6 +54,11 @@ cluster.}
 
 \item{selection_type}{character string specifying the type selection model to
 estimate, with possible options \code{"step"} or \code{"beta"}.}
+
+\item{alternative}{character string specifying the direction of the
+alternative hypothesis used in computing p-values for the observed effect
+sizes, with possible options \code{"greater"} (the default) or
+\code{"less"}.}
 
 \item{steps}{If \code{selection_type = "step"}, a numeric vector of one or
 more values specifying the thresholds (or steps) where the selection
@@ -79,8 +82,7 @@ probability of selection for p-values below the lowest threshold value of
 
 \item{priors}{a \code{selmodel_prior} object that defines priors (i.e.,
 penalty terms) for model parameters, with a default of
-\code{define_priors()}. Set to \code{NULL} to obtain unpenalized
-estimates.}
+\code{define_priors()}. Set to \code{NULL} to obtain unpenalized estimates.}
 
 \item{subset}{optional logical expression indicating a subset of observations
 to use for estimation.}
@@ -133,6 +135,12 @@ clustered bootstrap.}
 
 \item{retry_bootstrap}{number of times to re-draw a bootstrap sample in the
 event of non-convergence, with a default of \code{0}.}
+
+\item{valence_check}{logical value controlling whether to check that the
+valence of the median effect size estimate is consistent with the direction
+of the specified \code{alternative}. If \code{TRUE} (the default), a
+warning will be issued when most effect size estimates have the opposite
+sign of \code{alternative}. Set to \code{FALSE} to suppress the warning.}
 
 \item{...}{further arguments passed to \code{simhelpers::bootstrap_CIs}.}
 }
