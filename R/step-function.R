@@ -7,7 +7,7 @@ step_loglik <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
     ai = NULL,                                  # analytic weight 
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -18,6 +18,7 @@ step_loglik <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                           # valence of alternative hypothesis used to compute p-values
     priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
@@ -35,6 +36,7 @@ step_loglik <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
   
@@ -66,7 +68,7 @@ step_score <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values  
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values  
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -77,6 +79,7 @@ step_score <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                           # valence of alternative hypothesis used to compute p-values
     priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE                       # whether to return matrix of score contributions
 ) {
@@ -95,6 +98,7 @@ step_score <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
   
@@ -104,7 +108,7 @@ step_score <- function(
   #----------------------------------------------------------
   # Derivatives of A w/r/t mu, eta, lambda_h (Eq. 21-23)
   
-  dB <- dB_dmu_eta(k = k, H = H, c_mat = params$c_mat)
+  dB <- dB_dmu_eta(k = k, H = H, c_mat = params$c_mat, Hsgn = Hsgn)
   dA_dmu <- rowSums(dB$dmu * params$lambda_full) / sqrt(params$eta)
   dA_deta <- rowSums(dB$deta * params$lambda_full) / (2 * params$eta)
   
@@ -129,14 +133,16 @@ step_score <- function(
   if (!is.null(U)) S_gamma_ij <- U * S_gamma_ij
   
   # score contribution for lambda_h (Eq. 17) should be z_dim[h] X k
-  scores <- calculate_S_zeta_ij(B_mat = params$B_mat,
-                                  Ai = params$Ai,
-                                  weight_vec = params$weight_vec,
-                                  cats = params$cats,
-                                  Z0 = Z0,
-                                  Z = Z,
-                                  lambda0 = params$lambda0,
-                                  lambda = params$lambda)
+  scores <- calculate_S_zeta_ij(
+    B_mat = params$B_mat,
+    Ai = params$Ai,
+    weight_vec = params$weight_vec,
+    cats = params$cats,
+    Z0 = Z0,
+    Z = Z,
+    lambda0 = params$lambda0,
+    lambda = params$lambda
+  )
   
   S_zeta_ij <- scores$S_zeta_ij
   S_zeta0_ij <- if (is.null(Z0)) NULL else scores$S_zeta0_ij
@@ -191,7 +197,7 @@ step_hessian <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values  
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values  
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -202,6 +208,7 @@ step_hessian <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                           # valence of alternative hypothesis used to compute p-values
     priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
@@ -219,6 +226,7 @@ step_hessian <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
   
@@ -236,7 +244,7 @@ step_hessian <- function(
   
   # First derivatives of A w/r/t mu, eta, lambda_h (Eq. 21-23)
   
-  dB_dmu <- d1_mat[,2:(H+1L),drop=FALSE] - d1_mat[,1:H,drop=FALSE]
+  dB_dmu <- Hsgn * (d1_mat[,2:(H+1L),drop=FALSE] - d1_mat[,1:H,drop=FALSE])
   dA_dmu <- rowSums(dB_dmu * params$lambda_full) / sqrt(params$eta)
   
   dB_deta <- d2_mat[,2:(H+1L),drop=FALSE] - d2_mat[,1:H,drop=FALSE]
@@ -254,7 +262,7 @@ step_hessian <- function(
   dA_dmu_dmu <- rowSums(dB_deta * params$lambda_full) / params$eta
   
   # dA_dmu_deta is k * 1
-  dB_d3 <- d3_mat[,2:(H+1L)] - d3_mat[,1:H]
+  dB_d3 <- Hsgn * (d3_mat[,2:(H+1L)] - d3_mat[,1:H])
   dA_dmu_deta <- rowSums(dB_d3 * params$lambda_full) / (2 * params$eta^1.5)
   
   # dA_deta_deta is k * 1

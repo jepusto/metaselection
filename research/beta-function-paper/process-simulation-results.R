@@ -1,5 +1,7 @@
 library(tidyverse)
 
+method_palette <- colorspace::qualitative_hcl(n = 5, h = c(50, -164), c = 95, l = 60)
+
 delta_selection_levels <- c(
   "Extreme (d1=0.02, d2=0.90)" = "0.02_0.90",
   "d1=0.10, d2=0.90" = "0.10_0.90",
@@ -328,7 +330,7 @@ RMSE_comparison_plot <- function(data, x_method, y_method, measure, col_factor =
     geom_hline(yintercept = 1) + 
     geom_point(alpha = .5, position = position_jitter(width = 0.2)) +
     expand_limits(y = 0.5) + 
-    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3))+
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 3), guide = guide_axis(n.dodge = 2))+
     scale_y_continuous(transform = "log2") + 
     scale_color_brewer(palette = "Dark2", guide = guide_legend(nrow=legend_rows)) +
     facet_grid(tau ~ mean_smd, 

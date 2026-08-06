@@ -5,17 +5,18 @@ step_weighted_logpartlik <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
     ai = NULL,                                  # analytic weight 
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
-    zeta0 = NULL,                              # selection model coefficients
-    zeta = NULL,                               # selection model coefficients
+    zeta0 = NULL,                               # selection model coefficients
+    zeta = NULL,                                # selection model coefficients
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
@@ -34,12 +35,15 @@ step_weighted_logpartlik <- function(
     X = X,
     U = U,
     Z0 = Z0,
-    Z = Z
+    Z = Z,
+    Hsgn = Hsgn
   )
+  
+  weight_vec <- if (is.null(ai)) params$weight_vec else params$weight_vec * ai
   
   # likelihood contributions
   log_lik_i <- ((yi - params$mu)^2 / (-2 * params$eta) - log(params$eta) / 2 ) / params$weight_vec
-
+  
   # weighted log likelihood (Eq. 51)
   log_lik <- if (is.null(ai)) sum(log_lik_i) else sum(ai * log_lik_i)
   
@@ -67,7 +71,7 @@ step_selection_constraint <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -78,6 +82,7 @@ step_selection_constraint <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     priors = NULL,                              # selmodel_prior object to specify priors
     contributions = FALSE,                      # not used
     negate = FALSE                              # not used
@@ -97,6 +102,7 @@ step_selection_constraint <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
 
@@ -124,13 +130,14 @@ step_hybrid_profile_score <- function(
     theta,                                      # parameter vector excluding beta
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
     ai = NULL,                                  # analytic weight
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
@@ -147,6 +154,7 @@ step_hybrid_profile_score <- function(
     yi = yi, sei = sei, pi = pi, ai = ai,
     steps = steps, 
     X = X, U = U, Z0 = Z0, Z = Z,
+    Hsgn = Hsgn,
     priors = priors
   )  
   
@@ -161,7 +169,7 @@ step_hybrid_score <- function(
   theta,                                      # full parameter vector
   yi,                                         # outcome vector
   sei,                                        # sampling standard errors
-  pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+  pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
   ai = NULL,                                  # analytic weight
   beta = NULL,                                # mean parameter coefficients
   gamma = NULL,                               # variance component coefficients
@@ -172,6 +180,7 @@ step_hybrid_score <- function(
   U = NULL,                                   # variance component design matrix
   Z0 = NULL,                                  # selection model design matrix for highest step
   Z = NULL,                                   # selection model design matrices for each cut-point
+  Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
   priors = NULL,                              # selmodel_prior object to specify priors
   contributions = FALSE,                      # whether to return matrix of score contributions,
   negate = FALSE                              # whether to return the negative of the scores
@@ -191,6 +200,7 @@ step_hybrid_score <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     priors = priors,
     calc_Ai = TRUE
   )
@@ -270,13 +280,14 @@ step_hybrid_profile_jacobian <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values  
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values  
     ai = NULL,                                  # analytic weight
     steps = .025,                               # steps / cut-points
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
@@ -293,6 +304,7 @@ step_hybrid_profile_jacobian <- function(
     yi = yi, sei = sei, pi = pi, ai = ai,
     steps = steps, 
     X = X, U = U, Z0 = Z0, Z = Z,
+    Hsgn = Hsgn,
     priors = priors
   )
   
@@ -304,7 +316,7 @@ step_hybrid_jacobian <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values  
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values  
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -315,6 +327,7 @@ step_hybrid_jacobian <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     priors = NULL                               # selmodel_prior object to specify priors
 ) {
   
@@ -332,6 +345,7 @@ step_hybrid_jacobian <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
   
@@ -357,15 +371,19 @@ step_hybrid_jacobian <- function(
   J_gamma_gamma <- -1 * matrix_diag_crossprod(d = ai * J_gamma_gamma_right, A = U, B = U)
   
   if (is.null(Z0)) {
-    J_beta_zeta_right <- params$lambda * zeta_i / params$weight_vec^2
-    J_gamma_zeta_right <-  params$tausq * params$lambda * (zeta_i^2 - 1 / params$eta) / (2 * params$weight_vec^2)
+    dw_dlambda <- model.matrix(~ params$cats)[,-1]
+    lambda_dw_wsq <- (params$lambda * dw_dlambda) / params$weight_vec^2
+    J_beta_zeta_right <- lambda_dw_wsq * zeta_i
+    J_gamma_zeta_right <-  params$tausq * lambda_dw_wsq * (zeta_i^2 - 1 / params$eta) / 2
     
     Z_full <- Z
     z_index <- c(0,cumsum(params$z_dim))
     
   } else {
-    J_beta_zeta_right <- params$lambda_full * zeta_i / params$weight_vec^2
-    J_gamma_zeta_right <-  params$tausq * params$lambda_full * (zeta_i^2 - 1 / params$eta) * (2 * params$weight_vec^2)
+    dw_dlambda <- model.matrix(~ 0 + params$cats)
+    lambda_dw_wsq <- (params$lambda_full * dw_dlambda) / params$weight_vec^2
+    J_beta_zeta_right <- lambda_dw_wsq * zeta_i
+    J_gamma_zeta_right <-  params$tausq * lambda_dw_wsq * (zeta_i^2 - 1 / params$eta) / 2
     
     Z_full <- if (is.list(Z)) c(list(Z0),Z) else list(Z0, Z)
     z_index <- c(0,cumsum(c(params$z0_dim, params$z_dim)))
@@ -419,6 +437,7 @@ step_hybrid_jacobian <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     ai = ai,
     z0_dim = params$z0_dim,
     z_dim = params$z_dim,
@@ -460,7 +479,7 @@ step_selection_constraint_grad <- function(
     theta,                                      # full parameter vector
     yi,                                         # outcome vector
     sei,                                        # sampling standard errors
-    pi = pnorm(yi / sei, lower.tail = FALSE),   # one-sided p-values
+    pi = pnorm(Hsgn * yi / sei, lower.tail = FALSE),   # one-sided p-values
     ai = NULL,                                  # analytic weight
     beta = NULL,                                # mean parameter coefficients
     gamma = NULL,                               # variance component coefficients
@@ -471,6 +490,7 @@ step_selection_constraint_grad <- function(
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
     Z = NULL,                                   # selection model design matrices for each cut-point
+    Hsgn = 1L,                                  # valence of alternative hypothesis used to compute p-values
     contributions = FALSE                       # not used
 ) {
  
@@ -488,6 +508,7 @@ step_selection_constraint_grad <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     calc_Ai = TRUE
   )
   
@@ -508,6 +529,7 @@ step_selection_constraint_grad <- function(
     U = U,
     Z0 = Z0,
     Z = Z,
+    Hsgn = Hsgn,
     ai = ai,
     z0_dim = params$z0_dim,
     z_dim = params$z_dim,

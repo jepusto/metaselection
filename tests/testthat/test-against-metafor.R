@@ -33,6 +33,12 @@ test_that("step_loglik() and step_score() agree with metafor::selmodel().", {
     tol_score = 1e-4, tol_param = 5e-4,
   )
   
+  # # Random effects 4-parameter selection model with alternative direction, no predictors
+  # check_against_metafor_selmodel(
+  #   RE1, alternative = "less", steps = c(0.5, 0.95),
+  #   tol_score = 1e-4, tol_param = 5e-4,
+  # )
+  
   # Random effects 3-parameter selection model with meta-regression
   RE2 <- rma.uni(yi = yi, sei = sei, mods = ~ Color_Match + Gender, 
                  data = dat, method = "ML")
@@ -130,5 +136,57 @@ test_that("beta_loglik() and beta_score() agree with metafor::selmodel().", {
     RE2, type = "beta", steps = c(.0001, .9999), 
     tol_LRT = 2e-3, tol_score = 2e-2, tol_SE = Inf
   )
+  
+})
+
+test_that("selection_model() agrees with metafor::selmodel() with subset argument.", {
+  
+  # 4PSM where selection model only applies to non-pre-registered effects
+  dat$not_PR <- 1L * (dat$Preregistered == "Not Pre-Registered")
+  steps <- c(.025, .50)
+  res <- rma(yi, vi, data=dat, method="ML")
+  
+  metafor_fit <- selmodel(
+    res, 
+    type="stepfun", alternative="greater", 
+    steps=steps,
+    subset=Preregistered=="Not Pre-Registered"
+  ) |>
+    get_selmodel_params()
+  
+  pkg_fit <- 
+    selection_model(
+      data = dat, 
+      yi = yi, sei = sei,
+      steps = steps,
+      sel_mods = ~ 0 + not_PR,
+      priors = NULL
+    )
+  
+  expect_equal(pkg_fit$est$Est, metafor_fit, tolerance = 1e-4)
+
+  # Moderated 3PSM where selection model only applies to non-pre-registered effects
+  res <- 
+  
+  metafor_fit <- 
+    rma(yi, vi, mods = ~ Gender + Design, data=dat, method="ML") |>
+    selmodel(
+      type="stepfun", alternative="greater", 
+      steps=steps[1],
+      subset=Preregistered=="Not Pre-Registered"
+    ) |>
+    get_selmodel_params()
+  
+  pkg_fit <- 
+    selection_model(
+      data = dat, 
+      yi = yi, sei = sei,
+      steps = steps[1],
+      mean_mods = ~ Gender + Design,
+      sel_mods = ~ 0 + not_PR,
+      priors = NULL
+    )
+  
+  expect_equal(pkg_fit$est$Est, metafor_fit, tolerance = 1e-4)
   
 })

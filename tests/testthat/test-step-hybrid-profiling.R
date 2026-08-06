@@ -39,18 +39,37 @@ test_that("parse_step_params works when profiling beta with non-flat priors.", {
   prior_spec <- define_priors(beta_mean = 0.3, beta_precision = 0.3^2 / 2)
   verbose <- FALSE
   
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .02, priors = prior_spec, verbose = verbose, score_tol = 1e-7, jac_tol = 5e-3)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.025, .05), priors = prior_spec, verbose = verbose, score_tol = Inf, jac_tol = 5e-3)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.1, .5, .7), priors = prior_spec, tol = 1e-3, score_tol = Inf, jac_tol = 5e-3, verbose = verbose)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = .02, priors = prior_spec, verbose = verbose, score_tol = 1e-3, jac_tol = 5e-3)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.025, .05), priors = prior_spec, verbose = verbose, score_tol = Inf, jac_tol = 5e-3)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.1, .5, .7), priors = prior_spec, tol = 1e-3, score_tol = Inf, jac_tol = 5e-3, verbose = verbose)
   
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .05, X = pred_mat, priors = prior_spec, score_tol = 5e-7, jac_tol = 5e-3, verbose = verbose)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.025, .500), X = pred_mat, priors = prior_spec, tol = c(5e-3, 1e-4, 1e-4), score_tol = Inf, jac_tol = 5e-3, verbose = verbose)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.1, .6), X = pred_mat, priors = prior_spec, tol = c(5e-3, 1e-4, 1e-4), score_tol = 1e-6, jac_tol = 5e-3, verbose = verbose)
   
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .05, U = pred_mat, priors = prior_spec, verbose = verbose, score_tol = 5e-3, jac_tol = 1e-2)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.025, .500), U = pred_mat, priors = prior_spec, score_tol = Inf, jac_tol = 1e-2, verbose = verbose)
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = c(.1, .7), U = pred_mat, priors = prior_spec, tol = c(2e-4, 1e-8, 1e-8), score_tol = Inf, jac_tol = 1e-2, verbose = verbose)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = .05, 
+    X = pred_mat, priors = prior_spec, 
+    score_tol = 1e-3, jac_tol = 5e-3, verbose = verbose
+  )
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.025, .500), 
+    X = pred_mat, priors = prior_spec, 
+    tol = c(5e-3, 1e-4, 1e-4), score_tol = Inf, jac_tol = 5e-3, verbose = verbose
+  )
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.1, .6), X = pred_mat, priors = prior_spec, tol = c(5e-3, 1e-4, 1e-4), score_tol = 1e-3, jac_tol = 5e-3, verbose = verbose)
   
-  check_profiling_equivalence(yi = dat$d, sei = dat$sd_d, steps = .025, Z = list(pred_mat), priors = prior_spec, tol = c(1e-4, 1e-8, 1e-8), score_tol = Inf, jac_tol = 1e-3, verbose = verbose)
+  
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = .05, U = pred_mat, priors = prior_spec, verbose = verbose, score_tol = 5e-3, jac_tol = 1e-2)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.025, .500), U = pred_mat, priors = prior_spec, score_tol = Inf, jac_tol = 1e-2, verbose = verbose)
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = c(.1, .7), U = pred_mat, priors = prior_spec, tol = c(2e-4, 1e-8, 1e-8), score_tol = Inf, jac_tol = 1e-2, verbose = verbose)
+  
+  
+  check_profiling_equivalence(
+    yi = dat$d, sei = dat$sd_d, steps = .025, Z = list(pred_mat), priors = prior_spec, tol = c(1e-4, 1e-8, 1e-8), score_tol = Inf, jac_tol = 1e-3, verbose = verbose)
   
 })

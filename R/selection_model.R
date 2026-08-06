@@ -95,6 +95,7 @@ fit_selection_model <- function(
   U = NULL, 
   Z0 = NULL, 
   Z = NULL, 
+  Hsgn = 1L,
   priors = NULL,
   subset = NULL,
   vcov_type = "robust",
@@ -118,6 +119,8 @@ fit_selection_model <- function(
     if (!is.null(Z)) Z <- lapply(Z, \(z) z[subset,,drop=FALSE])
   }
   
+  x_index <- if (is.null(X)) 1L else 1:ncol(X)
+  
   if (is.null(theta)) {
     # Compute starting values for parameters if not provided
     theta <- find_starting_values(
@@ -125,16 +128,30 @@ fit_selection_model <- function(
       selection_type = selection_type, steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z
     )
-  }
+  } 
   
-  params <- parse_step_params(
-    theta = theta,
-    yi = yi, sei = sei,
-    pi = pi, ai = ai,
-    steps = steps,
-    X = X, U = U, Z0 = Z0, Z = Z, 
-    calc_Ai = FALSE
-  )
+  if (selection_type == "step") {
+    params <- parse_step_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  } else if (selection_type == "beta") {
+    params <- parse_beta_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, 
+      alpha = steps,
+      X = X, U = U, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  }   
+  
   
   if (estimator %in% c("ML","CML")) {
     
@@ -155,6 +172,7 @@ fit_selection_model <- function(
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, Z0 = Z0, Z = Z,
+          Hsgn = Hsgn,
           priors = priors,
           method = optimizer,
           control = optimizer_control
@@ -172,6 +190,7 @@ fit_selection_model <- function(
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, 
+          Hsgn = Hsgn,
           priors = priors,
           method = optimizer,
           control = optimizer_control
@@ -210,6 +229,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       jacobian = TRUE
     )
@@ -255,7 +275,6 @@ fit_selection_model <- function(
     
     info <- list()
     
-    x_index <- if (is.null(X)) 1L else 1:ncol(X)
     theta <- theta[-x_index]
      
     jac <- if (use_jac) step_hybrid_profile_jacobian else NULL
@@ -267,6 +286,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       jacobian = TRUE
     )
@@ -309,7 +329,7 @@ fit_selection_model <- function(
     theta[x_index] <- params$beta
 
     names(theta) <- params$H_names
-    
+
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
@@ -331,14 +351,16 @@ fit_selection_model <- function(
       theta = theta,  
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U, Z0 = Z0, Z = Z
+      X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn
     ) - norm_const
     
     wt_partial_log_lik <- step_weighted_logpartlik(
       theta = theta,  
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U, Z0 = Z0, Z = Z
+      X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn
     )
     
   } else if (selection_type == "beta") {
@@ -347,7 +369,8 @@ fit_selection_model <- function(
       theta, 
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U
+      X = X, U = U,
+      Hsgn = Hsgn
     ) - norm_const
     
     wt_partial_log_lik <- NULL
@@ -363,6 +386,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, Z0 = Z0, Z = Z, 
+                           Hsgn = Hsgn,
                            priors = priors,
                            contributions = TRUE)
       
@@ -372,6 +396,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, 
+                           Hsgn = Hsgn,
                            priors = priors,
                            contributions = TRUE)
       
@@ -384,6 +409,7 @@ fit_selection_model <- function(
                                 yi = yi, sei = sei, pi = pi, ai = ai,
                                 steps = steps,
                                 X = X, U = U, Z0 = Z0, Z = Z, 
+                                Hsgn = Hsgn,
                                 priors = priors,
                                 contributions = TRUE)
     
@@ -400,6 +426,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, Z0 = Z0, Z = Z,
+                           Hsgn = Hsgn,
                            priors = priors)
       
     } else if (selection_type == "beta") {
@@ -408,6 +435,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U,
+                           Hsgn = Hsgn,
                            priors = priors)
       
     }
@@ -419,6 +447,7 @@ fit_selection_model <- function(
                                  yi = yi, sei = sei, pi = pi, ai = ai,
                                  steps = steps,
                                  X = X, U = U, Z0 = Z0, Z = Z,
+                                 Hsgn = Hsgn,
                                  priors = priors)
   }
   
@@ -491,6 +520,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL,
+    Hsgn = 1L,
     priors = define_priors(),
     vcov_type = "robust",
     selection_type = "step",
@@ -560,6 +590,7 @@ bootstrap_selmodel <- function(
       cluster = cluster, 
       subset = cl_subset,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       vcov_type = vcov_type, 
       selection_type = selection_type,
@@ -586,6 +617,7 @@ bootstrap_selmodel <- function(
       U = U, 
       Z0 = Z0, 
       Z = Z, 
+      Hsgn = Hsgn,
       priors = priors,
       vcov_type = vcov_type,
       selection_type = selection_type,
@@ -630,6 +662,7 @@ jackknife_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
+    Hsgn = 1L,
     priors = priors,
     selection_type = "step",
     estimator = "CML",
@@ -655,6 +688,7 @@ jackknife_selmodel <- function(
         fit_selection_model(
           yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
           X = X, U = U, Z0 = Z0, Z = Z,
+          Hsgn = Hsgn,
           priors = priors,
           subset = cluster_jk != i,
           steps = steps,
@@ -689,13 +723,15 @@ jackknife_selmodel <- function(
 #'   \code{sei} argument must be omitted.
 #' @param sei vector of sampling standard errors. If \code{sei} is specified,
 #'   then the \code{vi} argument must be omitted.
-#' @param pi optional vector of one-sided p-values. If not specified, p-values
-#'   will be computed from \code{yi} and \code{sei}.
 #' @param ai optional vector of analytic weights.
 #' @param cluster vector indicating which observations belong to the same
 #'   cluster.
 #' @param selection_type character string specifying the type selection model to
 #'   estimate, with possible options \code{"step"} or \code{"beta"}.
+#' @param alternative character string specifying the direction of the
+#'   alternative hypothesis used in computing p-values for the observed effect
+#'   sizes, with possible options \code{"greater"} (the default) or
+#'   \code{"less"}.
 #' @param steps If \code{selection_type = "step"}, a numeric vector of one or
 #'   more values specifying the thresholds (or steps) where the selection
 #'   probability changes, with a default of \code{steps = .025}. If
@@ -713,8 +749,7 @@ jackknife_selmodel <- function(
 #'   \code{steps}. Only relevant for \code{selection_type = "step"}.
 #' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
 #'   penalty terms) for model parameters, with a default of
-#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized
-#'   estimates.
+#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized estimates.
 #' @param subset optional logical expression indicating a subset of observations
 #'   to use for estimation.
 #' @param estimator vector indicating whether to use the composite marginal
@@ -755,6 +790,11 @@ jackknife_selmodel <- function(
 #' @param R number of bootstrap replications, with a default of \code{1999}.
 #' @param retry_bootstrap number of times to re-draw a bootstrap sample in the
 #'   event of non-convergence, with a default of \code{0}.
+#' @param valence_check logical value controlling whether to check that the
+#'   valence of the median effect size estimate is consistent with the direction
+#'   of the specified \code{alternative}. If \code{TRUE} (the default), a
+#'   warning will be issued when most effect size estimates have the opposite
+#'   sign of \code{alternative}. Set to \code{FALSE} to suppress the warning.
 #' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
 #'
 #' @returns An object of class \code{"selmodel"} containing the following
@@ -816,10 +856,10 @@ selection_model <- function(
     yi,
     vi,
     sei,
-    pi,
     ai,
     cluster,
     selection_type = c("step","beta"),
+    alternative = "greater",
     steps = NULL,
     mean_mods = NULL,
     var_mods = NULL,
@@ -838,10 +878,13 @@ selection_model <- function(
     bootstrap = "none",
     R = 1999,
     retry_bootstrap = 0L,
+    valence_check = TRUE,
     ...
 ) {
   
   selection_type <- match.arg(selection_type)
+  alternative <- match.arg(alternative, c("greater","less"))
+  Hsgn <- if (alternative=="greater") 1L else -1L
   
   if (!is.null(priors) && !inherits(priors, "selmodel_prior")) {
     stop("priors must be NULL or a selmodel_prior object created by define_priors().")
@@ -877,6 +920,10 @@ selection_model <- function(
   }
   
   if (!inherits(steps, "numeric") || min(steps) <= 0 || max(steps) >= 1) stop("steps must be a numeric vector with all entries in the interval (0,1).")
+  
+  # ensure steps are sorted from smallest to largest
+  steps <- sort(steps)
+  
   if (selection_type == "beta") {
     if (length(steps) != 2L) stop("steps must be a numeric vector of length 2 when selection_type = 'beta'.")
     if (!is.null(sel_mods)) stop("sel_mods must be NULL when selection_type = 'beta'.")
@@ -884,10 +931,11 @@ selection_model <- function(
     if (!(estimator %in% c("ML","CML"))) stop("estimator must be equal to 'CML' when selection_type = 'beta'.")
   }
   
+  
   # Create common model frame
   
   cl <- match.call()
-  m <- match(c("data","yi", "vi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
+  m <- match(c("data","yi", "vi", "sei", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
   mf[[1L]] <- str2lang("metaselection:::build_model_frame")
@@ -896,18 +944,34 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
-  
+
   vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
   sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
+  pi <- pnorm(Hsgn * yi / sei, lower.tail = FALSE)
   
-  pi <- if (missing(pi)) pnorm(yi / sei, lower.tail = FALSE) else eval(cl$pi, envir = mf)
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
+  
   
   if (!is.null(cluster)) {
     n_clusters <- length(unique(cluster))
     if (n_clusters < 3L) stop("The data contain fewer than three unique clusters. This method will not provide valid results.")
   }
+  
+  if (valence_check) {
+    valence <- sign(median(yi))
+    if (valence != Hsgn) {
+      valence_lab <- if (valence < 0) "negative" else "positive"
+      msg <- paste0(
+        "Most of the effect size estimates are ", 
+        valence_lab, 
+        ". Are you sure you want to set `alternative = ", 
+        alternative, "`?"
+      )
+      warning(msg)
+    }
+  }
+  
   
   # Create matrices X, U, Z0, Z_1,... from data formulas
   
@@ -933,6 +997,7 @@ selection_model <- function(
   res <- fit_selection_model(
     yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
+    Hsgn = Hsgn,
     steps = steps,
     priors = priors,
     vcov_type = vcov_type, 
@@ -1001,6 +1066,7 @@ selection_model <- function(
       bootstrap_selmodel(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        Hsgn = Hsgn,
         priors = priors,
         steps = steps,
         vcov_type = boot_sandwich, 
@@ -1025,6 +1091,7 @@ selection_model <- function(
         est = res$est$Est,
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        Hsgn = Hsgn,
         priors = priors,
         steps = steps,
         selection_type = selection_type,
@@ -1062,7 +1129,7 @@ selection_model <- function(
       theta = res$est$Est,
       yi = yi, sei = sei, pi = pi, ai = ai, 
       steps = steps, 
-      X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
+      X = X, U = U, Z0 = Z0, Z = Z, Hsgn = Hsgn, calc_Ai = TRUE
     )
     sel_params <- sum(predictions$z_dim)
     sel_zero_params <- predictions$z0_dim
@@ -1072,7 +1139,7 @@ selection_model <- function(
       theta = res$est$Est,
       yi = yi, sei = sei, pi = pi, 
       alpha = steps, 
-      X = X, U = U, calc_Ai = TRUE
+      X = X, U = U, Hsgn = Hsgn, calc_Ai = TRUE
     )
     sel_params <- 2L
     sel_zero_params <- 0L
@@ -1084,6 +1151,7 @@ selection_model <- function(
   res$cl <- cl
   res$mf <- mf
   res$selection_type <- selection_type
+  res$alternative <- alternative
   res$steps <- steps
   res$priors <- priors
   res$estimator <- estimator
