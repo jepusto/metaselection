@@ -80,7 +80,7 @@ table_step <-
   select(-p_value, -df) %>%
   mutate(
     est_se = paste0(Est, " (", SE, ")"),
-    large_sample_ci = paste0("[", CI_lo, ",", CI_hi, "]"),
+    large_sample_ci = paste0("[", CI_lo, ", ", CI_hi, "]"),
     bootstrap_ci = paste0("[", percentile_lower, ", ", percentile_upper, "]")
   ) %>%
   select(-c(Est:percentile_upper)) %>%

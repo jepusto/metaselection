@@ -1,6 +1,6 @@
 Package: metaselection
 Title: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates
-Version: 0.1.5
+Version: 0.2.0
 Authors@R: c(
     person(given = c("James","E."), family = "Pustejovsky",
            email = "jepusto@gmail.com", 
