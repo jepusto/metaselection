@@ -64,12 +64,22 @@ vignette demonstrating how to use it, from GitHub with:
 ``` r
 # If not already installed, first run install.packages("remotes")
 
-remotes::install_github("jepusto/metaselection", build_vignettes = TRUE)
+remotes::install_github("jepusto/metaselection", dependencies = TRUE, build_vignettes = TRUE)
 ```
 
 It may take a few minutes to install the package and vignette. Setting
 `build_vignettes = FALSE` will lead to faster installation, although it
 will preclude viewing the package vignette.
+
+After installation, you can view the vignette by running the command:
+
+``` r
+vignette("selection-models", package = "metaselection")
+```
+
+You can also [view the vignette
+online](https://jepusto.github.io/metaselection/articles/selection-models.html)
+on the `metaselection` package website.
 
 ## Example
 
@@ -79,7 +89,8 @@ judgments. The dataset is included in the `metadat` package (White et
 al. 2022) as `dat.lehmann`. In the code below, we fit a step function
 selection model to the Lehmann dataset using the `selection_model()`
 function, with confidence intervals computed using two-stage cluster
-bootstrapping. For further details, please see the vignette.
+bootstrapping. For further details, please see the
+[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
 <!--# should we mention priors here or is it going to throw people off? -->
 
 ``` r
@@ -156,10 +167,28 @@ heterogeneity. `lambda1` is the selection parameter. The estimate of
 0.54 indicates that effect size estimates with one-sided $p$-values
 greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
-estimates with $p < 0.025$).
+estimates with $p < 0.025$). [This
+infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf)
+provides further guidance on interpreting the model output.
 
-The package is designed to work with the `progressr` package (Bengtsson
-2026). To turn on progress bars for all bootstrap calculations, use
+## Parallel computing and tracking progress
+
+The package is designed to work with the `future` package for parallel
+computing (Bengtsson 2021). To enable parallel computation of bootstrap
+calculations, simply set an appropriate parallelization plan such as
+
+``` r
+library(future)
+plan(multisession)
+```
+
+The
+[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html)
+includes a more detailed demonstration.
+
+The package is also designed to work with the `progressr` package
+(Bengtsson 2026). To turn on progress bars for all bootstrap
+calculations, use
 
 ``` r
 progressr::handlers(global = TRUE)
@@ -168,19 +197,6 @@ progressr::handlers(global = TRUE)
 See
 [`vignette("progressr-intro")`](https://progressr.futureverse.org/articles/progressr-01-intro.html)
 for further details.
-
-The package is also designed to work with the `future` package for
-parallel computing (Bengtsson 2021). To enable parallel computation of
-bootstrap calculations, simply set an appropriate parallelization plan
-such as
-
-``` r
-library(future)
-plan(multisession)
-```
-
-The `metaselection` package vignette includes a more detailed
-demonstration.
 
 ## Related Work
 

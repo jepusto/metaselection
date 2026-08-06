@@ -95,7 +95,7 @@ The tau estimate of `r round( exp(mod_3PSM_boot$est["gamma","Est"]), 3)` is the 
 The estimate of `r round(exp(mod_3PSM_boot$est["zeta1","Est"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$).
 [This infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf) provides further guidance on interpreting the model output.
 
-## Parallel computing and progress
+## Parallel computing and tracking progress
 
 The package is designed to work with the `future` package for parallel computing [@future].
 To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as
