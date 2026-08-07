@@ -13,41 +13,24 @@ Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-proj
 
 # metaselection
 
-Selective reporting occurs when statistically significant, affirmative
-results are more likely to be reported (and therefore more likely to be
-available for meta-analysis) compared to null, non-affirmative results.
 Selective reporting is a major concern for research syntheses because it
-distorts the evidence base available for a meta-analysis, biasing
-meta-analytic averages toward more favorable findings and
-misrepresenting the true population of effects. Failure to account for
-selective reporting can lead to inflated effect size estimates from
-meta-analysis and biased estimates of heterogeneity, making it difficult
-to draw accurate conclusions from a synthesis.
+distorts the evidence base available for a meta-analysis There are many
+tools available to investigate and correct for selective reporting but
+few of them can accommodate dependent effect sizes. Ignoring the
+dependency of effect size estimates included in a meta-analysis leads to
+overly narrow confidence intervals, hypothesis tests with inflated Type
+1 error rates, and incorrect inferences.
 
-There are many tools available already to investigate and correct for
-selective reporting. Widely used methods include graphical diagnostics
-like funnel plots, tests and adjustments for funnel plot asymmetry like
-trim-and-fill, Egger’s regression, PET/PEESE, selection models, and
-$p$-value diagnostics. However, very few methods for investigating
-selective reporting can accommodate dependent effect sizes. This
-limitation poses a problem for meta-analyses in education, psychology
-and other social sciences, where dependent effects are a common feature
-of meta-analytic data.
-
-Dependent effect sizes occur when primary studies report results for
-multiple measures of an outcome construct, collect repeated measures of
-an outcome across multiple time-points, or involve comparisons between
-multiple intervention conditions. Ignoring the dependency of effect size
-estimates included in a meta-analysis leads to overly narrow confidence
-intervals, hypothesis tests with inflated type one error rates, and
-incorrect inferences. Pustejovsky et al. (2025) and Citkowicz et al.
-(2026) developed methods for investigating and accounting for selective
-reporting in meta-analytic models that also account for dependent effect
-sizes. Their simulation results show that combining selection models
-with robust variance estimation to account for dependent effects reduces
-bias in the estimate of the overall effect size. Combining the selection
-models with cluster bootstrapping leads to confidence intervals with
-close-to-nominal coverage rates.
+[Pustejovsky et al. (2025)](https://osf.io/preprints/metaarxiv/qg5x6_v4)
+and [Citkowicz et al.
+(2026)](https://osf.io/preprints/metaarxiv/wjpxk_v1) developed methods
+for investigating and accounting for selective reporting in
+meta-analytic models that also account for dependent effect sizes. Their
+simulation results show that combining selection models with robust
+variance estimation to account for dependent effects reduces bias in the
+estimate of the overall effect size. Combining the selection models with
+cluster bootstrapping, particularly two-stage cluster bootstrapping,
+leads to confidence intervals with close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several
 meta-analytic selection models. The main function, `selection_model()`,
@@ -135,18 +118,18 @@ summary(mod_3PSM_boot)
     ## Bootstrap type: two-stage 
     ## Number of bootstrap replications: 19 
     ## 
-    ## Log composite likelihood of selection model: -44.46655
-    ## Inverse selection weighted partial log likelihood: 59.53697 
+    ## Log composite likelihood of selection model: -44.4716
+    ## Inverse selection weighted partial log likelihood: 55.18899 
     ## 
     ## Mean effect estimates:                                               
     ##                            Percentile Bootstrap
     ##  Coef. Estimate Std. Error      Lower     Upper
-    ##   beta    0.131      0.135    -0.0492     0.412
+    ##   beta    0.138      0.116    -0.0296     0.375
     ## 
     ## Heterogeneity estimates:                                               
     ##                            Percentile Bootstrap
     ##  Coef. Estimate Std. Error      Lower     Upper
-    ##   tau2   0.0794     0.0815    0.00298     0.223
+    ##   tau2   0.0814     0.0763    0.00305     0.213
     ## 
     ## Selection process estimates:
     ##  Step: 0 < p <= 0.025; Studies: 16; Effects: 25                                                 
@@ -157,14 +140,14 @@ summary(mod_3PSM_boot)
     ##  Step: 0.025 < p <= 1; Studies: 29; Effects: 56                                                 
     ##                              Percentile Bootstrap
     ##    Coef. Estimate Std. Error      Lower     Upper
-    ##  lambda1     0.54      0.601     0.0844      4.35
+    ##  lambda1    0.575      0.521      0.132      3.63
 
-The beta estimate of 0.131, with a 95% confidence interval -0.049,
-0.412, represents the overall average effect after accounting for both
-selection bias and dependent effects. The tau estimate of 0.079 is the
+The beta estimate of 0.138, with a 95% confidence interval -0.03, 0.375,
+represents the overall average effect after accounting for both
+selection bias and dependent effects. The tau estimate of 0.081 is the
 estimated total variance, including both between- and within-study
 heterogeneity. `lambda1` is the selection parameter. The estimate of
-0.54 indicates that effect size estimates with one-sided $p$-values
+0.575 indicates that effect size estimates with one-sided $p$-values
 greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
 estimates with $p < 0.025$). [This
