@@ -29,7 +29,7 @@ meta-analytic models that also account for dependent effect sizes. Their
 simulation results show that combining selection models with robust
 variance estimation to account for dependent effects reduces bias in the
 estimate of the overall effect size. Combining the selection models with
-cluster bootstrapping, particularly two-stage cluster bootstrapping,
+cluster bootstrapping, particularly the two-stage cluster bootstrapping,
 leads to confidence intervals with close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several

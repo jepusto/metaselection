@@ -22,7 +22,7 @@ Ignoring the dependency of effect size estimates included in a meta-analysis lea
 
 [@pustejovsky2025estimation](https://osf.io/preprints/metaarxiv/qg5x6_v4) and [@citkowicz2026estimating](https://osf.io/preprints/metaarxiv/wjpxk_v1) developed methods for investigating and accounting for selective reporting in meta-analytic models that also account for dependent effect sizes.
 Their simulation results show that combining selection models with robust variance estimation to account for dependent effects reduces bias in the estimate of the overall effect size.
-Combining the selection models with cluster bootstrapping, particularly two-stage cluster bootstrapping, leads to confidence intervals with close-to-nominal coverage rates.
+Combining the selection models with cluster bootstrapping, particularly the two-stage cluster bootstrapping, leads to confidence intervals with close-to-nominal coverage rates.
 
 The metaselection package provides an implementation of several meta-analytic selection models.
 The main function, `selection_model()`, fits step function and beta density selection models.

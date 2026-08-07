@@ -401,7 +401,7 @@ Furthermore, the `metaselection` package provides a function `selection_plot()` 
 selection_plot(mod_3PSM)
 ```
 
-\@ref(fig:3PSM-plot) illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate.
+Figure \@ref(fig:3PSM-plot) illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate.
 In this example, the plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
 
 ## Four-Parameter Step Model with RVE
