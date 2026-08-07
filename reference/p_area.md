@@ -66,5 +66,5 @@ step_boot <- selection_model(
 
 p_area(step_boot)
 #>    param       Est       SE bootstraps percentile_lower percentile_upper
-#> 1 p-area 0.5989296 5.284236          6       0.09451833         13.41982
+#> 1 p-area 0.5989296 5.284247          6       0.09440938         13.41982
 ```

@@ -13,10 +13,10 @@ selection_model(
   yi,
   vi,
   sei,
-  pi,
   ai,
   cluster,
   selection_type = c("step", "beta"),
+  alternative = "greater",
   steps = NULL,
   mean_mods = NULL,
   var_mods = NULL,
@@ -35,6 +35,7 @@ selection_model(
   bootstrap = "none",
   R = 1999,
   retry_bootstrap = 0L,
+  valence_check = TRUE,
   ...
 )
 ```
@@ -59,11 +60,6 @@ selection_model(
   vector of sampling standard errors. If `sei` is specified, then the
   `vi` argument must be omitted.
 
-- pi:
-
-  optional vector of one-sided p-values. If not specified, p-values will
-  be computed from `yi` and `sei`.
-
 - ai:
 
   optional vector of analytic weights.
@@ -76,6 +72,12 @@ selection_model(
 
   character string specifying the type selection model to estimate, with
   possible options `"step"` or `"beta"`.
+
+- alternative:
+
+  character string specifying the direction of the alternative
+  hypothesis used in computing p-values for the observed effect sizes,
+  with possible options `"greater"` (the default) or `"less"`.
 
 - steps:
 
@@ -187,6 +189,14 @@ selection_model(
 
   number of times to re-draw a bootstrap sample in the event of
   non-convergence, with a default of `0`.
+
+- valence_check:
+
+  logical value controlling whether to check that the valence of the
+  median effect size estimate is consistent with the direction of the
+  specified `alternative`. If `TRUE` (the default), a warning will be
+  issued when most effect size estimates have the opposite sign of
+  `alternative`. Set to `FALSE` to suppress the warning.
 
 - ...:
 
@@ -314,9 +324,9 @@ res_hybrid <- selection_model(
 
 res_hybrid
 #>    param    Est     SE percentile_lower percentile_upper
-#>     beta 0.2194 0.0483           0.1555            0.302
-#>     tau2 0.0393 0.0296           0.0199            0.130
-#>  lambda1 1.0332 0.1502           0.4508            3.146
+#>     beta 0.2194 0.0511           0.1555            0.302
+#>     tau2 0.0393 0.0283           0.0199            0.130
+#>  lambda1 1.0332 0.4825           0.4508            3.146
 summary(res_hybrid)
 #> Step Function Model with Cluster Bootstrapping 
 #>  
@@ -339,12 +349,12 @@ summary(res_hybrid)
 #> Mean effect estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   beta    0.219     0.0483      0.156     0.302
+#>   beta    0.219     0.0511      0.156     0.302
 #> 
 #> Heterogeneity estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   tau2   0.0393     0.0296     0.0199      0.13
+#>   tau2   0.0393     0.0283     0.0199      0.13
 #> 
 #> Selection process estimates:
 #>  Step: 0 < p <= 0.025; Studies: 18; Effects: 32                                                 
@@ -355,5 +365,5 @@ summary(res_hybrid)
 #>  Step: 0.025 < p <= 1; Studies: 24; Effects: 126                                                 
 #>                              Percentile Bootstrap
 #>    Coef. Estimate Std. Error      Lower     Upper
-#>  lambda1     1.03       0.15      0.451      3.15
+#>  lambda1     1.03      0.482      0.451      3.15
 ```
