@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.4.1
+FROM rocker/r-ver:4.5.3
 MAINTAINER "James Pustejovsky" jepusto@gmail.com
 
 RUN install2.r --error \

@@ -142,18 +142,6 @@ all_params %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 all_params %>%
-  filter(bootstrap == "exponential") %>%
-  select(row) %>%
-  distinct() %>%
-  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
-
-all_params %>%
-  filter(bootstrap == "multinomial") %>%
-  select(row) %>%
-  distinct() %>%
-  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
-
-all_params %>%
   filter(bootstrap == "two-stage", psi == 0, iterations == 24) %>%
   select(row) %>%
   distinct() %>%
@@ -172,7 +160,19 @@ all_params %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
 
 all_params %>%
+  filter(bootstrap == "multinomial", psi == 0) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
   filter(bootstrap == "multinomial", psi == 1) %>%
+  select(row) %>%
+  distinct() %>%
+  write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
+
+all_params %>%
+  filter(bootstrap == "exponential", psi == 0) %>%
   select(row) %>%
   distinct() %>%
   write_csv("research/step-function-simulations/batches-to-run.csv", col_names = FALSE)
