@@ -117,11 +117,11 @@ all_params <-
   )
 
 all_params %>%
-  group_by(bootstrap, psi, iterations) %>%
   summarize(
     n = n(),
     row_start = min(row),
-    row_end = max(row)
+    row_end = max(row),
+    .by = c(bootstrap, psi, iterations)
   ) %>%
   arrange(row_start)
 
