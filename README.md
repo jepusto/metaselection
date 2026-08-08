@@ -14,7 +14,7 @@ Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-proj
 # metaselection
 
 Selective reporting is a major concern for research syntheses because it
-distorts the evidence base available for a meta-analysis There are many
+distorts the evidence base available for a meta-analysis. There are many
 tools available to investigate and correct for selective reporting but
 few of them can accommodate dependent effect sizes. Ignoring the
 dependency of effect size estimates included in a meta-analysis leads to
@@ -26,18 +26,23 @@ and [Citkowicz et al.
 (2026)](https://osf.io/preprints/metaarxiv/wjpxk_v1) developed methods
 for investigating and accounting for selective reporting in
 meta-analytic models that also account for dependent effect sizes. Their
-simulation results show that combining selection models with robust
-variance estimation to account for dependent effects reduces bias in the
-estimate of the overall effect size. Combining the selection models with
-cluster bootstrapping, particularly the two-stage cluster bootstrapping,
-leads to confidence intervals with close-to-nominal coverage rates.
+simulation results show that combining selection models with cluster
+robust variance estimation to account for dependent effects reduces bias
+in the estimate of the overall effect size. Moreover, combining the
+selection models with cluster bootstrapping, particularly the two-stage
+cluster bootstrapping, leads to confidence intervals with
+close-to-nominal coverage rates.
+<!--# QUESTION: CRVE is not the thing that's reducing bias right. It's just that if you use selection models you get results with less bias? and then using cluster bootstrapping on top of that gets you getter ci coverage resutls?  -->
 
 The metaselection package provides an implementation of several
-meta-analytic selection models. The main function, `selection_model()`,
-fits step function and beta density selection models. To handle
-dependence in the effect size estimates, the function provides options
-to use cluster-robust (sandwich) variance estimation or cluster
-bootstrapping to assess uncertainty in the model parameter estimates.
+meta-analytic selection models. The main function,
+[`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html),
+can fit step function and beta density function selection models. To
+handle dependence in the effect size estimates, the function provides
+options to use cluster-robust (sandwich) variance estimation or cluster
+bootstrapping to assess uncertainty in the model parameter estimates. We
+highly recommend using cluster bootstrapping, particular the two-stage
+cluster bootstrapping with percentile bootstrap confidence intervals.
 
 ## Installation
 
@@ -69,12 +74,15 @@ on the `metaselection` package website.
 The following example uses data from a meta-analysis by Lehmann et al.
 (2018) which examined the effects of color red on attractiveness
 judgments. The dataset is included in the `metadat` package (White et
-al. 2022) as `dat.lehmann`. In the code below, we fit a step function
-selection model to the Lehmann dataset using the `selection_model()`
-function, with confidence intervals computed using two-stage cluster
-bootstrapping. For further details, please see the
+al. 2022) as `dat.lehmann`. In the code below, we fit a three-parameter
+step function selection model to the Lehmann dataset using the
+`selection_model()` function, with confidence intervals computed using
+two-stage cluster bootstrapping. Additionally, we use a default set of
+weak priors to regularize the estimates (for detail, see
+[`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+For further details on how to use the `selection_model()` function,
+please see the
 [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
-<!--# should we mention priors here or is it going to throw people off? -->
 
 ``` r
 library(metaselection)
@@ -92,6 +100,7 @@ mod_3PSM_boot <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = .025,
+  priors = define_priors(),
   CI_type = "percentile",
   bootstrap = "two-stage",
   R = 19
@@ -107,8 +116,8 @@ summary(mod_3PSM_boot)
     ##  
     ## Call: 
     ## selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, 
-    ##     selection_type = "step", steps = 0.025, CI_type = "percentile", 
-    ##     bootstrap = "two-stage", R = 19)
+    ##     selection_type = "step", steps = 0.025, priors = define_priors(), 
+    ##     CI_type = "percentile", bootstrap = "two-stage", R = 19)
     ## 
     ## Number of clusters = 41; Number of effects = 81
     ## 
@@ -152,21 +161,24 @@ greater than 0.025 are only about half as likely to be reported as
 estimates that are positive and statistically significant (i.e.,
 estimates with $p < 0.025$). [This
 infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf)
-provides further guidance on interpreting the model output.
+provides further guidance on interpreting the model
+output.<!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  -->
 
 ## Parallel computing and tracking progress
 
-The package is designed to work with the `future` package for parallel
-computing (Bengtsson 2021). To enable parallel computation of bootstrap
-calculations, simply set an appropriate parallelization plan such as
+Bootstrapping can be computationally intensive. To reduce computation
+time, we designed this package to work with the `future` package for
+parallel computing (Bengtsson 2021). To enable parallel computation of
+bootstrap calculations, simply set an appropriate parallelization plan
+such as
 
 ``` r
 library(future)
 plan(multisession)
 ```
 
-The
-[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html)
+Our
+[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html#parallel-processing)
 includes a more detailed demonstration.
 
 The package is also designed to work with the `progressr` package
