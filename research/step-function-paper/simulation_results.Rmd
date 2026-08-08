@@ -52,7 +52,7 @@ convergence_conditions <-
 ```
 
 The CHE-ISCW and PET/PEESE estimators produced results for every replication in every condition. 
-The PML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions. For the PML estimator, convergence exceeded 98% in  `r convergence_conditions$n98` out of `r convergence_conditions$n`) conditions in the full simulation, but fell below 98% under conditions with the lowest degree of heterogeneity $(\tau = 0.05)$, with the lowest convergence rate of `r convergence_min %>% filter(estimator=="PML") %>% pull(convergence) %>% formatC(format = "f", digits = 1)`%.
+The PML and ARGL estimators for the step-function selection model had very high convergence rates across most conditions. For the PML estimator, convergence exceeded 98% in  `r convergence_conditions$n98` out of `r convergence_conditions$n` conditions in the full simulation, but fell below 98% under conditions with the lowest degree of heterogeneity $(\tau = 0.05)$, with the lowest convergence rate of `r convergence_min %>% filter(estimator=="PML") %>% pull(convergence) %>% formatC(format = "f", digits = 1)`%.
 For the ARGL estimator, convergence was `r convergence_min %>% filter(estimator=="ARGL") %>% pull(convergence) %>% round(1)`% across all conditions.
 Supplementary Figure \@ref(fig:convergence-rates) depicts the range of convergence rates of the PML estimator.
 For purposes of computing further performance measures, we substituted results for the ARGL estimator for replications where the PML estimator did not converge.

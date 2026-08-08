@@ -16,7 +16,7 @@ We compared the performance of our novel estimators to two available alternative
 We evaluated the estimators in terms of convergence rates, bias, accuracy, and CI coverage for recovering the average effect size prior to selective reporting.
 To limit computational burden, we evaluated the performance of bootstrap CIs only for a subset of the conditions. 
 
-We ran the simulation in R Version 4.4.1 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison.[@CHTC]
+We ran the simulation in R Version 4.5.3 [@rcoreteam] using the high-throughput computing cluster at the University of Wisconsin - Madison.[@CHTC]
 The simulation code made use of several R packages, including `metafor` [@Viechtbauer2010conducting], `clubSandwich` [@clubSandwich], `simhelpers` [@simhelpers], `optimx` [@optimx], `nleqslv` [@nleqslv], and `tidyverse` [@tidyverse].
 
 ## Data generation
