@@ -4,9 +4,11 @@
 [![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
 [![Codecov
 Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
-[![CRAN
-Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
+
+<!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+
 <!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
+
 <!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 
 <!-- badges: end -->
@@ -34,14 +36,15 @@ cluster bootstrapping, leads to confidence intervals with
 close-to-nominal coverage rates.
 <!--# QUESTION: CRVE is not the thing that's reducing bias right. It's just that if you use selection models you get results with less bias? and then using cluster bootstrapping on top of that gets you getter ci coverage resutls?  -->
 
-The metaselection package provides an implementation of several
-meta-analytic selection models. The main function,
+The `metaselection` package provides an implementation of the methods
+examined and recommended by Pustejovsky et al. (2025) and Citkowicz et
+al. (2026). The main function,
 [`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html),
-can fit step function and beta density function selection models. To
-handle dependence in the effect size estimates, the function provides
-options to use cluster-robust (sandwich) variance estimation or cluster
-bootstrapping to assess uncertainty in the model parameter estimates. We
-highly recommend using cluster bootstrapping, particular the two-stage
+can fit step- and beta-function selection models. To handle dependence
+in the effect size estimates, the function provides options to use
+cluster-robust (sandwich) variance estimation or cluster bootstrapping
+to assess uncertainty in the model parameter estimates. We highly
+recommend using cluster bootstrapping, particularly the two-stage
 cluster bootstrapping with percentile bootstrap confidence intervals.
 
 ## Installation
@@ -75,7 +78,7 @@ The following example uses data from a meta-analysis by Lehmann et al.
 (2018) which examined the effects of color red on attractiveness
 judgments. The dataset is included in the `metadat` package (White et
 al. 2022) as `dat.lehmann`. In the code below, we fit a three-parameter
-step function selection model to the Lehmann dataset using the
+step-function selection model to the Lehmann dataset using the
 `selection_model()` function, with confidence intervals computed using
 two-stage cluster bootstrapping. Additionally, we use a default set of
 weak priors to regularize the estimates (for detail, see
@@ -151,15 +154,15 @@ summary(mod_3PSM_boot)
     ##    Coef. Estimate Std. Error      Lower     Upper
     ##  lambda1    0.575      0.521      0.132      3.63
 
-The beta estimate of 0.138, with a 95% confidence interval -0.03, 0.375,
-represents the overall average effect after accounting for both
-selection bias and dependent effects. The tau estimate of 0.081 is the
-estimated total variance, including both between- and within-study
-heterogeneity. `lambda1` is the selection parameter. The estimate of
-0.575 indicates that effect size estimates with one-sided $p$-values
-greater than 0.025 are only about half as likely to be reported as
-estimates that are positive and statistically significant (i.e.,
-estimates with $p < 0.025$). [This
+The beta estimate of 0.138, with a 95% confidence interval of \[-0.03,
+0.375\], represents the overall average effect after accounting for both
+selection bias and dependent effects. The `tau2` ($\tau^2$) estimate of
+0.081 is the estimated total variance, including both between- and
+within-study heterogeneity. `lambda1` ($\lambda_1$) is the selection
+parameter. The estimate of 0.575 indicates that effect size estimates
+with one-sided $p$-values greater than 0.025 are only about half as
+likely to be reported as estimates that are positive and statistically
+significant (i.e., estimates with $p < 0.025$). [This
 infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf)
 provides further guidance on interpreting the model
 output.<!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  -->
@@ -167,10 +170,10 @@ output.<!--# QUESTION: Do you want to move this infographic to our package websi
 ## Parallel computing and tracking progress
 
 Bootstrapping can be computationally intensive. To reduce computation
-time, we designed this package to work with the `future` package for
-parallel computing (Bengtsson 2021). To enable parallel computation of
-bootstrap calculations, simply set an appropriate parallelization plan
-such as
+time, we designed this package to work with the
+[`future`](https://future.futureverse.org/) package for parallel
+computing (Bengtsson 2021). To enable parallel computation of bootstrap
+calculations, simply set an appropriate parallelization plan such as
 
 ``` r
 library(future)
@@ -181,9 +184,9 @@ Our
 [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html#parallel-processing)
 includes a more detailed demonstration.
 
-The package is also designed to work with the `progressr` package
-(Bengtsson 2026). To turn on progress bars for all bootstrap
-calculations, use
+The package is also designed to work with the
+[`progressr`](https://progressr.futureverse.org/) package (Bengtsson
+2026). To turn on progress bars for all bootstrap calculations, use
 
 ``` r
 progressr::handlers(global = TRUE)
@@ -229,6 +232,7 @@ The `metaselection` package goes beyond these other tools both by
 considering more complex forms of selective reporting and by correcting
 for selective reporting bias while accommodating meta-analytic datasets
 that include dependent effect sizes.
+<!--# QUESTION: Does this sentence also apply to RoBMA package? What's the advantage of our package over that one in particular?  -->
 
 ## Acknowledgements
 

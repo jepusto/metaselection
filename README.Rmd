@@ -8,7 +8,9 @@ editor_options:
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml) [![Codecov Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection) [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection)
+[![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml) [![Codecov Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection) 
+
+<!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 <!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 <!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 
@@ -24,9 +26,9 @@ Their simulation results show that combining selection models with cluster robus
 Moreover, combining the selection models with cluster bootstrapping, particularly the two-stage cluster bootstrapping, leads to confidence intervals with close-to-nominal coverage rates.
 <!--# QUESTION: CRVE is not the thing that's reducing bias right. It's just that if you use selection models you get results with less bias? and then using cluster bootstrapping on top of that gets you getter ci coverage resutls?  -->
 
-The metaselection package provides an implementation of several meta-analytic selection models.
-The main function, [`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html), can fit step function and beta density function selection models.
-To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates. We highly recommend using cluster bootstrapping, particular the two-stage cluster bootstrapping with percentile bootstrap confidence intervals. 
+The `metaselection` package provides an implementation of the methods examined and recommended by @pustejovsky2025estimation and @citkowicz2026estimating.
+The main function, [`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html), can fit step- and beta-function selection models.
+To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates. We highly recommend using cluster bootstrapping, particularly the two-stage cluster bootstrapping with percentile bootstrap confidence intervals. 
 
 ## Installation
 
@@ -53,7 +55,7 @@ You can also [view the vignette online](https://jepusto.github.io/metaselection/
 
 The following example uses data from a meta-analysis by @lehmann2018meta which examined the effects of color red on attractiveness judgments.
 The dataset is included in the `metadat` package [@metadat] as `dat.lehmann`.
-In the code below, we fit a three-parameter step function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage cluster bootstrapping. Additionally, we use a default set of weak priors to regularize the estimates (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+In the code below, we fit a three-parameter step-function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage cluster bootstrapping. Additionally, we use a default set of weak priors to regularize the estimates (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
 For further details on how to use the `selection_model()` function, please see the [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
 
 
@@ -85,15 +87,15 @@ mod_3PSM_boot <- selection_model(
 summary(mod_3PSM_boot)
 ```
 
-The beta estimate of `r round(mod_3PSM_boot$est["beta","Est"], 3)`, with a 95% confidence interval `r round(mod_3PSM_boot$est["beta","percentile_lower"], 3)`, `r round(mod_3PSM_boot$est["beta","percentile_upper"], 3)`, represents the overall average effect after accounting for both selection bias and dependent effects.
-The tau estimate of `r round( exp(mod_3PSM_boot$est["gamma","Est"]), 3)` is the estimated total variance, including both between- and within-study heterogeneity.
-`lambda1` is the selection parameter.
+The beta estimate of `r round(mod_3PSM_boot$est["beta","Est"], 3)`, with a 95% confidence interval of [`r round(mod_3PSM_boot$est["beta","percentile_lower"], 3)`, `r round(mod_3PSM_boot$est["beta","percentile_upper"], 3)`], represents the overall average effect after accounting for both selection bias and dependent effects.
+The `tau2` ($\tau^2$) estimate of `r round( exp(mod_3PSM_boot$est["gamma","Est"]), 3)` is the estimated total variance, including both between- and within-study heterogeneity.
+`lambda1` ($\lambda_1$) is the selection parameter.
 The estimate of `r round(exp(mod_3PSM_boot$est["zeta1","Est"]), 3)` indicates that effect size estimates with one-sided $p$-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with $p < 0.025$).
 [This infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf) provides further guidance on interpreting the model output.<!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  -->
 
 ## Parallel computing and tracking progress
 
-Bootstrapping can be computationally intensive. To reduce computation time, we designed this package to work with the `future` package for parallel computing [@future].
+Bootstrapping can be computationally intensive. To reduce computation time, we designed this package to work with the [`future`](https://future.futureverse.org/) package for parallel computing [@future].
 To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as
 
 ```{r, eval = FALSE}
@@ -103,7 +105,7 @@ plan(multisession)
 
 Our [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html#parallel-processing) includes a more detailed demonstration.
 
-The package is also designed to work with the `progressr` package [@progressr].
+The package is also designed to work with the [`progressr`](https://progressr.futureverse.org/) package [@progressr].
 To turn on progress bars for all bootstrap calculations, use
 
 ```{r, eval = FALSE}
@@ -121,7 +123,7 @@ Several existing meta-analysis packages provide implementations of selection mod
 - The `RoBMA` package [@RoBMA] implements Bayesian ensemble models that include step-function selection models as one component of the ensemble. `RoBMA` includes an implementation of a multilevel extension to the step-function selection model, as described in @bartovs2026robust, a different approach for handling dependence that is an alternative to the marginal selection models implemented in `metaselection`.
 - The `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes. However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data. The sensitivity analyses are also based on a specific and simple form of selection model, and do not allow consideration of more complex forms of selection functions.
 
-The `metaselection` package goes beyond these other tools both by considering more complex forms of selective reporting and by correcting for selective reporting bias while accommodating meta-analytic datasets that include dependent effect sizes.
+The `metaselection` package goes beyond these other tools both by considering more complex forms of selective reporting and by correcting for selective reporting bias while accommodating meta-analytic datasets that include dependent effect sizes. <!--# QUESTION: Does this sentence also apply to RoBMA package? What's the advantage of our package over that one in particular?  -->
 
 ## Acknowledgements
 
