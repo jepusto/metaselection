@@ -83,8 +83,10 @@ step-function selection model to the Lehmann dataset using the
 two-stage cluster bootstrapping. Additionally, we use a default set of
 weak priors to regularize the estimates (for detail, see
 [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
-For further details on how to use the `selection_model()` function,
-please see the
+The function also has an argument that can be used to set the direction
+of the alternative hypothesis used in computing the p-values (default
+`alternative = "greater"`). For further details on how to use the
+`selection_model()` function, please see the
 [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
 
 ``` r
@@ -104,6 +106,7 @@ mod_3PSM_boot <- selection_model(
   selection_type = "step",
   steps = .025,
   priors = define_priors(),
+  alternative = "greater",
   CI_type = "percentile",
   bootstrap = "two-stage",
   R = 19
@@ -119,8 +122,9 @@ summary(mod_3PSM_boot)
     ##  
     ## Call: 
     ## selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, 
-    ##     selection_type = "step", steps = 0.025, priors = define_priors(), 
-    ##     CI_type = "percentile", bootstrap = "two-stage", R = 19)
+    ##     selection_type = "step", alternative = "greater", steps = 0.025, 
+    ##     priors = define_priors(), CI_type = "percentile", bootstrap = "two-stage", 
+    ##     R = 19)
     ## 
     ## Number of clusters = 41; Number of effects = 81
     ## 

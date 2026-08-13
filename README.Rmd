@@ -55,7 +55,7 @@ You can also [view the vignette online](https://jepusto.github.io/metaselection/
 
 The following example uses data from a meta-analysis by @lehmann2018meta which examined the effects of color red on attractiveness judgments.
 The dataset is included in the `metadat` package [@metadat] as `dat.lehmann`.
-In the code below, we fit a three-parameter step-function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage cluster bootstrapping. Additionally, we use a default set of weak priors to regularize the estimates (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+In the code below, we fit a three-parameter step-function selection model to the Lehmann dataset using the `selection_model()` function, with confidence intervals computed using two-stage cluster bootstrapping. Additionally, we use a default set of weak priors to regularize the estimates (for detail, see [`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)). The function also has an argument that can be used to set the direction of the alternative hypothesis used in computing the p-values (default `alternative = "greater"`).
 For further details on how to use the `selection_model()` function, please see the [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
 
 
@@ -76,6 +76,7 @@ mod_3PSM_boot <- selection_model(
   selection_type = "step",
   steps = .025,
   priors = define_priors(),
+  alternative = "greater",
   CI_type = "percentile",
   bootstrap = "two-stage",
   R = 19
