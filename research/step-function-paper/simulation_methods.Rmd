@@ -55,9 +55,9 @@ let $k^A_j = \sum_{i=1}^{k_j} s_{ij}$ denote the number of affirmative effect si
 We assume that effect size estimate $i$ in study $j$ is observed with probability $\pi_{ij}$, where
 \begin{equation}
 \label{eq:generalized-selection}
-\log(\pi_{ij}) = (1 - s_{ij}) \times (k^A_j + 1)^\psi \times \log(\lambda_1),
+\pi_{ij} = s_{ij} + (1 - s_{ij})\left[1 - \exp\left((k^A_j + 1)^\psi \log(1 - \lambda_1)\right) \right],
 \end{equation}
-for $\psi \geq 0$. 
+for $0 < \lambda_1 \leq 1$ and $\psi \geq 0$. 
 When $\psi = 0$, the probability that a non-affirmative result is reported depends only on its own $p$-value, so the selection process is univariate.
 When $\psi > 0$, the probability that a non-affirmative result is reported is affected by the number of affirmative results within the same study, with more affirmative results leading to a higher probability that a non-affirmative result will also be reported.
 Under this multivariate process, $\lambda_1$ can be interpreted as the probability that a non-affirmative result is reported when there are no affirmative findings in the study (i.e., when $k^A_j = 0$).
