@@ -52,7 +52,7 @@ bootstrap_factors <- list(
   stepfun_methods = list(c("CML","ARGL")),
   priors = "Weak",
   bootstrap = c("multinomial","two-stage","exponential"),
-  R = list(c(49,99,199,299))
+  R = list(c(49,99,199,299,399))
 )
 
 bootstrap_params <- 
@@ -81,7 +81,7 @@ big_B_factors <- list(
   stepfun_methods = list(c("CML","ARGL")),
   priors = "Weak",
   bootstrap = "two-stage",
-  R = list(c(49,99,199,299,1999))
+  R = list(c(49,99,199,299,399,1999))
 )
 
 big_B_params <- 

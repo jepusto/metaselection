@@ -225,8 +225,8 @@ To compute performance measures for this estimator, we substituted results for t
 
 For CIs based on cluster-robust variance estimation, we calculated coverage rates as the proportion of simulated intervals that included the true parameter. 
 For bootstrap CIs, estimation of coverage rates is complicated by the fact that coverage is affected by the number of bootstrap replications. 
-To mitigate computational demand, we used $B = 299$ although this is far fewer bootstraps per replication than recommended for analysis of real data. 
+To mitigate computational demand, we used $B = 399$ although this is far fewer bootstraps per replication than recommended for analysis of real data. 
 To estimate coverage rates for CIs as would be used in practice, we used an extrapolation technique.[@boos2000montecarlo]
-For each replication, we computed bootstrap CIs not only for $B = 299$, but also for $B = 49$, 99, and 199 bootstraps, randomly selected without replacement.
+For each replication, we computed bootstrap CIs not only for $B = 399$, but also for $B = 49$, 99, 199, and 299 bootstraps, randomly selected without replacement.
 We computed coverage rates separately for each value of $B$, fit a linear regression of the coverage rate on $1 / B$, and then used this regression to predict the coverage rate of CIs based on $B = 1999$ bootstraps.
 `r appendix_prefix` \@ref(bootstrap-extrapolation) provides further details and demonstrates the performance of the extrapolation technique.

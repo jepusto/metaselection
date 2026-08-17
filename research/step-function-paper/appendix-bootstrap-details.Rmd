@@ -63,11 +63,11 @@ Notably, the basic and studentized confidence intervals depend on the scale of t
 
 ## Extrapolating coverage rates {#bootstrap-extrapolation}
 
-The simulation results reported in the main manuscript used an extrapolation technique suggested by Boos and Zhang [@boos2000montecarlo] to estimate the coverage levels of bootstrap confidence intervals for $B = 1999$ bootstrap re-samples, when each replication of the simulation involved only $B = 299$ re-samples.
+The simulation results reported in the main manuscript used an extrapolation technique suggested by Boos and Zhang [@boos2000montecarlo] to estimate the coverage levels of bootstrap confidence intervals for $B = 1999$ bootstrap re-samples, when each replication of the simulation involved only $B = 399$ re-samples.
 We used $R = 2400$ replications of the simulation process.
-For each replication, we computed an estimator $\hat\theta$ of parameter $\theta$ and a set of bootstrap re-samples $\hat\theta^*_{b}$ for $b = 1,...,299$.
+For each replication, we computed an estimator $\hat\theta$ of parameter $\theta$ and a set of bootstrap re-samples $\hat\theta^*_{b}$ for $b = 1,...,399$.
 With these data, we can construct a confidence interval for $\theta$ by drawing $d \leq B$ of the bootstrap re-samples at random without replacement, then using these replications in the calculations described in Section \@ref(bootstrap-CI-construction). 
-We repeat this process for $d = 49, 99, 199, 299$.
+We repeat this process for $d = 49, 99, 199, 299, 399$.
 Let $C^{dr}$ be an indicator for whether the confidence interval constructed from $d$ re-samples covers $\theta$, for $r = 1,...,R$.
 To extrapolate coverage, we fit a linear regression
 $$
@@ -196,7 +196,7 @@ ggplot(boot_real_ARGL) +
 ```
 
 Figures \@ref(fig:bootstrap-extrapolation-CML) and \@ref(fig:bootstrap-extrapolation-ARGL) illustrate the extrapolation results for the penalized maximum likelihood and augmented, reweighted Gaussian likelihood estimators, respectively.
-In each figure, the circular points show the estimated coverage rates of a specific type of bootstrap confidence interval computed from $d = 49, 99, 199$, or $299$ bootstrap re-samples, with bands representing point-wise Monte Carlo intervals; 
+In each figure, the circular points show the estimated coverage rates of a specific type of bootstrap confidence interval computed from $d = 49, 99, 199, 299$, or $399$ bootstrap re-samples, with bands representing point-wise Monte Carlo intervals; 
 these data are drawn from the larger simulation study and use $R = 2400$ replications. 
 The horizontal axis of each panel is scaled in proportion to $1 / d$, and the straight line in each panel depicts the linear regression fit used for extrapolation.
 On the left edge of each panel, a square point and vertical whiskers indicate the coverage rates computed from the additional simulations with $B = 1999$ re-samples.
@@ -207,7 +207,7 @@ adjustment_size <-
   big_B_boot_CIs %>%
   ungroup() %>%
   mutate(
-    adjustment = 100 * (coverage - coverage[bootstraps == 299]),
+    adjustment = 100 * (coverage - coverage[bootstraps == 399]),
     .by = c(mean_smd, tau, cor_mu, weight, m, het_ratio, N_factor, estimator, CI_type)
   ) %>%
   filter(
@@ -253,4 +253,4 @@ It can be seen that nearly all coverage rates from the additional simulations fa
 Across conditions, estimators, and confidence interval types, discrepancies between extrapolated coverage and directly estimated coverage ranged from `r formatC(boot_compare$min, digits = 1, format = "f")` to `r formatC(boot_compare$max, digits = 1, format = "f")` percentage points, with an average of `r formatC(boot_compare$mean, digits = 1, format = "f")` and root mean-squared error of `r formatC(boot_compare$rmse, digits = 1, format = "f")` percentage points. 
 Thus, the extrapolations computed in the large simulation study appear to accurately predict the coverage rates computed from the additional simulations with $B = 1999$ re-samples.
 Furthermore, the size of the extrapolations is generally quite small.
-For the percentile bootstrap CIs, the difference between the extrapolated coverage rate and the measured coverage rate for $B = 299$ bootstrap replications is no more than `r max_adjustment_size %>% filter(estimator == "PML") %>% pull(adjustment) %>% formatC(digits = 1, format = "f")` percentage points for the penalized maximum likelihood estimator and no more than `r max_adjustment_size %>% filter(estimator == "ARGL") %>% pull(adjustment) %>% formatC(digits = 1, format = "f")` percentage points for the augmented, reweighted Gaussian likelihood estimator.
+For the percentile bootstrap CIs, the difference between the extrapolated coverage rate and the measured coverage rate for $B = 399$ bootstrap replications is no more than `r max_adjustment_size %>% filter(estimator == "PML") %>% pull(adjustment) %>% formatC(digits = 1, format = "f")` percentage points for the penalized maximum likelihood estimator and no more than `r max_adjustment_size %>% filter(estimator == "ARGL") %>% pull(adjustment) %>% formatC(digits = 1, format = "f")` percentage points for the augmented, reweighted Gaussian likelihood estimator.
