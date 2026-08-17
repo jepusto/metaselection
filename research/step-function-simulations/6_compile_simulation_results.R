@@ -1,8 +1,6 @@
 library(tidyverse)
 library(tictoc)
 library(simhelpers)
-library(future)
-library(furrr)
 
 params <- readRDS("research/step-function-simulations/simulation_parameters.rds")
 
@@ -27,7 +25,6 @@ outstanding_conditions %>%
 # Compile results from conditions with no bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-plan(multisession, workers = 10)
 
 tic()
 no_bootstraps_res <- 
@@ -37,11 +34,9 @@ no_bootstraps_res <-
   select(-priors, -comparison_methods) %>%
   distinct() %>%
   pull(file) %>%
-  future_map_dfr(.f = readRDS) %>%
+  map_dfr(.f = readRDS) %>%
   select(-seed)
 toc()
-
-plan(sequential)
 
 nrow(no_bootstraps_res)
 
@@ -75,103 +70,74 @@ write_rds(res, file = "research/step-function-simulations/sim-step-function-resu
 
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-# compile results from conditions with bootstraps ----
+# Set up summary calculations for conditions with bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
-
-
-source("research/step-function-simulations/2_performance_criteria.R")
 
 
 bootstrap_files <-
   params %>%
-  inner_join(res_list, by = "row") %>%
-  select(-batch, -row, -seed) %>%
   filter(bootstrap != "none") %>%
-  nest(iterations = iterations, files = file) %>%
-  mutate(R_max = map_dbl(R, max))
+  select(-seed) %>%
+  mutate(file = paste0("simulation_results_batch", row, ".rds")) %>%
+  nest(batches = batch, iterations = iterations, rows = row, files = file) %>%
+  mutate(
+    R_max = map_dbl(R, max),
+    nbatches = map_dbl(batches, nrow),
+    row = row_number(),
+    files = map_chr(files, \(x) paste(x$file, collapse = ", "))
+  )
 
 bootstrap_files %>%
-  mutate(
-    batch_file_name = map_chr(
-      files, 
-      ~ paste0(
-        "research/step-function-simulations/batch-results/simulation_results_bootstrap_batch",
-        str_match(.x$file[[1]], "_batch(.+).rds")[,2],
-        ".rds"
-      )
-    ),
-    complete = file.exists(batch_file_name)
-  ) %>%
-  filter(!complete) %>%
-  count(bootstrap)
+  filter(bootstrap == "multinomial") %>%
+  select(row, files) %>%
+  write_tsv("research/step-function-simulations/bootstrap-batches-to-run.tsv", col_names = FALSE)
+
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 # compile results from conditions with bootstraps ----
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
-source("research/step-function-simulations/2_performance_criteria.R")
-
-summarize_bootstraps <- function(file_list) {
-  
-  batch_file_name <- paste0(
-    "research/step-function-simulations/batch-results/simulation_results_bootstrap_batch",
-    str_match(file_list$file[[1]], "_batch(.+).rds")[,2],
-    ".rds"
+bootstrap_res_list <- tibble(
+  file = list.files("research/step-function-simulations/batch-results", pattern = "simulation_results_bootstrap_batch", full.names = TRUE)
+) %>%
+  mutate(
+    row = str_extract(file, "batch[0-9]+.rds") |> str_sub(6,-5) |> as.integer()
   )
-  
-  if (file.exists(batch_file_name)) return(batch_file_name)
-  
-  dat <- map_dfr(file_list$file, .f = readRDS)
-  time <- sum(dat$time)
-  run_date <- min(dat$run_date)
-  
-  true_params <- data.frame(
-    param = c("beta", "gamma", "zeta1"),
-    true_param = c(unique(dat$mean_smd), log(unique(dat$tau)^2 + unique(dat$omega)^2), log(unique(dat$weight)))
-  )
-  
-  results <-
-    bind_rows(dat$res, .id = "file") %>%
-    mutate(rep = as.character(as.integer(file) * 1000 + as.integer(rep))) %>%
-    left_join(true_params, by = "param")
-  
-  summary_res <-
-    results %>%
-    calc_performance() %>%
-    nest(res = everything()) %>%
-    mutate(
-      run_date = run_date,
-      time = time
-    )
-  
-  write_rds(summary_res, file = batch_file_name, compress = "gz", compression = 9L)
-  
-  return(batch_file_name)
-}
 
-
-plan(multisession, workers = 10L)
+nrow(bootstrap_res_list)
 
 tic()
 bootstrap_res <- 
   bootstrap_files %>%
+  mutate(row = map_int(rows, \(x) x$row[1])) %>%
+  select(-batches, -rows, -files, -nbatches) %>%
+  inner_join(bootstrap_res_list, by = "row") %>%
   mutate(
-    summary_file = future_map_chr(files, .f = summarize_bootstraps, .progress = TRUE)
-  )
-toc()
-
-tic()
-bootstrap_res <- 
-  bootstrap_res %>%
-  mutate(
-    iterations = future_map_int(iterations, ~ sum(.x$iterations)),
-    res =  future_map(summary_file, .f = read_rds, .progress = TRUE)
+    iterations = map_int(iterations, \(x) sum(x$iterations)),
+    res =  map(file, .f = read_rds, .progress = TRUE)
   ) %>%
-  select(-files, -summary_file) %>%
+  select(-file, -row) %>%
   unnest(res)
 toc()
 
-plan(sequential)
+# bootstrap_res %>%
+#   select(-run_date, -time) %>%
+#   unnest(res) %>%
+#   filter(estimator != "CML") %>%
+#   select(
+#     mean_smd:psi, bootstrap, omega, steps, bootstrap_type = bootstrap, model:param, 
+#     bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse
+#   ) %>%
+#   unnest(
+#     c(bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
+#     names_sep = "-"
+#   ) %>%
+#   pivot_longer(
+#     starts_with("boot_"),
+#     names_to = c(".value", "CI_type"),
+#     names_pattern = "(.+)-(.+)"
+#   ) %>%
+#   rename_with(~ str_remove(.x, "^boot_"))
 
 write_rds(bootstrap_res, file = "research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
 
