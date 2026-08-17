@@ -1,48 +1,36 @@
 # metaselection
 
-Selective reporting occurs when statistically significant, affirmative
-results are more likely to be reported (and therefore more likely to be
-available for meta-analysis) compared to null, non-affirmative results.
 Selective reporting is a major concern for research syntheses because it
-distorts the evidence base available for a meta-analysis, biasing
-meta-analytic averages toward more favorable findings and
-misrepresenting the true population of effects. Failure to account for
-selective reporting can lead to inflated effect size estimates from
-meta-analysis and biased estimates of heterogeneity, making it difficult
-to draw accurate conclusions from a synthesis.
+distorts the evidence base available for a meta-analysis. There are many
+tools available to investigate and correct for selective reporting but
+few of them can accommodate dependent effect sizes. Ignoring the
+dependency of effect size estimates included in a meta-analysis leads to
+overly narrow confidence intervals, hypothesis tests with inflated Type
+1 error rates, and incorrect inferences.
 
-There are many tools available already to investigate and correct for
-selective reporting. Widely used methods include graphical diagnostics
-like funnel plots, tests and adjustments for funnel plot asymmetry like
-trim-and-fill, Egger’s regression, PET/PEESE, selection models, and
-p-value diagnostics. However, very few methods for investigating
-selective reporting can accommodate dependent effect sizes. This
-limitation poses a problem for meta-analyses in education, psychology
-and other social sciences, where dependent effects are a common feature
-of meta-analytic data.
+[Pustejovsky et al. (2025)](https://osf.io/preprints/metaarxiv/qg5x6_v4)
+and [Citkowicz et al.
+(2026)](https://osf.io/preprints/metaarxiv/wjpxk_v1) developed methods
+for investigating and accounting for selective reporting in
+meta-analytic models that also account for dependent effect sizes. Their
+simulation results show that using a marginal selection model reduces
+bias in the estimate of the overall effect size compared to using
+conventional summary meta-analysis models or techniques such as the
+PET/PEESE adjustment. Moreover, combining the marginal selection model
+with cluster bootstrapping — particularly the two-stage cluster
+bootstrapping — leads to confidence intervals with close-to-nominal
+coverage rates.
 
-Dependent effect sizes occur when primary studies report results for
-multiple measures of an outcome construct, collect repeated measures of
-an outcome across multiple time-points, or involve comparisons between
-multiple intervention conditions. Ignoring the dependency of effect size
-estimates included in a meta-analysis leads to overly narrow confidence
-intervals, hypothesis tests with inflated type one error rates, and
-incorrect inferences. Pustejovsky et al. (2025) and Citkowicz et al.
-(2026) developed methods for investigating and accounting for selective
-reporting in meta-analytic models that also account for dependent effect
-sizes. Their simulation results show that combining selection models
-with robust variance estimation to account for dependent effects reduces
-bias in the estimate of the overall effect size. Combining the selection
-models with cluster bootstrapping leads to confidence intervals with
-close-to-nominal coverage rates.
-
-The metaselection package provides an implementation of several
-meta-analytic selection models. The main function,
-[`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md),
-fits step function and beta density selection models. To handle
-dependence in the effect size estimates, the function provides options
-to use cluster-robust (sandwich) variance estimation or cluster
-bootstrapping to assess uncertainty in the model parameter estimates.
+The `metaselection` package provides an implementation of the methods
+proposed and evaluated by Pustejovsky et al. (2025) and Citkowicz et al.
+(2026). The main function,
+[`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html),
+can fit step- and beta-function selection models. To handle dependence
+in the effect size estimates, the function provides options to use
+cluster-robust (sandwich) variance estimation or cluster bootstrapping
+to assess uncertainty in the model parameter estimates. We highly
+recommend using cluster bootstrapping, particularly the two-stage
+cluster bootstrapping with percentile bootstrap confidence intervals.
 
 ## Installation
 
@@ -76,11 +64,18 @@ on the `metaselection` package website.
 The following example uses data from a meta-analysis by Lehmann et al.
 (2018) which examined the effects of color red on attractiveness
 judgments. The dataset is included in the `metadat` package (White et
-al. 2022) as `dat.lehmann`. In the code below, we fit a step function
-selection model to the Lehmann dataset using the
+al. 2022) as `dat.lehmann`. In the code below, we fit a three-parameter
+step-function selection model to the Lehmann dataset using the
 [`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md)
 function, with confidence intervals computed using two-stage cluster
-bootstrapping. For further details, please see the
+bootstrapping. Additionally, we use a default set of weak priors to
+regularize the estimates (for detail, see
+[`define_priors()`](https://jepusto.github.io/metaselection/reference/define_priors.html)).
+The function also has an argument that can be used to set the direction
+of the alternative hypothesis used in computing the p-values (default
+`alternative = "greater"`). For further details on how to use the
+[`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md)
+function, please see the
 [vignette](https://jepusto.github.io/metaselection/articles/selection-models.html).
 
 ``` r
@@ -100,6 +95,8 @@ mod_3PSM_boot <- selection_model(
   cluster = study,
   selection_type = "step",
   steps = .025,
+  priors = define_priors(),
+  alternative = "greater",
   CI_type = "percentile",
   bootstrap = "two-stage",
   R = 19
@@ -116,8 +113,9 @@ summary(mod_3PSM_boot)
 ##  
 ## Call: 
 ## selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, 
-##     selection_type = "step", steps = 0.025, CI_type = "percentile", 
-##     bootstrap = "two-stage", R = 19)
+##     selection_type = "step", alternative = "greater", steps = 0.025, 
+##     priors = define_priors(), CI_type = "percentile", bootstrap = "two-stage", 
+##     R = 19)
 ## 
 ## Number of clusters = 41; Number of effects = 81
 ## 
@@ -152,21 +150,23 @@ summary(mod_3PSM_boot)
 ##  lambda1     0.54      0.601     0.0844      4.35
 ```
 
-The beta estimate of 0.131, with a 95% confidence interval -0.049,
-0.412, represents the overall average effect after accounting for both
-selection bias and dependent effects. The tau estimate of 0.079 is the
-estimated total variance, including both between- and within-study
-heterogeneity. `lambda1` is the selection parameter. The estimate of
-0.54 indicates that effect size estimates with one-sided p-values
-greater than 0.025 are only about half as likely to be reported as
-estimates that are positive and statistically significant (i.e.,
-estimates with p \< 0.025). [This
+The beta estimate of 0.131, with a 95% confidence interval of \[-0.049,
+0.412\], represents the overall average effect after accounting for both
+selection bias and dependent effects. The `tau2` (\tau^2) estimate of
+0.079 is the estimated total variance, including both between- and
+within-study heterogeneity. `lambda1` (\lambda_1) is the selection
+parameter. The estimate of 0.54 indicates that effect size estimates
+with one-sided p-values greater than 0.025 are only about half as likely
+to be reported as estimates that are positive and statistically
+significant (i.e., estimates with p \< 0.025). [This
 infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf)
 provides further guidance on interpreting the model output.
 
 ## Parallel computing and tracking progress
 
-The package is designed to work with the `future` package for parallel
+Bootstrapping can be computationally intensive. To reduce computation
+time, we designed this package to work with the
+[`future`](https://future.futureverse.org/) package for parallel
 computing (Bengtsson 2021). To enable parallel computation of bootstrap
 calculations, simply set an appropriate parallelization plan such as
 
@@ -176,13 +176,13 @@ library(future)
 plan(multisession)
 ```
 
-The
-[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html)
+Our
+[vignette](https://jepusto.github.io/metaselection/articles/selection-models.html#parallel-processing)
 includes a more detailed demonstration.
 
-The package is also designed to work with the `progressr` package
-(Bengtsson 2026). To turn on progress bars for all bootstrap
-calculations, use
+The package is also designed to work with the
+[`progressr`](https://progressr.futureverse.org/) package (Bengtsson
+2026). To turn on progress bars for all bootstrap calculations, use
 
 ``` r
 

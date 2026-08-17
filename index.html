@@ -65,10 +65,9 @@
 <div class="section level1">
 <div class="page-header"><h1 id="metaselection">metaselection<a class="anchor" aria-label="anchor" href="#metaselection"></a>
 </h1></div>
-<p>Selective reporting occurs when statistically significant, affirmative results are more likely to be reported (and therefore more likely to be available for meta-analysis) compared to null, non-affirmative results. Selective reporting is a major concern for research syntheses because it distorts the evidence base available for a meta-analysis, biasing meta-analytic averages toward more favorable findings and misrepresenting the true population of effects. Failure to account for selective reporting can lead to inflated effect size estimates from meta-analysis and biased estimates of heterogeneity, making it difficult to draw accurate conclusions from a synthesis.</p>
-<p>There are many tools available already to investigate and correct for selective reporting. Widely used methods include graphical diagnostics like funnel plots, tests and adjustments for funnel plot asymmetry like trim-and-fill, Egger’s regression, PET/PEESE, selection models, and <span class="math inline">p</span>-value diagnostics. However, very few methods for investigating selective reporting can accommodate dependent effect sizes. This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a common feature of meta-analytic data.</p>
-<p>Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions. Ignoring the dependency of effect size estimates included in a meta-analysis leads to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences. Pustejovsky et al. (2025) and Citkowicz et al. (2026) developed methods for investigating and accounting for selective reporting in meta-analytic models that also account for dependent effect sizes. Their simulation results show that combining selection models with robust variance estimation to account for dependent effects reduces bias in the estimate of the overall effect size. Combining the selection models with cluster bootstrapping leads to confidence intervals with close-to-nominal coverage rates.</p>
-<p>The metaselection package provides an implementation of several meta-analytic selection models. The main function, <code><a href="reference/selection_model.html">selection_model()</a></code>, fits step function and beta density selection models. To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates.</p>
+<p>Selective reporting is a major concern for research syntheses because it distorts the evidence base available for a meta-analysis. There are many tools available to investigate and correct for selective reporting but few of them can accommodate dependent effect sizes. Ignoring the dependency of effect size estimates included in a meta-analysis leads to overly narrow confidence intervals, hypothesis tests with inflated Type 1 error rates, and incorrect inferences.</p>
+<p><a href="https://osf.io/preprints/metaarxiv/qg5x6_v4" class="external-link">Pustejovsky et al. (2025)</a> and <a href="https://osf.io/preprints/metaarxiv/wjpxk_v1" class="external-link">Citkowicz et al. (2026)</a> developed methods for investigating and accounting for selective reporting in meta-analytic models that also account for dependent effect sizes. Their simulation results show that using a marginal selection model reduces bias in the estimate of the overall effect size compared to using conventional summary meta-analysis models or techniques such as the PET/PEESE adjustment. Moreover, combining the marginal selection model with cluster bootstrapping — particularly the two-stage cluster bootstrapping — leads to confidence intervals with close-to-nominal coverage rates.</p>
+<p>The <code>metaselection</code> package provides an implementation of the methods proposed and evaluated by Pustejovsky et al. (2025) and Citkowicz et al. (2026). The main function, <a href="https://jepusto.github.io/metaselection/reference/selection_model.html" class="external-link"><code>selection_model()</code></a>, can fit step- and beta-function selection models. To handle dependence in the effect size estimates, the function provides options to use cluster-robust (sandwich) variance estimation or cluster bootstrapping to assess uncertainty in the model parameter estimates. We highly recommend using cluster bootstrapping, particularly the two-stage cluster bootstrapping with percentile bootstrap confidence intervals.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -86,7 +85,7 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>The following example uses data from a meta-analysis by Lehmann et al. (2018) which examined the effects of color red on attractiveness judgments. The dataset is included in the <code>metadat</code> package (White et al. 2022) as <code>dat.lehmann</code>. In the code below, we fit a step function selection model to the Lehmann dataset using the <code><a href="reference/selection_model.html">selection_model()</a></code> function, with confidence intervals computed using two-stage cluster bootstrapping. For further details, please see the <a href="https://jepusto.github.io/metaselection/articles/selection-models.html" class="external-link">vignette</a>. <!--# should we mention priors here or is it going to throw people off? --></p>
+<p>The following example uses data from a meta-analysis by Lehmann et al. (2018) which examined the effects of color red on attractiveness judgments. The dataset is included in the <code>metadat</code> package (White et al. 2022) as <code>dat.lehmann</code>. In the code below, we fit a three-parameter step-function selection model to the Lehmann dataset using the <code><a href="reference/selection_model.html">selection_model()</a></code> function, with confidence intervals computed using two-stage cluster bootstrapping. Additionally, we use a default set of weak priors to regularize the estimates (for detail, see <a href="https://jepusto.github.io/metaselection/reference/define_priors.html" class="external-link"><code>define_priors()</code></a>). The function also has an argument that can be used to set the direction of the alternative hypothesis used in computing the p-values (default <code>alternative = "greater"</code>). For further details on how to use the <code><a href="reference/selection_model.html">selection_model()</a></code> function, please see the <a href="https://jepusto.github.io/metaselection/articles/selection-models.html" class="external-link">vignette</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jepusto/metaselection" class="external-link">metaselection</a></span><span class="op">)</span></span>
 <span></span>
@@ -103,6 +102,8 @@
 <span>  cluster <span class="op">=</span> <span class="va">study</span>,</span>
 <span>  selection_type <span class="op">=</span> <span class="st">"step"</span>,</span>
 <span>  steps <span class="op">=</span> <span class="fl">.025</span>,</span>
+<span>  priors <span class="op">=</span> <span class="fu"><a href="reference/define_priors.html">define_priors</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"greater"</span>,</span>
 <span>  CI_type <span class="op">=</span> <span class="st">"percentile"</span>,</span>
 <span>  bootstrap <span class="op">=</span> <span class="st">"two-stage"</span>,</span>
 <span>  R <span class="op">=</span> <span class="fl">19</span></span>
@@ -116,51 +117,52 @@
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">##  </span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">## Call: </span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## selection_model(data = dat.lehmann2018, yi = yi, sei = sei, cluster = study, </span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">##     selection_type = "step", steps = 0.025, CI_type = "percentile", </span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##     bootstrap = "two-stage", R = 19)</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## Number of clusters = 41; Number of effects = 81</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">## Steps: 0.025 </span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">## Estimator: composite marginal likelihood </span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## Variance estimator: robust </span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="do">## Bootstrap type: two-stage </span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="do">## Number of bootstrap replications: 19 </span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="do">## Log composite likelihood of selection model: -44.46655</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="do">## Inverse selection weighted partial log likelihood: 59.53697 </span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="do">## Mean effect estimates:                                               </span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="do">##                            Percentile Bootstrap</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="do">##  Coef. Estimate Std. Error      Lower     Upper</span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="do">##   beta    0.131      0.135    -0.0492     0.412</span></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="do">## Heterogeneity estimates:                                               </span></span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="do">##                            Percentile Bootstrap</span></span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="do">##  Coef. Estimate Std. Error      Lower     Upper</span></span>
-<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="do">##   tau2   0.0794     0.0815    0.00298     0.223</span></span>
-<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="do">## Selection process estimates:</span></span>
-<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="do">##  Step: 0 &lt; p &lt;= 0.025; Studies: 16; Effects: 25                                                 </span></span>
-<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="do">##                              Percentile Bootstrap</span></span>
-<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="do">##    Coef. Estimate Std. Error      Lower     Upper</span></span>
-<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="do">##  lambda0        1        ---        ---       ---</span></span>
-<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a><span class="do">##  Step: 0.025 &lt; p &lt;= 1; Studies: 29; Effects: 56                                                 </span></span>
-<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="do">##                              Percentile Bootstrap</span></span>
-<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a><span class="do">##    Coef. Estimate Std. Error      Lower     Upper</span></span>
-<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a><span class="do">##  lambda1     0.54      0.601     0.0844      4.35</span></span></code></pre></div>
-<p>The beta estimate of 0.131, with a 95% confidence interval -0.049, 0.412, represents the overall average effect after accounting for both selection bias and dependent effects. The tau estimate of 0.079 is the estimated total variance, including both between- and within-study heterogeneity. <code>lambda1</code> is the selection parameter. The estimate of 0.54 indicates that effect size estimates with one-sided <span class="math inline">p</span>-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with <span class="math inline">p &lt; 0.025</span>). <a href="https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf" class="external-link">This infographic</a> provides further guidance on interpreting the model output.</p>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">##     selection_type = "step", alternative = "greater", steps = 0.025, </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##     priors = define_priors(), CI_type = "percentile", bootstrap = "two-stage", </span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##     R = 19)</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## Number of clusters = 41; Number of effects = 81</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">## Steps: 0.025 </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## Estimator: composite marginal likelihood </span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="do">## Variance estimator: robust </span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="do">## Bootstrap type: two-stage </span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="do">## Number of bootstrap replications: 19 </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="do">## Log composite likelihood of selection model: -44.46655</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="do">## Inverse selection weighted partial log likelihood: 59.53697 </span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="do">## Mean effect estimates:                                               </span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="do">##                            Percentile Bootstrap</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="do">##  Coef. Estimate Std. Error      Lower     Upper</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="do">##   beta    0.131      0.135    -0.0492     0.412</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="do">## Heterogeneity estimates:                                               </span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="do">##                            Percentile Bootstrap</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="do">##  Coef. Estimate Std. Error      Lower     Upper</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="do">##   tau2   0.0794     0.0815    0.00298     0.223</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="do">## Selection process estimates:</span></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="do">##  Step: 0 &lt; p &lt;= 0.025; Studies: 16; Effects: 25                                                 </span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="do">##                              Percentile Bootstrap</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="do">##    Coef. Estimate Std. Error      Lower     Upper</span></span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a><span class="do">##  lambda0        1        ---        ---       ---</span></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="do">##  Step: 0.025 &lt; p &lt;= 1; Studies: 29; Effects: 56                                                 </span></span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a><span class="do">##                              Percentile Bootstrap</span></span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a><span class="do">##    Coef. Estimate Std. Error      Lower     Upper</span></span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a><span class="do">##  lambda1     0.54      0.601     0.0844      4.35</span></span></code></pre></div>
+<p>The beta estimate of 0.131, with a 95% confidence interval of [-0.049, 0.412], represents the overall average effect after accounting for both selection bias and dependent effects. The <code>tau2</code> (<span class="math inline">\tau^2</span>) estimate of 0.079 is the estimated total variance, including both between- and within-study heterogeneity. <code>lambda1</code> (<span class="math inline">\lambda_1</span>) is the selection parameter. The estimate of 0.54 indicates that effect size estimates with one-sided <span class="math inline">p</span>-values greater than 0.025 are only about half as likely to be reported as estimates that are positive and statistically significant (i.e., estimates with <span class="math inline">p &lt; 0.025</span>). <a href="https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf" class="external-link">This infographic</a> provides further guidance on interpreting the model output. <!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  --></p>
 </div>
 <div class="section level2">
 <h2 id="parallel-computing-and-tracking-progress">Parallel computing and tracking progress<a class="anchor" aria-label="anchor" href="#parallel-computing-and-tracking-progress"></a>
 </h2>
-<p>The package is designed to work with the <code>future</code> package for parallel computing (Bengtsson 2021). To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as</p>
+<p>Bootstrapping can be computationally intensive. To reduce computation time, we designed this package to work with the <a href="https://future.futureverse.org/" class="external-link"><code>future</code></a> package for parallel computing (Bengtsson 2021). To enable parallel computation of bootstrap calculations, simply set an appropriate parallelization plan such as</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span></span></code></pre></div>
-<p>The <a href="https://jepusto.github.io/metaselection/articles/selection-models.html" class="external-link">vignette</a> includes a more detailed demonstration.</p>
-<p>The package is also designed to work with the <code>progressr</code> package (Bengtsson 2026). To turn on progress bars for all bootstrap calculations, use</p>
+<p>Our <a href="https://jepusto.github.io/metaselection/articles/selection-models.html#parallel-processing" class="external-link">vignette</a> includes a more detailed demonstration.</p>
+<p>The package is also designed to work with the <a href="https://progressr.futureverse.org/" class="external-link"><code>progressr</code></a> package (Bengtsson 2026). To turn on progress bars for all bootstrap calculations, use</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">handlers</a></span><span class="op">(</span>global <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>See <a href="https://progressr.futureverse.org/articles/progressr-01-intro.html" class="external-link"><code>vignette("progressr-intro")</code></a> for further details.</p>
@@ -266,7 +268,6 @@ White, Thomas, Daniel Noble, Alistair Senior, W. Kyle Hamilton, and Wolfgang Vie
 <ul class="list-unstyled">
 <li><a href="https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/jepusto/metaselection" class="external-link"><img src="https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV" alt="Codecov Status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=metaselection" class="external-link"><img src="http://www.r-pkg.org/badges/version/metaselection" alt="CRAN Version"></a></li>
 </ul>
 </div>
 
