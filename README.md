@@ -4,11 +4,8 @@
 [![R-CMD-check](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jepusto/metaselection/actions/workflows/R-CMD-check.yaml)
 [![Codecov
 Status](https://codecov.io/gh/jepusto/metaselection/graph/badge.svg?token=8T7IUFT1QV)](https://codecov.io/gh/jepusto/metaselection)
-
 <!-- [![CRAN Version](http://www.r-pkg.org/badges/version/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-
 <!-- [![](http://cranlogs.r-pkg.org/badges/grand-total/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
-
 <!-- [![](http://cranlogs.r-pkg.org/badges/last-month/metaselection)](https://CRAN.R-project.org/package=metaselection) -->
 
 <!-- badges: end -->
@@ -28,17 +25,17 @@ and [Citkowicz et al.
 (2026)](https://osf.io/preprints/metaarxiv/wjpxk_v1) developed methods
 for investigating and accounting for selective reporting in
 meta-analytic models that also account for dependent effect sizes. Their
-simulation results show that combining selection models with cluster
-robust variance estimation to account for dependent effects reduces bias
-in the estimate of the overall effect size. Moreover, combining the
-selection models with cluster bootstrapping, particularly the two-stage
-cluster bootstrapping, leads to confidence intervals with
-close-to-nominal coverage rates.
-<!--# QUESTION: CRVE is not the thing that's reducing bias right. It's just that if you use selection models you get results with less bias? and then using cluster bootstrapping on top of that gets you getter ci coverage resutls?  -->
+simulation results show that using a marginal selection model reduces
+bias in the estimate of the overall effect size compared to using
+conventional summary meta-analysis models or techniques such as the
+PET/PEESE adjustment. Moreover, combining the marginal selection model
+with cluster bootstrapping — particularly the two-stage cluster
+bootstrapping — leads to confidence intervals with close-to-nominal
+coverage rates.
 
 The `metaselection` package provides an implementation of the methods
-examined and recommended by Pustejovsky et al. (2025) and Citkowicz et
-al. (2026). The main function,
+proposed and evaluated by Pustejovsky et al. (2025) and Citkowicz et al.
+(2026). The main function,
 [`selection_model()`](https://jepusto.github.io/metaselection/reference/selection_model.html),
 can fit step- and beta-function selection models. To handle dependence
 in the effect size estimates, the function provides options to use
@@ -168,8 +165,8 @@ with one-sided $p$-values greater than 0.025 are only about half as
 likely to be reported as estimates that are positive and statistically
 significant (i.e., estimates with $p < 0.025$). [This
 infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf)
-provides further guidance on interpreting the model
-output.<!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  -->
+provides further guidance on interpreting the model output.
+<!--# QUESTION: Do you want to move this infographic to our package website as a separate vignette so we don't have to rely on AIR for keeping the page active? QUESTION: do you know why the results are slightly different from the numbers in the current website readme?  -->
 
 ## Parallel computing and tracking progress
 
@@ -236,7 +233,6 @@ The `metaselection` package goes beyond these other tools both by
 considering more complex forms of selective reporting and by correcting
 for selective reporting bias while accommodating meta-analytic datasets
 that include dependent effect sizes.
-<!--# QUESTION: Does this sentence also apply to RoBMA package? What's the advantage of our package over that one in particular?  -->
 
 ## Acknowledgements
 
