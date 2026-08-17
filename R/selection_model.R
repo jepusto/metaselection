@@ -959,7 +959,7 @@ selection_model <- function(
   }
   
   if (valence_check) {
-    valence <- sign(median(yi))
+    valence <- sign(stats::median(yi))
     if (valence != Hsgn) {
       valence_lab <- if (valence < 0) "negative" else "positive"
       msg <- paste0(

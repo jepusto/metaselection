@@ -370,18 +370,18 @@ check_valence_equivalence <- function(
   if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
     pos_ls <- eval(cl_pos_ls, parent.frame())  
   } else {
-    expect_warning(
+    testthat::expect_warning(
       pos_ls <- eval(cl_pos_ls, parent.frame()),
       regexp = "Most of the effect size estimates are"
     )
   }
 
   # check betas are equal
-  expect_equal(pos_gt$est[1:p_b,], pos_ls$est[1:p_b,], tolerance = tol)
+  testthat::expect_equal(pos_gt$est[1:p_b,], pos_ls$est[1:p_b,], tolerance = tol)
   
   # check gamma are equal
   if (check_gamma) {
-    expect_equal(
+    testthat::expect_equal(
       pos_gt$est[p_b + 1:p_g,], 
       pos_ls$est[p_b + 1:p_g,], 
       tolerance = tol
@@ -391,20 +391,20 @@ check_valence_equivalence <- function(
   # check zetas are equivalent after translation
   if (inherits(pos_gt, "step.selmodel")) {
     if (p_z > 1L) {
-      expect_equal(
+      testthat::expect_equal(
         pos_gt$est$Est[p_bg + 1:p_z], 
         c(pos_ls$est$Est[p_bg + (p_z - 1):1], 0) - pos_ls$est$Est[p_bg + p_z],
         tolerance = tol
       )
     } else {
-      expect_equal(
+      testthat::expect_equal(
         pos_gt$est$Est[p_bg + p_z], 
         - pos_ls$est$Est[p_bg + p_z],
         tolerance = tol
       )
     }
   } else if (inherits(pos_gt, "beta.selmodel")) {
-    expect_equal(
+    testthat::expect_equal(
       pos_gt$est[p_bg + 1:p_z,-2],
       pos_ls$est[p_bg + p_z:1,-2],
       ignore_attr = TRUE,
@@ -426,7 +426,7 @@ check_valence_equivalence <- function(
   if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
     neg_gt <- eval(cl_neg_gt, parent.frame())  
   } else {
-    expect_warning(
+    testthat::expect_warning(
       neg_gt <- eval(cl_neg_gt, parent.frame()),
       regexp = "Most of the effect size estimates are"
     )
@@ -435,12 +435,12 @@ check_valence_equivalence <- function(
   # check beta equal magnitude but opposite sign
   
   to_flip <- !(names(neg_gt$est) %in% c("estimator","param","SE","p_value","bootstraps"))
-  expect_equal(
+  testthat::expect_equal(
     apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
     apply(-1 * neg_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
     tolerance = tol
   )
-  expect_equal(
+  testthat::expect_equal(
     pos_gt$est[1:p_b,!to_flip], 
     neg_gt$est[1:p_b,!to_flip], 
     tolerance = tol
@@ -448,7 +448,7 @@ check_valence_equivalence <- function(
   
   # check gamma are equal
   if (check_gamma) {
-    expect_equal(
+    testthat::expect_equal(
       pos_gt$est[p_b + 1:p_g,], 
       neg_gt$est[p_b + 1:p_g,], 
       tolerance = tol
@@ -459,20 +459,20 @@ check_valence_equivalence <- function(
 
   if (inherits(pos_gt, "step.selmodel")) {
     if (p_z > 1L) {
-      expect_equal(
+      testthat::expect_equal(
         pos_gt$est$Est[p_bg + 1:p_z], 
         c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
         tolerance = tol
       )
     } else {
-      expect_equal(
+      testthat::expect_equal(
         pos_gt$est$Est[p_bg + p_z], 
         - neg_gt$est$Est[p_bg + p_z],
         tolerance = tol
       )
     }
   } else if (inherits(pos_gt, "beta.selmodel")) {
-    expect_equal(
+    testthat::expect_equal(
       pos_gt$est[p_bg + 1:p_z,-2],
       neg_gt$est[p_bg + p_z:1,-2],
       ignore_attr = TRUE
@@ -491,12 +491,12 @@ check_valence_equivalence <- function(
   
 
   # check beta equal magnitude but opposite sign
-  expect_equal(
+  testthat::expect_equal(
     apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
     apply(-1 * neg_ls$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
     tolerance = tol
   )
-  expect_equal(
+  testthat::expect_equal(
     pos_gt$est[1:p_b,!to_flip], 
     neg_ls$est[1:p_b,!to_flip], 
     tolerance = tol
@@ -504,7 +504,7 @@ check_valence_equivalence <- function(
   
   # check gamma are equal
   if (check_gamma) {
-    expect_equal(
+    testthat::expect_equal(
       pos_gt$est[p_b + 1:p_g,], 
       neg_ls$est[p_b + 1:p_g,], 
       tolerance = tol
@@ -512,7 +512,7 @@ check_valence_equivalence <- function(
   }
   
   # check zetas are equal
-  expect_equal(
+  testthat::expect_equal(
     pos_gt$est[p_bg + 1:p_z,], 
     neg_ls$est[p_bg + 1:p_z,], 
     tolerance = tol
