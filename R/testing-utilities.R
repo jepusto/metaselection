@@ -349,6 +349,7 @@ check_valence_equivalence <- function(
   cl_pos_gt$alternative <- "greater"
   cl_pos_gt$yi_neg <- NULL
   cl_pos_gt$check_gamma <- NULL
+  cl_pos_gt$tol <- NULL
   cl_pos_gt[[1L]] <- quote(selection_model)
   
   set.seed(seed)
@@ -419,6 +420,7 @@ check_valence_equivalence <- function(
   cl_neg_gt$yi <- cl_neg_gt$yi_neg
   cl_neg_gt$yi_neg <- NULL
   cl_neg_gt$check_gamma <- NULL
+  cl_neg_gt$tol <- NULL
   cl_neg_gt$steps <- steps_rev
   cl_neg_gt[[1L]] <- quote(selection_model)
 

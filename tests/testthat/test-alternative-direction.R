@@ -299,13 +299,15 @@ test_that("ARGL step models are consistent when alternative = 'less'.", {
   check_valence_equivalence(
     data = dat, 
     yi = yi, yi_neg = yi_neg, sei = sei,
-    steps = c(.025),
+    steps = .1,
     priors = NULL,
     estimator = "ARGL",
     bootstrap = "multinomial",
     CI_type = c("large-sample","percentile","basic","student"),
-    R = 49L,
-    check_gamma = FALSE
+    R = 99L,
+    check_gamma = FALSE,
+    tol = 1e-3,
+    seed = 20260817
   )
 
 })
