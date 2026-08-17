@@ -38,29 +38,36 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 Systematic reviews and meta-analyses aim to provide comprehensive examinations of available evidence about phenomena of scientific or policy interest.
 One major challenge to this aim is selective reporting of evidence from primary studies.
 Selective reporting occurs when the direction or statistical significance level of a finding influences whether it is reported and therefore whether the finding is available for inclusion in a systematic review.
-Selective reporting can arise from biases in the publication process, on the part of journals, editors, and reviewers, as well as through strategic decisions on part of the authors [@Rothstein2005publication; @sutton2009publication].
 If results that are positive and statistically significant are more likely to be reported than results that are null or negative, the evidence base available for meta-analysis will be distorted, leading to inflated effect size estimates from meta-analysis [@Greenwald1975prejudice; @sutton2009publication; @Rothstein2005publication] and biased estimates of heterogeneity [@augusteijn2019effect].
 
-Because selective reporting can make it difficult to draw accurate inferences from a meta-analysis, many tools have been developed that try to detect selective reporting problems and correct for the biases they create in meta-analytic summaries.
-Widely used methods include graphical diagnostics like funnel plots [@sterne2001funnel; @Sterne2011recommendations]; tests and adjustments for funnel plot asymmetry such as trim-and-fill [@duval2000nonparametric], Egger's regression [@egger1997bias], and PET/PEESE [@stanley2008meta; @stanley2014meta]; and $p$-value diagnostics such as p-curve and p-uniform [@simonsohn2014pcurve; @VanAssen2015meta; @vanaert2016conducting].
-Selection models are another class of methods that both test and correct for selective reporting by directly modeling the section process [@Citkowicz2017parsimonious; @hedges1992modeling; @vevea1995general; @Hedges1996estimating].
-However, very few methods for investigating selective reporting can accommodate dependent effect sizes.
+Because selective reporting can make it difficult to draw accurate inferences from a meta-analysis, many tools have been developed that try to detect selective reporting problems and correct for the biases they create in meta-analytic summaries.[^publication-bias-methods]
+Among these, selection models are a class of meta-analytic methods that provide both tests and bias-adjustments for selective reporting by directly modeling the section process [@Citkowicz2017parsimonious; @hedges1992modeling; @vevea1995general; @Hedges1996estimating].
+However, few of the available methods for investigating selective reporting can accommodate dependent effect sizes.
 This limitation poses a problem for meta-analyses in education, psychology and other social sciences, where dependent effects are a common feature of meta-analytic data.
+
+[^publication-bias-methods]: Widely used methods include graphical diagnostics like funnel plots [@sterne2001funnel; @Sterne2011recommendations]; tests and adjustments for funnel plot asymmetry such as trim-and-fill [@duval2000nonparametric], Egger's regression [@egger1997bias], and PET/PEESE [@stanley2008meta; @stanley2014meta]; and $p$-value diagnostics such as p-curve and p-uniform [@simonsohn2014pcurve; @VanAssen2015meta; @vanaert2016conducting].
 
 Dependent effect sizes occur when primary studies report results for multiple measures of an outcome construct, collect repeated measures of an outcome across multiple time-points, or involve comparisons between multiple intervention conditions.
 Further, dependence can also arise when meta-analyses include multiple primary studies conducted by the same researchers or the same lab [@pustejovsky2022preventionscience].
 This dependency violates statistical assumptions of independent errors, leading to overly narrow confidence intervals, hypothesis tests with inflated type one error rates, and incorrect inferences.
-Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes, including multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience].
+Meta-analysts now have access to an array of methods for summarizing and modeling dependent effect sizes.[^dependence-models]
 These methods can be combined with a few of the available techniques for investigating selective reporting, but this is currently limited to techniques based on regression adjustment [@fernandezcastilla2019detecting; @rodgers2020evaluating; @chen2024adapting] or sensitivity analyses based on simple forms of selection models, which provide bounds on average effects given an *a priori* level of selective reporting [@mathur2020sensitivity].
 
-The `metaselection` package aims to expand the range of techniques available for investigating selective reporting bias while also accommodating meta-analytic datasets that include dependent effect sizes.
-In particular, the package provides methods for investigating and accounting for selective reporting based on selection models, where prior developments were limited to data with independent effect sizes.
-The available models describe the *marginal* distribution of effect size estimates and so do not attempt to directly capture the dependence structure among effect size estimates.
-However, the package implements methods that account for dependent effect sizes *after* fitting the model, using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping techniques.
-Simulation results show that applying selection models to dependent effect size estimates reduces bias in the estimate of the overall effect size [@pustejovsky2025estimation; @citkowicz2026estimating].
-Combining the selection models with cluster-bootstrapping, particularly the two-stage clustered bootstrapping, leads to confidence intervals with close-to-nominal coverage rates [@pustejovsky2025estimation].
+[^dependence-models]: Available methods include multi-level meta-analyses [@konstantopoulos2011fixed; @vandennoortgate2013threelevel; @vandennoortgate2015metaanalysis], robust variance estimation [@Hedges2010robust; @tipton2015small; @tiptonpusto2015small], and combinations thereof [@pustejovsky2022preventionscience]
 
-Several existing packages provide implementations of selection models, but none can accommodate dependent effect size estimates while accounting for selective reporting.
+The `metaselection` package expands the range of techniques available for investigating selective reporting bias while accommodating meta-analytic datasets that include dependent effect sizes.[^alternative-packages]
+The `metaselection` package implements selection models based on step-function [@pustejovsky2025estimation] and beta-density [@citkowicz2026estimating] selection processes.
+Because these models describe the *marginal* distribution of effect size estimates, they bypass the computational complexity of modeling full multivariate dependence structures directly while still effectively reducing bias in average effect size estimates.
+To account for dependent effect sizes, these models adjust standard errors *after* model fitting using either cluster-robust variance estimation (CRVE, i.e., sandwich estimation) or clustered bootstrapping.
+Key takeaways and practical recommendations from simulation studies evaluating these methods [@pustejovsky2025estimation; @citkowicz2026estimating]  include:
+
+* Inference Method: Two-stage clustered bootstrapping consistently outperforms large-sample CRVE, providing close-to-nominal confidence interval coverage for the average effect size.
+* Sample Size Requirements: A sample size of $J \ge 30$ studies is generally needed for estimators to achieve low bias and for bootstrap confidence intervals to provide reliable coverage, particularly under severe selection.
+* Bias–Variance Trade-off: While step-function and beta-density models substantially reduce systematic bias under selective reporting, this protection comes with a modest loss in efficiency compared to unadjusted estimates. This trade-off is particularly advantageous under more severe levels of selective reporting.
+* Focus of Inference: Meta-analysts should primarily focus interpretation on the bias-adjusted average effect size ($\mu$). Selection parameters should be interpreted cautiously due to potential mis-calibration in their individual confidence interval coverage.
+* Complementary Role: These models serve as flexible, parametric alternatives to regression adjustment or funnel plots, and their empirical selection estimates can also directly inform sensitivity analyses.
+
+[^alternative-packages]: Several existing packages provide implementations of selection models, but none can accommodate dependent effect size estimates while accounting for selective reporting.
 For example, the `metafor` package [@Viechtbauer2010conducting] includes the `selmodel()` function, which allows users to fit many different types of selection models.
 The `weightr` package [@weightr] includes functions to estimate a class of $p$-value selection models described in @vevea1995general.
 However, the functions available in these packages can only be applied to meta-analytic data assuming that the effect sizes are independent.
@@ -69,6 +76,7 @@ The `RoBMA` package [@RoBMA] implements Bayesian ensemble models that include st
 In addition, the `PublicationBias` package [@PublicationBias] implements sensitivity analyses for selective reporting bias that incorporate cluster-robust variance estimation methods for handling dependent effect sizes.
 However, the sensitivity analyses implemented in the package are based on a pre-specified degree of selective reporting, rather than allowing the degree of selection to be estimated from the data.
 The sensitivity analyses are also based on a specific and simple form of selection model and do not allow modeling of more complex forms of selection.
+
 
 # Selection Models
 
@@ -84,7 +92,7 @@ The effect size estimate has standard error $\sigma_{ij}$, which is treated as a
 Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors that encode characteristics of the effect sizes or the samples and may be related to average effect size magnitude.
 Let $\mathbf{u}_{ij}$ be a $1 \times u$ row vector of predictors that may be related to effect size heterogeneity.
 Let $\Phi()$ denote the standard normal cumulative distribution function and $\phi()$ the standard normal density.
-Finally, let $p_{ij}$ be the one-sided $p$-value corresponding to the effect size estimate, which is a function of the effect size estimate and its standard error: $p_{ij} = 1 - \Phi\left(Y_{ij} / \sigma_{ij}\right) = \Phi\left(-Y_{ij} / \sigma_{ij}\right)$.
+Finally, let $p_{ij}$ be the one-sided $p$-value corresponding to the effect size estimate, which is a function of the effect size estimate and its standard error. For p-values computed under the alternative hypothesis that the effect size is positive, $p_{ij} = 1 - \Phi\left(Y_{ij} / \sigma_{ij}\right) = \Phi\left(-Y_{ij} / \sigma_{ij}\right)$; for p-values computed under the alternative that the effect size is negative, $p_{ij} = \Phi\left(Y_{ij} / \sigma_{ij}\right)$.
 
 ## The evidence-generating process
 
@@ -106,7 +114,11 @@ The package includes two different forms of selection functions: step functions 
 Although it is possible in principle to specify selection functions in terms of $p$-values from two-tailed hypothesis tests, the models implemented in the package are based on selection functions for one-tailed $p$-values.
 In primary studies, researchers typically report $p$-values from two-tailed hypothesis tests.
 However, prejudice against non-significant results is generally directional, and two-tailed $p$-values do not consider the sign or valence of the effect.
-Thus, our formulation and discussion of these functions uses one-tailed $p$-values based on the null hypothesis of $H_0: \theta \leq 0$ versus the alternative $H_A: \theta > 0$.
+Thus, our formulation and discussion of these functions uses one-tailed $p$-values for a pre-specified, directional alternative hypothesis.[^alternative]
+
+[^alternative]: The package includes an option (`alternative`) to specify the anticipated direction of effect sizes, indicating whether positive values ("greater", such as higher student scores) or negative values ("less", such as lower mortality rates) represent the expected or favorable outcome direction.
+
+
 
 ### Step functions
 
@@ -242,7 +254,7 @@ With CRVE, confidence intervals for model parameters can be constructed using la
 
 ## Bootstrapped confidence intervals
 
-An alternative to CRVE is to use bootstrap re-sampling methods to quantify uncertainty in parameter estimates.
+A superior alternative to CRVE is to use bootstrap re-sampling methods to quantify uncertainty in parameter estimates.
 Bootstrapping involves re-sampling many times from the original data to create an empirical distribution that can be used as a proxy for the actual sampling distribution of parameter estimates [@boos2003introduction].
 With dependent data structures, entire clusters of observations are re-sampled so that each bootstrapped dataset includes dependent observations, emulating the structure of the original dataset.
 In the implementation in the `metaselection` package, this approach is called the multinomial bootstrap.
@@ -401,8 +413,10 @@ Furthermore, the `metaselection` package provides a function `selection_plot()` 
 selection_plot(mod_3PSM)
 ```
 
-\@ref(fig:3PSM-plot) illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate.
+Figure \@ref(fig:3PSM-plot) illustrates how the likelihood of selection differs as a function of the one-sided $p$-value of an effect size estimate.
 In this example, the plot shows that effect sizes with one-sided $p$-values larger than 0.025 are about half as likely $(\lambda_1 = `r round(exp(mod_3PSM$est$Est[mod_3PSM$est$param=="zeta1"]), 3)`)$ to be published than effect sizes with smaller $p$-values.
+
+See [this infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf) for additional guidance on interpreting model output from the step-function selection model.
 
 ## Four-Parameter Step Model with RVE
 
@@ -506,7 +520,8 @@ For example, an effect size estimate of zero (with a one-sided $p$-value of $p =
 
 ## Bootstrap Confidence Intervals
 
-Rather than relying on robust variance estimation to construct standard errors and confidence intervals for the parameter estimates, it is advisable to instead use confidence intervals based on clustered bootstrap re-sampling.
+Rather than relying on large-sample CRVE to construct standard errors and confidence intervals for the parameter estimates, it is preferable to instead use confidence intervals based on clustered bootstrap re-sampling.
+Simulation results demonstrate that two-stage clustered bootstrapping consistently outperforms CRVE by providing close-to-nominal confidence interval coverage for bias-adjusted average effect sizes [@pustejovsky2025estimation; @citkowicz2026estimating].
 The code below re-fits the three-parameter step function model to obtain cluster-bootstrap confidence intervals.
 We specify `bootstrap = "two-stage"` to run two-stage cluster bootstrapping and we specify that we want `"percentile"` bootstrap confidence intervals as the recommended approach.
 We specify that number of bootstraps by setting R to `199`.
