@@ -743,7 +743,7 @@ test_that("error messages appear as expected.", {
       steps = "severe",
       estimator = "ARGL"
     ),
-    regexp = "vector with all entries in the interval (0,1)"
+    regexp = "vector with all entries in the interval"
   )
   
   expect_error(
@@ -756,7 +756,7 @@ test_that("error messages appear as expected.", {
       steps = 0:5,
       estimator = "ARGL"
     ),
-    regexp = "vector with all entries in the interval (0,1)"
+    regexp = "vector with all entries in the interval"
   )
 
   expect_error(
@@ -769,7 +769,7 @@ test_that("error messages appear as expected.", {
       steps = seq(-0.5, 0.5, 0.2),
       estimator = "ARGL"
     ),
-    regexp = "vector with all entries in the interval (0,1)"
+    regexp = "vector with all entries in the interval"
   )
   
   expect_error(
