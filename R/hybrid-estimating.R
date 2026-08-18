@@ -469,9 +469,6 @@ step_hybrid_jacobian <- function(
     return(J_matrix + hessian_prior)
   }
   
-  
-  return(J_matrix)
-  
 }
 
 

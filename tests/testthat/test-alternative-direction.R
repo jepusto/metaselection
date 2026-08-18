@@ -168,6 +168,24 @@ test_that("ARGL step models are consistent when alternative = 'less'.", {
   )
   expect_equal(ll_gt, ll_ls)
   
+  # equivalence of posteriors
+  prior_set <- define_priors(lambda_mode = 1)
+  post_gt <- step_weighted_logpartlik(
+    test_param, yi = dat$yi, sei = dat$sei,
+    steps = steps, 
+    Hsgn = 1L,
+    priors = prior_set
+  )
+  post_ls <- step_weighted_logpartlik(
+    test_param_trans, yi = dat$yi, sei = dat$sei,
+    ai = 1 / scale_fac,
+    steps = rev(1 - steps),
+    Hsgn = -1L,
+    priors = prior_set
+  )
+  expect_equal(post_gt, post_ls)
+  
+  
   sel_const_gt <- step_selection_constraint(
     test_param, yi = dat$yi, sei = dat$sei,
     steps = steps, 
