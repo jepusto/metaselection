@@ -62,7 +62,7 @@ To account for dependent effect sizes, these models adjust standard errors *afte
 Key takeaways and practical recommendations from simulation studies evaluating these methods [@pustejovsky2025estimation; @citkowicz2026estimating]  include:
 
 * Inference Method: Two-stage clustered bootstrapping consistently outperforms large-sample CRVE, providing close-to-nominal confidence interval coverage for the average effect size.
-* Sample Size Requirements: A sample size of $J \ge 30$ studies is generally needed for estimators to achieve low bias and for bootstrap confidence intervals to provide reliable coverage, particularly under severe selection.
+* Sample Size Requirements: A sample size of $J \geq 30$ studies is generally needed for estimators to achieve low bias and for bootstrap confidence intervals to provide reliable coverage, particularly under severe selection.
 * Bias–Variance Trade-off: While step-function and beta-density models substantially reduce systematic bias under selective reporting, this protection comes with a modest loss in efficiency compared to unadjusted estimates. This trade-off is particularly advantageous under more severe levels of selective reporting.
 * Focus of Inference: Meta-analysts should primarily focus interpretation on the bias-adjusted average effect size ($\mu$). Selection parameters should be interpreted cautiously due to potential mis-calibration in their individual confidence interval coverage.
 * Complementary Role: These models serve as flexible, parametric alternatives to regression adjustment or funnel plots, and their empirical selection estimates can also directly inform sensitivity analyses.
@@ -288,7 +288,7 @@ n_studies <- length(table(dat.lehmann2018$Full_Citation))
 ```
 
 We now demonstrate the key functions from the `metaselection` package.
-As a running example, we use data from a meta-analysis by @lehmann2018meta, who examined the effects of exposure to the color red on judgements of attractiveness.
+As a running example, we use data from a meta-analysis by @lehmann2018meta, who examined the effects of exposure to the color red on judgments of attractiveness.
 The dataset is available in the `metadat` package [@metadat] as `dat.lehmann2018`.
 It consists of `r n_ES` effect sizes from `r n_studies` studies.
 The following code loads the dataset and creates variables that will be needed for the subsequent analysis.
@@ -327,7 +327,7 @@ CHE_mod <- rma.mv(
   data = dat.lehmann2018,
   sparse = TRUE
 ) |>
-# Apply RVE with small-sample corrections, clustering by study
+# Apply CRVE with small-sample corrections, clustering by study
   robust(cluster = study, clubSandwich = TRUE)
 
 CHE_mod
@@ -337,7 +337,7 @@ The overall estimate of the average effect is `r round(as.numeric(CHE_mod$beta),
 The estimated total variance (including both between- and within-study heterogeneity) is `r round(sum(CHE_mod$sigma2), 3)`, corresponding to a total standard deviation of `r round(sqrt(sum(CHE_mod$sigma2)), 3)`.
 Next, we examine how this average effect size estimate differs from the estimates based on step-function or beta-function selection models, as fitted using the `metaselection` package.
 
-## Three-Parameter Step Function with RVE
+## Three-Parameter Step Function with CRVE
 
 The primary function for fitting $p$-value selection models is `selection_model()`.
 In the code below, we fit a step-function selection model to the `dat.lehmann2018` data using the `selection_model()` function.
@@ -418,7 +418,7 @@ In this example, the plot shows that effect sizes with one-sided $p$-values larg
 
 See [this infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf) for additional guidance on interpreting model output from the step-function selection model.
 
-## Four-Parameter Step Model with RVE
+## Four-Parameter Step Model with CRVE
 
 Rather than using a single threshold at $\alpha_1 = 0.025$, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates.
 The following code fits such a model, setting `steps = c(0.025, 0.500)`.
@@ -455,7 +455,7 @@ However, as can be seen from the robust confidence intervals in the model output
 
 [^2]: Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.
 
-## Three-Parameter Step Model with RVE and Moderators
+## Three-Parameter Step Model with CRVE and Moderators
 
 The `selection_model()` function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias.
 The function allows for both discrete and continuous moderators.
@@ -486,7 +486,7 @@ The evidence-generating process implemented in `metaselection` also allows for t
 To do so, predictors can be specified using the `var_mods` argument. 
 Just like `mean_mods`, `var_mods` takes a one-sided formula, following R's usual syntax for regression specifications.
 
-## Beta Function with RVE
+## Beta Function with CRVE
 
 The `selection_model()` function also allows fitting models based on beta-density selection function by specifying `selection_type = "beta"`.
 The default estimator for the beta-density selection model is penalized composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not currently available for this selection model.

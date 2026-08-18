@@ -153,9 +153,9 @@ confidence intervals. Note that the results do not include p-values so
 as to focus interpretation on the parameter estimates, rather than on
 the statistical significance of any given parameter.}
 \item{\code{vcov}}{A matrix containing the estimated variance-covariance matrix
-of the parameter estiamtes}
+of the parameter estimates}
 \item{\code{method}}{Character string indicating the optimization method used to solve for parameter estimates.}
-\item{\code{info}}{Further informaton about the optimization results.}
+\item{\code{info}}{Further information about the optimization results.}
 \item{\code{ll}}{Log likelihood of the model evaluated at the reported parameter estimates.}
 \item{\code{wpll}}{Weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities}
 \item{\code{n_clusters}}{Number of independent clusters of effect sizes.}
