@@ -663,3 +663,212 @@ test_that("analytic weights work as expected.", {
   
   expect_equal(sel_unwt$est, sel_wt$est)
 })
+
+test_that("error messages appear as expected.", {
+
+  set.seed(20260818)
+  
+  dat <- r_meta(
+    mean_smd = 0.5, tau = 0.2, omega = 0,
+    m = 5, cor_mu = 0, cor_sd = 0,
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.9, 0.8)), 
+    n_ES_sim = n_ES_param(35, 3)
+  )
+  dat$z <- sample(LETTERS[1:3], size = nrow(dat), replace = TRUE)
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      priors = "none"
+    ),
+    regexp = "define_priors()"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      vcov_type = "model-based"
+    ),
+    regexp = "only allowed for estimator = 'CML'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "CML",
+      vcov_type = "model-based"
+    ),
+    regexp = "does not allow the use of a clustering variable"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      bootstrap = "multinomial",
+      CI_type = "percentile",
+      R = 0L
+    ),
+    regexp = "require setting R > 0"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = "severe",
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval (0,1)"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = 0:5,
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval (0,1)"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = seq(-0.5, 0.5, 0.2),
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval (0,1)"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50, 0.975),
+      estimator = "ARGL"
+    ),
+    regexp = "vector of length 2 when selection_type = 'beta'"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      estimator = "ARGL"
+    ),
+    regexp = "must be equal to 'CML' when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      sel_mods = ~ 0 + z
+    ),
+    regexp = "must be NULL when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      sel_zero_mods = ~ 0 + z
+    ),
+    regexp = "must be NULL when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = .025,
+      estimator = "ARGL",
+      sel_mods = list(~ z, ~ z)
+    ),
+    regexp = "list with length equal to the number of steps"
+  )
+  
+  expect_no_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025,.500),
+      estimator = "ARGL",
+      sel_mods = list(~ z, ~ z)
+    )
+  )
+  
+  dat <- r_meta(
+    mean_smd = 0.5, tau = 0.2, omega = 0,
+    m = 2, cor_mu = 0, cor_sd = 0,
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.9, 0.8)), 
+    n_ES_sim = n_ES_param(35, 30)
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50)
+    ),
+    regexp = "fewer than three unique clusters"
+  )
+  
+
+})

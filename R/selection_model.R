@@ -904,7 +904,7 @@ selection_model <- function(
   }
   if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {
     if (identical(as.integer(R), 0L)) stop("Bootstrap confidence intervals require setting R > 0.")
-    if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'multinomial' or 'exponential'.")
+    if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'two-stage', 'multinomial', or 'exponential'.")
   }
 
   if (is.null(optimizer)) {
