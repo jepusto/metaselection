@@ -21,8 +21,8 @@ A data frame with 23 rows and 3 variables:
 }
 }
 \source{
-\href{https://doi.org/10.1370/afm.1312}{Table 1 of Baskerville et al.
-(2012)}
+\doi{10.1370/afm.1312}{Table 1 of Baskerville et al.
+ (2012)}
 }
 \usage{
 practice_facilitation
