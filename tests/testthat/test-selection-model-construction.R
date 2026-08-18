@@ -313,7 +313,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   m1_mle_A2 <-
@@ -325,7 +325,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   expect_identical(m1_mle_A1$est, m1_mle_A2$est)
@@ -339,7 +339,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   m1_mle_B2 <-
@@ -351,7 +351,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   expect_identical(m1_mle_B1$est, m1_mle_B2$est)
@@ -368,7 +368,7 @@ test_that("selection_model() works with the subset argument.", {
       sel_mods = ~ 0 + Z1,
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
 
@@ -394,7 +394,7 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       calc_vcov = TRUE,
-      estimator = "hybrid"
+      estimator = "ARGL"
     )
   m1_hybrid_A2 <-
     selection_model(
@@ -404,7 +404,7 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       calc_vcov = TRUE,
-      estimator = "hybrid"
+      estimator = "ARGL"
     )
 
   expect_identical(m1_hybrid_A1$est, m1_hybrid_A2$est)
@@ -419,7 +419,7 @@ test_that("selection_model() works with the subset argument.", {
       vi = Va,
       steps = c(.025, .500),
       vcov_type = "robust",
-      estimator = "hybrid"
+      estimator = "ARGL"
     )
   m1_hybrid_B2 <-
     selection_model(
@@ -429,12 +429,52 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       vcov_type = "robust",
-      estimator = "hybrid"
+      estimator = "ARGL"
     )
   
   expect_identical(m1_hybrid_B1$est, m1_hybrid_B2$est)
   expect_identical(m1_hybrid_B1$vcov, m1_hybrid_B2$vcov)
   expect_identical(m1_hybrid_B1$info, m1_hybrid_B2$info)
+  
+  m1_hybrid_mod <-
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      steps = c(.025, .500),
+      mean_mods = ~ 0 + Z1,
+      var_mods = ~ 0 + Z1,
+      sel_zero_mods = ~ 0 + Z1,
+      sel_mods = ~ 0 + Z1,
+      vcov_type = "robust",
+      estimator = "ARGL"
+    )
+  
+  expect_equal(
+    m1_hybrid_mod$est["beta_Z1A","Est"],
+    m1_hybrid_A2$est["beta","Est"],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est[c("zeta1_Z1A","zeta2_Z1A"),"Est"] - m1_hybrid_mod$est["zeta0_Z1A","Est"],
+    m1_hybrid_A2$est[c("zeta1","zeta2"),"Est"],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est["beta_Z1B","Est"],
+    m1_hybrid_B2$est["beta","Est"],
+    ignore_attr = TRUE,
+    tolerance = 2e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est[c("zeta1_Z1B","zeta2_Z1B"),"Est"] - m1_hybrid_mod$est["zeta0_Z1B","Est"],
+    m1_hybrid_B2$est[c("zeta1","zeta2"),"Est"],
+    ignore_attr = TRUE,
+    tolerance = 5e-3
+  )
+  
   
   
   set.seed(20240912)
@@ -493,4 +533,5 @@ test_that("selection_model() works with the subset argument.", {
     tolerance = 2e-4
   )
   
+
 })
