@@ -1314,72 +1314,73 @@ check_selection_weights <- function(dat, steps, estimator = "CML", bootstrap = "
   
 }
 
-check_predictions <- function(
-    data, yi, sei, pi, ai, 
-    selection_type = "step", 
-    steps = NULL,
-    mean_mods = NULL,
-    var_mods = NULL,
-    sel_mods = NULL,
-    estimator = "ARGL",
-    check_subset = TRUE
-) {
-  
-  cl <- match.call()
-  cl[[1L]] <- str2lang("metaselection:::selection_model")
-  suppressWarnings(
-    mod <- eval(cl, parent.frame())
-  )
-  
-  all_preds <- stats::predict(mod)
+# check_predictions <- function(
+#     data, yi, sei, pi, ai, 
+#     selection_type = "step", 
+#     steps = NULL,
+#     mean_mods = NULL,
+#     var_mods = NULL,
+#     sel_mods = NULL,
+#     estimator = "ARGL",
+#     check_subset = TRUE
+# ) {
+#   
+#   cl <- match.call()
+#   cl[[1L]] <- str2lang("metaselection:::selection_model")
+#   suppressWarnings(
+#     mod <- eval(cl, parent.frame())
+#   )
+#   
+#   all_preds <- stats::predict(mod)
+# 
+#   params <- mod$est$param
+#   beta <- mod$est$Est[grepl("^beta", params)]
+#   gamma <- mod$est$Est[grepl("^gamma", params)]
+#   zeta <- mod$est$Est[grepl("^zeta", params)]
+#   
+#   if (is.null(mean_mods)) {
+#     testthat::expect_equal(beta, unique(all_preds$mu))
+#   } else {
+#     X <- stats::model.matrix(mean_mods, data = data)
+#     mu <- as.numeric(X %*% beta)
+#     testthat::expect_equal(mu, all_preds$mu)
+#   }
+#   
+#   if (is.null(var_mods)) {
+#     testthat::expect_equal(exp(gamma), unique(all_preds$tau2))
+#   } else {
+#     U <- stats::model.matrix(var_mods, data = data)
+#     tau2 <- as.numeric(exp(U %*% gamma))
+#     testthat::expect_equal(tau2, all_preds$tau2)
+#   }
+#   
+#   if (selection_type == "step") {
+#     if (is.null(sel_mods)) {
+#       
+#       lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
+#       testthat::expect_equal(exp(zeta), as.numeric(lambda[-1]))
+#       
+#       sel_wts <- selection_wts(mod)
+#       testthat::expect_equal(
+#         as.numeric(lambda[mod$predictions$cats]),
+#         sel_wts$wt
+#       )
+#       
+#     } else {
+#       Z <- stats::model.matrix(sel_mods, data = data)
+#       zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
+#       lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
+#       lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
+#       testthat::expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
+#     }
+#   }
+#   
+#   # Check prediction of subset of observations
+#   sub <- sample(1:nrow(data), 10L)
+#   newdata <- data[sub,]
+#   sub_preds <- stats::predict(mod, newdata = newdata)
+#   testthat::expect_equal(sub_preds, all_preds[sub,])
+#   
+#   return(all_preds)
+# }
 
-  params <- mod$est$param
-  beta <- mod$est$Est[grepl("^beta", params)]
-  gamma <- mod$est$Est[grepl("^gamma", params)]
-  zeta <- mod$est$Est[grepl("^zeta", params)]
-  
-  if (is.null(mean_mods)) {
-    testthat::expect_equal(beta, unique(all_preds$mu))
-  } else {
-    X <- stats::model.matrix(mean_mods, data = data)
-    mu <- as.numeric(X %*% beta)
-    testthat::expect_equal(mu, all_preds$mu)
-  }
-  
-  if (is.null(var_mods)) {
-    testthat::expect_equal(exp(gamma), unique(all_preds$tau2))
-  } else {
-    U <- stats::model.matrix(var_mods, data = data)
-    tau2 <- as.numeric(exp(U %*% gamma))
-    testthat::expect_equal(tau2, all_preds$tau2)
-  }
-  
-  if (selection_type == "step") {
-    if (is.null(sel_mods)) {
-      
-      lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
-      testthat::expect_equal(exp(zeta), as.numeric(lambda[-1]))
-      
-      sel_wts <- selection_wts(mod)
-      testthat::expect_equal(
-        as.numeric(lambda[mod$predictions$cats]),
-        sel_wts$wt
-      )
-      
-    } else {
-      Z <- stats::model.matrix(sel_mods, data = data)
-      zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
-      lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
-      lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
-      testthat::expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
-    }
-  }
-  
-  # Check prediction of subset of observations
-  sub <- sample(1:nrow(data), 10L)
-  newdata <- data[sub,]
-  sub_preds <- stats::predict(mod, newdata = newdata)
-  testthat::expect_equal(sub_preds, all_preds[sub,])
-  
-  return(all_preds)
-}

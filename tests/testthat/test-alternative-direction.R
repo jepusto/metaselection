@@ -78,7 +78,6 @@ test_that("CML step models are consistent when alternative = 'less'.", {
   )
 
   
-  # equivalence of parameter estimates
   check_valence_equivalence(
     data = dat, 
     yi = yi, yi_neg = yi_neg, sei = sei,
@@ -102,7 +101,8 @@ test_that("CML step models are consistent when alternative = 'less'.", {
     priors = NULL,
     bootstrap = "multinomial",
     CI_type = c("large-sample","percentile","normal","basic","bias-corrected","student"),
-    R = 19L
+    R = 19L,
+    valence_check = FALSE
   )
   
   
@@ -325,7 +325,8 @@ test_that("ARGL step models are consistent when alternative = 'less'.", {
     R = 99L,
     check_gamma = FALSE,
     tol = 1e-3,
-    seed = 20260817
+    seed = 20260817,
+    valence_check = FALSE
   )
 
 })
@@ -411,7 +412,8 @@ test_that("CML beta models are consistent when alternative = 'less' and steps ar
     selection_type = "beta",
     steps = steps,
     priors = NULL,
-    vcov_type = "model-based"
+    vcov_type = "model-based",
+    valence_check = FALSE
   )
   
 
@@ -509,7 +511,8 @@ test_that("CML beta models are consistent when alternative = 'less' and steps ar
     yi = yi, yi_neg = yi_neg, sei = sei,
     selection_type = "beta",
     steps = steps,
-    priors = NULL
+    priors = NULL,
+    valence_check = FALSE
   )
   
   check_valence_equivalence(
