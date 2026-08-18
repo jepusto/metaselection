@@ -117,7 +117,7 @@ mod <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = c(0.025, .5),
-  estimator = "CML",
+  estimator = "ARGL",
   bootstrap = "none"
 )
 
@@ -136,7 +136,7 @@ mod_boot <- selection_model(
   estimator = "ARGL",
   bootstrap = "multinomial",
   CI_type = "percentile",
-  R = 9
+  R = 9L
 )
 
  selection_plot(mod_boot, transform = "sqrt")

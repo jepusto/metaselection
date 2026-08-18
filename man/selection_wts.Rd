@@ -58,8 +58,7 @@ mod <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = c(0.025, .5),
-  estimator = "CML",
-  bootstrap = "none"
+  estimator = "ARGL"
 )
 
 selection_wts(mod, pvals = seq(0, 1, 0.2))
@@ -70,7 +69,7 @@ mod_boot <- selection_model(
   sei = se_g,
   cluster = studyid,
   steps = c(0.025, .5),
-  estimator = "CML",
+  estimator = "ARGL",
   bootstrap = "multinomial",
   CI_type = "percentile",
   R = 9

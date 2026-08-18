@@ -39,8 +39,7 @@
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = c(0.025, .5),
-#'   estimator = "CML",
-#'   bootstrap = "none"
+#'   estimator = "ARGL"
 #' )
 #'
 #' selection_wts(mod, pvals = seq(0, 1, 0.2))
@@ -51,7 +50,7 @@
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = c(0.025, .5),
-#'   estimator = "CML",
+#'   estimator = "ARGL",
 #'   bootstrap = "multinomial",
 #'   CI_type = "percentile",
 #'   R = 9
@@ -290,7 +289,7 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   sei = se_g,
 #'   cluster = studyid,
 #'   steps = c(0.025, .5),
-#'   estimator = "CML",
+#'   estimator = "ARGL",
 #'   bootstrap = "none"
 #' )
 #' 
@@ -309,7 +308,7 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   estimator = "ARGL",
 #'   bootstrap = "multinomial",
 #'   CI_type = "percentile",
-#'   R = 9
+#'   R = 9L
 #' )
 #' 
 #'  selection_plot(mod_boot, transform = "sqrt")
