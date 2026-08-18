@@ -103,7 +103,7 @@ To account for dependent effect sizes, these models adjust standard errors <em>a
 Key takeaways and practical recommendations from simulation studies evaluating these methods <span class="citation">(<a href="#ref-citkowicz2026estimating">Citkowicz et al., 2026</a>; <a href="#ref-pustejovsky2025estimation">Pustejovsky et al., 2025</a>)</span> include:</p>
 <ul>
 <li>Inference Method: Two-stage clustered bootstrapping consistently outperforms large-sample CRVE, providing close-to-nominal confidence interval coverage for the average effect size.</li>
-<li>Sample Size Requirements: A sample size of <span class="math inline">\(J \ge 30\)</span> studies is generally needed for estimators to achieve low bias and for bootstrap confidence intervals to provide reliable coverage, particularly under severe selection.</li>
+<li>Sample Size Requirements: A sample size of <span class="math inline">\(J \geq 30\)</span> studies is generally needed for estimators to achieve low bias and for bootstrap confidence intervals to provide reliable coverage, particularly under severe selection.</li>
 <li>Bias–Variance Trade-off: While step-function and beta-density models substantially reduce systematic bias under selective reporting, this protection comes with a modest loss in efficiency compared to unadjusted estimates. This trade-off is particularly advantageous under more severe levels of selective reporting.</li>
 <li>Focus of Inference: Meta-analysts should primarily focus interpretation on the bias-adjusted average effect size (<span class="math inline">\(\mu\)</span>). Selection parameters should be interpreted cautiously due to potential mis-calibration in their individual confidence interval coverage.</li>
 <li>Complementary Role: These models serve as flexible, parametric alternatives to regression adjustment or funnel plots, and their empirical selection estimates can also directly inform sensitivity analyses.</li>
@@ -266,7 +266,7 @@ The computational demands of bootstrapping can be mitigated by using parallel pr
 <h2 id="using-the-metaselection-package">Using the <code>metaselection</code> package<a class="anchor" aria-label="anchor" href="#using-the-metaselection-package"></a>
 </h2>
 <p>We now demonstrate the key functions from the <code>metaselection</code> package.
-As a running example, we use data from a meta-analysis by <span class="citation">Lehmann, Elliot, &amp; Calin-Jageman (<a href="#ref-lehmann2018meta">2018</a>)</span>, who examined the effects of exposure to the color red on judgements of attractiveness.
+As a running example, we use data from a meta-analysis by <span class="citation">Lehmann, Elliot, &amp; Calin-Jageman (<a href="#ref-lehmann2018meta">2018</a>)</span>, who examined the effects of exposure to the color red on judgments of attractiveness.
 The dataset is available in the <code>metadat</code> package <span class="citation">(<a href="#ref-metadat">White, Noble, Senior, Hamilton, &amp; Viechtbauer, 2022</a>)</span> as <code>dat.lehmann2018</code>.
 It consists of 81 effect sizes from 41 studies.
 The following code loads the dataset and creates variables that will be needed for the subsequent analysis.</p>
@@ -302,7 +302,7 @@ It then fits a CHE working model and applies robust variance estimation, cluster
 <span>  data <span class="op">=</span> <span class="va">dat.lehmann2018</span>,</span>
 <span>  sparse <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span><span class="co"># Apply RVE with small-sample corrections, clustering by study</span></span>
+<span><span class="co"># Apply CRVE with small-sample corrections, clustering by study</span></span>
 <span>  <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/robust.html" class="external-link">robust</a></span><span class="op">(</span>cluster <span class="op">=</span> <span class="va">study</span>, clubSandwich <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">CHE_mod</span></span></code></pre></div>
@@ -337,7 +337,7 @@ The estimated total variance (including both between- and within-study heterogen
 Next, we examine how this average effect size estimate differs from the estimates based on step-function or beta-function selection models, as fitted using the <code>metaselection</code> package.</p>
 </div>
 <div class="section level3">
-<h3 id="three-parameter-step-function-with-rve">Three-Parameter Step Function with RVE<a class="anchor" aria-label="anchor" href="#three-parameter-step-function-with-rve"></a>
+<h3 id="three-parameter-step-function-with-crve">Three-Parameter Step Function with CRVE<a class="anchor" aria-label="anchor" href="#three-parameter-step-function-with-crve"></a>
 </h3>
 <p>The primary function for fitting <span class="math inline">\(p\)</span>-value selection models is <code><a href="../reference/selection_model.html">selection_model()</a></code>.
 In the code below, we fit a step-function selection model to the <code>dat.lehmann2018</code> data using the <code><a href="../reference/selection_model.html">selection_model()</a></code> function.
@@ -447,7 +447,7 @@ In this example, the plot shows that effect sizes with one-sided <span class="ma
 <p>See <a href="https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Function-Selection-Model-Results-infographic-Sept-2025.pdf" class="external-link">this infographic</a> for additional guidance on interpreting model output from the step-function selection model.</p>
 </div>
 <div class="section level3">
-<h3 id="four-parameter-step-model-with-rve">Four-Parameter Step Model with RVE<a class="anchor" aria-label="anchor" href="#four-parameter-step-model-with-rve"></a>
+<h3 id="four-parameter-step-model-with-crve">Four-Parameter Step Model with CRVE<a class="anchor" aria-label="anchor" href="#four-parameter-step-model-with-crve"></a>
 </h3>
 <p>Rather than using a single threshold at <span class="math inline">\(\alpha_1 = 0.025\)</span>, we could fit a model that also allows the selection probability for negative effect size estimates to differ from the selection probability for positive but non-significant estimates.
 The following code fits such a model, setting <code>steps = c(0.025, 0.500)</code>.
@@ -483,7 +483,7 @@ Figure 6: P-value selection probability based on estimated two-step selection mo
 However, as can be seen from the robust confidence intervals in the model output, the selection parameters are very imprecisely estimated.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Again, this preliminary analysis should be refined by using clustered bootstrap confidence intervals instead of CRVE.&lt;/p&gt;"><sup>6</sup></a></p>
 </div>
 <div class="section level3">
-<h3 id="three-parameter-step-model-with-rve-and-moderators">Three-Parameter Step Model with RVE and Moderators<a class="anchor" aria-label="anchor" href="#three-parameter-step-model-with-rve-and-moderators"></a>
+<h3 id="three-parameter-step-model-with-crve-and-moderators">Three-Parameter Step Model with CRVE and Moderators<a class="anchor" aria-label="anchor" href="#three-parameter-step-model-with-crve-and-moderators"></a>
 </h3>
 <p>The <code><a href="../reference/selection_model.html">selection_model()</a></code> function allows moderators to be incorporated into model, which enables us to distinguish between systematic study differences and selective reporting bias.
 The function allows for both discrete and continuous moderators.
@@ -516,7 +516,7 @@ To do so, predictors can be specified using the <code>var_mods</code> argument.
 Just like <code>mean_mods</code>, <code>var_mods</code> takes a one-sided formula, following R’s usual syntax for regression specifications.</p>
 </div>
 <div class="section level3">
-<h3 id="beta-function-with-rve">Beta Function with RVE<a class="anchor" aria-label="anchor" href="#beta-function-with-rve"></a>
+<h3 id="beta-function-with-crve">Beta Function with CRVE<a class="anchor" aria-label="anchor" href="#beta-function-with-crve"></a>
 </h3>
 <p>The <code><a href="../reference/selection_model.html">selection_model()</a></code> function also allows fitting models based on beta-density selection function by specifying <code>selection_type = "beta"</code>.
 The default estimator for the beta-density selection model is penalized composite maximum likelihood; the augmented and reweighted Gaussian likelihood estimator is not currently available for this selection model.
@@ -581,7 +581,7 @@ We strongly recommend running the selection models with cluster bootstrapping, p
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  56.649   0.017  56.672</span></span></code></pre>
+<span><span class="co">##  42.283   0.010  42.295</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod_3PSM_boot</span>, transf_gamma <span class="op">=</span> <span class="cn">TRUE</span>, transf_zeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    param    Est     SE percentile_lower percentile_upper</span></span>
@@ -613,7 +613,7 @@ For example, the following code specifies a <code>multisession</code> future pro
 <span>  <span class="op">)</span>  </span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   1.468   0.029   9.401</span></span></code></pre>
+<span><span class="co">##   0.990   0.005   7.448</span></span></code></pre>
 <p>Parallel processing substantially reduces the overall computing time.
 If available, using a larger number of workers would further reduce computing time.</p>
 <p>Setting a <code>sequential</code> plan will discontinue use of parallel processing:</p>

@@ -217,7 +217,7 @@ An object of class `"selmodel"` containing the following components:
 - `vcov`:
 
   A matrix containing the estimated variance-covariance matrix of the
-  parameter estiamtes
+  parameter estimates
 
 - `method`:
 
@@ -226,7 +226,7 @@ An object of class `"selmodel"` containing the following components:
 
 - `info`:
 
-  Further informaton about the optimization results.
+  Further information about the optimization results.
 
 - `ll`:
 
@@ -324,9 +324,9 @@ res_hybrid <- selection_model(
 
 res_hybrid
 #>    param    Est     SE percentile_lower percentile_upper
-#>     beta 0.2194 0.0511           0.1555            0.302
-#>     tau2 0.0393 0.0283           0.0199            0.130
-#>  lambda1 1.0332 0.4825           0.4508            3.146
+#>     beta 0.2194 0.0511          0.13940            0.341
+#>     tau2 0.0393 0.0283          0.00463            0.118
+#>  lambda1 1.0332 0.4825          0.26763            7.981
 summary(res_hybrid)
 #> Step Function Model with Cluster Bootstrapping 
 #>  
@@ -349,12 +349,12 @@ summary(res_hybrid)
 #> Mean effect estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   beta    0.219     0.0511      0.156     0.302
+#>   beta    0.219     0.0511      0.139     0.341
 #> 
 #> Heterogeneity estimates:                                               
 #>                            Percentile Bootstrap
 #>  Coef. Estimate Std. Error      Lower     Upper
-#>   tau2   0.0393     0.0283     0.0199      0.13
+#>   tau2   0.0393     0.0283    0.00463     0.118
 #> 
 #> Selection process estimates:
 #>  Step: 0 < p <= 0.025; Studies: 18; Effects: 32                                                 
@@ -365,5 +365,5 @@ summary(res_hybrid)
 #>  Step: 0.025 < p <= 1; Studies: 24; Effects: 126                                                 
 #>                              Percentile Bootstrap
 #>    Coef. Estimate Std. Error      Lower     Upper
-#>  lambda1     1.03      0.482      0.451      3.15
+#>  lambda1     1.03      0.482      0.268      7.98
 ```

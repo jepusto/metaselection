@@ -74,7 +74,7 @@ methods ([Citkowicz et al., 2026](#ref-citkowicz2026estimating);
 - Inference Method: Two-stage clustered bootstrapping consistently
   outperforms large-sample CRVE, providing close-to-nominal confidence
   interval coverage for the average effect size.
-- Sample Size Requirements: A sample size of \\J \ge 30\\ studies is
+- Sample Size Requirements: A sample size of \\J \geq 30\\ studies is
   generally needed for estimators to achieve low bias and for bootstrap
   confidence intervals to provide reliable coverage, particularly under
   severe selection.
@@ -458,12 +458,12 @@ demonstrate below.
 We now demonstrate the key functions from the `metaselection` package.
 As a running example, we use data from a meta-analysis by Lehmann,
 Elliot, & Calin-Jageman ([2018](#ref-lehmann2018meta)), who examined the
-effects of exposure to the color red on judgements of attractiveness.
-The dataset is available in the `metadat` package ([White, Noble,
-Senior, Hamilton, & Viechtbauer, 2022](#ref-metadat)) as
-`dat.lehmann2018`. It consists of 81 effect sizes from 41 studies. The
-following code loads the dataset and creates variables that will be
-needed for the subsequent analysis.
+effects of exposure to the color red on judgments of attractiveness. The
+dataset is available in the `metadat` package ([White, Noble, Senior,
+Hamilton, & Viechtbauer, 2022](#ref-metadat)) as `dat.lehmann2018`. It
+consists of 81 effect sizes from 41 studies. The following code loads
+the dataset and creates variables that will be needed for the subsequent
+analysis.
 
 ``` r
 
@@ -507,7 +507,7 @@ CHE_mod <- rma.mv(
   data = dat.lehmann2018,
   sparse = TRUE
 ) |>
-# Apply RVE with small-sample corrections, clustering by study
+# Apply CRVE with small-sample corrections, clustering by study
   robust(cluster = study, clubSandwich = TRUE)
 
 CHE_mod
@@ -548,7 +548,7 @@ heterogeneity) is 0.123, corresponding to a total standard deviation of
 from the estimates based on step-function or beta-function selection
 models, as fitted using the `metaselection` package.
 
-### Three-Parameter Step Function with RVE
+### Three-Parameter Step Function with CRVE
 
 The primary function for fitting \\p\\-value selection models is
 [`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md).
@@ -723,7 +723,7 @@ infographic](https://www.air.org/sites/default/files/2025-09/How-to-Read-Step-Fu
 for additional guidance on interpreting model output from the
 step-function selection model.
 
-### Four-Parameter Step Model with RVE
+### Four-Parameter Step Model with CRVE
 
 Rather than using a single threshold at \\\alpha_1 = 0.025\\, we could
 fit a model that also allows the selection probability for negative
@@ -779,7 +779,7 @@ that are positive but not statistically significant. However, as can be
 seen from the robust confidence intervals in the model output, the
 selection parameters are very imprecisely estimated.[^6]
 
-### Three-Parameter Step Model with RVE and Moderators
+### Three-Parameter Step Model with CRVE and Moderators
 
 The
 [`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md)
@@ -832,7 +832,7 @@ function of covariates. To do so, predictors can be specified using the
 `var_mods` argument. Just like `mean_mods`, `var_mods` takes a one-sided
 formula, following R’s usual syntax for regression specifications.
 
-### Beta Function with RVE
+### Beta Function with CRVE
 
 The
 [`selection_model()`](http://jepusto.github.io/metaselection/reference/selection_model.md)
@@ -939,7 +939,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##  56.649   0.017  56.672
+    ##  42.283   0.010  42.295
 
 ``` r
 
@@ -984,7 +984,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.468   0.029   9.401
+    ##   0.990   0.005   7.448
 
 Parallel processing substantially reduces the overall computing time. If
 available, using a larger number of workers would further reduce

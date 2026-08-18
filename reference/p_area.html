@@ -90,7 +90,9 @@ confidence interval will also be calculated.</p>
 <span class="r-in"><span>  sei <span class="op">=</span> <span class="va">se_g</span>,</span></span>
 <span class="r-in"><span>  cluster <span class="op">=</span> <span class="va">studyid</span>,</span></span>
 <span class="r-in"><span>  selection_type <span class="op">=</span> <span class="st">"beta"</span>,</span></span>
-<span class="r-in"><span>  steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># provide starting parameter values to speed up fitting</span></span></span>
+<span class="r-in"><span>  theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1615505</span>, <span class="op">-</span><span class="fl">3.4166217</span>, <span class="op">-</span><span class="fl">0.2164530</span>, <span class="op">-</span><span class="fl">0.1184116</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">p_area</span><span class="op">(</span><span class="va">beta_noboot</span><span class="op">)</span></span></span>
@@ -106,13 +108,13 @@ confidence interval will also be calculated.</p>
 <span class="r-in"><span>  steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.50</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  estimator <span class="op">=</span> <span class="st">"ARGL"</span>,</span></span>
 <span class="r-in"><span>  bootstrap <span class="op">=</span> <span class="st">"multinomial"</span>,</span></span>
-<span class="r-in"><span>  CI_type <span class="op">=</span> <span class="st">"percentile"</span>,</span></span>
-<span class="r-in"><span>  R <span class="op">=</span> <span class="fl">6</span></span></span>
+<span class="r-in"><span>  CI_type <span class="op">=</span> <span class="st">"normal"</span>,</span></span>
+<span class="r-in"><span>  R <span class="op">=</span> <span class="fl">9L</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">p_area</span><span class="op">(</span><span class="va">step_boot</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    param       Est       SE bootstraps percentile_lower percentile_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 p-area 0.5989296 5.284247          6       0.09440938         13.41982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    param       Est       SE bootstraps normal_lower normal_upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 p-area 0.5989296 4.327653          9    -9.202823     7.761264</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

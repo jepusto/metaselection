@@ -44,7 +44,9 @@ beta_noboot <- selection_model(
   sei = se_g,
   cluster = studyid,
   selection_type = "beta",
-  steps = c(0.025,0.5)
+  steps = c(0.025,0.5),
+  # provide starting parameter values to speed up fitting
+  theta = c(0.1615505, -3.4166217, -0.2164530, -0.1184116)
 )
 
 p_area(beta_noboot)
@@ -60,11 +62,11 @@ step_boot <- selection_model(
   steps = c(0.025,0.50),
   estimator = "ARGL",
   bootstrap = "multinomial",
-  CI_type = "percentile",
-  R = 6
+  CI_type = "normal",
+  R = 9L
 )
 
 p_area(step_boot)
-#>    param       Est       SE bootstraps percentile_lower percentile_upper
-#> 1 p-area 0.5989296 5.284247          6       0.09440938         13.41982
+#>    param       Est       SE bootstraps normal_lower normal_upper
+#> 1 p-area 0.5989296 4.327653          9    -9.202823     7.761264
 ```
