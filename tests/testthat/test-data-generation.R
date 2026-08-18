@@ -353,4 +353,50 @@ test_that("step_count_fun() generates correct selection probabilities.", {
   
 })
 
+test_that("error messages appear as expected for step_fun and step_count_fun.", {
+  
+  # step_fun
+  
+  expect_error(
+    step_fun(cut_vals = c(.025, .5)),
+    regexp = "must be the same length"
+  )
+  expect_error(
+    step_fun(weights = c(0.7, 0.3)),
+    regexp = "must be the same length"
+  )
+  
+  expect_error(
+    step_fun(cut_vals = c(.025, .5), weights = 0.5^(1:3)), 
+    regexp = "must be the same length"
+  )
+  
+  # step_count_fun
+  
+  expect_error(
+    step_count_fun(cut_val = 1.5), 
+    regexp = "between 0 and 1"
+  )
+  expect_error(
+    step_count_fun(cut_val = -0.5), 
+    regexp = "between 0 and 1"
+  )
+  expect_error(
+    step_count_fun(cut_val = c(0.025, 0.500)), 
+    regexp = "single numeric value"
+  )
+  expect_error(
+    step_count_fun(weight = -0.5), 
+    regexp = "greater than or equal to zero"
+  )
+  expect_error(
+    step_count_fun(weight = c(0.5,0.25)), 
+    regexp = "greater than or equal to zero"
+  )
+  expect_error(
+    step_count_fun(psi = 1:3), 
+    regexp = "single numeric value"
+  )
+  
+})
 
