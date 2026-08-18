@@ -213,7 +213,7 @@ The opinions expressed are those of the authors and do not represent the views o
 
 # Acknowledgements {-}
 
-We thank Laura Michaelson for feedback on a draft version of this article.
+We thank Laura Michaelson and Man Chen for their feedback on draft versions of this article.
 
 # Data and Replication Materials {-}
 

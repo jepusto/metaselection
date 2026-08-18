@@ -67,7 +67,7 @@ The simulation results reported in the main manuscript used an extrapolation tec
 We used $R = 2400$ replications of the simulation process.
 For each replication, we computed an estimator $\hat\theta$ of parameter $\theta$ and a set of bootstrap re-samples $\hat\theta^*_{b}$ for $b = 1,...,399$.
 With these data, we can construct a confidence interval for $\theta$ by drawing $d \leq B$ of the bootstrap re-samples at random without replacement, then using these replications in the calculations described in Section \@ref(bootstrap-CI-construction). 
-We repeat this process for $d = 49, 99, 199, 299, 399$.
+We repeat this process for $d = 49, 99, 199, 299$.
 Let $C^{dr}$ be an indicator for whether the confidence interval constructed from $d$ re-samples covers $\theta$, for $r = 1,...,R$.
 To extrapolate coverage, we fit a linear regression
 $$
@@ -116,7 +116,7 @@ big_B_PML <-
     !extrapolated
   )
 
-bootstrap_breaks <- bootstrap_Bs[-4]
+bootstrap_breaks <- bootstrap_Bs[-(4:5)]
 
 ggplot(boot_real_PML) + 
   aes(bootstraps, coverage, color = CI_type) + 
@@ -134,7 +134,7 @@ ggplot(boot_real_PML) +
     labeller = labeller(tau_lab = label_parsed, lambda_lab = label_parsed), 
     scales = "free_y"
   ) + 
-  scale_x_continuous(transform = "reciprocal", breaks = bootstrap_breaks) + 
+  scale_x_continuous(limits = c(49,1999), transform = "reciprocal", breaks = bootstrap_breaks) + 
   theme_minimal() + 
   labs(x = "Bootstrap re-samples (B)", y = "Coverage rate") + 
   theme(legend.position = "none")
