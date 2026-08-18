@@ -88,7 +88,7 @@ bootstrap_files <-
   )
 
 bootstrap_files %>%
-  filter(bootstrap == "multinomial") %>%
+  filter(bootstrap == "exponential") %>%
   select(row, files) %>%
   write_tsv("research/step-function-simulations/bootstrap-batches-to-run.tsv", col_names = FALSE)
 
@@ -120,24 +120,27 @@ bootstrap_res <-
   unnest(res)
 toc()
 
-# bootstrap_res %>%
-#   select(-run_date, -time) %>%
-#   unnest(res) %>%
-#   filter(estimator != "CML") %>%
-#   select(
-#     mean_smd:psi, bootstrap, omega, steps, bootstrap_type = bootstrap, model:param, 
-#     bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse
-#   ) %>%
-#   unnest(
-#     c(bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
-#     names_sep = "-"
-#   ) %>%
-#   pivot_longer(
-#     starts_with("boot_"),
-#     names_to = c(".value", "CI_type"),
-#     names_pattern = "(.+)-(.+)"
-#   ) %>%
-#   rename_with(~ str_remove(.x, "^boot_"))
+bootstrap_res %>% count(iterations)
+
+bootstrap_res %>%
+  select(-run_date, -time) %>%
+  unnest(res) %>%
+  filter(estimator != "CML") %>%
+  select(
+    mean_smd:psi, bootstrap, omega, steps, bootstrap_type = bootstrap, model:param,
+    bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse
+  ) %>%
+  unnest(
+    c(bootstraps, extrapolated, boot_coverage, boot_coverage_mcse, boot_width, boot_width_mcse),
+    names_sep = "-"
+  ) %>%
+  pivot_longer(
+    starts_with("boot_"),
+    names_to = c(".value", "CI_type"),
+    names_pattern = "(.+)-(.+)"
+  ) %>%
+  rename_with(~ str_remove(.x, "^boot_")) %>%
+  summary()
 
 write_rds(bootstrap_res, file = "research/step-function-simulations/sim-step-function-bootstrap-performance-results.rds", compress = "gz", compression = 9L)
 
