@@ -1009,7 +1009,7 @@ selection_model <- function(
     use_jac = use_jac
   ) 
   
-  if ((vcov_type == "raw") && (bootstrap=="none")) {
+  if ((vcov_type %in% c("raw","none")) && (bootstrap=="none")) {
     return(res)
   }
   
