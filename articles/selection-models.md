@@ -939,7 +939,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##  59.589   0.011  59.610
+    ##  50.568   0.017  50.588
 
 ``` r
 
@@ -984,7 +984,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.555   0.040   9.818
+    ##   1.140   0.005   7.922
 
 Parallel processing substantially reduces the overall computing time. If
 available, using a larger number of workers would further reduce
