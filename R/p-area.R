@@ -16,14 +16,11 @@
 #' @examples
 #'
 #' beta_noboot <- selection_model(
-#'   data = self_control,
-#'   yi = g,
-#'   sei = se_g,
-#'   cluster = studyid,
+#'   data = practice_facilitation,
+#'   yi = SMD,
+#'   sei = SE,
 #'   selection_type = "beta",
-#'   steps = c(0.025,0.5),
-#'   # provide starting parameter values to speed up fitting
-#'   theta = c(0.1615505, -3.4166217, -0.2164530, -0.1184116)
+#'   steps = c(0.025,0.975)
 #' )
 #'
 #' p_area(beta_noboot)
