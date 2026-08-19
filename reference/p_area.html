@@ -85,19 +85,16 @@ confidence interval will also be calculated.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">beta_noboot</span> <span class="op">&lt;-</span> <span class="fu"><a href="selection_model.html">selection_model</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="va">self_control</span>,</span></span>
-<span class="r-in"><span>  yi <span class="op">=</span> <span class="va">g</span>,</span></span>
-<span class="r-in"><span>  sei <span class="op">=</span> <span class="va">se_g</span>,</span></span>
-<span class="r-in"><span>  cluster <span class="op">=</span> <span class="va">studyid</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">practice_facilitation</span>,</span></span>
+<span class="r-in"><span>  yi <span class="op">=</span> <span class="va">SMD</span>,</span></span>
+<span class="r-in"><span>  sei <span class="op">=</span> <span class="va">SE</span>,</span></span>
 <span class="r-in"><span>  selection_type <span class="op">=</span> <span class="st">"beta"</span>,</span></span>
-<span class="r-in"><span>  steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># provide starting parameter values to speed up fitting</span></span></span>
-<span class="r-in"><span>  theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1615505</span>, <span class="op">-</span><span class="fl">3.4166217</span>, <span class="op">-</span><span class="fl">0.2164530</span>, <span class="op">-</span><span class="fl">0.1184116</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.975</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">p_area</span><span class="op">(</span><span class="va">beta_noboot</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    param       Est</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 p-area 0.6420617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    param        Est</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 p-area 0.09652784</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">step_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="selection_model.html">selection_model</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">self_control</span>,</span></span>

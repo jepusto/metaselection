@@ -67,7 +67,7 @@
                         <h4 data-toc-skip class="author">Megha Joshi</h4>
                         <h4 data-toc-skip class="author">Martyna Citkowicz</h4>
             
-            <h4 data-toc-skip class="date">2026-08-18</h4>
+            <h4 data-toc-skip class="date">2026-08-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jepusto/metaselection/blob/main/vignettes/selection-models.Rmd" class="external-link"><code>vignettes/selection-models.Rmd</code></a></small>
       <div class="d-none name"><code>selection-models.Rmd</code></div>
@@ -581,7 +581,7 @@ We strongly recommend running the selection models with cluster bootstrapping, p
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  42.283   0.010  42.295</span></span></code></pre>
+<span><span class="co">##  62.789   0.019  62.814</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod_3PSM_boot</span>, transf_gamma <span class="op">=</span> <span class="cn">TRUE</span>, transf_zeta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    param    Est     SE percentile_lower percentile_upper</span></span>
@@ -613,7 +613,7 @@ For example, the following code specifies a <code>multisession</code> future pro
 <span>  <span class="op">)</span>  </span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.990   0.005   7.448</span></span></code></pre>
+<span><span class="co">##   1.598   0.018   9.754</span></span></code></pre>
 <p>Parallel processing substantially reduces the overall computing time.
 If available, using a larger number of workers would further reduce computing time.</p>
 <p>Setting a <code>sequential</code> plan will discontinue use of parallel processing:</p>

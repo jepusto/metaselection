@@ -1,4 +1,4 @@
-# metaselection: Meta-analytic selection models with cluster-robust and cluster-bootstrap standard errors for dependent effect size estimates
+# metaselection: Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap Standard Errors for Dependent Effect Size Estimates
 
 Fits a flexible class of p-value selection models for meta-analysis and
 meta-regression models, providing standard errors and confidence
@@ -7,6 +7,8 @@ sandwich estimators) or cluster-level bootstrapping to handle dependent
 effect size estimates, as described in Pustejovsky, Citkowicz, and Joshi
 (2025)
 [doi:10.31222/osf.io/qg5x6_v1](https://doi.org/10.31222/osf.io/qg5x6_v1)
+and Citkowicz, Pustejovsky, and Joshi (2026)
+[doi:10.31222/osf.io/wjpxk_v1](https://doi.org/10.31222/osf.io/wjpxk_v1)
 . Supported models include generalizations of the step-function
 selection model as proposed by Vevea and Hedges (1995)
 [doi:10.1007/BF02294384](https://doi.org/10.1007/BF02294384) and the

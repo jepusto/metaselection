@@ -62,7 +62,8 @@ A data frame with 23 rows and 3 variables:
 
 ## Source
 
-[Table 1 of Baskerville et al. (2012)](https://doi.org/10.1370/afm.1312)
+Table 1 of Baskerville et al. (2012;
+[doi:10.1370/afm.1312](https://doi.org/10.1370/afm.1312) )
 
 ## References
 
