@@ -1,8 +1,8 @@
 #' @title Summarize results from a `selmodel` object
 #'
-#' @description Summarize relevant results from a `selmodel` object.
+#' @description Summarize relevant results from a fitted selection model. 
 #' 
-#' @param object Fitted model of class \code{"selmodel"}.
+#' @param object fitted model of class \code{"selmodel"}.
 #' @inheritParams print.selmodel
 #'
 #' @export

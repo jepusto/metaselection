@@ -8,7 +8,7 @@ object}
 p_area(object, CI_type = NULL, conf_level = NULL, warn = TRUE)
 }
 \arguments{
-\item{object}{Fitted model of class \code{"selmodel"}.}
+\item{object}{fitted model of class \code{"selmodel"}.}
 
 \item{CI_type}{character string specifying the type of confidence interval to calculate, with options as in \code{"selection_model"}. If \code{NULL} (the default), it will be inherited from \code{object}.}
 

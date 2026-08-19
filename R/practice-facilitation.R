@@ -6,20 +6,20 @@
 #'
 #'@format A data frame with 23 rows and 3 variables:
 #' \describe{
-#'   \item{author}{First author and publication year of primary study report}
-#'   \item{score}{Scored on a scale from 0 to 12, in which the higher the score, the higher the quality of the study methods.}
-#'   \item{design}{Study design, with CCT = controlled clinical trial, C-RCT = cluster randomized controlled trial, RCT = randomized controlled trial.}
-#'   \item{allocation_concealed}{Indicator for allocation concealment.}
-#'   \item{blinded}{Indicator for whether study was single- or double-blinded.}
-#'   \item{intent_to_treat}{Indicator for whether study adhered to intent-to-treat principle.}
-#'   \item{outcome}{Description of outcome measure.}
-#'   \item{follow_up}{Months of follow-up.}
-#'   \item{retention_pct}{Percentage of sample retained at follow-up.}
-#'   \item{SMD}{effect size in form of Hedges' g}
-#'   \item{SE}{corresponding variance of the effect size}
+#'   \item{author}{first author and publication year of primary study report.}
+#'   \item{score}{score on a scale from 0 to 12, for which higher scores correspond to higher quality of the study methods.}
+#'   \item{design}{study design, with CCT = controlled clinical trial, C-RCT = cluster randomized controlled trial, RCT = randomized controlled trial.}
+#'   \item{allocation_concealed}{indicator for allocation concealment.}
+#'   \item{blinded}{indicator for whether study was single- or double-blinded.}
+#'   \item{intent_to_treat}{indicator for whether study adhered to intent-to-treat principle.}
+#'   \item{outcome}{description of outcome measure.}
+#'   \item{follow_up}{months of follow-up.}
+#'   \item{retention_pct}{percentage of sample retained at follow-up.}
+#'   \item{SMD}{effect size in form of Hedges' g.}
+#'   \item{SE}{corresponding variance of the effect size.}
 #' }
 #'
-#'@source Table 1 of Baskerville et al. (2012; \doi{10.1370/afm.1312})
+#'@source Table 1 of Baskerville et al. (2012; \doi{10.1370/afm.1312}).
 #'  
 #' @importFrom Rdpack reprompt
 #'

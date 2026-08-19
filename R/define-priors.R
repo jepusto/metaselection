@@ -26,9 +26,9 @@
 #' @returns An object of class \code{"selmodel_prior"} containing the following
 #'   components:
 #' \describe{
-#'   \item{\code{log_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the log of the prior density over these parameters.}
-#'   \item{\code{score_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the vector of scores for the prior density over these parameters.}
-#'   \item{\code{hessian_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the Hessian matrix of the prior density over these parameters.}
+#'   \item{\code{log_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the log of the prior density over these parameters.}
+#'   \item{\code{score_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the vector of scores for the prior density over these parameters.}
+#'   \item{\code{hessian_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the Hessian matrix of the prior density over these parameters.}
 #' }
 #'
 #' @export

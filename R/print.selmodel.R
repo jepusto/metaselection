@@ -3,10 +3,10 @@
 #' @description Print relevant results from a fitted `selmodel` object.
 #' 
 #' 
-#' @param x Fitted model of class \code{"selmodel"}.
+#' @param x fitted model of class \code{"selmodel"}.
 #' @param transf_gamma logical with `TRUE` (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
 #' @param transf_zeta logical with `TRUE` (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
-#' @param digits Minimum number of significant digits to be used, with a default of 3.
+#' @param digits minimum number of significant digits to be used, with a default of 3.
 #' @param ... further arguments passed to \code{print.data.frame()}.
 #'
 #' @export

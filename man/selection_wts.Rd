@@ -13,12 +13,12 @@ selection_wts(mod, pvals, ref_pval, ...)
 \method{selection_wts}{beta.selmodel}(mod, pvals = NULL, ref_pval = NULL, bootstraps = TRUE, ...)
 }
 \arguments{
-\item{mod}{Fitted model of class \code{"selmodel"}.}
+\item{mod}{fitted model of class \code{"selmodel"}.}
 
-\item{pvals}{Numeric vector of p-values for which to calculate selection
+\item{pvals}{numeric vector of p-values for which to calculate selection
 weights.}
 
-\item{ref_pval}{Numeric value of a p-value at which to standardize the
+\item{ref_pval}{numeric value of a p-value at which to standardize the
 weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
 selection weight of 1 and selection weights for all other p-values will be
 calculated relative to \code{ref_pval}.}

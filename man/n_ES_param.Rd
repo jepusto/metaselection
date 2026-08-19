@@ -8,12 +8,12 @@ sizes}
 n_ES_param(mean_N, mean_ES, min_N = 20L)
 }
 \arguments{
-\item{mean_N}{numeric value specifying the average sample size per primary study}
+\item{mean_N}{numeric value specifying the average sample size per primary study.}
 
 \item{mean_ES}{numeric value specifying the average number of effect sizes per
-primary study}
+primary study.}
 
-\item{min_N}{numeric value specifying the minimum sample size per study}
+\item{min_N}{numeric value specifying the minimum sample size per study.}
 }
 \value{
 A function that generates a \code{data.frame} with randomly generated sample

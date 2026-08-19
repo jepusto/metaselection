@@ -48,21 +48,21 @@ selection_plot(
 )
 }
 \arguments{
-\item{mod}{Fitted model of class \code{"selmodel"}.}
+\item{mod}{fitted model of class \code{"selmodel"}.}
 
 \item{limits}{numeric vector of length 2 specifying the minimum and maximum p-values to plot.}
 
-\item{pts}{Number of points for which to calculate selection weights, with a
+\item{pts}{number of points for which to calculate selection weights, with a
 default of 200 points, evenly spaced between the specified limits.}
 
-\item{ref_pval}{Numeric value of a p-value at which to standardize the
+\item{ref_pval}{numeric value of a p-value at which to standardize the
 weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
 selection weight of 1 and selection weights for all other p-values will be
 calculated relative to \code{ref_pval}.}
 
-\item{transform}{Character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.}
+\item{transform}{character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.}
 
-\item{expand}{Passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.}
+\item{expand}{passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.}
 
 \item{...}{further arguments passed to \code{ggplot2::scale_x_continuous}.}
 

@@ -6,7 +6,7 @@
 #'   with weight fixed at 1). If the object has bootstrap replications, then a
 #'   confidence interval will also be calculated.
 #'
-#' @param object Fitted model of class \code{"selmodel"}.
+#' @param object fitted model of class \code{"selmodel"}.
 #' @param CI_type character string specifying the type of confidence interval to calculate, with options as in \code{"selection_model"}. If \code{NULL} (the default), it will be inherited from \code{object}.
 #' @param conf_level desired coverage level for confidence intervals. If \code{NULL} (the default), it will be inherited from \code{object}, which has a default value of \code{.95}.
 #' @param warn logical controlling whether warnings are displayed, with a default of \code{TRUE}.

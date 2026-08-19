@@ -15,7 +15,7 @@
 #'    returns a function that generates random samples from the dataset
 #' 
 #' @param dat a \code{data.frame} or \code{tibble} containing primary study sample 
-#'    sizes and number of effect sizes per primary study
+#'    sizes and number of effect sizes per primary study.
 #' 
 #' @returns A function that generates random samples from the input dataset.
 #' 
@@ -41,10 +41,10 @@ n_ES_empirical <- function(dat) {
 #'   size per study and returns a function to generate random samples of primary
 #'   study sample sizes and numbers of effect sizes per study. 
 #'
-#' @param mean_N numeric value specifying the average sample size per primary study
+#' @param mean_N numeric value specifying the average sample size per primary study.
 #' @param mean_ES numeric value specifying the average number of effect sizes per
-#'   primary study
-#' @param min_N numeric value specifying the minimum sample size per study
+#'   primary study.
+#' @param min_N numeric value specifying the minimum sample size per study.
 #'
 #' @returns A function that generates a \code{data.frame} with randomly generated sample
 #'   size per primary study and number of effect sizes per study.
@@ -188,7 +188,7 @@ step_count_fun <- function(cut_val = .025, weight = 1, psi = 0, renormalize = TR
 #'    selection probabilities for different intervals of p-values; the intervals 
 #'    are determined by the `cut_vals`.
 #' @param renormalize logical indicating whether to normalize the step function
-#'   to have a maximum value of 1, with a default value of \code{TRUE}.
+#'   to have a maximum value of 1, with a default value of `TRUE`.
 #' 
 #' @returns A function that can be used to censor a meta-analytic dataset 
 #'    based on the univariate step-function model. 
@@ -220,8 +220,8 @@ step_fun <- function(cut_vals = .025, weights = 1, renormalize = TRUE) {
 #'   that can be used to censor meta-analytic datasets according to the
 #'   univariate beta-density model.
 #'
-#' @param delta_1 numeric value for the first parameter of the beta function
-#' @param delta_2 numeric value for the second parameter of the beta function
+#' @param delta_1 numeric value for the first parameter of the beta function.
+#' @param delta_2 numeric value for the second parameter of the beta function.
 #' @param trunc_1 numeric value between 0 and 1, below which p-values will be
 #'   truncated.
 #' @param trunc_2 numeric value between 0 and 1, above which p-values will be
@@ -275,36 +275,47 @@ beta_fun <- function(delta_1 = 1, delta_2 = 1,
 
 #' @title Generate meta-analytic data
 #'
-#' @description Generate meta-analytic correlated or correlated and hierarchical
-#'   effects data with options to simulate selective outcome reporting
+#' @description Generate meta-analytic correlated or correlated
+#'   and hierarchical effects data with options to simulate
+#'   selective outcome reporting
 #'
-#' @param mean_smd numeric value indicating the true mean effect size
-#' @param tau numeric value characterizing between-study heterogeneity in
-#'   effects
-#' @param omega numeric value characterizing within-study heterogeneity in
-#'   effects
-#' @param m numeric value of studies in the simulated meta-analysis
-#' @param cor_mu numeric value indicating the average correlation between
-#'   outcomes
-#' @param cor_sd numeric value indicating standard deviation of correlation
-#'   between outcomes
-#' @param n_ES_sim a function used to simulate the distribution of primary study
-#'   sample sizes and the number of effect sizes per study
-#' @param censor_fun a function used to censor effects; this package provides
-#'   functionals `step_fun()` and `beta_fun()` to censor effects based on
-#'   step-function or beta-function models respectively. If `NULL` (the default)
-#' @param m_multiplier numeric value indicating a multiplier for buffer for the
-#'   number of studies
-#' @param id_start integer indicating the starting value for study id
-#' @param paste_ids logical with `TRUE` (the default) indicating that the
-#'   study id and effect size id should be pasted together
-#' @param include_sel_prob logical with `TRUE` indicating that the returned
-#'   dataset should include a variable `selection_prob` reporting the true
-#'   probability of selection given the observed p-value. Default of
-#'   \code{FALSE} indicates that the `selection_prob` variable should be
-#'   omitted.
+#' @param mean_smd numeric value indicating the true mean effect
+#'   size.
+#' @param tau numeric value characterizing between-study
+#'   heterogeneity in effects.
+#' @param omega numeric value characterizing within-study
+#'   heterogeneity in effects.
+#' @param m numeric value of studies in the simulated
+#'   meta-analysis.
+#' @param cor_mu numeric value indicating the average
+#'   correlation between outcomes.
+#' @param cor_sd numeric value indicating standard deviation of
+#'   correlation between outcomes.
+#' @param n_ES_sim a function used to simulate the distribution
+#'   of primary study sample sizes and the number of effect
+#'   sizes per study.
+#' @param censor_fun a function used to censor effects. The
+#'   package provides functionals `step_fun()` and `beta_fun()`
+#'   to censor effects based on step-function or beta-function
+#'   models respectively. If `NULL` (the default), then all
+#'   generated effect size estimates will be included (i.e.,
+#'   without censoring).
+#' @param m_multiplier numeric value for a multiplier to
+#'   buffer the number of studies generated.
+#' @param id_start integer indicating the starting value for
+#'   study id.
+#' @param paste_ids logical with `TRUE` (the default) indicating
+#'   that the study id and effect size id should be pasted
+#'   together.
+#' @param include_sel_prob logical with `TRUE` indicating that
+#'   the returned dataset should include a variable
+#'   `selection_prob` reporting the true probability of
+#'   selection given the observed p-value. Default of
+#'   `FALSE` indicates that the `selection_prob` variable
+#'   should be omitted.
 #'
-#' @returns A \code{data.frame} containing the simulated meta-analytic dataset.
+#' @returns A `data.frame` containing the simulated
+#'   meta-analytic dataset.
 #'
 #'
 #' @examples

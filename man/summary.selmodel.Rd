@@ -7,18 +7,18 @@
 \method{summary}{selmodel}(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 }
 \arguments{
-\item{object}{Fitted model of class \code{"selmodel"}.}
+\item{object}{fitted model of class \code{"selmodel"}.}
 
 \item{transf_gamma}{logical with \code{TRUE} (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
 
 \item{transf_zeta}{logical with \code{TRUE} (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
 
-\item{digits}{Minimum number of significant digits to be used, with a default of 3.}
+\item{digits}{minimum number of significant digits to be used, with a default of 3.}
 
 \item{...}{further arguments passed to \code{print.data.frame()}.}
 }
 \description{
-Summarize relevant results from a \code{selmodel} object.
+Summarize relevant results from a fitted selection model.
 }
 \examples{
 res_ML <- selection_model(

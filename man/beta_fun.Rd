@@ -13,9 +13,9 @@ beta_fun(
 )
 }
 \arguments{
-\item{delta_1}{numeric value for the first parameter of the beta function}
+\item{delta_1}{numeric value for the first parameter of the beta function.}
 
-\item{delta_2}{numeric value for the second parameter of the beta function}
+\item{delta_2}{numeric value for the second parameter of the beta function.}
 
 \item{trunc_1}{numeric value between 0 and 1, below which p-values will be
 truncated.}

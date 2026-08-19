@@ -6,10 +6,10 @@
 #' @description Calculates the selection weights implied by an estimated model
 #'   for a user-specified p-value or set of p-values.
 #'
-#' @param mod Fitted model of class \code{"selmodel"}.
-#' @param pvals Numeric vector of p-values for which to calculate selection
+#' @param mod fitted model of class \code{"selmodel"}.
+#' @param pvals numeric vector of p-values for which to calculate selection
 #'   weights.
-#' @param ref_pval Numeric value of a p-value at which to standardize the
+#' @param ref_pval numeric value of a p-value at which to standardize the
 #'   weights. If not \code{NULL}, then a p-value of \code{ref_pval} will have
 #'   selection weight of 1 and selection weights for all other p-values will be
 #'   calculated relative to \code{ref_pval}.
@@ -263,12 +263,12 @@ selection_wts.beta.selmodel <- function(mod, pvals = NULL, ref_pval = NULL, boot
 #'   display the selection weights implied by each bootstrap replicate of the
 #'   parameter estimates.
 #'
-#' @param mod Fitted model of class \code{"selmodel"}.
+#' @param mod fitted model of class \code{"selmodel"}.
 #' @param limits numeric vector of length 2 specifying the minimum and maximum p-values to plot.
-#' @param pts Number of points for which to calculate selection weights, with a
+#' @param pts number of points for which to calculate selection weights, with a
 #'   default of 200 points, evenly spaced between the specified limits.
-#' @param transform Character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.
-#' @param expand Passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.
+#' @param transform character string specifying the name of a transformation function or the transformation function itself, as defined in the scales package. The transform is passed to \code{ggplot2::scale_x_continuous}. The default transform is \code{"identity"}. Other useful transforms for p-values are \code{"sqrt"} for square-root or \code{"asn"} for the arc-sin square root.
+#' @param expand passed to the \code{expand} argument of \code{ggplot2::scale_x_continuous}.
 #' @param fill character string specifying the fill-color to use when \code{mod}
 #'   does not include bootstrap replications, with a default of \code{"blue"}.
 #'   Passed to \code{ggplot2::geom_area()}.

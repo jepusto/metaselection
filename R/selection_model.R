@@ -710,109 +710,130 @@ jackknife_selmodel <- function(
 
 #' @title Estimate step or beta selection model
 #'
-#' @description Estimate step or beta selection model, with standard errors and
-#'   confidence intervals based on either cluster-robust variance estimators
-#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle
+#' @description Estimate step or beta selection model, with
+#'   standard errors and confidence intervals based on either
+#'   cluster-robust variance estimators (i.e., sandwich
+#'   estimators) or cluster-level bootstrapping to handle
 #'   dependent effect size estimates.
 #'
 #'
-#' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
-#'   data
+#' @param data \code{data.frame} or \code{tibble} containing the
+#'   meta-analytic data.
 #' @param yi vector of effect sizes estimates.
-#' @param vi vector of sample variances. If \code{vi} is specified, then the
-#'   \code{sei} argument must be omitted.
-#' @param sei vector of sampling standard errors. If \code{sei} is specified,
-#'   then the \code{vi} argument must be omitted.
+#' @param vi vector of sample variances. If \code{vi} is
+#'   specified, then the \code{sei} argument must be omitted.
+#' @param sei vector of sampling standard errors. If \code{sei}
+#'   is specified, then the \code{vi} argument must be omitted.
 #' @param ai optional vector of analytic weights.
-#' @param cluster vector indicating which observations belong to the same
-#'   cluster.
-#' @param selection_type character string specifying the type selection model to
-#'   estimate, with possible options \code{"step"} or \code{"beta"}.
-#' @param alternative character string specifying the direction of the
-#'   alternative hypothesis used in computing p-values for the observed effect
-#'   sizes, with possible options \code{"greater"} (the default) or
-#'   \code{"less"}.
-#' @param steps If \code{selection_type = "step"}, a numeric vector of one or
-#'   more values specifying the thresholds (or steps) where the selection
-#'   probability changes, with a default of \code{steps = .025}. If
-#'   \code{selection_type = "beta"}, then a numeric vector of two values
-#'   specifying the thresholds beyond which the selection function is truncated,
-#'   with a default of \code{steps = c(.025, .975)}.
-#' @param mean_mods optional model formula for moderators related to average
-#'   effect size magnitude.
-#' @param var_mods optional model formula for moderators related to effect size
-#'   heterogeneity.
-#' @param sel_mods optional model formula for moderators related to the
-#'   probability of selection. Only relevant for \code{selection_type = "step"}.
-#' @param sel_zero_mods optional model formula for moderators related to the
-#'   probability of selection for p-values below the lowest threshold value of
-#'   \code{steps}. Only relevant for \code{selection_type = "step"}.
-#' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
-#'   penalty terms) for model parameters, with a default of
-#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized estimates.
-#' @param subset optional logical expression indicating a subset of observations
-#'   to use for estimation.
-#' @param estimator vector indicating whether to use the composite marginal
-#'   likelihood estimator (option \code{"CML"}) or the augmented and reweighted
-#'   Gaussian likelihood estimator (option \code{"ARGL"} or \code{"ARGL-full"}).
-#'   If \code{selection_type = "beta"}, only the composite marginal likelihood
-#'   estimator, \code{"CML"}, is available. For step function models, both
+#' @param cluster vector indicating which observations belong to
+#'   the same cluster.
+#' @param selection_type character string specifying the type
+#'   selection model to estimate, with possible options
+#'   \code{"step"} or \code{"beta"}.
+#' @param alternative character string specifying the direction
+#'   of the alternative hypothesis used in computing p-values
+#'   for the observed effect sizes, with possible options
+#'   \code{"greater"} (the default) or \code{"less"}.
+#' @param steps If \code{selection_type = "step"}, a numeric
+#'   vector of one or more values specifying the thresholds (or
+#'   steps) where the selection probability changes, with a
+#'   default of \code{steps = .025}. If \code{selection_type =
+#'   "beta"}, then a numeric vector of two values specifying the
+#'   thresholds beyond which the selection function is
+#'   truncated, with a default of \code{steps = c(.025, .975)}.
+#' @param mean_mods optional model formula for moderators
+#'   related to average effect size magnitude.
+#' @param var_mods optional model formula for moderators related
+#'   to effect size heterogeneity.
+#' @param sel_mods optional model formula for moderators related
+#'   to the probability of selection. Only relevant for
+#'   \code{selection_type = "step"}.
+#' @param sel_zero_mods optional model formula for moderators
+#'   related to the probability of selection for p-values below
+#'   the lowest threshold value of \code{steps}. Only relevant
+#'   for \code{selection_type = "step"}.
+#' @param priors a \code{selmodel_prior} object that defines
+#'   priors (i.e., penalty terms) for model parameters, with a
+#'   default of \code{define_priors()}. Set to \code{NULL} to
+#'   obtain unpenalized estimates.
+#' @param subset optional logical expression indicating a subset
+#'   of observations to use for estimation.
+#' @param estimator vector indicating whether to use the
+#'   composite marginal likelihood estimator (option
+#'   \code{"CML"}) or the augmented and reweighted Gaussian
+#'   likelihood estimator (option \code{"ARGL"} or
+#'   \code{"ARGL-full"}). If \code{selection_type = "beta"},
+#'   only the composite marginal likelihood estimator,
+#'   \code{"CML"}, is available. For step function models, both
 #'   estimators are available.
-#' @param vcov_type character string specifying the type of variance-covariance
-#'   matrix to calculate, with possible options \code{"robust"} for robust or
-#'   cluster-robust standard errors, \code{"model-based"} for model-based
+#' @param vcov_type character string specifying the type of
+#'   variance-covariance matrix to calculate, with possible
+#'   options \code{"robust"} for robust or cluster-robust
+#'   standard errors, \code{"model-based"} for model-based
 #'   standard errors, or \code{"none"}.
-#' @param CI_type character string specifying the type of confidence interval to
-#'   calculate, with possible options \code{"large-sample"} for large-sample
-#'   normal interval (the default), \code{"percentile"} for a percentile
-#'   interval, \code{"BCa"} for a bias-corrected-and-accelerated interval,
-#'   \code{"bias-corrected"} for a bias-corrected percentile interval (without
-#'   acceleration correction), \code{"normal"} for a standard normal interval,
-#'   \code{"basic"} for a basic interval, \code{"student"} for a studentized
-#'   interval, or \code{"none"}.
-#' @param conf_level desired coverage level for confidence intervals, with the
-#'   default value set to \code{.95}.
-#' @param theta optional numeric vector of starting values to use in
-#'   optimization routines.
-#' @param optimizer character string indicating the optimizer to use. Ignored if
-#'   \code{estimator = "ARGL"} or \code{"ARGL-full"}.
-#' @param optimizer_control an optional list of control parameters to be used
-#'   for optimization
-#' @param use_jac logical indicating whether to use the Jacobian of the
-#'   estimating equations for optimization. If \code{NULL} (the default), it
-#'   will be reset to \code{FALSE} if \code{estimator = "CML"} or to \code{TRUE}
-#'   if \code{estimator = "ARGL"}
-#' @param bootstrap character string specifying the type of bootstrap to run,
-#'   with possible options \code{"none"} (the default), \code{"exponential"} for
-#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for a
-#'   conventional clustered bootstrap, or , \code{"two-stage"} for a two-stage
-#'   clustered bootstrap.
-#' @param R number of bootstrap replications, with a default of \code{1999}.
-#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the
-#'   event of non-convergence, with a default of \code{0}.
-#' @param valence_check logical value controlling whether to check that the
-#'   valence of the median effect size estimate is consistent with the direction
-#'   of the specified \code{alternative}. If \code{TRUE} (the default), a
-#'   warning will be issued when most effect size estimates have the opposite
-#'   sign of \code{alternative}. Set to \code{FALSE} to suppress the warning.
-#' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
+#' @param CI_type character string or vector specifying the type
+#'   of confidence interval to calculate, with possible options
+#'   \code{"large-sample"} for large-sample normal interval (the
+#'   default), \code{"percentile"} for a percentile interval,
+#'   \code{"BCa"} for a bias-corrected-and-accelerated interval,
+#'   \code{"bias-corrected"} for a bias-corrected percentile
+#'   interval (without acceleration correction), \code{"normal"}
+#'   for a standard normal interval, \code{"basic"} for a basic
+#'   interval, \code{"student"} for a studentized interval, or
+#'   \code{"none"}. More than one type of interval can be
+#'   computed by specifying a character vector with multiple
+#'   options.
+#' @param conf_level desired coverage level for confidence
+#'   intervals, with the default value set to \code{.95}.
+#' @param theta optional numeric vector of starting values to
+#'   use in optimization routines.
+#' @param optimizer character string indicating the optimizer to
+#'   use. Ignored if \code{estimator = "ARGL"} or
+#'   \code{"ARGL-full"}.
+#' @param optimizer_control an optional list of control
+#'   parameters to be used for optimization
+#' @param use_jac logical indicating whether to use the Jacobian
+#'   of the estimating equations for optimization. If
+#'   \code{NULL} (the default), it will be reset to \code{FALSE}
+#'   if \code{estimator = "CML"} or to \code{TRUE} if
+#'   \code{estimator = "ARGL"}
+#' @param bootstrap character string specifying the type of
+#'   bootstrap to run, with possible options \code{"none"} (the
+#'   default), \code{"exponential"} for the fractionally
+#'   re-weighted cluster bootstrap, \code{"multinomial"} for a
+#'   conventional clustered bootstrap, or , \code{"two-stage"}
+#'   for a two-stage clustered bootstrap.
+#' @param R number of bootstrap replications, with a default of
+#'   \code{1999}.
+#' @param retry_bootstrap number of times to re-draw a bootstrap
+#'   sample in the event of non-convergence, with a default of
+#'   \code{0}.
+#' @param valence_check logical value controlling whether to
+#'   check that the valence of the median effect size estimate
+#'   is consistent with the direction of the specified
+#'   \code{alternative}. If \code{TRUE} (the default), a warning
+#'   will be issued when most effect size estimates have the
+#'   opposite sign of \code{alternative}. Set to \code{FALSE} to
+#'   suppress the warning.
+#' @param ... further arguments passed to
+#'   \code{simhelpers::bootstrap_CIs}.
 #'
-#' @returns An object of class \code{"selmodel"} containing the following
-#'   components:
+#' @returns An object of class \code{"selmodel"} containing the
+#'   following components:
 #' \describe{
-#'   \item{\code{est}}{A data frame with parameter estimates, standard errors, and
+#'   \item{\code{est}}{`data.frame` with parameter estimates, standard errors, and
 #'   confidence intervals. Note that the results do not include p-values so
 #'   as to focus interpretation on the parameter estimates, rather than on
 #'   the statistical significance of any given parameter.}
-#'   \item{\code{vcov}}{A matrix containing the estimated variance-covariance matrix
-#'   of the parameter estimates}
-#'   \item{\code{method}}{Character string indicating the optimization method used to solve for parameter estimates.}
-#'   \item{\code{info}}{Further information about the optimization results.}
-#'   \item{\code{ll}}{Log likelihood of the model evaluated at the reported parameter estimates.}
-#'   \item{\code{wpll}}{Weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities}
-#'   \item{\code{n_clusters}}{Number of independent clusters of effect sizes.}
-#'   \item{\code{n_effects}}{Number of effect size estimates in the data.}
-#'   \item{\code{...}}{Some additional elements containing information about the methods used to estimate the model.}
+#'   \item{\code{vcov}}{matrix containing the estimated variance-covariance matrix
+#'   of the parameter estimates.}
+#'   \item{\code{method}}{character string indicating the optimization method used to solve for parameter estimates.}
+#'   \item{\code{info}}{further information about the optimization results.}
+#'   \item{\code{ll}}{log likelihood of the model evaluated at the reported parameter estimates.}
+#'   \item{\code{wpll}}{weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities.}
+#'   \item{\code{n_clusters}}{number of independent clusters of effect sizes.}
+#'   \item{\code{n_effects}}{number of effect size estimates in the data.}
+#'   \item{\code{...}}{some additional elements containing information about the methods used to estimate the model.}
 #' }
 #'
 #' @export
