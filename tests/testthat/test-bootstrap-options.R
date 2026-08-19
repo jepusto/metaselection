@@ -12,6 +12,8 @@ dat <- r_meta(
   n_ES_sim = n_ES_param(40, 3)
 )
 
+
+
 test_that("bootstrap_CI options for selection_model() are irrelevant when bootstrap = 'none'.", {
 
   expect_error(
@@ -70,7 +72,82 @@ test_that("bootstrap_CI options for selection_model() are irrelevant when bootst
 
 })  
 
+test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
+  
+  suppressWarnings(
+    step_multinomial <- 
+      selection_model(
+        data = dat,
+        yi = d,
+        sei = sd_d,
+        cluster = studyid,
+        steps = 0.025,
+        estimator = "ARGL",
+        bootstrap = "multinomial", 
+        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
+        R = 39,
+        seed = 20241031,
+        format = "long"
+      )
+  )
+  
+  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), R = 39, format = "long")
+  
+  expect_equal(step_multinomial$est$boot_CIs, multi_boot)
+  
+  suppressWarnings(
+    step_multinomial_multiR <- 
+      selection_model(
+        data = dat,
+        yi = d,
+        sei = sd_d,
+        cluster = studyid,
+        steps = 0.025,
+        estimator = "ARGL",
+        bootstrap = "multinomial", 
+        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
+        R = 59,
+        seed = 20240819,
+        format = "long"
+      )
+  )
+  
+  multi_boot_multiR <- get_boot_CIs(
+    step_multinomial_multiR, 
+    CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), 
+    R = 59, seed = 20240819, format = "long"
+  )
+  
+  expect_equal(step_multinomial_multiR$est$boot_CIs, multi_boot_multiR)
+  
+  suppressWarnings(
+    step_exponential <- 
+      selection_model(
+        data = dat,
+        yi = d,
+        sei = sd_d,
+        cluster = studyid,
+        steps = 0.025,
+        estimator = "ARGL",
+        bootstrap = "exp", 
+        CI_type = c("student","BCa"),
+        R = 49,
+        seed = 20241101,
+        format = "long"
+      )
+  )
+  
+  exp_boot <- get_boot_CIs(step_exponential, CI_type = c("BCa","student"), R = 49, format = "long")
+  
+  expect_equal(step_exponential$est$boot_CIs, exp_boot)
+  
+  
+})
+
+
 test_that("CI_type options for selection_model() work when bootstrap = 'multinomial'.", {
+  
+  skip_on_cran()
   
   aseed <- 20241030
   
@@ -318,6 +395,8 @@ test_that("CI_type options for selection_model() work when bootstrap = 'multinom
 
 test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp'.", {
   
+  skip_on_cran()
+  
   aseed <- 20241029
   set.seed(aseed)
   
@@ -495,6 +574,8 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'exp
 
 test_that("bootstrap_CI options for selection_model() work when bootstrap = 'two-stage'.", {
   
+  skip_on_cran()
+  
   aseed <- 20250418
   set.seed(aseed)
   
@@ -670,77 +751,6 @@ test_that("bootstrap_CI options for selection_model() work when bootstrap = 'two
   
 })
 
-test_that("CI_type options agree with simhelpers::bootstrap_CIs.", {
-
-  suppressWarnings(
-    step_multinomial <- 
-      selection_model(
-        data = dat,
-        yi = d,
-        sei = sd_d,
-        cluster = studyid,
-        steps = 0.025,
-        estimator = "CML",
-        bootstrap = "multinomial", 
-        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
-        R = 39,
-        seed = 20241031,
-        format = "long"
-      )
-  )
-  
-  multi_boot <- get_boot_CIs(step_multinomial, CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), R = 39, format = "long")
-  
-  expect_equal(step_multinomial$est$boot_CIs, multi_boot)
-  
-  suppressWarnings(
-    step_multinomial_multiR <- 
-      selection_model(
-        data = dat,
-        yi = d,
-        sei = sd_d,
-        cluster = studyid,
-        steps = 0.025,
-        estimator = "CML",
-        bootstrap = "multinomial", 
-        CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"),
-        R = 59,
-        seed = 20240819,
-        format = "long"
-      )
-  )
-  
-  multi_boot_multiR <- get_boot_CIs(
-    step_multinomial_multiR, 
-    CI_type = c("normal","student","percentile","basic","bias-corrected","BCa"), 
-    R = 59, seed = 20240819, format = "long"
-  )
-  
-  expect_equal(step_multinomial_multiR$est$boot_CIs, multi_boot_multiR)
-
-  suppressWarnings(
-    step_exponential <- 
-      selection_model(
-        data = dat,
-        yi = d,
-        sei = sd_d,
-        cluster = studyid,
-        steps = 0.025,
-        estimator = "CML",
-        bootstrap = "exp", 
-        CI_type = c("student","BCa"),
-        R = 49,
-        seed = 20241101,
-        format = "long"
-      )
-  )
-  
-  exp_boot <- get_boot_CIs(step_exponential, CI_type = c("BCa","student"), R = 49, format = "long")
-
-  expect_equal(step_exponential$est$boot_CIs, exp_boot)
-  
-  
-})
 
 test_that("bootstrapping works with parallel processing.", {
   
@@ -908,7 +918,7 @@ test_that("bootstrap reps differ by bootstrap type.", {
       sei = sd_d,
       cluster = studyid,
       steps = 0.025,
-      estimator = "CML",
+      estimator = "ARGL",
       CI_type = "percentile",
       bootstrap = "multinomial", 
       R = 24
@@ -923,7 +933,7 @@ test_that("bootstrap reps differ by bootstrap type.", {
       sei = sd_d,
       cluster = studyid,
       steps = 0.025,
-      estimator = "CML",
+      estimator = "ARGL",
       CI_type = "percentile",
       bootstrap = "two-stage", 
       R = 24
@@ -938,7 +948,7 @@ test_that("bootstrap reps differ by bootstrap type.", {
       sei = sd_d,
       cluster = studyid,
       steps = 0.025,
-      estimator = "CML",
+      estimator = "ARGL",
       CI_type = "percentile",
       bootstrap = "exponential", 
       R = 24

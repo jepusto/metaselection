@@ -111,6 +111,8 @@ test_that("priors = NULL is equivalent to defining flat priors for step function
 
 test_that("priors = NULL is equivalent to defining flat priors for beta function.", {
   
+  skip_on_cran()
+  
   set.seed(20260806)
   
   dat <- r_meta(
@@ -297,6 +299,8 @@ test_that("Score contributions sum to total when accounting for priors for step 
 })
 
 test_that("Score contributions sum to total when accounting for priors for beta model.", {
+  
+  skip_on_cran()
   
   set.seed(20251114)
   

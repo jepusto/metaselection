@@ -176,6 +176,8 @@ test_that("build_model_frame works properly.", {
 
 test_that("selection_model() returns results of correct dimension when estimator = 'ML'.", {
   
+  skip_on_cran()
+  
   # Generate some independent data
   
   set.seed(20230523)

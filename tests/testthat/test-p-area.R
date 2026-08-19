@@ -1,3 +1,4 @@
+
 test_that("calc_step_area() is correct.", {
   
   steps <- sort(runif(4))
@@ -166,6 +167,8 @@ test_that("p_area() works with 4-param step function models.", {
 })
 
 test_that("p_area() works with beta density models.", {
+  
+  skip_on_cran()
   
   beta_noboot <- selection_model(
     data = dat,

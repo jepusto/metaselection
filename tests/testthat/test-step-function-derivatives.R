@@ -252,6 +252,7 @@ test_that("step_hessian() divides up the parameter vector appropriately.", {
 
 test_that("step_score() is an unbiased estimating equation for models with no covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -304,6 +305,7 @@ test_that("step_score() is an unbiased estimating equation for models with no co
 
 test_that("step_score() is an unbiased estimating equation for models with covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -405,6 +407,8 @@ test_that("step_score() is an unbiased estimating equation for models with covar
 })
 
 test_that("step_score and step_hessian agree with numerical derivatives.", {
+  
+  skip_on_cran()
   
   set.seed(20240419)
   

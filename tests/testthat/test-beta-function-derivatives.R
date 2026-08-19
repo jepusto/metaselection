@@ -169,6 +169,8 @@ test_that("E_Y_f and E_Y_f_vec work.", {
 
 test_that("beta_score() is an unbiased estimating equation for models with no covariates.", {
   
+  skip_on_cran()
+  
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -225,6 +227,7 @@ test_that("beta_score() is an unbiased estimating equation for models with no co
 
 test_that("beta_score() is an unbiased estimating equation for models with covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -276,6 +279,8 @@ test_that("beta_score() is an unbiased estimating equation for models with covar
 
 
 test_that("beta_score and beta_hessian agree with numerical derivatives.", {
+
+  skip_on_cran()
   
   set.seed(20251114)
   

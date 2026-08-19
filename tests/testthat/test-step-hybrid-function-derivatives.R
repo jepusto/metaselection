@@ -213,6 +213,7 @@ test_that("step_hybrid_jacobian() divides up the parameter vector appropriately.
 
 test_that("step_hybrid_score() is an unbiased estimating equation for models with no covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
   
@@ -272,6 +273,7 @@ test_that("step_hybrid_score() is an unbiased estimating equation for models wit
 
 test_that("step_hybrid_score() is an unbiased estimating equation for models with covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
   
@@ -361,6 +363,8 @@ test_that("step_hybrid_score() is an unbiased estimating equation for models wit
 
 
 test_that("step_hybrid_score and step_hybrid_jacobian agree with numerical derivatives.", {
+  
+  skip_on_cran()
   
   set.seed(20240425)
   

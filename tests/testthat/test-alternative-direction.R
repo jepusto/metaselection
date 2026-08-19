@@ -15,7 +15,7 @@ zeta_score_trans <- function(score) {
   as.vector(c(score[!zeta_params],rev(zeta_score[-length(zeta_score)]), -sum(zeta_score)))
 }
 
-test_that("CML step models are consistent when alternative = 'less'.", {
+test_that("CML step model components are consistent when alternative = 'less'.", {
 
   steps <- c(.05, .10, .50)
   test_mu_gamma <- c(0, log(0.1) / 2)
@@ -77,6 +77,11 @@ test_that("CML step models are consistent when alternative = 'less'.", {
     sum(Hess_ls[-(1:2),-(1:2)])
   )
 
+})
+
+test_that("CML step model fitting is consistent when alternative = 'less'.", {
+  
+  skip_on_cran()
   
   check_valence_equivalence(
     data = dat, 
@@ -104,11 +109,10 @@ test_that("CML step models are consistent when alternative = 'less'.", {
     R = 19L,
     valence_check = FALSE
   )
-  
-  
+
 })
 
-test_that("ARGL step models are consistent when alternative = 'less'.", {
+test_that("ARGL step model components are consistent when alternative = 'less'.", {
   
   steps <- c(.05, .10, .50)
   test_mu_gamma <- c(0, log(0.1) / 2)
@@ -293,6 +297,12 @@ test_that("ARGL step models are consistent when alternative = 'less'.", {
     sum(Jac_ls[-(1:2),-(1:2)])
   )
   
+})
+
+test_that("ARGL step model fitting is consistent when alternative = 'less'.", {
+  
+  skip_on_cran()
+  
   # equivalence of parameter estimates
   check_valence_equivalence(
     data = dat, 
@@ -331,7 +341,7 @@ test_that("ARGL step models are consistent when alternative = 'less'.", {
 
 })
 
-test_that("CML beta models are consistent when alternative = 'less' and steps are symmetric.", {
+test_that("CML beta model components are consistent when alternative = 'less' and steps are symmetric.", {
   
   steps <- c(.025, .975)
   test_mu_gamma <- c(0, log(0.1) / 2)
@@ -395,6 +405,13 @@ test_that("CML beta models are consistent when alternative = 'less' and steps ar
   )
   expect_equal(Hess_gt, Hess_ls[c(1,2,4,3),c(1,2,4,3)], ignore_attr = TRUE)
   
+})
+
+test_that("CML beta model fitting is consistent when alternative = 'less'.", {
+  
+  skip_on_cran()
+  
+  steps <- c(.025, .975)
   
   # equivalence of parameter estimates
   check_valence_equivalence(
@@ -420,7 +437,7 @@ test_that("CML beta models are consistent when alternative = 'less' and steps ar
 })
 
 
-test_that("CML beta models are consistent when alternative = 'less' and steps are asymmetric.", {
+test_that("CML beta model components are consistent when alternative = 'less' and steps are asymmetric.", {
 
   steps <- c(.05, .50)
   test_mu_gamma <- c(0.2, log(0.02^2))
@@ -504,6 +521,13 @@ test_that("CML beta models are consistent when alternative = 'less' and steps ar
   )
   expect_equal(Hess_gt, Hess_ls[c(1,2,4,3),c(1,2,4,3)], ignore_attr = TRUE)
   
+})
+
+test_that("CML beta model fitting is consistent when alternative = 'less' and steps are asymmetric..", {
+  
+  skip_on_cran()
+  
+  steps <- c(.05, .50)
   
   # equivalence of parameter estimates
   check_valence_equivalence(

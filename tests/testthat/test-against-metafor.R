@@ -107,6 +107,8 @@ test_that("selection_model() agrees with composites of metafor::selmodel().", {
 
 test_that("beta_loglik() and beta_score() agree with metafor::selmodel().", {
   
+  skip_on_cran()
+  
   # Fixed effect selection model, no predictors
   FE1 <- rma.uni(yi = yi, sei = sei, data = dat, method = "FE")
   check_against_metafor_selmodel(
@@ -140,6 +142,8 @@ test_that("beta_loglik() and beta_score() agree with metafor::selmodel().", {
 })
 
 test_that("selection_model() agrees with metafor::selmodel() with subset argument.", {
+  
+  skip_on_cran()
   
   # 4PSM where selection model only applies to non-pre-registered effects
   dat$not_PR <- 1L * (dat$Preregistered == "Not Pre-Registered")

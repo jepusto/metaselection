@@ -12,6 +12,8 @@ dat <- r_meta(
 
 test_that("selection_wts() handles default values properly.", {
   
+  skip_on_cran()
+  
   check_selection_weights(dat, steps = .025)
   check_selection_weights(dat, steps = c(.05, .50))
   check_selection_weights(dat, steps = c(.025, .05, .50))
@@ -23,6 +25,8 @@ test_that("selection_wts() handles default values properly.", {
 })
 
 test_that("selection_wts.defaults() works.", {
+  
+  skip_on_cran()
   
   # check manual weights against beta function
   
@@ -111,6 +115,8 @@ test_that("selection_wts.defaults() works.", {
 })  
 
 test_that("selection_wts() handles ref_pval.", {
+  
+  skip_on_cran()
   
   step_fit <- selection_model(
     data = dat,
