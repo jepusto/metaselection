@@ -19,8 +19,7 @@
 #'   \item{SE}{corresponding variance of the effect size}
 #' }
 #'
-#'@source \doi{10.1370/afm.1312}{Table 1 of Baskerville et al.
-#'  (2012)}
+#'@source Table 1 of Baskerville et al. (2012; \doi{10.1370/afm.1312})
 #'  
 #' @importFrom Rdpack reprompt
 #'
