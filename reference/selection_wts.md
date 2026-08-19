@@ -19,15 +19,15 @@ selection_wts(mod, pvals = NULL, ref_pval = NULL, bootstraps = TRUE, ...)
 
 - mod:
 
-  Fitted model of class `"selmodel"`.
+  fitted model of class `"selmodel"`.
 
 - pvals:
 
-  Numeric vector of p-values for which to calculate selection weights.
+  numeric vector of p-values for which to calculate selection weights.
 
 - ref_pval:
 
-  Numeric value of a p-value at which to standardize the weights. If not
+  numeric value of a p-value at which to standardize the weights. If not
   `NULL`, then a p-value of `ref_pval` will have selection weight of 1
   and selection weights for all other p-values will be calculated
   relative to `ref_pval`.

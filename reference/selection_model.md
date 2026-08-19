@@ -44,7 +44,7 @@ selection_model(
 
 - data:
 
-  `data.frame` or `tibble` containing the meta-analytic data
+  `data.frame` or `tibble` containing the meta-analytic data.
 
 - yi:
 
@@ -139,14 +139,15 @@ selection_model(
 
 - CI_type:
 
-  character string specifying the type of confidence interval to
-  calculate, with possible options `"large-sample"` for large-sample
+  character string or vector specifying the type of confidence interval
+  to calculate, with possible options `"large-sample"` for large-sample
   normal interval (the default), `"percentile"` for a percentile
   interval, `"BCa"` for a bias-corrected-and-accelerated interval,
   `"bias-corrected"` for a bias-corrected percentile interval (without
   acceleration correction), `"normal"` for a standard normal interval,
   `"basic"` for a basic interval, `"student"` for a studentized
-  interval, or `"none"`.
+  interval, or `"none"`. More than one type of interval can be computed
+  by specifying a character vector with multiple options.
 
 - conf_level:
 
@@ -209,46 +210,46 @@ An object of class `"selmodel"` containing the following components:
 
 - `est`:
 
-  A data frame with parameter estimates, standard errors, and confidence
+  `data.frame` with parameter estimates, standard errors, and confidence
   intervals. Note that the results do not include p-values so as to
   focus interpretation on the parameter estimates, rather than on the
   statistical significance of any given parameter.
 
 - `vcov`:
 
-  A matrix containing the estimated variance-covariance matrix of the
-  parameter estimates
+  matrix containing the estimated variance-covariance matrix of the
+  parameter estimates.
 
 - `method`:
 
-  Character string indicating the optimization method used to solve for
+  character string indicating the optimization method used to solve for
   parameter estimates.
 
 - `info`:
 
-  Further information about the optimization results.
+  further information about the optimization results.
 
 - `ll`:
 
-  Log likelihood of the model evaluated at the reported parameter
+  log likelihood of the model evaluated at the reported parameter
   estimates.
 
 - `wpll`:
 
-  Weighted partial log likelihood of the random effects model, with
-  weights corresponding to inverse selection probabilities
+  weighted partial log likelihood of the random effects model, with
+  weights corresponding to inverse selection probabilities.
 
 - `n_clusters`:
 
-  Number of independent clusters of effect sizes.
+  number of independent clusters of effect sizes.
 
 - `n_effects`:
 
-  Number of effect size estimates in the data.
+  number of effect size estimates in the data.
 
 - `...`:
 
-  Some additional elements containing information about the methods used
+  some additional elements containing information about the methods used
   to estimate the model.
 
 ## Examples

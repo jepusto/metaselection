@@ -20,11 +20,11 @@ beta_fun(
 
 - delta_1:
 
-  numeric value for the first parameter of the beta function
+  numeric value for the first parameter of the beta function.
 
 - delta_2:
 
-  numeric value for the second parameter of the beta function
+  numeric value for the second parameter of the beta function.
 
 - trunc_1:
 

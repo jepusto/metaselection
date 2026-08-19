@@ -15,7 +15,7 @@ p_area(object, CI_type = NULL, conf_level = NULL, warn = TRUE)
 
 - object:
 
-  Fitted model of class `"selmodel"`.
+  fitted model of class `"selmodel"`.
 
 - CI_type:
 

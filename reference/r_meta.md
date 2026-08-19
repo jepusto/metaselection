@@ -26,56 +26,57 @@ r_meta(
 
 - mean_smd:
 
-  numeric value indicating the true mean effect size
+  numeric value indicating the true mean effect size.
 
 - tau:
 
-  numeric value characterizing between-study heterogeneity in effects
+  numeric value characterizing between-study heterogeneity in effects.
 
 - omega:
 
-  numeric value characterizing within-study heterogeneity in effects
+  numeric value characterizing within-study heterogeneity in effects.
 
 - m:
 
-  numeric value of studies in the simulated meta-analysis
+  numeric value of studies in the simulated meta-analysis.
 
 - cor_mu:
 
-  numeric value indicating the average correlation between outcomes
+  numeric value indicating the average correlation between outcomes.
 
 - cor_sd:
 
   numeric value indicating standard deviation of correlation between
-  outcomes
+  outcomes.
 
 - n_ES_sim:
 
   a function used to simulate the distribution of primary study sample
-  sizes and the number of effect sizes per study
+  sizes and the number of effect sizes per study.
 
 - censor_fun:
 
-  a function used to censor effects; this package provides functionals
+  a function used to censor effects. The package provides functionals
   [`step_fun()`](http://jepusto.github.io/metaselection/reference/step_fun.md)
   and
   [`beta_fun()`](http://jepusto.github.io/metaselection/reference/beta_fun.md)
   to censor effects based on step-function or beta-function models
-  respectively. If `NULL` (the default)
+  respectively. If `NULL` (the default), then all generated effect size
+  estimates will be included (i.e., without censoring).
 
 - m_multiplier:
 
-  numeric value indicating a multiplier for buffer for the number of
-  studies
+  numeric value for a multiplier to buffer the number of studies
+  generated.
 
 - id_start:
 
-  integer indicating the starting value for study id
+  integer indicating the starting value for study id.
 
 - paste_ids:
 
   logical with `TRUE` (the default) indicating that the study id and
-  effect size id should be pasted together
+  effect size id should be pasted together.
 
 - include_sel_prob:
 

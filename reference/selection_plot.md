@@ -57,7 +57,7 @@ selection_plot(
 
 - mod:
 
-  Fitted model of class `"selmodel"`.
+  fitted model of class `"selmodel"`.
 
 - limits:
 
@@ -66,19 +66,19 @@ selection_plot(
 
 - pts:
 
-  Number of points for which to calculate selection weights, with a
+  number of points for which to calculate selection weights, with a
   default of 200 points, evenly spaced between the specified limits.
 
 - ref_pval:
 
-  Numeric value of a p-value at which to standardize the weights. If not
+  numeric value of a p-value at which to standardize the weights. If not
   `NULL`, then a p-value of `ref_pval` will have selection weight of 1
   and selection weights for all other p-values will be calculated
   relative to `ref_pval`.
 
 - transform:
 
-  Character string specifying the name of a transformation function or
+  character string specifying the name of a transformation function or
   the transformation function itself, as defined in the scales package.
   The transform is passed to
   [`ggplot2::scale_x_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html).
@@ -88,7 +88,7 @@ selection_plot(
 
 - expand:
 
-  Passed to the `expand` argument of
+  passed to the `expand` argument of
   [`ggplot2::scale_x_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html).
 
 - ...:

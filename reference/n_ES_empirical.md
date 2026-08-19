@@ -15,7 +15,7 @@ n_ES_empirical(dat)
 - dat:
 
   a `data.frame` or `tibble` containing primary study sample sizes and
-  number of effect sizes per primary study
+  number of effect sizes per primary study.
 
 ## Value
 

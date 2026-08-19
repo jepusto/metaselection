@@ -13,7 +13,7 @@ print(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 
 - x:
 
-  Fitted model of class `"selmodel"`.
+  fitted model of class `"selmodel"`.
 
 - transf_gamma:
 
@@ -29,7 +29,7 @@ print(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 
 - digits:
 
-  Minimum number of significant digits to be used, with a default of 3.
+  minimum number of significant digits to be used, with a default of 3.
 
 - ...:
 

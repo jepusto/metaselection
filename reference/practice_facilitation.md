@@ -16,54 +16,54 @@ A data frame with 23 rows and 3 variables:
 
 - author:
 
-  First author and publication year of primary study report
+  first author and publication year of primary study report.
 
 - score:
 
-  Scored on a scale from 0 to 12, in which the higher the score, the
-  higher the quality of the study methods.
+  score on a scale from 0 to 12, for which higher scores correspond to
+  higher quality of the study methods.
 
 - design:
 
-  Study design, with CCT = controlled clinical trial, C-RCT = cluster
+  study design, with CCT = controlled clinical trial, C-RCT = cluster
   randomized controlled trial, RCT = randomized controlled trial.
 
 - allocation_concealed:
 
-  Indicator for allocation concealment.
+  indicator for allocation concealment.
 
 - blinded:
 
-  Indicator for whether study was single- or double-blinded.
+  indicator for whether study was single- or double-blinded.
 
 - intent_to_treat:
 
-  Indicator for whether study adhered to intent-to-treat principle.
+  indicator for whether study adhered to intent-to-treat principle.
 
 - outcome:
 
-  Description of outcome measure.
+  description of outcome measure.
 
 - follow_up:
 
-  Months of follow-up.
+  months of follow-up.
 
 - retention_pct:
 
-  Percentage of sample retained at follow-up.
+  percentage of sample retained at follow-up.
 
 - SMD:
 
-  effect size in form of Hedges' g
+  effect size in form of Hedges' g.
 
 - SE:
 
-  corresponding variance of the effect size
+  corresponding variance of the effect size.
 
 ## Source
 
 Table 1 of Baskerville et al. (2012;
-[doi:10.1370/afm.1312](https://doi.org/10.1370/afm.1312) )
+[doi:10.1370/afm.1312](https://doi.org/10.1370/afm.1312) ).
 
 ## References
 

@@ -15,11 +15,11 @@ A tibble with 615 rows and 2 variables:
 
 - n:
 
-  the sample size of the primary study
+  the sample size of the primary study.
 
 - n_ES:
 
-  number of effect sizes in the primary study
+  number of effect sizes in the primary study.
 
 ## References
 

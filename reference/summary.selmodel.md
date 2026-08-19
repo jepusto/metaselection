@@ -1,6 +1,6 @@
 # Summarize results from a `selmodel` object
 
-Summarize relevant results from a `selmodel` object.
+Summarize relevant results from a fitted selection model.
 
 ## Usage
 
@@ -13,7 +13,7 @@ summary(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 
 - object:
 
-  Fitted model of class `"selmodel"`.
+  fitted model of class `"selmodel"`.
 
 - transf_gamma:
 
@@ -29,7 +29,7 @@ summary(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
 
 - digits:
 
-  Minimum number of significant digits to be used, with a default of 3.
+  minimum number of significant digits to be used, with a default of 3.
 
 - ...:
 

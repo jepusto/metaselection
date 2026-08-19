@@ -64,18 +64,18 @@ components:
 
 - `log_prior`:
 
-  A function with arguments `beta`,`gamma`,`zeta` that returns the log
-  of the prior density over these parameters.
+  function with arguments `beta`,`gamma`,`zeta` that returns the log of
+  the prior density over these parameters.
 
 - `score_prior`:
 
-  A function with arguments `beta`,`gamma`,`zeta` that returns the
-  vector of scores for the prior density over these parameters.
+  function with arguments `beta`,`gamma`,`zeta` that returns the vector
+  of scores for the prior density over these parameters.
 
 - `hessian_prior`:
 
-  A function with arguments `beta`,`gamma`,`zeta` that returns the
-  Hessian matrix of the prior density over these parameters.
+  function with arguments `beta`,`gamma`,`zeta` that returns the Hessian
+  matrix of the prior density over these parameters.
 
 ## Examples
 

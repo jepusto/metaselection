@@ -13,7 +13,7 @@ assigned independent L-norm priors."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">metaselection</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,13 +117,13 @@ regression) parameters.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>"selmodel_prior"</code> containing the following
 components:</p><dl><dt><code>log_prior</code></dt>
-<dd><p>A function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the log of the prior density over these parameters.</p></dd>
+<dd><p>function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the log of the prior density over these parameters.</p></dd>
 
 <dt><code>score_prior</code></dt>
-<dd><p>A function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the vector of scores for the prior density over these parameters.</p></dd>
+<dd><p>function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the vector of scores for the prior density over these parameters.</p></dd>
 
 <dt><code>hessian_prior</code></dt>
-<dd><p>A function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the Hessian matrix of the prior density over these parameters.</p></dd>
+<dd><p>function with arguments <code>beta</code>,<code>gamma</code>,<code>zeta</code> that returns the Hessian matrix of the prior density over these parameters.</p></dd>
 
 
 </dl></div>
