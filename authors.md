@@ -18,12 +18,11 @@ Source:
 [`DESCRIPTION`](https://github.com/jepusto/metaselection/blob/main/DESCRIPTION)
 
 Pustejovsky JE, Joshi M, Citkowicz M (2026). *metaselection:
-Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap
-Standard Errors for Dependent Effect Size Estimates*. R package version
-0.3.0, <https://github.com/jepusto/metaselection>.
+Meta-Analytic Selection Models for Dependent Effect Sizes*. R package
+version 0.3.0, <https://github.com/jepusto/metaselection>.
 
     @Manual{,
-      title = {metaselection: Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap Standard Errors for Dependent Effect Size Estimates},
+      title = {metaselection: Meta-Analytic Selection Models for Dependent Effect Sizes},
       author = {James E. Pustejovsky and Megha Joshi and Martyna Citkowicz},
       year = {2026},
       note = {R package version 0.3.0},

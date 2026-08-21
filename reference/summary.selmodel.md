@@ -36,6 +36,18 @@ summary(object, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
   further arguments passed to
   [`print.data.frame()`](https://rdrr.io/r/base/print.dataframe.html).
 
+## Value
+
+The method does not return an object.
+
+## Details
+
+The function outputs a summary of a fitted `selmodel` object to the
+console. Output includes information about the number of clusters and
+number of effect size estimates used to fit the model, estimator and
+variance estimator settings, model fit information, and parameter
+estimates with associated uncertainty measures.
+
 ## Examples
 
 ``` r

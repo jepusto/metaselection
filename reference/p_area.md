@@ -34,6 +34,13 @@ p_area(object, CI_type = NULL, conf_level = NULL, warn = TRUE)
   logical controlling whether warnings are displayed, with a default of
   `TRUE`.
 
+## Value
+
+A `data.frame` containing the estmated area under the selection weight
+function. If the input `object` includes bootstraps, then the returned
+`data.frame` also includes bootstrap confidence interval(s) for the area
+under the selection weight function.
+
 ## Examples
 
 ``` r

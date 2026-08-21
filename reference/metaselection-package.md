@@ -1,4 +1,4 @@
-# metaselection: Meta-Analytic Selection Models with Cluster-Robust and Cluster-Bootstrap Standard Errors for Dependent Effect Size Estimates
+# metaselection: Meta-Analytic Selection Models for Dependent Effect Sizes
 
 Fits a flexible class of p-value selection models for meta-analysis and
 meta-regression models, providing standard errors and confidence

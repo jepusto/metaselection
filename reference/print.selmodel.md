@@ -36,6 +36,12 @@ print(x, transf_gamma = TRUE, transf_zeta = TRUE, digits = 3, ...)
   further arguments passed to
   [`print.data.frame()`](https://rdrr.io/r/base/print.dataframe.html).
 
+## Value
+
+The method returns a `data.frame` containing parameter estimates,
+standard errors, p-values, and confidence intervals for model
+parameters.
+
 ## Examples
 
 ``` r
