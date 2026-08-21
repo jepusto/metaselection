@@ -2,24 +2,39 @@
 % Please edit documentation in R/p-area.R
 \name{p_area}
 \alias{p_area}
-\title{Calculate area under the selection weight function from a \code{selmodel}
-object}
+\title{Calculate area under the selection weight function
+from a \code{selmodel} object}
 \usage{
 p_area(object, CI_type = NULL, conf_level = NULL, warn = TRUE)
 }
 \arguments{
 \item{object}{fitted model of class \code{"selmodel"}.}
 
-\item{CI_type}{character string specifying the type of confidence interval to calculate, with options as in \code{"selection_model"}. If \code{NULL} (the default), it will be inherited from \code{object}.}
+\item{CI_type}{character string specifying the type of
+confidence interval to calculate, with options as in
+\code{"selection_model"}. If \code{NULL} (the default), it
+will be inherited from \code{object}.}
 
-\item{conf_level}{desired coverage level for confidence intervals. If \code{NULL} (the default), it will be inherited from \code{object}, which has a default value of \code{.95}.}
+\item{conf_level}{desired coverage level for confidence
+intervals. If \code{NULL} (the default), it will be
+inherited from \code{object}, which has a default value of
+\code{.95}.}
 
-\item{warn}{logical controlling whether warnings are displayed, with a default of \code{TRUE}.}
+\item{warn}{logical controlling whether warnings are
+displayed, with a default of \code{TRUE}.}
+}
+\value{
+A \code{data.frame} containing the estmated area under
+the selection weight function. If the input \code{object}
+includes bootstraps, then the returned \code{data.frame} also
+includes bootstrap confidence interval(s) for the area
+under the selection weight function.
 }
 \description{
-Summarize the strength of selection by calculating the area
-under the selection weight function a \code{selmodel} object (excluding the area
-with weight fixed at 1). If the object has bootstrap replications, then a
+Summarize the strength of selection by
+calculating the area under the selection weight function a
+\code{selmodel} object (excluding the area with weight fixed at
+1). If the object has bootstrap replications, then a
 confidence interval will also be calculated.
 }
 \examples{

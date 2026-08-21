@@ -9,16 +9,28 @@
 \arguments{
 \item{x}{fitted model of class \code{"selmodel"}.}
 
-\item{transf_gamma}{logical with \code{TRUE} (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
+\item{transf_gamma}{logical with \code{TRUE} (the default)
+indicating that the heterogeneity parameter estimates
+(called gamma) should be transformed by exponentiating.}
 
-\item{transf_zeta}{logical with \code{TRUE} (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
+\item{transf_zeta}{logical with \code{TRUE} (the default)
+indicating that the selection parameter estimates (called
+zeta) should be transformed by exponentiating.}
 
-\item{digits}{minimum number of significant digits to be used, with a default of 3.}
+\item{digits}{minimum number of significant digits to be
+used, with a default of 3.}
 
-\item{...}{further arguments passed to \code{print.data.frame()}.}
+\item{...}{further arguments passed to
+\code{print.data.frame()}.}
+}
+\value{
+The method returns a \code{data.frame} containing
+parameter estimates, standard errors, p-values, and
+confidence intervals for model parameters.
 }
 \description{
-Print relevant results from a fitted \code{selmodel} object.
+Print relevant results from a fitted \code{selmodel}
+object.
 }
 \examples{
 res_ML <- selection_model(

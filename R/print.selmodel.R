@@ -1,16 +1,27 @@
 #' @title Print results from a `selmodel` object
 #'
-#' @description Print relevant results from a fitted `selmodel` object.
-#' 
-#' 
+#' @description Print relevant results from a fitted `selmodel`
+#'   object.
+#'
+#'
 #' @param x fitted model of class \code{"selmodel"}.
-#' @param transf_gamma logical with `TRUE` (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.
-#' @param transf_zeta logical with `TRUE` (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.
-#' @param digits minimum number of significant digits to be used, with a default of 3.
-#' @param ... further arguments passed to \code{print.data.frame()}.
+#' @param transf_gamma logical with `TRUE` (the default)
+#'   indicating that the heterogeneity parameter estimates
+#'   (called gamma) should be transformed by exponentiating.
+#' @param transf_zeta logical with `TRUE` (the default)
+#'   indicating that the selection parameter estimates (called
+#'   zeta) should be transformed by exponentiating.
+#' @param digits minimum number of significant digits to be
+#'   used, with a default of 3.
+#' @param ... further arguments passed to
+#'   \code{print.data.frame()}.
+#'
+#' @returns The method returns a `data.frame` containing
+#'   parameter estimates, standard errors, p-values, and
+#'   confidence intervals for model parameters. 
 #'
 #' @export
-#' 
+#'
 #' @examples
 #' res_ML <- selection_model(
 #'   data = self_control,
@@ -21,7 +32,7 @@
 #'   estimator = "CML",
 #'   bootstrap = "none"
 #' )
-#' 
+#'
 #' print(res_ML)
 #' print(res_ML, transf_gamma = FALSE, transf_zeta = FALSE)
 #'  

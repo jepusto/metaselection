@@ -9,16 +9,34 @@
 \arguments{
 \item{object}{fitted model of class \code{"selmodel"}.}
 
-\item{transf_gamma}{logical with \code{TRUE} (the default) indicating that the heterogeneity parameter estimates (called gamma) should be transformed by exponentiating.}
+\item{transf_gamma}{logical with \code{TRUE} (the default)
+indicating that the heterogeneity parameter estimates
+(called gamma) should be transformed by exponentiating.}
 
-\item{transf_zeta}{logical with \code{TRUE} (the default) indicating that the selection parameter estimates (called zeta) should be transformed by exponentiating.}
+\item{transf_zeta}{logical with \code{TRUE} (the default)
+indicating that the selection parameter estimates (called
+zeta) should be transformed by exponentiating.}
 
-\item{digits}{minimum number of significant digits to be used, with a default of 3.}
+\item{digits}{minimum number of significant digits to be
+used, with a default of 3.}
 
-\item{...}{further arguments passed to \code{print.data.frame()}.}
+\item{...}{further arguments passed to
+\code{print.data.frame()}.}
+}
+\value{
+The method does not return an object.
 }
 \description{
-Summarize relevant results from a fitted selection model.
+Summarize relevant results from a fitted
+selection model.
+}
+\details{
+The function outputs a summary of a fitted
+\code{selmodel} object to the console. Output includes information
+about the number of clusters and number of effect size
+estimates used to fit the model, estimator and variance
+estimator settings, model fit information, and parameter
+estimates with associated uncertainty measures.
 }
 \examples{
 res_ML <- selection_model(

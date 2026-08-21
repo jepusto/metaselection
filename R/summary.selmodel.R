@@ -1,12 +1,23 @@
 #' @title Summarize results from a `selmodel` object
 #'
-#' @description Summarize relevant results from a fitted selection model. 
-#' 
+#' @description Summarize relevant results from a fitted
+#'   selection model.
+#'
 #' @param object fitted model of class \code{"selmodel"}.
 #' @inheritParams print.selmodel
 #'
+#' @details The function outputs a summary of a fitted
+#' `selmodel` object to the console. Output includes information
+#' about the number of clusters and number of effect size
+#' estimates used to fit the model, estimator and variance
+#' estimator settings, model fit information, and parameter
+#' estimates with associated uncertainty measures.
+#'
+#'
+#' @returns The method does not return an object.
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' res_ML <- selection_model(
 #'   data = self_control,
@@ -17,7 +28,7 @@
 #'   estimator = "CML",
 #'   bootstrap = "none"
 #' )
-#' 
+#'
 #' summary(res_ML)
 #' summary(res_ML, transf_gamma = FALSE, transf_zeta = FALSE)
 

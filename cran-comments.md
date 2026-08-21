@@ -1,6 +1,10 @@
 ## New submission
 
-This is a new submission to CRAN. I have reviewed and agree to the CRAN submission policies.
+This package is a new submission to CRAN. 
+I am resubmitting it after addressing feedback from CRAN maintainers:
+- I reduced the title to less than 65 characters.
+- I ensured that all .Rd files include \value tags.
+I have reviewed and agree to the CRAN submission policies.
 
 ## Test environments
 
