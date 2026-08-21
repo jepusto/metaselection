@@ -60,3 +60,5 @@ VignetteBuilder: knitr
 LazyData: true
 URL: https://github.com/jepusto/metaselection
 Config/roxygen2/version: 8.0.0
+Language: en-US
+

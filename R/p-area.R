@@ -19,7 +19,7 @@
 #' @param warn logical controlling whether warnings are
 #'   displayed, with a default of \code{TRUE}.
 #'
-#' @returns A `data.frame` containing the estmated area under
+#' @returns A `data.frame` containing the estimated area under
 #'   the selection weight function. If the input `object`
 #'   includes bootstraps, then the returned `data.frame` also
 #'   includes bootstrap confidence interval(s) for the area

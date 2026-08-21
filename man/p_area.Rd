@@ -24,7 +24,7 @@ inherited from \code{object}, which has a default value of
 displayed, with a default of \code{TRUE}.}
 }
 \value{
-A \code{data.frame} containing the estmated area under
+A \code{data.frame} containing the estimated area under
 the selection weight function. If the input \code{object}
 includes bootstraps, then the returned \code{data.frame} also
 includes bootstrap confidence interval(s) for the area
