@@ -47,6 +47,12 @@ cluster bootstrapping with percentile bootstrap confidence intervals.
 
 ## Installation
 
+You can install the latest release of the package from CRAN by running:
+
+``` r
+install.packages("metaselection")
+```
+
 You can install the development version of the package, along with a
 vignette demonstrating how to use it, from GitHub with:
 
