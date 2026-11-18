@@ -148,6 +148,7 @@ test_that("selection_plot() works for 3PSM.", {
   expect_s3_class(p_boot_default$layers[[3]]$geom, "GeomArea")
 })
 
+
 test_that("selection_plot() works for 4PSM.", {
   
   set.seed(20240913)
@@ -385,3 +386,49 @@ test_that("selection_plot() works for beta model", {
   
 })
 
+test_that("selection_plot() throws errors as expected.", {
+  
+  dat <- r_meta(
+    mean_smd = 0, 
+    tau = .1, omega = .01,
+    m = 50, 
+    cor_mu = .4, cor_sd = 0.001, 
+    censor_fun = step_fun(cut_vals = .025, weights = 0.4), 
+    n_ES_sim = n_ES_param(40, 3)
+  )
+  
+  lm_fit <- lm(d ~ sd_d, data = dat)
+  expect_error(selection_plot(lm_fit))
+  
+  mod_fit <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    sel_mods = ~ sd_d,
+    steps = 0.025,
+    selection_type = "step",
+    estimator = "ARGL",
+    valence_check = FALSE
+  )
+  
+  expect_error(selection_plot(mod_fit))
+  
+  mod_boot_fit <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    sel_mods = ~ sd_d,
+    steps = 0.025,
+    selection_type = "step",
+    estimator = "ARGL",
+    bootstrap = "multinomial",
+    CI_type = "percentile",
+    R = 6,
+    valence_check = FALSE
+  )
+  
+  expect_error(selection_plot(mod_boot_fit))
+  
+})

@@ -6,8 +6,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README
+^cran-comments\.md$
 ^codecov\.yml$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^research$
+^\.positai$
+^\.claude$
+^CRAN-SUBMISSION$

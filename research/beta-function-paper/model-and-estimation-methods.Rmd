@@ -21,7 +21,12 @@ Third, it has strong precedents in other areas of statistical analysis, includin
 To account for dependence among effect sizes, we pair this marginal model with cluster-robust variance estimation (RVE) or clustered bootstrapping techniques. 
 Although this approach limits interpretation to the marginal distribution and does not distinguish between study-level and outcome-level selection, it remains a practical and plausible framework for modeling selective reporting based on the statistical significance of individual estimates.
 
-We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising $J$ studies, where study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote the $i$th effect size estimate from study $j$, with associated standard error $\sigma_{ij}$ and one-sided $p$-value $p_{ij}$. The one-sided $p$-value is defined relative to the null hypothesis that the true effect size is less than or equal to zero, with alternative hypothesis that the effect size is positive. Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use $\Phi()$ to denote the standard normal cumulative distribution function and $\phi()$ to denote the standard normal density function.
+We use the following notation to describe the model and estimation procedures. Consider a meta-analytic dataset comprising $J$ studies, where study $j$ reports $k_j$ effect size estimates. Let $y_{ij}$ denote the $i$th effect size estimate from study $j$, with associated standard error $\sigma_{ij}$. Let $\mathbf{x}_{ij}$ be a $1 \times x$ row vector of predictors representing characteristics of the effect size, sample, or study procedures. We use $\Phi()$ to denote the standard normal cumulative distribution function and $\phi()$ to denote the standard normal density function.
+
+The one-sided $p$-value associated with $y_{ij}$ is defined with respect to a certain null hypothesis about the true effect size, which depends on the valence of the effect that would be expected based on theory.
+To distinguish different possibilities,
+let $s = 1$ if the null hypothesis is that the true effect is less than or equal to zero, with alternative hypothesis that the effect size is positive,  and let $s = -1$ if the null hypothesis is that the true effect size is greater than or equal to zero, with alternative hypothesis that the effect size is negative. 
+The one-sided p-value for effect size $i$ in study $j$ is then $p_{ij} = 1 - \Phi\left(s y_{ij} / \sigma_{ij}\right)$.
 
 ## Evidence-generating process
 
@@ -49,9 +54,9 @@ Equation (\ref{eq:beta-density-p}) can be written equivalently as
 \begin{equation}
 \label{eq:beta-density-y}
 w(Y^*_i, \sigma^*_i, \boldsymbol\lambda) =  \begin{cases} 
-\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_1) \leq Y^* \\
-\left[\Phi\left(-Y^* / \sigma^*\right)\right]^{\lambda_1 - 1} \left[\Phi\left(Y^* / \sigma^*\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_2) < Y^* < \sigma^* \Phi^{-1}(1 - \alpha_1) \\
-\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  Y^* \leq \sigma^* \Phi^{-1}(1 - \alpha_2).
+\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_1) \leq s Y^* \\
+\left[\Phi\left(- s Y^* / \sigma^*\right)\right]^{\lambda_1 - 1} \left[\Phi\left( s Y^* / \sigma^*\right)\right]^{\lambda_2 - 1} & \text{if} \quad \sigma^* \Phi^{-1}(1 - \alpha_2) < sY^* < \sigma^* \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} & \text{if} \quad  s Y^* \leq \sigma^* \Phi^{-1}(1 - \alpha_2).
 \end{cases}
 \end{equation}
 When $\lambda_1 = \lambda_2 = 1$, the selection function is flat and selective reporting is absent.

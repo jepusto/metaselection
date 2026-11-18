@@ -11,6 +11,7 @@ parse_beta_params <- function(
     alpha = c(.025,.975),                      # p-value truncation points
     X = NULL,                                  # mean parameter design matrix
     U = NULL,                                  # variance component design matrix
+    Hsgn = 1L,                                 # sign transformation depending on alternative hypothesis
     calc_Ai = FALSE,                           # whether to calculate Ai 
     calc_Ai_deriv = FALSE                      # whether to calculate first derivatives of Ai
 ) {
@@ -54,7 +55,7 @@ parse_beta_params <- function(
 
   # calculate weights 
   if (!missing(yi)) {
-    if (is.null(pi)) pi <- pnorm(yi / sei, lower.tail = FALSE)
+    if (is.null(pi)) pi <- pnorm(Hsgn * yi / sei, lower.tail = FALSE)
     pi_tilde <- pmin(alpha[2], pmax(alpha[1], pi))
     weight_vec <- (pi_tilde ^ lambda[1]) * ((1 - pi_tilde) ^ lambda[2])
   } else {
@@ -80,7 +81,7 @@ parse_beta_params <- function(
   
   if (calc_Ai) {
     
-    c_mat <- (tcrossprod(sei, -qnorm(alpha)) - mu) / sqrt(eta)
+    c_mat <- (tcrossprod(sei, -qnorm(alpha)) - Hsgn * mu) / sqrt(eta)
     B_0ij <- pnorm(c_mat[,1], lower.tail = FALSE)
     B_2ij <- pnorm(c_mat[,2])
     
@@ -93,7 +94,8 @@ parse_beta_params <- function(
     E_Y_1 <- E_Y_f_vec(
       f_exp = "1", 
       sei = sei, mu = mu, eta = eta, 
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha, 
+      Hsgn = Hsgn
     )
     
     params$Ai <- alpha_lambda[1] * B_0ij + E_Y_1 + alpha_lambda[2] * B_2ij
@@ -112,15 +114,18 @@ parse_beta_params <- function(
     EY_A_mu <- E_Y_f_vec(
       f_exp = "(Y - mu) / sqrt(eta)", 
       sei = sei, mu = mu, eta = eta,
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha,
+      Hsgn = Hsgn
     )
     
-    params$dA_dmu <- (alpha_lambda[1] * dnorm(c_mat[,1]) + EY_A_mu  - alpha_lambda[2] * dnorm(c_mat[,2])) / sqrt(eta)
+    params$EY_A_mu <- EY_A_mu
+    params$dA_dmu <- (alpha_lambda[1] * Hsgn * dnorm(c_mat[,1]) + EY_A_mu  - alpha_lambda[2] * Hsgn * dnorm(c_mat[,2])) / sqrt(eta)
 
     EY_A_eta <- E_Y_f_vec(
       f_exp = "((Y - mu)^2 / eta - 1)", 
       sei = sei, mu = mu, eta = eta,
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha,
+      Hsgn = Hsgn
     )
 
     params$dA_deta <- 
@@ -130,9 +135,10 @@ parse_beta_params <- function(
 
     
     EY_A_lambda_1 <- E_Y_f_vec(
-      f_exp = "pnorm(-Y/sei, log.p = TRUE)", 
+      f_exp = "pnorm(-Hsgn * Y/sei, log.p = TRUE)", 
       sei = sei, mu = mu, eta = eta,
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha,
+      Hsgn = Hsgn
     )
     
     params$dA_dlambda1 <- 
@@ -141,9 +147,10 @@ parse_beta_params <- function(
       log(alpha[2]) * alpha_lambda[2] * B_2ij
 
     EY_A_lambda_2 <- E_Y_f_vec(
-      f_exp = "pnorm(Y/sei, log.p = TRUE)", 
+      f_exp = "pnorm(Hsgn * Y/sei, log.p = TRUE)", 
       sei = sei, mu = mu, eta = eta,
-      lambda = lambda, alpha = alpha
+      lambda = lambda, alpha = alpha,
+      Hsgn = Hsgn
     )
     
     params$dA_dlambda2 <- 
@@ -160,34 +167,34 @@ parse_beta_params <- function(
 
 # integration ------------------------------------------------------------------
 
-E_Y_f <- function(f_exp, 
-                  sei, 
-                  mu, 
-                  eta, 
-                  lambda, 
-                  alpha) {
-  
-  weightfun <- "(pnorm(-Y/sei)^lambda[1]) * (pnorm(Y/sei)^lambda[2])"
+E_Y_f <- function(f_exp, sei, mu, eta, 
+                  lambda, alpha, Hsgn) {
+  if (Hsgn > 0) {
+    weightfun <- "(pnorm(-Y / sei)^lambda[1]) * (pnorm(Y / sei)^lambda[2])"
+    bounds <- sei * qnorm(rev(alpha), lower.tail = FALSE)
+  } else {
+    weightfun <- "(pnorm(-Y / sei)^lambda[2]) * (pnorm(Y / sei)^lambda[1])"
+    bounds <- sei * qnorm(alpha)
+  }
   normdens <- "dnorm((Y - mu) / sqrt(eta)) / sqrt(eta)"
   integrand_exp <- paste(f_exp, weightfun, normdens, sep = " * ")
   integrand <- function(Y) Y
   body(integrand) <- str2lang(integrand_exp)
   
-  # added the upper and lower bounds here 
-  bounds <- sei * qnorm(alpha, lower.tail = FALSE)
-  
-  res <- integrate(integrand, lower = bounds[2], upper = bounds[1])
+  res <- integrate(integrand, lower = bounds[1], upper = bounds[2])
   res$value  
   
 }
 
-E_Y_f_vec <- function(f_exp, sei, mu, eta, lambda, alpha) {
+E_Y_f_vec <- function(f_exp, sei, mu, eta, lambda, alpha, Hsgn) {
   mapply(
     E_Y_f, 
     sei = sei, mu = mu, eta = eta,
     MoreArgs = list(
       f_exp = f_exp, 
-      lambda = lambda, alpha = alpha
+      lambda = lambda, 
+      alpha = alpha,
+      Hsgn = Hsgn
     )
   )
 }

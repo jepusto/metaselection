@@ -12,6 +12,8 @@ dat <- r_meta(
 
 test_that("selection_wts() handles default values properly.", {
   
+  skip_on_cran()
+  
   check_selection_weights(dat, steps = .025)
   check_selection_weights(dat, steps = c(.05, .50))
   check_selection_weights(dat, steps = c(.025, .05, .50))
@@ -22,8 +24,99 @@ test_that("selection_wts() handles default values properly.", {
   
 })
 
+test_that("selection_wts.defaults() works.", {
+  
+  skip_on_cran()
+  
+  # check manual weights against beta function
+  
+  beta_fit <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    selection_type = "beta"
+  )
+  
+  wts_model <- selection_wts(beta_fit)
+  zeta <- beta_fit$est$Est[grepl("zeta", beta_fit$est$param)]
+  wts_manual <- selection_wts(
+    "beta", pvals = wts_model$p,
+    ref_pval = .001, params = zeta, steps = c(.025, .975)
+  )
+  expect_equal(wts_model$wt, wts_manual)
+  
+  wts_model <- selection_wts(beta_fit, ref_pval = .50)
+  wts_manual <- selection_wts(
+    "beta", pvals = wts_model$p,
+    ref_pval = .50, params = zeta, steps = c(.025, .975)
+  )
+  expect_equal(wts_model$wt, wts_manual)
+  
+  
+  # check manual weights against step function
+  
+  steps <- c(.05, .50, .90)
+  step_fit <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sd_d,
+    cluster = studyid,
+    steps = steps,
+    estimator = "ARGL"
+  )
+  
+  wts_model <- selection_wts(step_fit)
+  zeta <- step_fit$est$Est[grepl("zeta", step_fit$est$param)]
+  wts_manual <- selection_wts(
+    "step", pvals = wts_model$p,
+    ref_pval = .001, params = zeta, steps = steps
+  )
+  expect_equal(wts_model$wt, wts_manual)
+  
+  wts_model <- selection_wts(step_fit, ref_pval = .99)
+  wts_manual <- selection_wts(
+    "step", pvals = wts_model$p,
+    ref_pval = .99, params = zeta, steps = steps
+  )
+  expect_equal(wts_model$wt, wts_manual)
+  
+  # check error behavior
+  
+  expect_error(
+    selection_wts(
+      "step", pvals = 4,
+      ref_pval = .001, params = zeta, steps = steps
+    )
+  )
+  
+  expect_error(
+    selection_wts(
+      "step", pvals = wts_model$p,
+      ref_pval = c(.025, .50), params = zeta, steps = steps
+    )
+  )
+  
+  expect_error(
+    selection_wts(
+      "step", pvals = wts_model$p,
+      ref_pval = -0.01, params = zeta, steps = steps
+    )
+  )
+  
+  expect_error(
+    selection_wts(
+      "step", pvals = wts_model$p,
+      ref_pval = .001, params = 0.5, steps = steps
+    )
+  )
+  
+
+})  
 
 test_that("selection_wts() handles ref_pval.", {
+  
+  skip_on_cran()
   
   step_fit <- selection_model(
     data = dat,
@@ -31,13 +124,16 @@ test_that("selection_wts() handles ref_pval.", {
     sei = sd_d,
     cluster = studyid,
     steps = c(.025, .50),
-    estimator = "hybrid"
+    estimator = "ARGL"
   )
   
   wts_raw <- selection_wts(step_fit)
   wts_ref <- selection_wts(step_fit, ref_pval = runif(1, min = .1, max = .9))
   expect_equal(diff(range(wts_raw$wt / wts_ref$wt)), 0)
-
+  
+  expect_error(selection_wts(step_fit, ref_pval = c(.025, .50)))
+  expect_error(selection_wts(step_fit, ref_pval = 10))
+  
   
   step_boot <- selection_model(
     data = dat,
@@ -45,7 +141,7 @@ test_that("selection_wts() handles ref_pval.", {
     sei = sd_d,
     cluster = studyid,
     steps = c(.025, .50),
-    estimator = "hybrid",
+    estimator = "ARGL",
     bootstrap = "exp", 
     R = 4
   )
@@ -69,6 +165,9 @@ test_that("selection_wts() handles ref_pval.", {
   wts_raw <- selection_wts(beta_fit)
   wts_ref <- selection_wts(beta_fit, ref_pval = runif(1, min = .1, max = .9))
   expect_equal(diff(range(wts_raw$wt / wts_ref$wt)), 0)
+  
+  expect_error(selection_wts(beta_fit, ref_pval = seq(0,1,0.2)))
+  expect_error(selection_wts(beta_fit, ref_pval = -3))
   
   
   suppressWarnings(

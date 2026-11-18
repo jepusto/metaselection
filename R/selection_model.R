@@ -95,6 +95,7 @@ fit_selection_model <- function(
   U = NULL, 
   Z0 = NULL, 
   Z = NULL, 
+  Hsgn = 1L,
   priors = NULL,
   subset = NULL,
   vcov_type = "robust",
@@ -118,6 +119,8 @@ fit_selection_model <- function(
     if (!is.null(Z)) Z <- lapply(Z, \(z) z[subset,,drop=FALSE])
   }
   
+  x_index <- if (is.null(X)) 1L else 1:ncol(X)
+  
   if (is.null(theta)) {
     # Compute starting values for parameters if not provided
     theta <- find_starting_values(
@@ -125,16 +128,30 @@ fit_selection_model <- function(
       selection_type = selection_type, steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z
     )
-  }
+  } 
   
-  params <- parse_step_params(
-    theta = theta,
-    yi = yi, sei = sei,
-    pi = pi, ai = ai,
-    steps = steps,
-    X = X, U = U, Z0 = Z0, Z = Z, 
-    calc_Ai = FALSE
-  )
+  if (selection_type == "step") {
+    params <- parse_step_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, ai = ai,
+      steps = steps,
+      X = X, U = U, Z0 = Z0, Z = Z, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  } else if (selection_type == "beta") {
+    params <- parse_beta_params(
+      theta = theta,
+      yi = yi, sei = sei,
+      pi = pi, 
+      alpha = steps,
+      X = X, U = U, 
+      Hsgn = Hsgn,
+      calc_Ai = FALSE
+    )
+  }   
+  
   
   if (estimator %in% c("ML","CML")) {
     
@@ -155,6 +172,7 @@ fit_selection_model <- function(
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, Z0 = Z0, Z = Z,
+          Hsgn = Hsgn,
           priors = priors,
           method = optimizer,
           control = optimizer_control
@@ -172,6 +190,7 @@ fit_selection_model <- function(
           yi = yi, sei = sei, pi = pi, ai = ai,
           steps = steps,
           X = X, U = U, 
+          Hsgn = Hsgn,
           priors = priors,
           method = optimizer,
           control = optimizer_control
@@ -210,6 +229,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       jacobian = TRUE
     )
@@ -255,7 +275,6 @@ fit_selection_model <- function(
     
     info <- list()
     
-    x_index <- if (is.null(X)) 1L else 1:ncol(X)
     theta <- theta[-x_index]
      
     jac <- if (use_jac) step_hybrid_profile_jacobian else NULL
@@ -267,6 +286,7 @@ fit_selection_model <- function(
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       jacobian = TRUE
     )
@@ -309,7 +329,7 @@ fit_selection_model <- function(
     theta[x_index] <- params$beta
 
     names(theta) <- params$H_names
-    
+
     if (vcov_type == "raw") {
       return(list(est = theta, max_method = max_method, info = info))
     }
@@ -331,14 +351,16 @@ fit_selection_model <- function(
       theta = theta,  
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U, Z0 = Z0, Z = Z
+      X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn
     ) - norm_const
     
     wt_partial_log_lik <- step_weighted_logpartlik(
       theta = theta,  
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U, Z0 = Z0, Z = Z
+      X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn
     )
     
   } else if (selection_type == "beta") {
@@ -347,7 +369,8 @@ fit_selection_model <- function(
       theta, 
       yi = yi, sei = sei, pi = pi, ai = ai,
       steps = steps,
-      X = X, U = U
+      X = X, U = U,
+      Hsgn = Hsgn
     ) - norm_const
     
     wt_partial_log_lik <- NULL
@@ -363,6 +386,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, Z0 = Z0, Z = Z, 
+                           Hsgn = Hsgn,
                            priors = priors,
                            contributions = TRUE)
       
@@ -372,6 +396,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, 
+                           Hsgn = Hsgn,
                            priors = priors,
                            contributions = TRUE)
       
@@ -384,6 +409,7 @@ fit_selection_model <- function(
                                 yi = yi, sei = sei, pi = pi, ai = ai,
                                 steps = steps,
                                 X = X, U = U, Z0 = Z0, Z = Z, 
+                                Hsgn = Hsgn,
                                 priors = priors,
                                 contributions = TRUE)
     
@@ -400,6 +426,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U, Z0 = Z0, Z = Z,
+                           Hsgn = Hsgn,
                            priors = priors)
       
     } else if (selection_type == "beta") {
@@ -408,6 +435,7 @@ fit_selection_model <- function(
                            yi = yi, sei = sei, pi = pi, ai = ai,
                            steps = steps,
                            X = X, U = U,
+                           Hsgn = Hsgn,
                            priors = priors)
       
     }
@@ -419,6 +447,7 @@ fit_selection_model <- function(
                                  yi = yi, sei = sei, pi = pi, ai = ai,
                                  steps = steps,
                                  X = X, U = U, Z0 = Z0, Z = Z,
+                                 Hsgn = Hsgn,
                                  priors = priors)
   }
   
@@ -491,6 +520,7 @@ bootstrap_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL,
+    Hsgn = 1L,
     priors = define_priors(),
     vcov_type = "robust",
     selection_type = "step",
@@ -560,6 +590,7 @@ bootstrap_selmodel <- function(
       cluster = cluster, 
       subset = cl_subset,
       X = X, U = U, Z0 = Z0, Z = Z,
+      Hsgn = Hsgn,
       priors = priors,
       vcov_type = vcov_type, 
       selection_type = selection_type,
@@ -586,6 +617,7 @@ bootstrap_selmodel <- function(
       U = U, 
       Z0 = Z0, 
       Z = Z, 
+      Hsgn = Hsgn,
       priors = priors,
       vcov_type = vcov_type,
       selection_type = selection_type,
@@ -630,6 +662,7 @@ jackknife_selmodel <- function(
     U = NULL, 
     Z0 = NULL, 
     Z = NULL, 
+    Hsgn = 1L,
     priors = priors,
     selection_type = "step",
     estimator = "CML",
@@ -655,6 +688,7 @@ jackknife_selmodel <- function(
         fit_selection_model(
           yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
           X = X, U = U, Z0 = Z0, Z = Z,
+          Hsgn = Hsgn,
           priors = priors,
           subset = cluster_jk != i,
           steps = steps,
@@ -676,103 +710,130 @@ jackknife_selmodel <- function(
 
 #' @title Estimate step or beta selection model
 #'
-#' @description Estimate step or beta selection model, with standard errors and
-#'   confidence intervals based on either cluster-robust variance estimators
-#'   (i.e., sandwich estimators) or cluster-level bootstrapping to handle
+#' @description Estimate step or beta selection model, with
+#'   standard errors and confidence intervals based on either
+#'   cluster-robust variance estimators (i.e., sandwich
+#'   estimators) or cluster-level bootstrapping to handle
 #'   dependent effect size estimates.
 #'
 #'
-#' @param data \code{data.frame} or \code{tibble} containing the meta-analytic
-#'   data
+#' @param data \code{data.frame} or \code{tibble} containing the
+#'   meta-analytic data.
 #' @param yi vector of effect sizes estimates.
-#' @param vi vector of sample variances. If \code{vi} is specified, then the
-#'   \code{sei} argument must be omitted.
-#' @param sei vector of sampling standard errors. If \code{sei} is specified,
-#'   then the \code{vi} argument must be omitted.
-#' @param pi optional vector of one-sided p-values. If not specified, p-values
-#'   will be computed from \code{yi} and \code{sei}.
+#' @param vi vector of sample variances. If \code{vi} is
+#'   specified, then the \code{sei} argument must be omitted.
+#' @param sei vector of sampling standard errors. If \code{sei}
+#'   is specified, then the \code{vi} argument must be omitted.
 #' @param ai optional vector of analytic weights.
-#' @param cluster vector indicating which observations belong to the same
-#'   cluster.
-#' @param selection_type character string specifying the type selection model to
-#'   estimate, with possible options \code{"step"} or \code{"beta"}.
-#' @param steps If \code{selection_type = "step"}, a numeric vector of one or
-#'   more values specifying the thresholds (or steps) where the selection
-#'   probability changes, with a default of \code{steps = .025}. If
-#'   \code{selection_type = "beta"}, then a numeric vector of two values
-#'   specifying the thresholds beyond which the selection function is truncated,
-#'   with a default of \code{steps = c(.025, .975)}.
-#' @param mean_mods optional model formula for moderators related to average
-#'   effect size magnitude.
-#' @param var_mods optional model formula for moderators related to effect size
-#'   heterogeneity.
-#' @param sel_mods optional model formula for moderators related to the
-#'   probability of selection. Only relevant for \code{selection_type = "step"}.
-#' @param sel_zero_mods optional model formula for moderators related to the
-#'   probability of selection for p-values below the lowest threshold value of
-#'   \code{steps}. Only relevant for \code{selection_type = "step"}.
-#' @param priors a \code{selmodel_prior} object that defines priors (i.e.,
-#'   penalty terms) for model parameters, with a default of
-#'   \code{define_priors()}. Set to \code{NULL} to obtain unpenalized
-#'   estimates.
-#' @param subset optional logical expression indicating a subset of observations
-#'   to use for estimation.
-#' @param estimator vector indicating whether to use the composite marginal
-#'   likelihood estimator (option \code{"CML"}) or the augmented and reweighted
-#'   Gaussian likelihood estimator (option \code{"ARGL"} or \code{"ARGL-full"}).
-#'   If \code{selection_type = "beta"}, only the composite marginal likelihood
-#'   estimator, \code{"CML"}, is available. For step function models, both
+#' @param cluster vector indicating which observations belong to
+#'   the same cluster.
+#' @param selection_type character string specifying the type
+#'   selection model to estimate, with possible options
+#'   \code{"step"} or \code{"beta"}.
+#' @param alternative character string specifying the direction
+#'   of the alternative hypothesis used in computing p-values
+#'   for the observed effect sizes, with possible options
+#'   \code{"greater"} (the default) or \code{"less"}.
+#' @param steps If \code{selection_type = "step"}, a numeric
+#'   vector of one or more values specifying the thresholds (or
+#'   steps) where the selection probability changes, with a
+#'   default of \code{steps = .025}. If \code{selection_type =
+#'   "beta"}, then a numeric vector of two values specifying the
+#'   thresholds beyond which the selection function is
+#'   truncated, with a default of \code{steps = c(.025, .975)}.
+#' @param mean_mods optional model formula for moderators
+#'   related to average effect size magnitude.
+#' @param var_mods optional model formula for moderators related
+#'   to effect size heterogeneity.
+#' @param sel_mods optional model formula for moderators related
+#'   to the probability of selection. Only relevant for
+#'   \code{selection_type = "step"}.
+#' @param sel_zero_mods optional model formula for moderators
+#'   related to the probability of selection for p-values below
+#'   the lowest threshold value of \code{steps}. Only relevant
+#'   for \code{selection_type = "step"}.
+#' @param priors a \code{selmodel_prior} object that defines
+#'   priors (i.e., penalty terms) for model parameters, with a
+#'   default of \code{define_priors()}. Set to \code{NULL} to
+#'   obtain unpenalized estimates.
+#' @param subset optional logical expression indicating a subset
+#'   of observations to use for estimation.
+#' @param estimator vector indicating whether to use the
+#'   composite marginal likelihood estimator (option
+#'   \code{"CML"}) or the augmented and reweighted Gaussian
+#'   likelihood estimator (option \code{"ARGL"} or
+#'   \code{"ARGL-full"}). If \code{selection_type = "beta"},
+#'   only the composite marginal likelihood estimator,
+#'   \code{"CML"}, is available. For step function models, both
 #'   estimators are available.
-#' @param vcov_type character string specifying the type of variance-covariance
-#'   matrix to calculate, with possible options \code{"robust"} for robust or
-#'   cluster-robust standard errors, \code{"model-based"} for model-based
+#' @param vcov_type character string specifying the type of
+#'   variance-covariance matrix to calculate, with possible
+#'   options \code{"robust"} for robust or cluster-robust
+#'   standard errors, \code{"model-based"} for model-based
 #'   standard errors, or \code{"none"}.
-#' @param CI_type character string specifying the type of confidence interval to
-#'   calculate, with possible options \code{"large-sample"} for large-sample
-#'   normal interval (the default), \code{"percentile"} for a percentile
-#'   interval, \code{"BCa"} for a bias-corrected-and-accelerated interval,
-#'   \code{"bias-corrected"} for a bias-corrected percentile interval (without
-#'   acceleration correction), \code{"normal"} for a standard normal interval,
-#'   \code{"basic"} for a basic interval, \code{"student"} for a studentized
-#'   interval, or \code{"none"}.
-#' @param conf_level desired coverage level for confidence intervals, with the
-#'   default value set to \code{.95}.
-#' @param theta optional numeric vector of starting values to use in
-#'   optimization routines.
-#' @param optimizer character string indicating the optimizer to use. Ignored if
-#'   \code{estimator = "ARGL"} or \code{"ARGL-full"}.
-#' @param optimizer_control an optional list of control parameters to be used
-#'   for optimization
-#' @param use_jac logical indicating whether to use the Jacobian of the
-#'   estimating equations for optimization. If \code{NULL} (the default), it
-#'   will be reset to \code{FALSE} if \code{estimator = "CML"} or to \code{TRUE}
-#'   if \code{estimator = "ARGL"}
-#' @param bootstrap character string specifying the type of bootstrap to run,
-#'   with possible options \code{"none"} (the default), \code{"exponential"} for
-#'   the fractionally re-weighted cluster bootstrap, \code{"multinomial"} for a
-#'   conventional clustered bootstrap, or , \code{"two-stage"} for a two-stage
-#'   clustered bootstrap.
-#' @param R number of bootstrap replications, with a default of \code{1999}.
-#' @param retry_bootstrap number of times to re-draw a bootstrap sample in the
-#'   event of non-convergence, with a default of \code{0}.
-#' @param ... further arguments passed to \code{simhelpers::bootstrap_CIs}.
+#' @param CI_type character string or vector specifying the type
+#'   of confidence interval to calculate, with possible options
+#'   \code{"large-sample"} for large-sample normal interval (the
+#'   default), \code{"percentile"} for a percentile interval,
+#'   \code{"BCa"} for a bias-corrected-and-accelerated interval,
+#'   \code{"bias-corrected"} for a bias-corrected percentile
+#'   interval (without acceleration correction), \code{"normal"}
+#'   for a standard normal interval, \code{"basic"} for a basic
+#'   interval, \code{"student"} for a studentized interval, or
+#'   \code{"none"}. More than one type of interval can be
+#'   computed by specifying a character vector with multiple
+#'   options.
+#' @param conf_level desired coverage level for confidence
+#'   intervals, with the default value set to \code{.95}.
+#' @param theta optional numeric vector of starting values to
+#'   use in optimization routines.
+#' @param optimizer character string indicating the optimizer to
+#'   use. Ignored if \code{estimator = "ARGL"} or
+#'   \code{"ARGL-full"}.
+#' @param optimizer_control an optional list of control
+#'   parameters to be used for optimization
+#' @param use_jac logical indicating whether to use the Jacobian
+#'   of the estimating equations for optimization. If
+#'   \code{NULL} (the default), it will be reset to \code{FALSE}
+#'   if \code{estimator = "CML"} or to \code{TRUE} if
+#'   \code{estimator = "ARGL"}
+#' @param bootstrap character string specifying the type of
+#'   bootstrap to run, with possible options \code{"none"} (the
+#'   default), \code{"exponential"} for the fractionally
+#'   re-weighted cluster bootstrap, \code{"multinomial"} for a
+#'   conventional clustered bootstrap, or , \code{"two-stage"}
+#'   for a two-stage clustered bootstrap.
+#' @param R number of bootstrap replications, with a default of
+#'   \code{1999}.
+#' @param retry_bootstrap number of times to re-draw a bootstrap
+#'   sample in the event of non-convergence, with a default of
+#'   \code{0}.
+#' @param valence_check logical value controlling whether to
+#'   check that the valence of the median effect size estimate
+#'   is consistent with the direction of the specified
+#'   \code{alternative}. If \code{TRUE} (the default), a warning
+#'   will be issued when most effect size estimates have the
+#'   opposite sign of \code{alternative}. Set to \code{FALSE} to
+#'   suppress the warning.
+#' @param ... further arguments passed to
+#'   \code{simhelpers::bootstrap_CIs}.
 #'
-#' @returns An object of class \code{"selmodel"} containing the following
-#'   components:
+#' @returns An object of class \code{"selmodel"} containing the
+#'   following components:
 #' \describe{
-#'   \item{\code{est}}{A data frame with parameter estimates, standard errors, and
+#'   \item{\code{est}}{`data.frame` with parameter estimates, standard errors, and
 #'   confidence intervals. Note that the results do not include p-values so
 #'   as to focus interpretation on the parameter estimates, rather than on
 #'   the statistical significance of any given parameter.}
-#'   \item{\code{vcov}}{A matrix containing the estimated variance-covariance matrix
-#'   of the parameter estiamtes}
-#'   \item{\code{method}}{Character string indicating the optimization method used to solve for parameter estimates.}
-#'   \item{\code{info}}{Further informaton about the optimization results.}
-#'   \item{\code{ll}}{Log likelihood of the model evaluated at the reported parameter estimates.}
-#'   \item{\code{wpll}}{Weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities}
-#'   \item{\code{n_clusters}}{Number of independent clusters of effect sizes.}
-#'   \item{\code{n_effects}}{Number of effect size estimates in the data.}
-#'   \item{\code{...}}{Some additional elements containing information about the methods used to estimate the model.}
+#'   \item{\code{vcov}}{matrix containing the estimated variance-covariance matrix
+#'   of the parameter estimates.}
+#'   \item{\code{method}}{character string indicating the optimization method used to solve for parameter estimates.}
+#'   \item{\code{info}}{further information about the optimization results.}
+#'   \item{\code{ll}}{log likelihood of the model evaluated at the reported parameter estimates.}
+#'   \item{\code{wpll}}{weighted partial log likelihood of the random effects model, with weights corresponding to inverse selection probabilities.}
+#'   \item{\code{n_clusters}}{number of independent clusters of effect sizes.}
+#'   \item{\code{n_effects}}{number of effect size estimates in the data.}
+#'   \item{\code{...}}{some additional elements containing information about the methods used to estimate the model.}
 #' }
 #'
 #' @export
@@ -816,10 +877,10 @@ selection_model <- function(
     yi,
     vi,
     sei,
-    pi,
     ai,
     cluster,
     selection_type = c("step","beta"),
+    alternative = "greater",
     steps = NULL,
     mean_mods = NULL,
     var_mods = NULL,
@@ -838,10 +899,13 @@ selection_model <- function(
     bootstrap = "none",
     R = 1999,
     retry_bootstrap = 0L,
+    valence_check = TRUE,
     ...
 ) {
   
   selection_type <- match.arg(selection_type)
+  alternative <- match.arg(alternative, c("greater","less"))
+  Hsgn <- if (alternative=="greater") 1L else -1L
   
   if (!is.null(priors) && !inherits(priors, "selmodel_prior")) {
     stop("priors must be NULL or a selmodel_prior object created by define_priors().")
@@ -861,7 +925,7 @@ selection_model <- function(
   }
   if (any(c("percentile","normal","basic","student","bias-corrected","BCa") %in% CI_type)) {
     if (identical(as.integer(R), 0L)) stop("Bootstrap confidence intervals require setting R > 0.")
-    if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'multinomial' or 'exponential'.")
+    if (bootstrap == "none") stop("Bootstrap confidence intervals require setting bootstrap to 'two-stage', 'multinomial', or 'exponential'.")
   }
 
   if (is.null(optimizer)) {
@@ -877,6 +941,10 @@ selection_model <- function(
   }
   
   if (!inherits(steps, "numeric") || min(steps) <= 0 || max(steps) >= 1) stop("steps must be a numeric vector with all entries in the interval (0,1).")
+  
+  # ensure steps are sorted from smallest to largest
+  steps <- sort(steps)
+  
   if (selection_type == "beta") {
     if (length(steps) != 2L) stop("steps must be a numeric vector of length 2 when selection_type = 'beta'.")
     if (!is.null(sel_mods)) stop("sel_mods must be NULL when selection_type = 'beta'.")
@@ -884,10 +952,11 @@ selection_model <- function(
     if (!(estimator %in% c("ML","CML"))) stop("estimator must be equal to 'CML' when selection_type = 'beta'.")
   }
   
+  
   # Create common model frame
   
   cl <- match.call()
-  m <- match(c("data","yi", "vi", "sei", "pi", "ai", "cluster","subset", "mean_mods", 
+  m <- match(c("data","yi", "vi", "sei", "ai", "cluster","subset", "mean_mods", 
                "var_mods", "sel_mods", "sel_zero_mods"), names(cl), 0L)
   mf <- cl[c(1L, m)]
   mf[[1L]] <- str2lang("metaselection:::build_model_frame")
@@ -896,18 +965,34 @@ selection_model <- function(
   # Evaluate yi, sei, pi, ai from model frame
   
   yi <- eval(cl$yi, envir = mf)
-  
+
   vi <- if (missing(vi)) NULL else eval(cl$vi, envir = mf)
   sei <- if (missing(sei)) sqrt(vi) else eval(cl$sei, envir = mf)
+  pi <- pnorm(Hsgn * yi / sei, lower.tail = FALSE)
   
-  pi <- if (missing(pi)) pnorm(yi / sei, lower.tail = FALSE) else eval(cl$pi, envir = mf)
   ai <- if (missing(ai)) NULL else eval(cl$ai, envir = mf)
   cluster <- if (missing(cluster)) NULL else eval(cl$cluster, envir = mf)
+  
   
   if (!is.null(cluster)) {
     n_clusters <- length(unique(cluster))
     if (n_clusters < 3L) stop("The data contain fewer than three unique clusters. This method will not provide valid results.")
   }
+  
+  if (valence_check) {
+    valence <- sign(stats::median(yi))
+    if (valence != Hsgn) {
+      valence_lab <- if (valence < 0) "negative" else "positive"
+      msg <- paste0(
+        "Most of the effect size estimates are ", 
+        valence_lab, 
+        ". Are you sure you want to set `alternative = ", 
+        alternative, "`?"
+      )
+      warning(msg)
+    }
+  }
+  
   
   # Create matrices X, U, Z0, Z_1,... from data formulas
   
@@ -933,6 +1018,7 @@ selection_model <- function(
   res <- fit_selection_model(
     yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
     X = X, U = U, Z0 = Z0, Z = Z,
+    Hsgn = Hsgn,
     steps = steps,
     priors = priors,
     vcov_type = vcov_type, 
@@ -944,7 +1030,7 @@ selection_model <- function(
     use_jac = use_jac
   ) 
   
-  if ((vcov_type == "raw") && (bootstrap=="none")) {
+  if ((vcov_type %in% c("raw","none")) && (bootstrap=="none")) {
     return(res)
   }
   
@@ -1001,6 +1087,7 @@ selection_model <- function(
       bootstrap_selmodel(
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        Hsgn = Hsgn,
         priors = priors,
         steps = steps,
         vcov_type = boot_sandwich, 
@@ -1025,6 +1112,7 @@ selection_model <- function(
         est = res$est$Est,
         yi = yi, sei = sei, pi = pi, ai = ai, cluster = cluster, 
         X = X, U = U, Z0 = Z0, Z = Z,
+        Hsgn = Hsgn,
         priors = priors,
         steps = steps,
         selection_type = selection_type,
@@ -1062,7 +1150,7 @@ selection_model <- function(
       theta = res$est$Est,
       yi = yi, sei = sei, pi = pi, ai = ai, 
       steps = steps, 
-      X = X, U = U, Z0 = Z0, Z = Z, calc_Ai = TRUE
+      X = X, U = U, Z0 = Z0, Z = Z, Hsgn = Hsgn, calc_Ai = TRUE
     )
     sel_params <- sum(predictions$z_dim)
     sel_zero_params <- predictions$z0_dim
@@ -1072,7 +1160,7 @@ selection_model <- function(
       theta = res$est$Est,
       yi = yi, sei = sei, pi = pi, 
       alpha = steps, 
-      X = X, U = U, calc_Ai = TRUE
+      X = X, U = U, Hsgn = Hsgn, calc_Ai = TRUE
     )
     sel_params <- 2L
     sel_zero_params <- 0L
@@ -1084,6 +1172,7 @@ selection_model <- function(
   res$cl <- cl
   res$mf <- mf
   res$selection_type <- selection_type
+  res$alternative <- alternative
   res$steps <- steps
   res$priors <- priors
   res$estimator <- estimator

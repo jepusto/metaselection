@@ -126,13 +126,13 @@ test_that("E_Y_f and E_Y_f_vec work.", {
   
   A1 <- mapply(
     E_Y_f, sei = sei, eta = eta, 
-    MoreArgs = list(f_exp = "(Y - mu) / sqrt(eta)", mu = 0.2, lambda = c(0, 0), alpha = c(.01, .96))
+    MoreArgs = list(f_exp = "(Y - mu) / sqrt(eta)", mu = 0.2, lambda = c(0, 0), alpha = c(.01, .96), Hsgn = 1L)
   )
   
   A2 <- E_Y_f_vec(
     f_exp = "(Y - mu) / sqrt(eta)", 
     sei = sei, mu = 0.2, eta = eta, 
-    lambda = c(0,0), alpha = c(.01, .96)
+    lambda = c(0,0), alpha = c(.01, .96), Hsgn = 1L
   )
   
   expect_equal(A0, A1)
@@ -154,13 +154,13 @@ test_that("E_Y_f and E_Y_f_vec work.", {
   
   B1 <- mapply(
     E_Y_f, sei = sei, eta = eta, 
-    MoreArgs = list(f_exp = "((Y - mu)^2 / eta - 1)", mu = 0.2, lambda = c(0, 0), alpha = c(.01, .96))
+    MoreArgs = list(f_exp = "((Y - mu)^2 / eta - 1)", mu = 0.2, lambda = c(0, 0), alpha = c(.01, .96), Hsgn = 1L)
   )
   
   B2 <- E_Y_f_vec(
     f_exp = "((Y - mu)^2 / eta - 1)", 
     sei = sei, mu = 0.2, eta = eta, 
-    lambda = c(0,0), alpha = c(.01, .96)
+    lambda = c(0,0), alpha = c(.01, .96), Hsgn = 1L
   )
   
   expect_equal(B0, B1)
@@ -168,6 +168,8 @@ test_that("E_Y_f and E_Y_f_vec work.", {
 })
 
 test_that("beta_score() is an unbiased estimating equation for models with no covariates.", {
+  
+  skip_on_cran()
   
   skip_if_not_installed("DescTools")
   verbose <- FALSE
@@ -225,6 +227,7 @@ test_that("beta_score() is an unbiased estimating equation for models with no co
 
 test_that("beta_score() is an unbiased estimating equation for models with covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -276,6 +279,8 @@ test_that("beta_score() is an unbiased estimating equation for models with covar
 
 
 test_that("beta_score and beta_hessian agree with numerical derivatives.", {
+
+  skip_on_cran()
   
   set.seed(20251114)
   
@@ -324,6 +329,20 @@ test_that("beta_score and beta_hessian agree with numerical derivatives.", {
     yi = d, sei = sd_d, 
     selection_type = "beta",
     steps = c(.025, .500),
+    estimator = "CML"
+  )
+  beta_derivs$selmod_fit$est
+  beta_derivs$score_diff_over_range
+  expect_lt(max(beta_derivs$score_diff_over_range), 5e-3)
+  round(beta_derivs$hess_diff_over_range, 5)
+  expect_lt(max(beta_derivs$hess_diff_over_range), 5e-3)
+  
+  beta_derivs <- check_all_derivatives(
+    data = dat, 
+    yi = d, sei = sd_d, 
+    selection_type = "beta",
+    steps = c(.5, .9),
+    alternative = "less",
     estimator = "CML"
   )
   beta_derivs$selmod_fit$est

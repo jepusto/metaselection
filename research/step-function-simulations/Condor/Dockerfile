@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.4.1
+FROM rocker/r-ver:4.5.3
 MAINTAINER "James Pustejovsky" jepusto@gmail.com
 
 RUN install2.r --error \
@@ -20,4 +20,4 @@ RUN install2.r --error \
     
 RUN R -q -e 'remotes::install_github("meghapsimatrix/simhelpers")'
 RUN R -q -e 'remotes::install_github("wviechtb/metafor")'
-RUN R -q -e 'remotes::install_github("jepusto/metaselection", ref = "penalization")'
+RUN R -q -e 'remotes::install_github("jepusto/metaselection", ref = "main")'

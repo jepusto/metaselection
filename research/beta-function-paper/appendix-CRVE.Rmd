@@ -55,25 +55,26 @@ where $V^{CR}_{gg}$ is the $g^{th}$ diagonal entry of $\mat{V}^{CR}$.
 It remains to give the exact form of the score contributions and Hessian matrix. To define these, observe that the beta-density selection function can be written compactly by defining
 \begin{equation}
 \tilde{p}_{ij} = \begin{cases}
-\alpha_1 & \text{if} \quad \Phi^{-1}(1 - \alpha_1) \leq y_{ij} / \sigma_{ij} \\
-\Phi\left(-y_{ij} / \sigma_{ij}\right) & \text{if} \quad \Phi^{-1}(1 - \alpha_2) \leq y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_1) \\
-\alpha_2 & \text{if} \quad y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_2),
+\alpha_1 & \text{if} \quad \Phi^{-1}(1 - \alpha_1) \leq s y_{ij} / \sigma_{ij} \\
+\Phi\left(-s y_{ij} / \sigma_{ij}\right) & \text{if} \quad \Phi^{-1}(1 - \alpha_2) \leq s y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_1) \\
+\alpha_2 & \text{if} \quad s y_{ij} / \sigma_{ij} < \Phi^{-1}(1 - \alpha_2),
 \end{cases}
 \end{equation}
 so that the selection weights of the truncated beta density model are
 \begin{equation}
 w_{ij} = w\left(y_{ij}, \sigma_{ij}; \zeta_1, \zeta_2 \right) = \tilde{p}_{ij}^{\lambda_1 - 1} \left(1 - \tilde{p}_{ij}\right)^{\lambda_2 - 1}.
 \end{equation}
-Also let $c_{hij} = \eta_{ij}^{-1/2}\left(\sigma_{ij} \Phi^{-1}(1 - \alpha_h) - \mu_{ij}\right)$ for $h = 1,2$; $B_{0ij} = 1 - \Phi(c_{1ij})$; and $B_{2ij} = \Phi(c_{2ij})$.
+Also let $c_{hij} = \eta_{ij}^{-1/2}\left(\sigma_{ij} \Phi^{-1}(1 - \alpha_h) - s \mu_{ij}\right)$ for $h = 1,2$; $B_{0ij} = 1 - \Phi(c_{1ij})$; and $B_{2ij} = \Phi(c_{2ij})$.
 
 The score and Hessian contributions of the truncated beta density model involve integrals that need to be calculated numerically. 
 To ease notation for these integrals, we will denote the integral of a function $f(Y)$ with respect to the distribution of $Y$ under the truncated beta density as 
-\begin{equation}
-E_Y\left[f(Y)| \sigma_{ij}, \lambda_1, \lambda_2\right] = \int_{\sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{\sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-Y / \sigma_{ij})\right]^{\lambda_1} \left[\Phi(Y / \sigma_{ij})\right]^{\lambda_2} \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY.
-\end{equation}
+\begin{align}
+E_Y\left[f(Y)| \sigma_{ij}, \lambda_1, \lambda_2\right] &= s \int_{s \sigma_{ij} \Phi^{-1}(1 - \alpha_2)}^{s \sigma_{ij} \Phi^{-1}(1 - \alpha_1)} f(Y) \left[\Phi(-s Y / \sigma_{ij})\right]^{\lambda_1 - 1} \left[\Phi(s Y / \sigma_{ij})\right]^{\lambda_2 - 1} \nonumber \\
+& \qquad \qquad \qquad \qquad \times \frac{1}{\sqrt{\eta_{ij}}}\phi\left(\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}}\right) dY.
+\end{align}
 It follows that 
 \begin{equation}
-A_{ij} = \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} + E_Y(1 | \sigma_{ij}, \lambda_1,\lambda_2) + \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+A_{ij} = \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} + E_Y(1 | \sigma_{ij}, \lambda_1,\lambda_2) + \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij}.
 \end{equation}
 
 ## Score contributions
@@ -95,14 +96,18 @@ with derivatives of $w_{ij}$ given by
 \end{align}
 and derivatives of $A_{ij}$ given by
 \begin{align}
-\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[ \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \right] \\
-\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \biggl[\alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad + E_Y\left(\left. \frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right] \\
-\frac{\partial A_{ij}}{\partial \lambda_1} &= \log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
-\frac{\partial A_{ij}}{\partial \lambda_2} &= \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] + \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}.
+\frac{\partial A_{ij}}{\partial \mu_{ij}} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[ \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right)  \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} s \phi(c_{2ij}) \biggr] \\
+\frac{\partial A_{ij}}{\partial \eta_{ij}} &= \frac{1}{2\eta_{ij}} \biggl[\alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad + E_Y\left(\left. \frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right)  \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} c_{2ij} \phi(c_{2ij}) \biggr] \\
+\frac{\partial A_{ij}}{\partial \lambda_1} &= \log(\alpha_1) \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(-s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \log(\alpha_2) \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij} \\
+\frac{\partial A_{ij}}{\partial \lambda_2} &= \log(1 - \alpha_1) \alpha_1^{\lambda_1 - 1} (1 - \alpha_1)^{\lambda_2 - 1} B_{0ij} \nonumber \\
+& \qquad \qquad \qquad + E_Y\left[\left.\log \Phi(sY / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad \qquad \qquad + \log(1 - \alpha_2) \alpha_2^{\lambda_1 - 1} (1 - \alpha_2)^{\lambda_2 - 1} B_{2ij}.
 \end{align}
 
 ## Hessian
@@ -130,19 +135,19 @@ The second derivatives of $A_{ij}$ are
 & \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1 \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \right]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^2 - 1) \phi(c_{1ij}) \biggr. \nonumber \\
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \eta_{ij}} &= \frac{1}{2 \eta_{ij}^{3/2}} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} s(c_{1ij}^2 - 1) \phi(c_{1ij}) \biggr. \nonumber \\
 & \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{(Y - \mu_{ij})[(Y - \mu_{ij})^2 - 3 \eta_{ij}]}{\eta_{ij}^{3/2}} \ \right| \sigma_{ij}, \lambda_1, \lambda_2 \right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} (c_{2ij}^2 - 1) \phi(c_{2ij}) \biggr]
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s(c_{2ij}^2 - 1) \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_1} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(-Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_1} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(-s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
-\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_2} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} \phi(c_{1ij}) \biggr. \nonumber \\
-& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij},  \lambda_1,\lambda_2\right) \right. \nonumber \\ 
-& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} \phi(c_{2ij}) \biggr]
+\frac{\partial^2 A_{ij}}{\partial \mu_{ij} \partial \lambda_2} &= \frac{1}{\sqrt{\eta_{ij}}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} s \phi(c_{1ij}) \biggr. \nonumber \\
+& \qquad \qquad \qquad \left. + E_Y\left(\left.\frac{Y - \mu_{ij}}{\sqrt{\eta_{ij}}} \times \log \Phi(s Y / \sigma_{ij}) \ \right| \sigma_{ij},  \lambda_1,\lambda_2\right) \right. \nonumber \\ 
+& \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} s \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij}^2} &= \frac{1}{4 \eta_{ij}^2} \biggl[  \alpha_1^{\lambda_1}(1 - \alpha_1)^{\lambda_2} (c_{1ij}^3 - 3 c_{1ij}) \phi(c_{1ij}) \biggr. \nonumber \\
@@ -151,22 +156,22 @@ The second derivatives of $A_{ij}$ are
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_1} &= \frac{1}{2\eta_{ij}} \biggl[\log(\alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-s Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
 & \qquad \qquad \qquad \qquad \qquad \biggl. - \log(\alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr] 
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \eta_{ij} \partial \lambda_2} &= \frac{1}{2\eta_{ij}} \biggl[\log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} c_{1ij} \phi(c_{1ij}) \biggr. \nonumber \\
-& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
+& \left. \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(s Y / \sigma_{ij}) \times \left(\frac{(Y - \mu_{ij})^2}{\eta_{ij}} - 1\right) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \right. \nonumber \\ 
 & \qquad \qquad \qquad \qquad \qquad \biggl. - \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} c_{2ij} \phi(c_{2ij}) \biggr]
 \end{align}
 \begin{align}
 \frac{\partial^2 A_{ij}}{\partial \lambda_1^2} &= \left[\log(\alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(-Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(-s Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(\alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\
 \frac{\partial^2 A_{ij}}{\partial \lambda_2^2} &= \left[\log(1 - \alpha_1)\right]^2 \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left.\left(\log \Phi(s Y / \sigma_{ij})\right)^2 \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \left(\log(1 - \alpha_2)\right)^2 \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij} \\ 
 \frac{\partial^2 A_{ij}}{\partial \lambda_1 \partial \lambda_2} &= \log(\alpha_1) \log(1 - \alpha_1) \alpha_1^{\lambda_1} (1 - \alpha_1)^{\lambda_2} B_{0ij} \nonumber \\
-& \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-Y / \sigma_{ij}) \log \Phi(Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
+& \qquad \qquad \qquad \qquad + E_Y\left[\left. \log \Phi(-s Y / \sigma_{ij}) \log \Phi(s Y / \sigma_{ij}) \ \right| \sigma_{ij}, \lambda_1,\lambda_2\right] \nonumber \\
 & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad + \log(\alpha_2) \log(1 - \alpha_2) \alpha_2^{\lambda_1} (1 - \alpha_2)^{\lambda_2} B_{2ij}
 \end{align}

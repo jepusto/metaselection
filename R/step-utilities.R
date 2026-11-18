@@ -15,7 +15,8 @@ parse_step_params <- function(
     X = NULL,                                   # mean parameter design matrix
     U = NULL,                                   # variance component design matrix
     Z0 = NULL,                                  # selection model design matrix for highest step
-    Z = NULL,
+    Z = NULL,                                   # selection model design matrix (or list of matrices) for remaining step(s)
+    Hsgn = 1L,                           # sign transformation depending on alternative hypothesis
     priors = NULL,                              # selmodel_prior object to specify priors
     calc_Ai = FALSE,
     min_Bhi = 1e-6
@@ -86,7 +87,7 @@ parse_step_params <- function(
   lambda_full <- cbind(lambda0, lambda)
   
   if (!missing(yi)) {
-    if (is.null(pi)) pi <- pnorm(yi / sei, lower.tail = FALSE)
+    if (is.null(pi)) pi <- pnorm(Hsgn * yi / sei, lower.tail = FALSE)
     cats <- cut(pi, breaks = c(0, steps, 1), include.lowest = TRUE)
     cats_index <- cbind(1:k, cats)
     weight_vec <- lambda_full[cats_index]
@@ -151,7 +152,7 @@ parse_step_params <- function(
                  H_names = H_names)
   
   if (calc_Ai) {
-    c_mat <- (tcrossprod(sei, -qnorm(steps)) - mu) / sqrt(eta)
+    c_mat <- (tcrossprod(sei, -qnorm(steps)) - Hsgn * mu) / sqrt(eta)
     N_mat <- cbind(rep(1,k), pnorm(c_mat), rep(0,k))
     B_mat <- N_mat[,1:H] - N_mat[,2:(H+1L)]
     B_mat <- apply(B_mat, 2, \(x) pmax(x, min_Bhi))
@@ -238,15 +239,16 @@ matrix_diag_crossprod <- function(d, A, B) {
 # Calculate S_lambda_ij
 
 
-calculate_S_zeta_ij <- function(B_mat,
-                                  Ai,
-                                  weight_vec,
-                                  cats,
-                                  Z0,
-                                  Z,
-                                  lambda0,
-                                  lambda)
-{
+calculate_S_zeta_ij <- function(
+  B_mat,
+  Ai,
+  weight_vec,
+  cats,
+  Z0,
+  Z,
+  lambda0,
+  lambda
+) {
   
   
   dA_dlambda <- B_mat
@@ -285,11 +287,11 @@ calculate_S_zeta_ij <- function(B_mat,
 #-------------------------------------------------------------------------------
 # Calculate H_zeta
 
-dB_dmu_eta <- function(k,H,c_mat) {
+dB_dmu_eta <- function(k, H, c_mat, Hsgn) {
   d1_mat <- cbind(rep(0,k), dnorm(c_mat), rep(0,k))
   d2_mat <- cbind(rep(0,k), c_mat * d1_mat[,2:H,drop=FALSE], rep(0,k))
   
-  dB_dmu <- d1_mat[,2:(H+1L),drop=FALSE] - d1_mat[,1:H,drop=FALSE]
+  dB_dmu <- Hsgn * (d1_mat[,2:(H+1L),drop=FALSE] - d1_mat[,1:H,drop=FALSE])
   dB_deta <- d2_mat[,2:(H+1L),drop=FALSE] - d2_mat[,1:H,drop=FALSE]
   
   list(dmu = dB_dmu, deta = dB_deta)
@@ -309,13 +311,14 @@ calculate_H_zeta <- function(
   U,
   Z0,
   Z,
+  Hsgn,
   ai,
   z0_dim,
   z_dim,
   lambda0,
   lambda,
   lambda_full,
-  dB = dB_dmu_eta(k, H, c_mat)
+  dB = dB_dmu_eta(k = k, H = H, c_mat = c_mat, Hsgn = Hsgn)
 ){
   
   eta_sqrt <- sqrt(eta)

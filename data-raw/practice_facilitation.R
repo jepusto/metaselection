@@ -21,7 +21,8 @@ practice_facilitation <-
     retention_pct = str_extract(`Months Follow-up % retention`, "\\([0-9.]+\\)") |> 
       str_sub(2,-2) |> 
       as.numeric(),
-    SMD = str_extract(`Effect Size`, "^[0-9.]+"),
+    SMD = str_extract(`Effect Size`, "^[0-9.]+") |> 
+      as.numeric(),
     SE = str_extract(`Effect Size`, "\\([0-9.]+\\)") |>
       str_sub(2, -2) |> 
       as.numeric()
@@ -34,6 +35,7 @@ practice_facilitation <-
     SMD, SE
   )
 
+str(practice_facilitation)
 practice_facilitation %>%
   View()
 

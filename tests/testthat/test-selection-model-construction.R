@@ -176,11 +176,13 @@ test_that("build_model_frame works properly.", {
 
 test_that("selection_model() returns results of correct dimension when estimator = 'ML'.", {
   
+  skip_on_cran()
+  
   # Generate some independent data
   
   set.seed(20230523)
   dat <- r_meta(
-    mean_smd = 0.3, tau = 0.1, omega = 0,
+    mean_smd = 0.3, tau = 0.15, omega = 0,
     m = 1000, cor_mu = 0.6, cor_sd = 0.001, 
     censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.5, 0.2)), 
     n_ES_sim = n_ES_param(40, 1)
@@ -313,7 +315,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   m1_mle_A2 <-
@@ -325,7 +327,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   expect_identical(m1_mle_A1$est, m1_mle_A2$est)
@@ -339,7 +341,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   m1_mle_B2 <-
@@ -351,7 +353,7 @@ test_that("selection_model() works with the subset argument.", {
       steps = c(.025, .500),
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
   expect_identical(m1_mle_B1$est, m1_mle_B2$est)
@@ -368,7 +370,7 @@ test_that("selection_model() works with the subset argument.", {
       sel_mods = ~ 0 + Z1,
       priors = NULL,
       vcov_type = "robust",
-      estimator = "ML",
+      estimator = "CML",
       optimizer = "Rvmmin"
     )
 
@@ -386,6 +388,9 @@ test_that("selection_model() works with the subset argument.", {
     tolerance = 1e-6    
   )
   
+  optimizer_controls <- list(method = "Broyden", global = "cline", xscalm = "auto")
+  
+  
   
   m1_hybrid_A1 <-
     selection_model(
@@ -394,7 +399,8 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       calc_vcov = TRUE,
-      estimator = "hybrid"
+      estimator = "ARGL",
+      optimizer_control = optimizer_controls
     )
   m1_hybrid_A2 <-
     selection_model(
@@ -404,7 +410,8 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       calc_vcov = TRUE,
-      estimator = "hybrid"
+      estimator = "ARGL",
+      optimizer_control = optimizer_controls
     )
 
   expect_identical(m1_hybrid_A1$est, m1_hybrid_A2$est)
@@ -419,7 +426,8 @@ test_that("selection_model() works with the subset argument.", {
       vi = Va,
       steps = c(.025, .500),
       vcov_type = "robust",
-      estimator = "hybrid"
+      estimator = "ARGL",
+      optimizer_control = optimizer_controls
     )
   m1_hybrid_B2 <-
     selection_model(
@@ -429,13 +437,53 @@ test_that("selection_model() works with the subset argument.", {
       sei = sda,
       steps = c(.025, .500),
       vcov_type = "robust",
-      estimator = "hybrid"
+      estimator = "ARGL",
+      optimizer_control = optimizer_controls
     )
   
   expect_identical(m1_hybrid_B1$est, m1_hybrid_B2$est)
   expect_identical(m1_hybrid_B1$vcov, m1_hybrid_B2$vcov)
   expect_identical(m1_hybrid_B1$info, m1_hybrid_B2$info)
   
+  m1_hybrid_mod <-
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      steps = c(.025, .500),
+      mean_mods = ~ 0 + Z1,
+      var_mods = ~ 0 + Z1,
+      sel_zero_mods = ~ 0 + Z1,
+      sel_mods = ~ 0 + Z1,
+      vcov_type = "robust",
+      estimator = "ARGL",
+      optimizer_control = optimizer_controls
+    )
+  
+  expect_equal(
+    m1_hybrid_mod$est["beta_Z1A","Est"],
+    m1_hybrid_A2$est["beta","Est"],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est[c("zeta1_Z1A","zeta2_Z1A"),"Est"] - m1_hybrid_mod$est["zeta0_Z1A","Est"],
+    m1_hybrid_A2$est[c("zeta1","zeta2"),"Est"],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est["beta_Z1B","Est"],
+    m1_hybrid_B2$est["beta","Est"],
+    ignore_attr = TRUE,
+    tolerance = 2e-3
+  )
+  expect_equal(
+    m1_hybrid_mod$est[c("zeta1_Z1B","zeta2_Z1B"),"Est"] - m1_hybrid_mod$est["zeta0_Z1B","Est"],
+    m1_hybrid_B2$est[c("zeta1","zeta2"),"Est"],
+    ignore_attr = TRUE,
+    tolerance = 5e-3
+  )
   
   set.seed(20240912)
   dat <- r_meta(
@@ -493,4 +541,336 @@ test_that("selection_model() works with the subset argument.", {
     tolerance = 2e-4
   )
   
+
+})
+
+test_that("`vcov_type` options work as expected.", {
+  
+  set.seed(20260818)
+  
+  dat <- r_meta(
+    mean_smd = 0.3, tau = 0.15, omega = 0,
+    m = 20, cor_mu = 0.6, cor_sd = 0.001, 
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.7, 0.4)), 
+    n_ES_sim = n_ES_param(30, 1)
+  )
+  
+  sel_none <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    vcov_type = "none",
+    estimator = "CML"
+  )
+
+  sel_raw <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    vcov_type = "raw",
+    estimator = "CML"
+  )
+  mle_est_conv <- sel_raw[(sel_raw$kkt1 & sel_raw$kkt2),]
+  theta <- unlist(mle_est_conv[which.max(mle_est_conv$value), names(sel_none)])
+  expect_equal(sel_none, theta)
+  
+  sel_model <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    vcov_type = "model-based",
+    estimator = "CML"
+  )
+  expect_equal(sel_none, sel_model$est$Est, ignore_attr = TRUE)
+  
+  sel_robust <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    vcov_type = "robust",
+    estimator = "CML"
+  )
+  expect_equal(sel_none, sel_robust$est$Est, ignore_attr = TRUE)
+  expect_all_false(as.logical(sel_model$vcov == sel_robust$vcov))  
+  
+})
+
+test_that("analytic weights work as expected.", {
+  
+  set.seed(20260818)
+  
+  dat <- r_meta(
+    mean_smd = 0.0, tau = 0.1, omega = 0,
+    m = 50, cor_mu = 0, cor_sd = 0,
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.5, 0.1)), 
+    n_ES_sim = n_ES_param(30, 1)
+  )
+  dat$wt <- 1
+  
+  sel_unwt <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    estimator = "ARGL"
+  )
+  
+  sel_wt <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    ai = wt,
+    selection_type = "step",
+    steps = c(.025, .500),
+    estimator = "ARGL"
+  )
+  
+  expect_equal(sel_unwt$est, sel_wt$est)
+  
+  set.seed(20260819)
+  boot_unwt <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    selection_type = "step",
+    steps = c(.025, .500),
+    estimator = "ARGL",
+    bootstrap = "multinomial",
+    CI_type = "BCa",
+    R = 9L
+  )
+  
+  set.seed(20260819)
+  boot_wt <- selection_model(
+    data = dat,
+    yi = d,
+    sei = sda,
+    ai = wt,
+    selection_type = "step",
+    steps = c(.025, .500),
+    estimator = "ARGL",
+    bootstrap = "multinomial",
+    CI_type = "BCa",
+    R = 9L
+  )
+  
+  expect_equal(sel_unwt$est, sel_wt$est)
+})
+
+test_that("error messages appear as expected.", {
+
+  set.seed(20260818)
+  
+  dat <- r_meta(
+    mean_smd = 0.5, tau = 0.2, omega = 0,
+    m = 5, cor_mu = 0, cor_sd = 0,
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.9, 0.8)), 
+    n_ES_sim = n_ES_param(35, 3)
+  )
+  dat$z <- sample(LETTERS[1:3], size = nrow(dat), replace = TRUE)
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      priors = "none"
+    ),
+    regexp = "define_priors()"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      vcov_type = "model-based"
+    ),
+    regexp = "only allowed for estimator = 'CML'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "CML",
+      vcov_type = "model-based"
+    ),
+    regexp = "does not allow the use of a clustering variable"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025, .500),
+      estimator = "ARGL",
+      bootstrap = "multinomial",
+      CI_type = "percentile",
+      R = 0L
+    ),
+    regexp = "require setting R > 0"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = "severe",
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = 0:5,
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = seq(-0.5, 0.5, 0.2),
+      estimator = "ARGL"
+    ),
+    regexp = "vector with all entries in the interval"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50, 0.975),
+      estimator = "ARGL"
+    ),
+    regexp = "vector of length 2 when selection_type = 'beta'"
+  )
+
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      estimator = "ARGL"
+    ),
+    regexp = "must be equal to 'CML' when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      sel_mods = ~ 0 + z
+    ),
+    regexp = "must be NULL when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50),
+      sel_zero_mods = ~ 0 + z
+    ),
+    regexp = "must be NULL when selection_type = 'beta'"
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = .025,
+      estimator = "ARGL",
+      sel_mods = list(~ z, ~ z)
+    ),
+    regexp = "list with length equal to the number of steps"
+  )
+  
+  expect_no_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "step",
+      steps = c(.025,.500),
+      estimator = "ARGL",
+      sel_mods = list(~ z, ~ z)
+    )
+  )
+  
+  dat <- r_meta(
+    mean_smd = 0.5, tau = 0.2, omega = 0,
+    m = 2, cor_mu = 0, cor_sd = 0,
+    censor_fun = step_fun(cut_vals = c(.025, .500), weights = c(0.9, 0.8)), 
+    n_ES_sim = n_ES_param(35, 30)
+  )
+  
+  expect_error(
+    selection_model(
+      data = dat,
+      yi = d,
+      sei = sda,
+      cluster = studyid,
+      selection_type = "beta",
+      steps = c(0.025, 0.50)
+    ),
+    regexp = "fewer than three unique clusters"
+  )
+  
+
 })

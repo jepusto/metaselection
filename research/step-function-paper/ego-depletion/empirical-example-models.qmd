@@ -46,6 +46,10 @@ ed_dat_clean %>%
     num_studies = n_distinct(study_id),
     num_effects = n_distinct(es_id)
   )
+
+ed_dat_clean %>%
+  count(study) %>%
+  count(n)
 ```
 
 ## CHE Estimate

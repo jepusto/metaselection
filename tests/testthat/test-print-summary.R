@@ -113,6 +113,8 @@ test_that("print() and summary() work for selmodel objects with no predictors.",
 
 test_that("print() and summary() work for selmodel objects with mean predictors.", {
   
+  skip_on_cran()
+  
   mod <- selection_model(
     data = dat,
     yi = d,
@@ -168,6 +170,8 @@ test_that("print() and summary() work for selmodel objects with mean predictors.
 })
 
 test_that("print() works for selmodel objects with variance predictors.", {
+  
+  skip_on_cran()
   
   mod <- selection_model(
     data = dat,

@@ -21,6 +21,8 @@ test_that("define_priors() works for default priors.", {
 
 test_that("priors = NULL is equivalent to defining flat priors for step function.", {
   
+  set.seed(20260806)
+  
   dat <- r_meta_categories(
     mean_smd = c(0, 0.1, 0.2),
     tau = 0.3,
@@ -109,6 +111,10 @@ test_that("priors = NULL is equivalent to defining flat priors for step function
 
 test_that("priors = NULL is equivalent to defining flat priors for beta function.", {
   
+  skip_on_cran()
+  
+  set.seed(20260806)
+  
   dat <- r_meta(
     mean_smd = 0.1,
     tau = 0.3,
@@ -145,6 +151,8 @@ test_that("priors = NULL is equivalent to defining flat priors for beta function
 })
 
 test_that("Score contributions sum to total when accounting for priors for step function model.", {
+  
+  set.seed(20260806)
   
   dat <- r_meta_categories(
     mean_smd = c(0, 0.1, 0.2),
@@ -292,7 +300,10 @@ test_that("Score contributions sum to total when accounting for priors for step 
 
 test_that("Score contributions sum to total when accounting for priors for beta model.", {
   
+  skip_on_cran()
+  
   set.seed(20251114)
+  
   dat <- r_meta(
     mean_smd = 0.1,
     tau = 0.3,

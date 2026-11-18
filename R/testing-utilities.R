@@ -10,33 +10,34 @@ formals(quick_boot_selection_model) <- quick_boot_selection_args
 #-------------------------------------------------------------------------------
 # Functions for comparing scores to numerical derivatives
 
-diffentiate_loglik <- function(
+differentiate_loglik <- function(
     param,
     f_ll, f_score, f_hess,
     steps,
     theta,
     from, to, N,
     yi,
-    sei
+    sei,
+    Hsgn
 ) {
   
   param_seq <- seq(from, to, length.out = N + 2)
   
   f_ll_ <- function(x) {
     theta[param] <- x
-    f_ll(theta = theta, yi = yi, sei = sei, steps = steps)
+    f_ll(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)
   }
   ll_seq <- sapply(param_seq, f_ll_)
   
   f_score_ <- function(x) {
     theta[param] <- x
-    f_score(theta = theta, yi = yi, sei = sei, steps = steps)
+    f_score(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)
   }
   score_seq <- sapply(param_seq, f_score_)
 
   f_hess_ <- function(x) {
     theta[param] <- x
-    f_hess(theta = theta, yi = yi, sei = sei, steps = steps)[param,]
+    f_hess(theta = theta, yi = yi, sei = sei, steps = steps, Hsgn = Hsgn)[,param]
   }
   hess_seq <- sapply(param_seq, f_hess_)
   delta <- param_seq[3:(N + 2)] - param_seq[1:N]
@@ -86,6 +87,7 @@ check_all_derivatives <- function(
   
   from <- selmod_fit$est$Est - crit * selmod_fit$est$SE
   to <- selmod_fit$est$Est + crit * selmod_fit$est$SE
+  Hsgn <- if (selmod_fit$alternative == "greater") 1L else -1L
   
   if (selection_type == "step") {
     if (estimator %in% c("ML","CML")) {
@@ -104,7 +106,7 @@ check_all_derivatives <- function(
   }
   
   derivs <- mapply(
-    diffentiate_loglik, 
+    differentiate_loglik, 
     param = params, from = from[params], to = to[params],
     MoreArgs = list(
       f_ll = f_ll,
@@ -114,6 +116,7 @@ check_all_derivatives <- function(
       theta = theta, 
       yi = yi,
       sei = sei,
+      Hsgn = Hsgn,
       N = N
     ),
     SIMPLIFY = FALSE
@@ -162,7 +165,7 @@ get_selmodel_params <- function(sel_mod, theta = TRUE) {
 }
 
 check_against_metafor_selmodel <- function(
-    mod, type = "stepfun", steps = .025,
+    mod, type = "stepfun", alternative = "greater", steps = .025,
     tol_LRT = 1e-8, tol_ll = 1e-4, tol_score = 5e-5, 
     tol_param = 1e-4, tol_SE = 1e-4,
     ...,
@@ -172,13 +175,13 @@ check_against_metafor_selmodel <- function(
   suppressWarnings(
     if (is.null(steps)) {
       sel_mod <- metafor::selmodel(
-        mod, type = type, 
+        mod, type = type, alternative = alternative,
         control=list(optimizer = "nlminb", rel.tol = 1e-10, ...)
       )
       steps <- c(1e-5, 1 - 1e-5)
     } else {
       sel_mod <- metafor::selmodel(
-        mod, type = type, steps = steps, 
+        mod, type = type, alternative = alternative, steps = steps, 
         control=list(optimizer = "nlminb", rel.tol = 1e-10, ...)
       )
     }
@@ -228,9 +231,10 @@ check_against_metafor_selmodel <- function(
         data = dat,
         yi = yi,
         sei = sei,
+        selection_type = "step",
+        alternative = alternative,
         steps = steps,
         mean_mods = mods,
-        selection_type = "step",
         priors = NULL,
         estimator = "CML",
         vcov_type = "model-based",
@@ -276,9 +280,10 @@ check_against_metafor_selmodel <- function(
         data = dat,
         yi = yi,
         sei = sei,
+        selection_type = "beta",
+        alternative = alternative,
         steps = steps,
         mean_mods = mods,
-        selection_type = "beta",
         priors = NULL,
         estimator = "CML",
         vcov_type = "model-based",
@@ -330,6 +335,192 @@ check_dims <- function(mf, rows, cols) {
   testthat::expect_identical(ncol(mf), cols)
 }
 
+
+check_valence_equivalence <- function(
+    yi, yi_neg, ..., steps = .025, 
+    check_gamma = TRUE,
+    tol = 1e-6,
+    seed = as.integer(Sys.Date())
+) {
+  
+  # base model
+  
+  cl_pos_gt <- match.call()
+  cl_pos_gt$alternative <- "greater"
+  cl_pos_gt$yi_neg <- NULL
+  cl_pos_gt$check_gamma <- NULL
+  cl_pos_gt$tol <- NULL
+  cl_pos_gt[[1L]] <- quote(selection_model)
+  
+  set.seed(seed)
+  pos_gt <- eval(cl_pos_gt, parent.frame())
+  p_b <- pos_gt$param_dim[1]
+  p_g <- pos_gt$param_dim[2]
+  p_bg <- p_b + p_g
+  p_z <- sum(pos_gt$param_dim[3])
+  
+  
+  # switch valence, reverse steps
+  
+  steps_rev <- rev(1 - steps)
+  cl_pos_ls <- cl_pos_gt
+  cl_pos_ls$alternative <- "less"
+  cl_pos_ls$steps <- steps_rev
+  
+  set.seed(seed)
+  if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
+    pos_ls <- eval(cl_pos_ls, parent.frame())  
+  } else {
+    testthat::expect_warning(
+      pos_ls <- eval(cl_pos_ls, parent.frame()),
+      regexp = "Most of the effect size estimates are"
+    )
+  }
+
+  # check betas are equal
+  testthat::expect_equal(pos_gt$est[1:p_b,], pos_ls$est[1:p_b,], tolerance = tol)
+  
+  # check gamma are equal
+  if (check_gamma) {
+    testthat::expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      pos_ls$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
+  
+  # check zetas are equivalent after translation
+  if (inherits(pos_gt, "step.selmodel")) {
+    if (p_z > 1L) {
+      testthat::expect_equal(
+        pos_gt$est$Est[p_bg + 1:p_z], 
+        c(pos_ls$est$Est[p_bg + (p_z - 1):1], 0) - pos_ls$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    } else {
+      testthat::expect_equal(
+        pos_gt$est$Est[p_bg + p_z], 
+        - pos_ls$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    }
+  } else if (inherits(pos_gt, "beta.selmodel")) {
+    testthat::expect_equal(
+      pos_gt$est[p_bg + 1:p_z,-2],
+      pos_ls$est[p_bg + p_z:1,-2],
+      ignore_attr = TRUE,
+      tolerance = tol
+    )
+  }
+  
+  # switch sign of outcome, reverse steps
+  
+  cl_neg_gt <- match.call()
+  cl_neg_gt$alternative <- "greater"
+  cl_neg_gt$yi <- cl_neg_gt$yi_neg
+  cl_neg_gt$yi_neg <- NULL
+  cl_neg_gt$check_gamma <- NULL
+  cl_neg_gt$tol <- NULL
+  cl_neg_gt$steps <- steps_rev
+  cl_neg_gt[[1L]] <- quote(selection_model)
+
+  set.seed(seed)
+  if ("valence_check" %in% names(cl_pos_gt) && !eval(cl_pos_gt$valence_check)) {
+    neg_gt <- eval(cl_neg_gt, parent.frame())  
+  } else {
+    testthat::expect_warning(
+      neg_gt <- eval(cl_neg_gt, parent.frame()),
+      regexp = "Most of the effect size estimates are"
+    )
+  }
+
+  # check beta equal magnitude but opposite sign
+  
+  to_flip <- !(names(neg_gt$est) %in% c("estimator","param","SE","p_value","bootstraps"))
+  testthat::expect_equal(
+    apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    apply(-1 * neg_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    tolerance = tol
+  )
+  testthat::expect_equal(
+    pos_gt$est[1:p_b,!to_flip], 
+    neg_gt$est[1:p_b,!to_flip], 
+    tolerance = tol
+  )
+  
+  # check gamma are equal
+  if (check_gamma) {
+    testthat::expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      neg_gt$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
+  
+  # check zetas are equivalent after translation
+
+  if (inherits(pos_gt, "step.selmodel")) {
+    if (p_z > 1L) {
+      testthat::expect_equal(
+        pos_gt$est$Est[p_bg + 1:p_z], 
+        c(neg_gt$est$Est[p_bg + (p_z - 1):1], 0) - neg_gt$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    } else {
+      testthat::expect_equal(
+        pos_gt$est$Est[p_bg + p_z], 
+        - neg_gt$est$Est[p_bg + p_z],
+        tolerance = tol
+      )
+    }
+  } else if (inherits(pos_gt, "beta.selmodel")) {
+    testthat::expect_equal(
+      pos_gt$est[p_bg + 1:p_z,-2],
+      neg_gt$est[p_bg + p_z:1,-2],
+      ignore_attr = TRUE
+    )
+  }
+  
+  
+  # switch sign of outcome, reverse steps
+  
+  cl_neg_ls <- cl_neg_gt
+  cl_neg_ls$alternative <- "less"
+  cl_neg_ls$steps <- cl_pos_gt$steps
+  
+  set.seed(seed)
+  neg_ls <- eval(cl_neg_ls, parent.frame())
+  
+
+  # check beta equal magnitude but opposite sign
+  testthat::expect_equal(
+    apply(pos_gt$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    apply(-1 * neg_ls$est[1:p_b,to_flip], 1, \(x) sort(as.numeric(x))), 
+    tolerance = tol
+  )
+  testthat::expect_equal(
+    pos_gt$est[1:p_b,!to_flip], 
+    neg_ls$est[1:p_b,!to_flip], 
+    tolerance = tol
+  )
+  
+  # check gamma are equal
+  if (check_gamma) {
+    testthat::expect_equal(
+      pos_gt$est[p_b + 1:p_g,], 
+      neg_ls$est[p_b + 1:p_g,], 
+      tolerance = tol
+    )
+  }
+  
+  # check zetas are equal
+  testthat::expect_equal(
+    pos_gt$est[p_bg + 1:p_z,], 
+    neg_ls$est[p_bg + 1:p_z,], 
+    tolerance = tol
+  )
+  
+}
 
 #-------------------------------------------------------------------------------
 # Functions for checking r_meta()
@@ -1123,72 +1314,73 @@ check_selection_weights <- function(dat, steps, estimator = "CML", bootstrap = "
   
 }
 
-check_predictions <- function(
-    data, yi, sei, pi, ai, 
-    selection_type = "step", 
-    steps = NULL,
-    mean_mods = NULL,
-    var_mods = NULL,
-    sel_mods = NULL,
-    estimator = "ARGL",
-    check_subset = TRUE
-) {
-  
-  cl <- match.call()
-  cl[[1L]] <- str2lang("metaselection:::selection_model")
-  suppressWarnings(
-    mod <- eval(cl, parent.frame())
-  )
-  
-  all_preds <- stats::predict(mod)
+# check_predictions <- function(
+#     data, yi, sei, pi, ai, 
+#     selection_type = "step", 
+#     steps = NULL,
+#     mean_mods = NULL,
+#     var_mods = NULL,
+#     sel_mods = NULL,
+#     estimator = "ARGL",
+#     check_subset = TRUE
+# ) {
+#   
+#   cl <- match.call()
+#   cl[[1L]] <- str2lang("metaselection:::selection_model")
+#   suppressWarnings(
+#     mod <- eval(cl, parent.frame())
+#   )
+#   
+#   all_preds <- stats::predict(mod)
+# 
+#   params <- mod$est$param
+#   beta <- mod$est$Est[grepl("^beta", params)]
+#   gamma <- mod$est$Est[grepl("^gamma", params)]
+#   zeta <- mod$est$Est[grepl("^zeta", params)]
+#   
+#   if (is.null(mean_mods)) {
+#     testthat::expect_equal(beta, unique(all_preds$mu))
+#   } else {
+#     X <- stats::model.matrix(mean_mods, data = data)
+#     mu <- as.numeric(X %*% beta)
+#     testthat::expect_equal(mu, all_preds$mu)
+#   }
+#   
+#   if (is.null(var_mods)) {
+#     testthat::expect_equal(exp(gamma), unique(all_preds$tau2))
+#   } else {
+#     U <- stats::model.matrix(var_mods, data = data)
+#     tau2 <- as.numeric(exp(U %*% gamma))
+#     testthat::expect_equal(tau2, all_preds$tau2)
+#   }
+#   
+#   if (selection_type == "step") {
+#     if (is.null(sel_mods)) {
+#       
+#       lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
+#       testthat::expect_equal(exp(zeta), as.numeric(lambda[-1]))
+#       
+#       sel_wts <- selection_wts(mod)
+#       testthat::expect_equal(
+#         as.numeric(lambda[mod$predictions$cats]),
+#         sel_wts$wt
+#       )
+#       
+#     } else {
+#       Z <- stats::model.matrix(sel_mods, data = data)
+#       zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
+#       lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
+#       lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
+#       testthat::expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
+#     }
+#   }
+#   
+#   # Check prediction of subset of observations
+#   sub <- sample(1:nrow(data), 10L)
+#   newdata <- data[sub,]
+#   sub_preds <- stats::predict(mod, newdata = newdata)
+#   testthat::expect_equal(sub_preds, all_preds[sub,])
+#   
+#   return(all_preds)
+# }
 
-  params <- mod$est$param
-  beta <- mod$est$Est[grepl("^beta", params)]
-  gamma <- mod$est$Est[grepl("^gamma", params)]
-  zeta <- mod$est$Est[grepl("^zeta", params)]
-  
-  if (is.null(mean_mods)) {
-    testthat::expect_equal(beta, unique(all_preds$mu))
-  } else {
-    X <- stats::model.matrix(mean_mods, data = data)
-    mu <- as.numeric(X %*% beta)
-    testthat::expect_equal(mu, all_preds$mu)
-  }
-  
-  if (is.null(var_mods)) {
-    testthat::expect_equal(exp(gamma), unique(all_preds$tau2))
-  } else {
-    U <- stats::model.matrix(var_mods, data = data)
-    tau2 <- as.numeric(exp(U %*% gamma))
-    testthat::expect_equal(tau2, all_preds$tau2)
-  }
-  
-  if (selection_type == "step") {
-    if (is.null(sel_mods)) {
-      
-      lambda <- apply(all_preds[,grepl("^lambda", names(all_preds))], 2, unique)
-      testthat::expect_equal(exp(zeta), as.numeric(lambda[-1]))
-      
-      sel_wts <- selection_wts(mod)
-      testthat::expect_equal(
-        as.numeric(lambda[mod$predictions$cats]),
-        sel_wts$wt
-      )
-      
-    } else {
-      Z <- stats::model.matrix(sel_mods, data = data)
-      zeta_list <- split(zeta, rep(seq_along(mod$steps), each = ncol(Z)))
-      lambda_list <- lapply(zeta_list, \(zeta) as.numeric(exp(Z %*% zeta)))
-      lambda_preds <- all_preds[,grepl("^lambda", names(all_preds))]
-      testthat::expect_equal(lambda_preds[,-1], data.frame(lambda_list), ignore_attr = TRUE)
-    }
-  }
-  
-  # Check prediction of subset of observations
-  sub <- sample(1:nrow(data), 10L)
-  newdata <- data[sub,]
-  sub_preds <- stats::predict(mod, newdata = newdata)
-  testthat::expect_equal(sub_preds, all_preds[sub,])
-  
-  return(all_preds)
-}

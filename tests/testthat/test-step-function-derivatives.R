@@ -252,6 +252,7 @@ test_that("step_hessian() divides up the parameter vector appropriately.", {
 
 test_that("step_score() is an unbiased estimating equation for models with no covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -304,6 +305,7 @@ test_that("step_score() is an unbiased estimating equation for models with no co
 
 test_that("step_score() is an unbiased estimating equation for models with covariates.", {
   
+  skip_on_cran()
   skip_if_not_installed("DescTools")
   verbose <- FALSE
 
@@ -405,6 +407,8 @@ test_that("step_score() is an unbiased estimating equation for models with covar
 })
 
 test_that("step_score and step_hessian agree with numerical derivatives.", {
+  
+  skip_on_cran()
   
   set.seed(20240419)
   
@@ -510,6 +514,20 @@ test_that("step_score and step_hessian agree with numerical derivatives.", {
     selection_type = "step",
     steps = c(.025, .500),
     estimator = "ML",
+  )
+  step_derivs$selmod_fit$est
+  step_derivs$score_diff_over_range
+  expect_lt(max(step_derivs$score_diff_over_range), 2e-3)
+  round(step_derivs$hess_diff_over_range, 5)
+  expect_lt(max(step_derivs$hess_diff_over_range), 1e-2)
+  
+  step_derivs <- check_all_derivatives(
+    data = dat, 
+    yi = d, sei = sd_d, 
+    selection_type = "step",
+    steps = c(.50, .95),
+    estimator = "ML",
+    alternative = "less"
   )
   step_derivs$selmod_fit$est
   step_derivs$score_diff_over_range

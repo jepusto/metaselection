@@ -6,7 +6,6 @@ bibliography: references.bib
 
 ```{r sim-results-setup}
 source("process-simulation-results.R")
-method_palette <- colorspace::qualitative_hcl(n = 5, h = c(50, -164), c = 95, l = 60)
 
 # Bias
 beta_bias_main <-

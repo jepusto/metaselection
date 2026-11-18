@@ -6,13 +6,13 @@
 \usage{
 define_priors(
   beta_mean = 0,
-  beta_precision = 1/2,
-  beta_L = 2,
+  beta_precision = 1/16,
+  beta_L = 4,
   tau_mode = 0.2,
   tau_alpha = 1,
-  lambda_mode = 0.8,
-  lambda_precision = 1/2,
-  lambda_L = 2
+  lambda_mode = 0.5,
+  lambda_precision = 1/54,
+  lambda_L = 4
 )
 }
 \arguments{
@@ -44,9 +44,9 @@ regression) parameters.}
 An object of class \code{"selmodel_prior"} containing the following
 components:
 \describe{
-\item{\code{log_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the log of the prior density over these parameters.}
-\item{\code{score_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the vector of scores for the prior density over these parameters.}
-\item{\code{hessian_prior}}{A function with arguments \code{beta},\code{gamma},\code{zeta} that returns the Hessian matrix of the prior density over these parameters.}
+\item{\code{log_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the log of the prior density over these parameters.}
+\item{\code{score_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the vector of scores for the prior density over these parameters.}
+\item{\code{hessian_prior}}{function with arguments \code{beta},\code{gamma},\code{zeta} that returns the Hessian matrix of the prior density over these parameters.}
 }
 }
 \description{
@@ -62,9 +62,9 @@ strong_priors <- define_priors(
   lambda_mode = 0.2, lambda_precision = 40
 )
 
-# set very weak priors
+# set standard normal prior on beta
 weak_priors <- define_priors(
-  beta_precision = 1/10, tau_alpha = 1/10, lambda_precision = 1/10
+  beta_mean = 0, beta_precision = 1/2, beta_L = 2
 )
 
 }

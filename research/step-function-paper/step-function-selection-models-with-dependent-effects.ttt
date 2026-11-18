@@ -1,0 +1,57 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tb]
+\centering
+\caption{\label{tab:empirical}Single-step and two-step selection model parameter estimates fit to ego depletion effects data from Carter et al. (2015)}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{threeparttable}
+\begin{tabular}[t]{l>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}>{\raggedright\arraybackslash}p{5.5em}}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{PML estimator} & \multicolumn{3}{c}{ARGL estimator} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+Parameter & Estimate (SE) & Cluster-Robust CI & Percentile Bootstrap CI & Estimate (SE) & Cluster-Robust CI & Percentile Bootstrap CI\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{One-step}}\\
+\hspace{1em}$\beta$ & 0.25 (0.09) & {}[ 0.07,   0.43] & {}[0.05, 0.47] & 0.27 (0.07) & {}[ 0.14,   0.40] & {}[0.11, 0.45]\\
+\hspace{1em}$\tau^2$ & 0.10 (0.03) & {}[ 0.06,   0.20] & {}[0.03, 0.18] & 0.11 (0.04) & {}[ 0.06,   0.21] & {}[0.02, 0.21]\\
+\hspace{1em}$\lambda_1$ & 0.27 (0.14) & {}[ 0.10,   0.73] & {}[0.07, 0.82] & 0.30 (0.09) & {}[ 0.16,   0.55] & {}[0.07, 1.13]\\
+\addlinespace[0.3em]
+\multicolumn{7}{l}{\textbf{Two-step}}\\
+\hspace{1em}$\beta$ & 0.23 (0.10) & {}[ 0.04,   0.43] & {}[0.02, 0.49] & 0.25 (0.76) & {}[-1.23,   1.74] & {}[0.04, 0.52]\\
+\hspace{1em}$\tau^2$ & 0.11 (0.03) & {}[ 0.06,   0.20] & {}[0.03, 0.18] & 0.11 (0.17) & {}[ 0.01,   2.15] & {}[0.01, 0.20]\\
+\hspace{1em}$\lambda_1$ & 0.27 (0.13) & {}[ 0.10,   0.70] & {}[0.08, 0.82] & 0.29 (0.89) & {}[ 0.00,>100] & {}[0.08, 1.09]\\
+\hspace{1em}$\lambda_2$ & 0.23 (0.15) & {}[ 0.06,   0.84] & {}[0.06, 1.16] & 0.26 (1.15) & {}[ 0.00,>100] & {}[0.04, 2.61]\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: }
+\item ARGL = augmented, reweighted gaussian likelihood; PML = penalized maximum likelihood; CI = confidence interval; SE = standard error.
+\end{tablenotes}
+\end{threeparttable}}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tb]
+\centering
+\caption{\label{tab:sim-design}Parameter values examined in the simulation study}
+\centering
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{2.5in}ll}
+\toprule
+Parameter & Full Simulation & Bootstrap Simulation\\
+\midrule
+Number of observed studies ($J$) & 15, 30, 60, 90, 120 & 15, 30, 60\\
+Primary study sample size & Typical, Small & Typical, Small\\
+Overall average SMD ($\mu$) & 0.0, 0.2, 0.4, 0.8 & 0.0, 0.2, 0.4, 0.8\\
+Between-study heterogeneity ($\tau_B$) & 0.05, 0.15, 0.30, 0.45 & 0.05, 0.15, 0.45\\
+Heterogeneity ratio ($\omega^2 / \tau_B^2$) & 0.0, 0.5 & 0.0, 0.5\\
+\addlinespace
+Average correlation between outcomes ($\rho$) & 0.40, 0.80 & 0.80\\
+Dependence of the selection process ($\psi$) & 0, 1 & 0, 1\\
+Probability of selection for non-affirmative effects ($\lambda_1$) & 0.02, 0.05, 0.10, 0.20, 0.50, 1.0 & 0.05, 0.20, 1.0\\
+\bottomrule
+\end{tabular}
+\end{table*}

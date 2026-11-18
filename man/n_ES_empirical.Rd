@@ -9,7 +9,7 @@ n_ES_empirical(dat)
 }
 \arguments{
 \item{dat}{a \code{data.frame} or \code{tibble} containing primary study sample
-sizes and number of effect sizes per primary study}
+sizes and number of effect sizes per primary study.}
 }
 \value{
 A function that generates random samples from the input dataset.

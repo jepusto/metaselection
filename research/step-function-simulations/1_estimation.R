@@ -57,7 +57,6 @@ estimate_step_models <- function(
         data = dat,
         yi = d,
         sei = sd_d,
-        pi = p_onesided,
         cluster = studyid,
         selection_type = "step",
         steps = steps,
@@ -75,6 +74,7 @@ estimate_step_models <- function(
         bootstrap = bootstrap,
         R = R,
         retry_bootstrap = retry_bootstrap,
+        valence_check = FALSE,
         use_jac = use_jac
       ), error = function(e) error_res
     )
@@ -90,7 +90,6 @@ estimate_step_models <- function(
           data = dat,
           yi = d,
           sei = sd_d,
-          pi = p_onesided,
           selection_type = "step",
           steps = steps,
           mean_mods = mean_mods,
@@ -105,6 +104,7 @@ estimate_step_models <- function(
           theta = res_MLE$est$Est,
           optimizer = CML_optimizer, 
           optimizer_control = CML_optimizer_control,
+          valence_check = FALSE,
           bootstrap = "none",
           use_jac = use_jac
         ), error = function(e) error_res
@@ -124,7 +124,6 @@ estimate_step_models <- function(
         data = dat,
         yi = d,
         sei = sd_d,
-        pi = p_onesided,
         cluster = studyid,
         selection_type = "step",
         steps = steps,
@@ -139,6 +138,7 @@ estimate_step_models <- function(
         conf_level = conf_level,
         optimizer = "nleqslv", 
         optimizer_control = c(method = "Broyden", ARGL_optimizer_control),
+        valence_check = FALSE,
         bootstrap = bootstrap,
         R = R,
         retry_bootstrap = retry_bootstrap

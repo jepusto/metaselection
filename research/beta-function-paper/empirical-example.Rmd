@@ -38,7 +38,7 @@ To demonstrate the interpretation of the beta-function selection model in practi
 #| cache: true
 
 library(future)
-plan(multisession, workers = 10)
+plan(multisession, workers = 10L)
 R <- 1999L
 set.seed(20260615)
 

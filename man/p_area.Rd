@@ -2,35 +2,49 @@
 % Please edit documentation in R/p-area.R
 \name{p_area}
 \alias{p_area}
-\title{Calculate area under the selection weight function from a \code{selmodel}
-object}
+\title{Calculate area under the selection weight function
+from a \code{selmodel} object}
 \usage{
 p_area(object, CI_type = NULL, conf_level = NULL, warn = TRUE)
 }
 \arguments{
-\item{object}{Fitted model of class \code{"selmodel"}.}
+\item{object}{fitted model of class \code{"selmodel"}.}
 
-\item{CI_type}{character string specifying the type of confidence interval to calculate, with options as in \code{"selection_model"}. If \code{NULL} (the default), it will be inherited from \code{object}.}
+\item{CI_type}{character string specifying the type of
+confidence interval to calculate, with options as in
+\code{"selection_model"}. If \code{NULL} (the default), it
+will be inherited from \code{object}.}
 
-\item{conf_level}{desired coverage level for confidence intervals. If \code{NULL} (the default), it will be inherited from \code{object}, which has a default value of \code{.95}.}
+\item{conf_level}{desired coverage level for confidence
+intervals. If \code{NULL} (the default), it will be
+inherited from \code{object}, which has a default value of
+\code{.95}.}
 
-\item{warn}{logical controlling whether warnings are displayed, with a default of \code{TRUE}.}
+\item{warn}{logical controlling whether warnings are
+displayed, with a default of \code{TRUE}.}
+}
+\value{
+A \code{data.frame} containing the estimated area under
+the selection weight function. If the input \code{object}
+includes bootstraps, then the returned \code{data.frame} also
+includes bootstrap confidence interval(s) for the area
+under the selection weight function.
 }
 \description{
-Summarize the strength of selection by calculating the area
-under the selection weight function a \code{selmodel} object (excluding the area
-with weight fixed at 1). If the object has bootstrap replications, then a
+Summarize the strength of selection by
+calculating the area under the selection weight function a
+\code{selmodel} object (excluding the area with weight fixed at
+1). If the object has bootstrap replications, then a
 confidence interval will also be calculated.
 }
 \examples{
 
 beta_noboot <- selection_model(
-  data = self_control,
-  yi = g,
-  sei = se_g,
-  cluster = studyid,
+  data = practice_facilitation,
+  yi = SMD,
+  sei = SE,
   selection_type = "beta",
-  steps = c(0.025,0.5)
+  steps = c(0.025,0.975)
 )
 
 p_area(beta_noboot)
@@ -44,8 +58,8 @@ step_boot <- selection_model(
   steps = c(0.025,0.50),
   estimator = "ARGL",
   bootstrap = "multinomial",
-  CI_type = "percentile",
-  R = 6
+  CI_type = "normal",
+  R = 9L
 )
 
 p_area(step_boot)

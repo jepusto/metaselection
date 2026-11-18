@@ -5,8 +5,8 @@
 #'
 #' @format A tibble with 615 rows and 2 variables:
 #' \describe{
-#'   \item{n}{the sample size of the primary study}
-#'   \item{n_ES}{number of effect sizes in the primary study}
+#'   \item{n}{the sample size of the primary study.}
+#'   \item{n_ES}{number of effect sizes in the primary study.}
 #' }
 #'
 #' @importFrom Rdpack reprompt

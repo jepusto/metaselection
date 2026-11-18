@@ -292,7 +292,7 @@ ggplot(tau2_graph_res) +
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error of heterogeneity for one-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","one-step")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "Beta","One-step")
 ```
 
 ```{r heterogeneity-rmse-two-beta}
@@ -303,7 +303,7 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","one-step")
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for beta-density by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","two-step")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "Beta","Two-step")
 ```
 
 ```{r heterogeneity-rmse-two-one}
@@ -314,7 +314,7 @@ RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "beta","two-step")
 #| fig.env: "sidewaysfigure"
 #| fig.cap: "Ratio of root mean-squared error of heterogeneity for two-step to root mean-squared error for one-step by selection probability, number of studies, average SMD, and between-study heterogeneity"
 
-RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "one-step","two-step")
+RMSE_comparison_plot(tau2_wide_res, measure = "rrmse", "One-step","Two-step")
 ```
 
 \newpage 
@@ -334,7 +334,7 @@ The figures show that $\lambda_1$ is substantially biased when selective reporti
 #| fig.cap: "Relative bias of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity"
 
 lambda1_graph_res %>%
-  filter(method %in% c("beta")) %>%
+  filter(method %in% c("Beta")) %>%
 ggplot() + 
   aes(x = selection_strength, y = rbias, color = J, fill = J) +
   geom_hline(yintercept = 0) +
@@ -371,7 +371,7 @@ ggplot() +
 #| fig.cap: "Relative root mean-squared error of the beta-density lambda1 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity"
 
 lambda1_graph_res %>%
-  filter(method %in% c("beta")) %>%
+  filter(method %in% c("Beta")) %>%
 ggplot() + 
   aes(x = selection_strength, y = rrmse, color = J, fill = J) +
   geom_hline(yintercept = 0) +
@@ -408,7 +408,7 @@ ggplot() +
 #| fig.cap: "Relative bias of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity"
 
 lambda2_graph_res %>%
-  filter(method %in% c("beta")) %>%
+  filter(method %in% c("Beta")) %>%
 ggplot() + 
   aes(x = selection_strength, y = rbias, color = J, fill = J) +
   geom_hline(yintercept = 0) +
@@ -445,7 +445,7 @@ ggplot() +
 #| fig.cap: "Relative root mean-squared error of the beta-density lambda2 selection parameter by number of studies, selection probability, average SMD, and between-study heterogeneity"
 
 lambda2_graph_res %>%
-  filter(method %in% c("beta")) %>%
+  filter(method %in% c("Beta")) %>%
 ggplot() + 
   aes(x = selection_strength, y = rrmse, color = J, fill = J) +
   geom_hline(yintercept = 0) +
