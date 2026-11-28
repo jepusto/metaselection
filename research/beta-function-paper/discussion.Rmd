@@ -34,7 +34,7 @@ In particular, we examined whether single-step or two-step marginal selection mo
 Because the data were generated via the smooth beta density process, the beta model estimate of average effect was naturally less biased than the estimates based on step-function models. 
 The one-step model produced biased estimates and miscalibrated, overly narrow confidence intervals under many conditions.
 The two-step model was less biased, suggesting that its more flexible specification allowed for a closer approximation to the true selection process, but still did not provide adequately calibrated confidence intervals. 
-However, the estimates of average effect from the mis-specfied step-function models were sometimes more accurate (with lower RMSE) than estimates from the beta density model, particularly under conditions with milder selective reporting.
+However, the estimates of average effect from the misspecified step-function models were sometimes more accurate (with lower RMSE) than estimates from the beta density model, particularly under conditions with milder selective reporting.
 In conditions where the true average effect was moderate or large and selection was not extreme, even the simpler one-step model had lower RMSE than the beta-density model. 
 Even though the beta density model has the same number of parameters as the two-step model, its parameters appear to be more difficult to estimate except under strong or extreme levels of selection.
 This suggests that the beta density model may be most useful for larger meta-analyses, with more information available for estimating the functional form of the selection process.

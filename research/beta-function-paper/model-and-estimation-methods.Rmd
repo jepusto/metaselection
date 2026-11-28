@@ -63,7 +63,11 @@ When $\lambda_1 = \lambda_2 = 1$, the selection function is flat and selective r
 
 @citkowicz2017parsimonious used extreme truncation points ($\alpha_1 = 10^{-5}$, $\alpha_2 = 1 - 10^{-5}$), but such choices can make the model overly sensitive to rare, extreme $p$-values, potentially producing implausible estimates [@hedges2017plausibility]. We instead consider more moderate, psychologically salient thresholds of $\alpha_1 = .025$ and $\alpha_2 = .975$. These thresholds correspond to the standard two-sided $\alpha = .05$ level and help stabilize estimation by preventing the selection function from being determined by a few extreme $p$-values, while still allowing the model to capture diverse selection patterns.
 
-Figure \@ref(fig:beta-functions) depicts several shapes that the beta density can assume. Figure \@ref(fig:beta-functions)a. shows a curve with $\lambda_1 = 0.5$ and $\lambda_2 = 2.0$, corresponding to a preference for statistically significant findings and a strictly decreasing probability of selection. Figure \@ref(fig:beta-functions)b. depicts a curve with $\lambda_1 = 0.5$ and $\lambda_2 = 0.6$, leading to a more complex form of selection in which both significantly positive and significantly negative effect sizes are more likely to be reported than null effects. 
+By varying $\lambda_1$ and $\lambda_2$, the truncated beta density can represent a wide range of editorial and researcher decision-making processes using only two parameters. Figure \@ref(fig:beta-functions) illustrates three theoretically meaningful selection patterns. 
+Figure \@ref(fig:beta-functions)a ($\lambda_1 = 0.1, \lambda_2 = 1.0$) depicts a steep drop immediately past $\alpha_1 = .025$ followed by a nearly flat lower tail, demonstrating that the beta-density function can closely approximate a classic step-function cutoff when selection is driven primarily by a strict significance threshold. 
+Figure \@ref(fig:beta-functions)b ($\lambda_1 = 0.5, \lambda_2 = 2.0$) illustrates a gradual, strictly decreasing selection curve, which aligns with a continuous preference for evidential strength: results just beyond the nominal significance threshold still retain a moderate probability of being reported as "marginally significant" trends, whereas findings pointing in the opposite direction ($p^* > .50$) face progressively steeper suppression. 
+Finally, Figure \@ref(fig:beta-functions)c ($\lambda_1 = 0.5, \lambda_2 = 0.6$) depicts a U-shaped curve in which selection probabilities are highest near both $\alpha_1 = .025$ and $\alpha_2 = .975$ and lowest for flat-null results ($p^* \approx .50$). 
+Because $p^*$ is defined as a one-sided $p$-value, this pattern reflects two-tailed significance filtering, where statistically significant findings in the contradictory direction are still viewed as noteworthy and publishable, while non-significant null findings are suppressed.
 
 ```{r beta-functions}
 #| echo: false
@@ -80,34 +84,32 @@ Figure \@ref(fig:beta-functions) depicts several shapes that the beta density ca
 library(metaselection)
 library(ggplot2)
 
-pvals <- seq(0,1,0.005)
-beta_sel <- beta_fun(delta_1 = 0.5, delta_2 = 2.0, trunc_1 = 0.025, trunc_2 = 0.975)
-beta_rev <- beta_fun(delta_1 = 0.5, delta_2 = 0.6, trunc_1 = 0.025, trunc_2 = 0.975)
+pvals <- seq(0, 1, 0.005)
+beta_step <- beta_fun(delta_1 = 0.1, delta_2 = 1.0, trunc_1 = 0.025, trunc_2 = 0.975)
+beta_grad <- beta_fun(delta_1 = 0.5, delta_2 = 2.0, trunc_1 = 0.025, trunc_2 = 0.975)
+beta_u    <- beta_fun(delta_1 = 0.5, delta_2 = 0.6, trunc_1 = 0.025, trunc_2 = 0.975)
 
-dat <- data.frame(p = pvals, strong = beta_sel(pvals), mild = beta_rev(pvals))
+dat <- data.frame(
+  p = pvals,
+  step = beta_step(pvals),
+  grad = beta_grad(pvals),
+  u_shape = beta_u(pvals)
+)
 
-beta_sel_plot <- 
-  ggplot(dat, aes(x = pvals)) + 
-  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
-  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
-  geom_vline(xintercept = c(0.025, 0.975), linetype = "dashed") + 
-  geom_hline(yintercept = 0) + 
-  geom_area(aes(y = strong), fill = "darkred", alpha = 0.6) +   
-  theme_minimal() + 
-  labs(x = "p-value (one-sided)", y = "Selection probability")
+beta_plot <- function(y_var, fill_col) {
+  ggplot(dat, aes(x = p, y = .data[[y_var]])) + 
+    scale_y_continuous(limits = c(0, 1.1), expand = expansion(0, 0)) + 
+    scale_x_continuous(breaks = seq(0, 1, 0.2), expand = expansion(0, 0)) + 
+    geom_vline(xintercept = c(0.025, 0.975), linetype = "dashed") + 
+    geom_hline(yintercept = 0) + 
+    geom_area(fill = fill_col, alpha = 0.6) +   
+    theme_minimal() + 
+    labs(x = "p-value (one-sided)", y = "Selection probability")
+}
 
-beta_rev_plot <- 
-  ggplot(dat, aes(x = pvals)) + 
-  scale_y_continuous(limits = c(0,1.1), expand = expansion(0,0)) + 
-  scale_x_continuous(breaks = seq(0,1,0.2), expand = expansion(0,0)) + 
-  geom_vline(xintercept = c(0.025, 0.975), linetype = "dashed") + 
-  geom_hline(yintercept = 0) + 
-  geom_area(aes(y = mild), fill = "purple", alpha = 0.6) +   
-  theme_minimal() + 
-  labs(x = "p-value (one-sided)", y = "Selection probability")
-
-beta_sel_plot
-beta_rev_plot
+beta_plot("step", "steelblue4")
+beta_plot("grad", "darkred")
+beta_plot("u_shape", "purple")
 ```
 
 ## Distribution of observed effect size estimates
@@ -137,7 +139,7 @@ For meta-analyses of effect sizes defined as standardized mean differences, we a
 These penalties provide a form of stabilization that prevents estimates from reaching extreme or unstable values during the optimization process without strongly influencing the results when the data are informative.
 `r appendix_prefix` \@ref(prior-specification) provides more details about the mathematical form of the penalty terms.[^prior-scale]
 
-[^prior-scale]: It is important to note that these proposed prior penaltiess for $\bs\beta$ and $\tau^2$ are scale dependent and so will require adaptation when applied to meta-analyses in which the effect sizes are defined on other metrics (e.g.,  correlation coefficients, raw mean differences, or log-odds ratios). The accompanying `metaselection` R package allows users to specify prior penalties appropriate for other metrics by changing the scale of the penalty terms accordingly.
+[^prior-scale]: It is important to note that these proposed prior penalties for $\bs\beta$ and $\tau^2$ are scale dependent and so will require adaptation when applied to meta-analyses in which the effect sizes are defined on other metrics (e.g.,  correlation coefficients, raw mean differences, or log-odds ratios). The accompanying `metaselection` R package allows users to specify prior penalties appropriate for other metrics by changing the scale of the penalty terms accordingly.
 
 Estimation proceeds by maximizing the penalized log-composite-likelihood function. 
 To account for the statistical dependence between effect sizes within the same study, we construct confidence intervals using robust (sandwich-type) variance estimators based on study-level score contributions. 

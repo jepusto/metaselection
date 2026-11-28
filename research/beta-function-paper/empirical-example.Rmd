@@ -228,7 +228,7 @@ all_res_table %>%
   add_header_above(c(" ", "Beta density" = 2, "One-step" = 2, "Two-step" = 2)) %>%
   pack_rows(index = Specification_group) %>%
   footnote(
-    general = c("Est. = estimate; SE = bootstrap standard error; CI = percentile boodstrap confidence interval.")
+    general = c("Est. = estimate; SE = bootstrap standard error; CI = percentile bootstrap confidence interval.")
   )
 ```
 

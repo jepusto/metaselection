@@ -48,7 +48,7 @@ The main distinction between the selection models lies in the assumed functional
 
 ## Experimental design
 
-We examined performance across a range of simulation conditions, summarized in Table \@ref(tab:sim-design). Manipulated parameters included overall average standardized mean difference ($\mu$), between-study heterogeneity ($\tau_B$), ratio of within- to between-study heterogeneity ($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$), probability of selection for non-affirmative results ($\lambda_1, \lambda_2$), and number of observed studies ($J$). The full simulation crossed all parameter values for a total of $4 \times 4 \times 2 \times 2 \times 5 \times 4 = `r formatC(4 * 4 * 2 * 2 * 5 * 4, big.mark = ",")`$ conditions. For the more computationally intensive bootstrap simulations, we limited the design to a smaller subset of $4 \times 2 \times 2 \times 1 \times 3 \times 3 = `r formatC(4 * 2 * 2 * 1 * 3 * 3, big.mark = ",")`$ conditions, focusing on smaller meta-analyses and reducing values for factors where results were stable (e.g., $\tau = 0.15$). For each condition, we generated 2,000 replications. 
+We examined performance across a range of simulation conditions, summarized in Table \@ref(tab:sim-design). Manipulated parameters included overall average standardized mean difference ($\mu$), between-study heterogeneity ($\tau_B$), ratio of within- to between-study heterogeneity ($\omega^2 / \tau^2$), average correlation between outcomes ($\rho$), selection parameters ($\lambda_1, \lambda_2$), and number of observed studies ($J$). The full simulation crossed all parameter values for a total of $4 \times 4 \times 2 \times 2 \times 5 \times 4 = `r formatC(4 * 4 * 2 * 2 * 5 * 4, big.mark = ",")`$ conditions. For the more computationally intensive bootstrap simulations, we limited the design to a smaller subset of $4 \times 2 \times 2 \times 1 \times 3 \times 3 = `r formatC(4 * 2 * 2 * 1 * 3 * 3, big.mark = ",")`$ conditions, focusing on smaller meta-analyses and reducing values for factors where results were stable (e.g., $\tau = 0.15$). For each condition, we generated 2,000 replications. 
 
 ```{r sim-design, tab.cap="Simulation design parameters"}
 library(kableExtra)
@@ -60,7 +60,7 @@ dat <- tibble(
     "Between-study heterogeneity ($\\tau_B$)",
     "Heterogeneity ratio ($\\omega^2 / \\tau^2$)",
     "Average correlation between outcomes ($\\rho$)",
-    "Probability of selection for non-affirmative effects ($\\lambda_1, \\lambda_2$)",
+    "Selection parameters ($\\lambda_1, \\lambda_2$)",
     "Number of observed studies ($J$)"
   ),
   `Full Simulation` = c(
